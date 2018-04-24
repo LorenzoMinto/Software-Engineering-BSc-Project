@@ -8,22 +8,45 @@ public class Dice {
 
     private DiceColors color;
 
-    /**
-     * @param color The color of the Dice
-     */
     public Dice(DiceColors color) {
+
         this.color = color;
         this.roll();
     }
 
-    //Changes the Dice value
+    private Dice(DiceColors color, int value) {
+
+        this.color = color;
+        this.value = value;
+    }
+
+    //Returns value of the dice
+    public int getValue() {
+        return value;
+    }
+
+    //Returns color of the dice
+    public DiceColors getColor() {
+        return color;
+    }
+
+    //Rolls the Dice
     public void roll() {
+
         Random r = new Random();
         this.value = r.nextInt(5)+1;
     }
 
+    //Rolls over the Dice
     public void rollOver() {
+
         //In a standard dice the sum of the opposites sides is always 7
         this.value = 7 - this.value;
+    }
+
+    //Returns a new dice instance with same properties of this dice
+    public Dice copy(){
+
+        return new Dice(this.color, this.value);
     }
 }
