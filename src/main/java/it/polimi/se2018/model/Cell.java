@@ -17,10 +17,10 @@ public class Cell{
         this.dice = null;
     }
 
-    public Cell(int allowedValue, DiceColors allowedColor, Dice dice){
+    public Cell(int allowedValue, DiceColors allowedColor){
         this.allowedColor = allowedColor;
         this.allowedValue = allowedValue;
-        this.dice = dice;
+        this.dice = null;
     }
 
     //Returns the allowed value for the dice
@@ -51,6 +51,14 @@ public class Cell{
     }
 
     public Cell copy(){
-        return new Cell(this.allowedValue,this.allowedColor,this.dice.copy());
+        Cell c = new Cell(this.allowedValue,this.allowedColor);
+        c.setDice(this.dice.copy());
+        return c;
+    }
+
+    @Override
+    public String toString() {
+
+        return "(" + allowedValue + ":" + allowedColor + ")";
     }
 }

@@ -20,7 +20,7 @@ public class WindowPattern {
         this.numberOfColumns = c;
         this.pattern = p;
     }
-    
+
     //Returns the pattern difficulty
     public int getDifficulty(){
         return this.difficulty;
@@ -69,5 +69,19 @@ public class WindowPattern {
     public WindowPattern copy(){
 
         return new WindowPattern(this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+
+        for(Cell[] cellsRow : this.pattern){
+            for(Cell cell : cellsRow){
+                s = s.concat( cell.toString() );
+            }
+            s = s.concat(System.lineSeparator());
+        }
+
+        return s;
     }
 }
