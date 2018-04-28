@@ -2,6 +2,9 @@ package it.polimi.se2018.model;
 
 public class WindowPattern {
 
+    //Name of the pattern
+    private String name;
+
     //Difficulty of the pattern
     private int difficulty;
 
@@ -14,7 +17,8 @@ public class WindowPattern {
     //Cells that compose the pattern
     private Cell[][] pattern;
 
-    public WindowPattern(int d, int r, int c, Cell[][] p) {
+    public WindowPattern(String name, int d, int r, int c, Cell[][] p) {
+        this.name = name;
         this.difficulty = d;
         this.numberOfRows = r;
         this.numberOfColumns = c;
@@ -34,6 +38,11 @@ public class WindowPattern {
     //Returns the number of columns of the pattern
     public int getNumberOfColumns(){
         return this.numberOfColumns;
+    }
+
+    //Returns the name of the pattern
+    public String getName() {
+        return name;
     }
 
     //Returns the cells composing the pattern
@@ -68,12 +77,12 @@ public class WindowPattern {
 
     public WindowPattern copy(){
 
-        return new WindowPattern(this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
+        return new WindowPattern(this.name,this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
     }
 
     @Override
     public String toString() {
-        String s = "";
+        String s = "{"+this.name+"}";
 
         for(Cell[] cellsRow : this.pattern){
             for(Cell cell : cellsRow){

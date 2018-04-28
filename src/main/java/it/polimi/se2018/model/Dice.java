@@ -44,6 +44,22 @@ public class Dice {
         this.value = 7 - this.value;
     }
 
+    public boolean incrementValue(){
+        if( this.value < 6 ){
+            this.value += 1;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean decrementValue(){
+        if( this.value > 1 ){
+            this.value -= 1;
+            return true;
+        }
+        return false;
+    }
+
     //Returns a new dice instance with same properties of this dice
     public Dice copy(){
 
