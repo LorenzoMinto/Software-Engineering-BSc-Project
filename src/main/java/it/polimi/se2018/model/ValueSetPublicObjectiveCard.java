@@ -18,7 +18,7 @@ public class ValueSetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
         int multiplier = 5;
-        int numberOfSets = 0;
+        int numberOfCompletedSets = 0;
         Cell[][] pattern = windowPattern.getPattern();
         List<List<Integer>> listOfSets = new ArrayList<>();
         List<Integer> set = new ArrayList<>();
@@ -40,7 +40,7 @@ public class ValueSetPublicObjectiveCard extends PublicObjectiveCard {
                                 listOfSets.remove(currentSet);
                                 set = new ArrayList<>();
                                 listOfSets.add(set);
-                                numberOfSets++;
+                                numberOfCompletedSets++;
                             }
 
                             break;
@@ -55,6 +55,6 @@ public class ValueSetPublicObjectiveCard extends PublicObjectiveCard {
             }
         }
 
-        return multiplier*numberOfSets;
+        return multiplier*numberOfCompletedSets;
     }
 }

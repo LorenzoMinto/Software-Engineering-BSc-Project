@@ -19,7 +19,7 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
         int multiplier = 4;
-        int numberOfSets = 0;
+        int numberOfCompletedSets = 0;
         Cell[][] pattern = windowPattern.getPattern();
         List<List<DiceColors>> listOfSets = new ArrayList<>();
         List<DiceColors> set = new ArrayList<>();
@@ -41,7 +41,7 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
                                 listOfSets.remove(currentSet);
                                 set = new ArrayList<>();
                                 listOfSets.add(set);
-                                numberOfSets++;
+                                numberOfCompletedSets++;
                             }
 
                             break;
@@ -56,6 +56,6 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
             }
         }
 
-        return multiplier*numberOfSets;
+        return multiplier*numberOfCompletedSets;
     }
 }
