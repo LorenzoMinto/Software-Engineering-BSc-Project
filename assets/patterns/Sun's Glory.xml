@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<pattern>
+   <rows>4</rows>
+   <cols>5</cols>
+   <difficulty>6</difficulty>
+   <constraint col="0" color="NOCOLOR" row="0" value="1"/>
+   <constraint col="1" color="PURPLE" row="0" value="0"/>
+   <constraint col="2" color="YELLOW" row="0" value="0"/>
+   <constraint col="4" color="NOCOLOR" row="0" value="4"/>
+   <constraint col="0" color="PURPLE" row="1" value="0"/>
+   <constraint col="1" color="YELLOW" row="1" value="0"/>
+   <constraint col="4" color="NOCOLOR" row="1" value="6"/>
+   <constraint col="0" color="YELLOW" row="2" value="0"/>
+   <constraint col="3" color="NOCOLOR" row="2" value="5"/>
+   <constraint col="4" color="NOCOLOR" row="2" value="3"/>
+   <constraint col="1" color="NOCOLOR" row="3" value="5"/>
+   <constraint col="2" color="NOCOLOR" row="3" value="4"/>
+   <constraint col="3" color="NOCOLOR" row="3" value="2"/>
+   <constraint col="4" color="NOCOLOR" row="3" value="1"/>
+</pattern>
