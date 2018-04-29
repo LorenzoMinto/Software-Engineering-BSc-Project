@@ -43,7 +43,7 @@ public class Cell{
     }
 
     public boolean hasDice() {
-        return dice == null;
+        return dice != null;
     }
 
     public void removeDice(){

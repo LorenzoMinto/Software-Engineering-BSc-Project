@@ -14,7 +14,7 @@ public class WindowPattern {
     //Columns of the pattern
     private int numberOfColumns;
 
-    //Cells that compose the pattern
+    //Cells that form the pattern
     private Cell[][] pattern;
 
     public WindowPattern(String name, int d, int r, int c, Cell[][] p) {

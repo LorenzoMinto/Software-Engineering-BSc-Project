@@ -108,7 +108,6 @@ public class WindowPatternManager {
     public List<WindowPattern> getPatterns(int quantity) throws BadFormattedPatternFileException {
         List<WindowPattern> patterns = new ArrayList<>();
         List<String> usedPatterns = new ArrayList<>();
-        boolean failedLoading = false;
 
         if( availablePatterns.size() >= quantity ){
 
