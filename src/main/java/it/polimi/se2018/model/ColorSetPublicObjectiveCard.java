@@ -15,7 +15,7 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
         this.colors = colors;
     }
 
-    //Pass a copy of the windowPattern to the method and check that it isn't null
+    //When calling this method, pass a copy of the windowPattern after checking that it isn't null
     @Override
     public int calculateScore(WindowPattern windowPattern) {
         int multiplier = 4;
@@ -47,8 +47,8 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
                             break;
 
                         }else if(k+1 == listOfSets.size()) {             //if another set is needed because all previous ones
-                                set = new ArrayList<>();                 //already had the current color
-                                set.add(currentColor);                   //create a new set and put the current color in it
+                                set = new ArrayList<>();                 //already have the current color
+                                set.add(currentColor);                   //create a new set and add the current color in it
                                 listOfSets.add(set);
                         }
                     }
