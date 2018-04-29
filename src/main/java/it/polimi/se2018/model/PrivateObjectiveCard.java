@@ -25,9 +25,9 @@ public class PrivateObjectiveCard extends ObjectiveCard {
             for (int i = 0; i < windowPattern.getNumberOfRows(); i++) {
                 for (int j = 0; j < windowPattern.getNumberOfColumns(); j++) {
                     if (pattern[i][j].hasDice()) {
-                        DiceColors currentDiceColor = pattern[i][j].getDice().getColor();   //get the color of the dice that is on the current cell of the for loop
-                        if (currentDiceColor == this.color) {
-                            score++;
+                        Dice currentDice = pattern[i][j].getDice();   //get the dice that is on the current cell of the for loop
+                        if (currentDice.getColor() == this.color) {
+                            score = score + currentDice.getValue();   //increase the score by the value that is on the current dice
                         }
                     }
                 }
