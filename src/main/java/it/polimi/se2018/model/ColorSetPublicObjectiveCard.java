@@ -1,17 +1,16 @@
 package it.polimi.se2018.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 //Public Objective Card that counts the number of sets of dice one of each color of a specific list in a window pattern
 
 public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
 
-    private List<DiceColors> colors;
+    private HashSet<DiceColors> colors;
 
     //The list of colors that form a set is passed in the constructor
-    public ColorSetPublicObjectiveCard(List<DiceColors> colors) {
+    public ColorSetPublicObjectiveCard(HashSet<DiceColors> colors) {
         this.colors = colors;
     }
 
@@ -21,10 +20,10 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
         int multiplier = 4;
         int numberOfCompletedSets = 0;
         Cell[][] pattern = windowPattern.getPattern();
-        List<List<DiceColors>> listOfSets = new ArrayList<>();
-        List<DiceColors> set = new ArrayList<>();
+        List<HashSet<DiceColors>> listOfSets = new ArrayList<>();
+        HashSet<DiceColors> set = new HashSet<>();
         listOfSets.add(set);
-        List<DiceColors> currentSet;
+        HashSet<DiceColors> currentSet;
 
         for(int i=0; i<windowPattern.getNumberOfRows(); i++){
             for(int j=0; j < windowPattern.getNumberOfColumns(); j++){
@@ -34,22 +33,23 @@ public class ColorSetPublicObjectiveCard extends PublicObjectiveCard {
                     for(int k=0; k<listOfSets.size(); k++){
                          currentSet = listOfSets.get(k);
 
-                        if(!currentSet.contains(currentColor)){          //if the current set of colors does not contain the current color
+                        if(colors.contains(currentColor) && !currentSet.contains(currentColor)){          //if the current set of colors does not contain the current color
                             currentSet.add(currentColor);                //then add it to the first set
 
                             if(currentSet.equals(colors)){               //if the current set is full then remove it and create a new set
                                 listOfSets.remove(currentSet);
-                                set = new ArrayList<>();
+                                set = new HashSet<>();
                                 listOfSets.add(set);
                                 numberOfCompletedSets++;
                             }
 
                             break;
 
-                        }else if(k+1 == listOfSets.size()) {             //if another set is needed because all previous ones
-                                set = new ArrayList<>();                 //already have the current color
+                        }else if(colors.contains(currentColor) && k+1 == listOfSets.size()) {             //if another set is needed because all previous ones
+                                set = new HashSet<>();                 //already have the current color
                                 set.add(currentColor);                   //create a new set and add the current color in it
                                 listOfSets.add(set);
+                                break;
                         }
                     }
                 }

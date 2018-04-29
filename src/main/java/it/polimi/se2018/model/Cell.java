@@ -58,7 +58,10 @@ public class Cell{
 
     @Override
     public String toString() {
-
-        return "(" + allowedValue + ":" + allowedColor + ")";
+        if(this.dice == null) {
+            return "(" + allowedValue + ":" + allowedColor + ")";
+        }else{
+            return "(" + dice + ")";
+        }
     }
 }

@@ -65,4 +65,9 @@ public class Dice {
 
         return new Dice(this.color, this.value);
     }
+
+    @Override
+    public String toString() {
+        return this.value + ":" + this.color;
+    }
 }

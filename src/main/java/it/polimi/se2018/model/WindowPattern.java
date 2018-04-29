@@ -83,6 +83,7 @@ public class WindowPattern {
     @Override
     public String toString() {
         String s = "{"+this.name+"}";
+        s = s.concat(System.lineSeparator());
 
         for(Cell[] cellsRow : this.pattern){
             for(Cell cell : cellsRow){
