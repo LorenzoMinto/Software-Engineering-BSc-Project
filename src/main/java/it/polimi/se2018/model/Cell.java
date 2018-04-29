@@ -52,7 +52,7 @@ public class Cell{
 
     public Cell copy(){
         Cell c = new Cell(this.allowedValue,this.allowedColor);
-        c.setDice(this.dice.copy());
+        if(this.hasDice()) c.setDice(this.dice.copy());
         return c;
     }
 
