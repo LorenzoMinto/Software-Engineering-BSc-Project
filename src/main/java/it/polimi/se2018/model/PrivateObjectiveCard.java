@@ -20,21 +20,15 @@ public class PrivateObjectiveCard extends ObjectiveCard {
         int score = 0;
         Cell[][] pattern = windowPattern.getPattern();
 
-
-        try {
-            for (int i = 0; i < windowPattern.getNumberOfRows(); i++) {
-                for (int j = 0; j < windowPattern.getNumberOfColumns(); j++) {
-                    if (pattern[i][j].hasDice()) {
-                        Dice currentDice = pattern[i][j].getDice();   //get the dice that is on the current cell of the for loop
-                        if (currentDice.getColor() == this.color) {
-                            score = score + currentDice.getValue();   //increase the score by the value that is on the current dice
-                        }
+        for (int i = 0; i < windowPattern.getNumberOfRows(); i++) {
+            for (int j = 0; j < windowPattern.getNumberOfColumns(); j++) {
+                if (pattern[i][j].hasDice()) {
+                    Dice currentDice = pattern[i][j].getDice();   //get the dice that is on the current cell of the for loop
+                    if (currentDice.getColor() == this.color) {
+                        score = score + currentDice.getValue();   //increase the score by the value that is on the current dice
                     }
                 }
             }
-        }
-        catch (NullPointerException e){
-            //TODO: notify the view that something went wrong in the WindowPattern that was passed as a parameter
         }
 
         return score;
