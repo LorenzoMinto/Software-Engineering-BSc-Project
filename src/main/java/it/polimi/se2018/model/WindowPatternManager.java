@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class WindowPatternManager {
 
-    public static final String PATH = "src/main/java/it/polimi/se2018/patterns/";
+    public static final String PATH = "assets/patterns/";
     public static final String EXTENSION = ".xml";
 
     private List<String> availablePatterns;
