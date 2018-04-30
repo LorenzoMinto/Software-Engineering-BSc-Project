@@ -50,22 +50,23 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
 
-        int numberOfCompletedSets = 0;
+        int numberOfCompletedSets;
         Cell[][] pattern = windowPattern.getPattern();
         List<HashSet<Object>> listOfSets = new ArrayList<>();
+        Object currentProperty;
 
         listOfSets.add(new HashSet<>());
 
         for(int i=0; i<windowPattern.getNumberOfRows(); i++){
             for(int j=0; j < windowPattern.getNumberOfColumns(); j++){
 
-                Object currentProperty = getProperty(pattern[i][j]);
+                currentProperty = getProperty(pattern[i][j]);
 
                 updateSets(listOfSets, currentProperty);
-
-                numberOfCompletedSets = countCompletedSets(listOfSets);
             }
         }
+
+        numberOfCompletedSets = countCompletedSets(listOfSets);
 
         return this.multiplier*numberOfCompletedSets;
     }

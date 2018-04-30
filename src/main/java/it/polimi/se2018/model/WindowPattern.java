@@ -45,7 +45,7 @@ public class WindowPattern {
         return name;
     }
 
-    //Returns the cells composing the pattern
+    //Returns the cells that form the pattern
     public Cell[][] getPattern() {
 
         Cell[][] p = new Cell[this.numberOfRows][this.numberOfColumns];
