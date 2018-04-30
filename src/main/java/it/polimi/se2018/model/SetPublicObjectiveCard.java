@@ -3,66 +3,131 @@ package it.polimi.se2018.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 
-//Public Objective Card that counts the number of sets of dice one of each color of a specific list in a window pattern
+/*
+Public Objective Card that counts the number of sets of dice in a window pattern, one for each color
+or value from a specific list.
+The set of properties (colors or values) that form a set is passed in the constructor and is stored in 'items'
+
+Attributes:
+    items: the set of colors or values that form a set
+    getPropertyFunction: the property of the dice to be evaluated (getColor or getValue)
+    multiplier: the score multiplier that is specific for each different set of colors or values
+
+Methods:
+    calculateScore()
+    getProperty()
+    updateSets()
+    countCompletedSets()
+*/
 
 public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
-    private List<Object> items;
+    private Set<Object> items;
 
     private Function<Dice,Object> getPropertyFunction;
 
     private int multiplier;
 
-    //The list of colors that form a set is passed in the constructor
-    public SetPublicObjectiveCard(List<Object> items, Function<Dice,Object> getPropertyFunction, int multiplier) {
+
+    public SetPublicObjectiveCard(Set<Object> items, Function<Dice,Object> getPropertyFunction, int multiplier) {
         this.items = items;
         this.getPropertyFunction = getPropertyFunction;
         this.multiplier = multiplier;
     }
 
-    //When calling this method, pass a copy of the windowPattern after checking that it isn't null
+    /*
+    Calculates a player's score relative to the specific SetPublicObjectiveCard, given their window pattern
+
+    Variables:
+        numberOfCompletedSets: number of sets that contain the same elements (colors or values) as the 'items' set
+        listOfSets: list of sets that can be formed with the dice of a WindowPattern. Not necessarily all sets of
+                    the list will be completed sets
+    */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
+
         int numberOfCompletedSets = 0;
         Cell[][] pattern = windowPattern.getPattern();
         List<HashSet<Object>> listOfSets = new ArrayList<>();
-        HashSet<Object> set = new HashSet<>();
-        listOfSets.add(set);
-        HashSet<Object> currentSet;
+
+        listOfSets.add(new HashSet<>());
 
         for(int i=0; i<windowPattern.getNumberOfRows(); i++){
             for(int j=0; j < windowPattern.getNumberOfColumns(); j++){
-                if(pattern[i][j].hasDice()) {
-                    Object currentProperty = this.getPropertyFunction.apply( pattern[i][j].getDice() );
 
-                    for(int k=0; k<listOfSets.size(); k++){
-                        currentSet = listOfSets.get(k);
+                Object currentProperty = getProperty(pattern[i][j]);
 
-                        if(!currentSet.contains(currentProperty)){          //if the current set of colors does not contain the current color
-                            currentSet.add(currentProperty);                //then add it to the first set
+                updateSets(listOfSets, currentProperty);
 
-                            if(currentSet.equals(items)){               //if the current set is full then remove it and create a new set
-                                listOfSets.remove(currentSet);
-                                set = new HashSet<>();
-                                listOfSets.add(set);
-                                numberOfCompletedSets++;
-                            }
-
-                            break;
-
-                        }else if(k+1 == listOfSets.size()) {             //if another set is needed because all previous ones
-                            set = new HashSet<>();                 //already have the current color
-                            set.add(currentProperty);                   //create a new set and add the current color in it
-                            listOfSets.add(set);
-                        }
-                    }
-                }
+                numberOfCompletedSets = countCompletedSets(listOfSets);
             }
         }
 
         return this.multiplier*numberOfCompletedSets;
     }
+
+    /*
+    Gets the dice property (color or value) if there is a dice on the cell
+    Otherwise returns null
+    */
+    private Object getProperty(Cell cell) {
+        if(cell.hasDice()) {
+            return this.getPropertyFunction.apply(cell.getDice());
+        }else{
+            return null;
+        }
+    }
+
+    /*
+    Updates the sets adding the current property if it is different from null and it is contained in 'items'
+    */
+    private void updateSets(List<HashSet<Object>> listOfSets, Object currentProperty) {
+
+        /*
+        If there is not a dice on the current cell or if the property to be evaluated is not contained in 'items',
+        no set can become a completed set
+        */
+        if(currentProperty == null || !items.contains(currentProperty)){
+            return;
+        }
+
+        /*
+        Otherwise, the property is necessarily contained in the 'items' set
+        For each set, if the set does not already contain the current property, then add it to it
+        If all sets already have the current property, then create a new set containing the current property
+        */
+        for (HashSet<Object> set: listOfSets) {
+
+            if (!set.contains(currentProperty)){
+                set.add(currentProperty);
+                return;
+            }
+
+            else if(listOfSets.indexOf(set) == listOfSets.size()-1){
+                set = new HashSet<>();
+                set.add(currentProperty);
+                listOfSets.add(set);
+                return;
+            }
+        }
+    }
+
+    /*
+    Counts the number of sets that are equal to the requested set ('items') specified in the constructor of the card
+    */
+    private int countCompletedSets(List<HashSet<Object>> listOfSets) {
+        int numberOfCompletedSets = 0;
+
+        for (HashSet set: listOfSets) {
+            if (set.equals(items)) {
+                numberOfCompletedSets++;
+            }
+        }
+        return numberOfCompletedSets;
+    }
+
 }
