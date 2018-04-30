@@ -9,6 +9,6 @@ public class ShadeComparator implements Comparator<Dice> {
     @Override
     public int compare(Dice dice1, Dice dice2) {
         if(dice1.getValue() == dice2.getValue()){ return 0;}
-        else{ return 1;}
+        else{ return dice1.getValue();}
     }
 }

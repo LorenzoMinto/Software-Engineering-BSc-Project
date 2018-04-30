@@ -9,6 +9,6 @@ public class ColorComparator implements Comparator<Dice> {
     @Override
     public int compare(Dice dice1, Dice dice2) {
         if(dice1.getColor() == dice2.getColor()){ return 0;}
-        else{ return 1;}
+        else{ return dice1.getColor().toInt(); }
     }
 }
