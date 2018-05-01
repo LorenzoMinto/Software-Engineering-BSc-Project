@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Round {
@@ -16,9 +17,7 @@ public class Round {
         this.draftPool = diceBag.getDices(players.length*2+1);
     }
 
-    public List<Dice> getDraftPool(){
-        return draftPool.dices;
-    }
+    public List<Dice> emptyDraftPool(){ return new ArrayList<>(draftPool.dices); }
 
     public boolean removeDiceFromDraftPool(Dice dice) {
         return draftPool.takeDice(dice);
