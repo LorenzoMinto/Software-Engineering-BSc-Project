@@ -8,9 +8,9 @@ import java.util.function.Function;
 
 
 /*
-Public Objective Card that counts the number of sets of dice in a window pattern, one dice for each color
-or value from a specific list.
-The set of properties (colors or values) that form a set is passed in the constructor and is stored in 'items'
+Public Objective Card that counts the number of specific sets of dice in a window pattern.
+Each set is formed by the properties (colors or values) specified in a set passed in the constructor
+This set is stored in the attribute 'items'
 
 Attributes:
     items: the set of colors or values that form a set

@@ -16,7 +16,7 @@ public enum DiceColors {
 
         do{
             randomColor = values()[random.nextInt(values().length)];
-        } while (randomColor!=DiceColors.NOCOLOR);
+        } while (randomColor.equals(DiceColors.NOCOLOR));
 
         return randomColor;
     }

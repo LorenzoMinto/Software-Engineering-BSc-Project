@@ -14,7 +14,7 @@ public class ObjectiveCardFactory {
 
         do{
             color = DiceColors.getRandomColor();
-        }while (color.equals(DiceColors.NOCOLOR) || assignedColors.contains(color));
+        }while (assignedColors.contains(color));
 
         assignedColors.add(color);
 
@@ -22,8 +22,8 @@ public class ObjectiveCardFactory {
     }
 
     private PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
-        String title = "Shades of " + color.name().toLowerCase()+ " - Private";
-        String description = "Sum of values on " + color.name().toLowerCase() + " dice";
+        String title = "Shades of " + color.toString()+ " - Private";
+        String description = "Sum of values on " + color.toString() + " dice";
         String imageURL = null;
 
         switch (color){
@@ -52,13 +52,17 @@ public class ObjectiveCardFactory {
 
 
     public Set<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
+
+        if(quantity > numberOfPublicObjectiveCards || quantity < 1){
+            RuntimeException e = new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater" +
+                    "than the number of Public Objective Cards.");
+            e.printStackTrace();
+        }
+
         Random r = new Random();
         int randomIndex;
         PublicObjectiveCard currentCard;
         Set<PublicObjectiveCard> publicObjectiveCards = new HashSet<>();
-
-        //TODO Exception
-        if(quantity > numberOfPublicObjectiveCards || quantity < 1) return new HashSet<>();
 
         for(int i=0; i<quantity; i++){
             //Choose randomly one of the cards
@@ -74,11 +78,11 @@ public class ObjectiveCardFactory {
         return publicObjectiveCards;
     }
 
-    private PublicObjectiveCard getPublicObjectiveCardCardByNumber(int randomIndex) {
-        if(randomIndex > numberOfPublicObjectiveCards-1|| randomIndex<0) return null;
+    private PublicObjectiveCard getPublicObjectiveCardCardByNumber(int index) {
+        if(index > numberOfPublicObjectiveCards-1|| index<0) return null;
 
         Set<Object> items;
-        switch (randomIndex){
+        switch (index){
             case 0:
                 return createRowsColorPublicObjectiveCard();
             case 1:
@@ -130,12 +134,14 @@ public class ObjectiveCardFactory {
         int multiplier = colors.size();
         String imageURL = null;
 
-        completeDescription(colors, description);
-
         if(colors.size() == 5){
             description = "Sets of one of each color anywhere";
             multiplier = 4;
             imageURL = null;
+        }else{
+            RuntimeException e = new RuntimeException("ERROR: The Color Set Public Objective Card " +
+                    "can only be created with all of the existing colors.");
+            e.printStackTrace();
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, colors,Dice::getColor, multiplier);
@@ -146,31 +152,26 @@ public class ObjectiveCardFactory {
         String description = null;
         int multiplier = values.size();
         String imageURL = null;
-        Integer firstValue;
-        Integer secondValue;
 
         switch(values.size()){
             case 2:
-                firstValue = 1;
-                secondValue = 2;
-                if(values.contains(firstValue) && values.contains(secondValue)){
+
+                if(values.contains(Integer.valueOf(1)) && values.contains(Integer.valueOf(2))){
                     title = "Light Shades";
                     description = "Sets of 1 & 2 values anywhere";
                     imageURL = null;
-                }
-                firstValue = 3;
-                secondValue = 4;
-                if(values.contains(firstValue) && values.contains(secondValue)){
+                }else if(values.contains(Integer.valueOf(3)) && values.contains(Integer.valueOf(4))){
                     title = "Medium Shades";
                     description = "Sets of 3 & 4 values anywhere";
                     imageURL = null;
-                }
-                firstValue = 5;
-                secondValue = 6;
-                if(values.contains(firstValue) && values.contains(secondValue)){
+                }else if(values.contains(Integer.valueOf(5)) && values.contains(Integer.valueOf(6))){
                     title = "Deep Shades";
                     description = "Sets of 5 & 6 values anywhere";
                     imageURL = null;
+                }else{
+                    RuntimeException e = new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                            "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
+                    e.printStackTrace();
                 }
                 multiplier = 2;
                 break;
@@ -181,26 +182,22 @@ public class ObjectiveCardFactory {
                 imageURL = null;
                 break;
             default:
+                RuntimeException e = new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                        "cannot be created with the values passed in the constructor. The values passed are:" +
+                        values + " .");
+                e.printStackTrace();
                 break;
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, values,Dice::getValue, multiplier);
     }
 
-    public PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
+    private PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
         String title = "Color Diagonals";
         String description = "Count of diagonally adjacent same color dice";
         String imageURL = null;
 
         return new DiagonalsPublicObjectiveCard(title, description, imageURL, new ColorComparator());
-    }
-
-    //This card does not yet exist in the game
-    private PublicObjectiveCard createDiagonalsValuePublicObjectiveCard(){
-        String title = "Shade Diagonals";
-        String description = "Count of diagonally adjacent same value dice";
-        String imageURL = null;
-        return new DiagonalsPublicObjectiveCard(title, description, imageURL, new ShadeComparator());
     }
 
     private PublicObjectiveCard createRowsColorPublicObjectiveCard() {
@@ -231,15 +228,4 @@ public class ObjectiveCardFactory {
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ShadeComparator(), 4, false);
     }
 
-    private void completeDescription(Set<Object> items, String description) {
-        int i = 0;
-        for (Object item :items) {
-            i++;
-            description = description.concat(item.toString());
-            if(i!= items.size()){
-                description = description.concat(", ");
-            }
-            description = description.concat(" dice anywhere");
-        }
-    }
 }
