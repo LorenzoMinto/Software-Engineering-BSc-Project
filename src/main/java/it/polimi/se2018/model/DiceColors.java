@@ -38,15 +38,4 @@ public enum DiceColors {
         return this.name().toLowerCase();
     }
 
-    public int toInt(){
-        switch(this) {
-            case NOCOLOR: return 0;
-            case RED: return 1;
-            case YELLOW: return 2;
-            case GREEN: return 3;
-            case BLUE: return 4;
-            case PURPLE: return 5;
-            default: throw new IllegalArgumentException();
-        }
-    }
 }
