@@ -26,9 +26,17 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
     private Comparator<Dice> comparator;
 
-    public DiagonalsPublicObjectiveCard(String title, String description, String imageURL, Comparator<Dice> comparator) {
+    public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
+                                        Comparator<Dice> comparator) {
         super(title, description, imageURL);
         this.comparator = comparator;
+    }
+
+    //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
+    @Override
+    public PublicObjectiveCard copy() {
+        return new DiagonalsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
+                this.comparator);
     }
 
     /*

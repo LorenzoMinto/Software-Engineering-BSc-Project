@@ -30,13 +30,20 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     private int multiplier;
     private boolean checkByRow;
 
-    public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL, Comparator<Dice> comparator, int multiplier, boolean checkByRow) {
+    public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL,
+                                          Comparator<Dice> comparator, int multiplier, boolean checkByRow) {
         super(title, description, imageURL);
         this.comparator = comparator;
         this.multiplier = multiplier;
         this.checkByRow = checkByRow;
     }
 
+    //Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
+    @Override
+    public PublicObjectiveCard copy() {
+        return new RowsColumnsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
+                this.comparator, this.multiplier, this.checkByRow);
+    }
 
     /*
     Calculates a player's score relative to the specific RowsColumnsPublicObjectiveCard, given their window pattern

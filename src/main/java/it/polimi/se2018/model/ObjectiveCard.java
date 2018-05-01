@@ -12,6 +12,20 @@ public abstract class ObjectiveCard {
         this.imageURL = imageURL;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public abstract ObjectiveCard copy();
+
     public abstract int calculateScore(WindowPattern windowPattern);
 
 }

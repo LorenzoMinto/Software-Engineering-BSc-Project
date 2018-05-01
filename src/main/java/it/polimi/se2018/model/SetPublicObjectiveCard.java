@@ -41,6 +41,13 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         this.multiplier = multiplier;
     }
 
+    //Returns a new SetPublicObjectiveCard instance with same properties of this one
+    @Override
+    public PublicObjectiveCard copy() {
+        return new SetPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
+                this.items, this.getPropertyFunction, this.multiplier);
+    }
+
     /*
     Calculates a player's score relative to the specific SetPublicObjectiveCard, given their window pattern
 
