@@ -21,8 +21,7 @@ public enum DiceColors {
         return randomColor;
     }
 
-    @Override
-    public String toString() {
+    public String toOneLetter(){
         switch(this) {
             case NOCOLOR: return "_";
             case RED: return "R";
@@ -32,6 +31,11 @@ public enum DiceColors {
             case PURPLE: return "P";
             default: throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
     }
 
     public int toInt(){

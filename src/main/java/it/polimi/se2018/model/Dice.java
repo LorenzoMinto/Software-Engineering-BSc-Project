@@ -68,6 +68,6 @@ public class Dice {
 
     @Override
     public String toString() {
-        return this.value + ":" + this.color;
+        return this.value + ":" + this.color.toOneLetter();
     }
 }

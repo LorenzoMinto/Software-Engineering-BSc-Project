@@ -46,8 +46,10 @@ public class Cell{
         return dice != null;
     }
 
-    public void removeDice(){
+    public Dice removeDice(){
+        Dice d = this.dice;
         this.dice = null;
+        return d;
     }
 
     public Cell copy(){
