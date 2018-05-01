@@ -13,12 +13,12 @@ import java.util.Random;
 
 public class WindowPatternManager {
 
-    public static final String PATH = "assets/patterns/";
-    public static final String EXTENSION = ".xml";
+    private static final String PATH = "assets/patterns/";
+    private static final String EXTENSION = ".xml";
 
     private List<String> availablePatterns;
 
-    public WindowPatternManager() {
+    public WindowPatternManager() throws NoPatternsFoundInFileSystemException {
 
         availablePatterns = new ArrayList<>();
 
@@ -26,7 +26,10 @@ public class WindowPatternManager {
         File dir = new File(PATH);
         File[] files = dir.listFiles((d, name) -> name.endsWith(".xml"));
 
-        //Add the patterns found to availablePatterns
+        //Exception is thrown if no pattern files are found in the folder (could happen even due to IO error)
+        if(files==null) throw new NoPatternsFoundInFileSystemException();
+
+        //Add the found patterns to availablePatterns
         for(File file : files){
 
             //PatternID is filename without ".xml"
@@ -38,20 +41,15 @@ public class WindowPatternManager {
     }
 
     public boolean hasAvailablePatterns(){
-        return availablePatterns.size() > 0;
+        return !(availablePatterns.isEmpty());
     }
 
     public List<String> getAvailablePatternsNames() {
 
-        List<String> p = new ArrayList<>();
-        for(String s : availablePatterns){
-            p.add(s);
-        }
-
-        return p;
+        return new ArrayList<>(availablePatterns);
     }
 
-    private WindowPattern loadPattern(String patternID) throws BadFormattedPatternFileException {
+    private WindowPattern loadPatternFromFileSystem(String patternID) throws BadFormattedPatternFileException {
 
         try {
 
@@ -100,7 +98,7 @@ public class WindowPatternManager {
             return new WindowPattern(patternID,diff,rows,cols,pattern);
 
         } catch (Exception e) {
-            //Bad formatting of xml is catched and method returns false
+            //Bad formatting of xml is caught and method returns false
             throw new BadFormattedPatternFileException();
         }
     }
@@ -129,7 +127,7 @@ public class WindowPatternManager {
                 WindowPattern randomPattern;
                 try {
 
-                    randomPattern = loadPattern(randomPatternID);
+                    randomPattern = loadPatternFromFileSystem(randomPatternID);
 
                 } catch (BadFormattedPatternFileException e){
 
@@ -139,7 +137,7 @@ public class WindowPatternManager {
                     throw new BadFormattedPatternFileException();
                 }
 
-                //The succesfully loaded pattern is added in a list that will be returned at the end of bulk loading
+                //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
                 patterns.add(randomPattern);
             }
         }
