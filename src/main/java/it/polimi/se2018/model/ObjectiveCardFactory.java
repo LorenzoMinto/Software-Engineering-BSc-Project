@@ -189,7 +189,7 @@ public class ObjectiveCardFactory {
                 break;
         }
 
-        return new SetPublicObjectiveCard(title, description, imageURL, values,Dice::getValue, multiplier);
+        return new SetPublicObjectiveCard(title, description, imageURL, values, Dice::getValue, multiplier);
     }
 
     private PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
@@ -197,35 +197,35 @@ public class ObjectiveCardFactory {
         String description = "Count of diagonally adjacent same color dice";
         String imageURL = null;
 
-        return new DiagonalsPublicObjectiveCard(title, description, imageURL, new ColorComparator());
+        return new DiagonalsPublicObjectiveCard(title, description, imageURL, Dice::getColor);
     }
 
     private PublicObjectiveCard createRowsColorPublicObjectiveCard() {
         String title = "Row Color Variety";
         String description = "Rows with no repeated colors";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ColorComparator(), 6, true);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 6, true);
     }
 
     private PublicObjectiveCard createColumnsColorPublicObjectiveCard() {
         String title = "Column Color Variety";
         String description = "Columns with no repeated colors";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ColorComparator(), 5, false);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 5, false);
     }
 
     private PublicObjectiveCard createRowsValuePublicObjectiveCard() {
         String title = "Row Shade Variety";
         String description = "Rows with no repeated values";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ShadeComparator(), 5, true);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getValue, 5, true);
     }
 
     private PublicObjectiveCard createColumnsValuePublicObjectiveCard() {
         String title = "Column Shade Variety";
         String description = "Columns with no repeated values";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ShadeComparator(), 4, false);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getValue, 4, false);
     }
 
 }

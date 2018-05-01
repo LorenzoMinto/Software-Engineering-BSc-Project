@@ -10,11 +10,13 @@ import java.util.function.Function;
 /*
 Public Objective Card that counts the number of specific sets of dice in a window pattern.
 Each set is formed by the properties (colors or values) specified in a set passed in the constructor
+The Function, which gets the property of the dice, is passed in the constructor
 This set is stored in the attribute 'items'
 
 Attributes:
     items: the set of colors or values that form a set
-    getPropertyFunction: the property of the dice to be evaluated (getColor or getValue)
+    getPropertyFunction: gets the property of the dice specified in the constructor
+                         needed to compare the properties of two dice
     multiplier: the score multiplier that is specific for each different set of colors or values
 
 Methods:

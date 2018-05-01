@@ -1,17 +1,18 @@
 package it.polimi.se2018.model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 
 /*
 Public Objective Card that counts the number of diagonally adjacent dice in a window pattern with the same property
 (color or value)
-The comparator, which compares the property, is passed in the constructor
+The Function, which gets the property of the dice, is passed in the constructor
 
 Attributes:
-    comparator: compares two dice according to a specific rule
+    getPropertyFunction: gets the property of the dice specified in the constructor
+                         needed to compare the properties of two dice
 
 Methods:
     calculateScore()
@@ -24,19 +25,19 @@ Methods:
 
 public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
-    private Comparator<Dice> comparator;
+    private Function<Dice,Object> getPropertyFunction;
 
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
-                                        Comparator<Dice> comparator) {
+                                        Function<Dice,Object> getPropertyFunction) {
         super(title, description, imageURL);
-        this.comparator = comparator;
+        this.getPropertyFunction = getPropertyFunction;
     }
 
     //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
     @Override
     public PublicObjectiveCard copy() {
         return new DiagonalsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
-                this.comparator);
+                this.getPropertyFunction);
     }
 
     /*
@@ -110,7 +111,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
 
     /*
-    Method to count the adjacent dice with the same property according to the comparator in a diagonal
+    Method to count the adjacent dice with the same property, specified in the getPropertyFunction, in a diagonal
     Parameters:
         row, col: indexes of the first cell of the diagonal to be checked
         move: +1 if moving to the right, -1 if moving to the left
@@ -142,20 +143,25 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         Dice currentDice;
         Dice adjacentDice;
+        Object currentDiceProperty;
+        Object adjacentDiceProperty;
         int currentDiceLinearIndex;
         int adjacentDiceLinearIndex;
 
         //If one of the cells does not have a dice, then return 0 as the score of the pair
         if(!pattern[row][column].hasDice() || !pattern[row+1][column+move].hasDice()) return 0;
 
-        //Get the two dice and their linear index
+        //Get the two dice, their property and their linear index
         currentDice = pattern[row][column].getDice();
-        adjacentDice = pattern[row + 1][column + move].getDice();
+        currentDiceProperty = getPropertyFunction.apply(currentDice);
         currentDiceLinearIndex = getLinearIndex(row, column, numberOfRows);
+
+        adjacentDice = pattern[row + 1][column + move].getDice();
+        adjacentDiceProperty = getPropertyFunction.apply(adjacentDice);
         adjacentDiceLinearIndex = getLinearIndex(row+1,column+move, numberOfRows);
 
         //Compare the dice. Return 0 as the score of the pair if the comparison is not positive
-        if(comparator.compare(currentDice, adjacentDice) != 0 ) return 0;
+        if(currentDiceProperty == adjacentDiceProperty ) return 0;
 
         score += scoreDice(listOfNotCountedDice, currentDiceLinearIndex);
         score += scoreDice(listOfNotCountedDice, adjacentDiceLinearIndex);

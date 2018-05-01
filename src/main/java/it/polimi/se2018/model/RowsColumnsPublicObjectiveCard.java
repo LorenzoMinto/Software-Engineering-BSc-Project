@@ -1,19 +1,20 @@
 package it.polimi.se2018.model;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 
 /*
 Public Objective Card that counts the number of lines or columns in a window pattern
 with all different values for a specific property (color or value)
 If the line or the column is empty or not complete, it is not considered as valid for the scoring
-The comparator, which compares the property of the dice in the line or column, is passed in the constructor
+The Function, which gets the property of the dice, is passed in the constructor
 The boolean 'checkByRow' specifies if the card checks the property by row or by column
 
 Attributes:
-    comparator: compares two dice according to a specific rule
+    getPropertyFunction: gets the property of the dice specified in the constructor
+                         needed to compare the properties of two dice
     multiplier: the score multiplier that is specific for each combination of the couple (property, row ||column)
     checkByRow
 
@@ -26,14 +27,17 @@ Methods:
 
 public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
 
-    private Comparator<Dice> comparator;
+    private Function<Dice,Object> getPropertyFunction;
+
     private int multiplier;
+
     private boolean checkByRow;
 
     public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL,
-                                          Comparator<Dice> comparator, int multiplier, boolean checkByRow) {
+                                          Function<Dice, Object> getPropertyFunction,
+                                          int multiplier, boolean checkByRow) {
         super(title, description, imageURL);
-        this.comparator = comparator;
+        this.getPropertyFunction = getPropertyFunction;
         this.multiplier = multiplier;
         this.checkByRow = checkByRow;
     }
@@ -42,7 +46,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public PublicObjectiveCard copy() {
         return new RowsColumnsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
-                this.comparator, this.multiplier, this.checkByRow);
+                this.getPropertyFunction, this.multiplier, this.checkByRow);
     }
 
     /*
@@ -99,39 +103,32 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     */
     private int getRowDifferentPropertiesNumber(Cell[] row, int numberOfColumns) {
 
-        Set<Integer> differentProperties = new HashSet<>();
-        int propertyValue;
+        Set<Object> differentProperties = new HashSet<>();
         Dice dice1;
         Dice dice2;
+        Object property1;
+        Object property2;
 
         /*
         Compare each two adjacent dice
-            If their properties are different add the property of the first one to the set of different properties
-            Otherwise return 0 since there are at least two same dice on the row
+            If their properties are different add the properties to the set of different properties
+            Otherwise return 0 since there are at least two dice with the same property on the row
         */
-        for(int col = 0; col+1 < numberOfColumns; col++) {
+        for(int col = 0; col < numberOfColumns; col++) {
 
             dice1 = row[col].getDice();
             dice2 = row[col+1].getDice();
 
-            propertyValue = comparator.compare(dice1,dice2);
+            property1 = getPropertyFunction.apply(dice1);
+            property2 = getPropertyFunction.apply(dice2);
 
-            if (propertyValue == 0) {
+            if (property1.equals(property2)) {
                 return 0;
             }else {
-                differentProperties.add(propertyValue);
+                differentProperties.add(property1);
+                differentProperties.add(property2);
             }
         }
-
-        /*
-        Set dice1 to the last dice and compare it to the second to last dice
-        The comparison will be positive as it was already done in the for loop
-        The purpose of the comparison is to get the property of the last dice and add it to
-        the set of different properties
-        */
-        dice1 = row[numberOfColumns-1].getDice();
-        dice2 = row[numberOfColumns-2].getDice();
-        differentProperties.add(comparator.compare(dice1,dice2));
 
         return differentProperties.size();
     }
