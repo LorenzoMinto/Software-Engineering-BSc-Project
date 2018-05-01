@@ -10,5 +10,4 @@ public abstract class PublicObjectiveCard extends ObjectiveCard{
     public PublicObjectiveCard(String title, String description, String imageURL) {
         super(title, description, imageURL);
     }
-    public abstract PublicObjectiveCard copy();
 }

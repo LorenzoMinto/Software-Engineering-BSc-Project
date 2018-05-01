@@ -158,4 +158,12 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         }
         return transposedPattern;
     }
+
+    @Override
+    public String toString(){
+        String s = super.toString();
+        s = s.concat("Multiplier: " + multiplier);
+        s = s.concat(System.lineSeparator());
+        return s;
+    }
 }

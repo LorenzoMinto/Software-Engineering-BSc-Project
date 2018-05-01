@@ -14,7 +14,7 @@ public class ObjectiveCardFactory {
 
         do{
             color = DiceColors.getRandomColor();
-        }while (assignedColors.contains(color));
+        }while (color.equals(DiceColors.NOCOLOR) || assignedColors.contains(color));
 
         assignedColors.add(color);
 
@@ -22,8 +22,8 @@ public class ObjectiveCardFactory {
     }
 
     private PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
-        String title = "Shades of " + color.toString() + " - Private";
-        String description = "Sum of values on " + color.toString() + " dice";
+        String title = "Shades of " + color.name().toLowerCase()+ " - Private";
+        String description = "Sum of values on " + color.name().toLowerCase() + " dice";
         String imageURL = null;
 
         switch (color){
@@ -133,7 +133,7 @@ public class ObjectiveCardFactory {
         completeDescription(colors, description);
 
         if(colors.size() == 5){
-            description = "Sets of one of each color anywhere.";
+            description = "Sets of one of each color anywhere";
             multiplier = 4;
             imageURL = null;
         }
@@ -155,28 +155,28 @@ public class ObjectiveCardFactory {
                 secondValue = 2;
                 if(values.contains(firstValue) && values.contains(secondValue)){
                     title = "Light Shades";
-                    description = "Sets of 1 & 2 values anywhere.";
+                    description = "Sets of 1 & 2 values anywhere";
                     imageURL = null;
                 }
                 firstValue = 3;
                 secondValue = 4;
                 if(values.contains(firstValue) && values.contains(secondValue)){
                     title = "Medium Shades";
-                    description = "Sets of 3 & 4 values anywhere.";
+                    description = "Sets of 3 & 4 values anywhere";
                     imageURL = null;
                 }
                 firstValue = 5;
                 secondValue = 6;
                 if(values.contains(firstValue) && values.contains(secondValue)){
                     title = "Deep Shades";
-                    description = "Sets of 5 & 6 values anywhere.";
+                    description = "Sets of 5 & 6 values anywhere";
                     imageURL = null;
                 }
                 multiplier = 2;
                 break;
             case 6:
                 title = "Shade Variety";
-                description = "Sets of one of each value anywhere.";
+                description = "Sets of one of each value anywhere";
                 multiplier = 5;
                 imageURL = null;
                 break;
@@ -187,9 +187,9 @@ public class ObjectiveCardFactory {
         return new SetPublicObjectiveCard(title, description, imageURL, values,Dice::getValue, multiplier);
     }
 
-    private PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
+    public PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
         String title = "Color Diagonals";
-        String description = "Count of diagonally adjacent same color dice.";
+        String description = "Count of diagonally adjacent same color dice";
         String imageURL = null;
 
         return new DiagonalsPublicObjectiveCard(title, description, imageURL, new ColorComparator());
@@ -198,35 +198,35 @@ public class ObjectiveCardFactory {
     //This card does not yet exist in the game
     private PublicObjectiveCard createDiagonalsValuePublicObjectiveCard(){
         String title = "Shade Diagonals";
-        String description = "Count of diagonally adjacent same value dice.";
+        String description = "Count of diagonally adjacent same value dice";
         String imageURL = null;
         return new DiagonalsPublicObjectiveCard(title, description, imageURL, new ShadeComparator());
     }
 
     private PublicObjectiveCard createRowsColorPublicObjectiveCard() {
         String title = "Row Color Variety";
-        String description = "Rows with no repeated colors.";
+        String description = "Rows with no repeated colors";
         String imageURL = null;
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ColorComparator(), 6, true);
     }
 
     private PublicObjectiveCard createColumnsColorPublicObjectiveCard() {
         String title = "Column Color Variety";
-        String description = "Columns with no repeated colors.";
+        String description = "Columns with no repeated colors";
         String imageURL = null;
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ColorComparator(), 5, false);
     }
 
     private PublicObjectiveCard createRowsValuePublicObjectiveCard() {
         String title = "Row Shade Variety";
-        String description = "Rows with no repeated values.";
+        String description = "Rows with no repeated values";
         String imageURL = null;
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ShadeComparator(), 5, true);
     }
 
     private PublicObjectiveCard createColumnsValuePublicObjectiveCard() {
         String title = "Column Shade Variety";
-        String description = "Columns with no repeated values.";
+        String description = "Columns with no repeated values";
         String imageURL = null;
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, new ShadeComparator(), 4, false);
     }
@@ -239,7 +239,7 @@ public class ObjectiveCardFactory {
             if(i!= items.size()){
                 description = description.concat(", ");
             }
-            description = description.concat(" dice anywhere.");
+            description = description.concat(" dice anywhere");
         }
     }
 }

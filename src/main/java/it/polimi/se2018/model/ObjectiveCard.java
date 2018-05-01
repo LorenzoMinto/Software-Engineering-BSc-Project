@@ -28,4 +28,12 @@ public abstract class ObjectiveCard {
 
     public abstract int calculateScore(WindowPattern windowPattern);
 
+    public String toString(){
+        String s = title;
+        s = s.concat(System.lineSeparator());
+        s = s.concat(description);
+        s = s.concat(System.lineSeparator());
+        return s;
+    }
+
 }

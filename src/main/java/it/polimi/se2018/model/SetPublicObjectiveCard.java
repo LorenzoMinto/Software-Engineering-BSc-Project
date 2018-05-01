@@ -140,4 +140,12 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         return numberOfCompletedSets;
     }
 
+    @Override
+    public String toString(){
+        String s = super.toString();
+        s = s.concat("Multiplier: " + multiplier);
+        s = s.concat(System.lineSeparator());
+        return s;
+    }
+
 }
