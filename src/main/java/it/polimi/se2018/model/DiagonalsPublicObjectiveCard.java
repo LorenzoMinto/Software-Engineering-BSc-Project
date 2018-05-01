@@ -26,7 +26,8 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
     private Comparator<Dice> comparator;
 
-    public DiagonalsPublicObjectiveCard(Comparator<Dice> comparator) {
+    public DiagonalsPublicObjectiveCard(String title, String description, String imageURL, Comparator<Dice> comparator) {
+        super(title, description, imageURL);
         this.comparator = comparator;
     }
 

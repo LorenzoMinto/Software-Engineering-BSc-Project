@@ -6,4 +6,8 @@ The objective of this abstract class is to better understand that a Game has a c
 which are visible to every player, whereas the private ones are only visible to the player who owns them.
 */
 
-public abstract class PublicObjectiveCard extends ObjectiveCard{}
+public abstract class PublicObjectiveCard extends ObjectiveCard{
+    public PublicObjectiveCard(String title, String description, String imageURL) {
+        super(title, description, imageURL);
+    }
+}

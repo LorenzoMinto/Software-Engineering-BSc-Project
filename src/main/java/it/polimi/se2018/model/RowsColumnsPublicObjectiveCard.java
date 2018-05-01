@@ -30,7 +30,8 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     private int multiplier;
     private boolean checkByRow;
 
-    public RowsColumnsPublicObjectiveCard(Comparator<Dice> comparator, int multiplier, boolean checkByRow) {
+    public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL, Comparator<Dice> comparator, int multiplier, boolean checkByRow) {
+        super(title, description, imageURL);
         this.comparator = comparator;
         this.multiplier = multiplier;
         this.checkByRow = checkByRow;

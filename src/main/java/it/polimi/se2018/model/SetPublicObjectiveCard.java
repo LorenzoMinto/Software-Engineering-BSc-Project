@@ -33,7 +33,9 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     private int multiplier;
 
 
-    public SetPublicObjectiveCard(Set<Object> items, Function<Dice,Object> getPropertyFunction, int multiplier) {
+    public SetPublicObjectiveCard(String title, String description, String imageURL, Set<Object> items,
+                                  Function<Dice, Object> getPropertyFunction, int multiplier) {
+        super(title, description, imageURL);
         this.items = items;
         this.getPropertyFunction = getPropertyFunction;
         this.multiplier = multiplier;
