@@ -14,7 +14,7 @@ public class Dice {
         this.roll();
     }
 
-    private Dice(DiceColors color, int value) {
+    public Dice(DiceColors color, int value) {
 
         this.color = color;
         this.value = value;
