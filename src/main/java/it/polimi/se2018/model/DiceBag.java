@@ -35,11 +35,6 @@ public class DiceBag {
 
     //Returns true if no more dices can be created. False in the other case.
     private boolean isEmpty(){
-        for (Integer i : availableDices){
-            if(i!=0){
-                return false;
-            }
-        }
-        return true;
+        return availableDices.stream().mapToInt(Integer::intValue).sum() == 0;
     }
 }

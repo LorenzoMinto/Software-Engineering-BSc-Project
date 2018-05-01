@@ -15,6 +15,8 @@ public class Player {
     private PrivateObjectiveCard privateObjectiveCard;
 
     public Player(User user, String nickname) {
+        if(user==null) throw new IllegalArgumentException();
+
         this.user = user;
 
         this.nickname = nickname;
@@ -27,6 +29,18 @@ public class Player {
     }
 
     public Player(User user, String nickname, WindowPattern windowPattern, PrivateObjectiveCard card) {
+
+        //Checks for bad params
+        if(user==null){
+            throw new IllegalArgumentException("Asked to create a player giving null user");
+        }
+        if(windowPattern==null){
+            throw new IllegalArgumentException("Asked to create a player giving null windowPattern");
+        }
+        if(card==null){
+            throw new IllegalArgumentException("Asked to create a player giving null card");
+        }
+
         this.user = user;
 
         this.nickname = nickname;
@@ -40,6 +54,8 @@ public class Player {
 
     //Can be assigned only one time at all
     public void setWindowPattern(WindowPattern windowPattern) {
+        if(windowPattern==null) throw new IllegalArgumentException();
+
         if(this.windowPattern==null){
             this.windowPattern = windowPattern;
             this.favorTokens = windowPattern.getDifficulty();
@@ -48,6 +64,8 @@ public class Player {
 
     //Can be assigned only one time at all
     public void setPrivateObjectiveCard(PrivateObjectiveCard card) {
+        if(card==null) throw new IllegalArgumentException();
+
         if(this.privateObjectiveCard==null){
             this.privateObjectiveCard = card;
         }

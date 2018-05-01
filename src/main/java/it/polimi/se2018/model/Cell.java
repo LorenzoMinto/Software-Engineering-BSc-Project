@@ -39,6 +39,7 @@ public class Cell{
     }
 
     public void setDice(Dice dice) {
+        if(dice==null) throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]");
         this.dice = dice;
     }
 

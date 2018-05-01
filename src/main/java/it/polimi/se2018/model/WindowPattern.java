@@ -18,6 +18,8 @@ public class WindowPattern {
     private Cell[][] pattern;
 
     public WindowPattern(String name, int d, int r, int c, Cell[][] p) {
+        if(p==null) throw new IllegalArgumentException();
+
         this.name = name;
         this.difficulty = d;
         this.numberOfRows = r;
@@ -61,6 +63,8 @@ public class WindowPattern {
     //Put a dice in the cell corresponding to the given row and column
     public boolean putDiceOnCell(Dice dice, int row, int col) {
 
+        if(dice==null) throw new IllegalArgumentException("Asked to put a null dice on cell [I am window pattern]");
+
         //Checks if location row,col is correct
         if(row>numberOfRows || col > numberOfColumns){
             return false;
@@ -72,6 +76,7 @@ public class WindowPattern {
         }
 
         pattern[row][col].setDice(dice);
+
         return true;
     }
 
