@@ -12,7 +12,13 @@ public enum DiceColors {
 
     public static DiceColors getRandomColor(){
         Random random = new Random();
-        return values()[random.nextInt(values().length)];
+        DiceColors randomColor;
+
+        do{
+            randomColor = values()[random.nextInt(values().length)];
+        } while (randomColor!=DiceColors.NOCOLOR);
+
+        return randomColor;
     }
 
     @Override

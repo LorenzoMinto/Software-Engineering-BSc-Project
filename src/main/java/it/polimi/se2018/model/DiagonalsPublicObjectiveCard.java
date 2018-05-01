@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /*
-Public Objective Card that counts the number of diagonally adjacent dice of a window pattern with the same property
+Public Objective Card that counts the number of diagonally adjacent dice in a window pattern with the same property
 (color or value)
 The comparator, which compares the property, is passed in the constructor
 
@@ -26,8 +26,17 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
     private Comparator<Dice> comparator;
 
-    public DiagonalsPublicObjectiveCard(Comparator<Dice> comparator) {
+    public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
+                                        Comparator<Dice> comparator) {
+        super(title, description, imageURL);
         this.comparator = comparator;
+    }
+
+    //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
+    @Override
+    public PublicObjectiveCard copy() {
+        return new DiagonalsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
+                this.comparator);
     }
 
     /*

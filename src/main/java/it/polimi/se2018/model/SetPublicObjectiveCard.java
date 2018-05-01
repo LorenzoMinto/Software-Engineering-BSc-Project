@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 
 /*
-Public Objective Card that counts the number of sets of dice in a window pattern, one for each color
+Public Objective Card that counts the number of sets of dice in a window pattern, one dice for each color
 or value from a specific list.
 The set of properties (colors or values) that form a set is passed in the constructor and is stored in 'items'
 
@@ -33,10 +33,19 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     private int multiplier;
 
 
-    public SetPublicObjectiveCard(Set<Object> items, Function<Dice,Object> getPropertyFunction, int multiplier) {
+    public SetPublicObjectiveCard(String title, String description, String imageURL, Set<Object> items,
+                                  Function<Dice, Object> getPropertyFunction, int multiplier) {
+        super(title, description, imageURL);
         this.items = items;
         this.getPropertyFunction = getPropertyFunction;
         this.multiplier = multiplier;
+    }
+
+    //Returns a new SetPublicObjectiveCard instance with same properties of this one
+    @Override
+    public PublicObjectiveCard copy() {
+        return new SetPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
+                this.items, this.getPropertyFunction, this.multiplier);
     }
 
     /*
@@ -129,6 +138,14 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
             }
         }
         return numberOfCompletedSets;
+    }
+
+    @Override
+    public String toString(){
+        String s = super.toString();
+        s = s.concat("Multiplier: " + multiplier);
+        s = s.concat(System.lineSeparator());
+        return s;
     }
 
 }
