@@ -18,9 +18,37 @@ public class ObjectiveCardFactory {
 
         assignedColors.add(color);
 
-        return new PrivateObjectiveCard(color);
+        return createPrivateObjectiveCard(color);
     }
 
+    private PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
+        String title = "Shades of " + color.toString() + " - Private";
+        String description = "Sum of values on " + color.toString() + " dice";
+        String imageURL = null;
+
+        switch (color){
+            case RED:
+                imageURL = null;
+                break;
+            case YELLOW:
+                imageURL = null;
+                break;
+            case GREEN:
+                imageURL = null;
+                break;
+            case BLUE:
+                imageURL = null;
+                break;
+            case PURPLE:
+                imageURL = null;
+                break;
+            default:
+                break;
+        }
+
+        return new PrivateObjectiveCard(title, description, imageURL, color);
+
+    }
 
 
     public Set<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
