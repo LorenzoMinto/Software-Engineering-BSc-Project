@@ -61,8 +61,13 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
 
-        int numberOfCompletedSets;
+        if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
+                " a null window pattern."); }
+
         Cell[][] pattern = windowPattern.getPattern();
+        if(pattern==null){ throw new IllegalArgumentException("ERROR: Pattern is null"); }
+
+        int numberOfCompletedSets;
         List<HashSet<Object>> listOfSets = new ArrayList<>();
         Object currentProperty;
 
@@ -87,6 +92,8 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     Otherwise returns null
     */
     private Object getProperty(Cell cell) {
+        if(cell==null){ throw new IllegalArgumentException("ERROR: Cannot get the property of" +
+                " a null cell."); }
         if(cell.hasDice()) {
             return this.getPropertyFunction.apply(cell.getDice());
         }else{
@@ -98,6 +105,8 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     Updates the sets adding the current property if it is different from null and it is contained in 'items'
     */
     private void updateSets(List<HashSet<Object>> listOfSets, Object currentProperty) {
+
+        if(listOfSets==null){ throw new IllegalArgumentException("ERROR: List of Sets cannot be null.");}
 
         /*
         If there is not a dice on the current cell or if the property to be evaluated is not contained in 'items',
@@ -132,6 +141,8 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     Counts the number of sets that are equal to the requested set ('items') specified in the constructor of the card
     */
     private int countCompletedSets(List<HashSet<Object>> listOfSets) {
+        if(listOfSets==null){ throw new IllegalArgumentException("ERROR: List of Sets cannot be null.");}
+
         int numberOfCompletedSets = 0;
 
         for (HashSet set: listOfSets) {

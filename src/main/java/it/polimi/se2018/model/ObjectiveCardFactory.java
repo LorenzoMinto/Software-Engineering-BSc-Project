@@ -22,6 +22,9 @@ public class ObjectiveCardFactory {
     }
 
     private PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
+        if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
+                "Private Objective Card with no color"); }
+
         String title = "Shades of " + color.toString()+ " - Private";
         String description = "Sum of values on " + color.toString() + " dice";
         String imageURL = null;
@@ -43,6 +46,8 @@ public class ObjectiveCardFactory {
                 imageURL = null;
                 break;
             default:
+                RuntimeException e = new RuntimeException("ERROR: The selected color does not exist.");
+                e.printStackTrace();
                 break;
         }
 
@@ -68,7 +73,7 @@ public class ObjectiveCardFactory {
             //Choose randomly one of the cards
             do {
                 randomIndex = r.nextInt(numberOfPublicObjectiveCards);
-                currentCard = getPublicObjectiveCardCardByNumber(randomIndex);
+                currentCard = getPublicObjectiveCardCardByIndex(randomIndex);
                 publicObjectiveCards.add(currentCard);
 
             }while(publicObjectiveCards.contains(currentCard));
@@ -78,8 +83,10 @@ public class ObjectiveCardFactory {
         return publicObjectiveCards;
     }
 
-    private PublicObjectiveCard getPublicObjectiveCardCardByNumber(int index) {
-        if(index > numberOfPublicObjectiveCards-1|| index<0) return null;
+    private PublicObjectiveCard getPublicObjectiveCardCardByIndex(int index) {
+        if(index > numberOfPublicObjectiveCards-1|| index<0) { throw new IllegalArgumentException("ERROR: " +
+                "Cannot get a Public Objective card with index not in range " +
+                "[0,"+(numberOfPublicObjectiveCards-1)+"]."); }
 
         Set<Object> items;
         switch (index){
@@ -123,12 +130,16 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard(items);
             default:
+                RuntimeException e = new RuntimeException("ERROR: The selected card by index does not exist.");
+                e.printStackTrace();
                 return null;
         }
     }
 
     //The card that now exists only has all 5 colors
     private PublicObjectiveCard createColorSetPublicObjectiveCard(Set<Object> colors){
+        if(colors == null){ throw new IllegalArgumentException("ERROR: Color set cannot be null."); }
+
         String title = "Color Variety";
         String description = "Sets of one ";
         int multiplier = colors.size();
@@ -148,6 +159,8 @@ public class ObjectiveCardFactory {
     }
 
     private PublicObjectiveCard createValueSetPublicObjectiveCard(Set<Object> values){
+        if(values == null){ throw new IllegalArgumentException("ERROR: Value set cannot be null."); }
+
         String title = null;
         String description = null;
         int multiplier = values.size();

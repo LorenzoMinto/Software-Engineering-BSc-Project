@@ -45,6 +45,9 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
+        if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
+                " a null window pattern."); }
+
         int score = 0;
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
@@ -161,7 +164,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         adjacentDiceLinearIndex = getLinearIndex(row+1,column+move, numberOfRows);
 
         //Compare the dice. Return 0 as the score of the pair if the comparison is not positive
-        if(currentDiceProperty == adjacentDiceProperty ) return 0;
+        if(currentDiceProperty != adjacentDiceProperty ) return 0;
 
         score += scoreDice(listOfNotCountedDice, currentDiceLinearIndex);
         score += scoreDice(listOfNotCountedDice, adjacentDiceLinearIndex);
@@ -173,6 +176,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     Returns 1 if the dice has not already been considered, otherwise 0
     */
     private int scoreDice(List<Integer> list, Integer linearIndex) {
+        if(list==null){ throw new IllegalArgumentException("ERROR: List cannot be null");}
 
         if(list.contains(linearIndex)){
             list.remove(linearIndex);
@@ -185,6 +189,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     Returns a list full of all integers from 0 to parameter 'numbers' -1
     */
     private List<Integer> fillListWithNumbers(int numbers){
+        if(numbers< 0){ throw new IllegalArgumentException("ERROR: parameter cannot be negative");}
         List<Integer> list = new ArrayList<>();
         for(int i=0; i < numbers; i++){
             list.add(i);

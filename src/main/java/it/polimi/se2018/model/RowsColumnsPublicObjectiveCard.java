@@ -60,6 +60,8 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
+        if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
+                " a null window pattern."); }
 
         int numberOfValidRows = 0;
         int numberOfDifferentProperties;
@@ -83,7 +85,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         for(int row = 0; row < numberOfRows; row++){
 
             //If the current row is incomplete, then skip to the next row
-            if(rowIsIncomplete(row, pattern, numberOfColumns)) continue;
+            if(rowIsIncomplete(pattern[row], numberOfColumns)) continue;
 
             numberOfDifferentProperties = getRowDifferentPropertiesNumber(pattern[row], numberOfColumns);
 
@@ -102,6 +104,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
                        if it is 0, then the two dice compared have the same property
     */
     private int getRowDifferentPropertiesNumber(Cell[] row, int numberOfColumns) {
+        if(row==null){ throw new IllegalArgumentException("ERROR: Cannot check a null row"); }
 
         Set<Object> differentProperties = new HashSet<>();
         Dice dice1;
@@ -114,7 +117,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
             If their properties are different add the properties to the set of different properties
             Otherwise return 0 since there are at least two dice with the same property on the row
         */
-        for(int col = 0; col < numberOfColumns; col++) {
+        for(int col = 0; col +1 < numberOfColumns; col++) {
 
             dice1 = row[col].getDice();
             dice2 = row[col+1].getDice();
@@ -136,9 +139,11 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     /*
     Returns true if every cell that forms a specified row has a dice
     */
-    private boolean rowIsIncomplete(int row, Cell[][] pattern, int numberOfColumns) {
+    private boolean rowIsIncomplete(Cell[] row, int numberOfColumns) {
+        if(row==null){ throw new IllegalArgumentException("ERROR: Cannot get dice of a null row."); }
+
         for(int col=0; col < numberOfColumns; col++){
-            if(!pattern[row][col].hasDice()) return true;
+            if(!row[col].hasDice()) return true;
         }
         return false;
     }
@@ -147,6 +152,8 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     Transposes a given pattern
     */
     private Cell[][] transpose(Cell[][] pattern, int rows, int columns) {
+        if(pattern==null){ throw new IllegalArgumentException("ERROR: Cannot transpose a null pattern"); }
+
         Cell[][] transposedPattern = new Cell[columns][rows];
         for(int i=0; i < rows; i++){
             for(int j=0; j < columns; j++){
