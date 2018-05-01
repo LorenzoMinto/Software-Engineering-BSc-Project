@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /*
-Public Objective Card that counts the number of diagonally adjacent dice of a window pattern with the same property
+Public Objective Card that counts the number of diagonally adjacent dice in a window pattern with the same property
 (color or value)
 The comparator, which compares the property, is passed in the constructor
 
