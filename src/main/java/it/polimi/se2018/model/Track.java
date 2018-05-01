@@ -12,6 +12,11 @@ public class Track {
         slots.add(nextSlot);
     }
 
+    public List<Dice> getDicesFromSlotNumber(int slotNumber) {
+        TrackSlot slot = slots.get(slotNumber);
+        return slot.getDices();
+    }
+
     //Removes dice from corresponding TrackSlot
     public boolean takeDice(Dice dice, int slotNumber){
         if (slotNumber >= slots.size()) {

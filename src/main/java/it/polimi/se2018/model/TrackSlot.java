@@ -1,8 +1,10 @@
 package it.polimi.se2018.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrackSlot {
+
     //TODO: ask question about rep exposition, if this is private then getter methods returns a copy and accessibility changes.
     private List<Dice> dices;
 
@@ -15,6 +17,10 @@ public class TrackSlot {
     public boolean removeDice(Dice dice) {
         if (dices.contains(dice)) { return dices.remove(dice); }
         return false;
+    }
+
+    public List<Dice> getDices() {
+        return new ArrayList<>(dices);
     }
 
 }
