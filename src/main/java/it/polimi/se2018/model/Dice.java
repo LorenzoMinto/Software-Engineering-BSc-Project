@@ -72,4 +72,19 @@ public class Dice {
     public String toString() {
         return this.value + ":" + this.color.toOneLetter();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Dice)) {
+            return false;
+        }
+
+        Dice c = (Dice) o;
+
+        return this.value == c.getValue()
+                && this.color == c.getColor();
+    }
 }
