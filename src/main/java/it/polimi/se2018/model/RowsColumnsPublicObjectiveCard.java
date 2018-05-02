@@ -13,8 +13,6 @@ The Function, which gets the property of the dice, is passed in the constructor
 The boolean 'checkByRow' specifies if the card checks the property by row or by column
 
 Attributes:
-    getPropertyFunction: gets the property of the dice specified in the constructor
-                         needed to compare the properties of two dice
     multiplier: the score multiplier that is specific for each combination of the couple (property, row ||column)
     checkByRow
 
@@ -27,17 +25,14 @@ Methods:
 
 public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
 
-    private Function<Dice,Object> getPropertyFunction;
-
     private int multiplier;
 
     private boolean checkByRow;
 
     public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL,
-                                          Function<Dice, Object> getPropertyFunction,
+                                          Function<Dice, Object> propertyFunction,
                                           int multiplier, boolean checkByRow) {
-        super(title, description, imageURL);
-        this.getPropertyFunction = getPropertyFunction;
+        super(title, description, imageURL, propertyFunction);
         this.multiplier = multiplier;
         this.checkByRow = checkByRow;
     }
@@ -46,7 +41,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public PublicObjectiveCard copy() {
         return new RowsColumnsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
-                this.getPropertyFunction, this.multiplier, this.checkByRow);
+                super.getPropertyFunction(), this.multiplier, this.checkByRow);
     }
 
     /*
@@ -122,8 +117,8 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
             dice1 = row[col].getDice();
             dice2 = row[col+1].getDice();
 
-            property1 = getPropertyFunction.apply(dice1);
-            property2 = getPropertyFunction.apply(dice2);
+            property1 = super.getPropertyFunction().apply(dice1);
+            property2 = super.getPropertyFunction().apply(dice2);
 
             if (property1.equals(property2)) {
                 return 0;

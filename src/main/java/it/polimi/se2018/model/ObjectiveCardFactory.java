@@ -141,9 +141,9 @@ public class ObjectiveCardFactory {
         if(colors == null){ throw new IllegalArgumentException("ERROR: Color set cannot be null."); }
 
         String title = "Color Variety";
-        String description = "Sets of one ";
-        int multiplier = colors.size();
-        String imageURL = null;
+        String description;
+        int multiplier;
+        String imageURL;
 
         if(colors.size() == 5){
             description = "Sets of one of each color anywhere";
@@ -153,6 +153,7 @@ public class ObjectiveCardFactory {
             RuntimeException e = new RuntimeException("ERROR: The Color Set Public Objective Card " +
                     "can only be created with all of the existing colors.");
             e.printStackTrace();
+            return null;
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, colors,Dice::getColor, multiplier);
@@ -161,10 +162,11 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createValueSetPublicObjectiveCard(Set<Object> values){
         if(values == null){ throw new IllegalArgumentException("ERROR: Value set cannot be null."); }
 
-        String title = null;
-        String description = null;
-        int multiplier = values.size();
-        String imageURL = null;
+        String title;
+        String description;
+        String imageURL;
+        int multiplier;
+
 
         switch(values.size()){
             case 2:
@@ -185,6 +187,7 @@ public class ObjectiveCardFactory {
                     RuntimeException e = new RuntimeException("ERROR: The Value Set Public Objective Card " +
                             "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
                     e.printStackTrace();
+                    return null;
                 }
                 multiplier = 2;
                 break;
@@ -199,7 +202,7 @@ public class ObjectiveCardFactory {
                         "cannot be created with the values passed in the constructor. The values passed are:" +
                         values + " .");
                 e.printStackTrace();
-                break;
+                return null;
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, values, Dice::getValue, multiplier);

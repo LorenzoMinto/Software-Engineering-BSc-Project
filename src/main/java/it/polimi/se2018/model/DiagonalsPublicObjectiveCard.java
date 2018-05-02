@@ -8,11 +8,6 @@ import java.util.function.Function;
 /*
 Public Objective Card that counts the number of diagonally adjacent dice in a window pattern with the same property
 (color or value)
-The Function, which gets the property of the dice, is passed in the constructor
-
-Attributes:
-    getPropertyFunction: gets the property of the dice specified in the constructor
-                         needed to compare the properties of two dice
 
 Methods:
     calculateScore()
@@ -25,19 +20,16 @@ Methods:
 
 public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
-    private Function<Dice,Object> getPropertyFunction;
-
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
-                                        Function<Dice,Object> getPropertyFunction) {
-        super(title, description, imageURL);
-        this.getPropertyFunction = getPropertyFunction;
+                                        Function<Dice,Object> propertyFunction) {
+        super(title, description, imageURL, propertyFunction);
     }
 
     //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
     @Override
     public PublicObjectiveCard copy() {
         return new DiagonalsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
-                this.getPropertyFunction);
+                super.getPropertyFunction());
     }
 
     /*
@@ -156,11 +148,11 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         //Get the two dice, their property and their linear index
         currentDice = pattern[row][column].getDice();
-        currentDiceProperty = getPropertyFunction.apply(currentDice);
+        currentDiceProperty = super.getPropertyFunction().apply(currentDice);
         currentDiceLinearIndex = getLinearIndex(row, column, numberOfRows);
 
         adjacentDice = pattern[row + 1][column + move].getDice();
-        adjacentDiceProperty = getPropertyFunction.apply(adjacentDice);
+        adjacentDiceProperty = super.getPropertyFunction().apply(adjacentDice);
         adjacentDiceLinearIndex = getLinearIndex(row+1,column+move, numberOfRows);
 
         //Compare the dice. Return 0 as the score of the pair if the comparison is not positive

@@ -15,8 +15,6 @@ This set is stored in the attribute 'items'
 
 Attributes:
     items: the set of colors or values that form a set
-    getPropertyFunction: gets the property of the dice specified in the constructor
-                         needed to compare the properties of two dice
     multiplier: the score multiplier that is specific for each different set of colors or values
 
 Methods:
@@ -30,16 +28,13 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
     private Set<Object> items;
 
-    private Function<Dice,Object> getPropertyFunction;
-
     private int multiplier;
 
 
     public SetPublicObjectiveCard(String title, String description, String imageURL, Set<Object> items,
-                                  Function<Dice, Object> getPropertyFunction, int multiplier) {
-        super(title, description, imageURL);
+                                  Function<Dice, Object> propertyFunction, int multiplier) {
+        super(title, description, imageURL, propertyFunction);
         this.items = items;
-        this.getPropertyFunction = getPropertyFunction;
         this.multiplier = multiplier;
     }
 
@@ -47,7 +42,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public PublicObjectiveCard copy() {
         return new SetPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
-                this.items, this.getPropertyFunction, this.multiplier);
+                this.items, super.getPropertyFunction(), this.multiplier);
     }
 
     /*
@@ -95,7 +90,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         if(cell==null){ throw new IllegalArgumentException("ERROR: Cannot get the property of" +
                 " a null cell."); }
         if(cell.hasDice()) {
-            return this.getPropertyFunction.apply(cell.getDice());
+            return super.getPropertyFunction().apply(cell.getDice());
         }else{
             return null;
         }
