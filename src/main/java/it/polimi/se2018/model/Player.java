@@ -14,21 +14,7 @@ public class Player {
 
     private PrivateObjectiveCard privateObjectiveCard;
 
-    public Player(User user, String nickname) {
-        if(user==null) throw new IllegalArgumentException();
-
-        this.user = user;
-
-        this.nickname = nickname;
-        this.score = 0;
-
-        this.windowPattern = null;
-        this.favorTokens = 0;
-
-        this.privateObjectiveCard = null;
-    }
-
-    public Player(User user, String nickname, WindowPattern windowPattern, PrivateObjectiveCard card) {
+    public Player(User user, String nickname, PrivateObjectiveCard card) {
 
         //Checks for bad params
         if(user==null){ throw new IllegalArgumentException("Asked to create a player giving null user"); }
@@ -40,8 +26,8 @@ public class Player {
         this.nickname = nickname;
         this.score = 0;
 
-        this.windowPattern = windowPattern;
-        this.favorTokens = windowPattern.getDifficulty();
+        this.windowPattern = null;
+        this.favorTokens = 0;
 
         this.privateObjectiveCard = card;
     }
