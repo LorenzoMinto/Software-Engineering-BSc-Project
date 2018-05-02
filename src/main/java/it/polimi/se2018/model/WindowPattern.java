@@ -3,7 +3,7 @@ package it.polimi.se2018.model;
 public class WindowPattern {
 
     //Name of the pattern
-    private String name;
+    private String title;
 
     //Difficulty of the pattern
     private int difficulty;
@@ -17,10 +17,10 @@ public class WindowPattern {
     //Cells that form the pattern
     private Cell[][] pattern;
 
-    public WindowPattern(String name, int d, int r, int c, Cell[][] p) {
+    public WindowPattern(String title, int d, int r, int c, Cell[][] p) {
         if(p==null) throw new IllegalArgumentException();
 
-        this.name = name;
+        this.title = title;
         this.difficulty = d;
         this.numberOfRows = r;
         this.numberOfColumns = c;
@@ -42,9 +42,9 @@ public class WindowPattern {
         return this.numberOfColumns;
     }
 
-    //Returns the name of the pattern
-    public String getName() {
-        return name;
+    //Returns the title of the pattern
+    public String getTitle() {
+        return title;
     }
 
     //Returns the cells that form the pattern
@@ -82,12 +82,12 @@ public class WindowPattern {
 
     public WindowPattern copy(){
 
-        return new WindowPattern(this.name,this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
+        return new WindowPattern(this.title,this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
     }
 
     @Override
     public String toString() {
-        String s = "{"+this.name+"}";
+        String s = "{"+this.title +"}";
         s = s.concat(System.lineSeparator());
 
         for(Cell[] cellsRow : this.pattern){
