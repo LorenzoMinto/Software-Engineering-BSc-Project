@@ -14,7 +14,7 @@ public class Round {
         this.number = number;
         this.players = players;
         this.diceBag = diceBag;
-        this.draftPool = diceBag.getDices(players.length*2+1);
+        this.draftPool = new DraftPool(diceBag.getDices(players.length*2+1));
     }
 
     public List<Dice> emptyDraftPool(){ return new ArrayList<>(draftPool.dices); }

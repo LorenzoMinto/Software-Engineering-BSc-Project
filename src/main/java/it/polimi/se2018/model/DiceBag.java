@@ -16,8 +16,8 @@ public class DiceBag {
     }
 
     //Takes "quantity" of dices out of DiceBag returning as a DraftPool
-    public DraftPool getDices(int quantity) {
-        DraftPool draftPool = new DraftPool();
+    public List<Dice> getDices(int quantity) {
+        List<Dice> drawnDices = new ArrayList<>();
         for(int i=0; i<quantity; i++){
 
             //Looks for a color dice that can be created, and creates it
@@ -28,9 +28,9 @@ public class DiceBag {
                 availableDicesForRandomColor = availableDices.get(Arrays.asList(DiceColors.values()).indexOf(randomColor));
             } while (availableDicesForRandomColor==0);
 
-            draftPool.addDice( new Dice(randomColor) );
+            drawnDices.add(new Dice(randomColor));
         }
-        return draftPool;
+        return drawnDices;
     }
 
     //Returns true if no more dices can be created. False in the other case.
