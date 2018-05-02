@@ -46,9 +46,7 @@ public class ObjectiveCardFactory {
                 imageURL = null;
                 break;
             default:
-                RuntimeException e = new RuntimeException("ERROR: The selected color does not exist.");
-                e.printStackTrace();
-                break;
+                throw new RuntimeException("ERROR: The selected color does not exist.");
         }
 
         return new PrivateObjectiveCard(title, description, imageURL, color);
@@ -59,9 +57,8 @@ public class ObjectiveCardFactory {
     public Set<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
         if(quantity > numberOfPublicObjectiveCards || quantity < 1){
-            RuntimeException e = new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater" +
+            throw new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater" +
                     "than the number of Public Objective Cards.");
-            e.printStackTrace();
         }
 
         Random r = new Random();
@@ -130,9 +127,7 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard(items);
             default:
-                RuntimeException e = new RuntimeException("ERROR: The selected card by index does not exist.");
-                e.printStackTrace();
-                return null;
+                throw new RuntimeException("ERROR: The selected card by index does not exist.");
         }
     }
 
@@ -150,10 +145,8 @@ public class ObjectiveCardFactory {
             multiplier = 4;
             imageURL = null;
         }else{
-            RuntimeException e = new RuntimeException("ERROR: The Color Set Public Objective Card " +
+            throw new RuntimeException("ERROR: The Color Set Public Objective Card " +
                     "can only be created with all of the existing colors.");
-            e.printStackTrace();
-            return null;
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, colors,Dice::getColor, multiplier);
@@ -184,10 +177,8 @@ public class ObjectiveCardFactory {
                     description = "Sets of 5 & 6 values anywhere";
                     imageURL = null;
                 }else{
-                    RuntimeException e = new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                    throw new RuntimeException("ERROR: The Value Set Public Objective Card " +
                             "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
-                    e.printStackTrace();
-                    return null;
                 }
                 multiplier = 2;
                 break;
@@ -198,11 +189,9 @@ public class ObjectiveCardFactory {
                 imageURL = null;
                 break;
             default:
-                RuntimeException e = new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                throw new RuntimeException("ERROR: The Value Set Public Objective Card " +
                         "cannot be created with the values passed in the constructor. The values passed are:" +
                         values + " .");
-                e.printStackTrace();
-                return null;
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, values, Dice::getValue, multiplier);
