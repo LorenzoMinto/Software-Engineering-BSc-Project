@@ -11,7 +11,8 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
     @Override
     public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         boolean adjacency = checkAdjacentDiceConstraints(windowPattern, row, col);
-        return  invert ? !adjacency : adjacency && decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+        return  invert ? !adjacency : adjacency &&
+                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
     }
 
     //Checks whether specified move complies with dice adjacency constraints

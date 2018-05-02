@@ -9,7 +9,7 @@ public class DraftPool {
     public List<Dice> dices;
 
     public DraftPool() {
-        this.dices = new ArrayList<>();
+        this(new ArrayList<>());
     }
 
     public DraftPool(List<Dice> dices){

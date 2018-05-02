@@ -12,9 +12,7 @@ public class Cell{
     private Dice dice;
 
     public Cell() {
-        this.allowedValue = 0;
-        this.allowedColor = DiceColors.NOCOLOR;
-        this.dice = null;
+        this(0, DiceColors.NOCOLOR);
     }
 
     public Cell(int allowedValue, DiceColors allowedColor){
@@ -39,7 +37,7 @@ public class Cell{
     }
 
     public void setDice(Dice dice) {
-        if(dice==null) throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]");
+        if(dice==null)  { throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]"); }
         this.dice = dice;
     }
 
@@ -55,7 +53,7 @@ public class Cell{
 
     public Cell copy(){
         Cell c = new Cell(this.allowedValue,this.allowedColor);
-        if(this.hasDice()) c.setDice(this.dice.copy());
+        if(this.hasDice()) { c.setDice(this.dice.copy()); }
         return c;
     }
 

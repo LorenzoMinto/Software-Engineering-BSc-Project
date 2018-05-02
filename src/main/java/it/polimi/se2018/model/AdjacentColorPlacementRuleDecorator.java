@@ -8,7 +8,8 @@ public class AdjacentColorPlacementRuleDecorator extends PlacementRuleDecorator 
 
     @Override
     public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
-        return checkAdjacentColorConstraints(windowPattern, dice, row, col) && decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+        return checkAdjacentColorConstraints(windowPattern, dice, row, col) &&
+                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
     }
 
     //Checks whether specified move complies with color adjacency constraints

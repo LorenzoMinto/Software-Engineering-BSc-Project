@@ -8,7 +8,8 @@ public class AdjacentValuePlacementRuleDecorator extends PlacementRuleDecorator 
 
     @Override
     public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
-        return checkAdjacentValueConstraints(windowPattern, dice, row, col) && decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+        return checkAdjacentValueConstraints(windowPattern, dice, row, col) &&
+                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
     }
 
     //Checks whether specified move complies with value adjacency constraints

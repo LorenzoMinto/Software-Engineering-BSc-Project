@@ -8,7 +8,8 @@ public class BorderPlacementRuleDecorator extends PlacementRuleDecorator {
 
     @Override
     public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
-        return checkBorderConstraints(windowPattern, row, col) && decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+        return checkBorderConstraints(windowPattern, row, col) &&
+                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
     }
 
     //Checks whether specified move complies with border constraints (first move)
