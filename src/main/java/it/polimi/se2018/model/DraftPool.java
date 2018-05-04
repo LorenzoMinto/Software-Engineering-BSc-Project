@@ -6,7 +6,7 @@ import java.util.List;
 public class DraftPool {
 
     //List of dices of the draftpool
-    public List<Dice> dices;
+    private List<Dice> dices;
 
     public DraftPool() {
         this(new ArrayList<>());
@@ -22,6 +22,11 @@ public class DraftPool {
         for (Dice dice : dices) {
             dice.roll();
         }
+    }
+
+    public List<Dice> getDices() {
+        //TODO: implement this method
+        return dices;
     }
 
     //Removes from the draftpool the specified dice
