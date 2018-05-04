@@ -16,9 +16,15 @@ public class Dice {
     public Dice(DiceColors color, int value) {
         if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "Dice with no color."); }
-        if(value > 0 && value <= 6){ throw new IllegalArgumentException("ERROR: Cannot create a " +
+        if(value <= 0 || value > 6){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "dice with value not in range [1,6]."); }
         this.color = color;
+        this.value = value;
+    }
+
+    public void setValue(int value) {
+        if(value <= 0 || value > 6){ throw new IllegalArgumentException("ERROR: Cannot create a " +
+                "dice with value not in range [1,6]."); }
         this.value = value;
     }
 
