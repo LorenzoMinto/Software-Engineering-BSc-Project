@@ -7,9 +7,9 @@ public class Track {
     private List<TrackSlot> slots;
 
     //Creates new TrackSlot with list of dices passed
-    public void processDraftPool(List<Dice> dices) {
-        TrackSlot nextSlot = new TrackSlot(dices);
-        slots.add(nextSlot);
+    public void processDices(List<Dice> dices) {
+        TrackSlot slot = new TrackSlot(dices);
+        slots.add(slot);
     }
 
     public List<Dice> getDicesFromSlotNumber(int slotNumber) {
