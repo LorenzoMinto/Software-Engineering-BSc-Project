@@ -5,35 +5,35 @@ import it.polimi.se2018.model.ToolCard;
 
 public class Controller {
     Game game;
-    State state;
+    ControllerState controllerState;
 
     ToolCard activeToolcard;
 
 
-    public StartState getStartState() {
+    public StartControllerState getStartState() {
         return startState;
     }
 
-    public PlaceState getPlaceState() {
+    public PlaceControllerState getPlaceState() {
         return placeState;
     }
 
-    StartState startState;
-    PlaceState placeState;
+    StartControllerState startState;
+    PlaceControllerState placeState;
 
     public Controller(Game game) {
         this.game = game;
-        this.state =  new StartState(this);
+        this.controllerState =  new StartControllerState(this);
 
-        this.startState = new StartState(this);
-        this.placeState = new PlaceState(this);
+        this.startState = new StartControllerState(this);
+        this.placeState = new PlaceControllerState(this);
     }
 
     public handleMove(PlayerMove move) {
         if (game.isCurrentPlayer(move.getPlayer())) {
-            //switch that handles different kind of moves to different methods of current state
+            //switch that handles different kind of moves to different methods of current controllerState
             if (move instanceof UseToolcardPlayerMove) {
-                state.useToolCard(((UseToolcardPlayerMove)move).getToolcard());
+                controllerState.useToolCard(((UseToolcardPlayerMove)move).getToolcard());
             } else if (move instanceof ) {
 
             }
@@ -42,10 +42,10 @@ public class Controller {
         }
     }
 
-    public void setState(State state) {
-        this.state = state;
-        //could change state implicitly
-        this.state.executeImplicitBehaviour();
+    public void setControllerState(ControllerState controllerState) {
+        this.controllerState = controllerState;
+        //could change controllerState implicitly
+        this.controllerState.executeImplicitBehaviour();
     }
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
