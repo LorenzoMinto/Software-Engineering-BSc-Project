@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Turn {
     public Turn(int number, Player player) {
+        if(player==null){ throw new IllegalArgumentException("Asked to create a turn giving null player"); }
+
         this.number = number;
         this.currentPlayer = player;
         this.draftedDice = null;

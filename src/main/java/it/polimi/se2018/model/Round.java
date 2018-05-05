@@ -11,9 +11,15 @@ public class Round {
 
     public DraftPool draftPool;
 
-    public Round(int number, DraftPool draftPool) {
+    private List<Player> players;
+
+    public Round(int number, DraftPool draftPool, List<Player> players) {
+        if(draftPool==null){ throw new IllegalArgumentException("Asked to create a round giving null draftPool"); }
+
         this.number = number;
+        this.currentTurn = null;
         this.draftPool = draftPool;
+        this.players = players;
     }
 
 
@@ -36,17 +42,22 @@ public class Round {
         return ( this.currentTurn.getNumber() < Game.NUMBER_OF_TURNS_PER_ROUND );
     }
 
-    public Turn nextTurn(Player nextTurnPlayer){
+    public Turn nextTurn(){
 
-        int nextTurnNumber = this.currentTurn.getNumber() + 1;
+        int nextTurnNumber;
 
-        if(nextTurnNumber > Game.NUMBER_OF_TURNS_PER_ROUND){ throw new IllegalStateException("Asked to create a turn but exceding turns number limit"); }
+        if( this.currentTurn == null ){
+            nextTurnNumber = 0;
+        } else {
+            nextTurnNumber = this.currentTurn.getNumber() + 1;
 
-        //Creates the turn
-        Turn t = new Turn(nextTurnNumber,nextTurnPlayer);
+            if(nextTurnNumber >= Game.NUMBER_OF_TURNS_PER_ROUND){
+                throw new IllegalStateException("Asked to create a turn but exceding turns number limit");
+            }
+        }
 
-        //Sets the new turn as the current one
-        this.currentTurn = t;
+        //Creates the new turn an sets it as the current one
+        this.currentTurn = new Turn(nextTurnNumber,players.get(nextTurnNumber));
 
         return this.currentTurn;
     }
