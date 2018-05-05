@@ -1,8 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.view.View;
 
-public class Controller {
+public class Controller implements Observer<PlayerMove> {
 
     //TODO: check access permissions to the following attributes
 
@@ -13,6 +15,12 @@ public class Controller {
     ToolCard activeToolcard;
 
     DiceBag diceBag;
+
+    //variables used to keep track of player moves
+    boolean hasToolCardBeenUsed = false;
+    boolean hasDrafted = false;
+    int movesCounter = 0;
+
 
     //Controller states
     StartControllerState startState;
@@ -51,34 +59,43 @@ public class Controller {
 
     //Handling View->Controller (Moves)
 
-    public void handleMove(PlayerMove move) {
-        if (game.currentRound.currentTurn.isCurrentPlayer(move.getPlayer())) {
-            //switch that handles different kind of moves to different methods of current controllerState
-            if (move instanceof UseToolCardPlayerMove) {
 
-                controllerState.useToolCard(
-                        move.getPlayer(),
-                        ((UseToolCardPlayerMove)move).getToolcard()
-                );
 
-            }
-
-            /*
-            TODO: fill with all cases
-            else if (move instanceof ) {
-
-            }
-            */
-        } else {
-            move.getView().reportError("Not your turn!");
-        }
+    public void handleMove(UseToolCardPlayerMove move) {
+        controllerState.useToolCard(
+                move.getPlayer(), move.getToolcard()
+        );
     }
 
-    public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
-        //TODO: implement this method
-        //define logic to check from Controller if toolcard is usable, these object are mere copies.
+    public void handleMove(PlayerMove move) {
 
-        return false; //placeholder waiting for implementation
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
+
+        //define logic to check from Controller if toolcard is usable, these object are mere copies.
+        if(player.getFavorTokens() >= toolCard.getNeededTokens()){
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
     public void setActiveToolCard(ToolCard toolCard) {
@@ -89,8 +106,8 @@ public class Controller {
     }
 
     public ToolCard getActiveToolCard() {
-        //TODO: make a copy
-        return this.activeToolcard;
+        //TODO: COMPLETE toolcard with tokens
+        return new ToolCard(activeToolcard.getTitle(), activeToolcard.getDescription(), activeToolcard.getImageURL());
     }
 
     public boolean goToNextRound() {
@@ -124,5 +141,16 @@ public class Controller {
         //TODO: implement here using Game.NUMBER_OF_ROUNDS, Game.NUMBER_OF_TURNS_PER_ROUND, game.players
 
         return game.players.get(playerShouldPlayingIndex);
+    }
+
+    @Override
+    public void update(PlayerMove move) {
+        Turn currentTurn = game.currentRound.currentTurn;
+        if(!currentTurn.isCurrentPlayer(move.getPlayer())){
+            move.getView().reportError("It's not your turn.");
+            return;
+        }
+
+        handleMove(move);
     }
 }
