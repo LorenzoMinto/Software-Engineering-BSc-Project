@@ -2,9 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Controller {
 
     //TODO: check access permissions to the following attributes
@@ -57,11 +54,11 @@ public class Controller {
     public void handleMove(PlayerMove move) {
         if (game.currentRound.currentTurn.isCurrentPlayer(move.getPlayer())) {
             //switch that handles different kind of moves to different methods of current controllerState
-            if (move instanceof UseToolcardPlayerMove) {
+            if (move instanceof UseToolCardPlayerMove) {
 
                 controllerState.useToolCard(
                         move.getPlayer(),
-                        ((UseToolcardPlayerMove)move).getToolcard()
+                        ((UseToolCardPlayerMove)move).getToolcard()
                 );
 
             }

@@ -23,7 +23,7 @@ public class StartControllerState implements ControllerState {
     }
 
     @Override
-    public boolean useToolCard(ToolCard toolcard, Player player) {
+    public boolean useToolCard(Player player, ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(player, toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.setControllerState(toolcard.nextState(this));
@@ -48,8 +48,13 @@ public class StartControllerState implements ControllerState {
     }
 
     @Override
-    public void deincrementDice() {
+    public void decrementDice() {
         System.out.println("Can't do. Choose a dice from the draft pool or activate a ToolCard");
+    }
+
+    @Override
+    public void chooseDiceValue(int value) {
+        //
     }
 
     @Override
