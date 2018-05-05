@@ -54,11 +54,14 @@ public class StartControllerState implements ControllerState {
 
     @Override
     public void chooseDiceValue(int value) {
-        //
+        System.out.println("Can't do. Choose a dice from the draft pool or activate a ToolCard");
     }
 
     @Override
     public void executeImplicitBehaviour() {
-        //
+        //TODO: initialize commented variables below only when at beginning of turn
+//        controller.hasDrafted = false;
+//        controller.hasToolCardBeenUsed = false;
+//        controller.movesCounter = 0;
     }
 }
