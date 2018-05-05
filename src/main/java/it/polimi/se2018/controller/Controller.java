@@ -2,6 +2,8 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 
+import java.util.List;
+
 public class Controller {
 
     //TODO: check access permissions to the following attributes
@@ -95,8 +97,10 @@ public class Controller {
 
     public boolean goToNextRound() {
         if (game.hasNextRound()) {
+            int numberOfDices = game.players.size() * 2 + 1;
+            List<Dice> dices = diceBag.getDices(numberOfDices);
 
-            game.nextRound( diceBag.getDices(game.players.size() * 2 + 1) );
+            game.nextRound( dices );
             return true;
         }
         return false;
@@ -105,24 +109,10 @@ public class Controller {
     public boolean goToNextTurn() {
         if (game.currentRound.hasNextTurn()) {
 
-            int currentRoundNumber = game.currentRound.getNumber();
-            int currentTurnNumber = game.currentRound.currentTurn.getNumber();
-
-            game.currentRound.nextTurn( whoShouldPlayingOnTurn(currentRoundNumber, currentTurnNumber) );
+            game.currentRound.nextTurn();
             return true;
         }
         return false;
     }
 
-
-    //UTILS
-
-    private Player whoShouldPlayingOnTurn(int roundNumber, int turnNumber){
-
-        int playerShouldPlayingIndex = 0;
-
-        //TODO: implement here using Game.NUMBER_OF_ROUNDS, Game.NUMBER_OF_TURNS_PER_ROUND, game.players
-
-        return game.players.get(playerShouldPlayingIndex);
-    }
 }
