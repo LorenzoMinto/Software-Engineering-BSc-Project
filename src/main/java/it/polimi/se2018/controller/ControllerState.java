@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 
 public interface ControllerState {
@@ -9,7 +10,7 @@ public interface ControllerState {
 
     public void placeDice(int row, int col);
 
-    public boolean useToolCard(ToolCard toolcard);
+    public boolean useToolCard(Player player, ToolCard toolcard);
 
     public void draftDiceFromTrack(Dice dice);
 
