@@ -32,6 +32,26 @@ public class Player {
         this.privateObjectiveCard = card;
     }
 
+
+
+    //Getters
+
+    public int getFavorTokens() {
+        return favorTokens;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+
+
+    //Setters
+
     //Can be assigned only one time at all
     public void setWindowPattern(WindowPattern windowPattern) {
         if(windowPattern==null) throw new IllegalArgumentException();
@@ -58,8 +78,26 @@ public class Player {
         return true;
     }
 
+
+
+    //Utils
+
     //Compares favorTokens with toolCard.getNeededTokens()
     public boolean canUseToolCard(ToolCard toolCard) {
         return toolCard.getNeededTokens() <= favorTokens;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Player)) {
+            return false;
+        }
+
+        Player p = (Player) o;
+
+        return this.nickname == p.getNickname();
     }
 }
