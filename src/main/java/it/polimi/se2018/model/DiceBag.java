@@ -15,7 +15,7 @@ public class DiceBag {
         }
     }
 
-    //Takes "quantity" of dices out of DiceBag returning as a DraftPool
+    //Takes "quantity" of dices out of DiceBag
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
         for(int i=0; i<quantity; i++){

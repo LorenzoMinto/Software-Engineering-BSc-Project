@@ -6,22 +6,49 @@ import java.util.List;
 public class Round {
 
     private int number;
-    private Player[] players;
-    private DraftPool draftPool;
-    private DiceBag diceBag;
 
-    public Round(int number, Player[] players, DiceBag diceBag) {
+    public Turn currentTurn;
+
+    public DraftPool draftPool;
+
+    public Round(int number, DraftPool draftPool) {
         this.number = number;
-        this.players = players;
-        this.diceBag = diceBag;
-        this.draftPool = new DraftPool(diceBag.getDices(players.length*2+1));
+        this.draftPool = draftPool;
     }
 
-    public List<Dice> emptyDraftPool(){ return new ArrayList<>(draftPool.dices); }
 
-    public boolean removeDiceFromDraftPool(Dice dice) {
-        return draftPool.takeDice(dice);
+    //Getters
+
+    public int getNumber() {
+        return number;
     }
 
+    //Setters
+
+    public void setCurrentTurn(Turn turn){
+        this.currentTurn = turn;
+    }
+
+
+    //Turns management
+
+    public boolean hasNextTurn(){
+        return ( this.currentTurn.getNumber() < Game.NUMBER_OF_TURNS_PER_ROUND );
+    }
+
+    public Turn nextTurn(Player nextTurnPlayer){
+
+        int nextTurnNumber = this.currentTurn.getNumber() + 1;
+
+        if(nextTurnNumber > Game.NUMBER_OF_TURNS_PER_ROUND){ throw new IllegalStateException("Asked to create a turn but exceding turns number limit"); }
+
+        //Creates the turn
+        Turn t = new Turn(nextTurnNumber,nextTurnPlayer);
+
+        //Sets the new turn as the current one
+        this.currentTurn = t;
+
+        return this.currentTurn;
+    }
 
 }
