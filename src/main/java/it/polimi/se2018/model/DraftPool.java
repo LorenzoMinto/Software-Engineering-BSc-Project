@@ -25,8 +25,13 @@ public class DraftPool {
     }
 
     public List<Dice> getDices() {
-        //TODO: implement this method
-        return dices;
+        List<Dice> d = new ArrayList<>();
+
+        for(Dice dice : dices){
+            d.add( dice.copy() );
+        }
+
+        return d;
     }
 
     //Removes from the draftpool the specified dice
@@ -39,11 +44,5 @@ public class DraftPool {
     public void putDice(Dice dice) {
 
         dices.add(dice);
-    }
-
-    public List<Dice> empty(){
-        List<Dice> d = new ArrayList<>(this.dices);
-        this.dices = new ArrayList<>();
-        return d;
     }
 }
