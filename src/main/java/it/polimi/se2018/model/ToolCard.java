@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.ControllerState;
+
 public class ToolCard {
     private String title;
     private String description;
@@ -18,11 +20,8 @@ public class ToolCard {
 
     public void use() {
         this.tokensUsed += this.neededTokens;
-        this.updateNeededTokens();
-    }
 
-    //this function incapsulates the logic of the update for the neededTokens, which may vary
-    protected void updateNeededTokens() {
+        //Update neededTokens
         if (this.tokensUsed==1) { this.neededTokens *= 2; }
     }
 
@@ -44,5 +43,15 @@ public class ToolCard {
 
     public String getImageURL() {
         return imageURL;
+    }
+
+    public ControllerState nextState(ControllerState state){
+
+        ControllerState nextState;
+
+        //TODO: implement here calculation of nextState
+        nextState = null;
+
+        return nextState;
     }
 }
