@@ -1,6 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.view.View;
+
 import java.util.List;
 
 public class Controller implements ControllerInterface {
@@ -53,56 +55,98 @@ public class Controller implements ControllerInterface {
     }
 
     //State pattern
-    public void setControllerState(ControllerState controllerState) {
+    public void setControllerState(ControllerState controllerState, View view) {
         this.controllerState = controllerState;
         //could change controllerState implicitly
-        this.controllerState.executeImplicitBehaviour();
+        this.controllerState.executeImplicitBehaviour(view);
     }
 
 
     //Handling View->Controller (Moves)
 
-    public void handleMove(DraftDiceFromDraftPoolMove move){
-        controllerState.draftDiceFromDraftPool(move.getDice());
+    @Override
+    public void handleDraftDiceFromDraftPoolMove(Dice dice, View view) {
+        controllerState.draftDiceFromDraftPool(dice, view);
     }
 
-    public void handleMove(UseToolCardPlayerMove move) {
-        controllerState.useToolCard(
-                move.getPlayer(), move.getToolcard()
-        );
+    @Override
+    public void handleUseToolCardPlayerMove(Player player, ToolCard toolcard, View view) {
+        controllerState.useToolCard(player, toolcard, view);
     }
 
-    public void handleMove(PlaceDiceMove move){
-        controllerState.placeDice(move.getRow(), move.getColumn());
+    @Override
+    public void handlePlaceDiceMove(int row, int col, View view){
+        if(row <= 4 && row >= 0 && col<=5 && col>=0) {
+            controllerState.placeDice(row, col, view);
+        }else { throw new IllegalArgumentException("ERROR: Cannot place dice on row "+row+" column " + col);}
     }
 
-    public void handleMove(IncrementOrDecrementMove move) {
-        if(move.isIncrement()) {
-            controllerState.incrementDice();
+    @Override
+    public void handleIncrementOrDecrementMove(boolean isIncrement, View view) {
+        if(isIncrement) {
+            controllerState.incrementDice(view);
         }else{
-            controllerState.decrementDice();
+            controllerState.decrementDice(view);
         }
     }
 
-    public void handleMove(MoveDiceMove move){
-        controllerState.moveDice(move.getRowFrom(), move.getColFrom(), move.getRowTo(), move.getColTo());
+    @Override
+    public void handleMoveDiceMove(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
+        if(rowFrom <= 4 && rowFrom >= 0 &&
+                colFrom <= 5 && colFrom >= 0 &&
+                rowTo <= 4 && rowTo >= 0 &&
+                colTo <= 5 && colTo >= 0) {
+            controllerState.moveDice(rowFrom, colFrom, rowTo, colTo, view);
+        }else {
+            throw new IllegalArgumentException("ERROR: Cannot place dice from row " + rowFrom + " column " + colFrom +
+                    " to row " + rowTo + " column " + colTo);
+
+        }
     }
 
-    public void handleMove(DraftDiceFromTrackMove move){
-        controllerState.chooseDiceFromTrack(move.getDice());
+
+    @Override
+    public void handleDraftDiceFromTrackMove(Dice dice, int slotNumber,View view){
+        controllerState.chooseDiceFromTrack(dice, slotNumber, view);
     }
 
-    public void handleMove(ChooseDiceValueMove move){
-        controllerState.chooseDiceValue(move.getValue());
+    @Override
+    public void handleChooseDiceValueMove(int value, View view) {
+        controllerState.chooseDiceValue(value, view);
+    }
+
+    @Override
+    public void handleEndMove(){
+        //If the game has finished (no more rounds and turns are to be played) then end the game
+        if(!advanceGame()){
+            endGame();
+        }
+    }
+
+
+    public Player endGame(){
+        //TODO: implement method. Returns the winner.
+        Player winnerPlayer = null;
+
+        return winnerPlayer;
     }
 
 
 
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
-        //TODO: needs to check whether toolcard needs drafting and if turn has already drafted
-        //define logic to check from Controller if toolcard is usable, these object are mere copies.
-        return player.getFavorTokens() >= toolCard.getNeededTokens();
+
+        //If a player's tokens are less than the tokens needed to activate the ToolCard, then the player can't use it
+        if(player.getFavorTokens() < toolCard.getNeededTokens()){
+            return false;
+        }
+
+        //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
+        if(toolCard.needsDrafting() && game.currentRound.currentTurn.hasDrafted()){
+            return false;
+        }
+
+        return true;
     }
 
     public void setActiveToolCard(ToolCard toolCard) {
@@ -119,34 +163,24 @@ public class Controller implements ControllerInterface {
         return activeToolcard.copy();
     }
 
-    public boolean goToNextRound() {
+    private boolean advanceGame() {
+        if (game.currentRound.hasNextTurn()) {
+            game.currentRound.nextTurn();
+            return true;
+        }else {
+            return proceedToNextRound();
+        }
+    }
+
+    private boolean proceedToNextRound() {
         if (game.hasNextRound()) {
-            int numberOfDices = game.players.size() * 2 + 1;
-            List<Dice> dices = diceBag.getDices(numberOfDices);
+            
+            int numberOfDicesPerRound = game.players.size() * 2 + 1;
+            List<Dice> dices = diceBag.getDices(numberOfDicesPerRound);
 
             game.nextRound( dices );
             return true;
         }
         return false;
-    }
-
-    public boolean goToNextTurn() {
-        if (game.currentRound.hasNextTurn()) {
-
-            game.currentRound.nextTurn();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void update(PlayerMove move) {
-        Turn currentTurn = game.currentRound.currentTurn;
-        if(!currentTurn.isCurrentPlayer(move.getPlayer())){
-            move.getView().reportError("It's not your turn.");
-            return;
-        }
-
-        handleMove(move);
     }
 }

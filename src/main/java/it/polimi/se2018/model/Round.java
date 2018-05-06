@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Round {
@@ -52,7 +51,7 @@ public class Round {
             nextTurnNumber = this.currentTurn.getNumber() + 1;
 
             if(nextTurnNumber >= Game.NUMBER_OF_TURNS_PER_ROUND){
-                throw new IllegalStateException("Asked to create a turn but exceding turns number limit");
+                throw new IllegalStateException("Asked to create a turn but exceeding turns number limit");
             }
         }
 
