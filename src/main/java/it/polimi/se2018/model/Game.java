@@ -85,4 +85,7 @@ public class Game {
         return this.players.get(playerShouldPlayingIndex);
     }
 
+    public boolean isCurrentPlayer(Player player) {
+        return this.currentRound.currentTurn.isCurrentPlayer(player);
+    }
 }

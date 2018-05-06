@@ -78,7 +78,9 @@ public class Player {
         return true;
     }
 
-
+    public WindowPattern getWindowPattern() {
+        return windowPattern;
+    }
 
     //Utils
 
