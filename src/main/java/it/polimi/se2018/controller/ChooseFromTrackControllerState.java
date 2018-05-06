@@ -31,7 +31,7 @@ public class ChooseFromTrackControllerState implements ControllerState {
         if (game.track.takeDice(dice, slotNumber)) {
             game.currentRound.currentTurn.setTrackChosenDice(dice);
             game.currentRound.currentTurn.setSlotOfTrackChosenDice(slotNumber);
-            controller.setControllerState(controller.getActiveToolCard().nextState(this));
+            controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
         }
 
     }

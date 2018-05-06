@@ -2,30 +2,35 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.ControllerState;
 
+import java.util.HashMap;
+
 public class ToolCard {
     private String title;
     private String description;
     private int tokensUsed;
     private int neededTokens;
     private String imageURL;
+    HashMap<String,String> controllerStateRules;
 
-    public ToolCard(String title, String description, String imageURL) {
+    public ToolCard(String title, String description, String imageURL, HashMap<String, String> controllerStateRules) {
         this.title = title;
         this.description = description;
         //TODO: neededTokens should be taken from the configuration file
         this.neededTokens = 1;
         this.tokensUsed = 0;
         this.imageURL = imageURL;
+        this.controllerStateRules = controllerStateRules;
     }
 
-    private ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsed){
-        this(title, description, imageURL);
+    private ToolCard(String title, String description, String imageURL, HashMap<String, String> stateRules, int neededTokens, int tokensUsed){
+        this(title, description, imageURL, stateRules);
         this.neededTokens = neededTokens;
         this.tokensUsed = tokensUsed;
     }
 
     public ToolCard copy(){
-        return new ToolCard(this.title, this.description, this.imageURL, this.neededTokens, this.tokensUsed);
+        //TODO: ensure that this.controllerStateRules does not need to be copied
+        return new ToolCard(this.title, this.description, this.imageURL, this.controllerStateRules, this.neededTokens, this.tokensUsed);
     }
 
     public void use() {
@@ -55,13 +60,19 @@ public class ToolCard {
         return imageURL;
     }
 
-    public ControllerState nextState(ControllerState state){
+    public String nextStateID(ControllerState currentState){
 
-        ControllerState nextState;
+        String nextStateID;
 
-        //TODO: implement here calculation of nextState
-        nextState = null;
+        //TODO: use controllerStateRules HasMap
+        nextStateID = null;
 
-        return nextState;
+        return nextStateID;
+    }
+
+    public boolean needsDrafting(){
+        //TODO: implement here
+
+        return false; //this is a placeholder waiting for implementation
     }
 }

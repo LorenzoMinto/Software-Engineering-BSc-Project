@@ -58,6 +58,6 @@ public class SwapDraftedWithTrackControllerState implements ControllerState {
         Turn turn = game.currentRound.currentTurn;
         game.track.putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
         turn.setDraftedDice(turn.getTrackChosenDice());
-        controller.setControllerState(controller.getActiveToolCard().nextState(this));
+        controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
     }
 }

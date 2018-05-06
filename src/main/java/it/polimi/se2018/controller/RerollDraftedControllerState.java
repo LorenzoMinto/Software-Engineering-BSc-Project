@@ -58,6 +58,6 @@ public class RerollDraftedControllerState implements ControllerState {
         Dice draftedDice = currentTurn.getDraftedDice();
         draftedDice.roll();
         currentTurn.setDraftedDice(draftedDice);
-        controller.setControllerState(controller.getActiveToolCard().nextState(this));
+        controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
     }
 }

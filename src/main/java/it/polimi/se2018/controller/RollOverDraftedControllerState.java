@@ -56,6 +56,6 @@ public class RollOverDraftedControllerState implements ControllerState {
         Dice draftedDice = currentTurn.getDraftedDice();
         draftedDice.rollOver();
         currentTurn.setDraftedDice(draftedDice);
-        controller.setControllerState(controller.getActiveToolCard().nextState(this));
+        controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
     }
 }
