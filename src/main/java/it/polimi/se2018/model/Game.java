@@ -55,7 +55,7 @@ public class Game {
         //Creates the list of players in the correct order of the next round
         List<Player> roundPlayers = new ArrayList<>();
         for(int turnNumber=0; turnNumber<Game.NUMBER_OF_TURNS_PER_ROUND; turnNumber++){
-            roundPlayers.add( this.whoShouldBePlayingOnTurn(nextRoundNumber,turnNumber) );
+            roundPlayers.add( this.whoShouldBePlayingDuringTurn(nextRoundNumber,turnNumber) );
         }
 
         return new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
@@ -69,7 +69,7 @@ public class Game {
     }
 
 
-    private Player whoShouldBePlayingOnTurn(int roundNumber, int turnNumber){
+    private Player whoShouldBePlayingDuringTurn(int roundNumber, int turnNumber){
 
         int playerShouldPlayingIndex = 0;
         int numberOfPlayers = this.players.size();

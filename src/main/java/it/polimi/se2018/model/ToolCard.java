@@ -18,6 +18,16 @@ public class ToolCard {
         this.imageURL = imageURL;
     }
 
+    private ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsed){
+        this(title, description, imageURL);
+        this.neededTokens = neededTokens;
+        this.tokensUsed = tokensUsed;
+    }
+
+    public ToolCard copy(){
+        return new ToolCard(this.title, this.description, this.imageURL, this.neededTokens, this.tokensUsed);
+    }
+
     public void use() {
         this.tokensUsed += this.neededTokens;
 
