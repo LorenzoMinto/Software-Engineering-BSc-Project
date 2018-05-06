@@ -36,36 +36,21 @@ public class Game {
     }
 
     public boolean hasNextRound(){
-        return ( this.currentRound.getNumber() < NUMBER_OF_ROUNDS );
+        return ( this.currentRound.getNumber()+1 < NUMBER_OF_ROUNDS );
     }
 
     public Round nextRound(List<Dice> dices){
 
         //TODO: end previous round, empty draftPool and fill track
 
-        int nextRoundNumber;
-
-        //Calculate the number of the next round
-        if( this.currentRound == null ){
-            nextRoundNumber = 0;
-        } else {
-            nextRoundNumber = this.currentRound.getNumber() + 1;
-
-            if(nextRoundNumber >= NUMBER_OF_ROUNDS){
-                throw new IllegalStateException("Asked to create a round but exceeding round number limit");
-            }
-        }
+        int nextRoundNumber = getNextRoundNumber();
 
         //Creates the list of players in the correct order of the next round
-        List<Player> roundPlayers = new ArrayList<>();
-        for(int turnNumber=0; turnNumber<Game.NUMBER_OF_TURNS_PER_ROUND; turnNumber++){
-            roundPlayers.add( this.whoShouldBePlayingDuringTurn(nextRoundNumber,turnNumber) );
-        }
+        List<Player> roundPlayers = getPlayersOfRound(nextRoundNumber);
 
         this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
         return this.currentRound;
     }
-
 
     private Player whoShouldBePlayingDuringTurn(int roundNumber, int turnNumber){
 
@@ -81,4 +66,30 @@ public class Game {
     public boolean isCurrentPlayer(Player player) {
         return this.currentRound.currentTurn.isCurrentPlayer(player);
     }
+
+    private int getNextRoundNumber() {
+
+        if( this.currentRound == null ) {
+            return 0;
+        }
+
+        int nextRoundNumber = this.currentRound.getNumber() + 1;
+
+        if(nextRoundNumber >= NUMBER_OF_ROUNDS){
+            throw new IllegalStateException("Asked to create a round but exceeding round number limit.");
+        }
+
+        return nextRoundNumber;
+    }
+
+    private List<Player> getPlayersOfRound(int nextRoundNumber) {
+        List<Player> roundPlayers = new ArrayList<>();
+
+        for(int turnNumber = 0; turnNumber< Game.NUMBER_OF_TURNS_PER_ROUND; turnNumber++){
+            roundPlayers.add( this.whoShouldBePlayingDuringTurn(nextRoundNumber,turnNumber) );
+        }
+
+        return roundPlayers;
+    }
+
 }

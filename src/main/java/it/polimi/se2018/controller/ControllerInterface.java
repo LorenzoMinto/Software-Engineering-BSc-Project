@@ -5,6 +5,10 @@ import it.polimi.se2018.view.View;
 
 public interface ControllerInterface {
 
+    void handlePlayerRegistration(int UserID, String username, String nickname, View view);
+
+    void handleChooseWindowPattern(WindowPattern windowPattern, View view);
+
     void handleDraftDiceFromDraftPoolMove(Dice dice, View view);
 
     void handleUseToolCardPlayerMove(ToolCard toolcard, View view);
