@@ -7,8 +7,8 @@ public class Game {
 
     //TODO: load these values from config file
     public static final int NUMBER_OF_ROUNDS = 10;
-    public static final int NUMBER_OF_TURNS_PER_ROUND = 8;
     public static final int MAX_NUMBER_OF_PLAYERS = 4;
+    public static final int NUMBER_OF_TURNS_PER_ROUND = MAX_NUMBER_OF_PLAYERS * 2;
 
 
     public Round currentRound;
@@ -68,16 +68,11 @@ public class Game {
 
     private Player whoShouldBePlayingDuringTurn(int roundNumber, int turnNumber){
 
-        int playerShouldPlayingIndex = 0;
         int numberOfPlayers = this.players.size();
 
-        if( turnNumber < numberOfPlayers ){
-            playerShouldPlayingIndex = (turnNumber + (roundNumber % numberOfPlayers)) % numberOfPlayers;
-        } else if ( turnNumber == numberOfPlayers ){
-            playerShouldPlayingIndex = (roundNumber + numberOfPlayers - 1) % numberOfPlayers;
-        } else {
-            playerShouldPlayingIndex = (2*numberOfPlayers - turnNumber - 1) + (roundNumber % numberOfPlayers);
-        }
+        if( turnNumber >= numberOfPlayers ){ turnNumber = NUMBER_OF_TURNS_PER_ROUND - turnNumber - 1; }
+
+        int playerShouldPlayingIndex = (turnNumber + (roundNumber % numberOfPlayers)) % numberOfPlayers;
 
         return this.players.get(playerShouldPlayingIndex);
     }
