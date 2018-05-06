@@ -4,8 +4,6 @@ public class Player {
 
     private int favorTokens;
 
-    private int score;
-
     private String nickname;
 
     private WindowPattern windowPattern;
@@ -24,7 +22,6 @@ public class Player {
         this.user = user;
 
         this.nickname = nickname;
-        this.score = 0;
 
         this.windowPattern = null;
         this.favorTokens = 0;
@@ -38,10 +35,6 @@ public class Player {
 
     public int getFavorTokens() {
         return favorTokens;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public String getNickname() {
