@@ -3,10 +3,10 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class SwapDraftedWithTrackControllerState implements ControllerState {
+public class RerollDraftedControllerState implements ControllerState {
     Controller controller;
 
-    public SwapDraftedWithTrackControllerState(Controller controller) {
+    public RerollDraftedControllerState(Controller controller) {
         this.controller = controller;
     }
 
@@ -54,10 +54,10 @@ public class SwapDraftedWithTrackControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-        Game game = controller.game;
-        Turn turn = game.currentRound.currentTurn;
-        game.track.putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
-        turn.setDraftedDice(turn.getTrackChosenDice());
+        Turn currentTurn = controller.game.currentRound.currentTurn;
+        Dice draftedDice = currentTurn.getDraftedDice();
+        draftedDice.roll();
+        currentTurn.setDraftedDice(draftedDice);
         controller.setControllerState(controller.getActiveToolCard().nextState(this));
     }
 }

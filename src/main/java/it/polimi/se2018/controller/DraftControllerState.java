@@ -63,7 +63,7 @@ public class DraftControllerState implements ControllerState {
     }
 
     @Override
-    public void executeImplicitBehaviour(View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+    public void executeImplicitBehaviour() {
+
     }
 }

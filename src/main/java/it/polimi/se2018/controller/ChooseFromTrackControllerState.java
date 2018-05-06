@@ -57,7 +57,7 @@ public class ChooseFromTrackControllerState implements ControllerState {
     }
 
     @Override
-    public void executeImplicitBehaviour(View view) {
+    public void executeImplicitBehaviour() {
 
     }
 }
