@@ -14,9 +14,9 @@ public class StartControllerState implements ControllerState {
     public void draftDiceFromDraftPool(Dice dice, View view) {
         Game game = controller.game;
         Round currentRound = game.currentRound;
+
         if (currentRound.draftPool.draftDice(dice)) {
             currentRound.currentTurn.setDraftedDice(dice);
-            controller.hasDrafted = true;
         }
         controller.setControllerState(controller.getPlaceState());
     }
@@ -27,13 +27,13 @@ public class StartControllerState implements ControllerState {
     }
 
     @Override
-    public boolean useToolCard(Player player, ToolCard toolcard, View view) {
+    public void useToolCard(Player player, ToolCard toolcard, View view) {
         if (controller.canUseSpecificToolCard(player, toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.setControllerState(toolcard.nextState(this));
-            return true;
+        } else {
+            view.showMessage("Can't use this toolcard.");
         }
-        return false;
     }
 
     @Override
@@ -63,9 +63,6 @@ public class StartControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour(View view) {
-        //TODO: initialize commented variables below only when at beginning of turn
-//        controller.hasDrafted = false;
-//        controller.hasToolCardBeenUsed = false;
-//        controller.movesCounter = 0;
+
     }
 }

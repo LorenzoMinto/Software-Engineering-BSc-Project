@@ -97,9 +97,9 @@ public class Controller implements Observer<PlayerMove> {
 
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
-
+        //TODO: needs to check whether toolcard needs drafting and if turn has already drafted
         //define logic to check from Controller if toolcard is usable, these object are mere copies.
-            return player.getFavorTokens() >= toolCard.getNeededTokens();
+        return player.getFavorTokens() >= toolCard.getNeededTokens();
     }
 
     public void setActiveToolCard(ToolCard toolCard) {
