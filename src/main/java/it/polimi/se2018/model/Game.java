@@ -1,7 +1,9 @@
 package it.polimi.se2018.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Game {
 
@@ -14,16 +16,15 @@ public class Game {
     public Round currentRound;
     public Track track;
     public List<Player> players;
-    public List<ToolCard> drawnToolCards;
-    public List<PublicObjectiveCard> drawnPublicObjectiveCards;
-    private Player winner;
+    public Set<ToolCard> drawnToolCards;
+    public Set<PublicObjectiveCard> drawnPublicObjectiveCards;
 
     public Game() {
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
-        this.drawnToolCards = new ArrayList<>();
-        this.drawnPublicObjectiveCards = new ArrayList<>();
+        this.drawnToolCards = new HashSet<>();
+        this.drawnPublicObjectiveCards = new HashSet<>();
     }
 
     public boolean addPlayer(Player player){
