@@ -106,7 +106,7 @@ public class Controller implements ControllerInterface {
 
 
     @Override
-    public void handleDraftDiceFromTrackMove(Dice dice, int slotNumber,View view){
+    public void handleDraftDiceFromTrackMove(Dice dice, int slotNumber, View view){
         controllerState.chooseDiceFromTrack(dice, slotNumber, view);
     }
 
@@ -136,17 +136,12 @@ public class Controller implements ControllerInterface {
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
 
-        //If a player's tokens are less than the tokens needed to activate the ToolCard, then the player can't use it
-        if(player.getFavorTokens() < toolCard.getNeededTokens()){
-            return false;
-        }
-
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
         if(toolCard.needsDrafting() && game.currentRound.currentTurn.hasDrafted()){
             return false;
         }
 
-        return true;
+        return player.canUseToolCard(toolCard);
     }
 
     public void setActiveToolCard(ToolCard toolCard) {

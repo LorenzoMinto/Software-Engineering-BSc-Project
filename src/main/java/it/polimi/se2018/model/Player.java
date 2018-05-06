@@ -62,7 +62,7 @@ public class Player {
         }
     }
 
-    //Can be assigned only one time at all
+    //Can be assigned only once
     public void setPrivateObjectiveCard(PrivateObjectiveCard card) {
         if(card==null) throw new IllegalArgumentException();
 
@@ -70,6 +70,11 @@ public class Player {
             this.privateObjectiveCard = card;
         }
     }
+
+    public PrivateObjectiveCard getPrivateObjectiveCard() {
+        return privateObjectiveCard;
+    }
+
 
     //Decrease favorTokens of quantity. Return false if not enough tokens left.
     public boolean decreaseTokens(int quantity) {
