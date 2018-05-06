@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -85,18 +86,24 @@ public class ToolCardsManager {
             String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
 
             //Parse from xml the list of constraints
-            NodeList constraints = document.getElementsByTagName("constraint");
-            for(int i=0; i<constraints.getLength(); i++){
+            NodeList placementRules = document.getElementsByTagName("placementRule");
+            for(int i=0; i<placementRules.getLength(); i++){
 
-                NamedNodeMap a = constraints.item(i).getAttributes();
+                NamedNodeMap a = placementRules.item(i).getAttributes();
 
                 //Parse from xml the decoratorName constraint
                 String decoratorName = a.getNamedItem("decoratorName").getNodeValue();
 
-                //TODO: Decorating toolcard rule
+                //TODO: Decorating toolcard placementRule
             }
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL);
+            //TODO: Parse of controllerStateRules
+
+            HashMap<String,String> controllerStateRules = new HashMap<>();
+
+            //TODO: Create HasMap of controllerStateRules
+
+            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,controllerStateRules);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
