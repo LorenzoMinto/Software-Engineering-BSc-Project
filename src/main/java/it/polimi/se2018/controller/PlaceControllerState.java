@@ -26,7 +26,7 @@ public class PlaceControllerState implements ControllerState {
                 view.showMessage("Dice placed!");
 
                 if (controller.getActiveToolCard() != null) {
-                    controller.setControllerState(controller.getActiveToolCard().nextState(this));
+                    controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
                 } else {
                     //TODO: change to ToolcardState
                     controller.setControllerState(controller.getToolCardState());

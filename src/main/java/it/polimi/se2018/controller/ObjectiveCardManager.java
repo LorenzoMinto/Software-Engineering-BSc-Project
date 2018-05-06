@@ -41,7 +41,7 @@ public class ObjectiveCardManager {
             //Choose randomly one of the cards
             do {
                 randomIndex = r.nextInt(numberOfPublicObjectiveCards);
-                currentCard = ObjectiveCardFactory.getInstance().getPublicObjectiveCardCardByIndex(randomIndex);
+                currentCard = ObjectiveCardFactory.getInstance().createPublicObjectiveCardCardByIndex(randomIndex);
                 publicObjectiveCards.add(currentCard);
 
             }while(publicObjectiveCards.contains(currentCard));

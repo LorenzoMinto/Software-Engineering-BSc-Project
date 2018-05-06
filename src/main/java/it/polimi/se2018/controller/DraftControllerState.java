@@ -21,7 +21,7 @@ public class DraftControllerState implements ControllerState {
 
         //TODO: activeToolcard needs to be set to null after effect expires
         if (controller.activeToolcard != null) {
-            controller.setControllerState(controller.getActiveToolCard().nextState(this));
+            controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
         } else {
             controller.setControllerState(controller.getPlaceState());
         }
@@ -64,6 +64,6 @@ public class DraftControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-
+        //TODO: think about inserting here this.resetPlacementRule
     }
 }

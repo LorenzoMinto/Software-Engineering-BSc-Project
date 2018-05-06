@@ -2,5 +2,6 @@
 <toolcard>
     <imageURL></imageURL>
     <description></description>
-    <constraint decoratorName="" />
+    <placementRule decoratorName="" />
+    <controllerStateRule prevState="" nextState="" />
 </toolcard>

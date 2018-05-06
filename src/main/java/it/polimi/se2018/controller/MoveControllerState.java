@@ -40,7 +40,7 @@ public class MoveControllerState implements ControllerState {
             view.showMessage("Move made.");
             controller.movesCounter += 1;
             if (controller.movesCounter < 2) {
-                controller.setControllerState(controller.getActiveToolCard().nextState(this));
+                controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
             } else {
                 controller.setControllerState(controller.getDraftControllerState());
             }
