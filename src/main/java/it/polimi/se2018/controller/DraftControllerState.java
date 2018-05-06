@@ -64,6 +64,6 @@ public class DraftControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-
+        //TODO: think about inserting here this.resetPlacementRule
     }
 }

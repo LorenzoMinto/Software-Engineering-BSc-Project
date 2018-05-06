@@ -10,15 +10,23 @@ public class Controller implements ControllerInterface {
 
     //TODO: check access permissions to the following attributes
 
-    Game game;  //Reference to the Model
+    protected Game game;  //Reference to the Model
 
-    ControllerState controllerState; //State pattern
+    protected ControllerState controllerState; //State pattern
 
-    ToolCard activeToolcard;
+    protected ToolCard activeToolcard;
 
-    DiceBag diceBag;
+    protected DiceBag diceBag;
 
-    ControllerStateManager controllerStateManager;
+    protected ControllerStateManager controllerStateManager;
+
+    protected ObjectiveCardManager objectiveCardManager;
+
+    protected ToolCardsManager toolCardsManager;
+
+    protected PlacementRule placementRule;
+
+    protected WindowPatternManager windowPatternManager;
 
     int movesCounter = 0;
 
@@ -53,6 +61,20 @@ public class Controller implements ControllerInterface {
         this.activeToolcard = null;
         this.diceBag = new DiceBag(18); //TODO: read this number from config file
         this.controllerStateManager = new ControllerStateManager(this);
+
+        try{
+            this.windowPatternManager = new WindowPatternManager();
+        } catch(NoPatternsFoundInFileSystemException e){
+            e.printStackTrace();
+        }
+
+        try{
+            this.toolCardsManager = new ToolCardsManager();
+        } catch(NoToolCardsFoundInFileSystemException e){
+            e.printStackTrace();
+        }
+
+        this.objectiveCardManager = new ObjectiveCardManager();
     }
 
     //State pattern
@@ -135,7 +157,7 @@ public class Controller implements ControllerInterface {
     }
 
 
-    private void endGame(){
+    protected void endGame(){
         Player winner;
         List<Player> rankings = getRankings();
         winner = rankings.get(0);
@@ -144,7 +166,7 @@ public class Controller implements ControllerInterface {
 
     }
 
-    private List<Player> getRankings() {
+    protected List<Player> getRankings() {
         List<Player> playersOfLastRound = game.currentRound.getPlayers();
         Set<PublicObjectiveCard> publicObjectiveCards = game.drawnPublicObjectiveCards;
 
@@ -152,7 +174,7 @@ public class Controller implements ControllerInterface {
     }
 
 
-    public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
+    protected boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
         if(toolCard.needsDrafting() && game.currentRound.currentTurn.hasDrafted()){
@@ -162,21 +184,21 @@ public class Controller implements ControllerInterface {
         return player.canUseToolCard(toolCard);
     }
 
-    public void setActiveToolCard(ToolCard toolCard) {
+    protected void setActiveToolCard(ToolCard toolCard) {
         toolCard.use();
 
         this.activeToolcard = toolCard;
         game.currentRound.currentTurn.setUsedToolCard(toolCard);
     }
 
-    public ToolCard getActiveToolCard() {
+    protected ToolCard getActiveToolCard() {
         if(activeToolcard == null){
             return null;
         }
         return activeToolcard.copy();
     }
 
-    private boolean advanceGame() {
+    protected boolean advanceGame() {
         if (game.currentRound.hasNextTurn()) {
             game.currentRound.nextTurn();
             return true;
@@ -185,7 +207,7 @@ public class Controller implements ControllerInterface {
         }
     }
 
-    private boolean proceedToNextRound() {
+    protected boolean proceedToNextRound() {
         if (game.hasNextRound()) {
 
             int numberOfDicesPerRound = game.players.size() * 2 + 1;
@@ -195,5 +217,15 @@ public class Controller implements ControllerInterface {
             return true;
         }
         return false;
+    }
+
+    protected void resetPlacementRule(){
+        //TODO: add here all decorates needed to creare the "standard" placement rule
+        //NOTE: the DefaultPlacementRule is an empty rule
+        this.placementRule = new DefaultPlacementRule();
+    }
+
+    protected void setPlacementRule(PlacementRule placementRule){
+        this.placementRule = placementRule;
     }
 }
