@@ -18,9 +18,11 @@ public class Controller implements ControllerInterface {
 
     DiceBag diceBag;
 
+    ControllerStateManager controllerStateManager;
+
     int movesCounter = 0;
 
-
+    //TODO: remove following states and move them to ControllerStateManager
     //Controller states
     StartControllerState startState;
     PlaceControllerState placeState;
@@ -50,6 +52,7 @@ public class Controller implements ControllerInterface {
         this.controllerState =  this.startState;
         this.activeToolcard = null;
         this.diceBag = new DiceBag(18); //TODO: read this number from config file
+        this.controllerStateManager = new ControllerStateManager(this);
     }
 
     //State pattern
