@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.Observable;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Game {
+public class Game extends Observable {
 
     //TODO: load these values from config file
     public static final int NUMBER_OF_ROUNDS = 10;

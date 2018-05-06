@@ -2,8 +2,9 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.ControllerInterface;
 import it.polimi.se2018.model.Player;
+import it.polimi.se2018.utils.Observer;
 
-public abstract class View {
+public abstract class View implements Observer {
 
     private Player player;
 
