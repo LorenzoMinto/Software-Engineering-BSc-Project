@@ -7,7 +7,7 @@ public interface ControllerInterface {
 
     void handleDraftDiceFromDraftPoolMove(Dice dice, View view);
 
-    void handleUseToolCardPlayerMove(Player player, ToolCard toolcard, View view);
+    void handleUseToolCardPlayerMove(ToolCard toolcard, View view);
 
     void handlePlaceDiceMove(int row, int col, View view);
 
@@ -19,5 +19,5 @@ public interface ControllerInterface {
 
     void handleChooseDiceValueMove(int value, View view);
 
-    void handleEndMove();
+    void handleEndMove(View view);
 }

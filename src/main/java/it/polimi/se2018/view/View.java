@@ -19,4 +19,8 @@ public abstract class View {
 
     public void reportError(String message){}
 
+    public Player getPlayer() {
+        return player;
+    }
+
 }

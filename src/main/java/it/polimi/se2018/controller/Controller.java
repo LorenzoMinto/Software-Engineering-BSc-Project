@@ -4,6 +4,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
 import java.util.List;
+import java.util.Set;
 
 public class Controller implements ControllerInterface {
 
@@ -17,9 +18,6 @@ public class Controller implements ControllerInterface {
 
     DiceBag diceBag;
 
-    //variables used to keep track of player moves
-    boolean hasToolCardBeenUsed = false;
-    boolean hasDrafted = false;
     int movesCounter = 0;
 
 
@@ -64,74 +62,91 @@ public class Controller implements ControllerInterface {
 
     //Handling View->Controller (Moves)
 
+    //call this function to make sure
+
     @Override
     public void handleDraftDiceFromDraftPoolMove(Dice dice, View view) {
-        controllerState.draftDiceFromDraftPool(dice, view);
+        if(game.isCurrentPlayer(view.getPlayer())) {
+            controllerState.draftDiceFromDraftPool(dice, view);
+        } else { view.showMessage("It is not your turn.");}
     }
 
     @Override
-    public void handleUseToolCardPlayerMove(Player player, ToolCard toolcard, View view) {
-        controllerState.useToolCard(player, toolcard, view);
+    public void handleUseToolCardPlayerMove(ToolCard toolcard, View view) {
+        if(game.isCurrentPlayer(view.getPlayer())) {
+            controllerState.useToolCard(view.getPlayer(), toolcard, view);
+        } else { view.showMessage("It is not your turn.");}
     }
 
     @Override
     public void handlePlaceDiceMove(int row, int col, View view){
-        if(row <= 4 && row >= 0 && col<=5 && col>=0) {
+        if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.placeDice(row, col, view);
-        }else { throw new IllegalArgumentException("ERROR: Cannot place dice on row "+row+" column " + col);}
+        } else { view.showMessage("It is not your turn.");}
+
     }
 
     @Override
     public void handleIncrementOrDecrementMove(boolean isIncrement, View view) {
-        if(isIncrement) {
-            controllerState.incrementDice(view);
-        }else{
-            controllerState.decrementDice(view);
-        }
+        if(game.isCurrentPlayer(view.getPlayer())) {
+            if(isIncrement) {
+                controllerState.incrementDice(view);
+            }else{
+                controllerState.decrementDice(view);
+            }
+        } else { view.showMessage("It is not your turn.");}
     }
 
     @Override
     public void handleMoveDiceMove(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        if(rowFrom <= 4 && rowFrom >= 0 &&
-                colFrom <= 5 && colFrom >= 0 &&
-                rowTo <= 4 && rowTo >= 0 &&
-                colTo <= 5 && colTo >= 0) {
+        if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.moveDice(rowFrom, colFrom, rowTo, colTo, view);
-        }else {
-            throw new IllegalArgumentException("ERROR: Cannot place dice from row " + rowFrom + " column " + colFrom +
-                    " to row " + rowTo + " column " + colTo);
-
-        }
+        } else { view.showMessage("It is not your turn.");}
     }
 
 
     @Override
     public void handleDraftDiceFromTrackMove(Dice dice, int slotNumber, View view){
-        controllerState.chooseDiceFromTrack(dice, slotNumber, view);
+        if(game.isCurrentPlayer(view.getPlayer())) {
+
+            controllerState.chooseDiceFromTrack(dice, slotNumber, view);
+        } else { view.showMessage("It is not your turn.");}
     }
 
     @Override
     public void handleChooseDiceValueMove(int value, View view) {
-        controllerState.chooseDiceValue(value, view);
+        if(game.isCurrentPlayer(view.getPlayer())) {
+
+            controllerState.chooseDiceValue(value, view);
+        } else { view.showMessage("It is not your turn.");}
     }
 
     @Override
-    public void handleEndMove(){
-        //If the game has finished (no more rounds and turns are to be played) then end the game
-        if(!advanceGame()){
-            endGame();
-        }
+    public void handleEndMove(View view){
+        if(game.isCurrentPlayer(view.getPlayer())) {
+            //If the game has finished (no more rounds and turns are to be played) then end the game
+            if(!advanceGame()){
+                endGame();
+            }
+        } else { view.showMessage("It is not your turn.");}
     }
 
 
-    public Player endGame(){
-        //TODO: implement method. Returns the winner.
-        Player winnerPlayer = null;
+    private void endGame(){
+        Player winner;
+        List<Player> rankings = getRankings();
+        winner = rankings.get(0);
 
-        return winnerPlayer;
+        //TODO: notify view of winners and scores
+
     }
 
+    private List<Player> getRankings() {
+        List<Player> playersOfLastRound = game.currentRound.getPlayers();
+        Set<PublicObjectiveCard> publicObjectiveCards = game.drawnPublicObjectiveCards;
 
+        return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
+    }
 
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
@@ -169,7 +184,7 @@ public class Controller implements ControllerInterface {
 
     private boolean proceedToNextRound() {
         if (game.hasNextRound()) {
-            
+
             int numberOfDicesPerRound = game.players.size() * 2 + 1;
             List<Dice> dices = diceBag.getDices(numberOfDicesPerRound);
 
