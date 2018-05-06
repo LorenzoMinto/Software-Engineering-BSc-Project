@@ -1,5 +1,6 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;

@@ -1,4 +1,7 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
+
+import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.DiceColors;
 
 import java.util.ArrayList;
 import java.util.Arrays;

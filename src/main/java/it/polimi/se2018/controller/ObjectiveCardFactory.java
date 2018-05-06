@@ -1,4 +1,6 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
+
+import it.polimi.se2018.model.*;
 
 import java.util.*;
 
@@ -149,7 +151,7 @@ public class ObjectiveCardFactory {
                     "can only be created with all of the existing colors.");
         }
 
-        return new SetPublicObjectiveCard(title, description, imageURL, colors,Dice::getColor, multiplier);
+        return new SetPublicObjectiveCard(title, description, imageURL, colors, Dice::getColor, multiplier);
     }
 
     private PublicObjectiveCard createValueSetPublicObjectiveCard(Set<Object> values){
