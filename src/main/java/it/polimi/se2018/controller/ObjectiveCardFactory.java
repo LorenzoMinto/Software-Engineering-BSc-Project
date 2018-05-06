@@ -11,6 +11,17 @@ public class ObjectiveCardFactory {
     private int numberOfPublicObjectiveCards = 10;
     private Set<DiceColors> assignedColors = new HashSet<>();
 
+    private static ObjectiveCardFactory instance = null;
+
+    private ObjectiveCardFactory() {}
+
+    public static ObjectiveCardFactory getInstance(){
+        if(instance == null) {
+            instance = new ObjectiveCardFactory();
+        }
+        return instance;
+    }
+
     public PrivateObjectiveCard getPrivateObjectiveCard(){
         DiceColors color;
 

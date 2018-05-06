@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.XMLFileReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -8,37 +9,34 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class WindowPatternManager {
 
-    private static final String PATH = "assets/patterns/";
-    private static final String EXTENSION = ".xml";
+    private static String PATH = "assets/patterns/";
+
+    private static WindowPatternManager instance = null;
 
     private List<String> availablePatterns;
 
-    public WindowPatternManager() throws NoPatternsFoundInFileSystemException {
+    private WindowPatternManager() throws NoPatternsFoundInFileSystemException {
 
-        availablePatterns = new ArrayList<>();
-
-        //Parse "patterns" directory in order to find all patterns .xml files
-        File dir = new File(PATH);
-        File[] files = dir.listFiles((d, name) -> name.endsWith(".xml"));
-
-        //Exception is thrown if no pattern files are found in the folder (could happen even due to IO error)
-        if(files==null) throw new NoPatternsFoundInFileSystemException();
-
-        //Add the found patterns to availablePatterns
-        for(File file : files){
-
-            //PatternID is filename without ".xml"
-            String patternID = file.getName().substring(0, file.getName().length() - 4 );
-
-            //Adds patternID to list of availablePatterns
-            availablePatterns.add( patternID );
+        try{
+            this.availablePatterns = XMLFileReader.getFilesNames(PATH);
+        } catch (IOException e){
+            throw new NoPatternsFoundInFileSystemException();
         }
+
+    }
+
+    public static WindowPatternManager getInstance() throws NoPatternsFoundInFileSystemException{
+        if(instance == null) {
+            instance = new WindowPatternManager();
+        }
+        return instance;
     }
 
     public boolean hasAvailablePatterns(){
@@ -56,7 +54,7 @@ public class WindowPatternManager {
 
             Cell[][] pattern;
 
-            File file = new File(PATH.concat(patternID).concat(EXTENSION));
+            File file = new File(PATH.concat(patternID).concat(".xml"));
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
