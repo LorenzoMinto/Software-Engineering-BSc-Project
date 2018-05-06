@@ -18,11 +18,9 @@ public class WindowPatternManager {
 
     private static String PATH = "assets/patterns/";
 
-    private static WindowPatternManager instance = null;
-
     private List<String> availablePatterns;
 
-    private WindowPatternManager() throws NoPatternsFoundInFileSystemException {
+    public WindowPatternManager() throws NoPatternsFoundInFileSystemException {
 
         try{
             this.availablePatterns = XMLFileReader.getFilesNames(PATH);
@@ -30,13 +28,6 @@ public class WindowPatternManager {
             throw new NoPatternsFoundInFileSystemException();
         }
 
-    }
-
-    public static WindowPatternManager getInstance() throws NoPatternsFoundInFileSystemException{
-        if(instance == null) {
-            instance = new WindowPatternManager();
-        }
-        return instance;
     }
 
     public boolean hasAvailablePatterns(){

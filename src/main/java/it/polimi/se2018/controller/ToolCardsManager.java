@@ -14,27 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ToolCardsFactory {
+public class ToolCardsManager {
 
     private static String PATH = "assets/toolcards/";
 
-    private static ToolCardsFactory instance = null;
-
     private List<String> availableToolCards;
 
-    private ToolCardsFactory() throws NoToolCardsFoundInFileSystemException{
+    public ToolCardsManager() throws NoToolCardsFoundInFileSystemException{
         try{
             this.availableToolCards = XMLFileReader.getFilesNames(PATH);
         } catch (IOException e) {
             throw new NoToolCardsFoundInFileSystemException();
         }
-    }
-
-    public static ToolCardsFactory getInstance() throws NoToolCardsFoundInFileSystemException{
-        if(instance == null) {
-            instance = new ToolCardsFactory();
-        }
-        return instance;
     }
 
     public List<ToolCard> getRandomToolCards(int quantity) throws BadFormattedToolCardFileException{

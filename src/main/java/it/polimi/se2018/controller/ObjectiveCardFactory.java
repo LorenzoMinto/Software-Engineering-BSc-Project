@@ -52,7 +52,7 @@ public class ObjectiveCardFactory {
 
     }
 
-    public PublicObjectiveCard getPublicObjectiveCardCardByIndex(int index) {
+    public PublicObjectiveCard createPublicObjectiveCardCardByIndex(int index) {
         Set<Object> items;
         switch (index){
             case 0:
