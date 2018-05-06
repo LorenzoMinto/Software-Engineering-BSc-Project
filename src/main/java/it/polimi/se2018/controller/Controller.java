@@ -85,9 +85,27 @@ public class Controller implements ControllerInterface {
     }
 
 
+    //Handling View->Controller (Initialization)
+
+    @Override
+    public void handlePlayerRegistration(int UserID, String username, String nickname, View view) {
+
+       /*User user = new User(UserID, username);
+
+       PrivateObjectiveCard playerPrivateObjectiveCarad = objectiveCardManager.getPrivateObjectiveCard();
+
+       Player player = new Player(user, nickname, playerPrivateObjectiveCarad);
+
+       game.players.add(player);*/
+    }
+
+    @Override
+    public void handleChooseWindowPattern(WindowPattern windowPattern, View view) {
+
+    }
+
     //Handling View->Controller (Moves)
 
-    //call this function to make sure
 
     @Override
     public void handleDraftDiceFromDraftPoolMove(Dice dice, View view) {
