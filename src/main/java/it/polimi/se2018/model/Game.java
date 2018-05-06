@@ -16,6 +16,7 @@ public class Game {
     public List<Player> players;
     public List<ToolCard> drawnToolCards;
     public List<PublicObjectiveCard> drawnPublicObjectiveCards;
+    private Player winner;
 
     public Game() {
         this.currentRound = null;
@@ -62,13 +63,6 @@ public class Game {
 
         this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
         return this.currentRound;
-    }
-
-    public Player endGame(){
-        //TODO: implement method. Returns the winner.
-        Player winnerPlayer = null;
-
-        return winnerPlayer;
     }
 
 
