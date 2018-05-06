@@ -41,7 +41,7 @@ public class Scorer {
         Map <Player, Integer> scores = new HashMap<>();
 
         for (Player player: players) {
-            int playerScore = calculatePlayerScore(player,publicObjectiveCards);
+            int playerScore = calculatePlayerScore(player, publicObjectiveCards);
             scores.put(player,playerScore);
         }
 
