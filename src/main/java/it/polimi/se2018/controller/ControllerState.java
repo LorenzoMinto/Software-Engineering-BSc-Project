@@ -3,25 +3,26 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
+import it.polimi.se2018.view.View;
 
 public interface ControllerState {
 
-    public void draftDiceFromDraftPool(Dice dice);
+    public void draftDiceFromDraftPool(Dice dice, View view);
 
-    public void placeDice(int row, int col);
+    public void placeDice(int row, int col, View view);
 
-    public boolean useToolCard(Player player, ToolCard toolcard);
+    public void useToolCard(Player player, ToolCard toolcard, View view);
 
-    public void draftDiceFromTrack(Dice dice);
+    public void draftDiceFromTrack(Dice dice, View view);
 
-    public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo);
+    public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view);
 
-    public void incrementDice();
+    public void incrementDice(View view);
 
-    public void decrementDice();
+    public void decrementDice(View view);
 
-    public void chooseDiceValue(int value);
+    public void chooseDiceValue(int value, View view);
 
-    public void executeImplicitBehaviour();
+    public void executeImplicitBehaviour(View view);
 
 }
