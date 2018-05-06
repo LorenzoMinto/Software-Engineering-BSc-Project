@@ -43,7 +43,7 @@ public class Turn {
         return !( this.usedToolCard == null );
     }
 
-    public Dice getDraftedDice() { return draftedDice.copy(); }
+    public Dice getDraftedDice() { return draftedDice; }
 
     //Setters
 
