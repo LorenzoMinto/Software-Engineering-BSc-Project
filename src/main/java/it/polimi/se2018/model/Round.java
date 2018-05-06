@@ -10,6 +10,7 @@ public class Round {
 
     public DraftPool draftPool;
 
+    //Ordered list of players of the round. First player is in index 0
     private List<Player> players;
 
     public Round(int number, DraftPool draftPool, List<Player> players) {
@@ -59,6 +60,11 @@ public class Round {
         this.currentTurn = new Turn(nextTurnNumber,players.get(nextTurnNumber));
 
         return this.currentTurn;
+    }
+
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
 }
