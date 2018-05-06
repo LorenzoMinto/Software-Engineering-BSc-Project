@@ -59,25 +59,47 @@ public class Controller implements Observer<PlayerMove> {
 
     //Handling View->Controller (Moves)
 
+    public void handleMove(DraftDiceFromDraftPoolMove move){
+        controllerState.draftDiceFromDraftPool(move.getDice());
+    }
+
     public void handleMove(UseToolCardPlayerMove move) {
         controllerState.useToolCard(
                 move.getPlayer(), move.getToolcard()
         );
     }
 
-    public void handleMove(PlayerMove move) {
-
+    public void handleMove(PlaceDiceMove move){
+        controllerState.placeDice(move.getRow(), move.getColumn());
     }
+
+    public void handleMove(IncrementOrDecrementMove move) {
+        if(move.isIncrement()) {
+            controllerState.incrementDice();
+        }else{
+            controllerState.decrementDice();
+        }
+    }
+
+    public void handleMove(MoveDiceMove move){
+        controllerState.moveDice(move.getRowFrom(), move.getColFrom(), move.getRowTo(), move.getColTo());
+    }
+
+    public void handleMove(DraftDiceFromTrackMove move){
+        controllerState.draftDiceFromTrack(move.getDice());
+    }
+
+    public void handleMove(ChooseDiceValueMove move){
+        controllerState.chooseDiceValue(move.getValue());
+    }
+
+
+
 
     public boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
 
         //define logic to check from Controller if toolcard is usable, these object are mere copies.
-        if(player.getFavorTokens() >= toolCard.getNeededTokens()){
-            return true;
-        }else {
-            return false;
-        }
-
+            return player.getFavorTokens() >= toolCard.getNeededTokens();
     }
 
     public void setActiveToolCard(ToolCard toolCard) {
@@ -88,8 +110,10 @@ public class Controller implements Observer<PlayerMove> {
     }
 
     public ToolCard getActiveToolCard() {
-        //TODO: COMPLETE toolcard with tokens
-        return new ToolCard(activeToolcard.getTitle(), activeToolcard.getDescription(), activeToolcard.getImageURL());
+        if(activeToolcard == null){
+            return null;
+        }
+        return activeToolcard.copy();
     }
 
     public boolean goToNextRound() {
