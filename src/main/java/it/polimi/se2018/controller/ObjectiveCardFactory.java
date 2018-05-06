@@ -8,8 +8,6 @@ import java.util.*;
 //TODO: set all imageURLs
 
 public class ObjectiveCardFactory {
-    private int numberOfPublicObjectiveCards = 10;
-    private Set<DiceColors> assignedColors = new HashSet<>();
 
     private static ObjectiveCardFactory instance = null;
 
@@ -22,19 +20,7 @@ public class ObjectiveCardFactory {
         return instance;
     }
 
-    public PrivateObjectiveCard getPrivateObjectiveCard(){
-        DiceColors color;
-
-        do{
-            color = DiceColors.getRandomColor();
-        }while (assignedColors.contains(color));
-
-        assignedColors.add(color);
-
-        return createPrivateObjectiveCard(color);
-    }
-
-    private PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
+    public PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
         if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "Private Objective Card with no color"); }
 
@@ -66,38 +52,7 @@ public class ObjectiveCardFactory {
 
     }
 
-
-    public Set<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
-
-        if(quantity > numberOfPublicObjectiveCards || quantity < 1){
-            throw new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater" +
-                    "than the number of Public Objective Cards.");
-        }
-
-        Random r = new Random();
-        int randomIndex;
-        PublicObjectiveCard currentCard;
-        Set<PublicObjectiveCard> publicObjectiveCards = new HashSet<>();
-
-        for(int i=0; i<quantity; i++){
-            //Choose randomly one of the cards
-            do {
-                randomIndex = r.nextInt(numberOfPublicObjectiveCards);
-                currentCard = getPublicObjectiveCardCardByIndex(randomIndex);
-                publicObjectiveCards.add(currentCard);
-
-            }while(publicObjectiveCards.contains(currentCard));
-
-        }
-
-        return publicObjectiveCards;
-    }
-
-    private PublicObjectiveCard getPublicObjectiveCardCardByIndex(int index) {
-        if(index > numberOfPublicObjectiveCards-1|| index<0) { throw new IllegalArgumentException("ERROR: " +
-                "Cannot get a Public Objective card with index not in range " +
-                "[0,"+(numberOfPublicObjectiveCards-1)+"]."); }
-
+    public PublicObjectiveCard getPublicObjectiveCardCardByIndex(int index) {
         Set<Object> items;
         switch (index){
             case 0:
