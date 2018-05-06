@@ -66,7 +66,7 @@ public class WindowPattern {
         if(dice==null) throw new IllegalArgumentException("Asked to put a null dice on cell [I am window pattern]");
 
         //Checks if location row,col is correct
-        if(row>numberOfRows || col > numberOfColumns){
+        if(!isLegalPosition(row, col)){
             return false;
         }
 
@@ -80,9 +80,31 @@ public class WindowPattern {
         return true;
     }
 
+    public boolean moveDiceFromCellToCell(int fromRow, int fromCol, int toRow, int toCol) {
+        //check if positions are legal
+        if (!isLegalPosition(fromRow, fromCol) || !isLegalPosition(toRow, toCol)) {
+            return false;
+        }
+        if (pattern[fromRow][fromCol].hasDice() && !pattern[toRow][toCol].hasDice()) {
+            Dice removedDice = pattern[fromRow][fromCol].removeDice();
+            pattern[toRow][toCol].setDice(removedDice);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public WindowPattern copy(){
 
         return new WindowPattern(this.title,this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
+    }
+
+    private boolean isLegalPosition(int row, int col) {
+        if ((row>0 && row<=6) && (col>0 && col<=6)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
