@@ -10,7 +10,7 @@ public class Round {
 
     public DraftPool draftPool;
 
-    //Ordered list of players of the round. First player is in index 0
+    //List of players of the game passed from game
     private List<Player> players;
 
     public Round(int number, DraftPool draftPool, List<Player> players) {
@@ -56,8 +56,10 @@ public class Round {
             }
         }
 
+        Player nextTurnPlayer = this.whoShouldBePlayingDuringTurn(this.getNumber(),nextTurnNumber);
+
         //Creates the new turn an sets it as the current one
-        this.currentTurn = new Turn(nextTurnNumber,players.get(nextTurnNumber));
+        this.currentTurn = new Turn(nextTurnNumber,nextTurnPlayer);
 
         return this.currentTurn;
     }
@@ -65,6 +67,17 @@ public class Round {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    private Player whoShouldBePlayingDuringTurn(int roundNumber, int turnNumber){
+
+        int numberOfPlayers = this.players.size();
+
+        if( turnNumber >= numberOfPlayers ){ turnNumber = Game.NUMBER_OF_TURNS_PER_ROUND - turnNumber - 1; }
+
+        int playerShouldPlayingIndex = (turnNumber + (roundNumber % numberOfPlayers)) % numberOfPlayers;
+
+        return this.players.get(playerShouldPlayingIndex);
     }
 
 }
