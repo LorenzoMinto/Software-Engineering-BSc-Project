@@ -27,7 +27,7 @@ public class MoveControllerState implements ControllerState {
     }
 
     @Override
-    public void draftDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, View view) {
         view.showMessage("Can't do. You are in the middle of a ToolCard effect");
     }
 

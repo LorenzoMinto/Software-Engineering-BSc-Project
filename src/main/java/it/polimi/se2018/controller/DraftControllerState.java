@@ -38,7 +38,7 @@ public class DraftControllerState implements ControllerState {
     }
 
     @Override
-    public void draftDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, View view) {
         view.showMessage("Can't do. You can only draft and place.");
     }
 

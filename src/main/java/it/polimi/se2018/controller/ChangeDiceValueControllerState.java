@@ -26,7 +26,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
     }
 
     @Override
-    public void draftDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, View view) {
         view.showMessage("Can't do. You have to change the dice value first.");
     }
 
