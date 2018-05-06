@@ -36,6 +36,12 @@ public class DiceBag {
         return drawnDices;
     }
 
+    public void addDice(Dice dice) {
+        int index = Arrays.asList(DiceColors.values()).indexOf(dice.getColor());
+        int availableDicesForColor = availableDices.get(index);
+        availableDices.set(index, availableDicesForColor+1);
+    }
+
     //Returns true if no more dices can be created. False in the other case.
     private boolean isEmpty(){
         return availableDices.stream().mapToInt(Integer::intValue).sum() == 0;
