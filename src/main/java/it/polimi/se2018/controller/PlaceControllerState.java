@@ -73,7 +73,7 @@ public class PlaceControllerState implements ControllerState {
     }
 
     @Override
-    public void executeImplicitBehaviour(View view) {
+    public void executeImplicitBehaviour() {
 
     }
 }

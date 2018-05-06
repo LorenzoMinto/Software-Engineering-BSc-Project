@@ -22,6 +22,7 @@ public class Turn {
 
     private Dice draftedDice;
     private Dice trackChosenDice;
+    private int slotOfTrackChosenDice;
 
     private ToolCard usedToolCard;
 
@@ -47,7 +48,13 @@ public class Turn {
     public Dice getDraftedDice() { return draftedDice; }
     public Dice getTrackChosenDice() { return trackChosenDice; }
 
+    public int getSlotOfTrackChosenDice() { return slotOfTrackChosenDice; }
+
     //Setters
+
+    public void setSlotOfTrackChosenDice(int value) {
+        this.slotOfTrackChosenDice = value;
+    }
 
     public void setDraftedDice(Dice dice){
         this.draftedDice = dice;

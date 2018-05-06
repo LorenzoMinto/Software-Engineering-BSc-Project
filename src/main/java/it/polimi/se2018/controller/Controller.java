@@ -55,10 +55,10 @@ public class Controller implements ControllerInterface {
     }
 
     //State pattern
-    public void setControllerState(ControllerState controllerState, View view) {
+    public void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;
         //could change controllerState implicitly
-        this.controllerState.executeImplicitBehaviour(view);
+        this.controllerState.executeImplicitBehaviour();
     }
 
 

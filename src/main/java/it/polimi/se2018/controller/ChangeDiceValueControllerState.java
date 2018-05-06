@@ -75,7 +75,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
     }
 
     @Override
-    public void executeImplicitBehaviour(View view) {
+    public void executeImplicitBehaviour() {
 
     }
 }

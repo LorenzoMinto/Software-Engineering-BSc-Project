@@ -23,6 +23,6 @@ public interface ControllerState {
 
     public void chooseDiceValue(int value, View view);
 
-    public void executeImplicitBehaviour(View view);
+    public void executeImplicitBehaviour();
 
 }

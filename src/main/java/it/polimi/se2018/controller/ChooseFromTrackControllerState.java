@@ -30,6 +30,7 @@ public class ChooseFromTrackControllerState implements ControllerState {
         Game game = controller.game;
         if (game.track.takeDice(dice, slotNumber)) {
             game.currentRound.currentTurn.setTrackChosenDice(dice);
+            game.currentRound.currentTurn.setSlotOfTrackChosenDice(slotNumber);
             controller.setControllerState(controller.getActiveToolCard().nextState(this));
         }
 
@@ -56,7 +57,7 @@ public class ChooseFromTrackControllerState implements ControllerState {
     }
 
     @Override
-    public void executeImplicitBehaviour(View view) {
+    public void executeImplicitBehaviour() {
 
     }
 }
