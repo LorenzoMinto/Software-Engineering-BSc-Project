@@ -1,10 +1,9 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.utils.Observer;
 import java.util.List;
 
-public class Controller implements Observer<PlayerMove> {
+public class Controller implements ControllerInterface {
 
     //TODO: check access permissions to the following attributes
 
