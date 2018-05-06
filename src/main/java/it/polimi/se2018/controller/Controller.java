@@ -89,7 +89,7 @@ public class Controller implements ControllerInterface {
     }
 
     public void handleMove(DraftDiceFromTrackMove move){
-        controllerState.draftDiceFromTrack(move.getDice());
+        controllerState.chooseDiceFromTrack(move.getDice());
     }
 
     public void handleMove(ChooseDiceValueMove move){

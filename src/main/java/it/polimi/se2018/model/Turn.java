@@ -21,6 +21,7 @@ public class Turn {
     private boolean draftedAndPlaced;
 
     private Dice draftedDice;
+    private Dice trackChosenDice;
 
     private ToolCard usedToolCard;
 
@@ -44,11 +45,16 @@ public class Turn {
     }
 
     public Dice getDraftedDice() { return draftedDice; }
+    public Dice getTrackChosenDice() { return trackChosenDice; }
 
     //Setters
 
     public void setDraftedDice(Dice dice){
         this.draftedDice = dice;
+    }
+
+    public void setTrackChosenDice(Dice trackChosenDice) {
+        this.trackChosenDice = trackChosenDice;
     }
 
     public void setDraftedAndPlaced(){
