@@ -58,26 +58,8 @@ public class Game extends Observable {
             }
         }
 
-        //Creates the list of players in the correct order of the next round
-        List<Player> roundPlayers = new ArrayList<>();
-        for(int turnNumber=0; turnNumber<Game.NUMBER_OF_TURNS_PER_ROUND; turnNumber++){
-            roundPlayers.add( this.whoShouldBePlayingDuringTurn(nextRoundNumber,turnNumber) );
-        }
-
-        this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
+        this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), this.players );
         return this.currentRound;
-    }
-
-
-    private Player whoShouldBePlayingDuringTurn(int roundNumber, int turnNumber){
-
-        int numberOfPlayers = this.players.size();
-
-        if( turnNumber >= numberOfPlayers ){ turnNumber = NUMBER_OF_TURNS_PER_ROUND - turnNumber - 1; }
-
-        int playerShouldPlayingIndex = (turnNumber + (roundNumber % numberOfPlayers)) % numberOfPlayers;
-
-        return this.players.get(playerShouldPlayingIndex);
     }
 
     public boolean isCurrentPlayer(Player player) {
