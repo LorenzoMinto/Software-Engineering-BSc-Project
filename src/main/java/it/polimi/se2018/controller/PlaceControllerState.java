@@ -24,8 +24,13 @@ public class PlaceControllerState implements ControllerState {
             if (currentTurn.currentPlayer.getWindowPattern().putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
                 //TODO: checking with PlacementRule of correctness of placement
                 view.showMessage("Dice placed!");
-                //the controller will return to the start state but with has drafted property set to true
-                controller.setControllerState(controller.getStartState());
+
+                if (controller.getActiveToolCard() != null) {
+                    controller.setControllerState(controller.getActiveToolCard().nextState(this));
+                } else {
+                    //TODO: change to ToolcardState
+                    controller.setControllerState(controller.getToolCardState());
+                }
             } else {
                 view.showMessage("Move is illegal. There's another dice in that position.");
             }

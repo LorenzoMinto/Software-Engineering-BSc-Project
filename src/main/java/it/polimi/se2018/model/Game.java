@@ -39,6 +39,8 @@ public class Game {
 
     public Round nextRound(List<Dice> dices){
 
+        //TODO: end previous round, empty draftPool and fill track
+
         int nextRoundNumber;
 
         //Calculate the number of the next round
@@ -58,7 +60,8 @@ public class Game {
             roundPlayers.add( this.whoShouldBePlayingDuringTurn(nextRoundNumber,turnNumber) );
         }
 
-        return new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
+        this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), roundPlayers );
+        return this.currentRound;
     }
 
     public Player endGame(){

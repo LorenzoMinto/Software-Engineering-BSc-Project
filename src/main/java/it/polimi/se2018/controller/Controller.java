@@ -25,6 +25,8 @@ public class Controller implements Observer<PlayerMove> {
     //Controller states
     StartControllerState startState;
     PlaceControllerState placeState;
+    ToolCardControllerState toolCardState;
+    DraftControllerState draftControllerState;
 
     //Getters for controller states
     public StartControllerState getStartState() {
@@ -33,7 +35,8 @@ public class Controller implements Observer<PlayerMove> {
     public PlaceControllerState getPlaceState() {
         return placeState;
     }
-
+    public ToolCardControllerState getToolCardState() { return toolCardState; }
+    public DraftControllerState getDraftControllerState() { return draftControllerState; }
 
     //Constructor
     public Controller(Game game) {
@@ -41,6 +44,7 @@ public class Controller implements Observer<PlayerMove> {
         //Set controller states
         this.startState = new StartControllerState(this);
         this.placeState = new PlaceControllerState(this);
+        this.toolCardState = new ToolCardControllerState(this);
 
         //Set main attributes
         this.game = game;
