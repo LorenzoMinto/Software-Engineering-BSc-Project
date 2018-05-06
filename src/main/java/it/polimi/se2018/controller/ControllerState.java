@@ -13,7 +13,7 @@ public interface ControllerState {
 
     public void useToolCard(Player player, ToolCard toolcard, View view);
 
-    public void chooseDiceFromTrack(Dice dice, View view);
+    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view);
 
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view);
 

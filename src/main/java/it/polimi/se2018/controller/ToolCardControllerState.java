@@ -33,7 +33,7 @@ public class ToolCardControllerState implements ControllerState {
     }
 
     @Override
-    public void chooseDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         view.showMessage("Can't do. You can only use a Toolcard");
     }
 

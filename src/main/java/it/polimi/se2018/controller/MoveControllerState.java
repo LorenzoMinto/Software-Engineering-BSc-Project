@@ -27,7 +27,7 @@ public class MoveControllerState implements ControllerState {
     }
 
     @Override
-    public void chooseDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         view.showMessage("Can't do. You are in the middle of a ToolCard effect");
     }
 
@@ -42,8 +42,7 @@ public class MoveControllerState implements ControllerState {
             if (controller.movesCounter < 2) {
                 controller.setControllerState(controller.getActiveToolCard().nextState(this));
             } else {
-                //TODO: set endState here
-                controller.setControllerState(controller.getStartState());
+                controller.setControllerState(controller.getDraftControllerState());
             }
         } else {
             view.showMessage("Can't make this move.");

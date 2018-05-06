@@ -48,7 +48,7 @@ public class PlaceControllerState implements ControllerState {
     //TOOLCARD ACTIVATED
 
     @Override
-    public void chooseDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         view.showMessage("Can't do. You have to place the drafted dice first");
     }
 

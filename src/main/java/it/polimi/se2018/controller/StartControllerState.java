@@ -37,7 +37,7 @@ public class StartControllerState implements ControllerState {
     }
 
     @Override
-    public void chooseDiceFromTrack(Dice dice, View view) {
+    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         view.showMessage("Can't do. Choose a dice from the draft pool or activate a ToolCard");
     }
 
