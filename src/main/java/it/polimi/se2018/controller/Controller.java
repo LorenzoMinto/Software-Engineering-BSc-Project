@@ -183,9 +183,11 @@ public class Controller implements ControllerInterface {
     }
 
     protected void setActiveToolCard(ToolCard toolCard) {
+        //TODO: this methods doesn't do anything, it only changes the copy. Make a method on Game that changes it directly!!
         toolCard.use();
 
         this.activeToolcard = toolCard;
+        this.placementRule = toolCard.getPlacementRule();
         game.currentRound.currentTurn.setUsedToolCard(toolCard);
     }
 
@@ -193,10 +195,12 @@ public class Controller implements ControllerInterface {
         if(activeToolcard == null){
             return null;
         }
-        return activeToolcard.copy();
+        return activeToolcard;
     }
 
     protected boolean advanceGame() {
+        //TODO: if player's first turn then activate placementRule border restriction. Need to reset startState here
+
         if (game.currentRound.hasNextTurn()) {
             game.currentRound.nextTurn();
             return true;
@@ -207,7 +211,6 @@ public class Controller implements ControllerInterface {
 
     protected boolean proceedToNextRound() {
         if (game.hasNextRound()) {
-
             int numberOfDicesPerRound = game.players.size() * 2 + 1;
             List<Dice> dices = diceBag.getDices(numberOfDicesPerRound);
 
@@ -218,8 +221,14 @@ public class Controller implements ControllerInterface {
     }
 
     protected void resetPlacementRule(){
-        //TODO: add here all decorates needed to creare the "standard" placement rule
         //NOTE: the DefaultPlacementRule is an empty rule
+        PlacementRule defaultPlacementRule = new AdjacentValuePlacementRuleDecorator(
+                new AdjacentDicePlacementRuleDecorator(
+                        new AdjacentColorPlacementRuleDecorator(
+                                new ColorPlacementRuleDecorator(
+                                        new ValuePlacementRuleDecorator(
+                                                new DefaultPlacementRule()))), false));
+
         this.placementRule = new DefaultPlacementRule();
     }
 

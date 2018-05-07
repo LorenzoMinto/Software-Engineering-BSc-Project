@@ -60,6 +60,14 @@ public class WindowPattern {
         return p;
     }
 
+    public Dice getDiceOnCell(int row, int col) {
+        Dice dice = null;
+        if (isLegalPosition(row, col)) {
+            dice = pattern[row][col].getDice();
+        }
+        return dice;
+    }
+
     //Put a dice in the cell corresponding to the given row and column
     public boolean putDiceOnCell(Dice dice, int row, int col) {
 

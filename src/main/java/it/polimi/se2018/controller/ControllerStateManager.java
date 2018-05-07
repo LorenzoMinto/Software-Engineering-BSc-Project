@@ -30,6 +30,7 @@ public class ControllerStateManager {
         if (stateTable.containsKey(nextControllerStateID)) {
             nextState = stateTable.get(nextControllerStateID);
         } else {
+            //NOTE: should an exception be thrown if specified state does not exist?
             nextState = createStateByID(nextControllerStateID);
             stateTable.put(nextControllerStateID, nextState);
         }

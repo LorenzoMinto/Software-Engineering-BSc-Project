@@ -3,6 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
+import java.awt.*;
+
 
 public class MoveControllerState implements ControllerState {
     Controller controller;
@@ -33,10 +35,13 @@ public class MoveControllerState implements ControllerState {
 
     @Override
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        //TODO: PlacementRule needs to be enforced
         Game game = controller.game;
         Turn currentTurn = game.currentRound.currentTurn;
-        if (currentTurn.currentPlayer.getWindowPattern().moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
+        WindowPattern pattern = currentTurn.currentPlayer.getWindowPattern();
+
+        //check if move conforms to current placementRules and general physical constraints
+        if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
+                && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             view.showMessage("Move made.");
             controller.movesCounter += 1;
             if (controller.movesCounter < 2) {
