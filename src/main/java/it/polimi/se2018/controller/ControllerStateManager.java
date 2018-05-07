@@ -1,8 +1,12 @@
 package it.polimi.se2018.controller;
 
+import java.util.HashMap;
+
 public class ControllerStateManager {
 
     private Controller controller = null;
+
+    private HashMap<String, ControllerState> stateTable;
 
     StartControllerState startState;
     PlaceControllerState placeState;
@@ -11,6 +15,7 @@ public class ControllerStateManager {
 
     public ControllerStateManager(Controller controller) {
         this.controller = controller;
+        this.stateTable = new HashMap<String, ControllerState>();
 
         this.startState = new StartControllerState(this.controller);
         this.placeState = new PlaceControllerState(this.controller);
@@ -21,16 +26,23 @@ public class ControllerStateManager {
         ControllerState nextState;
 
         String nextControllerStateID = controller.getActiveToolCard().nextStateID(prevState);
-        return createStateByID(nextControllerStateID);
+
+        if (stateTable.containsKey(nextControllerStateID)) {
+            nextState = stateTable.get(nextControllerStateID);
+        } else {
+            nextState = createStateByID(nextControllerStateID);
+            stateTable.put(nextControllerStateID, nextState);
+        }
+
+        return nextState;
     }
 
     private ControllerState createStateByID(String controllerStateID){
 
-        //TODO: create class using ID, keep instance in a dictionary (don't create more than one instance per state)
-
-        //NOTE: https://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
+        //TODO: https://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
 
         ControllerState controllerState;
+
 
         return controllerState;
     }
