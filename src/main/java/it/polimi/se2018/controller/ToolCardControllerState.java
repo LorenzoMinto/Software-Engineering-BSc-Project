@@ -26,7 +26,7 @@ public class ToolCardControllerState implements ControllerState {
     public void useToolCard(Player player, ToolCard toolcard, View view) {
         if (controller.canUseSpecificToolCard(player, toolcard)) {
             controller.setActiveToolCard(toolcard);
-            controller.setControllerState(toolcard.nextStateID(this));
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
             view.showMessage("Can't use this toolcard.");
         }

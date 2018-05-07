@@ -21,9 +21,9 @@ public class DraftControllerState implements ControllerState {
 
         //TODO: activeToolcard needs to be set to null after effect expires
         if (controller.activeToolcard != null) {
-            controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            controller.setControllerState(controller.getPlaceState());
+            controller.setControllerState(controller.stateManager.getPlaceState());
         }
     }
 

@@ -18,7 +18,7 @@ public class StartControllerState implements ControllerState {
         if (currentRound.draftPool.draftDice(dice)) {
             currentRound.currentTurn.setDraftedDice(dice);
         }
-        controller.setControllerState(controller.getPlaceState());
+        controller.setControllerState(controller.stateManager.getPlaceState());
     }
 
     @Override
@@ -30,7 +30,7 @@ public class StartControllerState implements ControllerState {
     public void useToolCard(Player player, ToolCard toolcard, View view) {
         if (controller.canUseSpecificToolCard(player, toolcard)) {
             controller.setActiveToolCard(toolcard);
-            controller.setControllerState(toolcard.nextStateID(this));
+            controller.stateManager.getNextState(this);
         } else {
             view.showMessage("Can't use this toolcard.");
         }

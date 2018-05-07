@@ -18,7 +18,7 @@ public class Controller implements ControllerInterface {
 
     protected DiceBag diceBag;
 
-    protected ControllerStateManager controllerStateManager;
+    protected ControllerStateManager stateManager;
 
     protected ObjectiveCardManager objectiveCardManager;
 
@@ -30,37 +30,11 @@ public class Controller implements ControllerInterface {
 
     int movesCounter = 0;
 
-    //TODO: remove following states and move them to ControllerStateManager
-    //Controller states
-    StartControllerState startState;
-    PlaceControllerState placeState;
-    ToolCardControllerState toolCardState;
-    DraftControllerState draftControllerState;
-
-    //Getters for controller states
-    public StartControllerState getStartState() {
-        return startState;
-    }
-    public PlaceControllerState getPlaceState() {
-        return placeState;
-    }
-    public ToolCardControllerState getToolCardState() { return toolCardState; }
-    public DraftControllerState getDraftControllerState() { return draftControllerState; }
-
     //Constructor
     public Controller(Game game) {
 
-        //Set controller states
-        this.startState = new StartControllerState(this);
-        this.placeState = new PlaceControllerState(this);
-        this.toolCardState = new ToolCardControllerState(this);
-
-        //Set main attributes
-        this.game = game;
-        this.controllerState =  this.startState;
-        this.activeToolcard = null;
-        this.diceBag = new DiceBag(18); //TODO: read this number from config file
-        this.controllerStateManager = new ControllerStateManager(this);
+        //Create Managers
+        this.stateManager = new ControllerStateManager(this);
 
         try{
             this.windowPatternManager = new WindowPatternManager();
@@ -75,6 +49,12 @@ public class Controller implements ControllerInterface {
         }
 
         this.objectiveCardManager = new ObjectiveCardManager();
+
+        //Set main attributes
+        this.game = game;
+        this.controllerState =  this.stateManager.getStartState();
+        this.activeToolcard = null;
+        this.diceBag = new DiceBag(18); //TODO: read this number from config file
     }
 
     //State pattern

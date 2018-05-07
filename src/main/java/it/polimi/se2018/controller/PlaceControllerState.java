@@ -26,10 +26,9 @@ public class PlaceControllerState implements ControllerState {
                 view.showMessage("Dice placed!");
 
                 if (controller.getActiveToolCard() != null) {
-                    controller.setControllerState(controller.getActiveToolCard().nextStateID(this));
+                    controller.setControllerState(controller.stateManager.getNextState(this));
                 } else {
-                    //TODO: change to ToolcardState
-                    controller.setControllerState(controller.getToolCardState());
+                    controller.setControllerState(controller.stateManager.getToolCardState());
                 }
             } else {
                 view.showMessage("Move is illegal. There's another dice in that position.");
