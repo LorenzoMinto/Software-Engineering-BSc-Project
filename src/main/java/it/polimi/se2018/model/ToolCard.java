@@ -66,12 +66,7 @@ public class ToolCard {
 
     public String nextStateID(ControllerState currentState){
 
-        String nextStateID;
-
-        //TODO: use controllerStateRules HasMap
-        nextStateID = null;
-
-        return nextStateID;
+        return controllerStateRules.get( currentState.getClass().getSimpleName() );
     }
 
     public boolean needsDrafting(){

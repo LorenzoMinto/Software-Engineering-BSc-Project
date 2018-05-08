@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,10 @@ public class ToolCardsManager {
             String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
             String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
 
-            //Parse from xml the list of constraints
+
+            //Placement Rules PARSING
+
+            PlacementRule placementRule = new EmptyPlacementRule();
             NodeList placementRules = document.getElementsByTagName("placementRule");
             for(int i=0; i<placementRules.getLength(); i++){
 
@@ -94,16 +98,28 @@ public class ToolCardsManager {
                 //Parse from xml the decoratorName constraint
                 String decoratorName = a.getNamedItem("decoratorName").getNodeValue();
 
-                //TODO: Decorating toolcard placementRule
+                /*Creates a PlacementRule decorator of the type specified in "decoratorName"
+                **and then decorates it with the previous rules (default is EmptyPlacementRule*/
+                placementRule = (PlacementRule) Class.forName(decoratorName).getConstructor(PlacementRule.class).newInstance(placementRule);
             }
 
-            //TODO: Parse of controllerStateRules
+
+            //ControllerStates transitions PARSING
 
             HashMap<String,String> controllerStateRules = new HashMap<>();
 
-            //TODO: Create HasMap of controllerStateRules
+            NodeList controllerStateRulesTags = document.getElementsByTagName("controllerStateRule");
+            for(int i=0; i<controllerStateRulesTags.getLength(); i++){
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,controllerStateRules);
+                NamedNodeMap a = controllerStateRulesTags.item(i).getAttributes();
+
+                String prevState = a.getNamedItem("prevState").getNodeValue();
+                String nextState = a.getNamedItem("nextState").getNodeValue();
+
+                controllerStateRules.put(prevState,nextState);
+            }
+
+            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
