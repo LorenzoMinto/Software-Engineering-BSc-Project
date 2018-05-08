@@ -16,13 +16,16 @@ public class Turn {
 
     private int number;
 
-    public Player currentPlayer;
+    private Player currentPlayer;
 
     private boolean draftedAndPlaced;
 
     private Dice draftedDice;
+
     private Dice trackChosenDice;
+
     private int slotOfTrackChosenDice;
+
 
     private ToolCard usedToolCard;
 
@@ -46,9 +49,14 @@ public class Turn {
     }
 
     public Dice getDraftedDice() { return draftedDice; }
+
     public Dice getTrackChosenDice() { return trackChosenDice; }
 
     public int getSlotOfTrackChosenDice() { return slotOfTrackChosenDice; }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 
     //Setters
 

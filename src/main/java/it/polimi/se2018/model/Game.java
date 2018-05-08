@@ -12,12 +12,15 @@ public class Game extends Observable {
     public static final int MAX_NUMBER_OF_PLAYERS = 4;
     public static final int NUMBER_OF_TURNS_PER_ROUND = MAX_NUMBER_OF_PLAYERS * 2;
 
+    private Round currentRound;
 
-    public Round currentRound;
-    public Track track;
-    public List<Player> players;
-    public ArrayList<ToolCard> drawnToolCards;
-    public Set<PublicObjectiveCard> drawnPublicObjectiveCards;
+    private Track track;
+
+    private List<Player> players;
+
+    private ArrayList<ToolCard> drawnToolCards;
+
+    private Set<PublicObjectiveCard> drawnPublicObjectiveCards;
 
     public Game() {
         this.currentRound = null;
@@ -25,6 +28,30 @@ public class Game extends Observable {
         this.players = new ArrayList<>();
         this.drawnToolCards = new ArrayList<>();
         this.drawnPublicObjectiveCards = new HashSet<>();
+    }
+
+    public Round getCurrentRound() {
+        return currentRound;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<ToolCard> getDrawnToolCards() {
+        return drawnToolCards;
+    }
+
+    public Set<PublicObjectiveCard> getDrawnPublicObjectiveCards() {
+        return drawnPublicObjectiveCards;
+    }
+
+    public void setCurrentRound(Round currentRound) {
+        this.currentRound = currentRound;
     }
 
     public boolean addPlayer(Player player){
@@ -35,33 +62,8 @@ public class Game extends Observable {
         return false;
     }
 
-    public boolean hasNextRound(){
-        return ( this.currentRound.getNumber() < NUMBER_OF_ROUNDS );
-    }
-
-    public Round nextRound(List<Dice> dices){
-
-        //TODO: end previous round, empty draftPool and fill track
-
-        int nextRoundNumber;
-
-        //Calculate the number of the next round
-        if( this.currentRound == null ){
-            nextRoundNumber = 0;
-        } else {
-            nextRoundNumber = this.currentRound.getNumber() + 1;
-
-            if(nextRoundNumber >= NUMBER_OF_ROUNDS){
-                throw new IllegalStateException("Asked to create a round but exceeding round number limit");
-            }
-        }
-
-        this.currentRound = new Round(nextRoundNumber, new DraftPool( dices ), this.players );
-        return this.currentRound;
-    }
-
     public boolean isCurrentPlayer(Player player) {
-        return this.currentRound.currentTurn.isCurrentPlayer(player);
+        return getCurrentRound().getCurrentTurn().isCurrentPlayer(player);
     }
 
     public void useToolCard(ToolCard toolCard){
@@ -71,7 +73,7 @@ public class Game extends Observable {
         }
 
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
-        this.currentRound.currentTurn.setUsedToolCard(toolCard);
+        this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
 
     }
 }
