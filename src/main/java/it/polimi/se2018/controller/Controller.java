@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -152,18 +153,6 @@ public class Controller implements ControllerInterface {
         } else { view.showMessage("It is not your turn.");}
     }
 
-
-
-
-    protected List<Player> getRankings() {
-        //TODO: fix problem due to removing of Round.getPlayers()
-        List<Player> playersOfLastRound = game.getPlayers();
-        Set<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
-
-        return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
-    }
-
-
     protected boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
@@ -240,12 +229,22 @@ public class Controller implements ControllerInterface {
     }
 
     protected void endGame(){
-        Player winner;
-        List<Player> rankings = getRankings();
-        winner = rankings.get(0);
+
+        getRankingsAndScores();
 
         //TODO: notify view of winners and scores
 
+    }
+
+    protected void getRankingsAndScores() {
+        //TODO: fix problem due to removing of Round.getPlayers()
+        List<Player> playersOfLastRound = game.getPlayers();
+        Set<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
+
+        Object[] results = Scorer.getInstance().compute(playersOfLastRound, publicObjectiveCards);
+
+        List<Player> rankings = (List<Player>) results[0];
+        HashMap<Player,Integer> scores= (HashMap<Player,Integer>) results[1];
     }
 
     protected PlacementRule getDefaultPlacementRule(){

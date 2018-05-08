@@ -7,6 +7,9 @@ import it.polimi.se2018.model.WindowPattern;
 
 import java.util.*;
 
+/**
+ * @author Jacopo Pio Gargano
+ */
 //Singleton
 public class Scorer {
     private static Scorer instance = null;
@@ -21,7 +24,13 @@ public class Scorer {
     }
 
 
-    List<Player> getRankings(List<Player> players, Set<PublicObjectiveCard> publicObjectiveCards){
+    /**
+     * @author Jacopo Pio Gargano
+     * @param players
+     * @param publicObjectiveCards
+     * @return rankings as an ordered list of players (first is winner) and scores as HashMap<Player,Score(Integer)>
+     */
+    Object[] compute(List<Player> players, Set<PublicObjectiveCard> publicObjectiveCards){
         if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
                 " if the list of players is empty");}
         List<Player> rankings;
@@ -34,7 +43,11 @@ public class Scorer {
         rankings = orderPlayersByFavorTokens(rankings);
         rankings = orderPlayersByScore(rankings, scores);
 
-        return rankings;
+        Object[] result = new Object[2];
+        result[0] = rankings;
+        result[1] = scores;
+
+        return result;
     }
 
     private Map<Player, Integer> getScores(List<Player> players, Set<PublicObjectiveCard> publicObjectiveCards) {

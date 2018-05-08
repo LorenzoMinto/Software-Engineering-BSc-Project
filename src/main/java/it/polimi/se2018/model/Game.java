@@ -22,12 +22,21 @@ public class Game extends Observable {
 
     private Set<PublicObjectiveCard> drawnPublicObjectiveCards;
 
+    private GameStatus status;
+
+    private List<Player> rankings;
+
+    private HashMap<Player,Integer> scores;
+
     public Game() {
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
         this.drawnToolCards = new ArrayList<>();
         this.drawnPublicObjectiveCards = new HashSet<>();
+        this.status = GameStatus.WAITING_FOR_PLAYERS;
+        this.rankings = null;
+        this.scores = null;
     }
 
     public Round getCurrentRound() {
@@ -50,8 +59,28 @@ public class Game extends Observable {
         return drawnPublicObjectiveCards;
     }
 
+    public GameStatus getStatus() {
+        return status;
+    }
+
     public void setCurrentRound(Round currentRound) {
         this.currentRound = currentRound;
+    }
+
+    public void setRankings(List<Player> rankings) {
+        if(this.status==GameStatus.ENDED) {
+            this.rankings = rankings;
+        } else {
+            throw new RuntimeException("Can't se rankings if game is not ended");
+        }
+    }
+
+    public void setScores(HashMap<Player, Integer> scores) {
+        if(this.status==GameStatus.ENDED) {
+            this.scores = scores;
+        } else {
+            throw new RuntimeException("Can't se rankings if game is not ended");
+        }
     }
 
     public boolean addPlayer(Player player){
