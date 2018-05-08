@@ -8,4 +8,9 @@ public class GUIView extends View{
     public GUIView(ControllerInterface controller, Player player) {
         super(controller, player);
     }
+
+    @Override
+    public void update(Object message) {
+
+    }
 }

@@ -9,4 +9,8 @@ public class CLIView extends View {
         super(controller, player);
     }
 
+    @Override
+    public void update(Object message) {
+
+    }
 }
