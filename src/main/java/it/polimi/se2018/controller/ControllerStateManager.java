@@ -22,7 +22,7 @@ public class ControllerStateManager {
         this.toolCardState = new ToolCardControllerState(this.controller);
     }
 
-    public ControllerState getNextState(ControllerState prevState){
+    public ControllerState getNextState(ControllerState prevState) throws ClassNotFoundException{
         ControllerState nextState;
 
         String nextControllerStateID = controller.getActiveToolCard().nextStateID(prevState);
@@ -30,7 +30,6 @@ public class ControllerStateManager {
         if (stateTable.containsKey(nextControllerStateID)) {
             nextState = stateTable.get(nextControllerStateID);
         } else {
-            //NOTE: should an exception be thrown if specified state does not exist?
             nextState = createStateByID(nextControllerStateID);
             stateTable.put(nextControllerStateID, nextState);
         }
@@ -38,14 +37,17 @@ public class ControllerStateManager {
         return nextState;
     }
 
-    private ControllerState createStateByID(String controllerStateID){
+    private ControllerState createStateByID(String controllerStateID) throws ClassNotFoundException{
+        try {
 
-        //TODO: https://stackoverflow.com/questions/6094575/creating-an-instance-using-the-class-name-and-calling-constructor
+            //Checks that the class it is created is a subclass of ControllerState
+            if( ! Class.forName(controllerStateID).isAssignableFrom(ControllerState.class) ){ throw new Exception(); }
 
-        ControllerState controllerState;
+            return (ControllerState) Class.forName(controllerStateID).getConstructor(Controller.class).newInstance(controller);
 
-
-        return controllerState;
+        } catch( Exception e ){
+            throw new ClassNotFoundException();
+        }
     }
 
     //getters
