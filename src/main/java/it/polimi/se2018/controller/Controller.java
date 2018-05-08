@@ -227,13 +227,13 @@ public class Controller implements ControllerInterface {
     }
 
     protected PlacementRule getDefaultPlacementRule(){
-        //NOTE: the DefaultPlacementRule is an empty rule
+        //NOTE: the EmptyPlacementRule is an empty rule
         PlacementRule defaultPlacementRule = new AdjacentValuePlacementRuleDecorator(
                 new AdjacentDicePlacementRuleDecorator(
                         new AdjacentColorPlacementRuleDecorator(
                                 new ColorPlacementRuleDecorator(
                                         new ValuePlacementRuleDecorator(
-                                                new DefaultPlacementRule()))), false));
+                                                new EmptyPlacementRule()))), false));
 
         return defaultPlacementRule;
     }
