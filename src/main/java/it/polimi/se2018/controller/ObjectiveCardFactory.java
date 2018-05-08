@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -26,27 +27,7 @@ public class ObjectiveCardFactory {
 
         String title = "Shades of " + color.toString()+ " - Private";
         String description = "Sum of values on " + color.toString() + " dice";
-        String imageURL = null;
-
-        switch (color){
-            case RED:
-                imageURL = null;
-                break;
-            case YELLOW:
-                imageURL = null;
-                break;
-            case GREEN:
-                imageURL = null;
-                break;
-            case BLUE:
-                imageURL = null;
-                break;
-            case PURPLE:
-                imageURL = null;
-                break;
-            default:
-                throw new RuntimeException("ERROR: The selected color does not exist.");
-        }
+        String imageURL = "assets/"+color+"privateobjectivecard.jpg";
 
         return new PrivateObjectiveCard(title, description, imageURL, color);
 
