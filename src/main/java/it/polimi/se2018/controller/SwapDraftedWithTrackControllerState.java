@@ -55,8 +55,8 @@ public class SwapDraftedWithTrackControllerState implements ControllerState {
     @Override
     public void executeImplicitBehaviour() {
         Game game = controller.game;
-        Turn turn = game.currentRound.currentTurn;
-        game.track.putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
+        Turn turn = game.getCurrentRound().getCurrentTurn();
+        game.getTrack().putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
         turn.setDraftedDice(turn.getTrackChosenDice());
         controller.setControllerState(controller.stateManager.getNextState(this));
     }

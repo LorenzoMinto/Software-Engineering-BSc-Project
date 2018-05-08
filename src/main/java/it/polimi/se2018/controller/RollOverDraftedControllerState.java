@@ -52,7 +52,7 @@ public class RollOverDraftedControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-        Turn currentTurn = controller.game.currentRound.currentTurn;
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         Dice draftedDice = currentTurn.getDraftedDice();
         draftedDice.rollOver();
         currentTurn.setDraftedDice(draftedDice);

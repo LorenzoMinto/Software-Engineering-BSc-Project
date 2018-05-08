@@ -28,9 +28,9 @@ public class ChooseFromTrackControllerState implements ControllerState {
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         Game game = controller.game;
-        if (game.track.takeDice(dice, slotNumber)) {
-            game.currentRound.currentTurn.setTrackChosenDice(dice);
-            game.currentRound.currentTurn.setSlotOfTrackChosenDice(slotNumber);
+        if (game.getTrack().takeDice(dice, slotNumber)) {
+            game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
+            game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
             controller.setControllerState(controller.stateManager.getNextState(this));
         }
 

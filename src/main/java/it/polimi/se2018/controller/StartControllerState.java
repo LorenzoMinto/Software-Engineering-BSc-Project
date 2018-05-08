@@ -12,11 +12,10 @@ public class StartControllerState implements ControllerState {
 
     @Override
     public void draftDiceFromDraftPool(Dice dice, View view) {
-        Game game = controller.game;
-        Round currentRound = game.currentRound;
+        Round currentRound = controller.game.getCurrentRound();
 
-        if (currentRound.draftPool.draftDice(dice)) {
-            currentRound.currentTurn.setDraftedDice(dice);
+        if (currentRound.getDraftPool().draftDice(dice)) {
+            currentRound.getCurrentTurn().setDraftedDice(dice);
         }
         controller.setControllerState(controller.stateManager.getPlaceState());
     }

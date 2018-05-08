@@ -36,8 +36,8 @@ public class MoveControllerState implements ControllerState {
     @Override
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
         Game game = controller.game;
-        Turn currentTurn = game.currentRound.currentTurn;
-        WindowPattern pattern = currentTurn.currentPlayer.getWindowPattern();
+        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
+        WindowPattern pattern = currentTurn.getCurrentPlayer().getWindowPattern();
 
         //check if move conforms to current placementRules and general physical constraints
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)

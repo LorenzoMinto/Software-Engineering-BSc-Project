@@ -20,8 +20,8 @@ public class PlaceControllerState implements ControllerState {
     @Override
     public void placeDice(int row, int col, View view) {
         Game game = controller.game;
-        Turn currentTurn = game.currentRound.currentTurn;
-        WindowPattern pattern = currentTurn.currentPlayer.getWindowPattern();
+        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
+        WindowPattern pattern = currentTurn.getCurrentPlayer().getWindowPattern();
         //NOTE: checking for currentTurn.hasDrafted might be redundant in the context of the State pattern
         if (currentTurn.hasDrafted()) {
             if (controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col)

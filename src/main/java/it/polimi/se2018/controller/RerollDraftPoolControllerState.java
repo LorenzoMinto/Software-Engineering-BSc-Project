@@ -52,8 +52,7 @@ public class RerollDraftPoolControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-        Round currentRound = controller.game.currentRound;
-        currentRound.draftPool.reroll();
+        controller.game.getCurrentRound().getDraftPool().reroll();
         controller.setControllerState(controller.stateManager.getNextState(this));
     }
 }

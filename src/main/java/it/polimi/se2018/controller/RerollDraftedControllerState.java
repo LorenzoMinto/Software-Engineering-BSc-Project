@@ -54,7 +54,7 @@ public class RerollDraftedControllerState implements ControllerState {
 
     @Override
     public void executeImplicitBehaviour() {
-        Turn currentTurn = controller.game.currentRound.currentTurn;
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         Dice draftedDice = currentTurn.getDraftedDice();
         draftedDice.roll();
         currentTurn.setDraftedDice(draftedDice);

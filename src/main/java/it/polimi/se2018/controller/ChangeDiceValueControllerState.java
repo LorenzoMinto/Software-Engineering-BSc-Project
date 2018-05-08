@@ -38,7 +38,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
     @Override
     public void incrementDice(View view) {
         Game game = controller.game;
-        Turn currentTurn = game.currentRound.currentTurn;
+        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
             if (currentTurn.getDraftedDice().incrementValue()) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
@@ -51,7 +51,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
     @Override
     public void decrementDice(View view) {
         Game game = controller.game;
-        Turn currentTurn = game.currentRound.currentTurn;
+        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
             if (currentTurn.getDraftedDice().decrementValue()) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
@@ -64,7 +64,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
     @Override
     public void chooseDiceValue(int value, View view) {
         Game game = controller.game;
-        Turn currentTurn = game.currentRound.currentTurn;
+        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
             //NOTE: this assumes value is a legal value, otherwise need bool returned from setValue
             currentTurn.getDraftedDice().setValue(value);

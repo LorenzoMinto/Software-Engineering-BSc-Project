@@ -53,7 +53,7 @@ public class SwitchDraftedWithBagControllerState implements ControllerState {
     @Override
     public void executeImplicitBehaviour() {
         DiceBag diceBag = controller.diceBag;
-        Turn currentTurn = controller.game.currentRound.currentTurn;
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         controller.diceBag.addDice(currentTurn.getDraftedDice());
         currentTurn.setDraftedDice(diceBag.getDices(1).get(0));
         controller.setControllerState(controller.stateManager.getNextState(this));

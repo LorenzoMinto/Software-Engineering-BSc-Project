@@ -13,10 +13,10 @@ public class DraftControllerState implements ControllerState {
     @Override
     public void draftDiceFromDraftPool(Dice dice, View view) {
         Game game = controller.game;
-        Round currentRound = game.currentRound;
+        Round currentRound = game.getCurrentRound();
 
-        if (currentRound.draftPool.draftDice(dice)) {
-            currentRound.currentTurn.setDraftedDice(dice);
+        if (currentRound.getDraftPool().draftDice(dice)) {
+            currentRound.getCurrentTurn().setDraftedDice(dice);
         }
 
         //TODO: activeToolcard needs to be set to null after effect expires
