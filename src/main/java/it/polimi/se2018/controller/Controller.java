@@ -183,12 +183,11 @@ public class Controller implements ControllerInterface {
     }
 
     protected void setActiveToolCard(ToolCard toolCard) {
-        //TODO: this methods doesn't do anything, it only changes the copy. Make a method on Game that changes it directly!!
-        toolCard.use();
+
+        game.useToolCard(toolCard);
 
         this.activeToolcard = toolCard;
         this.placementRule = toolCard.getPlacementRule();
-        game.currentRound.currentTurn.setUsedToolCard(toolCard);
     }
 
     protected ToolCard getActiveToolCard() {

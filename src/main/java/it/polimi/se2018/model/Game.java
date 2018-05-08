@@ -2,10 +2,8 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.tools.Tool;
+import java.util.*;
 
 public class Game extends Observable {
 
@@ -18,14 +16,14 @@ public class Game extends Observable {
     public Round currentRound;
     public Track track;
     public List<Player> players;
-    public Set<ToolCard> drawnToolCards;
+    public ArrayList<ToolCard> drawnToolCards;
     public Set<PublicObjectiveCard> drawnPublicObjectiveCards;
 
     public Game() {
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
-        this.drawnToolCards = new HashSet<>();
+        this.drawnToolCards = new ArrayList<>();
         this.drawnPublicObjectiveCards = new HashSet<>();
     }
 
@@ -64,5 +62,16 @@ public class Game extends Observable {
 
     public boolean isCurrentPlayer(Player player) {
         return this.currentRound.currentTurn.isCurrentPlayer(player);
+    }
+
+    public void useToolCard(ToolCard toolCard){
+
+        if( !this.drawnToolCards.contains(toolCard) ) {
+            throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
+        }
+
+        this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
+        this.currentRound.currentTurn.setUsedToolCard(toolCard);
+
     }
 }

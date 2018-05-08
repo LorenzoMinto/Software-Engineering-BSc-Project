@@ -79,4 +79,20 @@ public class ToolCard {
 
         return false; //this is a placeholder waiting for implementation
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof ToolCard)) {
+            return false;
+        }
+
+        ToolCard c = (ToolCard) o;
+
+        return this.title == c.getTitle()
+                && this.description == c.getDescription()
+                && this.imageURL == c.getImageURL();
+    }
 }
