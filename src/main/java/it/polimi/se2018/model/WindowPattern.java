@@ -17,6 +17,8 @@ public class WindowPattern {
     //Cells that form the pattern
     private Cell[][] pattern;
 
+    private boolean isEmpty;
+
     public WindowPattern(String title, int d, int r, int c, Cell[][] p) {
         if(p==null) throw new IllegalArgumentException();
 
@@ -25,6 +27,7 @@ public class WindowPattern {
         this.numberOfRows = r;
         this.numberOfColumns = c;
         this.pattern = p;
+        this.isEmpty = true;
     }
 
     //Returns the pattern difficulty
@@ -84,7 +87,7 @@ public class WindowPattern {
         }
 
         pattern[row][col].setDice(dice);
-
+        isEmpty = false;
         return true;
     }
 
@@ -113,6 +116,10 @@ public class WindowPattern {
         } else {
             return false;
         }
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
     }
 
     @Override

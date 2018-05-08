@@ -199,7 +199,14 @@ public class Controller implements ControllerInterface {
     }
 
     protected boolean advanceGame() {
-        //TODO: if player's first turn then activate placementRule border restriction. Need to reset startState here
+        this.placementRule = getDefaultPlacementRule();
+        setControllerState(stateManager.getStartState());
+
+        //if player's window pattern is empty
+
+        if(game.currentRound.currentTurn.currentPlayer.getWindowPattern().isEmpty()){
+            this.placementRule = new BorderPlacementRuleDecorator(this.getDefaultPlacementRule());
+        }
 
         if (game.currentRound.hasNextTurn()) {
             game.currentRound.nextTurn();
@@ -220,7 +227,7 @@ public class Controller implements ControllerInterface {
         return false;
     }
 
-    protected void resetPlacementRule(){
+    protected PlacementRule getDefaultPlacementRule(){
         //NOTE: the DefaultPlacementRule is an empty rule
         PlacementRule defaultPlacementRule = new AdjacentValuePlacementRuleDecorator(
                 new AdjacentDicePlacementRuleDecorator(
@@ -229,10 +236,7 @@ public class Controller implements ControllerInterface {
                                         new ValuePlacementRuleDecorator(
                                                 new DefaultPlacementRule()))), false));
 
-        this.placementRule = new DefaultPlacementRule();
+        return defaultPlacementRule;
     }
 
-    protected void setPlacementRule(PlacementRule placementRule){
-        this.placementRule = placementRule;
-    }
 }
