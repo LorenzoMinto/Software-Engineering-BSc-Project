@@ -38,13 +38,13 @@ public class Controller implements ControllerInterface {
         try{
             this.windowPatternManager = new WindowPatternManager();
         } catch(NoPatternsFoundInFileSystemException e){
-            e.printStackTrace();
+            throw new RuntimeException("NoPatternsFoundInFileSystemException thrown, caught but cannot be handled.");
         }
 
         try{
             this.toolCardsManager = new ToolCardsManager();
         } catch(NoToolCardsFoundInFileSystemException e){
-            e.printStackTrace();
+            throw new RuntimeException("NoToolCardsFoundInFileSystemException thrown, caught but cannot be handled.");
         }
 
         this.objectiveCardManager = new ObjectiveCardManager();
