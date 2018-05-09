@@ -11,6 +11,6 @@ public class CLIView extends View {
 
     @Override
     public void update(Object message) {
-
+        //TODO: implement here
     }
 }

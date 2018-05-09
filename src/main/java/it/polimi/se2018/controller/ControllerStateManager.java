@@ -15,7 +15,7 @@ public class ControllerStateManager {
 
     public ControllerStateManager(Controller controller) {
         this.controller = controller;
-        this.stateTable = new HashMap<String, ControllerState>();
+        this.stateTable = new HashMap<>();
 
         this.startState = new StartControllerState(this.controller);
         this.placeState = new PlaceControllerState(this.controller);

@@ -3,14 +3,13 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.utils.Observable;
 
-import javax.tools.Tool;
 import java.util.*;
 
 public class Game extends Observable {
 
-    private final int NUMBER_OF_ROUNDS;
-    private final int MAX_NUMBER_OF_PLAYERS;
-    private final int NUMBER_OF_TURNS_PER_ROUND;
+    private final int numberOfRounds;
+    private final int maxNumberOfPlayers;
+    private final int numberOfTurnsPerRound;
 
     private Round currentRound;
 
@@ -38,9 +37,9 @@ public class Game extends Observable {
         this.rankings = null;
         this.scores = null;
 
-        this.NUMBER_OF_ROUNDS = numberOfRounds;
-        this.MAX_NUMBER_OF_PLAYERS = maxNumberOfPlayers;
-        this.NUMBER_OF_TURNS_PER_ROUND = maxNumberOfPlayers * 2;
+        this.numberOfRounds = numberOfRounds;
+        this.maxNumberOfPlayers = maxNumberOfPlayers;
+        this.numberOfTurnsPerRound = maxNumberOfPlayers * 2;
     }
 
     public Round getCurrentRound() {
@@ -55,7 +54,7 @@ public class Game extends Observable {
         return players;
     }
 
-    public ArrayList<ToolCard> getDrawnToolCards() {
+    public List<ToolCard> getDrawnToolCards() {
         return drawnToolCards;
     }
 
@@ -79,16 +78,16 @@ public class Game extends Observable {
         }
     }
 
-    public void setScores(HashMap<Player, Integer> scores) {
+    public void setScores(Map<Player, Integer> scores) {
         if(this.status==GameStatus.ENDED) {
-            this.scores = scores;
+            this.scores = (HashMap<Player, Integer>) scores;
         } else {
             throw new RuntimeException("Can't se rankings if game is not ended");
         }
     }
 
     public boolean addPlayer(Player player){
-        if( !players.contains(player) && players.size() < MAX_NUMBER_OF_PLAYERS ){
+        if( !players.contains(player) && players.size() < maxNumberOfPlayers){
             players.add(player);
             return true;
         }
@@ -96,7 +95,7 @@ public class Game extends Observable {
     }
 
     public boolean canAcceptNewPlayer(){
-        return players.size() < MAX_NUMBER_OF_PLAYERS;
+        return players.size() < maxNumberOfPlayers;
     }
 
     public boolean isCurrentPlayer(Player player) {
@@ -123,10 +122,10 @@ public class Game extends Observable {
             nextRoundNumber = this.currentRound.getNumber() + 1;
         }
 
-        if(nextRoundNumber > NUMBER_OF_ROUNDS - 1){
+        if(nextRoundNumber > numberOfRounds - 1){
             throw new NoMoreRoundsAvailableException();
         }
 
-        this.currentRound = new Round(nextRoundNumber,NUMBER_OF_TURNS_PER_ROUND,this.players,new DraftPool(dices));
+        this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound,this.players,new DraftPool(dices));
     }
 }

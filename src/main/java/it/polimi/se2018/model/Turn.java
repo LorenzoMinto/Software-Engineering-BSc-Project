@@ -1,8 +1,5 @@
 package it.polimi.se2018.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Turn {
     public Turn(int number, Player player) {
         if(player==null){ throw new IllegalArgumentException("Asked to create a turn giving null player"); }
@@ -36,7 +33,7 @@ public class Turn {
     }
 
     public boolean hasDrafted(){
-        return !( draftedDice == null );
+        return ( draftedDice != null );
     }
 
     public boolean hasDraftedAndPlaced(){
@@ -44,7 +41,7 @@ public class Turn {
     }
 
     public boolean hasUsedToolCard(){
-        return !( this.usedToolCard == null );
+        return ( this.usedToolCard != null );
     }
 
     public Dice getDraftedDice() { return draftedDice; }

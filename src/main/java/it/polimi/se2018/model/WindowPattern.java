@@ -111,11 +111,7 @@ public class WindowPattern {
     }
 
     private boolean isLegalPosition(int row, int col) {
-        if ((row>0 && row<=6) && (col>0 && col<=6)) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((row>=0 && row<pattern.length) && (col>=0 && col<pattern[0].length));
     }
 
     public boolean isEmpty() {

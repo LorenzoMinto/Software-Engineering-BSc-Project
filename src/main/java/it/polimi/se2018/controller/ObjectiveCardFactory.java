@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -76,26 +75,25 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard(items);
             default:
-                throw new RuntimeException("ERROR: The selected card by index does not exist.");
+                throw new RuntimeException("The selected (by index) card does not exist.");
         }
     }
 
     //The card that now exists only has all 5 colors
     private PublicObjectiveCard createColorSetPublicObjectiveCard(Set<Object> colors){
-        if(colors == null){ throw new IllegalArgumentException("ERROR: Color set cannot be null."); }
+        if(colors == null){ throw new IllegalArgumentException("Cannot create a ColorSetPublicObjectiveCard with no colors specified"); }
 
         String title = "Color Variety";
         String description;
         int multiplier;
         String imageURL;
 
-        if(colors.size() == 5){
+        if(colors.size() == DiceColors.values().length - 1){
             description = "Sets of one of each color anywhere";
             multiplier = 4;
             imageURL = null;
         }else{
-            throw new RuntimeException("ERROR: The Color Set Public Objective Card " +
-                    "can only be created with all of the existing colors.");
+            throw new RuntimeException("ColorSetPublicObjectiveCard can be created only with all of the existing colors.");
         }
 
         return new SetPublicObjectiveCard(title, description, imageURL, colors, Dice::getColor, multiplier);

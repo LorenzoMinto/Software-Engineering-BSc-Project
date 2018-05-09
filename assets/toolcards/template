@@ -2,6 +2,7 @@
 <toolcard>
     <imageURL></imageURL>
     <description></description>
+    <neededTokens></neededTokens>
     <placementRule decoratorName="" />
     <controllerStateRule prevState="" nextState="" />
 </toolcard>

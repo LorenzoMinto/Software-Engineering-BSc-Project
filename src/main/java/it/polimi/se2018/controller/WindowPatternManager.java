@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class WindowPatternManager {
 
-    private static String PATH = "assets/patterns/";
+    private static final String PATH = "assets/patterns/";
 
     private List<String> availablePatterns;
 

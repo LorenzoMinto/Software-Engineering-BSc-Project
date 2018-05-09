@@ -30,7 +30,7 @@ public class Controller implements ControllerInterface {
     int movesCounter = 0;
 
     //Constructor
-    public Controller(Game game) {
+    public Controller(Game game, int numberOfDicesPerColor) {
 
         //Create Managers
         this.stateManager = new ControllerStateManager(this);
@@ -53,7 +53,7 @@ public class Controller implements ControllerInterface {
         this.game = game;
         this.controllerState =  this.stateManager.getStartState();
         this.activeToolcard = null;
-        this.diceBag = new DiceBag(18); //TODO: read this number from config file
+        this.diceBag = new DiceBag(numberOfDicesPerColor);
     }
 
     //State pattern
@@ -67,20 +67,8 @@ public class Controller implements ControllerInterface {
     //Handling View->Controller (Initialization)
 
     @Override
-    public void handlePlayerRegistration(int UserID, String username, String nickname, View view) {
-
-       /*User user = new User(UserID, username);
-
-       PrivateObjectiveCard playerPrivateObjectiveCarad = objectiveCardManager.getPrivateObjectiveCard();
-
-       Player player = new Player(user, nickname, playerPrivateObjectiveCarad);
-
-       game.players.add(player);*/
-    }
-
-    @Override
     public void handleChooseWindowPattern(WindowPattern windowPattern, View view) {
-
+        //TODO: implement here
     }
 
     //Handling View->Controller (Moves)
@@ -211,20 +199,31 @@ public class Controller implements ControllerInterface {
 
     protected void endGame(){
 
-        getRankingsAndScores();
+        Object[] results = getRankingsAndScores();
+
+        List<Player> rankings = (List<Player>) results[0];
+        HashMap<Player,Integer> scores= (HashMap<Player,Integer>) results[1];
+
+        registerRankingsOnUsersProfiles(rankings);
 
         //TODO: notify view of winners and scores
 
     }
 
-    protected void getRankingsAndScores() {
+    protected Object[] getRankingsAndScores() {
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrder();
         Set<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
-        Object[] results = Scorer.getInstance().compute(playersOfLastRound, publicObjectiveCards);
+        return Scorer.getInstance().compute(playersOfLastRound, publicObjectiveCards);
+    }
 
-        List<Player> rankings = (List<Player>) results[0];
-        HashMap<Player,Integer> scores= (HashMap<Player,Integer>) results[1];
+    private void registerRankingsOnUsersProfiles(List<Player> rankings){
+
+        for(Player player : game.getPlayers()){
+            User user = player.getUser();
+            user.increaseGamesPlayed();
+            if(rankings.get(0).equals(player)){ user.increaseGamesWon(); }
+        }
     }
 
     protected PlacementRule getDefaultPlacementRule(){
@@ -238,7 +237,7 @@ public class Controller implements ControllerInterface {
 
     }
 
-    public Player acceptPlayer(User user, String nickname) throws AcceptPlayerException{
+    public Player acceptPlayer(User user, String nickname) throws AcceptingPlayerException {
 
         if( game.canAcceptNewPlayer() ){
             PrivateObjectiveCard card = objectiveCardManager.getPrivateObjectiveCard();
@@ -246,11 +245,11 @@ public class Controller implements ControllerInterface {
 
             if( game.addPlayer(player) ){ return player; }
 
-            throw new AlreadyAddedPlayerException();
+            throw new AcceptingPlayerException("Player was already added");
 
         }
 
-        throw new NoMorePlayersCanBeAcceptedException();
+        throw new AcceptingPlayerException("No more players can be accepted");
 
     }
 

@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.ControllerState;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ToolCard {
@@ -10,37 +11,29 @@ public class ToolCard {
     private String description;
     private int tokensUsed;
     private int neededTokens;
+    private int baseNeededTokens;
+    private int tokensUsageMultiplier;
     private String imageURL;
-    HashMap<String,String> controllerStateRules;
+    private HashMap<String,String> controllerStateRules;
     private PlacementRule placementRule;
 
-    public ToolCard(String title, String description, String imageURL, HashMap<String, String> controllerStateRules, PlacementRule placementRule) {
+    public ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier, Map<String, String> controllerStateRules, PlacementRule placementRule) {
         this.title = title;
         this.description = description;
-        //TODO: neededTokens should be taken from the configuration file
-        this.neededTokens = 1;
+        this.neededTokens = neededTokens;
+        this.baseNeededTokens = neededTokens;
         this.tokensUsed = 0;
         this.imageURL = imageURL;
-        this.controllerStateRules = controllerStateRules;
+        this.controllerStateRules = (HashMap<String,String>)controllerStateRules;
         this.placementRule = placementRule;
-    }
-
-    private ToolCard(String title, String description, String imageURL, HashMap<String, String> stateRules, PlacementRule placementRule, int neededTokens, int tokensUsed){
-        this(title, description, imageURL, stateRules, placementRule);
-        this.neededTokens = neededTokens;
-        this.tokensUsed = tokensUsed;
-    }
-
-    public ToolCard copy(){
-        //TODO: ensure that this.controllerStateRules does not need to be copied
-        return new ToolCard(this.title, this.description, this.imageURL, this.controllerStateRules, this.placementRule, this.neededTokens, this.tokensUsed);
+        this.tokensUsageMultiplier = tokensUsageMultiplier;
     }
 
     public void use() {
         this.tokensUsed += this.neededTokens;
 
-        //Update neededTokens
-        if (this.tokensUsed==1) { this.neededTokens *= 2; }
+        //Increase neededTokens on the first usage (check of first usage is made thanks baseNeededTokens)
+        if (this.tokensUsed==this.baseNeededTokens) { this.neededTokens *= this.tokensUsageMultiplier; }
     }
 
     public String getTitle() {

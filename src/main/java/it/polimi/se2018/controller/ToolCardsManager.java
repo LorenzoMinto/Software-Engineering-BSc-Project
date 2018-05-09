@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.Random;
 
 public class ToolCardsManager {
 
-    private static String PATH = "assets/toolcards/";
+    private static final String PATH = "assets/toolcards/";
 
     private List<String> availableToolCards;
 
@@ -85,7 +84,7 @@ public class ToolCardsManager {
             //Parse from xml the number of rows of the pattern
             String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
             String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
-
+            int neededTokens = Integer.parseInt( document.getElementsByTagName("neededTokens").item(0).getTextContent() );
 
             //Placement Rules PARSING
 
@@ -119,7 +118,7 @@ public class ToolCardsManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,controllerStateRules,placementRule);
+            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();

@@ -7,6 +7,10 @@ import java.util.List;
 
 public class XMLFileReader {
 
+    private XMLFileReader(){
+        //Just for preventing instantiation
+    }
+
     public static List<String> getFilesNames(String path) throws IOException{
 
         List<String> filesNames = new ArrayList<>();
