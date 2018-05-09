@@ -22,7 +22,7 @@ public class ControllerStateManager {
         this.toolCardState = new ToolCardControllerState(this.controller);
     }
 
-    public ControllerState getNextState(ControllerState prevState) throws ClassNotFoundException{
+    public ControllerState getNextState(ControllerState prevState){
         ControllerState nextState;
 
         String nextControllerStateID = controller.getActiveToolCard().nextStateID(prevState);
@@ -30,7 +30,12 @@ public class ControllerStateManager {
         if (stateTable.containsKey(nextControllerStateID)) {
             nextState = stateTable.get(nextControllerStateID);
         } else {
-            nextState = createStateByID(nextControllerStateID);
+
+            try {
+                nextState = createStateByID(nextControllerStateID);
+            } catch (ClassNotFoundException e){
+                throw new RuntimeException("ClassNotFoundException thrown, caught but cannot be handled.");
+            }
             stateTable.put(nextControllerStateID, nextState);
         }
 
