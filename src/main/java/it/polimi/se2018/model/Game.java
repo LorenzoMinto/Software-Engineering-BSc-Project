@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.utils.Observable;
 
 import javax.tools.Tool;
@@ -104,5 +105,21 @@ public class Game extends Observable {
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
         this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
 
+    }
+
+    public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
+
+        int nextRoundNumber;
+        if( this.currentRound == null ){
+            nextRoundNumber = 0;
+        } else {
+            nextRoundNumber = this.currentRound.getNumber() + 1;
+        }
+
+        if(nextRoundNumber > NUMBER_OF_ROUNDS - 1){
+            throw new NoMoreRoundsAvailableException();
+        }
+
+        this.currentRound = new Round(nextRoundNumber,NUMBER_OF_TURNS_PER_ROUND,this.players,new DraftPool(dices));
     }
 }

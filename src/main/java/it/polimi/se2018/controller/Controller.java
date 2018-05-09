@@ -176,49 +176,30 @@ public class Controller implements ControllerInterface {
         return activeToolcard;
     }
 
-    protected void startGame(){
-
-        try {
-            nextRound();
-        } catch (NoMoreRoundsAvailableException e) {
-            throw new RuntimeException("Starting game but no rounds availables");
-        }
-
-        try {
-            nextTurn();
-        } catch (NoMoreTurnsAvailableException e) {
-            throw new RuntimeException("Starting game but no turns availables");
-        }
-
-    }
-
     protected boolean advanceGame() {
 
         this.placementRule = getDefaultPlacementRule();
         setControllerState(stateManager.getStartState());
 
         //if player's window pattern is empty
-
-        if(game.getCurrentRound().getCurrentTurn().getCurrentPlayer().getWindowPattern().isEmpty()){
+        if(game.getCurrentRound().getCurrentTurn().getPlayer().getWindowPattern().isEmpty()){
             this.placementRule = new BorderPlacementRuleDecorator( getDefaultPlacementRule() );
         }
 
-
         //Proceed with turns / rounds
         try {
-            nextTurn();
+            game.getCurrentRound().nextTurn();
         } catch (NoMoreTurnsAvailableException e) {
 
             try {
-                nextRound();
+                game.nextRound( diceBag.getDices(game.getPlayers().size()*2 + 1) );
             } catch (NoMoreRoundsAvailableException e1) {
 
                 endGame();
             }
 
-            //NOTE: this should not happen
-            try {
-                nextTurn();
+            try { //NOTE: this should not happen
+                game.getCurrentRound().nextTurn();
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new RuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }
@@ -237,8 +218,7 @@ public class Controller implements ControllerInterface {
     }
 
     protected void getRankingsAndScores() {
-        //TODO: fix problem due to removing of Round.getPlayers()
-        List<Player> playersOfLastRound = game.getPlayers();
+        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrder();
         Set<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
         Object[] results = Scorer.getInstance().compute(playersOfLastRound, publicObjectiveCards);
@@ -256,71 +236,6 @@ public class Controller implements ControllerInterface {
                                         new ValuePlacementRuleDecorator(
                                                 new EmptyPlacementRule()))), false));
 
-    }
-
-    private void nextTurn() throws NoMoreTurnsAvailableException { //NOTE: Assumes that a round exists
-
-        int nextRoundNumber = game.getCurrentRound().getNumber();
-
-        int nextTurnNumber = getNextTurnNumber();   //throws NoMoreTurnsAvailableException
-
-        Player nextPlayer = whoShouldBePlayingDuringTurn(game.getPlayers(),nextRoundNumber,nextTurnNumber);
-
-        game.getCurrentRound().setCurrentTurn( new Turn(nextTurnNumber,nextPlayer) );
-    }
-
-    private void nextRound() throws NoMoreRoundsAvailableException{
-
-        int nextRoundNumber = getNextRoundNumber(); //throws NoMoreRoundsAvailableException
-        int numberOfDicesPerRound = game.getPlayers().size() * 2 + 1;
-        List<Dice> nextRoundDices = diceBag.getDices( numberOfDicesPerRound );
-
-        game.setCurrentRound( new Round(nextRoundNumber, new DraftPool( nextRoundDices ) ) );
-    }
-
-    private int getNextTurnNumber() throws NoMoreTurnsAvailableException { //NOTE: Assumes that a round exists
-
-        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-
-        if(currentTurn == null){ return 0; }
-
-        int currentTurnNumber = currentTurn.getNumber();
-
-        if( currentTurnNumber >= game.NUMBER_OF_TURNS_PER_ROUND - 1 ){ throw new NoMoreTurnsAvailableException(); }
-
-        return currentTurnNumber++;
-    }
-
-    private int getNextRoundNumber() throws NoMoreRoundsAvailableException{
-
-        Round currentRound = game.getCurrentRound();
-
-        if(currentRound == null){ return 0; }
-
-        int currentRoundNumber = currentRound.getNumber();
-
-        if( currentRoundNumber >= game.NUMBER_OF_ROUNDS - 1 ){ throw new NoMoreRoundsAvailableException(); }
-
-        return currentRoundNumber++;
-
-    }
-
-    /**
-     * @author Federico Haag
-     * @param roundNumber sequential number of the round (starting from 0)
-     * @param turnNumber sequential number of the turn (starting from 0)
-     * @return the Player obj relative to which player should play according to the game rules in the specified round/turn
-     * @see Player
-     */
-    private Player whoShouldBePlayingDuringTurn(List<Player> players, int roundNumber, int turnNumber){
-
-        int numberOfPlayers = players.size();
-
-        if( turnNumber >= numberOfPlayers ){ turnNumber = game.NUMBER_OF_TURNS_PER_ROUND - turnNumber - 1; }
-
-        int playerShouldPlayingIndex = (turnNumber + (roundNumber % numberOfPlayers)) % numberOfPlayers;
-
-        return players.get(playerShouldPlayingIndex);
     }
 
 }

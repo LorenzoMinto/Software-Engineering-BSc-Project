@@ -3,8 +3,6 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-import java.awt.*;
-
 public class PlaceControllerState implements ControllerState {
     Controller controller;
 
@@ -21,7 +19,7 @@ public class PlaceControllerState implements ControllerState {
     public void placeDice(int row, int col, View view) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-        WindowPattern pattern = currentTurn.getCurrentPlayer().getWindowPattern();
+        WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
         //NOTE: checking for currentTurn.hasDrafted might be redundant in the context of the State pattern
         if (currentTurn.hasDrafted()) {
             if (controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col)

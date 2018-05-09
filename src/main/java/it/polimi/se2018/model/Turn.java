@@ -8,7 +8,7 @@ public class Turn {
         if(player==null){ throw new IllegalArgumentException("Asked to create a turn giving null player"); }
 
         this.number = number;
-        this.currentPlayer = player;
+        this.player = player;
         this.draftedDice = null;
         this.draftedAndPlaced = false;
         this.usedToolCard = null;
@@ -16,7 +16,7 @@ public class Turn {
 
     private int number;
 
-    private Player currentPlayer;
+    private Player player;
 
     private boolean draftedAndPlaced;
 
@@ -25,7 +25,6 @@ public class Turn {
     private Dice trackChosenDice;
 
     private int slotOfTrackChosenDice;
-
 
     private ToolCard usedToolCard;
 
@@ -54,8 +53,8 @@ public class Turn {
 
     public int getSlotOfTrackChosenDice() { return slotOfTrackChosenDice; }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+    public Player getPlayer() {
+        return player;
     }
 
     //Setters
@@ -88,7 +87,7 @@ public class Turn {
     //Utils
 
     public boolean isCurrentPlayer(Player player){
-        return ( this.currentPlayer.equals(player) );
+        return ( this.player.equals(player) );
     }
 
 
