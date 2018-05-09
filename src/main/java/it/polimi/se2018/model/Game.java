@@ -8,10 +8,9 @@ import java.util.*;
 
 public class Game extends Observable {
 
-    //TODO: load these values from config file
-    public static final int NUMBER_OF_ROUNDS = 10;
-    public static final int MAX_NUMBER_OF_PLAYERS = 4;
-    public static final int NUMBER_OF_TURNS_PER_ROUND = MAX_NUMBER_OF_PLAYERS * 2;
+    private final int NUMBER_OF_ROUNDS;
+    private final int MAX_NUMBER_OF_PLAYERS;
+    private final int NUMBER_OF_TURNS_PER_ROUND;
 
     private Round currentRound;
 
@@ -29,7 +28,7 @@ public class Game extends Observable {
 
     private HashMap<Player,Integer> scores;
 
-    public Game() {
+    public Game(int numberOfRounds, int maxNumberOfPlayers) {
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
@@ -38,6 +37,10 @@ public class Game extends Observable {
         this.status = GameStatus.WAITING_FOR_PLAYERS;
         this.rankings = null;
         this.scores = null;
+
+        this.NUMBER_OF_ROUNDS = numberOfRounds;
+        this.MAX_NUMBER_OF_PLAYERS = maxNumberOfPlayers;
+        this.NUMBER_OF_TURNS_PER_ROUND = maxNumberOfPlayers * 2;
     }
 
     public Round getCurrentRound() {

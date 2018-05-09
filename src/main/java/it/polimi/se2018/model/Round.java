@@ -21,9 +21,9 @@ public class Round {
         this.number = roundNumber;
 
         this.turns = new ArrayList<>();
-        for(int i=0; i<=numberOfTurns; i++){
+        for(int i=0; i < numberOfTurns; i++){
             int turnNumber = i;
-            Player player = getPlayerForTurn(players,turnNumber);
+            Player player = getPlayerForTurn(players,turnNumber,numberOfTurns);
             turns.add( new Turn(turnNumber,player) );
         }
 
@@ -72,10 +72,10 @@ public class Round {
      * @return the Player obj relative to which player should play according to the game rules in the specified round/turn
      * @see Player
      */
-    private Player getPlayerForTurn(List<Player> players, int turnNumber){
+    private Player getPlayerForTurn(List<Player> players, int turnNumber, int numberOfTurnsPerRound){
 
         int numberOfPlayers = players.size();
-        if( turnNumber >= numberOfPlayers ){ turnNumber = Game.NUMBER_OF_TURNS_PER_ROUND - turnNumber - 1; }
+        if( turnNumber >= numberOfPlayers ){ turnNumber = numberOfTurnsPerRound - turnNumber - 1; }
         int playerShouldPlayingIndex = (turnNumber + (this.number % numberOfPlayers)) % numberOfPlayers;
 
         return players.get(playerShouldPlayingIndex);
