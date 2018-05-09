@@ -141,14 +141,16 @@ public class Controller implements ControllerInterface {
         } else { view.showMessage("It is not your turn.");}
     }
 
-    protected boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
+    protected boolean canUseSpecificToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
         if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDrafted()){
             return false;
         }
 
-        return player.canUseToolCard(toolCard);
+        Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
+
+        return currentPlayer.canUseToolCard(toolCard);
     }
 
     protected void setActiveToolCard(ToolCard toolCard) {

@@ -118,7 +118,7 @@ public class ToolCardsManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,controllerStateRules,placementRule);
+            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,2, controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
