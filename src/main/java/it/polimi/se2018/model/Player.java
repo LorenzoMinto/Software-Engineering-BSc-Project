@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.util.Objects;
+
 public class Player {
 
     private int favorTokens;
@@ -99,5 +101,10 @@ public class Player {
         Player p = (Player) o;
 
         return this.nickname == p.getNickname();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(favorTokens,nickname,windowPattern,user,privateObjectiveCard);
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Dice {
@@ -92,5 +93,10 @@ public class Dice {
 
         return this.value == c.getValue()
                 && this.color == c.getColor();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value,color);
     }
 }

@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.ControllerState;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ToolCard {
     private String title;
@@ -89,5 +90,10 @@ public class ToolCard {
         return this.title == c.getTitle()
                 && this.description == c.getDescription()
                 && this.imageURL == c.getImageURL();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title,description,tokensUsed,neededTokens,imageURL,controllerStateRules,placementRule);
     }
 }
