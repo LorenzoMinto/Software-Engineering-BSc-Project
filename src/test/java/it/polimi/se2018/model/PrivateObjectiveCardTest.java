@@ -77,19 +77,24 @@ public class PrivateObjectiveCardTest {
 
         switch(cardColor){
             case RED:
-                assertEquals(score,redScore);
+                assertEquals("Score should be the same as redScore",
+                        score, redScore);
                 break;
             case YELLOW:
-                assertEquals(score,yellowScore);
+                assertEquals("Score should be the same as yellowScore",
+                        score, yellowScore);
                 break;
             case GREEN:
-                assertEquals(score,greenScore);
+                assertEquals("Score should be the same as greenScore",
+                        score, greenScore);
                 break;
             case PURPLE:
-                assertEquals(score,purpleScore);
+                assertEquals("Score should be the same as purpleScore",
+                        score, purpleScore);
                 break;
             case BLUE:
-                assertEquals(score,blueScore);
+                assertEquals("Score should be the same as blueScore",
+                        score, blueScore);
                 break;
             default:
                 fail();
@@ -99,13 +104,13 @@ public class PrivateObjectiveCardTest {
 
     @Test
     public void calculateScoreWithNullWindowPattern(){
-        wp = null;
+        WindowPattern nullWindowPattern = null;
         privateObjectiveCard = manager.getPrivateObjectiveCard();
         try {
-            privateObjectiveCard.calculateScore(wp);
+            privateObjectiveCard.calculateScore(nullWindowPattern);
             fail();
         }catch (IllegalArgumentException e){
-            assertNull(wp);
+            assertNull(nullWindowPattern);
         }
 
 
