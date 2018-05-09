@@ -238,4 +238,20 @@ public class Controller implements ControllerInterface {
 
     }
 
+    public Player acceptPlayer(User user, String nickname) throws AcceptPlayerException{
+
+        if( game.canAcceptNewPlayer() ){
+            PrivateObjectiveCard card = objectiveCardManager.getPrivateObjectiveCard();
+            Player player = new Player(user,nickname,card);
+
+            if( game.addPlayer(player) ){ return player; }
+
+            throw new AlreadyAddedPlayerException();
+
+        }
+
+        throw new NoMorePlayersCanBeAcceptedException();
+
+    }
+
 }

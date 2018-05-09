@@ -95,6 +95,10 @@ public class Game extends Observable {
         return false;
     }
 
+    public boolean canAcceptNewPlayer(){
+        return players.size() < MAX_NUMBER_OF_PLAYERS;
+    }
+
     public boolean isCurrentPlayer(Player player) {
         return getCurrentRound().getCurrentTurn().isCurrentPlayer(player);
     }
