@@ -87,6 +87,6 @@ public class ToolCard {
 
     @Override
     public int hashCode() {
-        return Objects.hash(title,description,tokensUsed,neededTokens,imageURL,controllerStateRules,placementRule);
+        return Objects.hash(title,description,tokensUsed,neededTokens,tokensUsageMultiplier,imageURL,controllerStateRules,placementRule);
     }
 }

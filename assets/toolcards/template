@@ -3,6 +3,7 @@
     <imageURL></imageURL>
     <description></description>
     <neededTokens></neededTokens>
+    <tokensUsageMultiplier></tokensUsageMultiplier>
     <placementRule decoratorName="" />
     <controllerStateRule prevState="" nextState="" />
 </toolcard>

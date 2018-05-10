@@ -85,6 +85,7 @@ public class ToolCardsManager {
             String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
             String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
             int neededTokens = Integer.parseInt( document.getElementsByTagName("neededTokens").item(0).getTextContent() );
+            int tokensUsageMultiplier = Integer.parseInt( document.getElementsByTagName("tokensUsageMultiplier").item(0).getTextContent() );
 
             //Placement Rules PARSING
 
@@ -118,7 +119,7 @@ public class ToolCardsManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,controllerStateRules,placementRule);
+            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,tokensUsageMultiplier,controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
