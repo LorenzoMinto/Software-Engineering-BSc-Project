@@ -27,7 +27,7 @@ public class StartControllerState implements ControllerState {
 
     @Override
     public void useToolCard(Player player, ToolCard toolcard, View view) {
-        if (controller.canUseSpecificToolCard(player, toolcard)) {
+        if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.stateManager.getNextState(this);
         } else {

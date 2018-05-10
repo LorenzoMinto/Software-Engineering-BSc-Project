@@ -225,18 +225,19 @@ public class Controller implements ControllerInterface {
 
     /**
      * Checks if a given {@link ToolCard} can be used by the specified {@link Player}
-     * @param player the {@link Player} who wants to use the {@link ToolCard}
      * @param toolCard the {@link ToolCard} to be checked
      * @return if the specified {@link ToolCard} can be used or not by the specified {@link Player} (true=can use)
      */
-    protected boolean canUseSpecificToolCard(Player player, ToolCard toolCard) {
+    protected boolean canUseSpecificToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
         if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDrafted()){
             return false;
         }
 
-        return player.canUseToolCard(toolCard);
+        Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
+
+        return currentPlayer.canUseToolCard(toolCard);
     }
 
     /**
