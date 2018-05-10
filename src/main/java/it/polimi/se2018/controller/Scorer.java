@@ -160,7 +160,6 @@ public class Scorer {
                 maxScore = score;
             }
         }
-        players.remove(playerWithMaxScore);
         return playerWithMaxScore;
     }
 
