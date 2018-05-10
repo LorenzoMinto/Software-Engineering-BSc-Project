@@ -268,7 +268,7 @@ public class Controller implements ControllerInterface {
      * Let the game advance in the turns sequence.
      * If in the current {@link Round} have been played all the possible {@link Turn}s
      * it is created a new {@link Round}. If the current {@link Round} is the last one,
-     * the game is ended calling {@link Controller#endGame()}
+     * the game is ended calling {@link Controller#endGame()}.
      */
     protected void advanceGame() {
 
@@ -302,7 +302,7 @@ public class Controller implements ControllerInterface {
     }
 
     /**
-     * Ends the current game. Calculates rankings and scores and then notify them to players
+     * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
     protected void endGame(){
 
@@ -318,7 +318,7 @@ public class Controller implements ControllerInterface {
     }
 
     /**
-     * Gets the rankings and scores of the current {@link Game}
+     * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
     protected Object[] getRankingsAndScores() {
@@ -330,7 +330,7 @@ public class Controller implements ControllerInterface {
 
     /**
      * Sends scores and rankings to players profiles ({@link User})
-     * in order to increase statistics of wins and played games
+     * in order to increase statistics of wins and played games.
      *
      * @param rankings
      */
