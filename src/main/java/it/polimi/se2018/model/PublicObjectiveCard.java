@@ -16,12 +16,12 @@ public abstract class PublicObjectiveCard extends ObjectiveCard{
 
     private Function<Dice,Object> propertyFunction;
 
-    public PublicObjectiveCard(){}
-
     public PublicObjectiveCard(String title, String description, String imageURL, Function<Dice,Object> propertyFunction) {
         super(title, description, imageURL);
         this.propertyFunction = propertyFunction;
     }
+
+    protected PublicObjectiveCard() {}
 
     public Function<Dice, Object> getPropertyFunction() {
         return propertyFunction;

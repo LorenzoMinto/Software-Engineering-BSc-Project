@@ -22,7 +22,11 @@ public class PrivateObjectiveCard extends ObjectiveCard {
         this.color = color;
     }
 
-    public PrivateObjectiveCard(){}
+    private PrivateObjectiveCard(){}
+
+    public static PrivateObjectiveCard createTestInstance(){
+        return new PrivateObjectiveCard();
+    }
 
     //Returns a new PrivateObjectiveCard instance with same properties of this one
     public PrivateObjectiveCard copy(){

@@ -38,6 +38,12 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         this.multiplier = multiplier;
     }
 
+    private SetPublicObjectiveCard(){}
+
+    public static PublicObjectiveCard createTestInstance() {
+        return new SetPublicObjectiveCard();
+    }
+
     //Returns a new SetPublicObjectiveCard instance with same properties of this one
     @Override
     public PublicObjectiveCard copy() {
@@ -155,5 +161,4 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         s = s.concat(System.lineSeparator());
         return s;
     }
-
 }
