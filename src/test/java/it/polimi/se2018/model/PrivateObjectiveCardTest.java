@@ -13,14 +13,27 @@ public class PrivateObjectiveCardTest {
 
     private static WindowPatternManager windowPatternManager;
     private static WindowPattern wp;
-    private ObjectiveCardManager manager = new ObjectiveCardManager();
-    private PrivateObjectiveCard privateObjectiveCard;
+    private static WindowPattern oneDiceWindowPattern;
+    private static WindowPattern nullWP = null;
+    private static WindowPattern emptyWP;
+    private static PrivateObjectiveCard oneDicePrivateObjectiveCard;
+
+    private static ObjectiveCardManager cardManager;
+    private static PrivateObjectiveCard privateObjectiveCard;
+    private static PrivateObjectiveCard redPrivateObjectiveCard;
+    private static PrivateObjectiveCard yellowPrivateObjectiveCard;
+    private static PrivateObjectiveCard greenPrivateObjectiveCard;
+    private static PrivateObjectiveCard purplePrivateObjectiveCard;
+    private static PrivateObjectiveCard bluePrivateObjectiveCard;
 
     private static int redScore;
     private static int yellowScore;
     private static int greenScore;
     private static int blueScore;
     private static int purpleScore;
+    private static int scoreOfOneDiceWindowPattern;
+
+    private int testScore = 0;
 
     @BeforeClass
     public static void buildPattern(){
@@ -56,6 +69,29 @@ public class PrivateObjectiveCardTest {
             purpleScore = 8;
             blueScore = 5;
 
+
+            oneDiceWindowPattern = windowPatternManager.getPatterns(1).get(0);
+
+            Dice uniqueDiceOnWindowPattern = new Dice(DiceColors.RED, 3);
+            oneDiceWindowPattern.putDiceOnCell(uniqueDiceOnWindowPattern,1,1);
+
+            scoreOfOneDiceWindowPattern = uniqueDiceOnWindowPattern.getValue();
+            oneDicePrivateObjectiveCard = new PrivateObjectiveCard
+                    (null,null,null, uniqueDiceOnWindowPattern.getColor());
+
+
+            emptyWP = windowPatternManager.getPatterns(1).get(0);
+
+
+            cardManager = new ObjectiveCardManager();
+
+            privateObjectiveCard = new PrivateObjectiveCard();
+            redPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
+            yellowPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.YELLOW);
+            greenPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.GREEN);
+            purplePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.PURPLE);
+            bluePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.BLUE);
+
         }catch (BadFormattedPatternFileException e){
             fail();
             e.printStackTrace();
@@ -63,13 +99,18 @@ public class PrivateObjectiveCardTest {
     }
 
 
+    @Before
+    public void resetScore(){
+        testScore = 0;
+    }
+
 
     //integration test between ObjectiveCardManager and CalculateScore. ObjectiveCardManager could return a card with
     //NOCOLOR as color. TODO: Must be run with ObjectiveCardManager Tests
     @Test
     public void calculateScore(){
 
-        privateObjectiveCard = manager.getPrivateObjectiveCard();
+        privateObjectiveCard = cardManager.getPrivateObjectiveCard();
         DiceColors cardColor = privateObjectiveCard.getColor();
 
         int score = privateObjectiveCard.calculateScore(wp);
@@ -77,24 +118,19 @@ public class PrivateObjectiveCardTest {
 
         switch(cardColor){
             case RED:
-                assertEquals("Score should be the same as redScore",
-                        score, redScore);
+                assertEquals(score, redScore);
                 break;
             case YELLOW:
-                assertEquals("Score should be the same as yellowScore",
-                        score, yellowScore);
+                assertEquals(score, yellowScore);
                 break;
             case GREEN:
-                assertEquals("Score should be the same as greenScore",
-                        score, greenScore);
+                assertEquals(score, greenScore);
                 break;
             case PURPLE:
-                assertEquals("Score should be the same as purpleScore",
-                        score, purpleScore);
+                assertEquals(score, purpleScore);
                 break;
             case BLUE:
-                assertEquals("Score should be the same as blueScore",
-                        score, blueScore);
+                assertEquals(score, blueScore);
                 break;
             default:
                 fail();
@@ -103,56 +139,56 @@ public class PrivateObjectiveCardTest {
     }
 
     @Test
-    public void calculateScoreWithNullWindowPattern(){
-        WindowPattern nullWindowPattern = null;
-        privateObjectiveCard = manager.getPrivateObjectiveCard();
+    public void calculateScoreOfNullWindowPattern(){
         try {
-            privateObjectiveCard.calculateScore(nullWindowPattern);
+            privateObjectiveCard.calculateScore(nullWP);
             fail();
         }catch (IllegalArgumentException e){
-            assertNull(nullWindowPattern);
+            assertNull(nullWP);
         }
-
-
     }
 
+    @Test
+    public void calculateScoreOfEmptyWindowPattern(){
+        testScore = privateObjectiveCard.calculateScore(emptyWP);
+        assertEquals(testScore, 0);
+    }
+
+    @Test
+    public void calculateScoreOfOneRedDice(){
+        testScore = oneDicePrivateObjectiveCard.calculateScore(oneDiceWindowPattern);
+        assertEquals(testScore, scoreOfOneDiceWindowPattern);
+    }
 
     @Test
     public void calculateScoreRed() {
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
-
-        assertThat(privateObjectiveCard.calculateScore(wp), is(redScore));
-
+        testScore = redPrivateObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, redScore);
     }
 
     @Test
     public void calculateScoreYellow() {
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.YELLOW);
-        assertThat(privateObjectiveCard.calculateScore(wp), is(yellowScore));
-
+        testScore = yellowPrivateObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, yellowScore);
     }
+
     @Test
     public void calculateScoreGreen() {
-        privateObjectiveCard = new PrivateObjectiveCard(null, null,null, DiceColors.GREEN);
-
-        assertThat(privateObjectiveCard.calculateScore(wp), is(greenScore));
-
+        testScore = greenPrivateObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, greenScore);
     }
+
     @Test
     public void calculateScorePurple() {
-        privateObjectiveCard = new PrivateObjectiveCard(null, null,null, DiceColors.PURPLE);
-
-        assertThat(privateObjectiveCard.calculateScore(wp), is(purpleScore));
-
+        testScore = purplePrivateObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, purpleScore);
     }
+
     @Test
     public void calculateScoreBlue() {
-        privateObjectiveCard = new PrivateObjectiveCard(null, null,null, DiceColors.BLUE);
-
-        assertThat(privateObjectiveCard.calculateScore(wp), is(blueScore));
-
+        testScore = bluePrivateObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, blueScore);
     }
-
 
 }
 

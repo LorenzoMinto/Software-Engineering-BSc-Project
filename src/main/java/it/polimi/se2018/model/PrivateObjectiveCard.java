@@ -22,6 +22,8 @@ public class PrivateObjectiveCard extends ObjectiveCard {
         this.color = color;
     }
 
+    public PrivateObjectiveCard(){}
+
     //Returns a new PrivateObjectiveCard instance with same properties of this one
     public PrivateObjectiveCard copy(){
         return new PrivateObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(), this.color);

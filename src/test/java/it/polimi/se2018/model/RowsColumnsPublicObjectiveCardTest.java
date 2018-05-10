@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.*;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,17 +12,28 @@ import static org.junit.Assert.*;
 public class RowsColumnsPublicObjectiveCardTest {
 
     private static WindowPatternManager windowPatternManager;
+
     private static WindowPattern wp;
-    private PublicObjectiveCard publicObjectiveCard;
+    private static WindowPattern nullWP = null;
+    private static WindowPattern empytyWP= null;
+
+    private static PublicObjectiveCard rowsColumnsPublicObjectiveCard;
+    private static PublicObjectiveCard rowsColorPublicObjectiveCard;
+    private static PublicObjectiveCard columnsColorPublicObjectiveCard;
+    private static PublicObjectiveCard rowsValuePublicObjectiveCard;
+    private static PublicObjectiveCard columnsValuePublicObjectiveCard;
+
 
     private static int scoreRowsColor;
     private static int scoreColumnsColor;
     private static int scoreRowsValue;
     private static int scoreColumnsValue;
 
+    private int testScore = 0;
+
 
     @BeforeClass
-    public static void buildPattern(){
+    public static void buildWindowPattern(){
         try {
             windowPatternManager = new WindowPatternManager();
         }catch (NoPatternsFoundInFileSystemException e){
@@ -57,60 +69,67 @@ public class RowsColumnsPublicObjectiveCardTest {
             scoreRowsValue = 5;
             scoreColumnsValue = 4;
 
+
+            empytyWP = windowPatternManager.getPatterns(1).get(0);
+
+
+            rowsColumnsPublicObjectiveCard = new RowsColumnsPublicObjectiveCard();
+            rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
+                    null, Dice::getColor, 6, true);
+            columnsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
+                    null, Dice::getColor, 5, false);
+            rowsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
+                    null, Dice::getValue, 5, true);
+            columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
+                    null, Dice::getValue, 4, false);
+
         }catch (BadFormattedPatternFileException e){
             e.printStackTrace();
         }
+    }
 
+    @Before
+    public void resetScore(){
+        testScore = 0;
     }
 
     @Test
-    public void calculateScoreWithNullWindowPattern(){
-        WindowPattern nullWindowPattern = null;
-        publicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
-                null, Dice::getColor, 6, true);
-
+    public void calculateScoreOfNullWindowPattern(){
         try {
-            publicObjectiveCard.calculateScore(nullWindowPattern);
+            rowsColumnsPublicObjectiveCard.calculateScore(nullWP);
             fail();
         }catch (IllegalArgumentException e){
-            assertNull(nullWindowPattern);
+            assertNull(nullWP);
         }
-
-
     }
 
+    @Test
+    public void calculateScoreOfEmptyWindowPattern(){
+        testScore = rowsColumnsPublicObjectiveCard.calculateScore(empytyWP);
+        assertEquals(testScore, 0);
+    }
 
     @Test
     public void calculateScoreRowsColor() {
-        publicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
-                null, Dice::getColor, 6, true);
-
-        int score = publicObjectiveCard.calculateScore(wp);
-
-        assertEquals(score,scoreRowsColor);
+        testScore = rowsColorPublicObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, scoreRowsColor);
     }
 
     @Test
     public void calculateScoreColumnsColor() {
-        publicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,null, Dice::getColor, 5, false);
-        int score = publicObjectiveCard.calculateScore(wp);
-
-        assertEquals(score,scoreColumnsColor);
+        testScore = columnsColorPublicObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, scoreColumnsColor);
     }
 
     @Test
     public void calculateScoreRowsValue() {
-        publicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,null, Dice::getValue, 5, true);
-        int score = publicObjectiveCard.calculateScore(wp);
-
-        assertEquals(score,scoreRowsValue);
+        testScore = rowsValuePublicObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, scoreRowsValue);
     }
 
     @Test
     public void calculateScoreColumnsValue() {
-        publicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,null, Dice::getValue, 4, false);
-        int score = publicObjectiveCard.calculateScore(wp);
-
-        assertEquals(score,scoreColumnsValue);
+        testScore = columnsValuePublicObjectiveCard.calculateScore(wp);
+        assertEquals(testScore, scoreColumnsValue);
     }
 }

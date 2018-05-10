@@ -37,6 +37,8 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         this.checkByRow = checkByRow;
     }
 
+    public RowsColumnsPublicObjectiveCard(){}
+
     //Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
     @Override
     public PublicObjectiveCard copy() {
@@ -132,7 +134,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /*
-    Returns true if every cell that forms a specified row has a dice
+    Returns false if every cell that forms a specified row has a dice
     */
     private boolean rowIsIncomplete(Cell[] row, int numberOfColumns) {
         if(row==null){ throw new IllegalArgumentException("ERROR: Cannot get dice of a null row."); }
