@@ -7,12 +7,29 @@ import java.util.*;
 
 //TODO: set all imageURLs
 
+/**
+ * Creates all the types of Objective Cards: {@link PublicObjectiveCard} and {@link PrivateObjectiveCard}.
+ *
+ * This class is a SINGLETON.
+ *
+ * @author Jacopo Pio Gargano
+ */
 public class ObjectiveCardFactory {
 
+    /**
+     * Instance of the class in order to achieve the Singleton Pattern
+     */
     private static ObjectiveCardFactory instance = null;
 
+    /**
+     * Private Costructor in order to prevent from multiple instantiation of the class
+     */
     private ObjectiveCardFactory() {}
 
+    /**
+     * Gets the instance of the class (according to Singleton Pattern)
+     * @return the instance of the class
+     */
     public static ObjectiveCardFactory getInstance(){
         if(instance == null) {
             instance = new ObjectiveCardFactory();
@@ -20,6 +37,11 @@ public class ObjectiveCardFactory {
         return instance;
     }
 
+    /**
+     * Creates and returns a new {@link PrivateObjectiveCard} of the specified color.
+     * @param color color of the card
+     * @return the {@link PrivateObjectiveCard} of the specified color
+     */
     public PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
         if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "Private Objective Card with no color"); }
@@ -32,6 +54,11 @@ public class ObjectiveCardFactory {
 
     }
 
+    /**
+     * Creates and returns a new {@link PublicObjectiveCard} of the type specified by index
+     * @param index specifies the type of {@link PublicObjectiveCard} that is requested
+     * @return the specified {@link PublicObjectiveCard}
+     */
     public PublicObjectiveCard createPublicObjectiveCardCardByIndex(int index) {
         Set<Object> items;
         switch (index){
@@ -73,32 +100,37 @@ public class ObjectiveCardFactory {
                         items.add(color);
                     }
                 }
-                return createColorSetPublicObjectiveCard(items);
+                return createColorSetPublicObjectiveCard();
             default:
                 throw new RuntimeException("The selected (by index) card does not exist.");
         }
     }
 
-    //The card that now exists only has all 5 colors
-    private PublicObjectiveCard createColorSetPublicObjectiveCard(Set<Object> colors){
-        if(colors == null){ throw new IllegalArgumentException("Cannot create a ColorSetPublicObjectiveCard with no colors specified"); }
 
-        String title = "Color Variety";
-        String description;
-        int multiplier;
-        String imageURL;
+    /**
+     * Creates and returns a new {@link SetPublicObjectiveCard}
+     *
+     * @return a {@link SetPublicObjectiveCard}
+     */
+    private PublicObjectiveCard createColorSetPublicObjectiveCard(){
 
-        if(colors.size() == DiceColors.values().length - 1){
-            description = "Sets of one of each color anywhere";
-            multiplier = 4;
-            imageURL = null;
-        }else{
-            throw new RuntimeException("ColorSetPublicObjectiveCard can be created only with all of the existing colors.");
-        }
-
-        return new SetPublicObjectiveCard(title, description, imageURL, colors, Dice::getColor, multiplier);
+        return new SetPublicObjectiveCard(
+                "Color Variety",
+                "Sets of one of each color anywhere",
+                null,
+                new HashSet<>(Arrays.asList(DiceColors.values())),
+                Dice::getColor,
+                4
+        );
     }
 
+    /**
+     * Creates and returns a new {@link SetPublicObjectiveCard} based on the specified values
+     *
+     * @param values A group of dices is considered a valid set if it contains at least one
+     *               dice per color specified in this list
+     * @return a {@link SetPublicObjectiveCard} evaluating the specified dices' values
+     */
     private PublicObjectiveCard createValueSetPublicObjectiveCard(Set<Object> values){
         if(values == null){ throw new IllegalArgumentException("ERROR: Value set cannot be null."); }
 
@@ -144,6 +176,10 @@ public class ObjectiveCardFactory {
         return new SetPublicObjectiveCard(title, description, imageURL, values, Dice::getValue, multiplier);
     }
 
+    /**
+     * Factory method for Diagonals Color Public Objective Cards
+     * @return a new instance of Diagonals Color Public Objective Card
+     */
     private PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
         String title = "Color Diagonals";
         String description = "Count of diagonally adjacent same color dice";
@@ -152,6 +188,10 @@ public class ObjectiveCardFactory {
         return new DiagonalsPublicObjectiveCard(title, description, imageURL, Dice::getColor);
     }
 
+    /**
+     * Factory method for Rows Color Public Objective Cards
+     * @return a new instance of Rows Color Public Objective Card
+     */
     private PublicObjectiveCard createRowsColorPublicObjectiveCard() {
         String title = "Row Color Variety";
         String description = "Rows with no repeated colors";
@@ -159,6 +199,10 @@ public class ObjectiveCardFactory {
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 6, true);
     }
 
+    /**
+     * Factory method for Columns Color Public Objective Card
+     * @return a new instance of Columns Color Public Objective Card
+     */
     private PublicObjectiveCard createColumnsColorPublicObjectiveCard() {
         String title = "Column Color Variety";
         String description = "Columns with no repeated colors";
@@ -166,6 +210,10 @@ public class ObjectiveCardFactory {
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 5, false);
     }
 
+    /**
+     * Factory method for Rows Values Public Objective Cards
+     * @return a new instance of Rows Values Public Objective Card
+     */
     private PublicObjectiveCard createRowsValuePublicObjectiveCard() {
         String title = "Row Shade Variety";
         String description = "Rows with no repeated values";
@@ -173,6 +221,10 @@ public class ObjectiveCardFactory {
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getValue, 5, true);
     }
 
+    /**
+     * Factory method for Columns Values Public Objective Cards
+     * @return a new instance of Columns Values Public Objective Card
+     */
     private PublicObjectiveCard createColumnsValuePublicObjectiveCard() {
         String title = "Column Shade Variety";
         String description = "Columns with no repeated values";

@@ -8,11 +8,29 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+/**Manages the creation and distribution of Objective Cards,
+ * ensuring that the same card can't be created more than once
+ *
+ * @author Jacopo Pio Gargano
+ */
 public class ObjectiveCardManager {
 
+    /**
+     * Keeps track of the already given cards' colors in order
+     * to ensure that the same card can not be distributed
+     * more than once
+     */
     private Set<DiceColors> assignedColors = new HashSet<>();
-    private int numberOfPublicObjectiveCards = 10;
 
+    /**
+     * Number of public objective cards that exists and can be created
+     */
+    private static final int NUMBER_OF_PUBLIC_OBJECTIVE_CARDS = 10;
+
+    /**
+     * Creates and returns a new {@link PrivateObjectiveCard}
+     * @return new instance of a {@link PrivateObjectiveCard}
+     */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
         DiceColors color;
 
@@ -25,9 +43,15 @@ public class ObjectiveCardManager {
         return ObjectiveCardFactory.getInstance().createPrivateObjectiveCard(color);
     }
 
+    /**
+     * Creates and returns the specified number (quantity) of public objective cards
+     *
+     * @param quantity how many cards must be returned
+     * @return the specified number (quantity) of public objective cards
+     */
     public Set<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
-        if(quantity > numberOfPublicObjectiveCards || quantity < 1){
+        if(quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS || quantity < 1){
             throw new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater" +
                     "than the number of Public Objective Cards.");
         }
@@ -40,7 +64,7 @@ public class ObjectiveCardManager {
         for(int i=0; i<quantity; i++){
             //Choose randomly one of the cards
             do {
-                randomIndex = r.nextInt(numberOfPublicObjectiveCards);
+                randomIndex = r.nextInt(NUMBER_OF_PUBLIC_OBJECTIVE_CARDS);
                 currentCard = ObjectiveCardFactory.getInstance().createPublicObjectiveCardCardByIndex(randomIndex);
                 publicObjectiveCards.add(currentCard);
 
