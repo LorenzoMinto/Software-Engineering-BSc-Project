@@ -29,7 +29,7 @@ public class TestRowsColumnsPublicObjectiveCard {
     private static int scoreRowsValue;
     private static int scoreColumnsValue;
 
-    private static int testScore;
+    private int testScore;
 
 
     @BeforeClass
@@ -71,8 +71,8 @@ public class TestRowsColumnsPublicObjectiveCard {
             emptyWP = windowPatternManager.getPatterns(1).get(0);
 
         }catch (BadFormattedPatternFileException e){
-            fail();
             e.printStackTrace();
+            fail();
         }
     }
 

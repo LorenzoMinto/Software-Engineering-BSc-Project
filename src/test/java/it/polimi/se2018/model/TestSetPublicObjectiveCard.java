@@ -80,8 +80,8 @@ public class TestSetPublicObjectiveCard {
             emptyWP = windowPatternManager.getPatterns(1).get(0);;
 
         }catch (BadFormattedPatternFileException e){
-            fail();
             e.printStackTrace();
+            fail();
         }
     }
 

@@ -27,7 +27,7 @@ public class TestDiagonalsPublicObjectiveCard {
     private static int rightDiagonalsScore;
     private static int leftDiagonalsScore;
 
-    private static int testScore;
+    private int testScore;
 
 
     @BeforeClass
@@ -116,8 +116,8 @@ public class TestDiagonalsPublicObjectiveCard {
             emptyWP = windowPatternManager.getPatterns(1).get(0);
 
         }catch (BadFormattedPatternFileException e){
-            fail();
             e.printStackTrace();
+            fail();
         }
     }
 

@@ -196,7 +196,8 @@ public class ObjectiveCardFactory {
         String title = "Row Color Variety";
         String description = "Rows with no repeated colors";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 6, true);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
+                Dice::getColor, 6, true);
     }
 
     /**
@@ -207,7 +208,8 @@ public class ObjectiveCardFactory {
         String title = "Column Color Variety";
         String description = "Columns with no repeated colors";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getColor, 5, false);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
+                Dice::getColor, 5, false);
     }
 
     /**
@@ -218,7 +220,8 @@ public class ObjectiveCardFactory {
         String title = "Row Shade Variety";
         String description = "Rows with no repeated values";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getValue, 5, true);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
+                Dice::getValue, 5, true);
     }
 
     /**
@@ -229,7 +232,8 @@ public class ObjectiveCardFactory {
         String title = "Column Shade Variety";
         String description = "Columns with no repeated values";
         String imageURL = null;
-        return new RowsColumnsPublicObjectiveCard(title, description, imageURL, Dice::getValue, 4, false);
+        return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
+                Dice::getValue, 4, false);
     }
 
 }

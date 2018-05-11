@@ -23,7 +23,7 @@ public abstract class PublicObjectiveCard extends ObjectiveCard{
 
     protected PublicObjectiveCard() {}
 
-    public Function<Dice, Object> getPropertyFunction() {
+    protected Function<Dice, Object> getPropertyFunction() {
         return propertyFunction;
     }
 }

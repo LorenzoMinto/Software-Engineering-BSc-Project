@@ -35,7 +35,7 @@ public class TestPrivateObjectiveCard {
 
     private static Dice uniqueDiceOnWindowPattern = new Dice(DiceColors.RED, 3);
 
-    private static int testScore;
+    private int testScore;
 
     @BeforeClass
     public static void buildWindowPatterns(){
@@ -43,6 +43,7 @@ public class TestPrivateObjectiveCard {
             windowPatternManager = new WindowPatternManager();
         }catch (NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
+            fail();
         }
 
         try {
@@ -76,8 +77,8 @@ public class TestPrivateObjectiveCard {
             emptyWP = windowPatternManager.getPatterns(1).get(0);
 
         }catch (BadFormattedPatternFileException e){
-            fail();
             e.printStackTrace();
+            fail();
         }
     }
 
