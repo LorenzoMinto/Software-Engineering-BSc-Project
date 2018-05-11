@@ -25,6 +25,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         super(title, description, imageURL, propertyFunction);
     }
 
+    private DiagonalsPublicObjectiveCard(){}
+
+    public static PublicObjectiveCard createTestInstance() {
+        return new DiagonalsPublicObjectiveCard();
+    }
+
     //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
     @Override
     public PublicObjectiveCard copy() {
@@ -48,9 +54,9 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         List<Integer> listOfNotConsideredDice = fillListWithNumbers(numberOfRows * numberOfColumns);
 
         //Score diagonals from left to right
-        score += getScoreLeftRight(windowPattern, listOfNotConsideredDice);
+        score += getScoreLeftToRight(windowPattern, listOfNotConsideredDice);
         //Score diagonals from right to left
-        score += getScoreRightLeft(windowPattern, listOfNotConsideredDice);
+        score += getScoreRightToLeft(windowPattern, listOfNotConsideredDice);
 
         return score;
     }
@@ -62,17 +68,17 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     The algorithm covers the whole matrix starting from the bottom left corner going vertically upward
     and finally horizontally to the right
     */
-    private int getScoreLeftRight(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
+    private int getScoreLeftToRight(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
 
         //Move vertically upward
         for(int row = windowPattern.getNumberOfRows()-1; row > 0; row--){
-                score+= scoreDiagonal(windowPattern, listOfNotCountedDice, row, 0, +1);
+                score+= scoreDiagonal(windowPattern, listOfNotCountedDice, row, 0, true);
         }
 
         //Move horizontally to the right
         for(int col = 0; col < windowPattern.getNumberOfColumns(); col++){
-            score+= scoreDiagonal(windowPattern, listOfNotCountedDice, 0, col, +1);
+            score+= scoreDiagonal(windowPattern, listOfNotCountedDice, 0, col, true);
         }
 
         return score;
@@ -84,7 +90,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     The algorithm covers the whole matrix starting from the bottom right corner going vertically upward
     and finally horizontally to the left
     */
-    private int getScoreRightLeft(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
+    private int getScoreRightToLeft(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
@@ -92,13 +98,13 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         //Move vertically upward
         for(int row = numberOfRows-1; row > 0; row--){
             score+= scoreDiagonal(windowPattern, listOfNotCountedDice, row, numberOfColumns-1,
-                    -1);
+                    false);
         }
 
         //Move horizontally to the left
         for(int col=numberOfColumns-1;  col>=0; col--){
             score+= scoreDiagonal(windowPattern, listOfNotCountedDice, 0, col,
-                    -1);
+                    false);
         }
 
         return score;
@@ -112,11 +118,17 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         move: +1 if moving to the right, -1 if moving to the left
     */
     private int scoreDiagonal(WindowPattern windowPattern, List<Integer> listOfNotCountedDice,
-                              int initialRow, int initialCol, int move){
+                              int initialRow, int initialCol, boolean isLeftToRightDiagonal){
         int score = 0;
+        int move;
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
 
+        if(isLeftToRightDiagonal){
+            move = 1;
+        }else{
+            move = -1;
+        }
 
         for (int currentRow = initialRow, currentCol = initialCol; currentRow + 1 < numberOfRows &&
                 currentCol + move < numberOfColumns && currentCol + move >= 0; currentRow++, currentCol+=move) {
@@ -192,4 +204,5 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     private int getLinearIndex(int row, int col, int numberOfRows) {
         return (row * (numberOfRows+1)) + col;
     }
+
 }

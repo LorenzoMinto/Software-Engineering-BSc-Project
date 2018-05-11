@@ -37,7 +37,11 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         this.checkByRow = checkByRow;
     }
 
-    public RowsColumnsPublicObjectiveCard(){}
+    private RowsColumnsPublicObjectiveCard(){}
+
+    public static PublicObjectiveCard createTestInstance(){
+        return new RowsColumnsPublicObjectiveCard();
+    }
 
     //Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
     @Override

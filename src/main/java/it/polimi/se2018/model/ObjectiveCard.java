@@ -12,7 +12,7 @@ public abstract class ObjectiveCard {
         this.imageURL = imageURL;
     }
 
-    public ObjectiveCard(){}
+    protected ObjectiveCard(){}
 
     public String getTitle() {
         return title;
