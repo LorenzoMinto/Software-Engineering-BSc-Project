@@ -6,33 +6,36 @@ import it.polimi.se2018.view.View;
 public class ChangeDiceValueControllerState implements ControllerState {
     Controller controller;
 
+    private static final String MIDDLEOFEFFECT= "Can't do. You are in the middle of a Toolcard effect";
+    private static final String NODICEDRAFTED = "Can't do. No dice has been drafted.";
+
     public ChangeDiceValueControllerState(Controller controller) {
         this.controller = controller;
     }
 
     @Override
     public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage("Can't do. You have to change the dice value first.");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void placeDice(int row, int col, View view) {
-        view.showMessage("Can't do. You have to change the dice value first.");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage("Can't do. You have to change the dice value first.");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage("Can't do. You have to change the dice value first.");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        view.showMessage("Can't do. You have to change the dice value first.");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage("Can't do. No dice has been drafted.");
+            view.showMessage(NODICEDRAFTED);
         }
     }
 
@@ -57,7 +60,7 @@ public class ChangeDiceValueControllerState implements ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage("Can't do. No dice has been drafted.");
+            view.showMessage(NODICEDRAFTED);
         }
     }
 
@@ -70,12 +73,12 @@ public class ChangeDiceValueControllerState implements ControllerState {
             currentTurn.getDraftedDice().setValue(value);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            view.showMessage("Can't do. No dice has been drafted.");
+            view.showMessage(NODICEDRAFTED);
         }
     }
 
     @Override
     public void executeImplicitBehaviour() {
-
+        //do nothing
     }
 }

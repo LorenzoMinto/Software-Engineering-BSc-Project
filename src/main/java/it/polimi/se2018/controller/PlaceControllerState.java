@@ -6,13 +6,16 @@ import it.polimi.se2018.view.View;
 public class PlaceControllerState implements ControllerState {
     Controller controller;
 
+    private static final String PLACEDICE= "Can't do. You have to place the drafted dice";
+
+
     public PlaceControllerState(Controller controller) {
         this.controller = controller;
     }
 
     @Override
     public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
@@ -42,38 +45,38 @@ public class PlaceControllerState implements ControllerState {
 
     @Override
     public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     //TOOLCARD ACTIVATED
 
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
     public void incrementDice(View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
     public void decrementDice(View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
     public void chooseDiceValue(int value, View view) {
-        view.showMessage("Can't do. You have to place the drafted dice first");
+        view.showMessage(PLACEDICE);
     }
 
     @Override
     public void executeImplicitBehaviour() {
-
+        //do nothing
     }
 }
