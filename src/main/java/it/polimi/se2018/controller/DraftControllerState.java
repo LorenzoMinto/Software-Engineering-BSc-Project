@@ -6,6 +6,10 @@ import it.polimi.se2018.view.View;
 public class DraftControllerState implements ControllerState {
     Controller controller;
 
+    private static final String DRAFTFIRST= "Can't do. You have to draft first";
+    private static final String ONLYDRAFTANDPLACE= "Can't do. You can only draft and place";
+
+
     public DraftControllerState(Controller controller) {
         this.controller = controller;
     }
@@ -29,42 +33,41 @@ public class DraftControllerState implements ControllerState {
 
     @Override
     public void placeDice(int row, int col, View view) {
-        view.showMessage("Can't do. You have to draft a dice first.");
+        view.showMessage(DRAFTFIRST);
     }
 
     @Override
     public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage("Can't do. Toolcard already used. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void incrementDice(View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void decrementDice(View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void chooseDiceValue(int value, View view) {
-        view.showMessage("Can't do. You can only draft and place.");
+        view.showMessage(ONLYDRAFTANDPLACE);
     }
 
     @Override
     public void executeImplicitBehaviour() {
-        //TODO: think about inserting here this.resetPlacementRule
-        //NOTE: PlacementRule reset can't go here, DraftControllerState is at the start of many toolcards effects
+        //do nothing
     }
 }

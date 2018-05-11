@@ -7,28 +7,31 @@ import it.polimi.se2018.view.View;
 public class MoveControllerState implements ControllerState {
     Controller controller;
 
+    private static final String MIDDLEOFEFFECT= "Can't do. You are in the middle of a Toolcard effect";
+
+
     public MoveControllerState(Controller controller) {
         this.controller = controller;
     }
 
     @Override
     public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void placeDice(int row, int col, View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
@@ -54,21 +57,21 @@ public class MoveControllerState implements ControllerState {
 
     @Override
     public void incrementDice(View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void decrementDice(View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void chooseDiceValue(int value, View view) {
-        view.showMessage("Can't do. You are in the middle of a ToolCard effect");
+        view.showMessage(MIDDLEOFEFFECT);
     }
 
     @Override
     public void executeImplicitBehaviour() {
-
+        //do nothing
     }
 }
