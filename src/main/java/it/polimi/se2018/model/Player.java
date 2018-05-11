@@ -18,7 +18,7 @@ public class Player {
 
         //Checks for bad params
         if(user==null){ throw new IllegalArgumentException("Asked to create a player giving null user"); }
-        if(windowPattern==null){ throw new IllegalArgumentException("Asked to create a player giving null windowPattern"); }
+//        TODO: if(windowPattern==null){ throw new IllegalArgumentException("Asked to create a player giving null windowPattern"); }
         if(card==null){ throw new IllegalArgumentException("Asked to create a player giving null card"); }
 
         this.user = user;
@@ -73,6 +73,7 @@ public class Player {
 
     //Decrease favorTokens of quantity. Return false if not enough tokens left.
     public boolean decreaseTokens(int quantity) {
+        if(quantity <0){ throw new IllegalArgumentException("ERROR: Cannot decrease tokens of a negative quantity.");}
         if(favorTokens<quantity) return false;
         favorTokens -= quantity;
         return true;

@@ -19,7 +19,7 @@ public class Game extends Observable {
 
     private ArrayList<ToolCard> drawnToolCards;
 
-    private Set<PublicObjectiveCard> drawnPublicObjectiveCards;
+    private List<PublicObjectiveCard> drawnPublicObjectiveCards;
 
     private GameStatus status;
 
@@ -32,7 +32,7 @@ public class Game extends Observable {
         this.track = new Track();
         this.players = new ArrayList<>();
         this.drawnToolCards = new ArrayList<>();
-        this.drawnPublicObjectiveCards = new HashSet<>();
+        this.drawnPublicObjectiveCards = new ArrayList<>();
         this.status = GameStatus.WAITING_FOR_PLAYERS;
         this.rankings = null;
         this.scores = null;
@@ -58,7 +58,7 @@ public class Game extends Observable {
         return drawnToolCards;
     }
 
-    public Set<PublicObjectiveCard> getDrawnPublicObjectiveCards() {
+    public List<PublicObjectiveCard> getDrawnPublicObjectiveCards() {
         return drawnPublicObjectiveCards;
     }
 

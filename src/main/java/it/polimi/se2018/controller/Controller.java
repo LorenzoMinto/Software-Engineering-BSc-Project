@@ -5,7 +5,6 @@ import it.polimi.se2018.view.View;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -322,10 +321,11 @@ public class Controller implements ControllerInterface {
      * @return rankings and scores of the current {@link Game}
      */
     protected Object[] getRankingsAndScores() {
-        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrder();
-        Set<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
+        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrderReverse();
+        List<Player> players = game.getPlayers();
+        List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
-        return Scorer.getInstance().compute(playersOfLastRound, publicObjectiveCards);
+        return Scorer.getInstance().compute(playersOfLastRound, players, publicObjectiveCards);
     }
 
     /**

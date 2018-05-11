@@ -3,7 +3,9 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Round {
 
@@ -45,12 +47,13 @@ public class Round {
         return draftPool;
     }
 
-    public List<Player> getPlayersByTurnOrder(){
-        List<Player> players = new ArrayList<>();
-        for(Turn turn : turns){
+    public List<Player> getPlayersByTurnOrderReverse(){
+        Set<Player> players = new HashSet<>();
+        for(int i= turns.size()-1; i>=0; i--){
+            Turn turn = turns.get(i);
             players.add(turn.getPlayer());
         }
-        return players;
+        return new ArrayList<>(players);
     }
 
     public void nextTurn() throws NoMoreTurnsAvailableException{
