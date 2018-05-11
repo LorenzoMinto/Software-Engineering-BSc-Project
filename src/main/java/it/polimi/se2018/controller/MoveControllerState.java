@@ -4,11 +4,8 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
 
-public class MoveControllerState implements ControllerState {
+public class MoveControllerState extends ControllerState {
     Controller controller;
-
-    private static final String MIDDLEOFEFFECT= "Can't do. You are in the middle of a Toolcard effect";
-
 
     public MoveControllerState(Controller controller) {
         this.controller = controller;

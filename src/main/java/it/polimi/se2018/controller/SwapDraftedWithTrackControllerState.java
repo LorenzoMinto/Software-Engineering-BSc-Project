@@ -3,11 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class SwapDraftedWithTrackControllerState implements ControllerState {
+public class SwapDraftedWithTrackControllerState extends ControllerState {
     Controller controller;
-
-    private static final String IMPLICITWARNING= "This is an implicit state.";
-
 
     public SwapDraftedWithTrackControllerState(Controller controller) {
         this.controller = controller;

@@ -3,11 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class ChooseFromTrackControllerState implements ControllerState {
+public class ChooseFromTrackControllerState extends ControllerState {
     Controller controller;
-
-    private static final String MIDDLEOFEFFECT= "Can't do. You are in the middle of a Toolcard effect";
-
 
     public ChooseFromTrackControllerState(Controller controller) {
         this.controller = controller;

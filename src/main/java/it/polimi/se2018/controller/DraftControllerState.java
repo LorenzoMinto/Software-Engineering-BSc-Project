@@ -3,12 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class DraftControllerState implements ControllerState {
+public class DraftControllerState extends ControllerState {
     Controller controller;
-
-    private static final String DRAFTFIRST= "Can't do. You have to draft first";
-    private static final String ONLYDRAFTANDPLACE= "Can't do. You can only draft and place";
-
 
     public DraftControllerState(Controller controller) {
         this.controller = controller;

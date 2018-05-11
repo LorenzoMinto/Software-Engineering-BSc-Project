@@ -3,11 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class PlaceControllerState implements ControllerState {
+public class PlaceControllerState extends ControllerState {
     Controller controller;
-
-    private static final String PLACEDICE= "Can't do. You have to place the drafted dice";
-
 
     public PlaceControllerState(Controller controller) {
         this.controller = controller;

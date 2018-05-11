@@ -5,11 +5,8 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.view.View;
 
-public class ToolCardControllerState implements ControllerState {
+public class ToolCardControllerState extends ControllerState {
     Controller controller;
-
-    private static final String TOOLCARDONLY= "Can't do. You have already drafted and placed. You can only use a Toolcard";
-
 
     public ToolCardControllerState(Controller controller) {
         this.controller = controller;

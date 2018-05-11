@@ -137,7 +137,7 @@ public class Controller implements ControllerInterface {
     /**
      * Set as current state the one passed as method's argument
      *
-     * @param controllerState
+     * @param controllerState state that must be setted to the controller
      */
     public void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;

@@ -3,11 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
-public class ChangeDiceValueControllerState implements ControllerState {
+public class ChangeDiceValueControllerState extends ControllerState {
     Controller controller;
-
-    private static final String MIDDLEOFEFFECT= "Can't do. You are in the middle of a Toolcard effect";
-    private static final String NODICEDRAFTED = "Can't do. No dice has been drafted.";
 
     public ChangeDiceValueControllerState(Controller controller) {
         this.controller = controller;
