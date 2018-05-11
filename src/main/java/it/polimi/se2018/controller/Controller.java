@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class Controller implements ControllerInterface {
 
+    private static final String NOT_YOUR_TURN = "It is not your turn.";
     /**
      * The controlled {@link Game}
      */
@@ -160,21 +161,21 @@ public class Controller implements ControllerInterface {
     public void handleDraftDiceFromDraftPoolMove(Dice dice, View view) {
         if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.draftDiceFromDraftPool(dice, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     @Override
     public void handleUseToolCardPlayerMove(ToolCard toolcard, View view) {
         if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.useToolCard(view.getPlayer(), toolcard, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     @Override
     public void handlePlaceDiceMove(int row, int col, View view){
         if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.placeDice(row, col, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
 
     }
 
@@ -186,14 +187,14 @@ public class Controller implements ControllerInterface {
             }else{
                 controllerState.decrementDice(view);
             }
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     @Override
     public void handleMoveDiceMove(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
         if(game.isCurrentPlayer(view.getPlayer())) {
             controllerState.moveDice(rowFrom, colFrom, rowTo, colTo, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
 
@@ -202,7 +203,7 @@ public class Controller implements ControllerInterface {
         if(game.isCurrentPlayer(view.getPlayer())) {
 
             controllerState.chooseDiceFromTrack(dice, slotNumber, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     @Override
@@ -210,7 +211,7 @@ public class Controller implements ControllerInterface {
         if(game.isCurrentPlayer(view.getPlayer())) {
 
             controllerState.chooseDiceValue(value, view);
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     @Override
@@ -219,7 +220,7 @@ public class Controller implements ControllerInterface {
 
             advanceGame();
 
-        } else { view.showMessage("It is not your turn.");}
+        } else { view.showMessage(NOT_YOUR_TURN);}
     }
 
     /**
