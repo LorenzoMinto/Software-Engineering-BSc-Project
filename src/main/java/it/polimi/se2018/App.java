@@ -17,7 +17,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-
+        /*
         //TODO: load from config file
         int numberOfRounds = 10;
         int maxNumberOfPlayers = 4;
@@ -42,6 +42,7 @@ public class App
 
             return; //here just to prevent infinite loop. it is not logically-correct. delete after implementing correctly while(true)
         }
+        */
 
     }
 }
