@@ -41,7 +41,6 @@ public class DiceBag {
      * @return a list of dices of lenght same of param quantity
      * @see Dice
      */
-    //Takes "quantity" of dices out of DiceBag
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
 

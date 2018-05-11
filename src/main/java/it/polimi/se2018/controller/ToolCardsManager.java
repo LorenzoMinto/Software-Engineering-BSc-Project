@@ -15,12 +15,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Manages creation and distribution of Tool Cards
+ *
+ * @author Federico Haag
+ */
 public class ToolCardsManager {
 
+    /**
+     * The file system path to find toolcards .xml files
+     */
     private static final String PATH = "assets/toolcards/";
 
+    /**
+     * List of all the toolcards that can be distributed in the current game
+     */
     private List<String> availableToolCards;
 
+    /**
+     * Constructor of the class. Checks if there are toolcards than can be loaded
+     * from file system and if yes loads them.
+     *
+     * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
+     */
     public ToolCardsManager() throws NoToolCardsFoundInFileSystemException{
         try{
             this.availableToolCards = XMLFileReader.getFilesNames(PATH);
@@ -29,6 +46,16 @@ public class ToolCardsManager {
         }
     }
 
+    /**
+     * Returns the requested quantity of toolcards, if there are enough available.
+     * It should not happen that the method is called if no toolcards are available;
+     * due to this reason a RuntimeException is thrown in that case.
+     *
+     * @param quantity the amount of toolcards requested
+     * @return the requested quantity of toolcards, if there are enough available
+     * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
+     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
+     */
     public List<ToolCard> getRandomToolCards(int quantity) throws BadFormattedToolCardFileException{
 
         List<ToolCard> toolCards = new ArrayList<>();
@@ -67,11 +94,21 @@ public class ToolCardsManager {
                 //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
                 toolCards.add(randomToolCard);
             }
+        } else {
+            throw new RuntimeException("Cant create the number of toolcards requested. This error is not handlable at all");
         }
 
         return toolCards;
     }
 
+    /**
+     * Loads from file the specified toolcard loading all its properties in a new {@link ToolCard} class.
+     *
+     * @param toolCardID the ID String representing the toolCard to be loaded
+     * @return the requested {@link ToolCard}
+     * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
+     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
+     */
     private ToolCard loadToolCardFromFileSystem(String toolCardID) throws BadFormattedToolCardFileException{
 
         try{

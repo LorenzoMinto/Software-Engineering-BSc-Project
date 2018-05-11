@@ -14,12 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Manages the loading and creation of {@link WindowPattern}
+ *
+ * @author Federico Haag
+ */
 public class WindowPatternManager {
 
+    /**
+     * The file system path to find windowpatterns .xml files
+     */
     private static final String PATH = "assets/patterns/";
 
+    /**
+     * List of all the toolcards that can be distributed in the current game
+     */
     private List<String> availablePatterns;
 
+    /**
+     * Constructor of the class. Checks if there are window patterns than can be loaded
+     * from file system and if yes loads them.
+     *
+     * @throws NoPatternsFoundInFileSystemException if no window patterns .xml files can be loaded
+     */
     public WindowPatternManager() throws NoPatternsFoundInFileSystemException {
 
         try{
@@ -30,15 +47,33 @@ public class WindowPatternManager {
 
     }
 
+    /**
+     * Returns if there are available window patterns
+     *
+     * @return if there are available window patterns
+     */
     public boolean hasAvailablePatterns(){
         return !(availablePatterns.isEmpty());
     }
 
+    /**
+     * Returns a list of available window patterns
+     *
+     * @return list of available window patterns
+     */
     public List<String> getAvailablePatternsNames() {
 
         return new ArrayList<>(availablePatterns);
     }
 
+    /**
+     * Loads from file the specified toolcard loading all its properties in a new {@link WindowPattern} class.
+     *
+     * @param patternID the ID String representing the window pattern to be loaded
+     * @return the requested {@link ToolCard}
+     * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
+     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
+     */
     private WindowPattern loadPatternFromFileSystem(String patternID) throws BadFormattedPatternFileException {
 
         try {
@@ -93,6 +128,14 @@ public class WindowPatternManager {
         }
     }
 
+    /**
+     * Returns a list of the requested quantity of Window Patterns
+     *
+     * @param quantity the amount of patterns that are asked to be created
+     * @return the list of the requested quantity of Window Patterns
+     * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
+     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
+     */
     public List<WindowPattern> getPatterns(int quantity) throws BadFormattedPatternFileException {
         List<WindowPattern> patterns = new ArrayList<>();
         List<String> usedPatterns = new ArrayList<>();
@@ -130,6 +173,8 @@ public class WindowPatternManager {
                 //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
                 patterns.add(randomPattern);
             }
+        } else {
+            throw new RuntimeException("Cant create the number of window pattern requested. This error is not handlable at all");
         }
 
         return patterns;

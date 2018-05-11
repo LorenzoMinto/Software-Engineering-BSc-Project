@@ -114,8 +114,12 @@ public class Scorer {
         return playersByFavorTokens;
     }
 
-
-    //TODO: javadoc
+    /**
+     * Orders a list of players based on the scores of Private Objective Cards
+     *
+     * @param players the list of players to be ordered
+     * @return the ordered list of players (based on the scores of Private Objective Cards)
+     */
     private List<Player> orderPlayersByPrivateObjectiveCardScore(List<Player> players) {
         if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective" +
                 "card score if the list of players is empty");}
@@ -134,7 +138,13 @@ public class Scorer {
         return playersByPrivateObjectiveCardScore;
     }
 
-    //TODO: javadoc
+    /**
+     * Calculates the score relatives to each given player
+     * based on the {@link PrivateObjectiveCard} assigned to the player.
+     *
+     * @param players List of the players to be evaluated
+     * @return score for each player given in the players list
+     */
     private Map<Player, Integer> getPrivateObjectiveCardScores(List<Player> players){
         Map <Player, Integer> privateObjectiveCardScores = new HashMap<>();
 

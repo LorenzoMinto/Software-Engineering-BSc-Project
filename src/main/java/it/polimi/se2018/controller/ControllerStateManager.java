@@ -2,26 +2,57 @@ package it.polimi.se2018.controller;
 
 import java.util.HashMap;
 
+/**
+ * Manages the creation of Controller's States
+ *
+ * @author Lorenzo Minto
+ */
 public class ControllerStateManager {
 
+    /**
+     * Controller to which is added the state
+     */
     private Controller controller = null;
 
+    /**
+     * Table containing all the previously created states
+     * in order to avoid creating more than once the same state.
+     * If it is requested a state that was already created, it
+     * is returned that state instead of creating a new one
+     */
     private HashMap<String, ControllerState> stateTable;
 
+    //TODO: check if this variables are needed
     StartControllerState startState;
     PlaceControllerState placeState;
     ToolCardControllerState toolCardState;
     DraftControllerState draftControllerState;
 
+    /**
+     * Constructor for the Controller State Manager. Each controller instance
+     * has a specific controller state manager, so it is required as a param
+     * the controller instance that will then receive the controller states
+     * instances when asking for them
+     *
+     * @param controller the controller to which are added the states
+     */
     public ControllerStateManager(Controller controller) {
         this.controller = controller;
         this.stateTable = new HashMap<>();
 
+        //TODO: checks if are really needed this variables:
         this.startState = new StartControllerState(this.controller);
         this.placeState = new PlaceControllerState(this.controller);
         this.toolCardState = new ToolCardControllerState(this.controller);
     }
 
+    /**
+     * Based on the active toolCard, decides what is the new state
+     * that the connected controller should take
+     *
+     * @param prevState the previous controller state
+     * @return the next controller state based on the active toolcard
+     */
     public ControllerState getNextState(ControllerState prevState){
         ControllerState nextState;
 
@@ -42,6 +73,14 @@ public class ControllerStateManager {
         return nextState;
     }
 
+    /**
+     * Creates a {@link ControllerState} based on its ID String passed as an argument
+     *
+     * @param controllerStateID the ID String representing a specific {@link ControllerState}.
+     *                          It is usually the name of the class.
+     * @return the {@link ControllerState} represented by the given ID
+     * @throws ClassNotFoundException if the given ID does not correspond to a subclass of {@link ControllerState}.
+     */
     private ControllerState createStateByID(String controllerStateID) throws ClassNotFoundException{
         try {
 
@@ -55,9 +94,8 @@ public class ControllerStateManager {
         }
     }
 
-    //getters
-
     //Getters for controller states
+    //TODO: check if are really needed this methods:
     public StartControllerState getStartState() {
         return startState;
     }
