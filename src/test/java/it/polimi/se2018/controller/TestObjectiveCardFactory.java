@@ -24,6 +24,8 @@ public class TestObjectiveCardFactory {
     private static int indexOfAllColorsSetPublicObjectiveCard;
     private static int wrongIndex;
 
+    private static int numberOfPublicObjectiveCards = 10;
+
 
 
     @BeforeClass
@@ -166,6 +168,19 @@ public class TestObjectiveCardFactory {
             fail();
         }catch (RuntimeException e){
             assertTrue(wrongIndex<0 || wrongIndex>9);
+        }
+    }
+
+    @Test
+    public void testAllPublicObjectiveCardsTitlesAreDifferent(){
+        for(int i=0; i < numberOfPublicObjectiveCards-1; i++){
+            PublicObjectiveCard currentCard = factory.createPublicObjectiveCardCardByIndex(i);
+            for(int j=i+1; j < numberOfPublicObjectiveCards; j++){
+                PublicObjectiveCard comparisonCard = factory.createPublicObjectiveCardCardByIndex(j);
+                if(currentCard.getTitle().equals(comparisonCard.getTitle())){
+                    fail();
+                }
+            }
         }
     }
 
