@@ -4,35 +4,10 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
 public class ChangeDiceValueControllerState extends ControllerState {
-    Controller controller;
 
     public ChangeDiceValueControllerState(Controller controller) {
         this.controller = controller;
-    }
-
-    @Override
-    public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void placeDice(int row, int col, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
+        this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
     @Override
@@ -44,7 +19,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage(NODICEDRAFTED);
+            view.showMessage(NO_DICE_DRAFTED);
         }
     }
 
@@ -57,7 +32,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage(NODICEDRAFTED);
+            view.showMessage(NO_DICE_DRAFTED);
         }
     }
 
@@ -70,12 +45,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
             currentTurn.getDraftedDice().setValue(value);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            view.showMessage(NODICEDRAFTED);
+            view.showMessage(NO_DICE_DRAFTED);
         }
-    }
-
-    @Override
-    public void executeImplicitBehaviour() {
-        //do nothing
     }
 }

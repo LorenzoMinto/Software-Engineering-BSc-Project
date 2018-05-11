@@ -5,30 +5,10 @@ import it.polimi.se2018.view.View;
 
 
 public class MoveControllerState extends ControllerState {
-    Controller controller;
 
     public MoveControllerState(Controller controller) {
         this.controller = controller;
-    }
-
-    @Override
-    public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void placeDice(int row, int col, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
+        this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
     @Override
@@ -50,25 +30,5 @@ public class MoveControllerState extends ControllerState {
         } else {
             view.showMessage("Can't make this move.");
         }
-    }
-
-    @Override
-    public void incrementDice(View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void decrementDice(View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void chooseDiceValue(int value, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void executeImplicitBehaviour() {
-        //do nothing
     }
 }

@@ -4,25 +4,10 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
 public class ChooseFromTrackControllerState extends ControllerState {
-    Controller controller;
 
     public ChooseFromTrackControllerState(Controller controller) {
         this.controller = controller;
-    }
-
-    @Override
-    public void draftDiceFromDraftPool(Dice dice, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void placeDice(int row, int col, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void useToolCard(Player player, ToolCard toolcard, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
+        this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
     @Override
@@ -34,30 +19,5 @@ public class ChooseFromTrackControllerState extends ControllerState {
             controller.setControllerState(controller.stateManager.getNextState(this));
         }
 
-    }
-
-    @Override
-    public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void incrementDice(View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void decrementDice(View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void chooseDiceValue(int value, View view) {
-        view.showMessage(MIDDLEOFEFFECT);
-    }
-
-    @Override
-    public void executeImplicitBehaviour() {
-        //do nothing
     }
 }
