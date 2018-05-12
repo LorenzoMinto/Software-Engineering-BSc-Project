@@ -74,7 +74,7 @@ public class ToolCardsManager {
                 //Add the selected toolcard to a list tracking all the selected patterns
                 usedToolCards.add(randomToolCardID);
 
-                //Removes the selected toolcard from the available to avoid double choise
+                //Removes the selected toolcard from the available to avoid double choice
                 availableToolCards.remove(randomToolCardID);
 
                 //Load the randomly selected pattern

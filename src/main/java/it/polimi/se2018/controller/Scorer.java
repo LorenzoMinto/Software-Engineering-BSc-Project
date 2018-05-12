@@ -52,7 +52,7 @@ public class Scorer {
      * @see Scorer#getScores(List, List)
      */
     Object[] compute(List<Player> playersOfLastRound, List<Player> playersOfGame,
-                     List<PublicObjectiveCard> publicObjectiveCards){
+                      List<PublicObjectiveCard> publicObjectiveCards){
         if(playersOfLastRound.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
                 " if the list of players is empty");}
         List<Player> rankings;
@@ -105,10 +105,11 @@ public class Scorer {
         List<Player> playersByFavorTokens = new ArrayList<>();
         List<Player> playersCopy = new ArrayList<>(players);
 
-        while(!players.isEmpty()) {
+        //NOTE: changed here
+        while(!playersCopy.isEmpty()) {
             Player playerWithMaxFavorTokens = getPlayerWithMaxFavorTokens(playersCopy);
             playersByFavorTokens.add(playerWithMaxFavorTokens);
-            players.remove(playerWithMaxFavorTokens);
+            playersCopy.remove(playerWithMaxFavorTokens);
         }
 
         return playersByFavorTokens;
@@ -130,10 +131,10 @@ public class Scorer {
 
         privateObjectiveCardsScore = getPrivateObjectiveCardScores(playersCopy);
 
-        while(!players.isEmpty()) {
+        while(!playersCopy.isEmpty()) {
             Player playerWithMaxPrivateObjectiveCardScore = getPlayerWithMaxScore(playersCopy, privateObjectiveCardsScore);
             playersByPrivateObjectiveCardScore.add(playerWithMaxPrivateObjectiveCardScore);
-            players.remove(playerWithMaxPrivateObjectiveCardScore);
+            playersCopy.remove(playerWithMaxPrivateObjectiveCardScore);
         }
         return playersByPrivateObjectiveCardScore;
     }
@@ -162,25 +163,26 @@ public class Scorer {
      * Orders a given list of players by score.
      *
      * @param players the list of players to be ordered
+     * @param scores //TODO: javadoc
      * @return the list of players ordered by score
      */
-    private List<Player> orderPlayersByScore(List<Player> players, Map<Player, Integer> scores) {
+    private List<Player> orderPlayersByScore(final List<Player> players, Map<Player, Integer> scores) {
         if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score" +
                 " if the list of players is empty");}
 
         List<Player> playersByScore = new ArrayList<>();
         List<Player> playersCopy = new ArrayList<>(players);
 
-        while(!players.isEmpty()) {
+        while(!playersCopy.isEmpty()) {
             Player playerWithMaxScore = getPlayerWithMaxScore(playersCopy, scores);
             playersByScore.add(playerWithMaxScore);
-            players.remove(playerWithMaxScore);
+            playersCopy.remove(playerWithMaxScore);
         }
         return playersByScore;
     }
 
-    //TODO: decidere se rivedere il funzionamento di questo metodo
-    private Player getPlayerWithMaxScore(List<Player> players, Map<Player, Integer> scores){
+    //TODO: javadoc
+    private Player getPlayerWithMaxScore(final List<Player> players, Map<Player, Integer> scores){
         Player playerWithMaxScore = players.get(0);
         int maxScore = scores.get(playerWithMaxScore);
 
@@ -203,14 +205,16 @@ public class Scorer {
      * @return the Player in the given list with the maximum number of favor tokens left
      */
     private Player getPlayerWithMaxFavorTokens(List<Player> players) {
+
+        List<Player> playersCopy = new ArrayList<>(players);
         Player playerWithMaxFavorTokens = players.get(0);
 
-        for (Player player: players) {
+        for (Player player: playersCopy) {
             if(player.getFavorTokens() > playerWithMaxFavorTokens.getFavorTokens()){
                 playerWithMaxFavorTokens = player;
             }
         }
-        players.remove(playerWithMaxFavorTokens);
+        playersCopy.remove(playerWithMaxFavorTokens);
         return playerWithMaxFavorTokens;
     }
 

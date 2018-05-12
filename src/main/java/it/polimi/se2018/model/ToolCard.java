@@ -17,7 +17,8 @@ public class ToolCard {
     private HashMap<String,String> controllerStateRules;
     private PlacementRule placementRule;
 
-    public ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier, Map<String, String> controllerStateRules, PlacementRule placementRule) {
+    public ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
+                    Map<String, String> controllerStateRules, PlacementRule placementRule) {
         this.title = title;
         this.description = description;
         this.neededTokens = neededTokens;
@@ -87,6 +88,7 @@ public class ToolCard {
 
     @Override
     public int hashCode() {
-        return Objects.hash(title,description,tokensUsed,neededTokens,tokensUsageMultiplier,imageURL,controllerStateRules,placementRule);
+        return Objects.hash(title,description,tokensUsed,neededTokens,tokensUsageMultiplier,imageURL,
+                controllerStateRules,placementRule);
     }
 }

@@ -526,7 +526,6 @@ public class TestScorer {
 
     @Test
     public void testGetScores(){
-        assignDefaultWindowPatterns();
         initializeDefaultGame();
 
         results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
