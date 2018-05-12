@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.XMLFileReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -95,7 +96,7 @@ public class ToolCardsManager {
                 toolCards.add(randomToolCard);
             }
         } else {
-            throw new RuntimeException("Cant create the number of toolcards requested. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException("Cant create the number of toolcards requested. This error is not handlable at all");
         }
 
         return toolCards;

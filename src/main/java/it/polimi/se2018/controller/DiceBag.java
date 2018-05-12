@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.DiceColors;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class DiceBag {
         List<Dice> drawnDices = new ArrayList<>();
 
         if( quantity > this.numberOfAvailableDices() ){
-            throw new RuntimeException("Asked DiceBag to produce "+quantity+" of dices but only "+numberOfAvailableDices()+" dices are available");
+            throw new BadBehaviourRuntimeException("Asked DiceBag to produce "+quantity+" of dices but only "+numberOfAvailableDices()+" dices are available");
         } else {
             for(int i=0; i<quantity; i++){
 

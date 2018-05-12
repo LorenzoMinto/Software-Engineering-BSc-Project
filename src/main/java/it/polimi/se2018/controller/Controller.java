@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.view.View;
 
 import java.util.HashMap;
@@ -292,7 +293,7 @@ public class Controller implements ControllerInterface {
             try { //NOTE: this should not happen
                 game.getCurrentRound().nextTurn();
             } catch (NoMoreTurnsAvailableException e1) {
-                throw new RuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
+                throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }
 
         }

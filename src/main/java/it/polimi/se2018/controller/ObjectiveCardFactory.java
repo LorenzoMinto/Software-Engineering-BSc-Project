@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.*;
 
@@ -102,7 +103,7 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard();
             default:
-                throw new RuntimeException("The selected (by index) card does not exist.");
+                throw new BadBehaviourRuntimeException("The selected (by index) card does not exist.");
         }
     }
 
@@ -156,7 +157,7 @@ public class ObjectiveCardFactory {
                     description = "Sets of 5 & 6 values anywhere";
                     imageURL = null;
                 }else{
-                    throw new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                    throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
                             "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
                 }
                 multiplier = 2;
@@ -168,7 +169,7 @@ public class ObjectiveCardFactory {
                 imageURL = null;
                 break;
             default:
-                throw new RuntimeException("ERROR: The Value Set Public Objective Card " +
+                throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
                         "cannot be created with the values passed in the constructor. The values passed are:" +
                         values + " .");
         }
