@@ -5,6 +5,10 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.view.View;
 
+/**
+ *  @author Lorenzo Minto
+ *  @author Federico Haag (refactor)
+ */
 public abstract class ControllerState {
 
     static final String MIDDLE_OF_EFFECT = "Can't do. You are in the middle of a Toolcard effect";

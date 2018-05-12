@@ -5,42 +5,52 @@ import java.util.List;
 import java.util.function.Function;
 
 
-/*
-Public Objective Card that counts the number of diagonally adjacent dice in a window pattern with the same property
-(color or value)
-
-Methods:
-    calculateScore()
-    getScoreLeftRight()
-    getScoreRightLeft()
-    scoreDiagonal()
-    fillListWithNumbers()
-    getLinearIndex()
-*/
-
+/**
+ * Public Objective Card that counts the number of diagonally adjacent dice
+ * in a window pattern with the same property (color or value)
+ */
 public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
+    /**
+     * @param title
+     * @param description
+     * @param imageURL
+     * @param propertyFunction
+     */
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
                                         Function<Dice,Object> propertyFunction) {
         super(title, description, imageURL, propertyFunction);
     }
 
+    /**
+     *
+     */
     private DiagonalsPublicObjectiveCard(){}
 
+    /**
+     * @return
+     */
     public static PublicObjectiveCard createTestInstance() {
         return new DiagonalsPublicObjectiveCard();
     }
 
-    //Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
+    /**
+     * Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
+     *
+     * @return new DiagonalsPublicObjectiveCard instance with same properties of this one
+     */
     @Override
     public PublicObjectiveCard copy() {
         return new DiagonalsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
                 super.getPropertyFunction());
     }
 
-    /*
-    Calculates a player's score relative to the specific DiagonalPublicObjectiveCard, given their window pattern
-    */
+    /**
+     * Calculates a player's score relative to the specific DiagonalPublicObjectiveCard, given their window pattern
+     *
+     * @param windowPattern
+     * @return
+     */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
         if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
@@ -62,12 +72,19 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
 
-    /*
-    Calculates the score of the diagonals from left to right: diagonals have origin in a cell and proceed to the right
-    The 'move' parameter in the scoreDiagonal() method therefore needs to be set to 1
-    The algorithm covers the whole matrix starting from the bottom left corner going vertically upward
-    and finally horizontally to the right
-    */
+    /**
+     *  Calculates the score of the diagonals from left to right: diagonals have origin
+     *  in a cell and proceed to the right.
+     *
+     *  The 'move' parameter in the scoreDiagonal() method therefore needs to be set to 1.
+     *
+     *  The algorithm covers the whole matrix starting from the bottom left corner going
+     *  vertically upward and finally horizontally to the right.
+     *
+     * @param windowPattern
+     * @param listOfNotCountedDice
+     * @return
+     */
     private int getScoreLeftToRight(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
 
@@ -84,12 +101,20 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return score;
     }
 
-    /*
-    Calculates the score of the diagonals from right to left: diagonals have origin in a cell and proceed to the left
-    The 'move' parameter in the scoreDiagonal() method therefore needs to be set to -1
-    The algorithm covers the whole matrix starting from the bottom right corner going vertically upward
-    and finally horizontally to the left
-    */
+
+    /**
+     * Calculates the score of the diagonals from right to left: diagonals have origin
+     * in a cell and proceed to the left.
+     *
+     * The 'move' parameter in the scoreDiagonal() method therefore needs to be set to -1.
+     *
+     * The algorithm covers the whole matrix starting from the bottom right corner going
+     * vertically upward and finally horizontally to the left.
+     *
+     * @param windowPattern
+     * @param listOfNotCountedDice
+     * @return
+     */
     private int getScoreRightToLeft(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
         int numberOfRows = windowPattern.getNumberOfRows();
@@ -111,16 +136,21 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
 
-    /*
-    Method to count the adjacent dice with the same property, specified in the getPropertyFunction, in a diagonal
-    Parameters:
-        row, col: indexes of the first cell of the diagonal to be checked
-        move: +1 if moving to the right, -1 if moving to the left
-    */
+    /**
+     * Method to count the adjacent dice with the same property,
+     * specified in the getPropertyFunction, in a diagonal.
+     *
+     * @param windowPattern
+     * @param listOfNotCountedDice
+     * @param initialRow row index of the first cell of the diagonal to be checked
+     * @param initialCol row index of the first cell of the diagonal to be checked
+     * @param isLeftToRightDiagonal
+     * @return
+     */
     private int scoreDiagonal(WindowPattern windowPattern, List<Integer> listOfNotCountedDice,
                               int initialRow, int initialCol, boolean isLeftToRightDiagonal){
         int score = 0;
-        int move;
+        int move; // +1 if moving to the right, -1 if moving to the left
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
 
@@ -139,9 +169,16 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
 
-    /*
-    Gets the score of a pair of cells identified by the row and column of the first cell
-    */
+    /**
+     * Gets the score of a pair of cells identified by the row and column of the first cell
+     *
+     * @param windowPattern
+     * @param listOfNotCountedDice
+     * @param move
+     * @param row
+     * @param column
+     * @return
+     */
     private int getCellPairScore(WindowPattern windowPattern, List<Integer> listOfNotCountedDice, int move,
                                  int row, int column){
         int score = 0;
@@ -176,9 +213,14 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return score;
     }
 
-    /*
-    Returns 1 if the dice has not already been considered, otherwise 0
-    */
+
+    /**
+     * Returns 1 if the dice has not already been considered, otherwise 0
+     *
+     * @param list
+     * @param linearIndex
+     * @return
+     */
     private int scoreDice(List<Integer> list, Integer linearIndex) {
         if(list==null){ throw new IllegalArgumentException("ERROR: List cannot be null");}
 
@@ -189,9 +231,13 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return 0;
     }
 
-    /*
-    Returns a list full of all integers from 0 to parameter 'numbers' -1
-    */
+
+    /**
+     * Returns a list full of all integers from 0 to parameter 'numbers' -1
+     *
+     * @param numbers
+     * @return
+     */
     private List<Integer> fillListWithNumbers(int numbers){
         if(numbers< 0){ throw new IllegalArgumentException("ERROR: parameter cannot be negative");}
         List<Integer> list = new ArrayList<>();
@@ -201,6 +247,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return list;
     }
 
+    /**
+     * @param row
+     * @param col
+     * @param numberOfRows
+     * @return
+     */
     private int getLinearIndex(int row, int col, int numberOfRows) {
         return (row * (numberOfRows+1)) + col;
     }

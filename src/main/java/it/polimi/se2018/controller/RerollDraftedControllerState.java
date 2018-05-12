@@ -1,8 +1,11 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
 
+/**
+ *  @author Lorenzo Minto
+ *  @author Federico Haag (refactor)
+ */
 public class RerollDraftedControllerState extends ImplicitControllerState {
 
     public RerollDraftedControllerState(Controller controller) {

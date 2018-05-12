@@ -4,6 +4,10 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.view.View;
 
+/**
+ *  @author Lorenzo Minto
+ *  @author Federico Haag (refactor)
+ */
 public class ToolCardControllerState extends ControllerState {
 
     public ToolCardControllerState(Controller controller) {

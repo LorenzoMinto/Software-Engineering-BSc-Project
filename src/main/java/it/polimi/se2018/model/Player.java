@@ -18,16 +18,12 @@ public class Player {
 
         //Checks for bad params
         if(user==null){ throw new IllegalArgumentException("Asked to create a player giving null user"); }
-//        TODO: if(windowPattern==null){ throw new IllegalArgumentException("Asked to create a player giving null windowPattern"); }
         if(card==null){ throw new IllegalArgumentException("Asked to create a player giving null card"); }
 
         this.user = user;
-
         this.nickname = nickname;
-
         this.windowPattern = null;
         this.favorTokens = 0;
-
         this.privateObjectiveCard = card;
     }
 

@@ -2,6 +2,12 @@ package it.polimi.se2018.model;
 
 import java.util.Random;
 
+/**
+ * Enum of Dice colors. It is included also a placeholder color named "NOCOLOR"
+ * to better handling when a {@link Cell} has not a specified color constraint.
+ *
+ * @author Federico Haag
+ */
 public enum DiceColors {
     NOCOLOR,
     RED,
@@ -10,6 +16,11 @@ public enum DiceColors {
     BLUE,
     PURPLE;
 
+    /**
+     * Returns a random color, except the NOCOLOR.
+     *
+     * @return a random color, except the NOCOLOR
+     */
     public static DiceColors getRandomColor(){
         Random random = new Random();
         DiceColors randomColor;
@@ -21,6 +32,11 @@ public enum DiceColors {
         return randomColor;
     }
 
+    /**
+     * Returns a string representation in one letter of the color.
+     *
+     * @return a string representation in one letter of the color
+     */
     public String toOneLetter(){
         switch(this) {
             case NOCOLOR: return "_";
@@ -33,6 +49,11 @@ public enum DiceColors {
         }
     }
 
+    /**
+     * Returns a string representation of the color.
+     *
+     * @return a string representation of the color
+     */
     @Override
     public String toString() {
         return this.name().toLowerCase();
