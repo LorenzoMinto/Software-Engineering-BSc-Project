@@ -1,2 +1,5 @@
-NUMBER_OF_ROUNDS=50
-CIAO=8
+numberOfRounds=10
+maxNumberOfPlayers=4
+numberOfDicesPerColor=18
+numberOfToolCards=3
+numberOfPublicObjectiveCards=3
