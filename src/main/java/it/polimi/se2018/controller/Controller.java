@@ -108,22 +108,14 @@ public class Controller implements ControllerInterface {
      * @param game the game instance to be controlled
      * @param numberOfDicesPerColor used to create a {@link DiceBag} containing the needed dices ({@link Dice})
      */
-    public Controller(Game game, int numberOfDicesPerColor) {
+    public Controller(Game game, int numberOfDicesPerColor, int numberOfToolCards, int numberOfPublicObjectiveCards) {
 
         //Create Managers
         this.stateManager = new ControllerStateManager(this);
 
-        try{
-            this.windowPatternManager = new WindowPatternManager();
-        } catch(NoPatternsFoundInFileSystemException e){
-            throw new RuntimeException("NoPatternsFoundInFileSystemException thrown, caught but cannot be handled.");
-        }
+        this.windowPatternManager = new WindowPatternManager();
 
-        try{
-            this.toolCardsManager = new ToolCardsManager();
-        } catch(NoToolCardsFoundInFileSystemException e){
-            throw new RuntimeException("NoToolCardsFoundInFileSystemException thrown, caught but cannot be handled.");
-        }
+        this.toolCardsManager = new ToolCardsManager();
 
         this.objectiveCardManager = new ObjectiveCardManager();
 
@@ -132,6 +124,12 @@ public class Controller implements ControllerInterface {
         this.controllerState =  this.stateManager.getStartState();
         this.activeToolcard = null;
         this.diceBag = new DiceBag(numberOfDicesPerColor);
+
+        //Produces and sets cards to the game
+        List<ToolCard> toolCards = toolCardsManager.getRandomToolCards(numberOfToolCards);
+        List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
+
+        this.game.setCards(toolCards,publicObjectiveCards);
     }
 
 
@@ -142,8 +140,7 @@ public class Controller implements ControllerInterface {
      */
     public void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;
-        //could change controllerState implicitly
-        this.controllerState.executeImplicitBehaviour();
+        this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
 

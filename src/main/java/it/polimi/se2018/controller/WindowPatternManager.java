@@ -34,10 +34,8 @@ public class WindowPatternManager {
     /**
      * Constructor of the class. Checks if there are window patterns than can be loaded
      * from file system and if yes loads them.
-     *
-     * @throws NoPatternsFoundInFileSystemException if no window patterns .xml files can be loaded
      */
-    public WindowPatternManager() throws NoPatternsFoundInFileSystemException {
+    public WindowPatternManager() {
 
         try{
             this.availablePatterns = XMLFileReader.getFilesNames(PATH);

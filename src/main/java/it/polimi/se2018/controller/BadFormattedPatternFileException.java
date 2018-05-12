@@ -14,7 +14,7 @@ package it.polimi.se2018.controller;
  *
  * @author Federico Haag
  */
-public class BadFormattedPatternFileException extends Exception {
+public class BadFormattedPatternFileException extends RuntimeException {
     public BadFormattedPatternFileException() {
         super();
     }

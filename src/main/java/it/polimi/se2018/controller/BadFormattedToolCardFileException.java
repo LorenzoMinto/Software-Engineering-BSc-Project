@@ -14,7 +14,7 @@ package it.polimi.se2018.controller;
  *
  * @author Federico Haag
  */
-public class BadFormattedToolCardFileException extends Exception {
+public class BadFormattedToolCardFileException extends RuntimeException {
     public BadFormattedToolCardFileException() {
         super();
     }
