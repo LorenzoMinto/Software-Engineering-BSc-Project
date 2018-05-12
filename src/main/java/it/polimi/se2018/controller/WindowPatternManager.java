@@ -78,10 +78,7 @@ public class WindowPatternManager {
 
             Cell[][] pattern;
 
-            File file = new File(PATH.concat(patternID).concat(".xml"));
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
+            Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
 
             //Parse from xml the number of rows of the pattern
             int rows = Integer.parseInt( document.getElementsByTagName("rows").item(0).getTextContent() );

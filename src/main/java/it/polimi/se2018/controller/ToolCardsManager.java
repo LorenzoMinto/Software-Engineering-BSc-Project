@@ -113,10 +113,7 @@ public class ToolCardsManager {
 
         try{
 
-            File file = new File(PATH.concat(toolCardID).concat(".xml"));
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
+            Document document = XMLFileReader.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
             //Parse from xml the number of rows of the pattern
             String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();

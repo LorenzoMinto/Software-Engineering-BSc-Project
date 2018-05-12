@@ -1,10 +1,18 @@
 package it.polimi.se2018.utils;
 
+import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class XMLFileReader {
 
     private XMLFileReader(){
@@ -38,5 +46,12 @@ public class XMLFileReader {
         }
 
         return filesNames;
+    }
+
+    public static Document getFileDocument(String path) throws Exception{
+        File file = new File(path);
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        return documentBuilder.parse(file);
     }
 }
