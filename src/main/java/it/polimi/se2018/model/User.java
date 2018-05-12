@@ -3,6 +3,15 @@ package it.polimi.se2018.model;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class representing a user (one per person, created one during first time sign up).
+ * Each user has one or more players connected (player is just the relationship
+ * between a user and the game the user is playing).
+ *
+ * @author Federico Haag
+ */
+//TODO: verificare se ha ancora senso la classe user o se va rimossa
+//NOTE: comments are not completed because is not sure this class will continue existing
 public class User {
     public User(int userID, String username) {
         this.userID = userID;

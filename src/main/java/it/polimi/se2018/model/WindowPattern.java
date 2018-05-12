@@ -1,61 +1,99 @@
 package it.polimi.se2018.model;
 
+/**
+ * Class representing Window Pattern.
+ *
+ * @author Federico Haag
+ */
 public class WindowPattern {
 
-    //Name of the pattern
+
+    /**
+     * Name of the pattern
+     */
     private String title;
 
-    //Difficulty of the pattern
+    /**
+     * Difficulty of the pattern
+     */
     private int difficulty;
 
-    //Rows of the pattern
-    private int numberOfRows;
-
-    //Columns of the pattern
-    private int numberOfColumns;
-
-    //Cells that form the pattern
+    /**
+     * Cells that form the pattern
+     */
     private Cell[][] pattern;
 
+    /**
+     * Boolean value stating if the pattern is empty or not (true=empty)
+     */
     private boolean isEmpty;
 
-    public WindowPattern(String title, int d, int r, int c, Cell[][] p) {
-        if(p==null) throw new IllegalArgumentException();
+    /**
+     * Constructor of a new Window Pattern
+     *
+     * @param title the title of the pattern
+     * @param difficulty the difficulty of the pattern
+     * @param pattern the pattern structured as array of cells with already set constraints
+     */
+    public WindowPattern(String title, int difficulty, Cell[][] pattern) {
+        if(pattern==null) throw new IllegalArgumentException();
 
         this.title = title;
-        this.difficulty = d;
-        this.numberOfRows = r;
-        this.numberOfColumns = c;
-        this.pattern = p;
+        this.difficulty = difficulty;
+        this.pattern = pattern;
         this.isEmpty = true;
     }
 
-    //Returns the pattern difficulty
+
+    /**
+     * Returns the pattern difficulty.
+     *
+     * @return  the pattern difficulty
+     */
     public int getDifficulty(){
         return this.difficulty;
     }
 
-    //Returns the number of rows of the pattern
+    /**
+     * Returns the number of rows of the pattern.
+     *
+     * @return the number of rows of the pattern
+     */
     public int getNumberOfRows(){
-        return this.numberOfRows;
+        return pattern.length;
     }
 
-    //Returns the number of columns of the pattern
+    /**
+     * Returns the number of columns of the pattern.
+     *
+     * @return the number of columns of the pattern
+     */
     public int getNumberOfColumns(){
-        return this.numberOfColumns;
+        return pattern[0].length;
     }
 
-    //Returns the title of the pattern
+    /**
+     * Returns the title of the pattern.
+     *
+     * @return the title of the pattern
+     */
     public String getTitle() {
         return title;
     }
 
-    //Returns the cells that form the pattern
-    public Cell[][] getPattern() {
 
-        Cell[][] p = new Cell[this.numberOfRows][this.numberOfColumns];
-        for (int i=0; i<this.numberOfRows; i++){
-            for (int j=0; j<this.numberOfColumns; j++){
+    /**
+     * Returns the cells that form the pattern.
+     *
+     * @return the cells that form the pattern
+     */
+    public Cell[][] getPattern() {
+        int nRows = getNumberOfRows();
+        int nCols = getNumberOfColumns();
+
+        Cell[][] p = new Cell[nRows][nCols];
+        for (int i=0; i<nRows; i++){
+            for (int j=0; j<nCols; j++){
                 p[i][j] = this.pattern[i][j].copy();
             }
         }
@@ -63,6 +101,13 @@ public class WindowPattern {
         return p;
     }
 
+    /**
+     * Returns the Dice that is placed on the cell corresponding to the given row and column numbers.
+     *
+     * @param row row number of the patter corresponding to the cell where to get the dice.
+     * @param col column number of the patter corresponding to the cell where to get the dice.
+     * @return the Dice that is placed on the cell corresponding to the given row and column numbers.
+     */
     public Dice getDiceOnCell(int row, int col) {
         Dice dice = null;
         if (isLegalPosition(row, col)) {
@@ -71,7 +116,14 @@ public class WindowPattern {
         return dice;
     }
 
-    //Put a dice in the cell corresponding to the given row and column
+    /**
+     * Put a dice in the cell corresponding to the given row and column numbers.
+     *
+     * @param dice Dice to put in the given cell
+     * @param row row number of the pattern corresponding the cell where to put the dice
+     * @param col column number of the pattern corresponding the cell where to put the dice
+     * @return a boolean value representing if the action succeeded
+     */
     public boolean putDiceOnCell(Dice dice, int row, int col) {
 
         if(dice==null) throw new IllegalArgumentException("Asked to put a null dice on cell [I am window pattern]");
@@ -91,6 +143,15 @@ public class WindowPattern {
         return true;
     }
 
+    /**
+     * Move the dice placed on the specified row,column to the specified new row,column position
+     *
+     * @param fromRow row number representing the cell where to pick the dice
+     * @param fromCol column number representing the cell where to pick the dice
+     * @param toRow row number representing the cell where to place the picked dice
+     * @param toCol column number representing the cell where to place the picked dice
+     * @return a boolean value representing if the action succeeded
+     */
     public boolean moveDiceFromCellToCell(int fromRow, int fromCol, int toRow, int toCol) {
         //check if positions are legal
         if (!isLegalPosition(fromRow, fromCol) || !isLegalPosition(toRow, toCol)) {
@@ -105,19 +166,42 @@ public class WindowPattern {
         }
     }
 
+    /**
+     * Makes a copy of the Window Pattern and returns it.
+     *
+     * @return a copy of the Window Pattern
+     */
     public WindowPattern copy(){
 
-        return new WindowPattern(this.title,this.difficulty,this.numberOfRows,this.numberOfColumns,this.getPattern());
+        return new WindowPattern(this.title,this.difficulty,this.getPattern());
     }
 
+    /**
+     * Checks if the given row and column numbers represent a valid
+     * cell of the pattern or not.
+     *
+     * @param row row number to check
+     * @param col column number to check
+     * @return
+     */
     private boolean isLegalPosition(int row, int col) {
-        return ((row>=0 && row<pattern.length) && (col>=0 && col<pattern[0].length));
+        return ((row>=0 && row<getNumberOfRows()) && (col>=0 && col<getNumberOfColumns()));
     }
 
+    /**
+     * Rturns if the Window Pattern is empty or not (true=empty)
+     *
+     * @return boolean value representing if the Window Pattern is empty or not (true=empty)
+     */
     public boolean isEmpty() {
         return isEmpty;
     }
 
+    /**
+     * Returns a string representation of the Window Pattern.
+     *
+     * @return a string representation of the Window Pattern
+     */
     @Override
     public String toString() {
         String s = "{"+this.title +"}";

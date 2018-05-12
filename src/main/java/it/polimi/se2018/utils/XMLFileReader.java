@@ -10,15 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class that manages the access to xml files (toolcards and windowpatterns).
  *
  * @author Federico Haag
  */
-public class XMLFileReader {
+public final class XMLFileReader {
 
-    private XMLFileReader(){
-        //Just for preventing instantiation
-    }
+    /**
+     * Private constructor just for preventing instantiation
+     */
+    private XMLFileReader(){}
 
+    /**
+     * Given a path returns the list of all .xml files in that path as a list of
+     * filenames (just the name, no path, no extension - is obviously .xml).
+     *
+     * @param path the path to explore
+     * @return the list of all .xml files in that path as a list of filenames
+     * (just the name, no path, no extension - is obviously .xml)
+     * @throws IOException if something during reading from file system fails
+     */
     public static List<String> getFilesNames(String path) throws IOException{
 
         List<String> filesNames = new ArrayList<>();
@@ -48,6 +59,13 @@ public class XMLFileReader {
         return filesNames;
     }
 
+    /**
+     * Returns a {@link Document} instance of the file specified in the path.
+     *
+     * @param path the path of the file to be opened
+     * @return a {@link Document} instance of the file specified in the path
+     * @throws Exception if something in opening the file fails
+     */
     public static Document getFileDocument(String path) throws Exception{
         File file = new File(path);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

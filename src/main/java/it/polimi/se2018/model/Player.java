@@ -2,18 +2,45 @@ package it.polimi.se2018.model;
 
 import java.util.Objects;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class Player {
 
+    /**
+     * Favor Tokens of the player.
+     */
     private int favorTokens;
 
+    /**
+     * Nickname of the player.
+     */
     private String nickname;
 
+    /**
+     * WindowPattern chosen by the player.
+     */
     private WindowPattern windowPattern;
 
-    private User user;
+    /**
+     * A player is just the relationship between a user and the game
+     * the user is playing. This is the user.
+     */
+    private User user;  //TODO: verificare se ha ancora senso la classe user o se va rimossa
 
+    /**
+     * Private Objective Card assigned to the player.
+     */
     private PrivateObjectiveCard privateObjectiveCard;
 
+    /**
+     * Constructor: creates a new Player based on given user, nickname and private objective card.
+     *
+     * @param user the user playing in this game
+     * @param nickname the nickname the user choose before entering the game
+     * @param card the private objective card assigned randomly to the player
+     */
     public Player(User user, String nickname, PrivateObjectiveCard card) {
 
         //Checks for bad params
@@ -27,69 +54,100 @@ public class Player {
         this.privateObjectiveCard = card;
     }
 
-
-
-    //Getters
-
+    /**
+     * Returns the number of favor tokens of the player.
+     *
+     * @return the number of favor tokens of the player
+     */
     public int getFavorTokens() {
         return favorTokens;
     }
 
+    /**
+     * Returns the player's nickname.
+     *
+     * @return the player's nickname
+     */
     public String getNickname() {
         return nickname;
     }
 
 
-
-    //Setters
-
-    //Can be assigned only one time at all
+    /**
+     * Assign to the player the given windowpattern. Can be assigned only one time at all.
+     *
+     * @param windowPattern the windowpattern to be assigned to this player
+     */
     public void setWindowPattern(WindowPattern windowPattern) {
         if(windowPattern==null) throw new IllegalArgumentException();
 
         if(this.windowPattern==null){
             this.windowPattern = windowPattern;
             this.favorTokens = windowPattern.getDifficulty();
+        } else {
+            throw new RuntimeException("Can't add again the windowpattern to this player. Controller should not ask for this. Bad unhandleable behaviour");
         }
     }
 
-    //Can be assigned only once
-    public void setPrivateObjectiveCard(PrivateObjectiveCard card) {
-        if(card==null) throw new IllegalArgumentException();
-
-        if(this.privateObjectiveCard==null){
-            this.privateObjectiveCard = card;
-        }
-    }
-
+    /**
+     * Returns the private objective card of the player.
+     *
+     * @return the private objective card of the player
+     */
     public PrivateObjectiveCard getPrivateObjectiveCard() {
         return privateObjectiveCard;
     }
 
 
-    //Decrease favorTokens of quantity. Return false if not enough tokens left.
+    /**
+     * Decrease favorTokens of the given quantity. Return false if not enough tokens left.
+     *
+     * @param quantity
+     * @return true if the action succeeded, false if not (not enough tokens left)
+     */
     public boolean decreaseTokens(int quantity) {
-        if(quantity <0){ throw new IllegalArgumentException("ERROR: Cannot decrease tokens of a negative quantity.");}
+        if(quantity < 0){ throw new IllegalArgumentException("ERROR: Cannot decrease tokens of a negative quantity.");}
         if(favorTokens<quantity) return false;
         favorTokens -= quantity;
         return true;
     }
 
+    /**
+     * Returns the windowpattern of the player.
+     *
+     * @return the windowpattern of the player
+     */
     public WindowPattern getWindowPattern() {
         return windowPattern;
     }
 
-    //Utils
 
-    //Compares favorTokens with toolCard.getNeededTokens()
+    /**
+     * Checks if the given toolcard can be used comparing favorTokens with {@link ToolCard#getNeededTokens()} .
+     *
+     * @param toolCard the toolcard to check if it's usable or not
+     * @return true if the given toolcard can be used, false if not
+     */
     public boolean canUseToolCard(ToolCard toolCard) {
         return toolCard.getNeededTokens() <= favorTokens;
     }
 
+    /**
+     * Returns the user.
+     *
+     * @return the user
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Indicates whether some other Player is "equal to" this one.
+     *
+     * @param o some other Player
+     * @return if the other Player is equal to this
+     * @see {@link Object#equals(Object)}
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -104,6 +162,12 @@ public class Player {
         return this.nickname == p.getNickname();
     }
 
+    /**
+     * Returns a hash code value for the Player.
+     *
+     * @return a hash code value for the Player
+     * @see {@link Object#hashCode()}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(favorTokens,nickname,windowPattern,user,privateObjectiveCard);

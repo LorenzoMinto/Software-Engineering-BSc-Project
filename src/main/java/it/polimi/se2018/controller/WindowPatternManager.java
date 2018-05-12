@@ -115,7 +115,7 @@ public class WindowPatternManager {
                 pattern[row][col] = new Cell(value,color);
             }
 
-            return new WindowPattern(patternID,diff,rows,cols,pattern);
+            return new WindowPattern(patternID,diff,pattern);
 
         } catch (Exception e) {
             //Bad formatting of xml is caught and method returns false
