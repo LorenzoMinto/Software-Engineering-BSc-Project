@@ -182,7 +182,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
      * Returns the String representation of te card.
-     * 
+     *
      * @return the String representation of te card.
      */
     @Override

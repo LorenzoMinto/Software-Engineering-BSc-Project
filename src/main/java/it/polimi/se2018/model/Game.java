@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observable;
 
 import java.util.*;
@@ -152,7 +153,7 @@ public class Game extends Observable {
      */
     public void setCards(List<ToolCard> drawnToolCards, List<PublicObjectiveCard> drawnPublicObjectiveCards){
         if( this.status != GameStatus.WAITING_FOR_CARDS ){
-            throw new RuntimeException("Can't assign cards more than once to the game. Controller should not ask for it. Bad unhandleable behaviour.");
+            throw new BadBehaviourRuntimeException("Can't assign cards more than once to the game. Controller should not ask for it. Bad unhandleable behaviour.");
         }
 
         this.drawnToolCards = drawnToolCards;
@@ -170,7 +171,7 @@ public class Game extends Observable {
         if(this.status==GameStatus.ENDED) {
             this.rankings = rankings;
         } else {
-            throw new RuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
+            throw new BadBehaviourRuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
         }
     }
 
@@ -183,7 +184,7 @@ public class Game extends Observable {
         if(this.status==GameStatus.ENDED) {
             this.scores = (HashMap<Player, Integer>) scores;
         } else {
-            throw new RuntimeException("Can't set scores if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
+            throw new BadBehaviourRuntimeException("Can't set scores if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
         }
     }
 
