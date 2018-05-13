@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.ControllerInterface;
+import it.polimi.se2018.model.ChangeMessage;
 import it.polimi.se2018.model.Player;
 
 public class CLIView extends View {
@@ -10,7 +11,7 @@ public class CLIView extends View {
     }
 
     @Override
-    public void update(Object message) {
-        //TODO: implement here
+    public void update(ChangeMessage m) {
+
     }
 }

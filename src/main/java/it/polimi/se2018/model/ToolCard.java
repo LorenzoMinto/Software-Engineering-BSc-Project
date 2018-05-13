@@ -30,6 +30,12 @@ public class ToolCard {
         this.tokensUsageMultiplier = tokensUsageMultiplier;
     }
 
+    private ToolCard(){}
+
+    public static ToolCard createTestInstance(){
+        return new ToolCard();
+    }
+
     public void use() {
         this.tokensUsed += this.neededTokens;
 
