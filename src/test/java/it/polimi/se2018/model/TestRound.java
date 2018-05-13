@@ -201,7 +201,7 @@ public class TestRound {
     }
 
     @Test
-    public void getNumber(){
+    public void testGetNumber(){
         int roundNumber = 7;
         round = new Round(roundNumber,players.size()*2, players, draftPool);
 
@@ -209,11 +209,42 @@ public class TestRound {
     }
 
     @Test
-    public void getDraftPool(){
+    public void testGetDraftPool(){
         draftPool = new DraftPool();
         round = new Round(0,players.size()*2, players, draftPool);
 
         assertEquals(draftPool, round.getDraftPool());
+    }
+
+    @Test
+    public void testRemoveNextTurnOfPlayer(){
+
+        int numberOfTurns = players.size() * 2;
+        round = new Round(0, numberOfTurns, players, draftPool);
+        Player currentPlayer = round.getCurrentTurn().getPlayer();
+
+        assertTrue(round.removeNextTurnOfPlayer(currentPlayer));
+
+        int currentTurnNumber = round.getCurrentTurn().getNumber();
+
+        for(int i = currentTurnNumber; i < numberOfTurns - 1; i++) {
+
+            try {
+                round.nextTurn();
+                if (round.getCurrentTurn().getPlayer() == currentPlayer) {
+                    fail();
+                }
+            } catch (NoMoreTurnsAvailableException e) {}
+        }
+    }
+
+    @Test
+    public void testRemoveNextTurnOfNullPlayer(){
+        round = new Round(0, players.size()*2, players, draftPool);
+        try{
+            round.removeNextTurnOfPlayer(null);
+            fail();
+        }catch (IllegalArgumentException e ){}
     }
 
 

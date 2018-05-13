@@ -53,7 +53,7 @@ public class Round {
         this.turns = new ArrayList<>();
         for(int i=0; i < numberOfTurns; i++){
             int turnNumber = i;
-            Player player = getPlayerForTurn(players,turnNumber);
+            Player player = getPlayerForTurn(players,turnNumber, numberOfTurns);
             turns.add( new Turn(turnNumber,player) );
         }
 
@@ -114,7 +114,6 @@ public class Round {
      * @throws NoMoreTurnsAvailableException if the method is called but all the turns
      * that could have been played in this round were actually already played
      */
-    //TODO Test
     public void nextTurn() throws NoMoreTurnsAvailableException{
 
         int nextTurnIndex = this.currentTurnIndex + 1;
@@ -131,12 +130,12 @@ public class Round {
      *
      * @param players list of players playing the game
      * @param turnNumber sequential number of the turn (starting from 0)
+     * @param numberOfTurns
      * @return the Player who should be playing according to the game rules in the specified round/turn
      * @author Jacopo Pio Gargano
      * @author Federico Haag
      */
-    //TODO Test
-    private Player getPlayerForTurn(List<Player> players, int turnNumber){
+    private Player getPlayerForTurn(List<Player> players, int turnNumber, int numberOfTurns){
         if(turnNumber<0){
             throw new IllegalArgumentException("Asked to get a player for a turn with negative turnNumber"); }
         if(players==null || players.isEmpty()){
@@ -147,7 +146,7 @@ public class Round {
         int playerShouldPlayingIndex;
 
         if(turnNumber >= numberOfPlayers){
-            turnNumber = 2*numberOfPlayers - turnNumber -1;
+            turnNumber = numberOfTurns - turnNumber -1;
         }
 
         playerShouldPlayingIndex = ((roundNumber % numberOfPlayers) + turnNumber) % numberOfPlayers;
@@ -155,6 +154,30 @@ public class Round {
         Player playerShouldBePlaying = players.get(playerShouldPlayingIndex);
 
         return playerShouldBePlaying;
+    }
+
+    /**
+     * Removes the next turn of the specified player
+     *
+     * @param player the player whose turn needs to be removed
+     * @return true if the operation was successful, otherwise false
+     * @author Jacopo Pio Gargano
+     */
+    public boolean removeNextTurnOfPlayer(Player player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Asked to remove the next turn of a null player");
+        }
+
+        for (int i = currentTurnIndex + 1; i < turns.size(); i++) {
+            Turn currentTurn = turns.get(i);
+            Player currentPlayer = currentTurn.getPlayer();
+
+            if (currentPlayer.equals(player)) {
+                turns.remove(currentTurn);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
