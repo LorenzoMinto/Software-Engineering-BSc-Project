@@ -104,7 +104,7 @@ public class Player {
     /**
      * Decrease favorTokens of the given quantity. Return false if not enough tokens left.
      *
-     * @param quantity
+     * @param quantity how much favorTokens must be decreased
      * @return true if the action succeeded, false if not (not enough tokens left)
      */
     public boolean decreaseTokens(int quantity) {
