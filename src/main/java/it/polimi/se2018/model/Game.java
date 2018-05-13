@@ -230,10 +230,28 @@ public class Game extends Observable {
         if( !this.drawnToolCards.contains(toolCard) ) {
             throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
         }
-
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
         this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
 
+    }
+
+    /**
+     * Gets the toolCard in the model that corresponds to the passed shallow copy.
+     *
+     * @param toolCardCopy the toolCard shallow copy.
+     * @return the actual toolCard from the drawnToolCards, or null if no such card is found.
+     *
+     * @author Lorenzo Minto
+     */
+    public ToolCard getToolCard(ToolCard toolCardCopy) {
+        if( !this.drawnToolCards.contains(toolCardCopy) ) {
+            throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
+        }
+
+        for (ToolCard card: drawnToolCards) {
+            if (card.equals(toolCardCopy)) { return card;}
+        }
+        return null;
     }
 
     /**
