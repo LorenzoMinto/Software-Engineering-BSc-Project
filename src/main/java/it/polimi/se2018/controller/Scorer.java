@@ -8,14 +8,14 @@ import it.polimi.se2018.model.WindowPattern;
 import java.util.*;
 
 /**
- * Calculates and retrieves the scores and rankings of a given list
- * of players and public objective cards.
+ * Calculates and retrieves the rankings of a given list of players and public objective cards.
  *
  * This class is a SINGLETON.
  *
  * @author Jacopo Pio Gargano
  * @see Player
  * @see PublicObjectiveCard
+ * @see PrivateObjectiveCard
  */
 public class Scorer {
 
@@ -42,34 +42,31 @@ public class Scorer {
     }
 
     /**
-     * Calculates and returns the rankings and scores of a given list of players
+     * Calculates and returns the rankings of a given list of players
      * based on a given list of public objective cards.
      *
      * @param playersOfLastRound ordered list of players of last round
-     * @param playersOfGame list of players of the game
      * @param publicObjectiveCards public objective cards of the game, players will be scored according to these
-     * @return rankings as an ordered list of players (first is winner) and scores as an HashMap<Player,Score(Integer)>
+     * @return rankings as a Map<Player,Score(Integer)>
      * @see Scorer#getScores(List, List)
+     * @see Scorer#orderRankingsByFavorTokens(Map)
+     * @see Scorer#orderRankingsByPrivateObjectiveCardScore(Map)
+     * @see Scorer#orderRankingsByScore(Map)
      */
-    Object[] compute(List<Player> playersOfLastRound, List<Player> playersOfGame,
-                      List<PublicObjectiveCard> publicObjectiveCards){
+    Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
+                                     List<PublicObjectiveCard> publicObjectiveCards){
         if(playersOfLastRound.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
-                " if the list of players is empty");}
-        List<Player> rankings;
-        Map<Player,Integer> scores;
+                " if the list of players is empty.");}
+        Map<Player,Integer> rankings;
 
         //calculate score for each player
-        scores = getScores(playersOfGame, publicObjectiveCards);
+        rankings = getScores(playersOfLastRound, publicObjectiveCards);
 
-        rankings = orderPlayersByFavorTokens(playersOfLastRound);
-        rankings = orderPlayersByPrivateObjectiveCardScore(rankings);
-        rankings = orderPlayersByScore(rankings, scores);
+        rankings = orderRankingsByFavorTokens(rankings);
+        rankings = orderRankingsByPrivateObjectiveCardScore(rankings);
+        rankings = orderRankingsByScore(rankings);
 
-        Object[] result = new Object[2];
-        result[0] = rankings;
-        result[1] = scores;
-
-        return result;
+        return rankings;
     }
 
 
@@ -81,7 +78,7 @@ public class Scorer {
      * @return scores of a given list of players and public objective cards
      */
     private Map<Player, Integer> getScores(List<Player> players, List<PublicObjectiveCard> publicObjectiveCards) {
-        Map <Player, Integer> scores = new HashMap<>();
+        Map <Player, Integer> scores = new LinkedHashMap<>();
 
         for (Player player: players) {
             int playerScore = calculatePlayerScore(player, publicObjectiveCards);
@@ -95,99 +92,102 @@ public class Scorer {
     /**
      * Orders a given list of players by favor tokens.
      *
-     * @param players the list of players to be ordered
-     * @return the list of players ordered by favor tokens
+     * @param rankings player rankings to be ordered
+     * @return rankings ordered by favor tokens
      */
-    private List<Player> orderPlayersByFavorTokens(List<Player> players) {
-        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by favor tokens" +
-                " if the list of players is empty");}
+    private Map<Player, Integer> orderRankingsByFavorTokens(Map<Player, Integer> rankings) {
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by favor tokens" +
+                " if the list of players is empty.");}
 
-        List<Player> playersByFavorTokens = new ArrayList<>();
-        List<Player> playersCopy = new ArrayList<>(players);
+        Map<Player, Integer> rankingsByFavorTokens = new LinkedHashMap<>();
 
-        //NOTE: changed here
-        while(!playersCopy.isEmpty()) {
-            Player playerWithMaxFavorTokens = getPlayerWithMaxFavorTokens(playersCopy);
-            playersByFavorTokens.add(playerWithMaxFavorTokens);
-            playersCopy.remove(playerWithMaxFavorTokens);
+        while(!rankings.isEmpty()) {
+            Player playerWithMaxFavorTokens = getPlayerWithMaxFavorTokens(rankings);
+            int playerScore = rankings.get(playerWithMaxFavorTokens);
+            rankingsByFavorTokens.put(playerWithMaxFavorTokens, playerScore);
+            rankings.remove(playerWithMaxFavorTokens);
         }
 
-        return playersByFavorTokens;
+        return rankingsByFavorTokens;
     }
 
     /**
-     * Orders a list of players based on the scores of Private Objective Cards
+     * Orders players rankings based on the Private Objective Cards score
      *
-     * @param players the list of players to be ordered
-     * @return the ordered list of players (based on the scores of Private Objective Cards)
+     * @param rankings rankings to be ordered
+     * @return rankings ordered by Private Objective Cards score
+     * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
-    private List<Player> orderPlayersByPrivateObjectiveCardScore(List<Player> players) {
-        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective" +
-                "card score if the list of players is empty");}
+    private Map<Player, Integer> orderRankingsByPrivateObjectiveCardScore(Map<Player, Integer> rankings) {
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective" +
+                "card score if the list of players is empty.");}
 
-        List<Player> playersByPrivateObjectiveCardScore = new ArrayList<>();
-        List<Player> playersCopy = new ArrayList<>(players);
-        Map<Player, Integer> privateObjectiveCardsScore;
+        Set<Player> players = rankings.keySet();
+        Map<Player, Integer> privateObjectiveCardsScores = getPrivateObjectiveCardScores(players);
 
-        privateObjectiveCardsScore = getPrivateObjectiveCardScores(playersCopy);
-
-        while(!playersCopy.isEmpty()) {
-            Player playerWithMaxPrivateObjectiveCardScore = getPlayerWithMaxScore(playersCopy, privateObjectiveCardsScore);
-            playersByPrivateObjectiveCardScore.add(playerWithMaxPrivateObjectiveCardScore);
-            playersCopy.remove(playerWithMaxPrivateObjectiveCardScore);
-        }
-        return playersByPrivateObjectiveCardScore;
+        Map<Player, Integer> RankingsByPrivateObjectiveCard =
+                orderRankingsByCriteria(rankings, privateObjectiveCardsScores);
+        return RankingsByPrivateObjectiveCard;
     }
 
+
+
+
     /**
-     * Calculates the score relatives to each given player
-     * based on the {@link PrivateObjectiveCard} assigned to the player.
+     * Orders rankings by score
      *
-     * @param players List of the players to be evaluated
-     * @return score for each player given in the players list
+     * @param rankings rankings to be ordered
+     * @return rankings ordered by score
+     * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
-    private Map<Player, Integer> getPrivateObjectiveCardScores(List<Player> players){
-        Map <Player, Integer> privateObjectiveCardScores = new HashMap<>();
+    private Map<Player, Integer> orderRankingsByScore(Map<Player, Integer> rankings) {
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score" +
+                " if the list of players is empty.");}
 
-        for (Player player: players) {
-            WindowPattern windowPattern = player.getWindowPattern();
-            int playerScore = player.getPrivateObjectiveCard().calculateScore(windowPattern);
-            privateObjectiveCardScores.put(player,playerScore);
-        }
-
-        return privateObjectiveCardScores;
+        Map<Player, Integer> rankingsByValue = orderRankingsByCriteria(rankings, rankings);
+        return rankingsByValue;
     }
 
 
     /**
-     * Orders a given list of players by score.
+     * Orders rankings ( Map <Players, Scores(Integer) ) by descending value of the criteria Map criteriaRankings
      *
-     * @param players the list of players to be ordered
-     * @param scores //TODO: javadoc
-     * @return the list of players ordered by score
+     * @param playerRankings rankings to be ordered
+     * @param criteriaRankings criteria rankings to follow
+     * @return rankings ordered by criteria specified in method parameter
      */
-    private List<Player> orderPlayersByScore(final List<Player> players, Map<Player, Integer> scores) {
-        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score" +
-                " if the list of players is empty");}
+    private Map<Player, Integer> orderRankingsByCriteria(Map<Player, Integer> playerRankings, Map<Player, Integer> criteriaRankings) {
+        Map<Player, Integer> rankingsByCriteria = new LinkedHashMap<>();
+        Map<Player, Integer> criteriaScoresCopy = new LinkedHashMap<>(criteriaRankings);
 
-        List<Player> playersByScore = new ArrayList<>();
-        List<Player> playersCopy = new ArrayList<>(players);
-
-        while(!playersCopy.isEmpty()) {
-            Player playerWithMaxScore = getPlayerWithMaxScore(playersCopy, scores);
-            playersByScore.add(playerWithMaxScore);
-            playersCopy.remove(playerWithMaxScore);
+        while(!criteriaScoresCopy.isEmpty()) {
+            Player playerWithMaxScoreByCriteria = getPlayerWithMaxScore(criteriaScoresCopy);
+            int playerScore = playerRankings.get(playerWithMaxScoreByCriteria);
+            rankingsByCriteria.put(playerWithMaxScoreByCriteria, playerScore);
+            criteriaScoresCopy.remove(playerWithMaxScoreByCriteria);
         }
-        return playersByScore;
+        return rankingsByCriteria;
     }
 
-    //TODO: javadoc
-    private Player getPlayerWithMaxScore(final List<Player> players, Map<Player, Integer> scores){
+
+    /**
+     * Gets the player with the max score from certain rankings
+     *
+     * @param rankings Map to get the player with the max score from
+     * @return the player with the max score from certain rankings
+     */
+    private Player getPlayerWithMaxScore(Map<Player, Integer> rankings){
+
+        List<Player> players = new ArrayList<>(rankings.keySet());
+
+        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get players with max score" +
+                " if there are no players.");}
+
         Player playerWithMaxScore = players.get(0);
-        int maxScore = scores.get(playerWithMaxScore);
+        int maxScore = rankings.get(playerWithMaxScore);
 
         for (Player player: players) {
-            int score = scores.get(player);
+            int score = rankings.get(player);
 
             if(score > maxScore){
                 playerWithMaxScore = player;
@@ -201,20 +201,21 @@ public class Scorer {
      * Calculates and returns the Player in the given list with
      * the maximum number of favor tokens left.
      *
-     * @param players the list to be evaluated
+     * @param scores the list to be evaluated
      * @return the Player in the given list with the maximum number of favor tokens left
      */
-    private Player getPlayerWithMaxFavorTokens(List<Player> players) {
+    private Player getPlayerWithMaxFavorTokens(Map<Player, Integer> scores) {
+        if(scores.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get the player with max favor tokens" +
+                " if the list of players is empty.");}
 
-        List<Player> playersCopy = new ArrayList<>(players);
-        Player playerWithMaxFavorTokens = players.get(0);
+        List<Player> playersCopy = new ArrayList<>(scores.keySet());
+        Player playerWithMaxFavorTokens = playersCopy.get(0);
 
         for (Player player: playersCopy) {
             if(player.getFavorTokens() > playerWithMaxFavorTokens.getFavorTokens()){
                 playerWithMaxFavorTokens = player;
             }
         }
-        playersCopy.remove(playerWithMaxFavorTokens);
         return playerWithMaxFavorTokens;
     }
 
@@ -227,29 +228,39 @@ public class Scorer {
      */
     private int calculatePlayerScore(Player player, List<PublicObjectiveCard> publicObjectiveCards){
         int score = 0;
-        WindowPattern wp = player.getWindowPattern();
+        WindowPattern windowPattern = player.getWindowPattern();
+        PrivateObjectiveCard privateObjectiveCard = player.getPrivateObjectiveCard();
 
-        score += getPublicObjectiveCardsScore(wp, publicObjectiveCards);
-        score += getPrivateObjectiveCardScore(wp, player.getPrivateObjectiveCard());
+        score += getPublicObjectiveCardsScore(windowPattern, publicObjectiveCards);
+        score += privateObjectiveCard.calculateScore(windowPattern);
         score += player.getFavorTokens();
-        score -= getNumberOfEmptySpaces(wp);
+        score -= getNumberOfEmptySpaces(windowPattern);
 
         return score;
     }
 
     /**
-     * Calculates the score of a {@link WindowPattern} based on a given {@link PrivateObjectiveCard}
+     * Gets the {@link PrivateObjectiveCard} score for each given player
      *
-     * @param windowPattern the window pattern to be evaluated
-     * @param card the private objective card to be used for evaluating the window pattern
-     * @return the score of the given {@link WindowPattern} based on the given {@link PrivateObjectiveCard}
+     * @param players Set of players to ge the {@link PrivateObjectiveCard} score of
+     * @return {@link PrivateObjectiveCard} score for each player given in the players set
      */
-    private int getPrivateObjectiveCardScore(WindowPattern windowPattern, PrivateObjectiveCard card){
-        return card.calculateScore(windowPattern);
+    private Map<Player, Integer> getPrivateObjectiveCardScores(Set<Player> players){
+        //used LinkedHashMap to preserve order of inserted pairs <key, value>
+        Map <Player, Integer> privateObjectiveCardScores = new LinkedHashMap<>();
+
+        for (Player player: players) {
+            WindowPattern windowPattern = player.getWindowPattern();
+            int playerScore = player.getPrivateObjectiveCard().calculateScore(windowPattern);
+            privateObjectiveCardScores.put(player,playerScore);
+        }
+
+        return privateObjectiveCardScores;
     }
 
+
     /**
-     * Calculates the score of a {@link WindowPattern} based on a given list of public objective cards
+     * Calculates the score of a {@link WindowPattern} based on a given list of {@link PublicObjectiveCard}
      *
      * @param windowPattern the window pattern to be evaluated
      * @param cards the public objective cards list

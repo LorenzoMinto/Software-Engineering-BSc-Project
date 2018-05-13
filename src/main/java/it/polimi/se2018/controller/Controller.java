@@ -4,8 +4,10 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -304,12 +306,9 @@ public class Controller implements ControllerInterface {
      */
     protected void endGame(){
 
-        Object[] results = getRankingsAndScores();
+        Map<Player, Integer> rankings = getRankingsAndScores();
 
-        List<Player> rankings = (List<Player>) results[0];
-        HashMap<Player,Integer> scores= (HashMap<Player,Integer>) results[1];
-
-        registerRankingsOnUsersProfiles(rankings);
+        registerRankingsOnUsersProfiles(new ArrayList<>(rankings.keySet()));
 
         //TODO: notify view of winners and scores
 
@@ -319,12 +318,12 @@ public class Controller implements ControllerInterface {
      * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
-    protected Object[] getRankingsAndScores() {
+    protected Map<Player,Integer> getRankingsAndScores() {
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrderReverse();
         List<Player> players = game.getPlayers();
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
-        return Scorer.getInstance().compute(playersOfLastRound, players, publicObjectiveCards);
+        return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
     }
 
     /**
