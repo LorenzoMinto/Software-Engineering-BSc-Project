@@ -145,9 +145,7 @@ public class Scorer {
         Set<Player> players = rankings.keySet();
         Map<Player, Integer> privateObjectiveCardsScores = getPrivateObjectiveCardScores(players);
 
-        Map<Player, Integer> RankingsByPrivateObjectiveCard =
-                orderRankingsByCriteria(rankings, privateObjectiveCardsScores);
-        return RankingsByPrivateObjectiveCard;
+        return orderRankingsByCriteria(rankings, privateObjectiveCardsScores);
     }
 
 
@@ -164,8 +162,7 @@ public class Scorer {
         if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score" +
                 " if the list of players is empty.");}
 
-        Map<Player, Integer> rankingsByValue = orderRankingsByCriteria(rankings, rankings);
-        return rankingsByValue;
+        return orderRankingsByCriteria(rankings, rankings);
     }
 
 
