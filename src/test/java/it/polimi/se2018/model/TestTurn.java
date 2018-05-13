@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +35,8 @@ public class TestTurn {
     public void initializeTurnWithPlayer(){
         turn = new Turn(0, player);
     }
+
+
 
     //to be run with setDraftedDice test
     @Test
@@ -89,7 +92,7 @@ public class TestTurn {
         try {
             turn.getSlotOfTrackChosenDice();
             fail();
-        }catch (RuntimeException e){}
+        }catch (BadBehaviourRuntimeException e){}
     }
 
     @Test

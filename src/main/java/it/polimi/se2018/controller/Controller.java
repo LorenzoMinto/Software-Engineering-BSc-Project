@@ -317,7 +317,7 @@ public class Controller implements ControllerInterface {
      * @return rankings and scores of the current {@link Game}
      */
     protected Map<Player,Integer> getRankingsAndScores() {
-        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrderReverse();
+        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
         return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
