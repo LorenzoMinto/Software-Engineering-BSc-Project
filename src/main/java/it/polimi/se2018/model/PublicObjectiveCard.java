@@ -1,28 +1,42 @@
 package it.polimi.se2018.model;
 
-/*
-Abstract class that extends ObjectiveCard
-The objective of this abstract class is to better understand that a Game has a certain amount of public objective cards
-which are visible to every player, whereas the private ones are only visible to the player who owns them.
-
-propertyFunction: gets the property of the dice specified in the constructor
-                         needed to compare the properties of two dice
-*/
-
-
 import java.util.function.Function;
 
+/**
+ * Represents Public Objective Cards as an abstract class that extends ObjectiveCard
+ *
+ * Each Public Objective card has a property function to get a certain property of the dice in the windowpattern
+ *
+ * @author Jacopo Pio Gargano
+ */
 public abstract class PublicObjectiveCard extends ObjectiveCard{
 
+    /**
+     * Function of Dice used to get a certain property of it
+     */
     private Function<Dice,Object> propertyFunction;
 
+    /**
+     * @param title the title of the card
+     * @param description the description of the card
+     * @param imageURL the image url of the card
+     * @param propertyFunction function of Dice used to get a certain property of it
+     */
     public PublicObjectiveCard(String title, String description, String imageURL, Function<Dice,Object> propertyFunction) {
         super(title, description, imageURL);
         this.propertyFunction = propertyFunction;
     }
 
+    /**
+     * Protected constructor needed for JUnit tests.
+     */
     protected PublicObjectiveCard() {}
 
+    /**
+     * Gets the property function of the public objective card
+     *
+     * @return the property function of the public objective card
+     */
     protected Function<Dice, Object> getPropertyFunction() {
         return propertyFunction;
     }

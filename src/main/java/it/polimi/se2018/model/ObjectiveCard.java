@@ -3,7 +3,9 @@ package it.polimi.se2018.model;
 /**
  * Abstract class for Objective Cards. Each type is described by specific subclasses
  *
- * @see {@link DiagonalsPublicObjectiveCard}, {@link PrivateObjectiveCard}, {@link PublicObjectiveCard}, {@link RowsColumnsPublicObjectiveCard}, {@link SetPublicObjectiveCard}
+ * @author Jacopo Pio Gargano
+ * @see {@link DiagonalsPublicObjectiveCard}, {@link PrivateObjectiveCard}, {@link PublicObjectiveCard},
+ * {@link RowsColumnsPublicObjectiveCard}, {@link SetPublicObjectiveCard}
  */
 public abstract class ObjectiveCard {
 

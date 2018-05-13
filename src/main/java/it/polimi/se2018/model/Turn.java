@@ -21,6 +21,7 @@ public class Turn {
         this.draftedDice = null;
         this.draftedAndPlaced = false;
         this.usedToolCard = null;
+        this.slotOfTrackChosenDice = -1;
     }
 
     /**
@@ -113,7 +114,10 @@ public class Turn {
      *
      * @return the sequential number representing the {@link TrackSlot} where the {@link Turn#trackChosenDice} was drafted
      */
-    public int getSlotOfTrackChosenDice() { return slotOfTrackChosenDice; }
+    public int getSlotOfTrackChosenDice() {
+        if(slotOfTrackChosenDice == -1) {throw new RuntimeException("No slot set");}
+            return slotOfTrackChosenDice;
+    }
 
     /**
      * Returns the player playing in this turn.
@@ -130,6 +134,7 @@ public class Turn {
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
+        if(value < 0 || value >= 10){ throw new IllegalArgumentException("The selected track slot does not exist.");}
         this.slotOfTrackChosenDice = value;
     }
 
@@ -139,6 +144,7 @@ public class Turn {
      * @param dice Dice to be set as the draftedDice
      */
     public void setDraftedDice(Dice dice){
+        if(dice == null){throw new IllegalArgumentException("Can't set the drafted dice with a null dice.");}
         this.draftedDice = dice;
     }
 
@@ -148,6 +154,7 @@ public class Turn {
      * @param dice Dice to be set as the trackChosenDice
      */
     public void setTrackChosenDice(Dice dice) {
+        if(dice == null){throw new IllegalArgumentException("Can't set the track chosen dice with a null dice.");}
         this.trackChosenDice = dice;
     }
 
@@ -155,17 +162,19 @@ public class Turn {
      * Sets the draftedAndPlaced to true
      */
     public void setDraftedAndPlaced(){
-        if(this.draftedDice==null){ throw new IllegalStateException("Asked to setDraftedAndPlaced but draftedDice is null"); }
+        if(this.draftedDice==null){ throw new IllegalStateException("Asked to setDraftedAndPlaced" +
+                " but draftedDice is null"); }
         this.draftedAndPlaced = true;
     }
 
     /**
      * Sets the given ToolCard as usedToolCard.
      *
-     * @param card the ToolCard to be set as usedToolCard.
+     * @param toolCard the ToolCard to be set as usedToolCard.
      */
-    public void setUsedToolCard(ToolCard card){
-        this.usedToolCard = card;
+    public void setUsedToolCard(ToolCard toolCard){
+        if(toolCard == null){throw new IllegalArgumentException("Can't set the used toolcard with a null toolcard.");}
+        this.usedToolCard = toolCard;
     }
 
     /**
@@ -175,6 +184,7 @@ public class Turn {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(Player player){
+        if(player == null){throw new IllegalArgumentException("Can't check if the current player is a null player.");}
         return ( this.player.equals(player) );
     }
 }

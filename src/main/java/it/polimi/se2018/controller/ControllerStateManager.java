@@ -85,7 +85,9 @@ public class ControllerStateManager {
         try {
 
             //Checks that the class it is created is a subclass of ControllerState
-            if( ! Class.forName(controllerStateID).isAssignableFrom(ControllerState.class) ){ throw new Exception(); }
+            if( ! Class.forName(controllerStateID).isAssignableFrom(ControllerState.class) ){
+                throw new BadBehaviourRuntimeException("Asked to create state: "+controllerStateID+" that seems to not being subclass of ControllerState");
+            }
 
             return (ControllerState) Class.forName(controllerStateID).getConstructor(Controller.class).newInstance(controller);
 

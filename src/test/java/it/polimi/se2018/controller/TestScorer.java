@@ -5,10 +5,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -45,9 +42,7 @@ public class TestScorer {
 
 
     private static User user = new User(1,null);
-    private static String nickname = null;
 
-    private List<Player> playersOfGame;
     private List<Player> playersOfLastRound;
     private static Player p1;
     private static Player p2;
@@ -101,15 +96,14 @@ public class TestScorer {
     private static int public3wp4Score;
 
 
-    private List<Player> rankings;
-    private List<Player> testRankings;
+    private List<Player> playersByScore;
+    private List<Player> testPlayersByScore;
     private Player winner;
     private Player testWinner;
 
-    private Map<Player, Integer> scores;
-    Map<Player, Integer> testScores;
+    Map<Player, Integer> testRankings;
 
-    private Object[] results;
+    private Map<Player, Integer> rankings;
     private int winnerScore;
 
 
@@ -454,10 +448,10 @@ public class TestScorer {
 
     @Before
     public void initializePlayersWithPrivateObjectiveCards(){
-        p1 = new Player(user, nickname, card1);
-        p2 = new Player(user, nickname, card2);
-        p3 = new Player(user, nickname, card3);
-        p4 = new Player(user, nickname, card4);
+        p1 = new Player(user, "p1", card1);
+        p2 = new Player(user, "p2", card2);
+        p3 = new Player(user, "p3", card3);
+        p4 = new Player(user, "p4", card4);
     }
 
     @BeforeClass
@@ -486,9 +480,8 @@ public class TestScorer {
 
     @Before
     public void initializeListsOfPlayers(){
-        playersOfGame = new ArrayList<>();
         playersOfLastRound = new ArrayList<>();
-        testRankings = new ArrayList<>();
+        testPlayersByScore = new ArrayList<>();
     }
 
     @Before
@@ -506,11 +499,9 @@ public class TestScorer {
     @Test
     public void testSinglePlayerIsWinner(){
         p1.setWindowPattern(wp1);
-        playersOfGame.add(p1);
         playersOfLastRound.add(p1);
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        winner = rankings.get(0);
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        winner = scorer.getWinner(rankings);
         assertEquals(p1, winner);
     }
 
@@ -518,57 +509,133 @@ public class TestScorer {
     public void testGetRankings(){
         initializeDefaultGame();
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
+
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
 
         assertEquals(testRankings, rankings);
     }
 
+
     @Test
-    public void testGetScores(){
-        initializeDefaultGame();
+    public void testGetRankingsOfNullPlayersOfLastRound(){
+        playersOfLastRound = null;
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        scores = (Map<Player, Integer>) results[1];
-
-        assertEquals(testScores, scores);
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
+    @Test
+    public void testGetRankingsOfEmptyPlayersOfLastRound(){
+        playersOfLastRound = new ArrayList<>();
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testGetRankingsOfNullPublicObjectiveCards(){
+        publicObjectiveCards = null;
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testGetRankingsOfEmptyPublicObjectiveCards(){
+        publicObjectiveCards = new ArrayList<>();
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
 
 
     @Test
     public void testGetWinner(){
+        rankings = new LinkedHashMap<>();
+        rankings.put(p1,p1Score);
+        rankings.put(p2,p2Score);
+        rankings.put(p3,p3Score);
+        rankings.put(p4,p4Score);
+
+        winner = scorer.getWinner(rankings);
+
+        assertEquals(p1, winner);
+    }
+
+    @Test
+    public void testGetWinnerOfNullRankings(){
+        rankings = null;
+
+        try {
+            winner = scorer.getWinner(rankings);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+
+    @Test
+    public void testGetWinnerOfEmptyRankings(){
+        rankings = new LinkedHashMap<>();
+
+        try {
+            winner = scorer.getWinner(rankings);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(rankings.isEmpty());
+        }
+    }
+
+
+
+
+    @Test
+    public void testGetWinnerFromRankings(){
         initializeDefaultGame();
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        winner = rankings.get(0);
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
+
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        winner = scorer.getWinner(rankings);
         testWinner = p3;
 
-        assertEquals(testRankings, rankings);
+        assertEquals(testWinner, winner);
     }
 
     @Test
     public void testGetWinnerScore(){
         initializeDefaultGame();
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        winner = rankings.get(0);
-        scores = (Map<Player, Integer>) results[1];
-        winnerScore = scores.get(winner);
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
+
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        winner = scorer.getWinner(rankings);
+        winnerScore = rankings.get(winner);
 
         assertEquals(p3Score, winnerScore);
     }
 
 
-    @Test
-    public void testGetRankingsWithNoPlayersInGame(){
-        try {
-            scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-            fail();
-        }catch (IllegalArgumentException e){}
-    }
 
     @Test
     public void testSameScoreRankings(){
@@ -580,22 +647,21 @@ public class TestScorer {
 
         p2.decreaseTokens(1);
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        scores = (Map<Player, Integer>)results[1];
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        playersByScore = new ArrayList<>(rankings.keySet());
 
-        int score = scores.get(p1);
+        int score = rankings.get(p1);
 
-        for (int playerScore: scores.values()) {
+        for (int playerScore: rankings.values()) {
             assertTrue(score == playerScore);
         }
 
-        testRankings.add(p1);
-        testRankings.add(p4);
-        testRankings.add(p2);
-        testRankings.add(p3);
+        testPlayersByScore.add(p1);
+        testPlayersByScore.add(p2);
+        testPlayersByScore.add(p4);
+        testPlayersByScore.add(p3);
 
-        assertEquals(testRankings, rankings);
+        assertEquals(testPlayersByScore, playersByScore);
     }
 
 
@@ -613,22 +679,21 @@ public class TestScorer {
         p3.decreaseTokens(2);
         p4.decreaseTokens(0);
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        scores = (Map<Player, Integer>)results[1];
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        playersByScore = new ArrayList<>(rankings.keySet());
 
-        int score = scores.get(p1);
+        int score = rankings.get(p1);
 
-        for (int playerScore: scores.values()) {
+        for (int playerScore: rankings.values()) {
             assertTrue(score == playerScore);
         }
 
-        testRankings.add(p4);
-        testRankings.add(p1);
-        testRankings.add(p3);
-        testRankings.add(p2);
+        testPlayersByScore.add(p4);
+        testPlayersByScore.add(p1);
+        testPlayersByScore.add(p3);
+        testPlayersByScore.add(p2);
 
-        assertEquals(testRankings, rankings);
+        assertEquals(testPlayersByScore, playersByScore);
     }
 
     //Also same score and same private objective card score
@@ -636,31 +701,25 @@ public class TestScorer {
     public void testSameFavorTokensRankings(){
         assignSameScoreAndSamePrivateScoreWindowPatterns();
 
-        playersOfGame.add(p1);
-        playersOfGame.add(p2);
-        playersOfGame.add(p3);
-        playersOfGame.add(p4);
-
         playersOfLastRound.add(p2);
         playersOfLastRound.add(p4);
         playersOfLastRound.add(p3);
         playersOfLastRound.add(p1);
 
-        testRankings = new ArrayList<>(playersOfLastRound);
+        testPlayersByScore = new ArrayList<>(playersOfLastRound);
 
         setCustomPublicObjectiveCards();
 
-        results = scorer.compute(playersOfLastRound, playersOfGame, publicObjectiveCards);
-        rankings = (List<Player>) results[0];
-        scores = (Map<Player, Integer>)results[1];
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        playersByScore = new ArrayList<>(rankings.keySet());
 
-        int score = scores.get(p1);
+        int score = rankings.get(p1);
 
-        for (int playerScore: scores.values()) {
+        for (int playerScore: rankings.values()) {
             assertTrue(score == playerScore);
         }
 
-        assertEquals(testRankings, rankings);
+        assertEquals(testPlayersByScore, playersByScore);
     }
 
 
@@ -694,23 +753,12 @@ public class TestScorer {
     }
 
     private void addDefaultPlayersToLists() {
-        playersOfGame.add(p1);
-        playersOfGame.add(p2);
-        playersOfGame.add(p3);
-        playersOfGame.add(p4);
 
         playersOfLastRound.add(p1);
         playersOfLastRound.add(p2);
         playersOfLastRound.add(p3);
         playersOfLastRound.add(p4);
 
-    }
-
-    private void setSameWindowPattern(WindowPattern wp) {
-        p1.setWindowPattern(wp);
-        p2.setWindowPattern(wp);
-        p3.setWindowPattern(wp);
-        p4.setWindowPattern(wp);
     }
 
     private void setCustomPublicObjectiveCards() {
@@ -729,21 +777,15 @@ public class TestScorer {
 
         setCustomPublicObjectiveCards();
 
-        testRankings.add(p3);
-        testRankings.add(p1);
-        testRankings.add(p2);
-        testRankings.add(p4);
+        testPlayersByScore.add(p3);
+        testPlayersByScore.add(p1);
+        testPlayersByScore.add(p2);
+        testPlayersByScore.add(p4);
 
         p1Score = 32 + p1.getFavorTokens();
         p2Score = 19 + p2.getFavorTokens();
         p3Score = 33 + p3.getFavorTokens();
         p4Score = 17 + p4.getFavorTokens();
-
-        testScores = new HashMap<>();
-        testScores.put(p3,p3Score);
-        testScores.put(p1,p1Score);
-        testScores.put(p2,p2Score);
-        testScores.put(p4,p4Score);
 
     }
 }
