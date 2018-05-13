@@ -4,9 +4,7 @@ import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.DiceColors;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Contains all the dices that can be drafted and used.
@@ -19,7 +17,7 @@ import java.util.List;
  */
 public class DiceBag {
 
-    private List<Integer> availableDices;
+    private Map<DiceColors,Integer> availableDices;
 
     /**
      * Creates a {@link DiceBag} containing specified number of dices of all colors ({@link DiceColors})
@@ -29,9 +27,9 @@ public class DiceBag {
      * @see DiceColors
      */
     public DiceBag(int numberOfDicesPerColor) {
-        availableDices = new ArrayList<>(DiceColors.values().length);
-        for(int i=0; i<availableDices.size(); i++){
-            availableDices.set(i,numberOfDicesPerColor);
+        this.availableDices = new EnumMap<>(DiceColors.class);
+        for(int i=0; i<DiceColors.values().length-1; i++){
+            this.availableDices.put(DiceColors.values()[i],numberOfDicesPerColor);
         }
     }
 
@@ -55,10 +53,11 @@ public class DiceBag {
                 DiceColors randomColor;
                 do {
                     randomColor = DiceColors.getRandomColor();
-                    availableDicesForRandomColor = availableDices.get(Arrays.asList(DiceColors.values()).indexOf(randomColor));
-                } while (availableDicesForRandomColor==0);
+                    availableDicesForRandomColor = availableDices.get(randomColor);
+                } while (availableDicesForRandomColor<=0);
 
                 drawnDices.add(new Dice(randomColor));
+                availableDices.put(randomColor,availableDicesForRandomColor-1);
             }
         }
 
@@ -70,19 +69,10 @@ public class DiceBag {
      * @param dice the dice to be added to
      */
     public void addDice(Dice dice) {
-        int index = Arrays.asList(DiceColors.values()).indexOf(dice.getColor());
-        int availableDicesForColor = availableDices.get(index);
-        availableDices.set(index, availableDicesForColor+1);
-    }
+        DiceColors diceColor = dice.getColor();
 
-    /**
-     * Checks if this {@link DiceBag} has no dices left
-     *
-     * @return true if the {@link DiceBag} has no dices left
-     */
-    //Returns true if no more dices can be created. False in the other case.
-    private boolean isEmpty(){
-        return this.numberOfAvailableDices() == 0;
+        int availableDicesForColor = availableDices.get(diceColor);
+        availableDices.put(diceColor, availableDicesForColor+1);
     }
 
     /**
@@ -91,6 +81,10 @@ public class DiceBag {
      * @return the number of available dices
      */
     private int numberOfAvailableDices(){
-        return availableDices.stream().mapToInt(Integer::intValue).sum();
+        int sum = 0;
+        for(Integer value : availableDices.values()){
+            sum += value;
+        }
+        return sum;
     }
 }

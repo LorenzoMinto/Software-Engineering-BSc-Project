@@ -9,12 +9,12 @@ import java.util.Random;
  * @author Federico Haag
  */
 public enum DiceColors {
-    NOCOLOR,
     RED,
     YELLOW,
     GREEN,
     BLUE,
-    PURPLE;
+    PURPLE,
+    NOCOLOR;
 
     /**
      * Returns a random color, except the NOCOLOR.
