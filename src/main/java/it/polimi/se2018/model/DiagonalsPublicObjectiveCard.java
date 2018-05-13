@@ -8,14 +8,18 @@ import java.util.function.Function;
 /**
  * Public Objective Card that counts the number of diagonally adjacent dice
  * in a window pattern with the same property (color or value)
+ *
+ * @author Jacopo Pio Gargano
  */
 public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
-     * @param title
-     * @param description
-     * @param imageURL
-     * @param propertyFunction
+     * Constructor for Diagonals Public Objective Card
+     *
+     * @param title the title of the card
+     * @param description the description of the card
+     * @param imageURL the image url of the card
+     * @param propertyFunction //TODO: commentare qui
      */
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
                                         Function<Dice,Object> propertyFunction) {
@@ -23,12 +27,14 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     *
+     * Private constructor for {@link DiagonalsPublicObjectiveCard#createTestInstance}.
      */
     private DiagonalsPublicObjectiveCard(){}
 
     /**
-     * @return
+     * Returns an empty instance of PublicObjectiveCard. It's used by JUnit tests.
+     *
+     * @return an empty instance of PublicObjectiveCard
      */
     public static PublicObjectiveCard createTestInstance() {
         return new DiagonalsPublicObjectiveCard();
@@ -46,10 +52,10 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Calculates a player's score relative to the specific DiagonalPublicObjectiveCard, given their window pattern
+     * Calculates the score of a given window pattern based on the DiagonalPublicObjectiveCard's score criteria
      *
-     * @param windowPattern
-     * @return
+     * @param windowPattern the window pattern to be avaluated
+     * @return the score of a given window pattern based on the DiagonalPublicObjectiveCard's score criteria
      */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
@@ -81,9 +87,9 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      *  The algorithm covers the whole matrix starting from the bottom left corner going
      *  vertically upward and finally horizontally to the right.
      *
-     * @param windowPattern
-     * @param listOfNotCountedDice
-     * @return
+     * @param windowPattern the windowpattern to be evaluated
+     * @param listOfNotCountedDice //TODO: commentare quì
+     * @return  the score of the diagonals from left to right
      */
     private int getScoreLeftToRight(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
@@ -111,9 +117,9 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      * The algorithm covers the whole matrix starting from the bottom right corner going
      * vertically upward and finally horizontally to the left.
      *
-     * @param windowPattern
-     * @param listOfNotCountedDice
-     * @return
+     * @param windowPattern the windowpattern to be evaluated
+     * @param listOfNotCountedDice //TODO: commentare quì
+     * @return the score of the diagonals from right to left
      */
     private int getScoreRightToLeft(WindowPattern windowPattern, List<Integer> listOfNotCountedDice) {
         int score = 0;
@@ -137,14 +143,14 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
 
     /**
-     * Method to count the adjacent dice with the same property,
+     * Method to count the adjacent dice with the same property, //TODO: non chiaro. forse intendi "dices"?
      * specified in the getPropertyFunction, in a diagonal.
      *
-     * @param windowPattern
-     * @param listOfNotCountedDice
+     * @param windowPattern the windowpattern to be evaluated
+     * @param listOfNotCountedDice //TODO: commentare quì
      * @param initialRow row index of the first cell of the diagonal to be checked
      * @param initialCol row index of the first cell of the diagonal to be checked
-     * @param isLeftToRightDiagonal
+     * @param isLeftToRightDiagonal boolean value meaning if the score must be calculated for ??? //TODO: non chiaro
      * @return
      */
     private int scoreDiagonal(WindowPattern windowPattern, List<Integer> listOfNotCountedDice,
@@ -172,12 +178,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * Gets the score of a pair of cells identified by the row and column of the first cell
      *
-     * @param windowPattern
-     * @param listOfNotCountedDice
-     * @param move
-     * @param row
-     * @param column
-     * @return
+     * @param windowPattern the windowpattern to be evaluated
+     * @param listOfNotCountedDice //TODO: commentare quì
+     * @param move //TODO: commentare quì
+     * @param row row number of the first cell
+     * @param column column number of the first cell
+     * @return the score of a pair of cells identified by the row and column of the first cell
      */
     private int getCellPairScore(WindowPattern windowPattern, List<Integer> listOfNotCountedDice, int move,
                                  int row, int column){
@@ -215,11 +221,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
 
     /**
-     * Returns 1 if the dice has not already been considered, otherwise 0
+     * Returns 1 if the dice has not already been considered, otherwise 0 //TODO: non chiaro. considered dove?
      *
-     * @param list
-     * @param linearIndex
-     * @return
+     * @param list list of the processed dices' lineare indexes
+     * @param linearIndex //TODO: commentare quì
+     * @return 1 if the dice has not already been considered, otherwise 0 //TODO: come sopra, non chiaro
+     * @see {@link DiagonalsPublicObjectiveCard#getLinearIndex(int, int, int)}
      */
     private int scoreDice(List<Integer> list, Integer linearIndex) {
         if(list==null){ throw new IllegalArgumentException("ERROR: List cannot be null");}
@@ -231,12 +238,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return 0;
     }
 
-
     /**
      * Returns a list full of all integers from 0 to parameter 'numbers' -1
      *
      * @param numbers
      * @return
+     * @deprecated
      */
     private List<Integer> fillListWithNumbers(int numbers){
         if(numbers< 0){ throw new IllegalArgumentException("ERROR: parameter cannot be negative");}
@@ -248,10 +255,12 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * @param row
-     * @param col
+     * Returns the linear index of a dice contained in a window pattern
+     *
+     * @param row row index of the cell containing the dice
+     * @param col column index of the cell containing the dice
      * @param numberOfRows
-     * @return
+     * @return the linear index of a dice contained in a window pattern
      */
     private int getLinearIndex(int row, int col, int numberOfRows) {
         return (row * (numberOfRows+1)) + col;

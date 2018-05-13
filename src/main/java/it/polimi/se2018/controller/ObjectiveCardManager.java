@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.*;
 
@@ -29,7 +30,7 @@ public class ObjectiveCardManager {
      * @return new instance of a {@link PrivateObjectiveCard}
      */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
-        if(assignedColors.size() == DiceColors.values().length-1){ throw new RuntimeException("ERROR: Cannot get more than 5 Private Objective Card " +
+        if(assignedColors.size() == DiceColors.values().length-1){ throw new BadBehaviourRuntimeException("ERROR: Cannot get more than 5 Private Objective Card " +
                 "as all of them were already created.");}
 
         DiceColors color;
@@ -52,7 +53,7 @@ public class ObjectiveCardManager {
     public List<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
         if(quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS || quantity < 1){
-            throw new RuntimeException("ERROR: The quantity of Public Objective Cards asked is greater " +
+            throw new BadBehaviourRuntimeException("ERROR: The quantity of Public Objective Cards asked is greater " +
                     "than the number of Public Objective Cards.");
         }
 

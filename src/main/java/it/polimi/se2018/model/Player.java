@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+
 import java.util.Objects;
 
 /**
@@ -85,7 +87,7 @@ public class Player {
             this.windowPattern = windowPattern;
             this.favorTokens = windowPattern.getDifficulty();
         } else {
-            throw new RuntimeException("Can't add again the windowpattern to this player. Controller should not ask for this. Bad unhandleable behaviour");
+            throw new BadBehaviourRuntimeException("Can't add again the windowpattern to this player. Controller should not ask for this. Bad unhandleable behaviour");
         }
     }
 

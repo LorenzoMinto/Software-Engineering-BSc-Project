@@ -1,5 +1,7 @@
 package it.polimi.se2018.controller;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+
 import java.util.HashMap;
 
 /**
@@ -62,11 +64,8 @@ public class ControllerStateManager {
             nextState = stateTable.get(nextControllerStateID);
         } else {
 
-            try {
-                nextState = createStateByID(nextControllerStateID);
-            } catch (ClassNotFoundException e){
-                throw new RuntimeException("ClassNotFoundException thrown, caught but cannot be handled.");
-            }
+            nextState = createStateByID(nextControllerStateID);
+
             stateTable.put(nextControllerStateID, nextState);
         }
 
@@ -82,7 +81,7 @@ public class ControllerStateManager {
      * @throws ClassNotFoundException if the given ID does not correspond to a subclass of {@link ControllerState}.
      * @author Federico Haag
      */
-    private ControllerState createStateByID(String controllerStateID) throws ClassNotFoundException{
+    private ControllerState createStateByID(String controllerStateID){
         try {
 
             //Checks that the class it is created is a subclass of ControllerState
@@ -91,7 +90,7 @@ public class ControllerStateManager {
             return (ControllerState) Class.forName(controllerStateID).getConstructor(Controller.class).newInstance(controller);
 
         } catch( Exception e ){
-            throw new ClassNotFoundException();
+            throw new BadBehaviourRuntimeException("Something during the creation of a controller state by id failed. This is the asked ID: "+controllerStateID);
         }
     }
 
