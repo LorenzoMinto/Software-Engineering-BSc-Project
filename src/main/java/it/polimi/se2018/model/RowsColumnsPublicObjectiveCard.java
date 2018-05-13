@@ -4,31 +4,36 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
-
-/*
-Public Objective Card that counts the number of lines or columns in a window pattern
-with all different values for a specific property (color or value)
-If the line or the column is empty or not complete, it is not considered as valid for the scoring
-The Function, which gets the property of the dice, is passed in the constructor
-The boolean 'checkByRow' specifies if the card checks the property by row or by column
-
-Attributes:
-    multiplier: the score multiplier that is specific for each combination of the couple (property, row ||column)
-    checkByRow
-
-Methods:
-    calculateScore()
-    getRowDifferentPropertiesNumber()
-    rowIsIncomplete()
-    transpose()
-*/
-
+/**
+ * Represents a type of Public Objective Card that counts the number of rows or columns in a window pattern
+ * with all different values for a specific property (color or value).
+ * If the line or the column is empty or not complete, it is not considered as valid for the scoring
+ *
+ * The Function, which gets the property of the dice (color or value), is passed in the constructor
+ *
+ * @author Jacopo Pio Gargano
+ */
 public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
 
+    /**
+     * The score multiplier that is specific for each different combination of row/column - property.
+     */
     private int multiplier;
 
+    /**
+     *   Specifies if the card checks the property by row or by column
+     */
     private boolean checkByRow;
 
+
+    /**
+     * @param title the title of the specific objective card
+     * @param description the description of the specific objective card
+     * @param imageURL the imageURL of the specific objective card
+     * @param propertyFunction function of Dice used to get a certain property of it
+     * @param multiplier the card multiplier used in the scoring process
+     * @param checkByRow boolean to check the property by row or by column
+     */
     public RowsColumnsPublicObjectiveCard(String title, String description, String imageURL,
                                           Function<Dice, Object> propertyFunction,
                                           int multiplier, boolean checkByRow) {
@@ -37,28 +42,40 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         this.checkByRow = checkByRow;
     }
 
+    /**
+     * Private constructor for {@link DiagonalsPublicObjectiveCard#createTestInstance}.
+     */
     private RowsColumnsPublicObjectiveCard(){}
 
+    /**
+     * Returns an empty instance of RowsColumnsPublicObjectiveCard. It's used by JUnit tests.
+     *
+     * @return an empty instance of RowsColumnsPublicObjectiveCard
+     */
     public static PublicObjectiveCard createTestInstance(){
         return new RowsColumnsPublicObjectiveCard();
     }
 
-    //Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
+    /**
+     * Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
+     *
+     * @return new RowsColumnsPublicObjectiveCard instance with same properties of this one
+     */
     @Override
     public PublicObjectiveCard copy() {
         return new RowsColumnsPublicObjectiveCard(super.getTitle(), super.getDescription(), super.getImageURL(),
                 super.getPropertyFunction(), this.multiplier, this.checkByRow);
     }
 
-    /*
-    Calculates a player's score relative to the specific RowsColumnsPublicObjectiveCard, given their window pattern
-        Transposes the pattern if the check is by columns, in order to avoid code duplication
-        The number of different properties of a row must be equal to the number of columns of the pattern if every
-        property is different, since there is one property for each dice and one dice for each cell (row, column)
-
-    Variables:
-        numberOfValidRows: contains the number of rows that are complete and have no dice with the same property
-    */
+    /**Calculates the score of a given window pattern based on the RowsColumnsPublicObjectiveCard's score criteria
+     *
+     * Transposes the pattern if the check is by columns, in order to avoid code duplication
+     * The number of different properties of a row must be equal to the number of columns of the pattern if every
+     * property is different, since there is one property for each dice and one dice for each cell (row, column)
+     *
+     * @param windowPattern the windowpattern to calculate the score of
+     * @return the score of a given window pattern based on the RowsColumnsPublicObjectiveCard's score criteria
+     */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
         if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
@@ -98,12 +115,13 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         return numberOfValidRows*multiplier;
     }
 
-    /*
-    Gets the number of different property values of a specific row
-    Variables:
-        propertyValue: the integer of the property that is compared
-                       if it is 0, then the two dice compared have the same property
-    */
+    /**
+     * Gets the number of different property values of a specific row
+     *
+     * @param row the row to calculate the number of different properties of
+     * @param numberOfColumns the number of columns of the windowpattern
+     * @return the number of different property values of a specific row
+     */
     private int getRowDifferentPropertiesNumber(Cell[] row, int numberOfColumns) {
         if(row==null){ throw new IllegalArgumentException("ERROR: Cannot check a null row"); }
 
@@ -137,9 +155,14 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         return differentProperties.size();
     }
 
-    /*
-    Returns false if every cell that forms a specified row has a dice
-    */
+
+    /**
+     * Returns false if every cell that forms a specific row has a dice
+     *
+     * @param row the row to be evaluated
+     * @param numberOfColumns the number of columns of the windowpattern
+     * @return false if every cell that forms a specific row has a dice, otherwise true
+     */
     private boolean rowIsIncomplete(Cell[] row, int numberOfColumns) {
         if(row==null){ throw new IllegalArgumentException("ERROR: Cannot get dice of a null row."); }
 
@@ -149,9 +172,15 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         return false;
     }
 
-    /*
-    Transposes a given pattern
-    */
+    /**
+     * Transposes a given pattern
+     *
+     * @param pattern the pattern to be transposed
+     * @param rows the number of rows of the pattern
+     * @param columns the number of columns of the pattern
+     * @return the transposed pattern
+     */
+
     private Cell[][] transpose(Cell[][] pattern, int rows, int columns) {
         if(pattern==null){ throw new IllegalArgumentException("ERROR: Cannot transpose a null pattern"); }
 
@@ -163,7 +192,12 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
         }
         return transposedPattern;
     }
-
+    
+    /**
+     * Returns the String representation of the card.
+     *
+     * @return the String representation of the card.
+     */
     @Override
     public String toString(){
         String s = super.toString();

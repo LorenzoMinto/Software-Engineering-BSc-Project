@@ -29,12 +29,12 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
 
     /**
-     * @param title
-     * @param description
-     * @param imageURL
-     * @param items
-     * @param propertyFunction
-     * @param multiplier
+     * @param title the title of the specific objective card
+     * @param description the description of the specific objective card
+     * @param imageURL the imageURL of the specific objective card
+     * @param items the set of items to be checked when scoring
+     * @param propertyFunction function of Dice used to get a certain property of it
+     * @param multiplier the card multiplier used in the scoring process
      */
     public SetPublicObjectiveCard(String title, String description, String imageURL, Set<Object> items,
                                   Function<Dice, Object> propertyFunction, int multiplier) {
@@ -96,7 +96,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         for(int i=0; i<windowPattern.getNumberOfRows(); i++){
             for(int j=0; j < windowPattern.getNumberOfColumns(); j++){
 
-                currentProperty = getProperty(pattern[i][j]);
+                currentProperty = getDiceProperty(pattern[i][j]);
 
                 updateSets(listOfSets, currentProperty);
             }
@@ -113,7 +113,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
      * @param cell the cell to check
      * @return the dice property (color or value) if there is a dice on the cell otherwise returns null
      */
-    private Object getProperty(Cell cell) {
+    private Object getDiceProperty(Cell cell) {
         if(cell==null){ throw new IllegalArgumentException("ERROR: Cannot get the property of" +
                 " a null cell."); }
         if(cell.hasDice()) {
@@ -126,9 +126,9 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * Updates the sets adding the current property if it is different from null and it is contained in 'items'.
      *
-     * @param listOfSets
-     * @param currentProperty
-     */ //TODO: non chiaro. chiarire e rivedere la documntazione
+     * @param listOfSets the sets that are or can become completed sets of properties
+     * @param currentProperty the property of the dice that is being evaluated
+     */
     private void updateSets(List<HashSet<Object>> listOfSets, Object currentProperty) {
 
         if(listOfSets==null){ throw new IllegalArgumentException("ERROR: List of Sets cannot be null.");}
@@ -164,7 +164,8 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
      * Counts the number of sets that are equal to the requested set ('items') specified in the constructor of the card
-     * @param listOfSets //TODO: anche qui rivedere. forse gli "items" riferiti sopra e soto sono in realtà lsitOfSets?
+     *
+     * @param listOfSets the sets, both completed and not, that were formed after the execution of the algorithm
      * @return the number of sets that are equal to the requested set ('items') specified in the constructor of the card
      */
     private int countCompletedSets(List<HashSet<Object>> listOfSets) {
@@ -181,9 +182,9 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Returns the String representation of te card.
+     * Returns the String representation of the card.
      *
-     * @return the String representation of te card.
+     * @return the String representation of the card.
      */
     @Override
     public String toString(){

@@ -21,7 +21,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      * @param title the title of the card
      * @param description the description of the card
      * @param imageURL the image url of the card
-     * @param propertyFunction lambda function of Dice used to get a certain property of it
+     * @param propertyFunction function of Dice used to get a certain property of it
      */
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
                                         Function<Dice,Object> propertyFunction) {
