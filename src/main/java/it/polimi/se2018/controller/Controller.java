@@ -308,7 +308,7 @@ public class Controller implements ControllerInterface {
 
         Map<Player, Integer> rankings = getRankingsAndScores();
 
-        registerRankingsOnUsersProfiles(new ArrayList<>(rankings.keySet()));
+        registerRankingsOnUsersProfiles(rankings);
 
         //TODO: notify view of winners and scores
 
@@ -320,7 +320,6 @@ public class Controller implements ControllerInterface {
      */
     protected Map<Player,Integer> getRankingsAndScores() {
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByTurnOrderReverse();
-        List<Player> players = game.getPlayers();
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
         return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
@@ -332,12 +331,18 @@ public class Controller implements ControllerInterface {
      *
      * @param rankings
      */
-    private void registerRankingsOnUsersProfiles(List<Player> rankings){
+    private void registerRankingsOnUsersProfiles(Map<Player, Integer> rankings){
 
         for(Player player : game.getPlayers()){
+
             User user = player.getUser();
             user.increaseGamesPlayed();
-            if(rankings.get(0).equals(player)){ user.increaseGamesWon(); }
+
+            Player winner = Scorer.getInstance().getWinner(rankings);
+
+            if(winner.equals(player)){
+                user.increaseGamesWon();
+            }
         }
     }
 

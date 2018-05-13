@@ -5,10 +5,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -104,7 +101,7 @@ public class TestScorer {
     private Player winner;
     private Player testWinner;
 
-    Map<Player, Integer> testScores;
+    Map<Player, Integer> testRankings;
 
     private Map<Player, Integer> rankings;
     private int winnerScore;
@@ -504,8 +501,7 @@ public class TestScorer {
         p1.setWindowPattern(wp1);
         playersOfLastRound.add(p1);
         rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
-        winner = playersByScore.get(0);
+        winner = scorer.getWinner(rankings);
         assertEquals(p1, winner);
     }
 
@@ -513,31 +509,110 @@ public class TestScorer {
     public void testGetRankings(){
         initializeDefaultGame();
 
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
 
-        assertEquals(testPlayersByScore, playersByScore);
+        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+
+        assertEquals(testRankings, rankings);
+    }
+
+
+    @Test
+    public void testGetRankingsOfNullPlayersOfLastRound(){
+        playersOfLastRound = null;
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
     @Test
-    public void testGetScores(){
-        initializeDefaultGame();
+    public void testGetRankingsOfEmptyPlayersOfLastRound(){
+        playersOfLastRound = new ArrayList<>();
 
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
-
-        assertEquals(testScores, rankings);
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
+    @Test
+    public void testGetRankingsOfNullPublicObjectiveCards(){
+        publicObjectiveCards = null;
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testGetRankingsOfEmptyPublicObjectiveCards(){
+        publicObjectiveCards = new ArrayList<>();
+
+        try {
+            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
 
 
     @Test
     public void testGetWinner(){
+        rankings = new LinkedHashMap<>();
+        rankings.put(p1,p1Score);
+        rankings.put(p2,p2Score);
+        rankings.put(p3,p3Score);
+        rankings.put(p4,p4Score);
+
+        winner = scorer.getWinner(rankings);
+
+        assertEquals(p1, winner);
+    }
+
+    @Test
+    public void testGetWinnerOfNullRankings(){
+        rankings = null;
+
+        try {
+            winner = scorer.getWinner(rankings);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+
+    @Test
+    public void testGetWinnerOfEmptyRankings(){
+        rankings = new LinkedHashMap<>();
+
+        try {
+            winner = scorer.getWinner(rankings);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(rankings.isEmpty());
+        }
+    }
+
+
+
+
+    @Test
+    public void testGetWinnerFromRankings(){
         initializeDefaultGame();
 
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
+
         rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
-        winner = playersByScore.get(0);
+        winner = scorer.getWinner(rankings);
         testWinner = p3;
 
         assertEquals(testWinner, winner);
@@ -547,22 +622,20 @@ public class TestScorer {
     public void testGetWinnerScore(){
         initializeDefaultGame();
 
+        testRankings = new LinkedHashMap<>();
+        testRankings.put(p3,p3Score);
+        testRankings.put(p1,p1Score);
+        testRankings.put(p2,p2Score);
+        testRankings.put(p4,p4Score);
+
         rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
-        winner = playersByScore.get(0);
+        winner = scorer.getWinner(rankings);
         winnerScore = rankings.get(winner);
 
         assertEquals(p3Score, winnerScore);
     }
 
 
-    @Test
-    public void testGetRankingsWithNoPlayersInGame(){
-        try {
-            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-            fail();
-        }catch (IllegalArgumentException e){}
-    }
 
     @Test
     public void testSameScoreRankings(){
@@ -713,12 +786,6 @@ public class TestScorer {
         p2Score = 19 + p2.getFavorTokens();
         p3Score = 33 + p3.getFavorTokens();
         p4Score = 17 + p4.getFavorTokens();
-
-        testScores = new HashMap<>();
-        testScores.put(p3,p3Score);
-        testScores.put(p1,p1Score);
-        testScores.put(p2,p2Score);
-        testScores.put(p4,p4Score);
 
     }
 }

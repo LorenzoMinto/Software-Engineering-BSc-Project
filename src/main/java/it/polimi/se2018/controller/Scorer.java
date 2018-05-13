@@ -42,6 +42,23 @@ public class Scorer {
     }
 
     /**
+     * Gets the first player of certain rankings
+     *
+     * @param rankings rankings to get the winner from
+     * @return the first player of certain rankings
+     */
+    public Player getWinner(Map<Player, Integer> rankings){
+        if(rankings == null || rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
+                " if the list of players is empty.");}
+        Player winner;
+        Set<Player> players = rankings.keySet();
+        List<Player> playersOfRankings = new ArrayList<>(players);
+        winner = playersOfRankings.get(0);
+        return winner;
+    }
+
+
+    /**
      * Calculates and returns the rankings of a given list of players
      * based on a given list of public objective cards.
      *
@@ -55,8 +72,11 @@ public class Scorer {
      */
     Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
                                      List<PublicObjectiveCard> publicObjectiveCards){
-        if(playersOfLastRound.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
-                " if the list of players is empty.");}
+        if(playersOfLastRound == null || playersOfLastRound.isEmpty()){ throw new IllegalArgumentException(
+                "ERROR: Can't determine winner if the list of players is empty.");}
+        if(publicObjectiveCards == null || publicObjectiveCards.isEmpty()){ throw new IllegalArgumentException(
+                "ERROR: Can't determine winner if the list of public objective cards is empty.");}
+
         Map<Player,Integer> rankings;
 
         //calculate score for each player
