@@ -5,6 +5,8 @@ package it.polimi.se2018.model;
  * Represents Private Objective Cards.
  *
  * Each private objective card has a different color.
+ *
+ * @author Jacopo Pio Gargano
  */
 public class PrivateObjectiveCard extends ObjectiveCard {
 

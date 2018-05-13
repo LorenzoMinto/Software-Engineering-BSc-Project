@@ -228,10 +228,10 @@ public class Scorer {
         if(scores.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get the player with max favor tokens" +
                 " if the list of players is empty.");}
 
-        List<Player> playersCopy = new ArrayList<>(scores.keySet());
-        Player playerWithMaxFavorTokens = playersCopy.get(0);
+        List<Player> players = new ArrayList<>(scores.keySet());
+        Player playerWithMaxFavorTokens = players.get(0);
 
-        for (Player player: playersCopy) {
+        for (Player player: players) {
             if(player.getFavorTokens() > playerWithMaxFavorTokens.getFavorTokens()){
                 playerWithMaxFavorTokens = player;
             }
