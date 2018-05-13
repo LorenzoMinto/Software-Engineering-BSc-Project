@@ -148,7 +148,7 @@ public class Player {
      *
      * @param o some other Player
      * @return if the other Player is equal to this
-     * @see {@link Object#equals(Object)}
+     * @see Object#equals(Object)
      */
     @Override
     public boolean equals(Object o) {
@@ -168,7 +168,7 @@ public class Player {
      * Returns a hash code value for the Player.
      *
      * @return a hash code value for the Player
-     * @see {@link Object#hashCode()}
+     * @see Object#hashCode()
      */
     @Override
     public int hashCode() {

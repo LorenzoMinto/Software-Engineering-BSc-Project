@@ -4,8 +4,11 @@ package it.polimi.se2018.model;
  * Abstract class for Objective Cards. Each type is described by specific subclasses
  *
  * @author Jacopo Pio Gargano
- * @see {@link DiagonalsPublicObjectiveCard}, {@link PrivateObjectiveCard}, {@link PublicObjectiveCard},
- * {@link RowsColumnsPublicObjectiveCard}, {@link SetPublicObjectiveCard}
+ * @see DiagonalsPublicObjectiveCard
+ * @see PrivateObjectiveCard
+ * @see PublicObjectiveCard
+ * @see RowsColumnsPublicObjectiveCard
+ * @see SetPublicObjectiveCard
  */
 public abstract class ObjectiveCard {
 
@@ -80,7 +83,7 @@ public abstract class ObjectiveCard {
     /**
      * Returns the score of a given windowpattern according to this objective card criteria
      *
-     * @param windowPattern
+     * @param windowPattern the windowpattern to be evaluated
      * @return the score of a given windowpattern according to this objective card criteria
      */
     public abstract int calculateScore(WindowPattern windowPattern);

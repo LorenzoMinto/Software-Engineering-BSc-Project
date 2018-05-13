@@ -108,6 +108,8 @@ public class Controller implements ControllerInterface {
      *
      * @param game the game instance to be controlled
      * @param numberOfDicesPerColor used to create a {@link DiceBag} containing the needed dices ({@link Dice})
+     * @param numberOfToolCards the number of toolcards the game will have
+     * @param numberOfPublicObjectiveCards the number of public objective cards the game will have
      */
     public Controller(Game game, int numberOfDicesPerColor, int numberOfToolCards, int numberOfPublicObjectiveCards) {
 
