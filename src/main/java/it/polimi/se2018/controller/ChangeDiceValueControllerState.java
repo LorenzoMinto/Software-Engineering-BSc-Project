@@ -9,6 +9,12 @@ import it.polimi.se2018.view.View;
  */
 public class ChangeDiceValueControllerState extends ControllerState {
 
+
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public ChangeDiceValueControllerState(Controller controller) {
         this.controller = controller;
         this.defaultMessage = MIDDLE_OF_EFFECT;

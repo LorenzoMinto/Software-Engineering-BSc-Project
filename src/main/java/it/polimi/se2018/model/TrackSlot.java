@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * Class representing the single slots of the Game's Track (one for each round).
+ *
+ * @author Lorenzo Minto
  */
 public class TrackSlot {
 

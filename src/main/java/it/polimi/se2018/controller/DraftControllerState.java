@@ -4,11 +4,18 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.View;
 
 /**
+ *
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
 public class DraftControllerState extends ControllerState {
 
+
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public DraftControllerState(Controller controller) {
         this.controller = controller;
         this.defaultMessage = ONLY_DRAFT_AND_PLACE;
@@ -33,6 +40,6 @@ public class DraftControllerState extends ControllerState {
 
     @Override
     public void placeDice(int row, int col, View view) {
-        view.showMessage(DRAFT_FIRST);
+        view.showMessage(NO_DICE_DRAFTED);
     }
 }

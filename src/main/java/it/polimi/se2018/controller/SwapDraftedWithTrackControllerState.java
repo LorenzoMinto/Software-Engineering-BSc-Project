@@ -8,10 +8,18 @@ import it.polimi.se2018.model.*;
  */
 public class SwapDraftedWithTrackControllerState extends ImplicitControllerState {
 
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public SwapDraftedWithTrackControllerState(Controller controller) {
         super(controller);
     }
 
+    /**
+     * Swaps the drafted dice of the current turn with the dice chosen from the track of the current turn.
+     */
     @Override
     public void executeImplicitBehaviour() {
         Game game = controller.game;

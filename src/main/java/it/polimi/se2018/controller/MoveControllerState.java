@@ -9,6 +9,11 @@ import it.polimi.se2018.view.View;
  */
 public class MoveControllerState extends ControllerState {
 
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public MoveControllerState(Controller controller) {
         this.controller = controller;
         this.defaultMessage = MIDDLE_OF_EFFECT;

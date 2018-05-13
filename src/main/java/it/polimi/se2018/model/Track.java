@@ -6,6 +6,8 @@ import java.util.List;
 /**
  * Class representing the Game's Track, where the leftover dices from the {@link DraftPool} are kept at the end of
  * every {@link Round}. The dices are stacked if more than one.
+ *
+ * @author Lorenzo Minto
  */
 public class Track {
 

@@ -247,6 +247,7 @@ public class Controller implements ControllerInterface {
 
         game.useToolCard(toolCard);
 
+        //TODO: get from game the reference to the actual ToolCard and do not use the emptied copy as active card.
         this.activeToolcard = toolCard;
         this.placementRule = toolCard.getPlacementRule();
     }

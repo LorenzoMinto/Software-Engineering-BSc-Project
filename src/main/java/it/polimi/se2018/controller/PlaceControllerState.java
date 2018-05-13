@@ -9,6 +9,11 @@ import it.polimi.se2018.view.View;
  */
 public class PlaceControllerState extends ControllerState {
 
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public PlaceControllerState(Controller controller) {
         this.controller = controller;
         this.defaultMessage = PLACE_DICE;

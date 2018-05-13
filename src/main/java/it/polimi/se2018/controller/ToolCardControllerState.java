@@ -10,6 +10,11 @@ import it.polimi.se2018.view.View;
  */
 public class ToolCardControllerState extends ControllerState {
 
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public ToolCardControllerState(Controller controller) {
         this.controller = controller;
         this.defaultMessage = TOOLCARD_ONLY;

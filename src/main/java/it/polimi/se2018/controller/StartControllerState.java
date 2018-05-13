@@ -9,9 +9,14 @@ import it.polimi.se2018.view.View;
  */
 public class StartControllerState extends ControllerState {
 
+    /**
+     * Class constructor.
+     *
+     * @param controller the controller of which this class is going to act as a state.
+     */
     public StartControllerState(Controller controller) {
         this.controller = controller;
-        this.defaultMessage = FIRST_DRAFT_DICE;
+        this.defaultMessage = NO_DICE_DRAFTED;
     }
 
     @Override
