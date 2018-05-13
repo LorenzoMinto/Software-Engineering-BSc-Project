@@ -9,7 +9,7 @@ public class TestCell {
     @Test
     public void testGetAllowedValue() {
         Cell cell = new Cell(3,DiceColors.PURPLE);
-        assertEquals(cell.getAllowedValue(),3);
+        assertEquals(3,cell.getAllowedValue());
     }
 
     @Test
