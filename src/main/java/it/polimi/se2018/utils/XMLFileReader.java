@@ -62,8 +62,10 @@ public final class XMLFileReader {
     }
 
     /**
-     * @param path
-     * @return
+     * Returns the Document instance of the given file (by path name)
+     *
+     * @param path pathname of the file
+     * @return the Document instance of the given file (by path name)
      * @throws IOException if something in opening the file fails
      * @throws ParserConfigurationException if build of a new document fails
      * @throws SAXException if parsing of the document fails
