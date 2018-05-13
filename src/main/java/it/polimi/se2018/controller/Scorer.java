@@ -48,8 +48,7 @@ public class Scorer {
      * @return the first player of certain rankings
      */
     public Player getWinner(Map<Player, Integer> rankings){
-        if(rankings == null || rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner" +
-                " if the list of players is empty.");}
+        if(rankings == null || rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner if the list of players is empty.");}
         Player winner;
         Set<Player> players = rankings.keySet();
         List<Player> playersOfRankings = new ArrayList<>(players);
@@ -116,8 +115,7 @@ public class Scorer {
      * @return rankings ordered by favor tokens
      */
     private Map<Player, Integer> orderRankingsByFavorTokens(Map<Player, Integer> rankings) {
-        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by favor tokens" +
-                " if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by favor tokens if the list of players is empty.");}
 
         Map<Player, Integer> rankingsByFavorTokens = new LinkedHashMap<>();
 
@@ -139,8 +137,7 @@ public class Scorer {
      * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
     private Map<Player, Integer> orderRankingsByPrivateObjectiveCardScore(Map<Player, Integer> rankings) {
-        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective" +
-                "card score if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective card score if the list of players is empty.");}
 
         Set<Player> players = rankings.keySet();
         Map<Player, Integer> privateObjectiveCardsScores = getPrivateObjectiveCardScores(players);
@@ -159,8 +156,7 @@ public class Scorer {
      * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
     private Map<Player, Integer> orderRankingsByScore(Map<Player, Integer> rankings) {
-        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score" +
-                " if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by score if the list of players is empty.");}
 
         return orderRankingsByCriteria(rankings, rankings);
     }
@@ -197,8 +193,7 @@ public class Scorer {
 
         List<Player> players = new ArrayList<>(rankings.keySet());
 
-        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get players with max score" +
-                " if there are no players.");}
+        if(players.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get players with max score if there are no players.");}
 
         Player playerWithMaxScore = players.get(0);
         int maxScore = rankings.get(playerWithMaxScore);
@@ -222,8 +217,7 @@ public class Scorer {
      * @return the Player in the given list with the maximum number of favor tokens left
      */
     private Player getPlayerWithMaxFavorTokens(Map<Player, Integer> scores) {
-        if(scores.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get the player with max favor tokens" +
-                " if the list of players is empty.");}
+        if(scores.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't get the player with max favor tokens if the list of players is empty.");}
 
         List<Player> players = new ArrayList<>(scores.keySet());
         Player playerWithMaxFavorTokens = players.get(0);
