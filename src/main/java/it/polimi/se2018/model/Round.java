@@ -2,10 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class representing a game's Round.
@@ -44,13 +41,19 @@ public class Round {
      */
     public Round(int roundNumber, int numberOfTurns, List<Player> players, DraftPool draftPool) {
         if(draftPool==null){ throw new IllegalArgumentException("Asked to create a round giving null draftPool"); }
+        if(players==null || players.isEmpty()){
+            throw new IllegalArgumentException("Asked to create a round with no players"); }
+        if(roundNumber<0){
+            throw new IllegalArgumentException("Asked to create a round with negative roundNumber"); }
+        if(numberOfTurns<0){
+            throw new IllegalArgumentException("Asked to create a round with negative numberOfTurns"); }
 
         this.number = roundNumber;
 
         this.turns = new ArrayList<>();
         for(int i=0; i < numberOfTurns; i++){
             int turnNumber = i;
-            Player player = getPlayerForTurn(players,turnNumber,numberOfTurns);
+            Player player = getPlayerForTurn(players,turnNumber);
             turns.add( new Turn(turnNumber,player) );
         }
 
@@ -59,9 +62,9 @@ public class Round {
     }
 
     /**
-     * Returns the prorgessive number of this round.
+     * Returns the progressive number of this round.
      *
-     * @return the prorgessive number of this round.
+     * @return the progressive number of this round.
      */
     public int getNumber() {
         return number;
@@ -86,15 +89,22 @@ public class Round {
     }
 
     /**
-     * @return
+     * Method that gets the list of players who played the last round in order from last to first without repetitions
+     *
+     * @return the list of players who played the last round in order
+     * @see it.polimi.se2018.controller.Scorer#getRankings(List, List)
      * @author Jacopo Pio Gargano
      */
-    public List<Player> getPlayersByTurnOrderReverse(){ //TODO: commentare
-        Set<Player> players = new HashSet<>();
+    public List<Player> getPlayersByReverseTurnOrder(){
+
+        Set<Player> players = new LinkedHashSet<>();
+        Turn turn;
+
         for(int i= turns.size()-1; i>=0; i--){
-            Turn turn = turns.get(i);
+            turn = turns.get(i);
             players.add(turn.getPlayer());
         }
+
         return new ArrayList<>(players);
     }
 
@@ -104,6 +114,7 @@ public class Round {
      * @throws NoMoreTurnsAvailableException if the method is called but all the turns
      * that could have been played in this round were actually already played
      */
+    //TODO Test
     public void nextTurn() throws NoMoreTurnsAvailableException{
 
         int nextTurnIndex = this.currentTurnIndex + 1;
@@ -120,17 +131,30 @@ public class Round {
      *
      * @param players list of players playing the game
      * @param turnNumber sequential number of the turn (starting from 0)
-     * @return the Player obj relative to which player should play according to the game rules in the specified round/turn
+     * @return the Player who should be playing according to the game rules in the specified round/turn
      * @author Jacopo Pio Gargano
      * @author Federico Haag
      */
-    private Player getPlayerForTurn(List<Player> players, int turnNumber, int numberOfTurnsPerRound){
+    //TODO Test
+    private Player getPlayerForTurn(List<Player> players, int turnNumber){
+        if(turnNumber<0){
+            throw new IllegalArgumentException("Asked to get a player for a turn with negative turnNumber"); }
+        if(players==null || players.isEmpty()){
+            throw new IllegalArgumentException("Asked to get a player for a turn from a list of no players"); }
 
         int numberOfPlayers = players.size();
-        if( turnNumber >= numberOfPlayers ){ turnNumber = numberOfTurnsPerRound - turnNumber - 1; }
-        int playerShouldPlayingIndex = (turnNumber + (this.number % numberOfPlayers)) % numberOfPlayers;
+        int roundNumber = this.number;
+        int playerShouldPlayingIndex;
 
-        return players.get(playerShouldPlayingIndex);
+        if(turnNumber >= numberOfPlayers){
+            turnNumber = 2*numberOfPlayers - turnNumber -1;
+        }
+
+        playerShouldPlayingIndex = ((roundNumber % numberOfPlayers) + turnNumber) % numberOfPlayers;
+
+        Player playerShouldBePlaying = players.get(playerShouldPlayingIndex);
+
+        return playerShouldBePlaying;
     }
 
 }
