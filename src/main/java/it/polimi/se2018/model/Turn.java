@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+
 /**
  * Class representing a round's Turn.
  *
@@ -115,7 +117,7 @@ public class Turn {
      * @return the sequential number representing the {@link TrackSlot} where the {@link Turn#trackChosenDice} was drafted
      */
     public int getSlotOfTrackChosenDice() {
-        if(slotOfTrackChosenDice == -1) {throw new RuntimeException("No slot set");}
+        if(slotOfTrackChosenDice == -1) {throw new BadBehaviourRuntimeException("No slot set");}
             return slotOfTrackChosenDice;
     }
 
