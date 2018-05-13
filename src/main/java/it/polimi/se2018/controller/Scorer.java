@@ -49,11 +49,10 @@ public class Scorer {
      */
     public Player getWinner(Map<Player, Integer> rankings){
         if(rankings == null || rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner if the list of players is empty.");}
-        Player winner;
-        Set<Player> players = rankings.keySet();
-        List<Player> playersOfRankings = new ArrayList<>(players);
-        winner = playersOfRankings.get(0);
-        return winner;
+
+        List<Player> playersOfRankings = new ArrayList<>( rankings.keySet() );
+
+        return playersOfRankings.get(0);
     }
 
 

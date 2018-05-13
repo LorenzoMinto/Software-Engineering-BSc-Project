@@ -1,9 +1,11 @@
 package it.polimi.se2018.utils;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,13 +62,13 @@ public final class XMLFileReader {
     }
 
     /**
-     * Returns a {@link Document} instance of the file specified in the path.
-     *
-     * @param path the path of the file to be opened
-     * @return a {@link Document} instance of the file specified in the path
-     * @throws Exception if something in opening the file fails
+     * @param path
+     * @return
+     * @throws IOException if something in opening the file fails
+     * @throws ParserConfigurationException if build of a new document fails
+     * @throws SAXException if parsing of the document fails
      */
-    public static Document getFileDocument(String path) throws Exception{
+        public static Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException{
         File file = new File(path);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

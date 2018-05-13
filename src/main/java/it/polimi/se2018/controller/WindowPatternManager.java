@@ -7,9 +7,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +70,7 @@ public class WindowPatternManager {
      * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    private WindowPattern loadPatternFromFileSystem(String patternID) throws BadFormattedPatternFileException {
+    private WindowPattern loadPatternFromFileSystem(String patternID) {
 
         try {
 
@@ -132,7 +129,7 @@ public class WindowPatternManager {
      * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    public List<WindowPattern> getPatterns(int quantity) throws BadFormattedPatternFileException {
+    public List<WindowPattern> getPatterns(int quantity) {
         List<WindowPattern> patterns = new ArrayList<>();
         List<String> usedPatterns = new ArrayList<>();
 

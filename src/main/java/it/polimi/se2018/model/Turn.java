@@ -51,7 +51,7 @@ public class Turn {
     /**
      * Reference to the sequential number representing the {@link TrackSlot} where the {@link Turn#trackChosenDice} was drafted.
      */
-    private int slotOfTrackChosenDice;
+        private int slotOfTrackChosenDice;
 
     /**
      * Reference to the toolcard used in the turn (if no toolcards used, this is null)

@@ -7,9 +7,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +36,7 @@ public class ToolCardsManager {
      *
      * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
      */
-    public ToolCardsManager() throws NoToolCardsFoundInFileSystemException{
+    public ToolCardsManager(){
         try{
             this.availableToolCards = XMLFileReader.getFilesNames(PATH);
         } catch (IOException e) {
@@ -57,7 +54,7 @@ public class ToolCardsManager {
      * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    public List<ToolCard> getRandomToolCards(int quantity) throws BadFormattedToolCardFileException{
+    public List<ToolCard> getRandomToolCards(int quantity){
 
         List<ToolCard> toolCards = new ArrayList<>();
         List<String> usedToolCards = new ArrayList<>();
@@ -96,7 +93,7 @@ public class ToolCardsManager {
                 toolCards.add(randomToolCard);
             }
         } else {
-            throw new BadBehaviourRuntimeException("Cant create the number of toolcards requested. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException("Can't create the requested number of toolcards. This error is not handlable at all");
         }
 
         return toolCards;
@@ -110,7 +107,7 @@ public class ToolCardsManager {
      * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    private ToolCard loadToolCardFromFileSystem(String toolCardID) throws BadFormattedToolCardFileException{
+    private ToolCard loadToolCardFromFileSystem(String toolCardID){
 
         try{
 

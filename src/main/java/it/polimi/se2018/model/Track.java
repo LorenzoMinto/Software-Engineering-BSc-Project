@@ -14,7 +14,7 @@ public class Track {
      * List of {@link TrackSlot}, on which the leftover dices of the draft pool of every round are kept.
      */
     private List<TrackSlot> slots;
-
+    //TODO: instantiation of slots (and creation) missing
 
     /**
      * Creates new TrackSlot with the list of dice passed and appends it to the list.
