@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -7,31 +8,98 @@ import static org.junit.Assert.*;
 
 public class TestDice {
 
-    private static Dice dice;
+    private Dice dice;
 
-    @BeforeClass
-    public static void testInit(){
+    @Before
+    public  void initializeDice(){
         dice = new Dice(DiceColors.GREEN,2);
     }
 
     @Test
     public void testSetValue() {
-        dice.setValue(5);
+        int value = 5;
+        dice.setValue(value);
+
+        assertEquals(value,dice.getValue());
+    }
+
+    @Test
+    public void testSetIllegalValue(){
+        try{
+            dice.setValue(7);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testSetNegativeValue(){
+        try{
+            dice.setValue(-3);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+
+    @Test
+    public void testRollOverFromOne() {
+        dice.setValue(1);
+        dice.rollOver();
+
+        assertEquals(6,dice.getValue());
+    }
+
+    @Test
+    public void testRollOverFromTwo() {
+        dice.setValue(2);
+        dice.rollOver();
+
         assertEquals(5,dice.getValue());
     }
 
     @Test
-    public void testRollOver() {
-        dice.setValue(2);
+    public void testRollOverFromThree() {
+        dice.setValue(3);
         dice.rollOver();
-        assertEquals(5,dice.getValue());
+
+        assertEquals(4,dice.getValue());
+    }
+
+    @Test
+    public void testRollOverFromFour() {
+        dice.setValue(4);
+        dice.rollOver();
+
+        assertEquals(3,dice.getValue());
+    }
+
+    @Test
+    public void testRollOverFromFive() {
+        dice.setValue(5);
+        dice.rollOver();
+
+        assertEquals(2,dice.getValue());
+    }
+
+    @Test
+    public void testRollOverFromSix() {
+        dice.setValue(6);
+        dice.rollOver();
+
+        assertEquals(1,dice.getValue());
     }
 
     @Test
     public void testIncrementValue() {
         dice.setValue(5);
         dice.incrementValue();
+
         assertEquals(6,dice.getValue());
+    }
+
+    @Test
+    public void testIncrementValueFromMaxValue() {
+        dice.setValue(6);
+
         assertFalse(dice.incrementValue());
     }
 
@@ -39,7 +107,14 @@ public class TestDice {
     public void testDecrementValue() {
         dice.setValue(2);
         dice.decrementValue();
+
         assertEquals(1,dice.getValue());
+    }
+
+    @Test
+    public void testDecrementValueFromMin() {
+        dice.setValue(1);
+
         assertFalse(dice.decrementValue());
     }
 

@@ -79,6 +79,10 @@ public class Game extends Observable {
      * @param maxNumberOfPlayers the maximum number of players that the game can have
      */
     public Game(int numberOfRounds, int maxNumberOfPlayers) {
+        if(numberOfRounds < 0){
+            throw new IllegalArgumentException("Can't create a game with negative number of rounds"); }
+        if(maxNumberOfPlayers <0 ){
+            throw new IllegalArgumentException("Can't create a game with negative number of players"); }
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
@@ -168,7 +172,7 @@ public class Game extends Observable {
      * @param rankings list of ordered players: first is winner
      */
     public void setRankings(List<Player> rankings) {
-        if(this.status==GameStatus.ENDED) {
+        if(this.status == GameStatus.ENDED) {
             this.rankings = rankings;
         } else {
             throw new BadBehaviourRuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
