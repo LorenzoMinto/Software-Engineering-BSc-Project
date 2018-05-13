@@ -227,7 +227,8 @@ public class Game extends Observable {
 
     /**
      * Set the given ToolCard as used in the current Turn
-     * @param toolCard
+     *
+     * @param toolCard toolCard used in the current Turn
      */
     public void useToolCard(ToolCard toolCard){
 

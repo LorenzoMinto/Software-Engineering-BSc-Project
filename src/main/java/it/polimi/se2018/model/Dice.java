@@ -86,7 +86,7 @@ public class Dice {
 
     /**
      * Roll over the Dice.
-     * In a standard Dice this means for example: 6 ==> 1, 4 ==> 3, 1==>6
+     * In a standard Dice this means for example: 6 becomes 1, 4 becomes 3, 1 becomes 6
      */
     public void rollOver() {
 
@@ -146,7 +146,7 @@ public class Dice {
      *
      * @param o some other Dice
      * @return if the other Dice is equal to this
-     * @see {@link Object#equals(Object)}
+     * @see Object#equals(Object)
      */
     @Override
     public boolean equals(Object o) {
@@ -167,7 +167,7 @@ public class Dice {
      * Returns a hash code value for the Dice.
      *
      * @return a hash code value for the Dice
-     * @see {@link Object#hashCode()}
+     * @see Object#hashCode()
      */
     @Override
     public int hashCode() {

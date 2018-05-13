@@ -80,9 +80,9 @@ public class Turn {
     }
 
     /**
-     * Returns a boolean value representing if during the turn was made a "draft&place" move.
+     * Returns a boolean value representing if during the turn was made a "draft and place" move.
      *
-     * @return boolean value representing if during the turn was made a "draft&place" move
+     * @return boolean value representing if during the turn was made a "draft and place" move
      */
     public boolean hasDraftedAndPlaced(){
         return draftedAndPlaced;

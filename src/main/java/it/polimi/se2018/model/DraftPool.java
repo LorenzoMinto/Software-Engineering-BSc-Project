@@ -34,7 +34,7 @@ public class DraftPool {
 
     /**
      * Rolls each dice in draftpool.
-     * @see {@link Dice#roll()}
+     * @see Dice#roll()
      */
     public void reroll() {
 

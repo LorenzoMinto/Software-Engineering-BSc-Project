@@ -104,7 +104,7 @@ public class Player {
     /**
      * Decrease favorTokens of the given quantity. Return false if not enough tokens left.
      *
-     * @param quantity
+     * @param quantity how much favorTokens must be decreased
      * @return true if the action succeeded, false if not (not enough tokens left)
      */
     public boolean decreaseTokens(int quantity) {
@@ -148,7 +148,7 @@ public class Player {
      *
      * @param o some other Player
      * @return if the other Player is equal to this
-     * @see {@link Object#equals(Object)}
+     * @see Object#equals(Object)
      */
     @Override
     public boolean equals(Object o) {
@@ -168,7 +168,7 @@ public class Player {
      * Returns a hash code value for the Player.
      *
      * @return a hash code value for the Player
-     * @see {@link Object#hashCode()}
+     * @see Object#hashCode()
      */
     @Override
     public int hashCode() {
