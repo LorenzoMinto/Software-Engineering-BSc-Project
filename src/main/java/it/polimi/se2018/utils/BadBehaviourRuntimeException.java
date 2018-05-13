@@ -5,8 +5,8 @@ package it.polimi.se2018.utils;
  * that is thrown when something that according the software logic should not happens
  * and the recover from the situation is impossible.
  *
- * This class is used to recognize really "unexpeted" runtime exceptions during debugging
- * versus "exptected during coding phase" runtime exceptions.
+ * This class is used to recognize really "unexpected" runtime exceptions during debugging
+ * versus "expected during coding phase" runtime exceptions.
  */
 public class BadBehaviourRuntimeException extends RuntimeException {
     /**
