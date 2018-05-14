@@ -55,7 +55,7 @@ public class Controller implements ControllerInterface {
      *
      * @see ToolCard
      */
-    protected ToolCard activeToolcard;
+    private ToolCard activeToolcard;
 
     /**
      * Contains an instance of a {@link ToolCardsManager} that is the one
@@ -254,6 +254,17 @@ public class Controller implements ControllerInterface {
     }
 
     /**
+     * Resets the current active toolCard and resets the placement rules to their default.
+     *
+     * @author Lorenzo Minto
+     */
+    protected void resetActiveToolCard() {
+
+        this.activeToolcard = null;
+        this.placementRule = getDefaultPlacementRule();
+    }
+
+    /**
      * Gets the {@link ToolCard} that is being used in the current {@link Turn}
      *
      * @return the {@link ToolCard} that is being used in the current {@link Turn}
@@ -272,7 +283,7 @@ public class Controller implements ControllerInterface {
      */
     protected void advanceGame() {
 
-        this.placementRule = getDefaultPlacementRule();
+        resetActiveToolCard();
         setControllerState(stateManager.getStartState());
 
         //if player's window pattern is empty
