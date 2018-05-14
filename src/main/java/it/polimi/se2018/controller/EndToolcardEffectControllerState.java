@@ -20,9 +20,8 @@ public class EndToolcardEffectControllerState extends ImplicitControllerState {
      */
     @Override
     public void executeImplicitBehaviour() {
-        ControllerState nextState = controller.stateManager.getNextState(this);
 
         this.controller.resetActiveToolCard();
-        controller.setControllerState(nextState);
+        controller.setControllerState(controller.stateManager.getDraftControllerState());
     }
 }

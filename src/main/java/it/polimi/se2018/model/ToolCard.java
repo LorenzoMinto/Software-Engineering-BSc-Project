@@ -178,9 +178,7 @@ public class ToolCard {
      * @return whether or not the ToolCard's effect requires drafting.
      */
     public boolean needsDrafting(){
-        //TODO: implement here
-
-        return false; //this is a placeholder waiting for implementation
+        return controllerStateRules.containsKey("DraftControllerState");
     }
 
     @Override

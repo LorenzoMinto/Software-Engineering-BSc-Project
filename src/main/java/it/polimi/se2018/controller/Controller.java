@@ -260,6 +260,7 @@ public class Controller implements ControllerInterface {
      */
     protected void resetActiveToolCard() {
 
+        this.movesCounter = 0;
         this.activeToolcard = null;
         this.placementRule = getDefaultPlacementRule();
     }

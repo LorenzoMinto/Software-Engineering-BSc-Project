@@ -30,10 +30,10 @@ public class MoveControllerState extends ControllerState {
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             view.showMessage("Move made.");
             controller.movesCounter += 1;
-            if (controller.movesCounter < 2) {
+            if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             } else {
-                controller.setControllerState(controller.stateManager.getDraftControllerState());
+                controller.setControllerState(controller.stateManager.getEndToolcardEffectControllerState());
             }
         } else {
             view.showMessage("Can't make this move.");
