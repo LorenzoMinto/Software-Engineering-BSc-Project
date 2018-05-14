@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,7 +16,7 @@ public class Track {
     /**
      * List of {@link TrackSlot}, on which the leftover dices of the draft pool of every round are kept.
      */
-    private List<TrackSlot> slots;
+    private List<TrackSlot> slots = new ArrayList<>();
 
     /**
      * Creates new TrackSlot with the list of dice passed and appends it to the list.
