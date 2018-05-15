@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.ControllerState;
+import it.polimi.se2018.controller.DraftControllerState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -178,7 +179,7 @@ public class ToolCard {
      * @return whether or not the ToolCard's effect requires drafting.
      */
     public boolean needsDrafting(){
-        return controllerStateRules.containsKey("DraftControllerState");
+        return controllerStateRules.containsKey(DraftControllerState.class.getSimpleName());
     }
 
     @Override
