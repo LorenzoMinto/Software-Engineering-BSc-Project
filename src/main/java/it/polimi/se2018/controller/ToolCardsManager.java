@@ -114,6 +114,7 @@ public class ToolCardsManager {
             Document document = XMLFileReader.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
             //Parse from xml the number of rows of the pattern
+            String toolCardTitle = document.getElementsByTagName("title").item(0).getTextContent();
             String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
             String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
             int neededTokens = Integer.parseInt( document.getElementsByTagName("neededTokens").item(0).getTextContent() );
@@ -151,7 +152,7 @@ public class ToolCardsManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(toolCardID,toolCardDescription,toolCardImageURL,neededTokens,tokensUsageMultiplier,controllerStateRules,placementRule);
+            return new ToolCard(toolCardID,toolCardTitle,toolCardDescription,toolCardImageURL,neededTokens,tokensUsageMultiplier,controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();

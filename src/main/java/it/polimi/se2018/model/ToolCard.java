@@ -16,6 +16,8 @@ import java.util.Objects;
  */
 public class ToolCard {
 
+    private final String ID;
+
     /**
      * The tool card's title.
      */
@@ -72,8 +74,9 @@ public class ToolCard {
      * @param controllerStateRules the state table that governs state transitions when the tool card is active.
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      */
-    public ToolCard(String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
+    public ToolCard(String ID, String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
                     Map<String, String> controllerStateRules, PlacementRule placementRule) {
+        this.ID = ID;
         this.title = title;
         this.description = description;
         this.neededTokens = neededTokens;
@@ -88,7 +91,9 @@ public class ToolCard {
     /**
      * Empty private constructor.
      */
-    private ToolCard(){}
+    private ToolCard(){
+        this.ID = "placeholder";
+    }
 
     /**
      * Constructor for test purposes.
