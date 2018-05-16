@@ -16,7 +16,8 @@ public class Turn {
      * @param player se player playing the new turn
      */
     public Turn(int number, Player player) {
-        if(player==null){ throw new IllegalArgumentException("Asked to create a turn giving null player"); }
+        if(number < 0 ){ throw new IllegalArgumentException("Can't create a turn with negative turnNumber");}
+        if(player==null){ throw new IllegalArgumentException("Can't create a turn giving null player"); }
 
         this.number = number;
         this.player = player;

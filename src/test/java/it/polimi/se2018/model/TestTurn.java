@@ -32,11 +32,32 @@ public class TestTurn {
     }
 
     @Before
-    public void initializeTurnWithPlayer(){
+    public void initializeDefaultTurnWithPlayer(){
         turn = new Turn(0, player);
     }
 
 
+    @Test
+    public void testConstructor(){
+        turn = new Turn(0,player);
+        assertNotNull(turn);
+    }
+
+    @Test
+    public void testConstructorWithNegativeTurnNumber(){
+        try{
+            turn = new Turn(-1, player);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testConstructorWithNullPlayer(){
+        try{
+            turn = new Turn(0, null);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
 
     //to be run with setDraftedDice test
     @Test
