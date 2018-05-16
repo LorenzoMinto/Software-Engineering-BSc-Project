@@ -3,14 +3,14 @@ package it.polimi.se2018.connection.Socket.serverSocket;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientGatherer extends Thread {
+public class SocketClientGatherer extends Thread {
 
     private final ServerSocket server;
     private final int port;
     private java.net.ServerSocket serverSocket;
 
 
-    public ClientGatherer(ServerSocket server, int port ) {
+    public SocketClientGatherer(ServerSocket server, int port ) {
         this.server = server;
         this.port = port;
 

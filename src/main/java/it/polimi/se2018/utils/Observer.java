@@ -1,7 +1,7 @@
 package it.polimi.se2018.utils;
 
 
-import it.polimi.se2018.model.ChangeMessage;
+import it.polimi.se2018.connection.Message;
 
 /**
  * A class can implement the {@link Observer} interface when it
@@ -9,13 +9,13 @@ import it.polimi.se2018.model.ChangeMessage;
  */
 public interface Observer {
 
-    /**
+    /** //TODO: controllare quì l'uso di Message
      * This method is called whenever the observed object is changed. An
      * application calls an {@link Observable} object's
-     * {@link Observable#notify(ChangeMessage)} method to have all the object's
+     * {@link Observable#notify(it.polimi.se2018.connection.Message)} method to have all the object's
      * observers notified of the change.
      *
-     * @param m an argument passed to the {@link Observable#notify(ChangeMessage)} method
+     * @param m an argument passed to the {@link Observable#notify(Message)} method
      */
-    void update(ChangeMessage m);
+    void update(Message m); //TODO: controllare quì l'uso di Message
 }

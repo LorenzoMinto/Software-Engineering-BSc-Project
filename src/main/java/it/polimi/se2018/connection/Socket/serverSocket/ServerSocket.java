@@ -1,6 +1,7 @@
 package it.polimi.se2018.connection.Socket.serverSocket;
 
-import it.polimi.se2018.connection.Socket.clientSocket.ClientInterface;
+import it.polimi.se2018.connection.RemoteClientInterface;
+import it.polimi.se2018.connection.ServerInterface;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -8,22 +9,22 @@ import java.util.ArrayList;
 public class ServerSocket {
 
     private static int PORT = 1111;
-    private static ServerInterface server;
+    private ServerInterface server;
 
-    private ArrayList<ClientInterface> clients = new ArrayList<ClientInterface>();
+    private ArrayList<RemoteClientInterface> clients = new ArrayList<>();
 
     public ServerSocket() {
 
        // servizio offerto ai clientRmi
        this.server = new ServerImplementation(this);
 
-       // Avvio il ClientGatherer, un nuovo thread che si occupa di gestire la connessione di nuovi clientRmi
-       (new ClientGatherer(this, PORT)).start();
+       // Avvio il SocketClientGatherer, un nuovo thread che si occupa di gestire la connessione di nuovi clientRmi
+       (new SocketClientGatherer(this, PORT)).start();
 
     }
 
     /**
-     * Aggiungi un nuovo clientRmi alla lista
+     * Aggiungi un nuovo clientSocket alla lista
      * @param clientConnection
      */
     protected synchronized void addClient( Socket clientConnection ) {
@@ -41,7 +42,7 @@ public class ServerSocket {
      * Ritorna tutti i clientRmi
      * @return
      */
-    protected synchronized ArrayList<ClientInterface> getClients() {
+    protected synchronized ArrayList<RemoteClientInterface> getClients() {
         return this.clients;
     }
 
@@ -49,7 +50,7 @@ public class ServerSocket {
      * Rimuovi un clientRmi disconnesso
      * @param client
      */
-    protected synchronized void removeClient(ClientInterface client) {
+    protected synchronized void removeClient(RemoteClientInterface client) {
         this.clients.remove(client);
     }
 

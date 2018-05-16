@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils;
 
-import it.polimi.se2018.model.ChangeMessage;
+import it.polimi.se2018.connection.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +59,8 @@ public class Observable {
      * Calls all observers method update sending the received message
      *
      * @param message message received from the calling application
-     */
-    protected void notify(ChangeMessage message){
+     */ 
+    protected void notify(Message message){ //TODO: controllare quì l'uso di Message
         synchronized (observers) {
             for(Observer observer : observers){
                 observer.update(message);

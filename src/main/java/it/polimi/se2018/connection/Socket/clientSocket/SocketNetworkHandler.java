@@ -1,7 +1,9 @@
 package it.polimi.se2018.connection.Socket.clientSocket;
 
-import it.polimi.se2018.connection.Socket.Message;
-import it.polimi.se2018.connection.Socket.serverSocket.ServerInterface;
+import it.polimi.se2018.connection.RemoteClientInterface;
+import it.polimi.se2018.connection.Message;
+import it.polimi.se2018.connection.ServerInterface;
+import it.polimi.se2018.connection.ViewMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,14 +11,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class NetworkHandler extends Thread implements ServerInterface {
+public class SocketNetworkHandler extends Thread implements ServerInterface {
 
     private Socket socket;
     private BufferedReader is;
 
-    private ClientInterface client;
+    private RemoteClientInterface client;
 
-    public NetworkHandler(String host, int port, ClientInterface client) {
+    public SocketNetworkHandler(String host, int port, RemoteClientInterface client) {
 
         try {
             this.socket =  new Socket( host, port);
@@ -52,7 +54,7 @@ public class NetworkHandler extends Thread implements ServerInterface {
                     this.stopConnection();
 
                 } else {
-                    client.notify(new Message(message));
+                    client.send(new ViewMessage(message));
                 }
 
 

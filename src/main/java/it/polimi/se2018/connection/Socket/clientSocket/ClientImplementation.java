@@ -1,14 +1,21 @@
 package it.polimi.se2018.connection.Socket.clientSocket;
 
 
-import it.polimi.se2018.connection.Socket.Message;
+import it.polimi.se2018.connection.RemoteClientInterface;
+import it.polimi.se2018.connection.Message;
 
-public class ClientImplementation implements ClientInterface{
+import java.rmi.RemoteException;
 
-    public void notify ( Message message ) {
+public class ClientImplementation implements RemoteClientInterface {
 
-        System.out.println("Received: " + message.getMessage());
+    private RemoteClientInterface client;
 
+    public ClientImplementation(RemoteClientInterface client) {
+        this.client = client;
+    }
+
+    public void send (Message message ) throws RemoteException {
+        this.client.send(message);
     }
 
 }

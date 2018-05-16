@@ -1,13 +1,20 @@
 package it.polimi.se2018.connection.rmi.clientRmi;
 
-import it.polimi.se2018.connection.rmi.Message;
+import it.polimi.se2018.connection.RemoteClientInterface;
+import it.polimi.se2018.connection.Message;
 
 import java.rmi.RemoteException;
 
 public class ClientRMIImplementation implements ClientRMIInterface {
 
-	public void notify(Message message) throws RemoteException {
-		System.out.println("Ho ricevuto il messaggio: " + message.getMessage());
+	private RemoteClientInterface client;
+
+	public ClientRMIImplementation(RemoteClientInterface client) {
+		this.client = client;
+	}
+
+	public void send(Message message) throws RemoteException {
+		this.client.send(message);
 	}
 
 }

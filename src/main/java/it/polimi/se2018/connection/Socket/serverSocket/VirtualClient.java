@@ -1,7 +1,8 @@
 package it.polimi.se2018.connection.Socket.serverSocket;
 
-import it.polimi.se2018.connection.Socket.Message;
-import it.polimi.se2018.connection.Socket.clientSocket.ClientInterface;
+import it.polimi.se2018.connection.RemoteClientInterface;
+import it.polimi.se2018.connection.Message;
+import it.polimi.se2018.connection.ViewMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class VirtualClient extends Thread implements ClientInterface {
+public class VirtualClient extends Thread implements RemoteClientInterface {
 
     private final ServerSocket server;
 
@@ -32,13 +33,14 @@ public class VirtualClient extends Thread implements ClientInterface {
 
             while(loop) {
 
-//                System.out.println("Waiting for messages.");
+                System.out.println("Waiting for messages.");
 
                 String message = is.readLine();
                 if ( message == null ) {
                     loop = false;
                 } else {
-                    server.getImplementation().send(new Message(message));
+                    System.out.println(message);
+                    server.getImplementation().send(new ViewMessage(message));
                 }
 
             }
@@ -55,7 +57,7 @@ public class VirtualClient extends Thread implements ClientInterface {
 
     }
 
-    public void notify(Message message) {
+    public void send(Message message) {
 
             OutputStreamWriter writer;
 

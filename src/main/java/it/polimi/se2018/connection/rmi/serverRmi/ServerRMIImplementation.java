@@ -1,7 +1,8 @@
 package it.polimi.se2018.connection.rmi.serverRmi;
 
 
-import it.polimi.se2018.connection.rmi.Message;
+import it.polimi.se2018.connection.Message;
+import it.polimi.se2018.connection.ServerInterface;
 import it.polimi.se2018.connection.rmi.clientRmi.ClientRMIInterface;
 
 import java.rmi.ConnectException;
@@ -12,8 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class ServerRMIImplementation extends UnicastRemoteObject implements
-        ServerRMIInterface {
+public class ServerRMIImplementation extends UnicastRemoteObject implements ServerRMIInterface {
 	
 	private List<ClientRMIInterface> clients = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements
 
 	public void addClient(ClientRMIInterface client) throws RemoteException {
 		clients.add(client);
-        System.out.println("ClientRMI "+ (clients.indexOf(client)+1) + " connesso!");
+        System.out.println("RMIClient "+ (clients.indexOf(client)+1) + " connesso!");
 	}
 
 	public void send(Message message) throws RemoteException {
@@ -33,10 +33,10 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements
 		while(clientIterator.hasNext()){
 			System.out.println(message.getMessage());
 			try{
-				clientIterator.next().notify(message);
+				clientIterator.next().send(message);
 			}catch(ConnectException e) {
 				clientIterator.remove();	
-				System.out.println("ClientRMI rimosso!");
+				System.out.println("RMIClient rimosso!");
 			}			
 		}	
 	}
