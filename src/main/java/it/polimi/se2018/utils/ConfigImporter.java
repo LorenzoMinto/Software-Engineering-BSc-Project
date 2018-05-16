@@ -37,7 +37,7 @@ public class ConfigImporter {
     /**
      * Path to the folder of config files
      */
-    private static final String GENERAL_PATH = "configs/";
+    private static final String GENERAL_PATH = "assets/configs/";
 
     /**
      * Constructor for a ConfigImporter that loads params from the default config file.
@@ -80,7 +80,7 @@ public class ConfigImporter {
      * @return the requested property
      * @throws NoConfigParamFoundException if the requested property is not found
      */
-    public Object getProperty(String propertyName) throws NoConfigParamFoundException{
+    public int getProperty(String propertyName) throws NoConfigParamFoundException{
 
         //Loads properties if not already loaded
         if(!parametersLoaded){ loadParameters(); }
@@ -88,6 +88,6 @@ public class ConfigImporter {
         //Throw exception if can't find the requested property
         if(!properties.containsKey(propertyName)){ throw new NoConfigParamFoundException(); }
 
-        return properties.getProperty(propertyName);
+        return Integer.parseInt(properties.getProperty(propertyName));
     }
 }

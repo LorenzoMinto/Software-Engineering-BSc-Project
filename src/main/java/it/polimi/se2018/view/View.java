@@ -10,9 +10,8 @@ public abstract class View implements Observer {
 
     protected ControllerInterface controller;
 
-    public View(ControllerInterface controller, Player player) {
+    public View(ControllerInterface controller) {
 
-        this.player = player;
         this.controller = controller;
     }
 

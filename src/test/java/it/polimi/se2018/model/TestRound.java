@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,6 +38,7 @@ public class TestRound {
         p3 = new Player(user, "p3", privateObjectiveCard);
         p4 = new Player(user, "p4", privateObjectiveCard);
 
+        players = new ArrayList<>();
         draftPool = new DraftPool();
 
     }
@@ -44,11 +46,15 @@ public class TestRound {
 
     @Before
     public void initializePlayersList(){
-        players = new ArrayList<>();
         players.add(p1);
         players.add(p2);
         players.add(p3);
         players.add(p4);
+    }
+
+    @After
+    public void clearList(){
+        players.clear();
     }
 
     @Test

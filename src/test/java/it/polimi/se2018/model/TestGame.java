@@ -89,7 +89,7 @@ public class TestGame {
     }
 
     @Test
-    public void testCanAcceptPlayer(){
+    public void testCanAcceptPlayerAfterMaxPlayerJoined(){
         game.addPlayer(player);
         player = new Player(user, "player2", privateObjectiveCard);
         game.addPlayer(player);
