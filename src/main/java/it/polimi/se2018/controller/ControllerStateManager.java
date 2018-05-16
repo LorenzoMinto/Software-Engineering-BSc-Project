@@ -29,7 +29,7 @@ public class ControllerStateManager {
     PlaceControllerState placeState;
     ToolCardControllerState toolCardState;
     DraftControllerState draftControllerState;
-    EndToolcardEffectControllerState endToolcardEffectControllerState;
+    EndToolCardEffectControllerState endToolCardEffectControllerState;
 
     /**
      * Constructor for the Controller State Manager. Each controller instance
@@ -47,7 +47,7 @@ public class ControllerStateManager {
         this.startState = new StartControllerState(this.controller);
         this.placeState = new PlaceControllerState(this.controller);
         this.toolCardState = new ToolCardControllerState(this.controller);
-        this.endToolcardEffectControllerState = new EndToolcardEffectControllerState(this.controller);
+        this.endToolCardEffectControllerState = new EndToolCardEffectControllerState(this.controller);
     }
 
     /**
@@ -108,7 +108,7 @@ public class ControllerStateManager {
     }
     public ToolCardControllerState getToolCardState() { return toolCardState; }
     public DraftControllerState getDraftControllerState() { return draftControllerState; }
-    public EndToolcardEffectControllerState getEndToolcardEffectControllerState() {
-        return endToolcardEffectControllerState;
+    public EndToolCardEffectControllerState getEndToolCardEffectControllerState() {
+        return endToolCardEffectControllerState;
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Martelletto</title>
+    <imageURL></imageURL>
+    <description>After drafting, swap the drafted die with a die from the Round Track.</description>
+    <neededTokens>1</neededTokens>
+    <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <controllerStateRule prevState="StartControllerState" nextState="RerollDraftPoolControllerState" />
+    <controllerStateRule prevState="ToolCardControllerState" nextState="RerollDraftPoolControllerState" />
+    <controllerStateRule prevState="RerollDraftPoolControllerState" nextState="EndToolCardEffectControllerState" />
+</toolcard>

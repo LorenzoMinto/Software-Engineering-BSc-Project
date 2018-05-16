@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Pennello Per Eglomise</title>
+    <imageURL></imageURL>
+    <description>Move any one die in your window, ignoring the color restrictions./n
+        You must obey all other placement restrictions</description>
+    <neededTokens>1</neededTokens>
+    <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
+    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator" invert="false"/>
+    <placementRule decoratorName="ValuePlacementRuleDecorator"/>
+    <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
+    <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />
+    <controllerStateRule prevState="MoveControllerState" nextState="EndToolCardEffectControllerState" />
+</toolcard>

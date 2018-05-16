@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Lathekin</title>
+    <imageURL></imageURL>
+    <description>Move exactly two dice, obeying all placement restrictions.</description>
+    <neededTokens>1</neededTokens>
+    <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
+    <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />
+    <controllerStateRule prevState="MoveControllerState" nextState="MoveControllerState" />
+</toolcard>
