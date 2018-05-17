@@ -33,7 +33,7 @@ public class MoveControllerState extends ControllerState {
             if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             } else {
-                controller.setControllerState(controller.stateManager.getEndToolcardEffectControllerState());
+                controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
             }
         } else {
             view.showMessage("Can't make this move.");
