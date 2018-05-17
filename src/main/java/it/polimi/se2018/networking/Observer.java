@@ -4,5 +4,7 @@ import java.rmi.RemoteException;
 
 public interface Observer {
 
-    void update(String m) throws RemoteException;
+    void update(String message) throws RemoteException;
+
+    void update(String message, ServerInterface sender) throws RemoteException;
 }

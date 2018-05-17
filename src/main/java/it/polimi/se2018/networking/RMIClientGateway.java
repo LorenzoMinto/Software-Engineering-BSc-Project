@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -12,16 +14,14 @@ public class RMIClientGateway implements ClientInterface, RMIServerInterface{
     private Observer client;
     private RMIServerInterface proxySender;
 
-    private static final int PORT = 1098;
-    private static final String PATH = "//localhost/";
 
-    RMIClientGateway(String recipient, Observer client) {
+    RMIClientGateway(String path, int port, Observer client) {
         try{
-            this.recipient = (RMIServerInterface) Naming.lookup(PATH+recipient);
+            this.recipient = (RMIServerInterface) Naming.lookup(path);
             this.client = client;
-            this.proxySender = (RMIServerInterface) UnicastRemoteObject.exportObject(this, PORT);
+            this.proxySender = (RMIServerInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
-            e.printStackTrace();
+            //TODO inserire network exception da throware fino a Client
         }
     }
 

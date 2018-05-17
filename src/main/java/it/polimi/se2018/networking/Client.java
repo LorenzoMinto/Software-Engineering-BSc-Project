@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking;
 
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,21 @@ public class Client implements Observer, Observable<ClientInterface> {
 
     private final List<ClientInterface> gateways = new ArrayList<>();
 
-    private Client() {
-        ClientInterface server = new RMIClientGateway("sagradaserver",this);
+    public enum NetoworkingCriteria {RMI,SOCKET};
+
+    private Client(NetoworkingCriteria criteria) {
+
+        ClientInterface server = null;
+
+        switch(criteria){
+
+            case RMI:
+                server = new RMIClientGateway("//localhost/sagradaserver",1098,this);
+                break;
+            case SOCKET:
+                server = new SocketClientGateway("localhost",1111,this);
+                break;
+        }
 
         register(server);
 
@@ -21,13 +35,28 @@ public class Client implements Observer, Observable<ClientInterface> {
     }
 
     public static void main (String[] args) {
-        new Client();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("1. RMI\n2. Socket");
+        int choice = scanner.nextInt();
+
+        if (choice == 2) {
+            new Client(NetoworkingCriteria.SOCKET);
+        } else if (choice == 1) {
+            new Client(NetoworkingCriteria.RMI);
+        }
     }
 
     @Override
     public void notify(String m) throws RemoteException{
         for(ClientInterface o : gateways){
-            o.sendMessage(m);
+            try{
+                o.sendMessage(m);
+                System.out.println("Succesfully sent the message to: "+o);
+            } catch(ConnectException e){
+                //TODO gestire meglio questa eccezione
+                System.out.println("Could not send the message due to connection error to: "+o);
+            }
         }
     }
 
@@ -44,6 +73,11 @@ public class Client implements Observer, Observable<ClientInterface> {
     @Override
     public void update(String m) {
         System.out.println("Received message: "+m);
+    }
+
+    @Override
+    public void update(String m, ServerInterface sender) throws RemoteException {
+        //Client doesn't answer to server's messages
     }
 
 
