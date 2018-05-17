@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Taglierina Circolare</title>
+    <imageURL></imageURL>
+    <description>After drafting, swap the drafted die with a die from the Round Track.</description>
+    <neededTokens>1</neededTokens>
+    <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
+    <controllerStateRule prevState="DraftControllerState" nextState="ChooseFromTrackControllerState" />
+    <controllerStateRule prevState="ChooseFromTrackControllerState" nextState="SwapDraftedWithTrackControllerState" />
+    <controllerStateRule prevState="ChooseFromTrackControllerState" nextState="EndControllerState" />
+</toolcard>

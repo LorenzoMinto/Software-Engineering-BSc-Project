@@ -4,14 +4,14 @@ package it.polimi.se2018.controller;
  *
  * @author Lorenzo Minto
  */
-public class EndToolcardEffectControllerState extends ImplicitControllerState {
+public class EndToolCardEffectControllerState extends ImplicitControllerState {
 
     /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
-    public EndToolcardEffectControllerState(Controller controller) {
+    public EndToolCardEffectControllerState(Controller controller) {
         super(controller);
     }
 

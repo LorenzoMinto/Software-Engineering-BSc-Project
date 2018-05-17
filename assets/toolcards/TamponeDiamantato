@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolcard>
+    <title>Tampone Diamantato</title>
+    <imageURL></imageURL>
+    <description>After drafting, flip the die to its opposite side.</description>
+    <neededTokens>1</neededTokens>
+    <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
+    <controllerStateRule prevState="DraftControllerState" nextState="RollOverDraftedControllerState" />
+    <controllerStateRule prevState="RollOverDraftedControllerState" nextState="PlaceControllerState" />
+    <controllerStateRule prevState="PlaceControllerState" nextState="EndControllerState" />
+</toolcard>

@@ -48,6 +48,7 @@ public class TrackTest {
     public void takeDice() {
         track.takeDice(dice1, 0);
         assertFalse(track.getDicesFromSlotNumber(0).contains(dice1));
+        assertFalse(track.takeDice(dice1, 1));
     }
 
     @Test
@@ -55,5 +56,6 @@ public class TrackTest {
         Dice dice6 = new Dice(DiceColors.RED, 6);
         track.putDice(dice6, 0);
         assertTrue(track.getDicesFromSlotNumber(0).contains(dice6));
+        assertFalse(track.putDice(dice1, 1));
     }
 }
