@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class Server implements Observer{
 
-    Observable proxyServer;
+    private Observable proxyServer;
 
-    public Server() {
+    private Server() {
         try {
             this.proxyServer = new RMIServerGateway("sagradaserver",this);
             System.out.println("Started Sagrada Server");
@@ -38,16 +38,18 @@ public class Server implements Observer{
     private void listenForMessagesFromConsole(){
         //Codice per inviare messaggio da riga di comando
         Scanner scanner = new Scanner(System.in);
-        do{
+        while(true){
             System.out.print("Inserisci messaggio: ");
             String text = scanner.nextLine();
+
+            if(text.equals("exit")){ return; }
 
             try {
                 proxyServer.notify(text);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        } while(true);
+        }
         //Fine codice per inviare messaggio da riga di comando
     }
 }

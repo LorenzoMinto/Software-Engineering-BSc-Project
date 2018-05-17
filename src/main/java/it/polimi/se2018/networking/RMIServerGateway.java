@@ -10,11 +10,11 @@ import java.util.List;
 public class RMIServerGateway extends UnicastRemoteObject implements RMIServerInterface, Observable<ServerInterface> {
 
     private static final int PORT = 1099; // porta di default
-    private Server receiver;
+    private transient Server receiver;
 
-    private final List<ServerInterface> gateways = new ArrayList<>();
+    private final transient List<ServerInterface> gateways = new ArrayList<>();
 
-    public RMIServerGateway(String name, Server receiver) throws RemoteException {
+    RMIServerGateway(String name, Server receiver) throws RemoteException {
         this.receiver = receiver;
 
         try {
@@ -50,5 +50,15 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIServerIn
 
     public void deregister(ServerInterface gateway) {
         gateways.remove(gateway);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj); //TODO:verificare se implementare qualcosa quì
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); //TODO:verificare se implementare qualcosa quì
     }
 }

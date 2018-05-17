@@ -9,7 +9,7 @@ public class Client implements Observer, Observable<ClientInterface> {
 
     private final List<ClientInterface> gateways = new ArrayList<>();
 
-    public Client() {
+    private Client() {
         ClientInterface server = new RMIClientGateway("sagradaserver",this);
 
         register(server);
@@ -52,16 +52,18 @@ public class Client implements Observer, Observable<ClientInterface> {
     private void listenForMessagesFromConsole(){
         //Codice per inviare messaggio da riga di comando
         Scanner scanner = new Scanner(System.in);
-        do{
+        while(true){
             System.out.print("Inserisci messaggio: ");
             String text = scanner.nextLine();
+
+            if(text.equals("exit")){ return; }
 
             try {
                 notify(text);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        } while(true);
+        }
         //Fine codice per inviare messaggio da riga di comando
     }
 }

@@ -13,9 +13,9 @@ public class RMIClientGateway implements ClientInterface, RMIServerInterface{
     private RMIServerInterface proxySender;
 
     private static final int PORT = 1098;
-    private static final String PATH = "rmi://127.0.0.1/";
+    private static final String PATH = "//localhost/";
 
-    public RMIClientGateway(String recipient, Observer client) {
+    RMIClientGateway(String recipient, Observer client) {
         try{
             this.recipient = (RMIServerInterface) Naming.lookup(PATH+recipient);
             this.client = client;
