@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.view.View;
 
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Map;
  * @see PlacementRule
  * @see WindowPatternManager
  */
-public class Controller implements ControllerInterface {
+public class Controller extends Observable implements ControllerInterface {
 
     private static final String NOT_YOUR_TURN = "It is not your turn.";
     /**

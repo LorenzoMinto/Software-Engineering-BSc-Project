@@ -5,8 +5,8 @@ import it.polimi.se2018.controller.ControllerInterface;
 
 public class CLIView extends View {
 
-    public CLIView(ControllerInterface controller) {
-        super(controller);
+    public CLIView() {
+        super();
     }
 
     @Override

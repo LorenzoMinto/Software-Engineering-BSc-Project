@@ -1,25 +1,24 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-
 import java.rmi.Naming;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-//Extends RMIServerInterface because can receive messages from Server,
+//Extends RMIReceiverInterface because can receive messages from Server,
 //so from the perspective of Server this class it is also a server
-public class RMIClientGateway implements ClientInterface, RMIServerInterface{
+public class RMIClientGateway implements SenderInterface, ReceiverInterface, Remote {
 
-    private RMIServerInterface recipient;
-    private Observer client;
-    private RMIServerInterface proxySender;
+    private ReceiverInterface recipient;
+    private ReceiverInterface client;
+    private ReceiverInterface proxySender;
 
 
-    RMIClientGateway(String path, int port, Observer client) {
+    RMIClientGateway(String path, int port, ReceiverInterface client) {
         try{
-            this.recipient = (RMIServerInterface) Naming.lookup(path);
+            this.recipient = (ReceiverInterface) Naming.lookup(path);
             this.client = client;
-            this.proxySender = (RMIServerInterface) UnicastRemoteObject.exportObject(this, port);
+            this.proxySender = (ReceiverInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
             //TODO inserire network exception da throware fino a Client
         }
@@ -29,7 +28,7 @@ public class RMIClientGateway implements ClientInterface, RMIServerInterface{
         this.recipient.receiveMessage(message,this.proxySender);
     }
 
-    public void receiveMessage(String message, ServerInterface sender) throws RemoteException{
-        this.client.update(message);
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException{
+        this.client.receiveMessage(message,sender);
     }
 }

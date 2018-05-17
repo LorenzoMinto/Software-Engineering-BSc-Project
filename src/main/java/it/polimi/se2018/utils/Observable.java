@@ -13,9 +13,9 @@ import java.util.List;
  * An observable object can have one or more observers. An observer
  * may be any object that implements interface {@link Observer}. After an
  * observable instance changes, an application calling the
- * {@link Observable#notify(ChangeMessage)} method
+ * {@link Observable#notify(Message)} method
  * causes all of its observers to be notified of the change by a call
- * to their {@link Observer#update(ChangeMessage)} method.
+ * to their {@link Observer#update(Message)} method.
  *
  * The order in which notifications will be delivered is unspecified.
  * The default implementation provided in the Observable class will

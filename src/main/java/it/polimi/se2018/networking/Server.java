@@ -1,18 +1,41 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.connection.message.Message;
+import it.polimi.se2018.controller.Controller;
+import it.polimi.se2018.model.Game;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ConfigImporter;
+import it.polimi.se2018.utils.NoConfigParamFoundException;
+import it.polimi.se2018.utils.Observer;
+
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Server implements Observer, Observable<ServerInterface>{
+public class Server implements Observer, ReceiverInterface, SenderInterface{
 
-    private ServerInterface proxyServer;
+    private ReceiverInterface proxyServer;
 
-    private final transient List<ServerInterface> gateways = new ArrayList<>();
+    private final List<ReceiverInterface> gateways = new ArrayList<>();
+
+    private final Controller controller;
+
+    public static void main (String[] args) {
+        new Server();
+    }
 
     private Server() {
+        setupNetworking();
+
+        this.controller = createController();
+        this.controller.register(this);
+
+        listenForCommandsFromConsole();
+    }
+
+    private void setupNetworking() {
         try {
             System.out.println("Starting RMI...");
             this.proxyServer = new RMIServerGateway("sagradaserver",this);
@@ -21,60 +44,65 @@ public class Server implements Observer, Observable<ServerInterface>{
             new SocketServerGateway(1111,this);
 
             System.out.println("Sagrada Server is up.");
-
-            System.out.println("Start listening for messages...");
-            listenForMessagesFromConsole();
-
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main (String[] args) {
-        new Server();
-    }
+    private Controller createController(){
+        int numberOfRounds;
+        int maxNumberOfPlayers;
+        int numberOfDicesPerColor;
+        int numberOfToolCards;
+        int numberOfPublicObjCards;
 
-    @Override
-    public void notify(String message) throws RemoteException{
-        for(ServerInterface c : gateways){
+        //Loads config parameters
+        ConfigImporter configImporter = new ConfigImporter("default");
+        boolean alreadyFailedLoading = false;
+
+        while(true){
             try{
-                c.receiveMessage(message,this.proxyServer);
-                System.out.println("Message sent to "+c);
+                numberOfRounds          = configImporter.getProperty("numberOfRounds");
+                maxNumberOfPlayers      = configImporter.getProperty("maxNumberOfPlayers");
+                numberOfDicesPerColor   = configImporter.getProperty("numberOfDicesPerColor");
+                numberOfToolCards       = configImporter.getProperty("numberOfToolCards");
+                numberOfPublicObjCards  = configImporter.getProperty("numberOfPublicObjectiveCards");
+                break;
+            } catch(NoConfigParamFoundException e) {
+                if(alreadyFailedLoading) { throw new BadBehaviourRuntimeException("Can't load default config file"); }
+                else {
+                    alreadyFailedLoading = true;
 
-            } catch (ConnectException e){
-                //TODO: gestire meglio questa eccezione
-                System.out.println("The message was not sent to "+c+" due to connection error");
+                    //loads the default config file
+                    configImporter = new ConfigImporter();
+                }
             }
         }
+
+        //Creates the game
+        Game game = new Game(numberOfRounds,maxNumberOfPlayers);
+        game.register(this);
+        return new Controller(game,numberOfDicesPerColor,numberOfToolCards,numberOfPublicObjCards);
     }
 
-    @Override
-    public void register(ServerInterface gateway) {
+    public void addGateway(ReceiverInterface gateway) {
         gateways.add(gateway);
     }
 
-    @Override
-    public void deregister(ServerInterface gateway) {
+    public void removeGateway(ReceiverInterface gateway) {
         gateways.remove(gateway);
     }
 
-
     @Override
-    public void update(String message) throws RemoteException {
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
 
         System.out.println("Received message: "+message);
-    }
-
-    @Override
-    public void update(String message,ServerInterface sender) throws RemoteException {
-
-        update(message);
 
         if(isJoinRequest(message)){
 
             if( canJoin(message) ){
 
-                register(sender);
+                addGateway(sender);
 
                 String replyMessage = "Welcome to SagradaServer. You are now an authorized client.";
                 sender.receiveMessage(replyMessage,this.proxyServer);
@@ -90,6 +118,20 @@ public class Server implements Observer, Observable<ServerInterface>{
 
             }
 
+        }
+    }
+
+    @Override
+    public void sendMessage(String message) throws RemoteException {
+        for(ReceiverInterface c : gateways){
+            try{
+                c.receiveMessage(message,this.proxyServer);
+                System.out.println("Message sent to "+c);
+
+            } catch (ConnectException e){
+                //TODO: gestire meglio questa eccezione
+                System.out.println("The message was not sent to "+c+" due to connection error");
+            }
         }
     }
 
@@ -109,21 +151,35 @@ public class Server implements Observer, Observable<ServerInterface>{
 
     //Just for testing
 
-    private void listenForMessagesFromConsole(){
+    private void listenForCommandsFromConsole(){
         //Codice per inviare messaggio da riga di comando
+        System.out.println("Start listening for messages...");
+
         Scanner scanner = new Scanner(System.in);
         while(true){
             System.out.print("Inserisci messaggio: ");
             String text = scanner.nextLine();
 
-            if(text.equals("exit")){ return; }
-
+            //Just for testing comunication
             try {
-                notify(text);
+                sendMessage(text);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
+            //TODO: implementa quì metodi di servizio per debug
+
+            if(text.equals("exit")){ break; }
         }
         //Fine codice per inviare messaggio da riga di comando
+    }
+
+    @Override
+    public void update(Message m) {
+        try {
+            sendMessage(m.getMessage());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }

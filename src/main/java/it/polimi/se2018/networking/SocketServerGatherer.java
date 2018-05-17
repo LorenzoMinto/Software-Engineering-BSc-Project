@@ -9,11 +9,11 @@ import java.net.Socket;
 
 public class SocketServerGatherer extends Thread{
 
-    private final Server server;
+    private final ReceiverInterface server;
     private boolean acceptConns = true;
     private int portNumber;
 
-    public SocketServerGatherer(Integer portNumber, Server server) {
+    public SocketServerGatherer(Integer portNumber, ReceiverInterface server) {
 
         this.server = server;
         this.portNumber = portNumber;
@@ -46,7 +46,7 @@ public class SocketServerGatherer extends Thread{
             public void run() {
                 try(BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
                     while ( (message = in.readLine()) != null ){
-                        server.update(message,socketServer);
+                        server.receiveMessage(message,socketServer);
                     }
                 } catch(IOException e){
                     //TODO inserire eccezione

@@ -2,11 +2,11 @@ package it.polimi.se2018.networking;
 
 import java.rmi.RemoteException;
 
-public class SocketServerGateway implements ServerInterface {
+public class SocketServerGateway implements ReceiverInterface {
 
-    private Server receiver;
+    private ReceiverInterface receiver;
 
-    SocketServerGateway(Integer portNumber, Server receiver) throws RemoteException {
+    SocketServerGateway(Integer portNumber, ReceiverInterface receiver) throws RemoteException {
         this.receiver = receiver;
 
         SocketServerGatherer socketServerGatherer = new SocketServerGatherer(portNumber,receiver);
@@ -18,8 +18,8 @@ public class SocketServerGateway implements ServerInterface {
         */
     }
 
-    public void receiveMessage(String message, ServerInterface sender) throws RemoteException {
-        receiver.update(message,sender);
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+        receiver.receiveMessage(message,sender);
     }
 
     @Override

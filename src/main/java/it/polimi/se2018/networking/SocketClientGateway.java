@@ -6,15 +6,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
-public class SocketClientGateway extends Thread implements ClientInterface, ServerInterface {
+public class SocketClientGateway extends Thread implements SenderInterface, ReceiverInterface {
 
     private PrintWriter out;
 
-    private Observer client;
+    private ReceiverInterface client;
     private String hostName;
     private int portNumber;
 
-    public SocketClientGateway(String hostName, int portNumber, Observer client) {
+    public SocketClientGateway(String hostName, int portNumber, ReceiverInterface client) {
         this.client = client;
         this.hostName = hostName;
         this.portNumber = portNumber;
@@ -28,8 +28,8 @@ public class SocketClientGateway extends Thread implements ClientInterface, Serv
     }
 
     @Override
-    public void receiveMessage(String message, ServerInterface sender) throws RemoteException {
-        client.update(message);
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+        client.receiveMessage(message,sender);
         //Client doesn't answer to server's messages so it is unnecessary sender
     }
 

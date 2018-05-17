@@ -1,18 +1,17 @@
 package it.polimi.se2018.networking;
 
 import java.rmi.Naming;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
 
-public class RMIServerGateway extends UnicastRemoteObject implements RMIServerInterface {
+public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInterface, Remote {
 
     private static final int PORT = 1099; // porta di default
-    private transient Server receiver;
+    private transient ReceiverInterface receiver;
 
-    RMIServerGateway(String name, Server receiver) throws RemoteException {
+    RMIServerGateway(String name, ReceiverInterface receiver) throws RemoteException {
         this.receiver = receiver;
 
         try {
@@ -23,8 +22,8 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIServerIn
         }
     }
 
-    public void receiveMessage(String message, ServerInterface sender) throws RemoteException{
-        receiver.update(message,sender);
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException{
+        receiver.receiveMessage(message,sender);
     }
 
     @Override

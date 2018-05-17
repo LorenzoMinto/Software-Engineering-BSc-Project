@@ -2,25 +2,29 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.ControllerInterface;
 import it.polimi.se2018.model.Player;
+import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
-public abstract class View implements Observer {
+public abstract class View extends Observable implements Observer {
 
     private Player player;
 
-    protected ControllerInterface controller;
+    public View() {
+        //does nothing
+    }
 
-    public View(ControllerInterface controller) {
+    public Player getPlayer() {
+        return player;
+    }
 
-        this.controller = controller;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public void showMessage(String message){}
 
     public void reportError(String message){}
 
-    public Player getPlayer() {
-        return player;
-    }
+
 
 }

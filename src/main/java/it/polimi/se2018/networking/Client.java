@@ -1,32 +1,66 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.connection.message.Message;
+import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.view.CLIView;
+import it.polimi.se2018.view.View;
+
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Client implements Observer, Observable<ClientInterface> {
+public class Client implements Observer, SenderInterface, ReceiverInterface {
 
-    private final List<ClientInterface> gateways = new ArrayList<>();
+    private final List<SenderInterface> gateways = new ArrayList<>();
 
-    public enum NetoworkingCriteria {RMI,SOCKET};
+    private final View view;
 
-    private Client(NetoworkingCriteria criteria) {
+    @Override
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+        System.out.println("Received message: "+message);
+    }
 
-        ClientInterface server = null;
+    @Override
+    public void sendMessage(String message) throws RemoteException {
+        for(SenderInterface o : gateways){
+            try{
+                o.sendMessage(message);
+                System.out.println("Succesfully sent the message to: "+o);
+            } catch(ConnectException e){
+                //TODO gestire meglio questa eccezione
+                System.out.println("Could not send the message due to connection error to: "+o);
+            }
+        }
+    }
 
-        switch(criteria){
+    @Override
+    public void update(Message m) {
+        try {
+            sendMessage(m.getMessage());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
-            case RMI:
-                server = new RMIClientGateway("//localhost/sagradaserver",1098,this);
-                break;
-            case SOCKET:
-                server = new SocketClientGateway("localhost",1111,this);
-                break;
+    public enum ConnectionType {RMI,SOCKET};
+
+    private Client(ConnectionType type) {
+
+        //Creates View and connects itself as observer
+        this.view = new CLIView();
+        this.view.register(this);
+
+        SenderInterface server = null;
+        if (type == ConnectionType.RMI) {
+            server = new RMIClientGateway("//localhost/sagradaserver", 1098, this);
+
+        } else if (type == ConnectionType.SOCKET) {
+            server = new SocketClientGateway("localhost", 1111, this);
         }
 
-        register(server);
+        addGateway(server);
 
         System.out.println("Started a Sagrada Client and connected to SagradaServer as guest.");
         System.out.println("Remember that in order to receive message from server you have to send a message with content 'federico'");
@@ -41,43 +75,18 @@ public class Client implements Observer, Observable<ClientInterface> {
         int choice = scanner.nextInt();
 
         if (choice == 2) {
-            new Client(NetoworkingCriteria.SOCKET);
+            new Client(ConnectionType.SOCKET);
         } else if (choice == 1) {
-            new Client(NetoworkingCriteria.RMI);
+            new Client(ConnectionType.RMI);
         }
     }
 
-    @Override
-    public void notify(String m) throws RemoteException{
-        for(ClientInterface o : gateways){
-            try{
-                o.sendMessage(m);
-                System.out.println("Succesfully sent the message to: "+o);
-            } catch(ConnectException e){
-                //TODO gestire meglio questa eccezione
-                System.out.println("Could not send the message due to connection error to: "+o);
-            }
-        }
-    }
-
-    @Override
-    public void register(ClientInterface gateway) {
+    public void addGateway(SenderInterface gateway) {
         gateways.add(gateway);
     }
 
-    @Override
-    public void deregister(ClientInterface gateway) {
+    public void removeGateway(SenderInterface gateway) {
         gateways.remove(gateway);
-    }
-
-    @Override
-    public void update(String m) {
-        System.out.println("Received message: "+m);
-    }
-
-    @Override
-    public void update(String m, ServerInterface sender) throws RemoteException {
-        //Client doesn't answer to server's messages
     }
 
 
@@ -87,13 +96,13 @@ public class Client implements Observer, Observable<ClientInterface> {
         //Codice per inviare messaggio da riga di comando
         Scanner scanner = new Scanner(System.in);
         while(true){
-            System.out.print("Inserisci messaggio: ");
-            String text = scanner.nextLine();
+            System.out.print("Inserisci messaggio:\n");
+            String text = scanner.next();
 
             if(text.equals("exit")){ return; }
 
             try {
-                notify(text);
+                sendMessage(text);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

@@ -5,8 +5,8 @@ import it.polimi.se2018.controller.ControllerInterface;
 
 public class GUIView extends View{
 
-    public GUIView(ControllerInterface controller) {
-        super(controller);
+    public GUIView() {
+        super();
     }
 
 
