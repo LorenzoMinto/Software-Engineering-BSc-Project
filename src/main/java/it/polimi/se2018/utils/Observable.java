@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils;
 
-import it.polimi.se2018.connection.Message;
+import it.polimi.se2018.connection.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;

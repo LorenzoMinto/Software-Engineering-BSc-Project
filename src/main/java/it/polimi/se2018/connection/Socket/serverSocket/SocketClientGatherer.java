@@ -1,20 +1,22 @@
 package it.polimi.se2018.connection.Socket.serverSocket;
 
+import it.polimi.se2018.connection.Socket.clientSocket.SocketClient;
+
 import java.io.IOException;
 import java.net.Socket;
 
 public class SocketClientGatherer extends Thread {
 
-    private final ServerSocket server;
+    private final SocketServer server;
     private final int port;
     private java.net.ServerSocket serverSocket;
 
 
-    public SocketClientGatherer(ServerSocket server, int port ) {
+    public SocketClientGatherer(SocketServer server, int port ) {
         this.server = server;
         this.port = port;
 
-        // Inizializzo il serverRmi socket
+        // Inizializzo il server socket
         try {
             this.serverSocket = new java.net.ServerSocket(port);
         } catch (IOException e) {

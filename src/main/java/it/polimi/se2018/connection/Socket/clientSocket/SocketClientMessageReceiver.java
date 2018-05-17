@@ -1,24 +1,20 @@
 package it.polimi.se2018.connection.Socket.clientSocket;
 
-import it.polimi.se2018.connection.RemoteClientInterface;
-import it.polimi.se2018.connection.Message;
-import it.polimi.se2018.connection.ServerInterface;
-import it.polimi.se2018.connection.ViewMessage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import it.polimi.se2018.connection.ClientImplementationInterface;
+import it.polimi.se2018.connection.message.ViewMessage;
+
+import java.io.*;
 import java.net.Socket;
 
-public class SocketNetworkHandler extends Thread implements ServerInterface {
+public class SocketClientMessageReceiver extends Thread {
 
     private Socket socket;
     private BufferedReader is;
 
-    private RemoteClientInterface client;
+    private ClientImplementationInterface client;
 
-    public SocketNetworkHandler(String host, int port, RemoteClientInterface client) {
+    public SocketClientMessageReceiver(String host, int port, ClientImplementationInterface client) {
 
         try {
             this.socket =  new Socket( host, port);
@@ -28,8 +24,6 @@ public class SocketNetworkHandler extends Thread implements ServerInterface {
             this.is = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.client = client;
 
-            this.start();
-
         } catch (IOException e) {
             System.out.println("Connection Error.");
             e.printStackTrace();
@@ -37,10 +31,12 @@ public class SocketNetworkHandler extends Thread implements ServerInterface {
 
     }
 
+
+    //ascolta i messaggi dal server
     @Override
     public void run () {
 
-        System.out.println("Listening for messages from the ServerRMI. ");
+        System.out.println("Listening for messages from the Server. ");
 
         boolean loop = true;
         while ( loop && !this.socket.isClosed() ) {
@@ -54,7 +50,7 @@ public class SocketNetworkHandler extends Thread implements ServerInterface {
                     this.stopConnection();
 
                 } else {
-                    client.send(new ViewMessage(message));
+                    client.receiveFromServer(new ViewMessage(message));
                 }
 
 
@@ -65,22 +61,7 @@ public class SocketNetworkHandler extends Thread implements ServerInterface {
         }
     }
 
-    public synchronized void send ( Message message ) {
 
-        try {
-
-            OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
-
-            // qui passiamo la stringa, ma potete passare anche l'oggetto Message
-            // serializzato e deserializzarlo lato ServerRMI ( online troverete come fare )
-
-            writer.write(message.getMessage());
-            writer.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public synchronized void stopConnection () {
 
@@ -92,5 +73,9 @@ public class SocketNetworkHandler extends Thread implements ServerInterface {
             }
             System.out.println("Connection closed.");
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

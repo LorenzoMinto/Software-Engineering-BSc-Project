@@ -1,19 +1,21 @@
 package it.polimi.se2018.connection;
 
 
-import it.polimi.se2018.connection.Socket.serverSocket.ServerSocket;
-import it.polimi.se2018.connection.rmi.serverRmi.ServerRMI;
+import it.polimi.se2018.connection.Socket.serverSocket.SocketServer;
+import it.polimi.se2018.connection.rmi.serverRmi.RMIServer;
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.ConfigImporter;
 import it.polimi.se2018.utils.NoConfigParamFoundException;
 
+import java.rmi.RemoteException;
+
 public class Server {
 
     private final Controller controller;
 
-    public Server() {
+    public Server() throws RemoteException {
         int numberOfRounds;
         int maxNumberOfPlayers;
         int numberOfDicesPerColor;
@@ -48,11 +50,11 @@ public class Server {
         this.controller = new Controller(game,numberOfDicesPerColor,numberOfToolCards,numberOfPublicObjCards);
 
         //Starts client gatherers
-        new ServerRMI();
-        new ServerSocket();
+        new RMIServer();
+        new SocketServer();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws RemoteException {
         new Server();
     }
 

@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection;
+package it.polimi.se2018.connection.message;
 
 public class ControllerMessage extends Message {
 

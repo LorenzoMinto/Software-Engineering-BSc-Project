@@ -1,15 +1,16 @@
 package it.polimi.se2018.connection.rmi.serverRmi;
 
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-public class ServerRMI {
+public class RMIServer{
 
     private static final int PORT = 1099; // porta di default
 
-	public ServerRMI() {
+	public RMIServer(){
 		try {
 			LocateRegistry.createRegistry(PORT);
 
@@ -19,7 +20,7 @@ public class ServerRMI {
 
 		try {
 
-			ServerRMIImplementation serverImplementation = new ServerRMIImplementation();
+			RMIServerImplementation serverImplementation = new RMIServerImplementation();
 
 			Naming.rebind("//localhost/MyServer", serverImplementation);
 

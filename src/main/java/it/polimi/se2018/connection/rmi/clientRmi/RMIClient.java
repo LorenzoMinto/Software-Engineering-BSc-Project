@@ -1,9 +1,8 @@
 package it.polimi.se2018.connection.rmi.clientRmi;
 
 
-import it.polimi.se2018.connection.*;
-import it.polimi.se2018.connection.rmi.serverRmi.ServerRMIImplementation;
-import it.polimi.se2018.connection.rmi.serverRmi.ServerRMIInterface;
+import it.polimi.se2018.connection.ClientInterface;
+import it.polimi.se2018.connection.rmi.serverRmi.RMIServerInterface;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -12,25 +11,23 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 
-public class RMIClient implements LocalClientInterface {
+public class RMIClient implements ClientInterface{
 
-    private ServerRMIInterface server;
-    private RemoteClientInterface client;
-
-    public RMIClient(RemoteClientInterface client) {
-        this.client = client;
-    }
+    private RMIServerInterface remoteServer;
+    private RMIClientImplementation clientImplementation;
 
     public void start() {
         try {
 
-            this.server = (ServerRMIInterface) Naming.lookup("//localhost/MyServer");
+            remoteServer = (RMIServerInterface) Naming.lookup("//localhost/MyServer");
 
-            ClientRMIImplementation client = new ClientRMIImplementation(this.client);
+            clientImplementation = new RMIClientImplementation(remoteServer);
 
-            ClientRMIInterface remoteRef = (ClientRMIInterface) UnicastRemoteObject.exportObject(client, 0);
+            RMIClientInterface remoteRef = (RMIClientInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
-            server.addClient(remoteRef);
+            remoteServer.addClient(remoteRef);
+
+            clientImplementation.start();
 
         } catch (MalformedURLException e) {
             System.err.println("URL non trovato!");
@@ -44,10 +41,6 @@ public class RMIClient implements LocalClientInterface {
 
     public void stop(){
         //TODO: implement here
-    }
-
-    public void send(Message message) throws RemoteException {
-        this.server.send(message);
     }
 
 }

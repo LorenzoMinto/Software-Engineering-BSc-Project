@@ -1,31 +1,30 @@
 package it.polimi.se2018.connection.Socket.clientSocket;
 
 import it.polimi.se2018.connection.*;
+import it.polimi.se2018.connection.message.Message;
 
-import java.rmi.RemoteException;
-
-public class SocketClient implements LocalClientInterface {
+public class SocketClient implements ClientInterface{
 
     private static final int PORT = 1111;
     private static final String HOST = "localhost";
 
-    private ServerInterface server;
-    private RemoteClientInterface client;
-
-    public SocketClient(RemoteClientInterface client) {
-        this.client = client;
-    }
+    private SocketClientMessageReceiver socketMessageReceiver;
+    private SocketClientImplementation clientImplementation;
 
     public void start() {
-        this.server = new SocketNetworkHandler(HOST, PORT, new ClientImplementation(this.client) );
+
+        clientImplementation = new SocketClientImplementation();
+
+        socketMessageReceiver = new SocketClientMessageReceiver(HOST, PORT, clientImplementation);
+        socketMessageReceiver.start();
+        clientImplementation.setSocket(socketMessageReceiver.getSocket());
+        clientImplementation.start();
+
     }
 
     public void stop(){
-        SocketNetworkHandler nh = (SocketNetworkHandler) server;
+        SocketClientMessageReceiver nh = (SocketClientMessageReceiver) socketMessageReceiver;
         nh.stopConnection();
     }
 
-    public void send(Message message) throws RemoteException {
-        this.server.send(message);
-    }
 }
