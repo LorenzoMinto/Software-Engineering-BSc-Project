@@ -1,7 +1,6 @@
 package it.polimi.se2018.networking;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.rmi.RemoteException;
 
 public class SocketServer implements ReceiverInterface {
@@ -13,8 +12,13 @@ public class SocketServer implements ReceiverInterface {
     }
 
     private void receiveMessage(String message) throws RemoteException {
-        PrintWriter out = new PrintWriter(stream, true);
-        out.println(message);
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream));
+        try {
+            out.write(message + "\n");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

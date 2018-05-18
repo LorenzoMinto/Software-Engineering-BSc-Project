@@ -1,9 +1,6 @@
 package it.polimi.se2018.networking;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -35,7 +32,8 @@ public class SocketServerGatherer extends Thread{
     private void acceptConnection(ServerSocket socket) throws IOException{
         Socket clientSocket = socket.accept();
 
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        //TODO: understand why never used but created
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
         SocketServer socketServer = new SocketServer(clientSocket.getOutputStream());
 
