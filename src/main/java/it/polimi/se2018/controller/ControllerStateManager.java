@@ -34,7 +34,7 @@ public class ControllerStateManager {
     /**
      * Constructor for the Controller State Manager. Each controller instance
      * has a specific controller state manager, so it is required as a param
-     * the controller instance that will then receive the controller states
+     * the controller instance that will then receiveFromServer the controller states
      * instances when asking for them
      *
      * @param controller the controller to which are added the states

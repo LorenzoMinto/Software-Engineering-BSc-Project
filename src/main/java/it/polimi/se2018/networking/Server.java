@@ -1,8 +1,8 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.connection.message.Message;
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
+import it.polimi.se2018.networking.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.ConfigImporter;
 import it.polimi.se2018.utils.NoConfigParamFoundException;

@@ -1,7 +1,6 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.connection.message.Message;
-import it.polimi.se2018.controller.ControllerInterface;
+import it.polimi.se2018.networking.message.Message;
 
 public class GUIView extends View{
 

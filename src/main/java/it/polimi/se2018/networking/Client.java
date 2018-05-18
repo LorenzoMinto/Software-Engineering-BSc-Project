@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.connection.message.Message;
+import it.polimi.se2018.networking.message.Message;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.CLIView;
 import it.polimi.se2018.view.View;
@@ -27,7 +27,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         for(SenderInterface o : gateways){
             try{
                 o.sendMessage(message);
-                System.out.println("Succesfully sent the message to: "+o);
+                System.out.println("Successfully sent the message to: "+o);
             } catch(ConnectException e){
                 //TODO gestire meglio questa eccezione
                 System.out.println("Could not send the message due to connection error to: "+o);
@@ -62,7 +62,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
         addGateway(server);
 
-        System.out.println("Started a Sagrada Client and connected to SagradaServer as guest.");
+        System.out.println("Started a Sagrada Client and connected to Sagrada Server as guest.");
         System.out.println("Remember that in order to receive message from server you have to send a message with content 'federico'");
 
         listenForMessagesFromConsole();

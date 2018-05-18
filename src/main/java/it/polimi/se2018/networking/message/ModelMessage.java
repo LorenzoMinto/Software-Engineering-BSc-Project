@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection.message;
+package it.polimi.se2018.networking.message;
 
 public class ModelMessage extends Message {
 
