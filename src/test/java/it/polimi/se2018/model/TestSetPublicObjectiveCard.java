@@ -197,4 +197,18 @@ public class TestSetPublicObjectiveCard {
         testScore = allColorsPublicObjectiveCard.calculateScore(wp);
         assertEquals(allColorsSetScore, testScore);
     }
+
+    @Test
+    public void testToString(){
+        setPublicObjectiveCard = new SetPublicObjectiveCard(
+                "title", "description", null, allValuesSet, Dice::getValue, 5);
+        String toString = setPublicObjectiveCard.toString();
+        String expectedString = "title\ndescription\nMultiplier: 5\n";
+        assertEquals(expectedString, toString);
+    }
+
+    @Test
+    public void testCopy(){
+        assertNotNull(setPublicObjectiveCard.copy());
+    }
 }

@@ -133,8 +133,23 @@ public class TestWindowPattern {
     }
 
 
+    @Test
+    public void testToString(){
+        Cell[][] smallPattern = new Cell[2][2];
+        for(int i=0; i<2; i++){
+            for(int j=0; j<2; j++){
+                smallPattern[i][j] = new Cell();
+            }
+        }
 
+        windowPattern = new WindowPattern("title", 5, smallPattern);
 
+        String windowPatternToString = windowPattern.toString();
+        String expectedString = "{title}\nDifficulty: 5\n(0:_)(0:_)\n(0:_)(0:_)\n";
+
+        assertEquals(expectedString, windowPatternToString);
+
+    }
 
 
 

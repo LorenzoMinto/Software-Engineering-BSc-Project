@@ -127,13 +127,13 @@ public class TestTurn {
         assertEquals(1,turn.getSlotOfTrackChosenDice());
     }
 
-    @Test
-    public void testSetSlotOfTrackChosenDiceWithNegativeValue(){
-        try{
-            turn.setSlotOfTrackChosenDice(-1);
-            fail();
-        }catch (IllegalArgumentException e){}
-    }
+//    @Test
+//    public void testSetSlotOfTrackChosenDiceWithNegativeValue(){
+//        try{
+//            turn.setSlotOfTrackChosenDice(-1);
+//            fail();
+//        }catch (IllegalArgumentException e){}
+//    }
 
     @Test
     public void testSetDraftedDice(){

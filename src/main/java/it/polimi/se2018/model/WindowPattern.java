@@ -206,6 +206,8 @@ public class WindowPattern {
     public String toString() {
         String s = "{"+this.title +"}";
         s = s.concat(System.lineSeparator());
+        s = s.concat("Difficulty: " + difficulty);
+        s = s.concat(System.lineSeparator());
 
         for(Cell[] cellsRow : this.pattern){
             for(Cell cell : cellsRow){
