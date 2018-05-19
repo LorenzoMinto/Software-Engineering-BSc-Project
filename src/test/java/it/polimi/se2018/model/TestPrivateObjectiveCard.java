@@ -5,7 +5,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
+
+/**
+ * @author Jacopo Pio Gargano
+ */
 
 public class TestPrivateObjectiveCard {
 
@@ -33,7 +38,7 @@ public class TestPrivateObjectiveCard {
     private static int purpleScore;
     private static int oneDiceWindowPatternScore;
 
-    private static Dice uniqueDiceOnWindowPattern = new Dice(DiceColors.RED, 3);
+    private static Dice uniqueDiceOnWindowPattern = new Dice(RED, 3);
 
     private int testScore;
 
@@ -50,21 +55,21 @@ public class TestPrivateObjectiveCard {
 
             wp = windowPatternManager.getPatterns(1).get(0);
 
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 1), 0, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 1), 0, 1);
-            wp.putDiceOnCell(new Dice(DiceColors.PURPLE, 3), 0, 2);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 2), 0, 3);
-            wp.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 0, 4);
+            wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
+            wp.putDiceOnCell(new Dice(YELLOW, 1), 0, 1);
+            wp.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            wp.putDiceOnCell(new Dice(BLUE, 2), 0, 3);
+            wp.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 3), 1, 3);
+            wp.putDiceOnCell(new Dice(RED, 3), 1, 3);
 
-            wp.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 2, 2);
-            wp.putDiceOnCell(new Dice(DiceColors.GREEN, 2), 2, 3);
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wp.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wp.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            wp.putDiceOnCell(new Dice(GREEN, 2), 2, 3);
+            wp.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 3, 3);
+            wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             oneDiceWindowPattern = windowPatternManager.getPatterns(1).get(0);
@@ -89,11 +94,11 @@ public class TestPrivateObjectiveCard {
 
         privateObjectiveCard = PrivateObjectiveCard.createTestInstance();
 
-        redPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
-        yellowPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.YELLOW);
-        greenPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.GREEN);
-        purplePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.PURPLE);
-        bluePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.BLUE);
+        redPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
+        yellowPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, YELLOW);
+        greenPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, GREEN);
+        purplePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, PURPLE);
+        bluePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, BLUE);
 
         oneDicePrivateObjectiveCard = new PrivateObjectiveCard
                 (null,null,null, uniqueDiceOnWindowPattern.getColor());

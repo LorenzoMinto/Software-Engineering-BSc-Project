@@ -7,8 +7,12 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
+/**
+ * @author Jacopo Pio Gargano
+ */
 public class TestScorer {
 
     private static Scorer scorer;
@@ -61,13 +65,13 @@ public class TestScorer {
     private ObjectiveCardFactory factory = ObjectiveCardFactory.getInstance();
 
     private static final PrivateObjectiveCard card1 = new PrivateObjectiveCard(
-            null, null, null, DiceColors.RED);
+            null, null, null, RED);
     private static final PrivateObjectiveCard card2 = new PrivateObjectiveCard(
-            null, null, null, DiceColors.GREEN);
+            null, null, null, GREEN);
     private static final PrivateObjectiveCard card3 = new PrivateObjectiveCard(
-            null, null, null, DiceColors.PURPLE);
+            null, null, null, PURPLE);
     private static final PrivateObjectiveCard card4 = new PrivateObjectiveCard(
-            null, null, null, DiceColors.YELLOW);
+            null, null, null, YELLOW);
 
     private List<PublicObjectiveCard> publicObjectiveCards;
     private PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
@@ -99,12 +103,10 @@ public class TestScorer {
     private List<Player> playersByScore;
     private List<Player> testPlayersByScore;
     private Player winner;
-    private Player testWinner;
 
-    Map<Player, Integer> testRankings;
+    private Map<Player, Integer> testRankings;
 
     private Map<Player, Integer> rankings;
-    private int winnerScore;
 
 
     @BeforeClass
@@ -127,318 +129,318 @@ public class TestScorer {
 
             wp1 = genericWP.copy();
 
-            wp1.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0, 0);
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wp1.putDiceOnCell(new Dice(DiceColors.PURPLE, 4), 0, 2);
-            wp1.putDiceOnCell(new Dice(DiceColors.BLUE, 5), 0, 3);
-            wp1.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 0, 4);
+            wp1.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
+            wp1.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wp1.putDiceOnCell(new Dice(PURPLE, 4), 0, 2);
+            wp1.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            wp1.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wp1.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 1);
-            wp1.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 2);
-            wp1.putDiceOnCell(new Dice(DiceColors.RED, 5), 1, 3);
+            wp1.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wp1.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            wp1.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            wp1.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wp1.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wp1.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 2, 2);
-            wp1.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 2, 3);
-            wp1.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wp1.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp1.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wp1.putDiceOnCell(new Dice(BLUE, 1), 2, 2);
+            wp1.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            wp1.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 4), 3, 0);
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 3, 2);
-            wp1.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 3, 3);
+            wp1.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            wp1.putDiceOnCell(new Dice(YELLOW, 2), 3, 2);
+            wp1.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             wp2 = genericWP.copy();
 
-            wp2.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0, 0);
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wp2.putDiceOnCell(new Dice(DiceColors.PURPLE, 3), 0, 2);
-            wp2.putDiceOnCell(new Dice(DiceColors.GREEN, 5), 0, 3);
-            wp2.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 0, 4);
+            wp2.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
+            wp2.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wp2.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            wp2.putDiceOnCell(new Dice(GREEN, 5), 0, 3);
+            wp2.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wp2.putDiceOnCell(new Dice(DiceColors.RED, 3), 1, 1);
-            wp2.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 2);
-            wp2.putDiceOnCell(new Dice(DiceColors.RED, 5), 1, 3);
+            wp2.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wp2.putDiceOnCell(new Dice(RED, 3), 1, 1);
+            wp2.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            wp2.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wp2.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wp2.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 2, 2);
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 2, 3);
-            wp2.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wp2.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp2.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wp2.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            wp2.putDiceOnCell(new Dice(YELLOW, 3), 2, 3);
+            wp2.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 4), 3, 0);
-            wp2.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 3, 2);
-            wp2.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 3, 3);
+            wp2.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            wp2.putDiceOnCell(new Dice(GREEN, 3), 3, 2);
+            wp2.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             wp3 = genericWP.copy();
 
-            wp3.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0, 0);
-            wp3.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wp3.putDiceOnCell(new Dice(DiceColors.PURPLE, 3), 0, 2);
-            wp3.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 0, 3);
-            wp3.putDiceOnCell(new Dice(DiceColors.GREEN, 2), 0, 4);
+            wp3.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
+            wp3.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wp3.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            wp3.putDiceOnCell(new Dice(PURPLE, 5), 0, 3);
+            wp3.putDiceOnCell(new Dice(GREEN, 2), 0, 4);
 
-            wp3.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wp3.putDiceOnCell(new Dice(DiceColors.RED, 3), 1, 1);
-            wp3.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 2);
-            wp3.putDiceOnCell(new Dice(DiceColors.GREEN, 5), 1, 3);
-            wp3.putDiceOnCell(new Dice(DiceColors.GREEN, 1), 1, 4);
+            wp3.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wp3.putDiceOnCell(new Dice(RED, 3), 1, 1);
+            wp3.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            wp3.putDiceOnCell(new Dice(GREEN, 5), 1, 3);
+            wp3.putDiceOnCell(new Dice(GREEN, 1), 1, 4);
 
-            wp3.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp3.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wp3.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 2, 2);
-            wp3.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 2, 3);
-            wp3.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wp3.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp3.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wp3.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            wp3.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            wp3.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wp3.putDiceOnCell(new Dice(DiceColors.YELLOW, 4), 3, 0);
-            wp3.putDiceOnCell(new Dice(DiceColors.GREEN, 5), 3, 4);
+            wp3.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            wp3.putDiceOnCell(new Dice(GREEN, 5), 3, 4);
 
 
             wp4 = genericWP.copy();
 
-            wp4.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0, 0);
-            wp4.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wp4.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 0, 2);
-            wp4.putDiceOnCell(new Dice(DiceColors.BLUE, 5), 0, 3);
-            wp4.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 0, 4);
+            wp4.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
+            wp4.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wp4.putDiceOnCell(new Dice(GREEN, 3), 0, 2);
+            wp4.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            wp4.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp4.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wp4.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 1);
-            wp4.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 1, 2);
-            wp4.putDiceOnCell(new Dice(DiceColors.RED, 2), 1, 4);
+            wp4.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wp4.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            wp4.putDiceOnCell(new Dice(GREEN, 3), 1, 2);
+            wp4.putDiceOnCell(new Dice(RED, 2), 1, 4);
 
-            wp4.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp4.putDiceOnCell(new Dice(DiceColors.BLUE, 6), 2, 1);
-            wp4.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 2, 2);
-            wp4.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 2, 3);
-            wp4.putDiceOnCell(new Dice(DiceColors.RED, 3), 2, 4);
+            wp4.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp4.putDiceOnCell(new Dice(BLUE, 6), 2, 1);
+            wp4.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            wp4.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            wp4.putDiceOnCell(new Dice(RED, 3), 2, 4);
 
-            wp4.putDiceOnCell(new Dice(DiceColors.RED, 4), 3, 0);
-            wp4.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 3, 3);
-            wp4.putDiceOnCell(new Dice(DiceColors.RED, 1), 3, 4);
+            wp4.putDiceOnCell(new Dice(RED, 4), 3, 0);
+            wp4.putDiceOnCell(new Dice(PURPLE, 5), 3, 3);
+            wp4.putDiceOnCell(new Dice(RED, 1), 3, 4);
 
 
             wpWithSamePrivateScore = genericWP.copy();
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.PURPLE, 4), 0, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.BLUE, 5), 0, 3);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.GREEN, 6), 0, 4);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(PURPLE, 4), 0, 2);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(GREEN, 6), 0, 4);
 
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.RED, 5), 1, 3);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.PURPLE, 6), 2, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 2, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 2, 3);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(PURPLE, 6), 2, 0);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 1), 2, 2);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 3, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 4), 3, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 3, 3);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 6), 3, 0);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 4), 3, 2);
+            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             wpSameScore1 = genericWP.copy();
 
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.RED,5),0,0);
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.BLUE,1),0,1);
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.YELLOW,1),0,2);
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,3);
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.GREEN,1),0,4);
+            wpSameScore1.putDiceOnCell(new Dice(RED,5),0,0);
+            wpSameScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
+            wpSameScore1.putDiceOnCell(new Dice(YELLOW,1),0,2);
+            wpSameScore1.putDiceOnCell(new Dice(PURPLE,1),0,3);
+            wpSameScore1.putDiceOnCell(new Dice(GREEN,1),0,4);
 
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.RED,3),1,1);
+            wpSameScore1.putDiceOnCell(new Dice(RED,3),1,1);
 
-            wpSameScore1.putDiceOnCell(new Dice(DiceColors.RED,2),2,2);
+            wpSameScore1.putDiceOnCell(new Dice(RED,2),2,2);
 
 
             wpSameScore2 = genericWP.copy();
 
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.RED,5),0,0);
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.BLUE,1),0,1);
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.YELLOW,1),0,2);
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,3);
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.GREEN,3),0,4);
+            wpSameScore2.putDiceOnCell(new Dice(RED,5),0,0);
+            wpSameScore2.putDiceOnCell(new Dice(BLUE,1),0,1);
+            wpSameScore2.putDiceOnCell(new Dice(YELLOW,1),0,2);
+            wpSameScore2.putDiceOnCell(new Dice(PURPLE,1),0,3);
+            wpSameScore2.putDiceOnCell(new Dice(GREEN,3),0,4);
 
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.RED,5),1,2);
+            wpSameScore2.putDiceOnCell(new Dice(RED,5),1,2);
 
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.RED,3),2,3);
+            wpSameScore2.putDiceOnCell(new Dice(RED,3),2,3);
 
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.GREEN,6),3,0);
-            wpSameScore2.putDiceOnCell(new Dice(DiceColors.RED,4),3,2);
+            wpSameScore2.putDiceOnCell(new Dice(GREEN,6),3,0);
+            wpSameScore2.putDiceOnCell(new Dice(RED,4),3,2);
 
 
             wpSameScore3 = genericWP.copy();
 
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,0);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.RED,5),0,1);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,2);
+            wpSameScore3.putDiceOnCell(new Dice(PURPLE,1),0,0);
+            wpSameScore3.putDiceOnCell(new Dice(RED,5),0,1);
+            wpSameScore3.putDiceOnCell(new Dice(PURPLE,1),0,2);
 
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.YELLOW,2),1,0);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.RED,2),1,2);
+            wpSameScore3.putDiceOnCell(new Dice(YELLOW,2),1,0);
+            wpSameScore3.putDiceOnCell(new Dice(RED,2),1,2);
 
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.RED,3),2,0);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.YELLOW,3),2,2);
+            wpSameScore3.putDiceOnCell(new Dice(RED,3),2,0);
+            wpSameScore3.putDiceOnCell(new Dice(YELLOW,3),2,2);
 
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.GREEN,4),3,0);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.GREEN,4),3,2);
-            wpSameScore3.putDiceOnCell(new Dice(DiceColors.PURPLE,4),3,4);
+            wpSameScore3.putDiceOnCell(new Dice(GREEN,4),3,0);
+            wpSameScore3.putDiceOnCell(new Dice(GREEN,4),3,2);
+            wpSameScore3.putDiceOnCell(new Dice(PURPLE,4),3,4);
 
 
             wpSameScore4 = genericWP.copy();
 
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.RED, 4),0,0);
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.YELLOW, 3),0,4);
+            wpSameScore4.putDiceOnCell(new Dice(RED, 4),0,0);
+            wpSameScore4.putDiceOnCell(new Dice(YELLOW, 3),0,4);
 
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.RED, 5),1,1);
+            wpSameScore4.putDiceOnCell(new Dice(RED, 5),1,1);
 
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.RED, 3),2,2);
+            wpSameScore4.putDiceOnCell(new Dice(RED, 3),2,2);
 
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.RED,5),3,0);
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.BLUE,1),3,1);
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.YELLOW,5),3,2);
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.PURPLE,1),3,3);
-            wpSameScore4.putDiceOnCell(new Dice(DiceColors.GREEN,1),3,4);
+            wpSameScore4.putDiceOnCell(new Dice(RED,5),3,0);
+            wpSameScore4.putDiceOnCell(new Dice(BLUE,1),3,1);
+            wpSameScore4.putDiceOnCell(new Dice(YELLOW,5),3,2);
+            wpSameScore4.putDiceOnCell(new Dice(PURPLE,1),3,3);
+            wpSameScore4.putDiceOnCell(new Dice(GREEN,1),3,4);
 
 
 
             wpSamePrivateScore1 = genericWP.copy();
 
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.RED,5),0,0);
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.BLUE,1),0,1);
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.YELLOW,1),0,2);
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,3);
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.GREEN,1),0,4);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(RED,5),0,0);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(YELLOW,1),0,2);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(PURPLE,1),0,3);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(GREEN,1),0,4);
 
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.RED,3),1,1);
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.YELLOW,1),1,3);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(RED,3),1,1);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(YELLOW,1),1,3);
 
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.RED,2),2,2);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(RED,2),2,2);
 
-            wpSamePrivateScore1.putDiceOnCell(new Dice(DiceColors.RED,1),3,3);
+            wpSamePrivateScore1.putDiceOnCell(new Dice(RED,1),3,3);
 
 
             wpSamePrivateScore2 = genericWP.copy();
 
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.BLUE,1),0,0);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,5),0,1);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.YELLOW,1),0,2);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.PURPLE,1),0,3);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.GREEN,5),0,4);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(BLUE,1),0,0);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,5),0,1);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(YELLOW,1),0,2);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(PURPLE,1),0,3);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(GREEN,5),0,4);
 
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,5),1,2);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,1),1,4);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,5),1,2);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,1),1,4);
 
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,3),2,3);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,3),2,3);
 
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.GREEN,6),3,0);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,4),3,2);
-            wpSamePrivateScore2.putDiceOnCell(new Dice(DiceColors.RED,3),3,4);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(GREEN,6),3,0);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,4),3,2);
+            wpSamePrivateScore2.putDiceOnCell(new Dice(RED,3),3,4);
 
 
             wpSamePrivateScore3 = genericWP.copy();
 
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.PURPLE,5),0,0);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.RED,5),0,1);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.PURPLE,6),0,2);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(PURPLE,5),0,0);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(RED,5),0,1);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(PURPLE,6),0,2);
 
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.RED,3),1,0);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.RED,2),1,2);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(RED,3),1,0);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(RED,2),1,2);
 
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.YELLOW,2),2,0);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.YELLOW,3),2,2);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.RED,3),2,3);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(YELLOW,2),2,0);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(YELLOW,3),2,2);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(RED,3),2,3);
 
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.GREEN,4),3,0);
-            wpSamePrivateScore3.putDiceOnCell(new Dice(DiceColors.GREEN,4),3,2);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(GREEN,4),3,0);
+            wpSamePrivateScore3.putDiceOnCell(new Dice(GREEN,4),3,2);
 
 
             wpSamePrivateScore4 = genericWP.copy();
 
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.YELLOW, 5),0,4);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(YELLOW, 5),0,4);
 
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.RED, 5),1,1);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(RED, 5),1,1);
 
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.RED, 3),2,2);
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.YELLOW, 1),2,3);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(RED, 3),2,2);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(YELLOW, 1),2,3);
 
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.BLUE,1),3,0);
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.RED,5),3,1);
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.YELLOW,5),3,2);
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.PURPLE,1),3,3);
-            wpSamePrivateScore4.putDiceOnCell(new Dice(DiceColors.GREEN,1),3,4);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(BLUE,1),3,0);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(RED,5),3,1);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(YELLOW,5),3,2);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(PURPLE,1),3,3);
+            wpSamePrivateScore4.putDiceOnCell(new Dice(GREEN,1),3,4);
 
 
             wpSame1 = genericWP.copy();
 
-            wpSame1.putDiceOnCell(new Dice(DiceColors.RED, 5), 0,0);
-            wpSame1.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0,1);
-            wpSame1.putDiceOnCell(new Dice(DiceColors.YELLOW, 1), 0,2);
-            wpSame1.putDiceOnCell(new Dice(DiceColors.PURPLE, 1), 0,3);
-            wpSame1.putDiceOnCell(new Dice(DiceColors.GREEN, 1), 0,4);
+            wpSame1.putDiceOnCell(new Dice(RED, 5), 0,0);
+            wpSame1.putDiceOnCell(new Dice(BLUE, 1), 0,1);
+            wpSame1.putDiceOnCell(new Dice(YELLOW, 1), 0,2);
+            wpSame1.putDiceOnCell(new Dice(PURPLE, 1), 0,3);
+            wpSame1.putDiceOnCell(new Dice(GREEN, 1), 0,4);
 
-            wpSame1.putDiceOnCell(new Dice(DiceColors.RED, 3), 1,1);
-            wpSame1.putDiceOnCell(new Dice(DiceColors.YELLOW, 1), 1,3);
+            wpSame1.putDiceOnCell(new Dice(RED, 3), 1,1);
+            wpSame1.putDiceOnCell(new Dice(YELLOW, 1), 1,3);
 
-            wpSame1.putDiceOnCell(new Dice(DiceColors.RED, 2), 2,2);
+            wpSame1.putDiceOnCell(new Dice(RED, 2), 2,2);
 
-            wpSame1.putDiceOnCell(new Dice(DiceColors.RED, 1), 3,3);
+            wpSame1.putDiceOnCell(new Dice(RED, 1), 3,3);
 
 
             wpSame2 = genericWP.copy();
 
-            wpSame2.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 0,0);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.RED, 5), 0,1);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.YELLOW, 1), 0,2);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.PURPLE, 1), 0,3);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.GREEN, 5), 0,4);
+            wpSame2.putDiceOnCell(new Dice(BLUE, 1), 0,0);
+            wpSame2.putDiceOnCell(new Dice(RED, 5), 0,1);
+            wpSame2.putDiceOnCell(new Dice(YELLOW, 1), 0,2);
+            wpSame2.putDiceOnCell(new Dice(PURPLE, 1), 0,3);
+            wpSame2.putDiceOnCell(new Dice(GREEN, 5), 0,4);
 
-            wpSame2.putDiceOnCell(new Dice(DiceColors.RED, 5), 1,2);
+            wpSame2.putDiceOnCell(new Dice(RED, 5), 1,2);
 
-            wpSame2.putDiceOnCell(new Dice(DiceColors.RED, 3), 2,3);
+            wpSame2.putDiceOnCell(new Dice(RED, 3), 2,3);
 
-            wpSame2.putDiceOnCell(new Dice(DiceColors.GREEN, 6), 3,0);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.RED, 4), 3,2);
-            wpSame2.putDiceOnCell(new Dice(DiceColors.RED, 1), 3,4);
+            wpSame2.putDiceOnCell(new Dice(GREEN, 6), 3,0);
+            wpSame2.putDiceOnCell(new Dice(RED, 4), 3,2);
+            wpSame2.putDiceOnCell(new Dice(RED, 1), 3,4);
 
 
             wpSame3 = genericWP.copy();
 
-            wpSame3.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0,0);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.PURPLE, 1), 0,1);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.RED, 2), 0,2);
+            wpSame3.putDiceOnCell(new Dice(YELLOW, 2), 0,0);
+            wpSame3.putDiceOnCell(new Dice(PURPLE, 1), 0,1);
+            wpSame3.putDiceOnCell(new Dice(RED, 2), 0,2);
 
-            wpSame3.putDiceOnCell(new Dice(DiceColors.PURPLE, 1), 1,0);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 1,2);
+            wpSame3.putDiceOnCell(new Dice(PURPLE, 1), 1,0);
+            wpSame3.putDiceOnCell(new Dice(PURPLE, 5), 1,2);
 
-            wpSame3.putDiceOnCell(new Dice(DiceColors.RED, 3), 2,0);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 2,2);
+            wpSame3.putDiceOnCell(new Dice(RED, 3), 2,0);
+            wpSame3.putDiceOnCell(new Dice(YELLOW, 3), 2,2);
 
-            wpSame3.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 3,0);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 3,2);
-            wpSame3.putDiceOnCell(new Dice(DiceColors.PURPLE, 4), 3,4);
+            wpSame3.putDiceOnCell(new Dice(GREEN, 4), 3,0);
+            wpSame3.putDiceOnCell(new Dice(GREEN, 4), 3,2);
+            wpSame3.putDiceOnCell(new Dice(PURPLE, 4), 3,4);
 
 
             wpSame4 = genericWP.copy();
 
-            wpSame4.putDiceOnCell(new Dice(DiceColors.RED, 4), 0,0);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.RED, 1), 0,2);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 0,4);
+            wpSame4.putDiceOnCell(new Dice(RED, 4), 0,0);
+            wpSame4.putDiceOnCell(new Dice(RED, 1), 0,2);
+            wpSame4.putDiceOnCell(new Dice(YELLOW, 5), 0,4);
 
-            wpSame4.putDiceOnCell(new Dice(DiceColors.RED, 5), 1,1);
+            wpSame4.putDiceOnCell(new Dice(RED, 5), 1,1);
 
-            wpSame4.putDiceOnCell(new Dice(DiceColors.RED, 3), 2,2);
+            wpSame4.putDiceOnCell(new Dice(RED, 3), 2,2);
 
-            wpSame4.putDiceOnCell(new Dice(DiceColors.BLUE, 1), 3,0);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.RED, 5), 3,1);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 3,2);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.PURPLE, 1), 3,3);
-            wpSame4.putDiceOnCell(new Dice(DiceColors.GREEN, 1), 3,4);
+            wpSame4.putDiceOnCell(new Dice(BLUE, 1), 3,0);
+            wpSame4.putDiceOnCell(new Dice(RED, 5), 3,1);
+            wpSame4.putDiceOnCell(new Dice(YELLOW, 6), 3,2);
+            wpSame4.putDiceOnCell(new Dice(PURPLE, 1), 3,3);
+            wpSame4.putDiceOnCell(new Dice(GREEN, 1), 3,4);
 
         }catch (BadFormattedPatternFileException e){
             e.printStackTrace();
@@ -520,7 +522,6 @@ public class TestScorer {
         assertEquals(testRankings, rankings);
     }
 
-
     @Test
     public void testGetRankingsOfNullPlayersOfLastRound(){
         playersOfLastRound = null;
@@ -543,10 +544,8 @@ public class TestScorer {
 
     @Test
     public void testGetRankingsOfNullPublicObjectiveCards(){
-        publicObjectiveCards = null;
-
         try {
-            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            scorer.getRankings(playersOfLastRound, null);
             fail();
         }catch (IllegalArgumentException e){}
     }
@@ -613,7 +612,7 @@ public class TestScorer {
 
         rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
         winner = scorer.getWinner(rankings);
-        testWinner = p3;
+        Player testWinner = p3;
 
         assertEquals(testWinner, winner);
     }
@@ -630,7 +629,7 @@ public class TestScorer {
 
         rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
         winner = scorer.getWinner(rankings);
-        winnerScore = rankings.get(winner);
+        int winnerScore = rankings.get(winner);
 
         assertEquals(p3Score, winnerScore);
     }

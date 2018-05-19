@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 public class TestDiceBag {
@@ -30,19 +31,19 @@ public class TestDiceBag {
             dice.setValue(3);
         }
         assertTrue(
-                dices.contains(new Dice(DiceColors.RED,3))&&
-                        dices.contains(new Dice(DiceColors.GREEN,3))&&
-                        dices.contains(new Dice(DiceColors.BLUE,3))&&
-                        dices.contains(new Dice(DiceColors.PURPLE,3))&&
-                        dices.contains(new Dice(DiceColors.YELLOW,3))
+                dices.contains(new Dice(RED,3))&&
+                        dices.contains(new Dice(GREEN,3))&&
+                        dices.contains(new Dice(BLUE,3))&&
+                        dices.contains(new Dice(PURPLE,3))&&
+                        dices.contains(new Dice(YELLOW,3))
         );
     }
 
     @Test
     public void testAddDice() {
         DiceBag diceBag = new DiceBag(0);
-        Dice dice = new Dice(DiceColors.RED,4);
+        Dice dice = new Dice(RED,4);
         diceBag.addDice(dice);
-        assertTrue(diceBag.getDices(1).get(0).getColor()==DiceColors.RED);
+        assertTrue(diceBag.getDices(1).get(0).getColor()== RED);
     }
 }

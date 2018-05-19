@@ -36,7 +36,7 @@ public class WindowPattern {
      * @param pattern the pattern structured as array of cells with already set constraints
      */
     public WindowPattern(String title, int difficulty, Cell[][] pattern) {
-        if(pattern==null) throw new IllegalArgumentException();
+        if(pattern==null) throw new IllegalArgumentException("Can't create a window pattern with null pattern.");
 
         this.title = title;
         this.difficulty = difficulty;
@@ -110,7 +110,7 @@ public class WindowPattern {
      */
     public Dice getDiceOnCell(int row, int col) {
         Dice dice = null;
-        if (isLegalPosition(row, col)) {
+        if (isLegalPosition(row, col) && pattern[row][col].hasDice()) {
             dice = pattern[row][col].getDice();
         }
         return dice;
@@ -134,11 +134,11 @@ public class WindowPattern {
         }
 
         //Checks if no dice is present on the specified cell
-        if(pattern[row][col].hasDice()){
+        if(this.pattern[row][col].hasDice()){
             return false;
         }
 
-        pattern[row][col].setDice(dice);
+        this.pattern[row][col].setDice(dice);
         isEmpty = false;
         return true;
     }

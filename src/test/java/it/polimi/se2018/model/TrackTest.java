@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 public class TrackTest {
@@ -18,11 +19,11 @@ public class TrackTest {
     public void setUp() throws Exception {
         dices = new ArrayList<>();
 
-        dice1 = new Dice(DiceColors.BLUE, 5);
-        Dice dice2 = new Dice(DiceColors.RED, 3);
-        Dice dice3 = new Dice(DiceColors.GREEN, 2);
-        Dice dice4 = new Dice(DiceColors.PURPLE, 1);
-        Dice dice5 = new Dice(DiceColors.YELLOW, 4);
+        dice1 = new Dice(BLUE, 5);
+        Dice dice2 = new Dice(RED, 3);
+        Dice dice3 = new Dice(GREEN, 2);
+        Dice dice4 = new Dice(PURPLE, 1);
+        Dice dice5 = new Dice(YELLOW, 4);
 
         dices.add(dice1);
         dices.add(dice2);

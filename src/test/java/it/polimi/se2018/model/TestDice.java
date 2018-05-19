@@ -4,15 +4,22 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
+
+
+/**
+ * @author Federico Haag
+ * @author Jacopo Pio Gargano
+ */
 public class TestDice {
 
     private Dice dice;
 
     @Before
     public  void initializeDice(){
-        dice = new Dice(DiceColors.GREEN,2);
+        dice = new Dice(GREEN,2);
     }
 
     @Test
@@ -41,50 +48,29 @@ public class TestDice {
 
 
     @Test
-    public void testRollOverFromOne() {
+    public void testRollOver() {
         dice.setValue(1);
         dice.rollOver();
-
         assertEquals(6,dice.getValue());
-    }
 
-    @Test
-    public void testRollOverFromTwo() {
         dice.setValue(2);
         dice.rollOver();
-
         assertEquals(5,dice.getValue());
-    }
 
-    @Test
-    public void testRollOverFromThree() {
         dice.setValue(3);
         dice.rollOver();
-
         assertEquals(4,dice.getValue());
-    }
 
-    @Test
-    public void testRollOverFromFour() {
         dice.setValue(4);
         dice.rollOver();
-
         assertEquals(3,dice.getValue());
-    }
 
-    @Test
-    public void testRollOverFromFive() {
         dice.setValue(5);
         dice.rollOver();
-
         assertEquals(2,dice.getValue());
-    }
 
-    @Test
-    public void testRollOverFromSix() {
         dice.setValue(6);
         dice.rollOver();
-
         assertEquals(1,dice.getValue());
     }
 

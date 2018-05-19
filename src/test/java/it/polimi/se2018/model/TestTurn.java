@@ -5,7 +5,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
+
+/**
+ * @author Jacopo Pio Gargano
+ */
 
 public class TestTurn {
 
@@ -23,10 +28,10 @@ public class TestTurn {
     @BeforeClass
     public static void initializeVariables() {
         user = new User(1, "username");
-        privateObjectiveCard = new PrivateObjectiveCard(null,null, null, DiceColors.RED);
+        privateObjectiveCard = new PrivateObjectiveCard(null,null, null, RED);
         playerName = "player";
-        TestTurn.player = new Player(user, playerName, privateObjectiveCard);
-        dice = new Dice(DiceColors.RED);
+        player = new Player(user, playerName, privateObjectiveCard);
+        dice = new Dice(RED);
         toolCard = ToolCard.createTestInstance();
 
     }
@@ -186,7 +191,6 @@ public class TestTurn {
 
     @Test
     public void testNullPlayerIsCurrentPlayer(){
-        Player playerTest = null;
         try{
             turn.isCurrentPlayer(null);
             fail();
