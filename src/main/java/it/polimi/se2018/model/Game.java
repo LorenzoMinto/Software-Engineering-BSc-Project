@@ -64,12 +64,8 @@ public class Game extends Observable {
     /**
      * Represents the final players' rankings (during the middle of the game is a null object)
      */
-    private List<Player> rankings;
+    private Map<Player, Integer> rankings;
 
-    /**
-     * Represents the final players' scores (during the middle of the game is a null object)
-     */
-    private HashMap<Player,Integer> scores;
 
     /**
      * Constructor for a new Game instance. Basic configuration is passed as argument.
@@ -88,7 +84,6 @@ public class Game extends Observable {
         this.players = new ArrayList<>();
         this.status = GameStatus.WAITING_FOR_CARDS;
         this.rankings = null;
-        this.scores = null;
 
         this.numberOfRounds = numberOfRounds;
         this.maxNumberOfPlayers = maxNumberOfPlayers;
@@ -167,38 +162,35 @@ public class Game extends Observable {
     }
 
     /**
+     * Gets the final rankings
+     *
+     * @return list of ordered players, first is the winner, null if not yet set
+     */
+    public Map<Player, Integer> getRankings() {
+        return rankings;
+    }
+
+    /**
      * Sets the final rankings.
      *
      * @param rankings list of ordered players: first is winner
      */
-    public void setRankings(List<Player> rankings) {
-        if(this.status == GameStatus.ENDED) {
-            this.rankings = rankings;
-        } else {
-            throw new BadBehaviourRuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
-        }
+    public void setRankings(Map<Player, Integer> rankings) {
+        if(this.status != GameStatus.ENDED){ throw  new BadBehaviourRuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");}
+        if(rankings == null){ throw new IllegalArgumentException("Can't set rankings to null");}
+
+        this.rankings = rankings;
     }
 
     /**
-     * Sets the final scores.
-     *
-     * @param scores map each player to its finale score
-     */
-    public void setScores(Map<Player, Integer> scores) {
-        if(this.status==GameStatus.ENDED) {
-            this.scores = (HashMap<Player, Integer>) scores;
-        } else {
-            throw new BadBehaviourRuntimeException("Can't set scores if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");
-        }
-    }
-
-    /**
-     * If possibile, adds the given player to the game.
+     * If possible, adds the given player to the game.
      *
      * @param player player to add to the game
      * @return if the action succeeded
      */
     public boolean addPlayer(Player player){
+        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("Can't add player if game is not waiting for players. Controller should not ask for it. Bad unhandleable behaviour.");}
+
         if( !players.contains(player) && players.size() < maxNumberOfPlayers){
             players.add(player);
             return true;
@@ -231,6 +223,8 @@ public class Game extends Observable {
      * @param toolCard toolCard used in the current Turn
      */
     public void useToolCard(ToolCard toolCard){
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if not playing");}
+        if(toolCard == null){ throw new IllegalArgumentException("Asked to use a null toolcard ");}
 
         if( !this.drawnToolCards.contains(toolCard) ) {
             throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
@@ -249,6 +243,7 @@ public class Game extends Observable {
      * @author Lorenzo Minto
      */
     public ToolCard getToolCard(ToolCard toolCardCopy) {
+        if(toolCardCopy == null){ throw new IllegalArgumentException("Asked to use a null toolcard ");}
         if( !this.drawnToolCards.contains(toolCardCopy) ) {
             throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
         }
@@ -268,14 +263,20 @@ public class Game extends Observable {
      */
     public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
 
+        if(dices == null){ throw new IllegalArgumentException("Can't proceed to next round with null dices.");}
+
         int nextRoundNumber;
-        if( this.currentRound == null ){
+        if( this.currentRound == null && this.status == GameStatus.WAITING_FOR_PLAYERS){
             nextRoundNumber = 0;
-        } else {
+            this.status = GameStatus.PLAYING;
+        } else if(this.currentRound != null && this.status == GameStatus.PLAYING){
             nextRoundNumber = this.currentRound.getNumber() + 1;
+        }else{
+            throw new BadBehaviourRuntimeException("Can't proceed to next round if not playing.");
         }
 
         if(nextRoundNumber > numberOfRounds - 1){
+            this.status = GameStatus.ENDED;
             throw new NoMoreRoundsAvailableException();
         }
 

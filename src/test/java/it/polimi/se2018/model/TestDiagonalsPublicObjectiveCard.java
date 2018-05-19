@@ -7,8 +7,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
+
+/**
+ * @author Jacopo Pio Gargano
+ */
 public class TestDiagonalsPublicObjectiveCard {
 
     private static WindowPatternManager windowPatternManager;
@@ -43,70 +48,70 @@ public class TestDiagonalsPublicObjectiveCard {
 
             diagonalsWP = windowPatternManager.getPatterns(1).get(0);
 
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.BLUE), 0, 0);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 0, 1);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.GREEN), 0, 2);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 0, 3);
+            diagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
+            diagonalsWP.putDiceOnCell(new Dice(RED), 0, 1);
+            diagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 0, 3);
 
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 1, 0);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 1, 1);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 1, 2);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 1, 3);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 1, 4);
+            diagonalsWP.putDiceOnCell(new Dice(RED), 1, 0);
+            diagonalsWP.putDiceOnCell(new Dice(PURPLE), 1, 1);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 1, 2);
+            diagonalsWP.putDiceOnCell(new Dice(PURPLE), 1, 3);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 1, 4);
 
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 2, 1);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 2, 2);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 2, 3);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 2, 4);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 2, 1);
+            diagonalsWP.putDiceOnCell(new Dice(PURPLE), 2, 2);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 2, 3);
+            diagonalsWP.putDiceOnCell(new Dice(PURPLE), 2, 4);
 
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 3, 0);
-            diagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 3, 3);
+            diagonalsWP.putDiceOnCell(new Dice(YELLOW), 3, 0);
+            diagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
             rightDiagonalsWP = windowPatternManager.getPatterns(1).get(0);
 
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.BLUE), 0, 0);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.GREEN), 0, 2);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 0, 3);
+            rightDiagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
+            rightDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
+            rightDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 0, 3);
 
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 1, 0);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 1, 1);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 1, 3);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 1, 4);
+            rightDiagonalsWP.putDiceOnCell(new Dice(RED), 1, 0);
+            rightDiagonalsWP.putDiceOnCell(new Dice(PURPLE), 1, 1);
+            rightDiagonalsWP.putDiceOnCell(new Dice(RED), 1, 3);
+            rightDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 1, 4);
 
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 2, 1);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 2, 2);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 2, 4);
+            rightDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 2, 1);
+            rightDiagonalsWP.putDiceOnCell(new Dice(PURPLE), 2, 2);
+            rightDiagonalsWP.putDiceOnCell(new Dice(RED), 2, 4);
 
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 3, 2);
-            rightDiagonalsWP.putDiceOnCell(new Dice(DiceColors.PURPLE), 3, 3);
+            rightDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 3, 2);
+            rightDiagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
             leftDiagonalsWP = windowPatternManager.getPatterns(1).get(0);
 
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 0, 0);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.GREEN), 0, 2);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 0, 3);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 0, 4);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 0);
+            leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 3);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 4);
 
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.GREEN), 1, 1);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 1, 2);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.BLUE), 1, 3);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 1, 4);
+            leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 1, 1);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 1, 2);
+            leftDiagonalsWP.putDiceOnCell(new Dice(BLUE), 1, 3);
+            leftDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 1, 4);
 
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.GREEN), 2, 0);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 2, 1);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.YELLOW), 2, 3);
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 2, 4);
+            leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 2, 0);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 2, 1);
+            leftDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 2, 3);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 2, 4);
 
-            leftDiagonalsWP.putDiceOnCell(new Dice(DiceColors.RED), 3, 0);
+            leftDiagonalsWP.putDiceOnCell(new Dice(RED), 3, 0);
 
 
             twoDiceWP = windowPatternManager.getPatterns(1).get(0);
 
-            twoDiceWP.putDiceOnCell(new Dice(DiceColors.RED), 0, 0);
+            twoDiceWP.putDiceOnCell(new Dice(RED), 0, 0);
 
-            twoDiceWP.putDiceOnCell(new Dice(DiceColors.RED), 1, 1);
+            twoDiceWP.putDiceOnCell(new Dice(RED), 1, 1);
 
 
 
@@ -181,5 +186,9 @@ public class TestDiagonalsPublicObjectiveCard {
         assertEquals(2, testScore);
     }
 
+    @Test
+    public void testCopy() {
+        assertNotNull(diagonalsPublicObjectiveCard.copy());
+    }
 
 }

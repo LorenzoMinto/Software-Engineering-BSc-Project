@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.ControllerInterface;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;

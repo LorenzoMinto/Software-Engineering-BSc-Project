@@ -5,10 +5,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * @author Jacopo Pio Gargano
+ */
 
 public class TestRound {
 
@@ -31,7 +37,7 @@ public class TestRound {
     @BeforeClass
     public static void initializeVariables(){
         user = new User(1,"username");
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
+        privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
         p1 = new Player(user, "p1", privateObjectiveCard);
         p2 = new Player(user, "p2", privateObjectiveCard);

@@ -4,8 +4,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
+
+/**
+ * @author Federico Haag
+ * @author Jacopo Pio Gargano
+ */
 public class TestCell {
 
     private Cell cell;
@@ -13,26 +19,26 @@ public class TestCell {
 
     @BeforeClass
     public static void initializeVariables(){
-        dice = new Dice(DiceColors.GREEN,4);
+        dice = new Dice(GREEN,4);
     }
 
     @Before
     public void initializeCell(){
-        cell = new Cell(3,DiceColors.PURPLE);
+        cell = new Cell(3, PURPLE);
     }
 
     @Test
     public void testGetAllowedValue() {
         int allowedValue = 3;
 
-        cell = new Cell(allowedValue, DiceColors.PURPLE);
+        cell = new Cell(allowedValue, PURPLE);
 
         assertEquals(allowedValue, cell.getAllowedValue());
     }
 
     @Test
     public void testGetAllowedColor() {
-        DiceColors allowedColor = DiceColors.PURPLE;
+        DiceColors allowedColor = PURPLE;
 
         cell = new Cell(3, allowedColor);
 

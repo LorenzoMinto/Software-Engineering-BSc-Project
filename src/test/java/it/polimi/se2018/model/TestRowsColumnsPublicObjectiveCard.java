@@ -5,8 +5,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
+
+/**
+ * @author Jacopo Pio Gargano
+ */
 
 //TODO: tests with factory
 public class TestRowsColumnsPublicObjectiveCard {
@@ -45,25 +50,25 @@ public class TestRowsColumnsPublicObjectiveCard {
 
             wp = windowPatternManager.getPatterns(1).get(0);
 
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 1), 0, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 2), 0, 1);
-            wp.putDiceOnCell(new Dice(DiceColors.PURPLE, 3), 0, 2);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 5), 0, 3);
-            wp.putDiceOnCell(new Dice(DiceColors.GREEN, 4), 0, 4);
+            wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
+            wp.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            wp.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            wp.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            wp.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 3), 1, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 1);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 1, 2);
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 5), 1, 3);
+            wp.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            wp.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wp.putDiceOnCell(new Dice(DiceColors.PURPLE, 5), 2, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 6), 2, 1);
-            wp.putDiceOnCell(new Dice(DiceColors.BLUE, 3), 2, 2);
-            wp.putDiceOnCell(new Dice(DiceColors.GREEN, 3), 2, 3);
-            wp.putDiceOnCell(new Dice(DiceColors.RED, 4), 2, 4);
+            wp.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            wp.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            wp.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            wp.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            wp.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 4), 3, 0);
-            wp.putDiceOnCell(new Dice(DiceColors.YELLOW, 5), 3, 3);
+            wp.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             nullWP = null;

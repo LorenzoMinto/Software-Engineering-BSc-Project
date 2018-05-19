@@ -151,9 +151,7 @@ public class Round {
 
         playerShouldPlayingIndex = ((roundNumber % numberOfPlayers) + turnNumber) % numberOfPlayers;
 
-        Player playerShouldBePlaying = players.get(playerShouldPlayingIndex);
-
-        return playerShouldBePlaying;
+        return players.get(playerShouldPlayingIndex);
     }
 
     /**

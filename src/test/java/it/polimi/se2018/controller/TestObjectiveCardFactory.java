@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Jacopo Pio Gargano
+ */
+
 public class TestObjectiveCardFactory {
 
     private static ObjectiveCardFactory factory;
@@ -58,35 +62,35 @@ public class TestObjectiveCardFactory {
     @Test
     public void testCreateRedPrivateObjectiveCard(){
         privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.RED);
-        assertTrue(privateObjectiveCard instanceof PrivateObjectiveCard);
+        assertNotNull(privateObjectiveCard);
         assertEquals(DiceColors.RED, privateObjectiveCard.getColor());
     }
 
     @Test
     public void testCreateYellowPrivateObjectiveCard(){
         privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.YELLOW);
-        assertTrue(privateObjectiveCard instanceof PrivateObjectiveCard);
+        assertNotNull(privateObjectiveCard);
         assertEquals(DiceColors.YELLOW, privateObjectiveCard.getColor());
     }
 
     @Test
     public void testCreateGreenPrivateObjectiveCard(){
         privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.GREEN);
-        assertTrue(privateObjectiveCard instanceof PrivateObjectiveCard);
+        assertNotNull(privateObjectiveCard);
         assertEquals(DiceColors.GREEN, privateObjectiveCard.getColor());
     }
 
     @Test
     public void testCreateBluePrivateObjectiveCard(){
         privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.BLUE);
-        assertTrue(privateObjectiveCard instanceof PrivateObjectiveCard);
+        assertNotNull(privateObjectiveCard);
         assertEquals(DiceColors.BLUE, privateObjectiveCard.getColor());
     }
 
     @Test
     public void testCreatePurplePrivateObjectiveCard(){
         privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.PURPLE);
-        assertTrue(privateObjectiveCard instanceof PrivateObjectiveCard);
+        assertNotNull(privateObjectiveCard);
         assertEquals(DiceColors.PURPLE, privateObjectiveCard.getColor());
     }
 
