@@ -30,13 +30,17 @@ public class ToolCardsManager {
      */
     private List<String> availableToolCards;
 
+    private PlacementRule defaultPlacementRule;
+
     /**
      * Constructor of the class. Checks if there are toolcards than can be loaded
      * from file system and if yes loads them.
      *
      * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
      */
-    public ToolCardsManager(){
+    public ToolCardsManager(PlacementRule defaultPlacementRule){
+        this.defaultPlacementRule = defaultPlacementRule;
+
         try{
             this.availableToolCards = XMLFileReader.getFilesNames(PATH);
         } catch (IOException e) {
@@ -122,20 +126,28 @@ public class ToolCardsManager {
 
             //Placement Rules PARSING
 
-            PlacementRule placementRule = new EmptyPlacementRule();
+            PlacementRule placementRule;
             NodeList placementRules = document.getElementsByTagName("placementRule");
-            for(int i=0; i<placementRules.getLength(); i++){
 
-                NamedNodeMap a = placementRules.item(i).getAttributes();
+            if(placementRules.getLength()==0){
+                //If no placement rules are specified in the file, the default one is applied
+                placementRule = this.defaultPlacementRule;
 
-                //Parse from xml the decoratorName constraint
-                String decoratorName = a.getNamedItem("decoratorName").getNodeValue();
+            } else {
+                //The placement rule is built by decorating additional rules according to the "Decorator Pattern"
+                placementRule = new EmptyPlacementRule();
+                for(int i=0; i<placementRules.getLength(); i++){
 
-                /*Creates a PlacementRule decorator of the type specified in "decoratorName"
-                **and then decorates it with the previous rules (default is EmptyPlacementRule*/
-                placementRule = (PlacementRule) Class.forName(decoratorName).getConstructor(PlacementRule.class).newInstance(placementRule);
+                    NamedNodeMap a = placementRules.item(i).getAttributes();
+
+                    //Parse from xml the decoratorName constraint
+                    String decoratorName = a.getNamedItem("decoratorName").getNodeValue();
+
+                    /*Creates a PlacementRule decorator of the type specified in "decoratorName"
+                     **and then decorates it with the previous rules (default is EmptyPlacementRule*/
+                    placementRule = (PlacementRule) Class.forName(decoratorName).getConstructor(PlacementRule.class).newInstance(placementRule);
+                }
             }
-
 
             //ControllerStates transitions PARSING
 
