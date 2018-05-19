@@ -7,6 +7,7 @@ import it.polimi.se2018.view.View;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -42,6 +43,7 @@ public class Controller extends Observable implements ControllerInterface {
      * The current state of the {@link Controller}
      */
     protected ControllerState controllerState; //State pattern
+    //TODO: capire perchè IntelliJ consigli di mettere controllerState private. Non dovrebbe consigliarlo. Sicuri che gli state funzioni correttamente?
 
     /**
      * Contains an instance of a {@link ControllerStateManager} that is the one
@@ -59,27 +61,12 @@ public class Controller extends Observable implements ControllerInterface {
     private ToolCard activeToolcard;
 
     /**
-     * Contains an instance of a {@link ToolCardsManager} that is the one
-     * that creates the {@link ToolCard} (s) to be assigned to the {@link Game}
-     */
-    protected ToolCardsManager toolCardsManager;
-
-    /**
      * Contains an istance of a {@link DiceBag} in order to create the
      * needed dices for the game
      *
      * @see Dice
      */
     protected DiceBag diceBag;
-
-    /**
-     * Contains an instance of a {@link ObjectiveCardManager} that is the one
-     * that creates {@link PublicObjectiveCard}(s) and {@link PrivateObjectiveCard} (s)
-     *
-     * @see PublicObjectiveCard
-     * @see PrivateObjectiveCard
-     */
-    protected ObjectiveCardManager objectiveCardManager;
 
     /**
      * The current Placement Rule that is used in the current {@link Turn}
@@ -92,12 +79,29 @@ public class Controller extends Observable implements ControllerInterface {
     protected PlacementRule placementRule;
 
     /**
+     * Contains an instance of a {@link ObjectiveCardManager} that is the one
+     * that creates {@link PublicObjectiveCard}(s) and {@link PrivateObjectiveCard} (s)
+     *
+     * @see PublicObjectiveCard
+     * @see PrivateObjectiveCard
+     */
+    private ObjectiveCardManager objectiveCardManager;
+
+    /**
      * Contains an instance of a {@link WindowPatternManager} that is the one
      * that creates the {@link WindowPattern}(s) for player(s)
      *
      * @see WindowPattern
      */
-    protected WindowPatternManager windowPatternManager;
+    private WindowPatternManager windowPatternManager;
+
+    /**
+     * Contains an instance of a {@link ToolCardsManager} that is the one
+     * that creates the {@link ToolCard} (s) to be assigned to the {@link Game}
+     */
+    private ToolCardsManager toolCardsManager;
+
+    private final Properties properties;
 
     int movesCounter = 0;
 
@@ -108,18 +112,22 @@ public class Controller extends Observable implements ControllerInterface {
      * working of the game
      *
      * @param game the game instance to be controlled
-     * @param numberOfDicesPerColor used to create a {@link DiceBag} containing the needed dices ({@link Dice})
-     * @param numberOfToolCards the number of toolcards the game will have
-     * @param numberOfPublicObjectiveCards the number of public objective cards the game will have
+     * @param properties dictionary of parameters loaded from config file
      */
-    public Controller(Game game, int numberOfDicesPerColor, int numberOfToolCards, int numberOfPublicObjectiveCards) {
+    public Controller(Game game, Properties properties) {
+
+        this.properties = properties;
+
+        int numberOfDicesPerColor = Integer.parseInt( properties.getProperty("numberOfDicesPerColor") );
+        int numberOfToolCards = Integer.parseInt( properties.getProperty("numberOfToolCards") );
+        int numberOfPublicObjectiveCards =  Integer.parseInt( properties.getProperty("numberOfPublicObjectiveCards") );
 
         //Create Managers
         this.stateManager = new ControllerStateManager(this);
 
         this.windowPatternManager = new WindowPatternManager();
 
-        this.toolCardsManager = new ToolCardsManager();
+        this.toolCardsManager = new ToolCardsManager(this.getDefaultPlacementRule());
 
         this.objectiveCardManager = new ObjectiveCardManager();
 
@@ -400,6 +408,13 @@ public class Controller extends Observable implements ControllerInterface {
 
         throw new AcceptingPlayerException("No more players can be accepted");
 
+    }
+
+    /**
+     * @return Dictionary of parameters
+     */
+    public int getConfigProperty(String p){
+        return Integer.parseInt( this.properties.getProperty(p) );
     }
 
 }

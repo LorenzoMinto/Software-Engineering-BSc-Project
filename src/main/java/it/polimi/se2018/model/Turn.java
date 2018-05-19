@@ -137,7 +137,6 @@ public class Turn {
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
-        if(value < 0 || value >= 10){ throw new IllegalArgumentException("The selected track slot does not exist.");}
         this.slotOfTrackChosenDice = value;
     }
 

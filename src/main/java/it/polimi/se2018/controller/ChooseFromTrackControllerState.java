@@ -21,6 +21,11 @@ public class ChooseFromTrackControllerState extends ControllerState {
 
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
+        
+        if(slotNumber<0 || slotNumber>=controller.getConfigProperty("numberOfRounds")){
+            throw new IllegalArgumentException("Asked to put a dice in track slot corresponding to unexisting round (out of numberOfRounds param value)");
+        }
+
         Game game = controller.game;
         try {
             game.getTrack().takeDice(dice, slotNumber);

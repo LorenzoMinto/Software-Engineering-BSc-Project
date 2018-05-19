@@ -74,20 +74,16 @@ public class ConfigImporter {
     }
 
     /**
-     * Returns the requested property.
-     *
-     * @param propertyName the requested property name
-     * @return the requested property
-     * @throws NoConfigParamFoundException if the requested property is not found
+     * @return Dictionary of parameters
+     * @throws NoConfigParamFoundException if an error occurred loading parameters from file
      */
-    public int getProperty(String propertyName) throws NoConfigParamFoundException{
+    public Properties getProperties() throws NoConfigParamFoundException{
 
         //Loads properties if not already loaded
         if(!parametersLoaded){ loadParameters(); }
 
-        //Throw exception if can't find the requested property
-        if(!properties.containsKey(propertyName)){ throw new NoConfigParamFoundException(); }
-
-        return Integer.parseInt(properties.getProperty(propertyName));
+        Properties p = new Properties();
+        p.putAll(this.properties);
+        return p;
     }
 }

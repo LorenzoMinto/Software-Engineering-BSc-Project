@@ -12,6 +12,7 @@ import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class Server implements Observer, ReceiverInterface, SenderInterface{
@@ -50,39 +51,33 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     private Controller createController(){
-        int numberOfRounds;
-        int maxNumberOfPlayers;
-        int numberOfDicesPerColor;
-        int numberOfToolCards;
-        int numberOfPublicObjCards;
 
         //Loads config parameters
         ConfigImporter configImporter = new ConfigImporter("default");
-        boolean alreadyFailedLoading = false;
+        Properties properties;
+        try{
+            properties = configImporter.getProperties();
+        } catch(NoConfigParamFoundException e){
 
-        while(true){
+            //Try with default configuration
+            configImporter = new ConfigImporter();
+
             try{
-                numberOfRounds          = configImporter.getProperty("numberOfRounds");
-                maxNumberOfPlayers      = configImporter.getProperty("maxNumberOfPlayers");
-                numberOfDicesPerColor   = configImporter.getProperty("numberOfDicesPerColor");
-                numberOfToolCards       = configImporter.getProperty("numberOfToolCards");
-                numberOfPublicObjCards  = configImporter.getProperty("numberOfPublicObjectiveCards");
-                break;
-            } catch(NoConfigParamFoundException e) {
-                if(alreadyFailedLoading) { throw new BadBehaviourRuntimeException("Can't load default config file"); }
-                else {
-                    alreadyFailedLoading = true;
+                properties = configImporter.getProperties();
+            } catch(NoConfigParamFoundException ex){
 
-                    //loads the default config file
-                    configImporter = new ConfigImporter();
-                }
+                throw new BadBehaviourRuntimeException("Can't load default config file");
             }
         }
 
         //Creates the game
-        Game game = new Game(numberOfRounds,maxNumberOfPlayers);
+        Game game = new Game(
+                Integer.parseInt( properties.getProperty("numberOfRounds") ),
+                Integer.parseInt( properties.getProperty("maxNumberOfPlayers") )
+        );
         game.register(this);
-        return new Controller(game,numberOfDicesPerColor,numberOfToolCards,numberOfPublicObjCards);
+
+        return new Controller(game,properties);
     }
 
     public void addGateway(ReceiverInterface gateway) {
