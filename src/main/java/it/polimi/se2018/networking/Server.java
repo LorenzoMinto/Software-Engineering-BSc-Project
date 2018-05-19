@@ -137,12 +137,12 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
     /*This method returns true if the message m contains something that
     enables who sent it to be added to the clients of this server*/
-    public boolean canJoin(String m){
+    private boolean canJoin(String m){
         return m.equals("federico");
     }
 
     //True if the message is a join request
-    public boolean isJoinRequest(String m){
+    private boolean isJoinRequest(String m){
         return m.equals("federico"); //TODO:inserire quì il criterio corretto
     }
 

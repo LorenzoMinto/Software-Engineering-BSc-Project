@@ -56,7 +56,6 @@ public class AdjacentValuePlacementRuleDecoratorTest {
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
         assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, fourDice, 1, 0));
     }
-
     @Test
     public void testCheckAdjacentValueConstraintsBelow() {
         assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 0,1));

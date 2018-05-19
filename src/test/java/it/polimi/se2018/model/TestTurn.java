@@ -136,14 +136,6 @@ public class TestTurn {
     }
 
     @Test
-    public void testSetSlotOfTrackChosenDiceWithWrongValue(){
-        try{
-            turn.setSlotOfTrackChosenDice(10);
-            fail();
-        }catch (IllegalArgumentException e){}
-    }
-
-    @Test
     public void testSetDraftedDice(){
         turn.setDraftedDice(dice);
         assertNotNull(turn.getDraftedDice());

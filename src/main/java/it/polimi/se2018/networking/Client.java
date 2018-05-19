@@ -17,33 +17,6 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     private final View view;
 
-    @Override
-    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
-        System.out.println("Received message: "+message);
-    }
-
-    @Override
-    public void sendMessage(String message) throws RemoteException {
-        for(SenderInterface o : gateways){
-            try{
-                o.sendMessage(message);
-                System.out.println("Successfully sent the message to: "+o);
-            } catch(ConnectException e){
-                //TODO gestire meglio questa eccezione
-                System.out.println("Could not send the message due to connection error to: "+o);
-            }
-        }
-    }
-
-    @Override
-    public void update(Message m) {
-        try {
-            sendMessage(m.getMessage());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
     public enum ConnectionType {RMI,SOCKET};
 
     private Client(ConnectionType type) {
@@ -80,6 +53,34 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
             new Client(ConnectionType.RMI);
         }
     }
+
+    @Override
+    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+        System.out.println("Received message: "+message);
+    }
+
+    @Override
+    public void sendMessage(String message) throws RemoteException {
+        for(SenderInterface o : gateways){
+            try{
+                o.sendMessage(message);
+                System.out.println("Successfully sent the message to: "+o);
+            } catch(ConnectException e){
+                //TODO gestire meglio questa eccezione
+                System.out.println("Could not send the message due to connection error to: "+o);
+            }
+        }
+    }
+
+    @Override
+    public void update(Message m) {
+        try {
+            sendMessage(m.getMessage());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void addGateway(SenderInterface gateway) {
         gateways.add(gateway);
