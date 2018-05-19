@@ -52,10 +52,10 @@ public class AdjacentColorPlacementRuleDecorator extends PlacementRuleDecorator 
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
 
-        return !((row != 0 && pattern[row-1][col].hasDice() && dice.getColor() != pattern[row-1][col].getDice().getColor()) ||
-                (col != numberOfColumns-1 && pattern[row][col+1].hasDice() && dice.getColor() != pattern[row][col+1].getDice().getColor()) ||
-                (row != numberOfRows-1 && pattern[row+1][col].hasDice() && dice.getColor() != pattern[row+1][col].getDice().getColor()) ||
-                (col != 0 && pattern[row][col-1].hasDice() && dice.getColor() != pattern[row][col-1].getDice().getColor()));
+        return !((row != 0 && pattern[row-1][col].hasDice() && dice.getColor() == pattern[row-1][col].getDice().getColor()) ||
+                (col != numberOfColumns-1 && pattern[row][col+1].hasDice() && dice.getColor() == pattern[row][col+1].getDice().getColor()) ||
+                (row != numberOfRows-1 && pattern[row+1][col].hasDice() && dice.getColor() == pattern[row+1][col].getDice().getColor()) ||
+                (col != 0 && pattern[row][col-1].hasDice() && dice.getColor() == pattern[row][col-1].getDice().getColor()));
     }
 
 

@@ -50,10 +50,10 @@ public class AdjacentValuePlacementRuleDecorator extends PlacementRuleDecorator 
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
 
-        return !((row != 0 && pattern[row-1][col].hasDice() && dice.getValue() != pattern[row-1][col].getDice().getValue()) ||
-                (col != numberOfColumns-1 && pattern[row][col+1].hasDice() && dice.getValue() != pattern[row][col+1].getDice().getValue()) ||
-                (row != numberOfRows-1 && pattern[row+1][col].hasDice() && dice.getValue() != pattern[row+1][col].getDice().getValue()) ||
-                (col != 0 && pattern[row][col-1].hasDice() && dice.getValue() != pattern[row][col-1].getDice().getValue()));
+        return !((row != 0 && pattern[row-1][col].hasDice() && dice.getValue() == pattern[row-1][col].getDice().getValue()) ||
+                (col != numberOfColumns-1 && pattern[row][col+1].hasDice() && dice.getValue() == pattern[row][col+1].getDice().getValue()) ||
+                (row != numberOfRows-1 && pattern[row+1][col].hasDice() && dice.getValue() == pattern[row+1][col].getDice().getValue()) ||
+                (col != 0 && pattern[row][col-1].hasDice() && dice.getValue() == pattern[row][col-1].getDice().getValue()));
     }
 
 

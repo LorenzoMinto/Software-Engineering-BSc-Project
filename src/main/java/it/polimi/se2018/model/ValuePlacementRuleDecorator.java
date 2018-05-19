@@ -44,7 +44,8 @@ public class ValuePlacementRuleDecorator extends PlacementRuleDecorator {
      * @see ValuePlacementRuleDecorator for formal rule.
      */
     private boolean checkValueConstraints(WindowPattern windowPattern, Dice dice, int row, int col){
-        return windowPattern.getPattern()[row][col].getAllowedValue() != dice.getValue();
+        return windowPattern.getPattern()[row][col].getAllowedValue() == 0
+                || windowPattern.getPattern()[row][col].getAllowedValue() == dice.getValue();
     }
 
 
