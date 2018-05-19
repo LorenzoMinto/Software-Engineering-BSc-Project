@@ -7,15 +7,14 @@ package it.polimi.se2018.model;
  *
  * @author Lorenzo Minto
  */
-public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
-
+public class NotAdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
 
     /**
      * Class constructor specifying {@link PlacementRule} to be decorated.
      *
      * @param decoratedPlacementRule rule to be decorated.
      */
-    public AdjacentDicePlacementRuleDecorator(PlacementRule decoratedPlacementRule){
+    public NotAdjacentDicePlacementRuleDecorator(PlacementRule decoratedPlacementRule){
         super(decoratedPlacementRule);
     }
 
@@ -32,7 +31,7 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
     @Override
     public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         boolean adjacency = checkAdjacentDiceConstraints(windowPattern, row, col);
-        return  adjacency &&
+        return  !adjacency &&
                 decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
     }
 

@@ -313,7 +313,7 @@ public class Controller extends Observable implements ControllerInterface {
                 endGame();
             }
 
-            try { //NOTE: this should not happen
+            try {
                 game.getCurrentRound().nextTurn();
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
@@ -379,7 +379,7 @@ public class Controller extends Observable implements ControllerInterface {
                         new AdjacentColorPlacementRuleDecorator(
                                 new ColorPlacementRuleDecorator(
                                         new ValuePlacementRuleDecorator(
-                                                new EmptyPlacementRule()))), false));
+                                                new EmptyPlacementRule())))));
 
     }
 
