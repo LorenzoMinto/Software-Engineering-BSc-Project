@@ -33,7 +33,7 @@ public class TrackSlotTest {
     }
 
     @Test
-    public void addDice() {
+    public void testAddDice() {
         Dice dice = new Dice(DiceColors.BLUE, 2);
         TrackSlot slot = new TrackSlot(new ArrayList<>());
 
@@ -43,7 +43,7 @@ public class TrackSlotTest {
     }
 
     @Test
-    public void removeDice() {
+    public void testRemoveDice() {
         TrackSlot slot = new TrackSlot(dices);
 
         slot.removeDice(dice1);
@@ -52,7 +52,18 @@ public class TrackSlotTest {
     }
 
     @Test
-    public void getDices() {
+    public void testRemoveDiceNotInTrackSlot() {
+        TrackSlot slot = new TrackSlot(dices);
+        Dice dice = new Dice(DiceColors.BLUE, 2);
+
+        try {
+            slot.removeDice(dice);
+            fail();
+        } catch (IllegalArgumentException e) {}
+    }
+
+    @Test
+    public void testGetDices() {
         TrackSlot slot = new TrackSlot(this.dices);
 
         assertEquals(this.dices, slot.getDices());

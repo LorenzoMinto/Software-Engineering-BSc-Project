@@ -22,11 +22,13 @@ public class ChooseFromTrackControllerState extends ControllerState {
     @Override
     public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
         Game game = controller.game;
-        if (game.getTrack().takeDice(dice, slotNumber)) {
+        try {
+            game.getTrack().takeDice(dice, slotNumber);
             game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
             game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
             controller.setControllerState(controller.stateManager.getNextState(this));
+        } catch (IllegalArgumentException e) {
+            //TODO:Use logger here??
         }
-
     }
 }

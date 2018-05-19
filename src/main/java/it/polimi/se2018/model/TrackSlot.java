@@ -39,8 +39,12 @@ public class TrackSlot {
      * @param dice the dice to be removed.
      * @return whether or not specified dice could be removed from the TrackSlot's dices.
      */
-    public boolean removeDice(Dice dice) {
-        return dices.contains(dice) && dices.remove(dice);
+    public void removeDice(Dice dice) {
+        if (dices.contains(dice)) {
+            dices.remove(dice);
+        } else {
+            throw new IllegalArgumentException("Asked to remove a dice that is not present in the TrackSlot.");
+        }
     }
 
     /**

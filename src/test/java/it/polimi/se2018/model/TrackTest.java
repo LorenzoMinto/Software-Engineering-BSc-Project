@@ -35,27 +35,66 @@ public class TrackTest {
     }
 
     @Test
-    public void processDices() {
+    public void testProcessDices() {
         assertEquals(dices, track.getDicesFromSlotNumber(0));
     }
 
     @Test
-    public void getDicesFromSlotNumber() {
+    public void testGetDicesFromSlotNumber() {
         assertEquals(dices, track.getDicesFromSlotNumber(0));
     }
 
     @Test
-    public void takeDice() {
+    public void testGetDicesFromNonExistingSlotNumber() {
+
+        try {
+            track.getDicesFromSlotNumber(1);
+            fail();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testTakeDice() {
         track.takeDice(dice1, 0);
         assertFalse(track.getDicesFromSlotNumber(0).contains(dice1));
-        assertFalse(track.takeDice(dice1, 1));
     }
 
     @Test
-    public void putDice() {
+    public void testTakeDiceNotInTrackSlot() {
+        track.takeDice(dice1, 0);
+        try {
+            track.takeDice(dice1, 0);
+            fail();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testTakeDiceFromNonExistingTrackSlot() {
+        try {
+            track.takeDice(dice1, 2);
+            fail();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testPutDice() {
         Dice dice6 = new Dice(DiceColors.RED, 6);
         track.putDice(dice6, 0);
         assertTrue(track.getDicesFromSlotNumber(0).contains(dice6));
-        assertFalse(track.putDice(dice1, 1));
+    }
+
+    @Test
+    public void testPutDiceInNonExistingTrackSlot() {
+        try {
+            track.putDice(dice1, 1);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

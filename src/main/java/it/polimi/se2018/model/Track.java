@@ -36,6 +36,9 @@ public class Track {
      * @return the list of dices kept in the wanted TrackSlot.
      */
     public List<Dice> getDicesFromSlotNumber(int slotNumber) {
+        if (slotNumber < 0 || slotNumber >= slots.size()) {
+            throw new IllegalArgumentException("TrackSlot selected doesn't exist.");
+        }
         TrackSlot slot = slots.get(slotNumber);
         return slot.getDices();
     }
@@ -47,13 +50,12 @@ public class Track {
      * @param slotNumber the TrackSlot number from which to remove the dice.
      * @return whether or not the specified dice could be removed from the specified TrackSlot.
      */
-    public boolean takeDice(Dice dice, int slotNumber){
+    public void takeDice(Dice dice, int slotNumber){
         if (slotNumber >= slots.size()) {
-            //TrackSlotIndexOutOfBound
-            return false;
+            throw new IllegalArgumentException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
-        return slot.removeDice(dice);
+        slot.removeDice(dice);
     }
 
     /**
@@ -65,7 +67,7 @@ public class Track {
      */
     public boolean putDice(Dice dice, int slotNumber){
         if (slotNumber >= slots.size()) {
-            return false;
+            throw new IllegalArgumentException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.addDice(dice);
