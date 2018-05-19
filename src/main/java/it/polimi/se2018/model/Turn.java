@@ -133,10 +133,12 @@ public class Turn {
 
     /**
      * Sets the slotOfTrackChosenDice to the given value.
+     * The callers has the responsability to check if the value is legal or not
      *
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
+        //The callers has the responsability to check if the value is legal or not
         this.slotOfTrackChosenDice = value;
     }
 
