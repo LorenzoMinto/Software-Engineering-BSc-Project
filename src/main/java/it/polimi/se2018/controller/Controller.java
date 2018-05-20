@@ -31,7 +31,7 @@ import java.util.Properties;
  * @see PlacementRule
  * @see WindowPatternManager
  */
-public class Controller extends Observable implements ControllerInterface {
+public class Controller extends Observable {
 
     private static final String NOT_YOUR_TURN = "It is not your turn.";
     /**
@@ -155,82 +155,7 @@ public class Controller extends Observable implements ControllerInterface {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-
-    //Handling View->Controller (Initialization)
-
-    @Override
-    public void handleChooseWindowPattern(WindowPattern windowPattern, View view) {
-        //TODO: implement here
-    }
-
-
-    //Handling View->Controller (Moves)
-
-    @Override
-    public void handleDraftDiceFromDraftPoolMove(Dice dice, View view) {
-        if(game.isCurrentPlayer(view.getPlayer())) {
-            controllerState.draftDiceFromDraftPool(dice, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-    @Override
-    public void handleUseToolCardPlayerMove(ToolCard toolcard, View view) {
-        if(game.isCurrentPlayer(view.getPlayer())) {
-            controllerState.useToolCard(view.getPlayer(), toolcard, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-    @Override
-    public void handlePlaceDiceMove(int row, int col, View view){
-        if(game.isCurrentPlayer(view.getPlayer())) {
-            controllerState.placeDice(row, col, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-
-    }
-
-    @Override
-    public void handleIncrementOrDecrementMove(boolean isIncrement, View view) {
-        if(game.isCurrentPlayer(view.getPlayer())) {
-            if(isIncrement) {
-                controllerState.incrementDice(view);
-            }else{
-                controllerState.decrementDice(view);
-            }
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-    @Override
-    public void handleMoveDiceMove(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
-        if(game.isCurrentPlayer(view.getPlayer())) {
-            controllerState.moveDice(rowFrom, colFrom, rowTo, colTo, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-
-    @Override
-    public void handleDraftDiceFromTrackMove(Dice dice, int slotNumber, View view){
-        if(game.isCurrentPlayer(view.getPlayer())) {
-
-            controllerState.chooseDiceFromTrack(dice, slotNumber, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-    @Override
-    public void handleChooseDiceValueMove(int value, View view) {
-        if(game.isCurrentPlayer(view.getPlayer())) {
-
-            controllerState.chooseDiceValue(value, view);
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
-
-    @Override
-    public void handleEndMove(View view){
-        if(game.isCurrentPlayer(view.getPlayer())) {
-
-            advanceGame();
-
-        } else { view.showMessage(NOT_YOUR_TURN);}
-    }
+    //TODO: handle moves (Message)
 
     /**
      * Checks if a given {@link ToolCard} can be used by the specified {@link Player}
