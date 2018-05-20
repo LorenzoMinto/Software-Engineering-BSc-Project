@@ -7,7 +7,7 @@
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
-    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator" invert="false"/>
+    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator"/>
     <placementRule decoratorName="ValuePlacementRuleDecorator"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />

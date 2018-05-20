@@ -6,7 +6,7 @@
     You must obey all other placement restrictions.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
-    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator" invert="false"/>
+    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator"/>
     <placementRule decoratorName="AdjacentColorPlacementRuleDecorator"/>
     <placementRule decoratorName="ColorPlacementRuleDecorator"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />

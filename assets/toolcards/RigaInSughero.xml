@@ -7,7 +7,7 @@
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
-    <placementRule decoratorName="AdjacentDicePlacementRuleDecorator" invert="true"/>
+    <placementRule decoratorName="NotAdjacentDicePlacementRuleDecorator"/>
     <placementRule decoratorName="AdjacentColorPlacementRuleDecorator"/>
     <placementRule decoratorName="ColorPlacementRuleDecorator"/>
     <placementRule decoratorName="ValuePlacementRuleDecorator"/>
