@@ -139,7 +139,7 @@ public class ToolCard {
      *
      * @return the number of tokens spent on the tool card.
      */
-    private int getTokensUsed() { return tokensUsed; }
+    public int getTokensUsed() { return tokensUsed; }
 
     /**
      * Returns the number of tokens needed to activate the tool card.
