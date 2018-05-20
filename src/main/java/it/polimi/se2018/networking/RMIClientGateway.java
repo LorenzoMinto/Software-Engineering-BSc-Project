@@ -14,14 +14,20 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
     private ReceiverInterface proxySender;
 
 
-    RMIClientGateway(String path, int port, ReceiverInterface client) {
+    RMIClientGateway(String path, int port, ReceiverInterface client) throws RemoteException {
         try{
             this.recipient = (ReceiverInterface) Naming.lookup(path);
-            this.client = client;
+        } catch(Exception e){
+            throw new RemoteException("Failed looking for RMI name");
+        }
+
+        try{
             this.proxySender = (ReceiverInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
-            //TODO inserire network exception da throware fino a Client
+            throw new RemoteException("Failed exporting RMI object");
         }
+
+        this.client = client;
     }
 
     public void sendMessage(String message) throws RemoteException{

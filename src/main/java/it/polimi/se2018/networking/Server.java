@@ -14,42 +14,84 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server implements Observer, ReceiverInterface, SenderInterface{
 
+    /**
+     * Logger class
+     */
+    private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
+
+    /**
+     * How many attempts must be done before declaring sending of a message failed
+     */
+    private static final int MAX_NUMBER_OF_ATTEMPTS = 5;
+
+    /**
+     * Server representation for RMI
+     */
     private ReceiverInterface proxyServer;
 
+    /**
+     * List of gateways for communicating with clients
+     */
     private final List<ReceiverInterface> gateways = new ArrayList<>();
 
+    /**
+     * Controller created by the server
+     */
     private final Controller controller;
 
     public static void main (String[] args) {
         new Server();
     }
 
+    /**
+     * Server constructor. Do the netwroking setup, creates controller and game
+     */
     private Server() {
+        LOGGER.setLevel(Level.ALL);
+
         setupNetworking();
 
+        //Creates controller and game
         this.controller = createController();
         this.controller.register(this);
 
         listenForCommandsFromConsole();
     }
 
+    /**
+     * Setup of networking starting RMI and Socket servers
+     */
     private void setupNetworking() {
         try {
-            System.out.println("Starting RMI...");
+            LOGGER.info("Starting RMI...");
             this.proxyServer = new RMIServerGateway("sagradaserver",this);
 
-            System.out.println("Starting Socket...");
+        } catch (RemoteException e) {
+            LOGGER.severe("Failed RMI setup");
+            return;
+        }
+
+        try{
+            LOGGER.info("Starting Socket...");
             new SocketServerGateway(1111,this);
 
-            System.out.println("Sagrada Server is up.");
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.severe("Failed Socket setup");
+            return;
         }
+
+        LOGGER.info("Sagrada Server is up.");
     }
 
+    /**
+     * Creates an returns the instance of a new controller
+     * @return an returns the instance of a new controller
+     */
     private Controller createController(){
 
         //Loads config parameters
@@ -80,18 +122,26 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         return new Controller(game,properties);
     }
 
-    public void addGateway(ReceiverInterface gateway) {
+    /**
+     * Add the specified gateway from the list of gateways
+     * @param gateway the gateway to add
+     */
+    private void addGateway(ReceiverInterface gateway) {
         gateways.add(gateway);
     }
 
-    public void removeGateway(ReceiverInterface gateway) {
+    /**
+     * Remove the specified gateway from the list of gateways
+     * @param gateway the gateway to remove
+     */
+    private void removeGateway(ReceiverInterface gateway) {
         gateways.remove(gateway);
     }
 
     @Override
     public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
 
-        System.out.println("Received message: "+message);
+        LOGGER.info(()->"Received message: "+message);
 
         if(isJoinRequest(message)){
 
@@ -102,14 +152,14 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
                 String replyMessage = "Welcome to SagradaServer. You are now an authorized client.";
                 sender.receiveMessage(replyMessage,this.proxyServer);
 
-                System.out.println("A new client has been authorized");
+                LOGGER.info("A new client has been authorized");
 
             } else {
 
                 String replyMessage = "You can't join this server";
                 sender.receiveMessage(replyMessage,this.proxyServer);
 
-                System.out.println("A new client asked to join but refused");
+                LOGGER.info("A new client asked to join but refused");
 
             }
 
@@ -118,25 +168,46 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
     @Override
     public void sendMessage(String message) throws RemoteException {
-        for(ReceiverInterface c : gateways){
-            try{
-                c.receiveMessage(message,this.proxyServer);
-                System.out.println("Message sent to "+c);
-
-            } catch (ConnectException e){
-                //TODO: gestire meglio questa eccezione
-                System.out.println("The message was not sent to "+c+" due to connection error");
+        boolean somethingFailed = false;
+        for(ReceiverInterface o : gateways){
+            int attempts = 0;
+            boolean correctlySent = false;
+            //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
+            while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent){
+                attempts++;
+                try{
+                    o.receiveMessage(message,this.proxyServer);
+                } catch(Exception e){
+                    LOGGER.warning("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
+                    continue;
+                }
+                correctlySent = true;
+                LOGGER.info("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
             }
+            //Add failed gateway to a list that will be returned at the end of this method execution
+            if(!correctlySent){ somethingFailed=true; }
         }
+        //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
+        if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
-    /*This method returns true if the message m contains something that
-    enables who sent it to be added to the clients of this server*/
+
+    /**
+     * This method returns true if the message contains something that
+     * enables who sent it to be added to the clients of this server
+     * @param m the message received
+     * @return true if the message contains something that enables who sent it to be added to the clients of this server
+     */
     private boolean canJoin(String m){
         return m.equals("federico");
     }
 
-    //True if the message is a join request
+
+    /**
+     * Returns true if the message is a join request
+     * @param m the message received
+     * @return True if the message is a join request
+     */
     private boolean isJoinRequest(String m){
         return m.equals("federico"); //TODO:inserire quì il criterio corretto
     }
@@ -148,7 +219,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
     private void listenForCommandsFromConsole(){
         //Codice per inviare messaggio da riga di comando
-        System.out.println("Start listening for messages...");
+        LOGGER.info("Start listening for messages...");
 
         Scanner scanner = new Scanner(System.in);
         while(true){
@@ -159,7 +230,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             try {
                 sendMessage(text);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                LOGGER.severe("Exception while sending a message from the Server console");
             }
 
             //TODO: implementa quì metodi di servizio per debug
@@ -170,11 +241,18 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void update(Message m) {
+    public boolean update(Message m) {
         try {
             sendMessage(m.getMessage());
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
+            return false;
         }
+
+        return true;
+    }
+
+    void fail(String m){
+        throw new BadBehaviourRuntimeException(m);
     }
 }

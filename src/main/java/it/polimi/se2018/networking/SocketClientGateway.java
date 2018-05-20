@@ -12,7 +12,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     private String hostName;
     private int portNumber;
 
-    public SocketClientGateway(String hostName, int portNumber, ReceiverInterface client) {
+    SocketClientGateway(String hostName, int portNumber, ReceiverInterface client) {
         this.client = client;
         this.hostName = hostName;
         this.portNumber = portNumber;
@@ -26,7 +26,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
             this.out.write(message + "\n");
             this.out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RemoteException("Failed sending message from SocketClientGateway due to IOException");
         }
     }
 
@@ -48,8 +48,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
             }
 
         } catch(Exception e){
-            e.printStackTrace();
-            //TODO: creare networking exception da throware fino a Server
+            ((Client)this.client).fail("Exception thrown opening socket or reading from stream");
         }
     }
 }

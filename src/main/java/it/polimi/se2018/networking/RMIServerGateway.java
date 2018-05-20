@@ -16,9 +16,14 @@ public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInt
 
         try {
             LocateRegistry.createRegistry(PORT);
+        } catch(Exception ex) {
+            throw new RemoteException("Failed creating RMI registry");
+        }
+
+        try {
             Naming.rebind(name, this);
         } catch(Exception ex) {
-            //TODO: creare networking exception da throware fino a Server
+            throw new RemoteException("Failed creating binding rmi name");
         }
     }
 

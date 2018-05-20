@@ -25,15 +25,12 @@ public class SocketServerGatherer extends Thread{
             }
 
         } catch (Exception e){
-            //TODO: gestire eccezione
+            ((Server)this.server).fail("Exception thrown accepting socket connections");
         }
     }
 
     private void acceptConnection(ServerSocket socket) throws IOException{
         Socket clientSocket = socket.accept();
-
-        //TODO: understand why never used but created
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
         SocketServer socketServer = new SocketServer(clientSocket.getOutputStream());
 
@@ -47,7 +44,7 @@ public class SocketServerGatherer extends Thread{
                         server.receiveMessage(message,socketServer);
                     }
                 } catch(IOException e){
-                    //TODO inserire eccezione
+                    ((Server)server).fail("IOException thrown reading socket input stream");
                 }
             }
         }).start();

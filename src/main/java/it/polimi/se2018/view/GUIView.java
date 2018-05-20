@@ -10,7 +10,7 @@ public class GUIView extends View{
 
 
     @Override
-    public void update(Message m) {
-
+    public boolean update(Message m) {
+        return true;
     }
 }

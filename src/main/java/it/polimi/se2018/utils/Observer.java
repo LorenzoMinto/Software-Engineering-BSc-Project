@@ -17,5 +17,5 @@ public interface Observer {
      *
      * @param m an argument passed to the {@link Observable#notify(Message)} method
      */
-    void update(Message m); //TODO: controllare quì l'uso di Message
+    boolean update(Message m); //TODO: controllare quì l'uso di Message
 }
