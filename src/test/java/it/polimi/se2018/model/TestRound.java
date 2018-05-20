@@ -251,6 +251,18 @@ public class TestRound {
     }
 
     @Test
+    public void testTryToRemoveNextTurnOfPlayer(){
+
+        int numberOfTurns = players.size() * 2;
+        round = new Round(0, numberOfTurns, players, draftPool);
+        Player currentPlayer = round.getCurrentTurn().getPlayer();
+
+        round.removeNextTurnOfPlayer(currentPlayer);
+        assertFalse(round.removeNextTurnOfPlayer(currentPlayer));
+
+    }
+
+    @Test
     public void testRemoveNextTurnOfNullPlayer(){
         round = new Round(0, players.size()*2, players, draftPool);
         try{

@@ -179,7 +179,7 @@ public class TestPrivateObjectiveCard {
     //integration test between ObjectiveCardManager and CalculateScore. ObjectiveCardManager could return a card with
     //NOCOLOR as color. TODO: Must be run with ObjectiveCardManager Tests
     @Test
-    public void testCalculateScoreWithCardFromCardManager(){
+    public void testCalculateScoreWithCardFromCardManager() {
 
         privateObjectiveCard = cardManager.getPrivateObjectiveCard();
         DiceColors cardColor = privateObjectiveCard.getColor();
@@ -187,7 +187,7 @@ public class TestPrivateObjectiveCard {
         testScore = privateObjectiveCard.calculateScore(wp);
 
 
-        switch(cardColor){
+        switch (cardColor) {
             case RED:
                 assertEquals(redScore, testScore);
                 break;
@@ -207,6 +207,11 @@ public class TestPrivateObjectiveCard {
                 fail();
         }
 
+    }
+
+    @Test
+    public void testCopy(){
+        assertNotNull(privateObjectiveCard.copy());
     }
 
 

@@ -136,10 +136,6 @@ public class Round {
      * @author Federico Haag
      */
     private Player getPlayerForTurn(List<Player> players, int turnNumber, int numberOfTurns){
-        if(turnNumber<0){
-            throw new IllegalArgumentException("Asked to get a player for a turn with negative turnNumber"); }
-        if(players==null || players.isEmpty()){
-            throw new IllegalArgumentException("Asked to get a player for a turn from a list of no players"); }
 
         int numberOfPlayers = players.size();
         int roundNumber = this.number;

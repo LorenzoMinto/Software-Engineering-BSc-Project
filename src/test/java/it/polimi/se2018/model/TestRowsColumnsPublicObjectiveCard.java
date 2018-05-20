@@ -81,8 +81,17 @@ public class TestRowsColumnsPublicObjectiveCard {
         }
     }
 
+
     @BeforeClass
-    public static void initializeCards(){
+    public static void initializeScores(){
+        scoreRowsColor = 12;
+        scoreColumnsColor = 5;
+        scoreRowsValue = 5;
+        scoreColumnsValue = 4;
+    }
+
+    @Before
+    public void initializeCards(){
 
         rowsColumnsPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance();
 
@@ -94,14 +103,6 @@ public class TestRowsColumnsPublicObjectiveCard {
                 null, Dice::getValue, 5, true);
         columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
                 null, Dice::getValue, 4, false);
-    }
-
-    @BeforeClass
-    public static void initializeScores(){
-        scoreRowsColor = 12;
-        scoreColumnsColor = 5;
-        scoreRowsValue = 5;
-        scoreColumnsValue = 4;
     }
 
     @Before
@@ -150,5 +151,19 @@ public class TestRowsColumnsPublicObjectiveCard {
     public void testCalculateScoreColumnsValue() {
         testScore = columnsValuePublicObjectiveCard.calculateScore(wp);
         assertEquals(scoreColumnsValue, testScore);
+    }
+
+    @Test
+    public void testToString(){
+        rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+                "title", "description", null, Dice::getValue, 4, true);
+        String toString = rowsColorPublicObjectiveCard.toString();
+        String expectedString = "title\ndescription\nMultiplier: 4\n";
+        assertEquals(expectedString, toString);
+    }
+
+    @Test
+    public void testCopy(){
+        assertNotNull(rowsColorPublicObjectiveCard.copy());
     }
 }

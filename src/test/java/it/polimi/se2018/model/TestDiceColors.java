@@ -9,12 +9,15 @@ public class TestDiceColors {
 
     private DiceColors color;
 
-    @Test
-    public void testToOneLetter(){
-        color = RED;
-        String oneLetter = color.toOneLetter();
 
-        assertEquals(1, oneLetter.length());
+    @Test
+    public void testToOneLetterSizeIsOne(){
+        for (DiceColors color: DiceColors.values()) {
+            
+            String oneLetter = color.toOneLetter();
+
+            assertEquals(1, oneLetter.length());
+        }
     }
 
     @Test

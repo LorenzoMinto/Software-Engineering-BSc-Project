@@ -49,29 +49,11 @@ public class TestDice {
 
     @Test
     public void testRollOver() {
-        dice.setValue(1);
-        dice.rollOver();
-        assertEquals(6,dice.getValue());
-
-        dice.setValue(2);
-        dice.rollOver();
-        assertEquals(5,dice.getValue());
-
-        dice.setValue(3);
-        dice.rollOver();
-        assertEquals(4,dice.getValue());
-
-        dice.setValue(4);
-        dice.rollOver();
-        assertEquals(3,dice.getValue());
-
-        dice.setValue(5);
-        dice.rollOver();
-        assertEquals(2,dice.getValue());
-
-        dice.setValue(6);
-        dice.rollOver();
-        assertEquals(1,dice.getValue());
+        for(int i=1; i <= 6; i++){
+            dice.setValue(i);
+            dice.rollOver();
+            assertEquals(7-i, dice.getValue());
+        }
     }
 
     @Test
@@ -119,5 +101,6 @@ public class TestDice {
 
     @Test
     public void testHashCode() {
+        assertNotNull(dice.hashCode());
     }
 }
