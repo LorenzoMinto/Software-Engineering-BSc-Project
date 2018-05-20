@@ -8,6 +8,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public class ToolCardsManager {
                 toolCards.add(randomToolCard);
             }
         } else {
-            throw new BadBehaviourRuntimeException("Can't create the requested number of toolcards. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException("Can't create the requested number of toolcards. Controller should not ask for so much cards. This error is not handlable at all");
         }
 
         return toolCards;
@@ -111,7 +112,7 @@ public class ToolCardsManager {
      * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    private ToolCard loadToolCardFromFileSystem(String toolCardID){
+    public ToolCard loadToolCardFromFileSystem(String toolCardID){
 
         try{
 
@@ -145,7 +146,10 @@ public class ToolCardsManager {
 
                     /*Creates a PlacementRule decorator of the type specified in "decoratorName"
                      **and then decorates it with the previous rules (default is EmptyPlacementRule*/
-                    placementRule = (PlacementRule) Class.forName(decoratorName).getConstructor(PlacementRule.class).newInstance(placementRule);
+
+                    Class<?> classe = Class.forName(PlacementRule.class.getPackage().getName()+"."+decoratorName);
+                    Constructor<?> costru = classe.getConstructor(PlacementRule.class);
+                    placementRule = (PlacementRule) costru.newInstance(placementRule);
                 }
             }
 
