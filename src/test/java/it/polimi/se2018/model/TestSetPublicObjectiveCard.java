@@ -203,7 +203,7 @@ public class TestSetPublicObjectiveCard {
         setPublicObjectiveCard = new SetPublicObjectiveCard(
                 "title", "description", null, allValuesSet, Dice::getValue, 5);
         String toString = setPublicObjectiveCard.toString();
-        String expectedString = "title\ndescription\nMultiplier: 5\n";
+        String expectedString = "title"+System.lineSeparator()+"description"+System.lineSeparator()+"Multiplier: 5"+System.lineSeparator();
         assertEquals(expectedString, toString);
     }
 

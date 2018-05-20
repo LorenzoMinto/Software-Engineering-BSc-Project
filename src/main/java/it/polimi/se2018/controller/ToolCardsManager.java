@@ -112,7 +112,7 @@ public class ToolCardsManager {
      * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    public ToolCard loadToolCardFromFileSystem(String toolCardID){
+    private ToolCard loadToolCardFromFileSystem(String toolCardID){
 
         try{
 

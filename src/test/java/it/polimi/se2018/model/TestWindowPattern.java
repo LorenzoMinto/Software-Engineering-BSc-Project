@@ -145,7 +145,8 @@ public class TestWindowPattern {
         windowPattern = new WindowPattern("title", 5, smallPattern);
 
         String windowPatternToString = windowPattern.toString();
-        String expectedString = "{title}\nDifficulty: 5\n(0:_)(0:_)\n(0:_)(0:_)\n";
+        String br = System.lineSeparator();
+        String expectedString = "{title}"+br+"Difficulty: 5"+br+"(0:_)(0:_)"+br+"(0:_)(0:_)"+br;
 
         assertEquals(expectedString, windowPatternToString);
 

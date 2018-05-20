@@ -158,7 +158,7 @@ public class TestRowsColumnsPublicObjectiveCard {
         rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
                 "title", "description", null, Dice::getValue, 4, true);
         String toString = rowsColorPublicObjectiveCard.toString();
-        String expectedString = "title\ndescription\nMultiplier: 4\n";
+        String expectedString = "title"+System.lineSeparator()+"description"+System.lineSeparator()+"Multiplier: 4"+System.lineSeparator();
         assertEquals(expectedString, toString);
     }
 
