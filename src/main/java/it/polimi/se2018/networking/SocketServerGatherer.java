@@ -10,7 +10,7 @@ public class SocketServerGatherer extends Thread{
     private boolean acceptConns = true;
     private int portNumber;
 
-    public SocketServerGatherer(Integer portNumber, ReceiverInterface server) {
+    SocketServerGatherer(Integer portNumber, ReceiverInterface server) {
 
         this.server = server;
         this.portNumber = portNumber;

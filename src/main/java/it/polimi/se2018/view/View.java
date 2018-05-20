@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
-public abstract class View extends Observable implements Observer {
+public abstract class View extends Observable {
 
     private Player player;
 
