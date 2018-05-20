@@ -9,7 +9,7 @@ import it.polimi.se2018.networking.message.Message;
  */
 public interface Observer {
 
-    /** //TODO: controllare quì l'uso di Message
+    /**
      * This method is called whenever the observed object is changed. An
      * application calls an {@link Observable} object's
      * {@link Observable#notify(Message)} method to have all the object's
@@ -17,5 +17,5 @@ public interface Observer {
      *
      * @param m an argument passed to the {@link Observable#notify(Message)} method
      */
-    boolean update(Message m); //TODO: controllare quì l'uso di Message
+    boolean update(Message m);
 }

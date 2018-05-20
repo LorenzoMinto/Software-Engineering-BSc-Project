@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Client implements Observer, SenderInterface, ReceiverInterface {
@@ -23,7 +22,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     private final View view;
 
-    public enum ConnectionType {RMI,SOCKET};
+    public enum ConnectionType {RMI,SOCKET}
 
     private Client(ConnectionType type) {
         //Creates View and connects itself as observer

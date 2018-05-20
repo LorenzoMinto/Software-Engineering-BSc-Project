@@ -66,6 +66,7 @@ public class ToolCard {
     /**
      * Class constructor.
      *
+     * @param id the id of toolcard
      * @param title the title of the tool card.
      * @param description the description of the tool card.
      * @param imageURL the URL of the tool card image.
@@ -74,9 +75,9 @@ public class ToolCard {
      * @param controllerStateRules the state table that governs state transitions when the tool card is active.
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      */
-    public ToolCard(String ID, String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
+    public ToolCard(String id, String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
                     Map<String, String> controllerStateRules, PlacementRule placementRule) {
-        this.ID = ID;
+        this.ID = id;
         this.title = title;
         this.description = description;
         this.neededTokens = neededTokens;

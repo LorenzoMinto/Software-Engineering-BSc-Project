@@ -17,7 +17,7 @@ public class SocketServer implements ReceiverInterface {
             out.write(message + "\n");
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RemoteException("IOException thrown writing in socket stream during receiveMessage method call");
         }
     }
 

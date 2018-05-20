@@ -8,7 +8,6 @@ import it.polimi.se2018.utils.ConfigImporter;
 import it.polimi.se2018.utils.NoConfigParamFoundException;
 import it.polimi.se2018.utils.Observer;
 
-import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;

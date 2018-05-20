@@ -63,7 +63,7 @@ public class ToolCardsManager {
         List<ToolCard> toolCards = new ArrayList<>();
         List<String> usedToolCards = new ArrayList<>();
 
-        /*if( availableToolCards.size() >= quantity ){
+        if( availableToolCards.size() >= quantity ){
 
             Random r = new Random();
 
@@ -98,7 +98,7 @@ public class ToolCardsManager {
             }
         } else {
             throw new BadBehaviourRuntimeException("Can't create the requested number of toolcards. This error is not handlable at all");
-        }*/
+        }
 
         return toolCards;
     }

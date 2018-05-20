@@ -60,7 +60,7 @@ public class Observable {
      *
      * @param message message received from the calling application
      */ 
-    protected void notify(Message message){ //TODO: controllare quì l'uso di Message
+    protected void notify(Message message){
         synchronized (observers) {
             for(Observer observer : observers){
                 observer.update(message);
