@@ -92,7 +92,6 @@ public class ToolCardTest {
     @Test
     public void testNextStateID(){
         Game game = new Game(2,3);
-        ConfigImporter configImporter = new ConfigImporter("default");
         Properties prop = new Properties();
         prop.setProperty("numberOfDicesPerColor","18");
         prop.setProperty("numberOfToolCards","3");
