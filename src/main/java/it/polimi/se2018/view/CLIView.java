@@ -1,8 +1,9 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.networking.message.Message;
+import it.polimi.se2018.utils.Observer;
 
-public class CLIView extends View {
+public class CLIView extends View implements Observer {
 
     public CLIView() {
         super();
