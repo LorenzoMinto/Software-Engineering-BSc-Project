@@ -334,9 +334,10 @@ public class Controller extends Observable {
      * @throws AcceptingPlayerException if the user was already added or no more players
      * can be accepted in this game (maximum number of players reached)
      */
+    //TODO: chi lo chiama deve verificare se è raggiunto il massimo numero di giocatori e fare startGame()
     public Player acceptPlayer(User user, String nickname) throws AcceptingPlayerException {
 
-        if( game.canAcceptNewPlayer() ){
+        if( game.getPlayers().size() < this.getConfigProperty("maxNumberOfPlayers") ){
             PrivateObjectiveCard card = objectiveCardManager.getPrivateObjectiveCard();
             Player player = new Player(user,nickname,card);
 

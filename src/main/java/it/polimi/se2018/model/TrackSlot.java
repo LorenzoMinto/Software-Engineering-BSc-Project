@@ -43,6 +43,7 @@ public class TrackSlot {
         if (dices.contains(dice)) {
             dices.remove(dice);
         } else {
+            //TODO: inserisci InvalidDiceException e adegua chiamanti
             throw new IllegalArgumentException("Asked to remove a dice that is not present in the TrackSlot.");
         }
     }

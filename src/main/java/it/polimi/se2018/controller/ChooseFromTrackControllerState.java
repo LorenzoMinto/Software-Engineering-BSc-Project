@@ -26,16 +26,19 @@ public class ChooseFromTrackControllerState extends ControllerState {
         if(slotNumber<0 || slotNumber>=controller.getConfigProperty("numberOfRounds")){
             throw new IllegalArgumentException("Asked to put a dice in track slot corresponding to unexisting round (out of numberOfRounds param value)");
         }
+        //TODO: catch exception from model and delete this previous check
 
         Game game = controller.game;
         try {
             game.getTrack().takeDice(dice, slotNumber);
-            game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
-            game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
-            controller.setControllerState(controller.stateManager.getNextState(this));
         } catch (IllegalArgumentException e) {
             //TODO:Use logger here??
         }
+
+        game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
+        game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
+        controller.setControllerState(controller.stateManager.getNextState(this));
+
         return new ControllerMessage("Dice from Track chosen.");
     }
 }

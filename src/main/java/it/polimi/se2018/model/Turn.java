@@ -16,6 +16,7 @@ public class Turn {
      * @param player se player playing the new turn
      */
     public Turn(int number, Player player) {
+        //TODO: bound exc
         if(number < 0 ){ throw new IllegalArgumentException("Can't create a turn with negative turnNumber");}
         if(player==null){ throw new IllegalArgumentException("Can't create a turn giving null player"); }
 
@@ -188,7 +189,6 @@ public class Turn {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(Player player){
-        if(player == null){throw new IllegalArgumentException("Can't check if the current player is a null player.");}
         return ( this.player.equals(player) );
     }
 }

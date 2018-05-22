@@ -38,6 +38,7 @@ public class Dice {
      */
     public Dice(DiceColors color, int value) {
         if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a Dice with no color."); }
+        //TODO: add OutOfBoundExceptions
         if(value <= 0 || value > 6){ throw new IllegalArgumentException("ERROR: Cannot create a dice with value not in range [1,6]."); }
 
         this.color = color;
@@ -50,6 +51,7 @@ public class Dice {
      * @param value the value to be setted to the Dice
      */
     public void setValue(int value) {
+        //TODO: outofbound exc
         if(value <= 0 || value > 6){ throw new IllegalArgumentException("ERROR: Cannot create a dice with value not in range [1,6]."); }
         this.value = value;
     }

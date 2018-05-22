@@ -83,7 +83,7 @@ public class Cell{
      * @param dice the dice that must be putted on the cell
      */
     public void setDice(Dice dice) {
-        if(dice==null)  { throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]"); }
+        if(dice==null){ throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]"); }
         this.dice = dice;
     }
 

@@ -43,7 +43,7 @@ public class ObjectiveCardFactory {
      * @param color color of the card
      * @return the {@link PrivateObjectiveCard} of the specified color
      */
-    public PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
+    protected PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
         if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "Private Objective Card with no color"); }
 
@@ -60,7 +60,7 @@ public class ObjectiveCardFactory {
      * @param index specifies the type of {@link PublicObjectiveCard} that is requested
      * @return the specified {@link PublicObjectiveCard}
      */
-    public PublicObjectiveCard createPublicObjectiveCardCardByIndex(int index) {
+    protected PublicObjectiveCard createPublicObjectiveCardCardByIndex(int index) {
         Set<Object> items;
         switch (index){
             case 0:
@@ -103,7 +103,7 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard();
             default:
-                throw new BadBehaviourRuntimeException("The selected (by index) card does not exist.");
+                throw new IllegalArgumentException("The selected (by index) card does not exist.");
         }
     }
 

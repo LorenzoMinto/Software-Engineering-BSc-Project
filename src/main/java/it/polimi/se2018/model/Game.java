@@ -75,6 +75,7 @@ public class Game extends Observable {
      * @param maxNumberOfPlayers the maximum number of players that the game can have
      */
     public Game(int numberOfRounds, int maxNumberOfPlayers) {
+        //TODO: modifica entrambe con outofbound exc
         if(numberOfRounds < 0){
             throw new IllegalArgumentException("Can't create a game with negative number of rounds"); }
         if(maxNumberOfPlayers <0 ){
@@ -199,15 +200,6 @@ public class Game extends Observable {
     }
 
     /**
-     * Returns if the game can accept a new player according to its max number of players.
-     *
-     * @return if the game can accept a new player according to its max number of players
-     */
-    public boolean canAcceptNewPlayer(){
-        return players.size() < maxNumberOfPlayers;
-    }
-
-    /**
      * Returns if the given player is the current playing one.
      *
      * @param player the player to be checked
@@ -224,10 +216,9 @@ public class Game extends Observable {
      */
     public void useToolCard(ToolCard toolCard){
         if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if not playing");}
-        if(toolCard == null){ throw new IllegalArgumentException("Asked to use a null toolcard ");}
 
         if( !this.drawnToolCards.contains(toolCard) ) {
-            throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
+            throw new BadBehaviourRuntimeException("Asked to use a toolcard that is not in the drawn set");
         }
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
         this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
@@ -243,15 +234,11 @@ public class Game extends Observable {
      * @author Lorenzo Minto
      */
     public ToolCard getToolCard(ToolCard toolCardCopy) {
-        if(toolCardCopy == null){ throw new IllegalArgumentException("Asked to use a null toolcard ");}
-        if( !this.drawnToolCards.contains(toolCardCopy) ) {
-            throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
-        }
 
         for (ToolCard card: drawnToolCards) {
             if (card.equals(toolCardCopy)) { return card;}
         }
-        return null;
+        throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
     }
 
     /**
@@ -278,8 +265,9 @@ public class Game extends Observable {
      * that could have been played in this game were actually already played
      */
     public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
-        if(dices == null){ throw new IllegalArgumentException("Can't proceed to next round with null dices.");}
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't prooeed to next round if game is not already running"); }
+        //TODO: aggiungi emptylist exc
+        if(dices.isEmpty()){ throw new IllegalArgumentException("Can't proceed to next round with no dices.");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next round if game is not already running"); }
 
         int nextRoundNumber;
         if( this.currentRound == null ){

@@ -41,10 +41,13 @@ public class Round {
      */
     public Round(int roundNumber, int numberOfTurns, List<Player> players, DraftPool draftPool) {
         if(draftPool==null){ throw new IllegalArgumentException("Asked to create a round giving null draftPool"); }
-        if(players==null || players.isEmpty()){
+        if(players.isEmpty()){
             throw new IllegalArgumentException("Asked to create a round with no players"); }
+
+            //TODO: inserisci bound exc
         if(roundNumber<0){
             throw new IllegalArgumentException("Asked to create a round with negative roundNumber"); }
+            //TODO: inserisci bound exc
         if(numberOfTurns<0){
             throw new IllegalArgumentException("Asked to create a round with negative numberOfTurns"); }
 
@@ -158,10 +161,6 @@ public class Round {
      * @author Jacopo Pio Gargano
      */
     public boolean removeNextTurnOfPlayer(Player player) {
-        if (player == null) {
-            throw new IllegalArgumentException("Asked to remove the next turn of a null player");
-        }
-
         for (int i = currentTurnIndex + 1; i < turns.size(); i++) {
             Turn currentTurn = turns.get(i);
             Player currentPlayer = currentTurn.getPlayer();

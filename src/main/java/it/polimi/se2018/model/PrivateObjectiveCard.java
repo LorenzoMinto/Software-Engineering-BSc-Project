@@ -70,12 +70,8 @@ public class PrivateObjectiveCard extends ObjectiveCard {
      */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
-        if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
-                " a null window pattern."); }
-
         int score = 0;
         Cell[][] pattern = windowPattern.getPattern();
-        if(pattern==null){ throw new IllegalArgumentException("ERROR: Pattern is null."); }
 
         for (int i = 0; i < windowPattern.getNumberOfRows(); i++) {
             for (int j = 0; j < windowPattern.getNumberOfColumns(); j++) {
