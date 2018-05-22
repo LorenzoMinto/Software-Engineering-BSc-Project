@@ -254,20 +254,20 @@ public class Game extends Observable {
         return null;
     }
 
-    public boolean startGame(List<Dice> dices){
-        if( this.status == GameStatus.WAITING_FOR_PLAYERS){
+    /**
+     * Starts the game and creates the first round with the given dices
+     * @param dices list of dices to be used for the first round
+     * @return true if game was created, false if not
+     */
+    public void startGame(List<Dice> dices){
 
-            this.status = GameStatus.PLAYING;
+        this.status = GameStatus.PLAYING;
 
-            try {
-                nextRound(dices);
-            } catch (NoMoreRoundsAvailableException e) {
-                throw new BadBehaviourRuntimeException();
-            }
-            return true;
+        try {
+            nextRound(dices);
+        } catch (NoMoreRoundsAvailableException e) {
+            throw new BadBehaviourRuntimeException();
         }
-
-        return false;
     }
 
     /**

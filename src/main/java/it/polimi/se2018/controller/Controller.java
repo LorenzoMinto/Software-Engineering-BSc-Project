@@ -209,11 +209,16 @@ public class Controller extends Observable {
         return activeToolcard;
     }
 
+    /**
+     * Starts the game
+     * @return true if game was started successfully, false if not
+     */
     protected boolean startGame(){
-
-        return  game.getPlayers().size()>=2 &&
-                game.getStatus()==GameStatus.WAITING_FOR_PLAYERS &&
-                game.startGame( getDicesForNewRound() );
+        if( game.getPlayers().size()>=2 && game.getStatus()==GameStatus.WAITING_FOR_PLAYERS ){
+            game.startGame( getDicesForNewRound() );
+            return true;
+        }
+        return false;
     }
 
     /**
