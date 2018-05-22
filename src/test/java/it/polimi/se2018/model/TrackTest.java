@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,9 +52,7 @@ public class TrackTest {
         try {
             track.getDicesFromSlotNumber(1);
             fail();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        } catch (ValueOutOfBoundsException e) {}
     }
 
     @Test
@@ -68,9 +67,8 @@ public class TrackTest {
         try {
             track.takeDice(dice1, 0);
             fail();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+            //TODO: invalidDiceException
+        } catch (IllegalArgumentException e) {}
     }
 
     @Test
@@ -78,9 +76,7 @@ public class TrackTest {
         try {
             track.takeDice(dice1, 2);
             fail();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        } catch (ValueOutOfBoundsException e) {}
     }
 
     @Test
@@ -94,8 +90,6 @@ public class TrackTest {
     public void testPutDiceInNonExistingTrackSlot() {
         try {
             track.putDice(dice1, 1);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        } catch (ValueOutOfBoundsException e) {}
     }
 }

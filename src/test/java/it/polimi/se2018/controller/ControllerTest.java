@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.*;
 
-public class TestController {
+public class ControllerTest {
 
     private static Controller controller;
 

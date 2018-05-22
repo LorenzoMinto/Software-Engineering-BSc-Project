@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.util.*;
 
@@ -52,8 +53,8 @@ public class ObjectiveCardManager {
      */
     public List<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
-        if(quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS || quantity < 1){
-            throw new BadBehaviourRuntimeException("ERROR: The quantity of Public Objective Cards asked is greater " +
+        if(quantity < 1 || quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS){
+            throw new ValueOutOfBoundsException("ERROR: The quantity of Public Objective Cards asked is greater " +
                     "than the number of Public Objective Cards.");
         }
 

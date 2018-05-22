@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,7 +13,7 @@ import static org.junit.Assert.*;
  * @author Jacopo Pio Gargano
  */
 
-public class TestTurn {
+public class TurnTest {
 
     private Turn turn;
 
@@ -53,7 +54,7 @@ public class TestTurn {
         try{
             turn = new Turn(-1, player);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
@@ -80,7 +81,6 @@ public class TestTurn {
     @Test
     public void testHasDraftedAndPlaced(){
         turn.setDraftedDice(dice);
-//        assertNotNull(turn.getDraftedDice());
         turn.setDraftedAndPlaced();
         assertTrue(turn.hasDraftedAndPlaced());
     }
@@ -127,13 +127,13 @@ public class TestTurn {
         assertEquals(1,turn.getSlotOfTrackChosenDice());
     }
 
-//    @Test
-//    public void testSetSlotOfTrackChosenDiceWithNegativeValue(){
-//        try{
-//            turn.setSlotOfTrackChosenDice(-1);
-//            fail();
-//        }catch (IllegalArgumentException e){}
-//    }
+    @Test
+    public void testSetSlotOfTrackChosenDiceWithNegativeValue(){
+        try{
+            turn.setSlotOfTrackChosenDice(-1);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+    }
 
     @Test
     public void testSetDraftedDice(){

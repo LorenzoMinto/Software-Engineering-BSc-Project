@@ -1,6 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,7 +15,7 @@ import static org.junit.Assert.*;
 /**
  * @author Jacopo Pio Gargano
  */
-public class TestScorer {
+public class ScorerTest {
 
     private static Scorer scorer;
 
@@ -524,40 +526,36 @@ public class TestScorer {
 
     @Test
     public void testGetRankingsOfNullPlayersOfLastRound(){
-        playersOfLastRound = null;
-
         try {
-            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            scorer.getRankings(null, publicObjectiveCards);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (NullPointerException e){}
     }
 
     @Test
     public void testGetRankingsOfEmptyPlayersOfLastRound(){
-        playersOfLastRound = new ArrayList<>();
-
         try {
-            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            scorer.getRankings(new ArrayList<>(), publicObjectiveCards);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (EmptyListException e){}
     }
 
     @Test
     public void testGetRankingsOfNullPublicObjectiveCards(){
+        playersOfLastRound.add(p1);
         try {
             scorer.getRankings(playersOfLastRound, null);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (NullPointerException e){}
     }
 
     @Test
     public void testGetRankingsOfEmptyPublicObjectiveCards(){
-        publicObjectiveCards = new ArrayList<>();
-
+        playersOfLastRound.add(p1);
         try {
-            scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+            scorer.getRankings(playersOfLastRound, new ArrayList<>());
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (EmptyListException e){}
     }
 
 
@@ -581,7 +579,7 @@ public class TestScorer {
         try {
             winner = scorer.getWinner(rankings);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (NullPointerException e){}
     }
 
 
@@ -592,9 +590,7 @@ public class TestScorer {
         try {
             winner = scorer.getWinner(rankings);
             fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(rankings.isEmpty());
-        }
+        }catch (EmptyListException e){}
     }
 
 

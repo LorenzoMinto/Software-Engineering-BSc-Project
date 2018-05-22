@@ -29,6 +29,7 @@ public class DraftPool {
      * @param dices the dices that are contained in the new DraftPool
      */
     public DraftPool(List<Dice> dices){
+        if(dices == null){ throw new IllegalArgumentException("ERROR: Can't create a draftpool with null dices.");}
         this.dices = dices;
     }
 

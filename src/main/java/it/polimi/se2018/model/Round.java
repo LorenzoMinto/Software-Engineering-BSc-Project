@@ -1,6 +1,8 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
+import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.util.*;
 
@@ -42,14 +44,12 @@ public class Round {
     public Round(int roundNumber, int numberOfTurns, List<Player> players, DraftPool draftPool) {
         if(draftPool==null){ throw new IllegalArgumentException("Asked to create a round giving null draftPool"); }
         if(players.isEmpty()){
-            throw new IllegalArgumentException("Asked to create a round with no players"); }
+            throw new EmptyListException("Asked to create a round with no players"); }
 
-            //TODO: inserisci bound exc
         if(roundNumber<0){
-            throw new IllegalArgumentException("Asked to create a round with negative roundNumber"); }
-            //TODO: inserisci bound exc
+            throw new ValueOutOfBoundsException("Asked to create a round with negative roundNumber"); }
         if(numberOfTurns<0){
-            throw new IllegalArgumentException("Asked to create a round with negative numberOfTurns"); }
+            throw new ValueOutOfBoundsException("Asked to create a round with negative numberOfTurns"); }
 
         this.number = roundNumber;
 
@@ -161,6 +161,7 @@ public class Round {
      * @author Jacopo Pio Gargano
      */
     public boolean removeNextTurnOfPlayer(Player player) {
+        if(player == null){throw new IllegalArgumentException("ERROR: Can't remove the next turn of a null player");}
         for (int i = currentTurnIndex + 1; i < turns.size(); i++) {
             Turn currentTurn = turns.get(i);
             Player currentPlayer = currentTurn.getPlayer();

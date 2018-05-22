@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,13 +14,39 @@ import static org.junit.Assert.*;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public class TestDice {
+public class DiceTest {
 
     private Dice dice;
 
     @Before
     public  void initializeDice(){
         dice = new Dice(GREEN,2);
+    }
+
+    @Test
+    public void testConstructor(){
+        dice = new Dice(GREEN, 2);
+    }
+
+    @Test
+    public void testConstructorWithNoColor(){
+        try{
+            dice = new Dice(NOCOLOR);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testConstructorWithValueOutOfBounds(){
+        try{
+            dice = new Dice(GREEN, 7);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try{
+            dice = new Dice(GREEN, -2);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
@@ -35,17 +62,13 @@ public class TestDice {
         try{
             dice.setValue(7);
             fail();
-        }catch (IllegalArgumentException e){}
-    }
+        }catch (ValueOutOfBoundsException e){}
 
-    @Test
-    public void testSetNegativeValue(){
         try{
             dice.setValue(-3);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
-
 
     @Test
     public void testRollOver() {

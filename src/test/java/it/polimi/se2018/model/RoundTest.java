@@ -1,6 +1,8 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
+import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,7 +18,7 @@ import java.util.List;
  * @author Jacopo Pio Gargano
  */
 
-public class TestRound {
+public class RoundTest {
 
 
     private Round round;
@@ -74,7 +76,7 @@ public class TestRound {
         try{
             round = new Round(-1, players.size()*2, players, draftPool);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
@@ -82,7 +84,7 @@ public class TestRound {
         try{
             round = new Round(0, -2, players, draftPool);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
@@ -90,7 +92,7 @@ public class TestRound {
         try{
             round = new Round(0, 8, null, draftPool);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (NullPointerException e){}
     }
 
     @Test
@@ -98,7 +100,7 @@ public class TestRound {
         try{
             round = new Round(0, 8, new ArrayList<>(), draftPool);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (EmptyListException e){}
     }
 
     @Test
@@ -270,9 +272,6 @@ public class TestRound {
             fail();
         }catch (IllegalArgumentException e ){}
     }
-
-
-
 
 
 }

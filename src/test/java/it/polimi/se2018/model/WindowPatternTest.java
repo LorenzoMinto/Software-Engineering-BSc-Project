@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * @author Jacopo Pio Gargano
  */
-public class TestWindowPattern {
+public class WindowPatternTest {
 
     private WindowPattern windowPattern;
 

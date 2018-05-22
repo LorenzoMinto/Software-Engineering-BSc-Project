@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 /**
  * @author Jacopo Pio Gargano
  */
-public class TestDiagonalsPublicObjectiveCard {
+public class DiagonalsPublicObjectiveCardTest {
 
     private static WindowPatternManager windowPatternManager;
 
@@ -151,9 +151,7 @@ public class TestDiagonalsPublicObjectiveCard {
         try {
             testScore = diagonalsPublicObjectiveCard.calculateScore(nullWP);
             fail();
-        }catch (IllegalArgumentException e){
-            assertNull(nullWP);
-        }
+        }catch (IllegalArgumentException e){}
     }
 
     @Test

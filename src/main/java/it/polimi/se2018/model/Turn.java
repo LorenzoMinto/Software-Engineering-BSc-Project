@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 /**
  * Class representing a round's Turn.
@@ -16,8 +17,7 @@ public class Turn {
      * @param player se player playing the new turn
      */
     public Turn(int number, Player player) {
-        //TODO: bound exc
-        if(number < 0 ){ throw new IllegalArgumentException("Can't create a turn with negative turnNumber");}
+        if(number < 0 ){ throw new ValueOutOfBoundsException("Can't create a turn with negative turnNumber");}
         if(player==null){ throw new IllegalArgumentException("Can't create a turn giving null player"); }
 
         this.number = number;
@@ -139,7 +139,7 @@ public class Turn {
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
-        //The callers has the responsibility to check if the value is legal or not
+        if(value < 0) {throw new ValueOutOfBoundsException("ERROR: Can't set the slot of chosen dice to a negative value.");}
         this.slotOfTrackChosenDice = value;
     }
 
@@ -189,6 +189,7 @@ public class Turn {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(Player player){
+        if(player == null){throw new IllegalArgumentException("ERROR: Can't check if null player is current player");}
         return ( this.player.equals(player) );
     }
 }

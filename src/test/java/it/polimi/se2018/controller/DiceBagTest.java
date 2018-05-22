@@ -10,7 +10,7 @@ import java.util.List;
 import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
-public class TestDiceBag {
+public class DiceBagTest {
 
     @Test
     public void testGetDices1() {

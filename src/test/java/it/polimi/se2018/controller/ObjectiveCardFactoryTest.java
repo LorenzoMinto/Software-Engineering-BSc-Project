@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  * @author Jacopo Pio Gargano
  */
 
-public class TestObjectiveCardFactory {
+public class ObjectiveCardFactoryTest {
 
     private static ObjectiveCardFactory factory;
     private PrivateObjectiveCard privateObjectiveCard;
@@ -170,7 +170,7 @@ public class TestObjectiveCardFactory {
         try{
             publicObjectiveCard = factory.createPublicObjectiveCardCardByIndex(wrongIndex);
             fail();
-        }catch (RuntimeException e){
+        }catch (IllegalArgumentException e){
             assertTrue(wrongIndex<0 || wrongIndex>9);
         }
     }

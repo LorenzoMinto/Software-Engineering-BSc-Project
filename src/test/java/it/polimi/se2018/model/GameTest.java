@@ -2,6 +2,8 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +19,7 @@ import static org.junit.Assert.*;
  * @author Jacopo Pio Gargano
  */
 
-public class TestGame {
+public class GameTest {
 
     private Game game;
     private static final int numberOfRounds = 10;
@@ -74,7 +76,7 @@ public class TestGame {
         try{
             game = new Game(-1, maxNumberOfPlayers);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
@@ -82,19 +84,15 @@ public class TestGame {
         try{
             game = new Game(numberOfRounds, -1);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test
     public void testGetCurrentRound(){
-        try {
             game.setCards(toolCards, publicObjectiveCards);
             game.addPlayer(player);
-            game.nextRound(dices);
+            game.startGame(dices);
             assertNotNull(game.getCurrentRound());
-        } catch (NoMoreRoundsAvailableException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -133,8 +131,6 @@ public class TestGame {
     public void testAddPlayer(){
         game.setCards(toolCards, publicObjectiveCards);
 
-        assertTrue(game.canAcceptNewPlayer());
-
         game.addPlayer(player);
 
         List<Player> expectedPlayersOfGame = new ArrayList<>();
@@ -160,25 +156,11 @@ public class TestGame {
         assertEquals(expectedPlayersOfGame, players);
     }
 
-    @Test
-    public void testCanAcceptPlayerAfterMaxPlayersJoined(){
-        game.setCards(toolCards, publicObjectiveCards);
-
-        player = new Player(user, "player1", privateObjectiveCard);
-        game.addPlayer(player);
-        player = new Player(user, "player2", privateObjectiveCard);
-        game.addPlayer(player);
-        player = new Player(user, "player3", privateObjectiveCard);
-        game.addPlayer(player);
-        player = new Player(user, "player4", privateObjectiveCard);
-        game.addPlayer(player);
-
-        assertFalse(game.canAcceptNewPlayer());
-    }
 
 
     @Test
     public void testSetRankingsWhenIllegalStatus(){
+        rankings.put(player,9);
         try {
             game.setRankings(rankings);
             fail();
@@ -189,11 +171,12 @@ public class TestGame {
     public void testSetRankingsToNull(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.startGame(dices);
 
-        for(int i=0; i <= numberOfRounds; i++){
+        for(int i=1; i <= numberOfRounds; i++){
             try {
                 game.nextRound(dices);
-            } catch (NoMoreRoundsAvailableException e) {}
+            } catch (NoMoreRoundsAvailableException e){}
         }
 
         try{
@@ -206,8 +189,9 @@ public class TestGame {
     public void testSetRankings(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.startGame(dices);
 
-        for(int i=0; i <= numberOfRounds; i++){
+        for(int i=1; i <= numberOfRounds; i++){
             try {
                 game.nextRound(dices);
             } catch (NoMoreRoundsAvailableException e) {}
@@ -222,8 +206,10 @@ public class TestGame {
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
         try {
-            game.nextRound(dices);
-        } catch (NoMoreRoundsAvailableException e) {}
+            game.startGame(dices);
+        } catch (BadBehaviourRuntimeException e) {
+            fail();
+        }
 
         game.useToolCard(toolCard);
         assertTrue(game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
@@ -242,13 +228,15 @@ public class TestGame {
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
         try {
-            game.nextRound(dices);
-        } catch (NoMoreRoundsAvailableException e) {}
+            game.startGame(dices);
+        } catch (BadBehaviourRuntimeException e) {
+            fail();
+        }
 
         try {
             game.useToolCard(toolCard2);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (BadBehaviourRuntimeException e){}
     }
 
     @Test
@@ -271,11 +259,11 @@ public class TestGame {
         try {
             game.getToolCard(null);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (NullPointerException e){}
     }
 
     @Test
-    public void testGetToolCardNotContainedInDrawnToolCards(){
+    public void testGetToolCardNotInDrawnToolCards(){
         ToolCard toolCard1 = new ToolCard("ID1","title1",null, null, 3,
                 3, null, null );
         ToolCard toolCard2 = new ToolCard("ID2","title2",null, null, 3,
@@ -292,39 +280,112 @@ public class TestGame {
         try {
             game.getToolCard(toolCard3);
             fail();
-        }catch (IllegalArgumentException e){}
+        }catch (BadBehaviourRuntimeException e){}
     }
 
     @Test
-    public void testNextRound(){
+    public void testStartGame(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
 
         try {
-            game.nextRound(dices);
-        } catch (NoMoreRoundsAvailableException e) {
+            game.startGame(dices);
+        } catch (Exception e) {
             fail();
         }
         assertNotNull(game.getCurrentRound());
     }
 
     @Test
-    public void testNextRoundWithNullDices(){
+    public void testStartGameWithNullDices(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+
         try {
-            game.nextRound(null);
+            game.startGame(null);
             fail();
-        } catch (NoMoreRoundsAvailableException e) {
+        } catch (BadBehaviourRuntimeException e) {
             fail();
         } catch (IllegalArgumentException e){}
     }
 
     @Test
-    public void testNextRoundWhenIllegalStatus(){
+    public void testStartGameWithEmptyDices(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+
+        try {
+            game.startGame(new ArrayList<>());
+            fail();
+        } catch (BadBehaviourRuntimeException e) {
+            fail();
+        } catch (EmptyListException e){}
+    }
+
+    @Test
+    public void testStartGameIllegalStatus(){
+        try {
+            game.startGame(dices);
+            fail();
+        } catch (IllegalArgumentException e) {
+            fail();
+        } catch (BadBehaviourRuntimeException e){}
+    }
+
+    @Test
+    public void testNextRound(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+        game.startGame(dices);
+
         try {
             game.nextRound(dices);
+        } catch (NoMoreRoundsAvailableException e) {
+            fail();
+        }
+
+        assertEquals(1, game.getCurrentRound().getNumber());
+    }
+
+    @Test
+    public void testNextRoundWithNullDices(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+        game.startGame(dices);
+
+        try {
+            game.nextRound(null);
             fail();
         } catch (NoMoreRoundsAvailableException e) {
             fail();
-        } catch (BadBehaviourRuntimeException e){}
+        } catch (EmptyListException e){
+            fail();
+        } catch (IllegalArgumentException e){}
+    }
+
+    @Test
+    public void testNextRoundWithEmptyDices(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+        game.startGame(dices);
+
+        try {
+            game.nextRound(new ArrayList<>());
+            fail();
+        } catch (NoMoreRoundsAvailableException e) {
+            fail();
+        } catch (EmptyListException e){}
+    }
+
+    @Test
+    public void testNextRoundIllegalStatus(){
+        try {
+            game.nextRound(dices);
+            fail();
+        } catch (IllegalArgumentException e) {
+            fail();
+        }catch (NoMoreRoundsAvailableException e){
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
     }
 }

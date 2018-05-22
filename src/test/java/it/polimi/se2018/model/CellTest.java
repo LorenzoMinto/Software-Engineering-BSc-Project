@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public class TestCell {
+public class CellTest {
 
     private Cell cell;
     private static Dice dice;

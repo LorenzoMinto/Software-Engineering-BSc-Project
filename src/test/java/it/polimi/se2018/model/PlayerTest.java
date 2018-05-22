@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestPlayer {
+public class PlayerTest {
 
     User user;
     Player p;

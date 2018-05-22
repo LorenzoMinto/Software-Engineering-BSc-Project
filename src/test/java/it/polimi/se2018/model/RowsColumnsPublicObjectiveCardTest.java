@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  */
 
 //TODO: tests with factory
-public class TestRowsColumnsPublicObjectiveCard {
+public class RowsColumnsPublicObjectiveCardTest {
 
     private static WindowPatternManager windowPatternManager;
 
@@ -118,9 +118,7 @@ public class TestRowsColumnsPublicObjectiveCard {
         try {
             testScore = rowsColumnsPublicObjectiveCard.calculateScore(nullWP);
             fail();
-        }catch (IllegalArgumentException e){
-            assertNull(nullWP);
-        }
+        }catch (NullPointerException e){}
     }
 
     @Test

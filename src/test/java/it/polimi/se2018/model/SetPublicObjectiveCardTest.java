@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author Jacopo Pio Gargano
  */
 
-public class TestSetPublicObjectiveCard {
+public class SetPublicObjectiveCardTest {
 
     private static WindowPatternManager windowPatternManager;
 
@@ -156,9 +156,7 @@ public class TestSetPublicObjectiveCard {
         try {
             testScore = setPublicObjectiveCard.calculateScore(nullWP);
             fail();
-        }catch (IllegalArgumentException e){
-            assertNull(nullWP);
-        }
+        }catch (NullPointerException e){}
     }
 
     @Test

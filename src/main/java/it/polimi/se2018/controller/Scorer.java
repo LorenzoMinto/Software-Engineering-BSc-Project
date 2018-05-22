@@ -4,6 +4,7 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.PrivateObjectiveCard;
 import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.WindowPattern;
+import it.polimi.se2018.utils.EmptyListException;
 
 import java.util.*;
 
@@ -48,7 +49,7 @@ public class Scorer {
      * @return the first player of certain rankings
      */
     public Player getWinner(Map<Player, Integer> rankings){
-        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't determine winner if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new EmptyListException("ERROR: Can't determine winner if the list of players is empty.");}
 
         List<Player> playersOfRankings = new ArrayList<>( rankings.keySet() );
 
@@ -68,11 +69,11 @@ public class Scorer {
      * @see Scorer#orderRankingsByPrivateObjectiveCardScore(Map)
      * @see Scorer#orderRankingsByScore(Map)
      */
-    Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
+     public Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
                                      List<PublicObjectiveCard> publicObjectiveCards){
-        if(playersOfLastRound.isEmpty()){ throw new IllegalArgumentException(
+        if(playersOfLastRound.isEmpty()){ throw new EmptyListException(
                 "ERROR: Can't determine winner if the list of players is empty.");}
-        if(publicObjectiveCards.isEmpty()){ throw new IllegalArgumentException(
+        if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(
                 "ERROR: Can't determine winner if the list of public objective cards is empty.");}
 
         Map<Player,Integer> rankings;
@@ -135,7 +136,6 @@ public class Scorer {
      * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
     private Map<Player, Integer> orderRankingsByPrivateObjectiveCardScore(Map<Player, Integer> rankings) {
-        if(rankings.isEmpty()){ throw new IllegalArgumentException("ERROR: Can't order players by private objective card score if the list of players is empty.");}
 
         Set<Player> players = rankings.keySet();
         Map<Player, Integer> privateObjectiveCardsScores = getPrivateObjectiveCardScores(players);
@@ -154,7 +154,8 @@ public class Scorer {
      * @see Scorer#orderRankingsByCriteria(Map, Map)
      */
     private Map<Player, Integer> orderRankingsByScore(Map<Player, Integer> rankings) {
-        
+
+        //TODO: commenta
         return orderRankingsByCriteria(rankings, rankings);
     }
 
@@ -166,6 +167,7 @@ public class Scorer {
      * @param criteriaRankings criteria rankings to follow
      * @return rankings ordered by criteria specified in method parameter
      */
+    //TODO: rename
     private Map<Player, Integer> orderRankingsByCriteria(Map<Player, Integer> playerRankings, Map<Player, Integer> criteriaRankings) {
         Map<Player, Integer> rankingsByCriteria = new LinkedHashMap<>();
         Map<Player, Integer> criteriaScoresCopy = new LinkedHashMap<>(criteriaRankings);

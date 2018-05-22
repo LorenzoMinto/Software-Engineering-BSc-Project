@@ -2,7 +2,9 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.util.*;
 
@@ -75,11 +77,10 @@ public class Game extends Observable {
      * @param maxNumberOfPlayers the maximum number of players that the game can have
      */
     public Game(int numberOfRounds, int maxNumberOfPlayers) {
-        //TODO: modifica entrambe con outofbound exc
         if(numberOfRounds < 0){
-            throw new IllegalArgumentException("Can't create a game with negative number of rounds"); }
+            throw new ValueOutOfBoundsException("Can't create a game with negative number of rounds"); }
         if(maxNumberOfPlayers <0 ){
-            throw new IllegalArgumentException("Can't create a game with negative number of players"); }
+            throw new ValueOutOfBoundsException("Can't create a game with negative number of players"); }
         this.currentRound = null;
         this.track = new Track();
         this.players = new ArrayList<>();
@@ -238,7 +239,7 @@ public class Game extends Observable {
         for (ToolCard card: drawnToolCards) {
             if (card.equals(toolCardCopy)) { return card;}
         }
-        throw new IllegalArgumentException("Asked to use a toolcard but it is not in the drawn set");
+        throw new BadBehaviourRuntimeException("Asked to use a toolcard but it is not in the drawn set");
     }
 
     /**
@@ -247,6 +248,9 @@ public class Game extends Observable {
      * @return true if game was created, false if not
      */
     public void startGame(List<Dice> dices){
+        if(dices == null){ throw new IllegalArgumentException("ERROR: Can't start game with null dices.");}
+        if(dices.isEmpty()){ throw new EmptyListException("Can't start game with no dices.");}
+        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("ERROR: Can't start game if not waiting for players.");}
 
         this.status = GameStatus.PLAYING;
 
@@ -265,8 +269,8 @@ public class Game extends Observable {
      * that could have been played in this game were actually already played
      */
     public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
-        //TODO: aggiungi emptylist exc
-        if(dices.isEmpty()){ throw new IllegalArgumentException("Can't proceed to next round with no dices.");}
+        if(dices == null){ throw new IllegalArgumentException("ERROR: Can't proceed to next round with null dices.");}
+        if(dices.isEmpty()){ throw new EmptyListException("Can't proceed to next round with no dices.");}
         if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next round if game is not already running"); }
 
         int nextRoundNumber;

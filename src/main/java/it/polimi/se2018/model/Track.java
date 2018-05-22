@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +38,9 @@ public class Track {
      * @return the list of dices kept in the wanted TrackSlot.
      */
     public List<Dice> getDicesFromSlotNumber(int slotNumber) {
-        //TODO: aggiungi bound exc
+
         if (slotNumber < 0 || slotNumber >= slots.size()) {
-            throw new IllegalArgumentException("TrackSlot selected doesn't exist.");
+            throw new ValueOutOfBoundsException("TrackSlot selected doesn't exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
         return slot.getDices();
@@ -53,8 +55,7 @@ public class Track {
      */
     public void takeDice(Dice dice, int slotNumber){
         if (slotNumber >= slots.size()) {
-            //TODO: bound exc
-            throw new IllegalArgumentException("The selected track slot does not exist.");
+            throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.removeDice(dice);
@@ -69,8 +70,7 @@ public class Track {
      */
     public boolean putDice(Dice dice, int slotNumber){
         if (slotNumber >= slots.size()) {
-            //TODO: inserisci bound exc
-            throw new IllegalArgumentException("The selected track slot does not exist.");
+            throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.addDice(dice);

@@ -1,6 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +14,7 @@ import static org.junit.Assert.*;
  * @author Jacopo Pio Gargano
  */
 
-public class TestObjectiveCardManager {
+public class ObjectiveCardManagerTest {
 
     private ObjectiveCardManager manager;
     private PrivateObjectiveCard privateObjectiveCard;
@@ -49,7 +51,7 @@ public class TestObjectiveCardManager {
         for(int i=0; i < numberOfPrivateObjectiveCards; i++){
             try{
                 privateObjectiveCard = manager.getPrivateObjectiveCard();
-            } catch (RuntimeException e ){
+            } catch (BadBehaviourRuntimeException e ){
                 fail();
             }
         }
@@ -65,7 +67,7 @@ public class TestObjectiveCardManager {
         try{
             privateObjectiveCard = manager.getPrivateObjectiveCard();
             fail();
-        }catch (RuntimeException e){}
+        }catch (BadBehaviourRuntimeException e){}
     }
 
     //TODO: to be run with testGetAllPrivateObjectiveCards
@@ -92,7 +94,7 @@ public class TestObjectiveCardManager {
         }
     }
 
-    //TODO: to be run with testAllPublicObjectiveCardsTitlesAreDifferent of TestObjectiveCardFactory
+    //TODO: to be run with testAllPublicObjectiveCardsTitlesAreDifferent of ObjectiveCardFactoryTest
     @Test
     public void testAllPublicObjectiveCardsRetrievedAreDifferent(){
 
@@ -115,7 +117,7 @@ public class TestObjectiveCardManager {
         try{
             publicObjectiveCards = manager.getPublicObjectiveCards(numberOfPublicObjectiveCards+1);
             fail();
-        }catch (RuntimeException e){}
+        }catch (ValueOutOfBoundsException e){}
     }
 
     @Test

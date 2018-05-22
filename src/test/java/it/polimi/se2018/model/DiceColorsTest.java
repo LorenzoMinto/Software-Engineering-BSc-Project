@@ -5,7 +5,10 @@ import org.junit.Test;
 import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
-public class TestDiceColors {
+/**
+ * @author Jacopo Pio Gargano
+ */
+public class DiceColorsTest {
 
     private DiceColors color;
 

@@ -60,6 +60,7 @@ public class TrackSlotTest {
         try {
             slot.removeDice(dice);
             fail();
+            //TODO: invalidDiceException
         } catch (IllegalArgumentException e) {}
     }
 
