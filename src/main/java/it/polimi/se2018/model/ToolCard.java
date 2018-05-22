@@ -116,6 +116,8 @@ public class ToolCard {
         if (this.tokensUsed==this.baseNeededTokens) { this.neededTokens *= this.tokensUsageMultiplier; }
     }
 
+    public String getID() { return ID; }
+
     /**
      * Returns the title of the tool card.
      *
@@ -199,10 +201,7 @@ public class ToolCard {
 
         ToolCard c = (ToolCard) o;
 
-        //TODO: here only ID should suffice, it could have different urls in the future and different localized descr.
-        return this.title.equals(c.getTitle())
-                && this.description.equals(c.getDescription())
-                && this.imageURL.equals(c.getImageURL());
+        return this.ID.equals(c.getID());
     }
 
     @Override

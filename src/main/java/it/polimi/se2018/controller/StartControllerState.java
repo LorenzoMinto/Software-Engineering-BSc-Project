@@ -26,9 +26,11 @@ public class StartControllerState extends ControllerState {
 
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
+            controller.setControllerState(controller.stateManager.getPlaceState());
+            return new ControllerMessage("Dice drafted.");
+        } else {
+            return new ControllerMessage("Dice not in the draft pool.");
         }
-        controller.setControllerState(controller.stateManager.getPlaceState());
-        return new ControllerMessage("Dice drafted.");
     }
 
     @Override
