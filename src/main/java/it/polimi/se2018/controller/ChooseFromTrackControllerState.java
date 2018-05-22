@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -20,7 +21,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
     }
 
     @Override
-    public void chooseDiceFromTrack(Dice dice, int slotNumber, View view) {
+    public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
         
         if(slotNumber<0 || slotNumber>=controller.getConfigProperty("numberOfRounds")){
             throw new IllegalArgumentException("Asked to put a dice in track slot corresponding to unexisting round (out of numberOfRounds param value)");
@@ -35,5 +36,6 @@ public class ChooseFromTrackControllerState extends ControllerState {
         } catch (IllegalArgumentException e) {
             //TODO:Use logger here??
         }
+        return new ControllerMessage("Dice from Track chosen.");
     }
 }

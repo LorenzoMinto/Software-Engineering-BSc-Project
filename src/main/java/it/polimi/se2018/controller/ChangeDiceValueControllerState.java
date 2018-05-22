@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -21,7 +22,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public void incrementDice(View view) {
+    public Message incrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
@@ -29,12 +30,13 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage(NO_DICE_DRAFTED);
+            return NO_DICE_DRAFTED;
         }
+        return new ControllerMessage("Dice incremented.");
     }
 
     @Override
-    public void decrementDice(View view) {
+    public Message decrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
@@ -42,12 +44,13 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            view.showMessage(NO_DICE_DRAFTED);
+            return NO_DICE_DRAFTED;
         }
+        return new ControllerMessage("Dice decremented.");
     }
 
     @Override
-    public void chooseDiceValue(int value, View view) {
+    public Message chooseDiceValue(int value) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
@@ -55,7 +58,8 @@ public class ChangeDiceValueControllerState extends ControllerState {
             currentTurn.getDraftedDice().setValue(value);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            view.showMessage(NO_DICE_DRAFTED);
+            return NO_DICE_DRAFTED;
         }
+        return new ControllerMessage("Dice value changed.");
     }
 }

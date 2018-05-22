@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -20,7 +21,7 @@ public class MoveControllerState extends ControllerState {
     }
 
     @Override
-    public void moveDice(int rowFrom, int colFrom, int rowTo, int colTo, View view) {
+    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
@@ -28,15 +29,17 @@ public class MoveControllerState extends ControllerState {
         //check if move conforms to current placementRules and general physical constraints
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
-            view.showMessage("Move made.");
+            //TODO: what if multiple messages needs to be returned to the view, sequentially
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
+                return new ControllerMessage("Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
+                return new ControllerMessage("Move made.");
             }
         } else {
-            view.showMessage("Can't make this move.");
+            return new ControllerMessage("Can't make this move.");
         }
     }
 }

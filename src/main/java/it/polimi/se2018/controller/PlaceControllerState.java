@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -20,7 +21,7 @@ public class PlaceControllerState extends ControllerState {
     }
 
     @Override
-    public void placeDice(int row, int col, View view) {
+    public Message placeDice(int row, int col) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
@@ -28,18 +29,19 @@ public class PlaceControllerState extends ControllerState {
         if (currentTurn.hasDrafted()) {
             if (controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col)
                     && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
-                view.showMessage("Dice placed!");
 
                 if (controller.getActiveToolCard() != null) {
                     controller.setControllerState(controller.stateManager.getNextState(this));
+                    return new ControllerMessage("Dice placed!");
                 } else {
                     controller.setControllerState(controller.stateManager.getToolCardState());
+                    return new ControllerMessage("Dice placed!");
                 }
             } else {
-                view.showMessage("Move is illegal. There's another dice in that position.");
+                return new ControllerMessage("Move is illegal. There's another dice in that position.");
             }
         } else {
-            view.showMessage("No drafted dice.");
+            return new ControllerMessage("No drafted dice.");
         }
 
     }

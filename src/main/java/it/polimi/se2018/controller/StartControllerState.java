@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -20,22 +21,24 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public void draftDiceFromDraftPool(Dice dice, View view) {
+    public Message draftDiceFromDraftPool(Dice dice) {
         Round currentRound = controller.game.getCurrentRound();
 
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
         }
         controller.setControllerState(controller.stateManager.getPlaceState());
+        return new ControllerMessage("Dice drafted.");
     }
 
     @Override
-    public void useToolCard(Player player, ToolCard toolcard, View view) {
+    public Message useToolCard(Player player, ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.stateManager.getNextState(this);
         } else {
-            view.showMessage("Can't use this toolcard.");
+            return new ControllerMessage("Can't use this toolcard.");
         }
+        return new ControllerMessage("Toolcard activated.");
     }
 }

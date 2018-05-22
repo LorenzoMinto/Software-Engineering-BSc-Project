@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *
@@ -22,7 +23,7 @@ public class DraftControllerState extends ControllerState {
     }
 
     @Override
-    public void draftDiceFromDraftPool(Dice dice, View view) {
+    public Message draftDiceFromDraftPool(Dice dice) {
         Game game = controller.game;
         Round currentRound = game.getCurrentRound();
 
@@ -30,16 +31,16 @@ public class DraftControllerState extends ControllerState {
             currentRound.getCurrentTurn().setDraftedDice(dice);
         }
 
-        //TODO: activeToolcard needs to be set to null after effect expires
         if (controller.getActiveToolCard() != null) {
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
             controller.setControllerState(controller.stateManager.getPlaceState());
         }
+        return new ControllerMessage("Dice drafted.");
     }
 
     @Override
-    public void placeDice(int row, int col, View view) {
-        view.showMessage(NO_DICE_DRAFTED);
+    public Message placeDice(int row, int col) {
+        return NO_DICE_DRAFTED;
     }
 }

@@ -2,7 +2,8 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
-import it.polimi.se2018.view.View;
+import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.Message;
 
 /**
  *  @author Lorenzo Minto
@@ -21,12 +22,13 @@ public class ToolCardControllerState extends ControllerState {
     }
 
     @Override
-    public void useToolCard(Player player, ToolCard toolcard, View view) {
+    public Message useToolCard(Player player, ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            view.showMessage("Can't use this toolcard.");
+            return new ControllerMessage("Can't use this toolcard.");
         }
+        return new ControllerMessage("Toolcard activated.");
     }
 }

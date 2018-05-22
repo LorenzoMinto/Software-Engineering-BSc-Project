@@ -82,6 +82,7 @@ public class ToolCardTest {
     @Test
     public void testNeedsDrafting(){
         assertTrue(toolcard.needsDrafting());
+        //TODO: needs a negative (instantiate toolcard that doesn't need to draft and test.
     }
 
     @Test
