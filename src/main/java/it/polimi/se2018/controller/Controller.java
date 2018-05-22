@@ -209,6 +209,12 @@ public class Controller extends Observable {
         return activeToolcard;
     }
 
+    protected boolean startGame(){
+
+        return  game.getPlayers().size()>=2 &&
+                game.getStatus()==GameStatus.WAITING_FOR_PLAYERS &&
+                game.startGame( getDicesForNewRound() );
+    }
 
     /**
      * Let the game advance in the turns sequence.
@@ -232,7 +238,7 @@ public class Controller extends Observable {
         } catch (NoMoreTurnsAvailableException e) {
 
             try {
-                game.nextRound( diceBag.getDices(game.getPlayers().size()*2 + 1) );
+                game.nextRound( getDicesForNewRound() );
             } catch (NoMoreRoundsAvailableException e1) {
 
                 endGame();
@@ -245,6 +251,10 @@ public class Controller extends Observable {
             }
 
         }
+    }
+
+    private List<Dice> getDicesForNewRound(){
+        return diceBag.getDices( game.getPlayers().size()*2 + 1 );
     }
 
     /**

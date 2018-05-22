@@ -254,6 +254,22 @@ public class Game extends Observable {
         return null;
     }
 
+    public boolean startGame(List<Dice> dices){
+        if( this.status == GameStatus.WAITING_FOR_PLAYERS){
+
+            this.status = GameStatus.PLAYING;
+
+            try {
+                nextRound(dices);
+            } catch (NoMoreRoundsAvailableException e) {
+                throw new BadBehaviourRuntimeException();
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Proceed the game going to the next round (if available).
      *
@@ -262,17 +278,14 @@ public class Game extends Observable {
      * that could have been played in this game were actually already played
      */
     public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
-
         if(dices == null){ throw new IllegalArgumentException("Can't proceed to next round with null dices.");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't prooeed to next round if game is not already running"); }
 
         int nextRoundNumber;
-        if( this.currentRound == null && this.status == GameStatus.WAITING_FOR_PLAYERS){
+        if( this.currentRound == null ){
             nextRoundNumber = 0;
-            this.status = GameStatus.PLAYING;
-        } else if(this.currentRound != null && this.status == GameStatus.PLAYING){
+        } else {
             nextRoundNumber = this.currentRound.getNumber() + 1;
-        }else{
-            throw new BadBehaviourRuntimeException("Can't proceed to next round if not playing.");
         }
 
         if(nextRoundNumber > numberOfRounds - 1){
