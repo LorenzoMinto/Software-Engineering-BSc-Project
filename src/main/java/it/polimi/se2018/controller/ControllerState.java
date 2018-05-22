@@ -1,7 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
-import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.networking.message.ControllerMessage;
 import it.polimi.se2018.networking.message.Message;
@@ -70,10 +69,9 @@ public abstract class ControllerState {
     /**
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
      * passed toolCard is set as activeToolCard in the Controller.
-     *  @param player the player requesting the action.
      * @param toolcard the toolcard to be activated.
      */
-    public Message useToolCard(Player player, ToolCard toolcard){ return defaultMessage; }
+    public Message useToolCard(ToolCard toolcard){ return defaultMessage; }
 
     /**
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.

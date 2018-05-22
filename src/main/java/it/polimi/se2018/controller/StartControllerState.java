@@ -34,7 +34,7 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public Message useToolCard(Player player, ToolCard toolcard) {
+    public Message useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.stateManager.getNextState(this);

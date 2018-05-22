@@ -1,6 +1,5 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.networking.message.ControllerMessage;
 import it.polimi.se2018.networking.message.Message;
@@ -22,7 +21,7 @@ public class ToolCardControllerState extends ControllerState {
     }
 
     @Override
-    public Message useToolCard(Player player, ToolCard toolcard) {
+    public Message useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.setControllerState(controller.stateManager.getNextState(this));
