@@ -1,6 +1,5 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.PlacementRule;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class ControllerStateManager {
     /**
      * Controller to which is added the state
      */
-    private Controller controller = null;
+    private Controller controller;
 
     /**
      * Table containing all the previously created states
@@ -25,12 +24,11 @@ public class ControllerStateManager {
      */
     private HashMap<String, ControllerState> stateTable;
 
-    //TODO: check if this variables are needed
-    StartControllerState startState;
-    PlaceControllerState placeState;
-    ToolCardControllerState toolCardState;
-    DraftControllerState draftControllerState;
-    EndToolCardEffectControllerState endToolCardEffectControllerState;
+    private StartControllerState startState;
+    private PlaceControllerState placeState;
+    private ToolCardControllerState toolCardState;
+    private DraftControllerState draftControllerState;
+    private EndToolCardEffectControllerState endToolCardEffectControllerState;
 
     /**
      * Constructor for the Controller State Manager. Each controller instance
@@ -44,7 +42,7 @@ public class ControllerStateManager {
         this.controller = controller;
         this.stateTable = new HashMap<>();
 
-        //TODO: checks if are really needed this variables:
+        this.draftControllerState = new DraftControllerState(this.controller);
         this.startState = new StartControllerState(this.controller);
         this.placeState = new PlaceControllerState(this.controller);
         this.toolCardState = new ToolCardControllerState(this.controller);
@@ -101,7 +99,6 @@ public class ControllerStateManager {
     }
 
     //Getters for controller states
-    //TODO: check if are really needed this methods:
     public StartControllerState getStartState() {
         return startState;
     }
@@ -110,7 +107,5 @@ public class ControllerStateManager {
     }
     public ToolCardControllerState getToolCardState() { return toolCardState; }
     public DraftControllerState getDraftControllerState() { return draftControllerState; }
-    public EndToolCardEffectControllerState getEndToolCardEffectControllerState() {
-        return endToolCardEffectControllerState;
-    }
+    public EndToolCardEffectControllerState getEndToolCardEffectControllerState() { return endToolCardEffectControllerState; }
 }
