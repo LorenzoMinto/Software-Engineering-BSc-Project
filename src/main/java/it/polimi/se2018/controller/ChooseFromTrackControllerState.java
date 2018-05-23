@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.message.ControllerMessage;
 import it.polimi.se2018.networking.message.Message;
+import it.polimi.se2018.utils.BadDiceReferenceException;
 
 /**
  *  @author Lorenzo Minto
@@ -22,21 +23,15 @@ public class ChooseFromTrackControllerState extends ControllerState {
 
     @Override
     public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
-        
-        if(slotNumber<0 || slotNumber>=controller.getConfigProperty("numberOfRounds")){
-            throw new IllegalArgumentException("Asked to put a dice in track slot corresponding to unexisting round (out of numberOfRounds param value)");
-        }
-        //TODO: catch exception from model and delete this previous check
 
-        Game game = controller.game;
         try {
-            game.getTrack().takeDice(dice, slotNumber);
-        } catch (IllegalArgumentException e) {
-            //TODO:Use logger here??
+            controller.game.getTrack().takeDice(dice, slotNumber);
+        } catch (BadDiceReferenceException e) {
+            return new ControllerMessage("Can't choose this Dice.");
         }
 
-        game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
-        game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
+        controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
+        controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
         controller.setControllerState(controller.stateManager.getNextState(this));
 
         return new ControllerMessage("Dice from Track chosen.");

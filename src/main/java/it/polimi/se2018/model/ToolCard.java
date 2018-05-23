@@ -6,6 +6,7 @@ import it.polimi.se2018.controller.DraftControllerState;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 
 
 /**
@@ -16,7 +17,7 @@ import java.util.Objects;
  */
 public class ToolCard {
 
-    private final String ID;
+    private final String toolCardID;
 
     /**
      * The tool card's title.
@@ -66,34 +67,35 @@ public class ToolCard {
     /**
      * Class constructor.
      *
-     * @param id the id of toolcard
-     * @param title the title of the tool card.
-     * @param description the description of the tool card.
-     * @param imageURL the URL of the tool card image.
-     * @param neededTokens the tokens needed to activate the tool card.
-     * @param tokensUsageMultiplier the factor that multiplies needed tokens after the first activation.
+     * @param p contains id, title, description, imageURL, neededtokens, tokensUsageMultiplier
      * @param controllerStateRules the state table that governs state transitions when the tool card is active.
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      */
-    public ToolCard(String id, String title, String description, String imageURL, int neededTokens, int tokensUsageMultiplier,
-                    Map<String, String> controllerStateRules, PlacementRule placementRule) {
-        this.ID = id;
-        this.title = title;
-        this.description = description;
-        this.neededTokens = neededTokens;
-        this.baseNeededTokens = neededTokens;
+    public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule) {
+        //the id of toolcard
+        this.toolCardID = p.getProperty("id");
+        //the title of the tool card.
+        this.title = p.getProperty("title");
+        //the description of the tool card.
+        this.description = p.getProperty("description");
+        //the tokens needed to activate the tool card.
+        this.neededTokens = Integer.getInteger( p.getProperty("neededTokens") );
+        this.baseNeededTokens = Integer.getInteger( p.getProperty("neededTokens") );
         this.tokensUsed = 0;
-        this.imageURL = imageURL;
+        //the factor that multiplies needed tokens after the first activation.
+        this.tokensUsageMultiplier = Integer.getInteger( p.getProperty("tokensUsageMultiplier") );
+        //the URL of the tool card image.
+        this.imageURL = p.getProperty("imageURL");
+
         this.controllerStateRules = (HashMap<String,String>)controllerStateRules;
         this.placementRule = placementRule;
-        this.tokensUsageMultiplier = tokensUsageMultiplier;
     }
 
     /**
      * Empty private constructor.
      */
     private ToolCard(){
-        this.ID = "placeholder";
+        this.toolCardID = "placeholder";
     }
 
     /**
@@ -116,7 +118,7 @@ public class ToolCard {
         if (this.tokensUsed==this.baseNeededTokens) { this.neededTokens *= this.tokensUsageMultiplier; }
     }
 
-    public String getID() { return ID; }
+    public String getToolCardID() { return toolCardID; }
 
     /**
      * Returns the title of the tool card.
@@ -201,7 +203,7 @@ public class ToolCard {
 
         ToolCard c = (ToolCard) o;
 
-        return this.ID.equals(c.getID());
+        return this.toolCardID.equals(c.getToolCardID());
     }
 
     @Override

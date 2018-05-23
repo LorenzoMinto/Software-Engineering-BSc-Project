@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadDiceReferenceException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +41,11 @@ public class TrackSlot {
      * @param dice the dice to be removed.
      * @return whether or not specified dice could be removed from the TrackSlot's dices.
      */
-    public void removeDice(Dice dice) {
+    public void removeDice(Dice dice) throws BadDiceReferenceException {
         if (dices.contains(dice)) {
             dices.remove(dice);
         } else {
-            //TODO: inserisci InvalidDiceException e adegua chiamanti
-            throw new IllegalArgumentException("Asked to remove a dice that is not present in the TrackSlot.");
+            throw new BadDiceReferenceException("Asked to remove a dice that is not present in the TrackSlot.");
         }
     }
 

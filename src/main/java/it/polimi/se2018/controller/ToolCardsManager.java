@@ -9,10 +9,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Manages creation and distribution of Tool Cards
@@ -114,16 +111,19 @@ public class ToolCardsManager {
      */
     private ToolCard loadToolCardFromFileSystem(String toolCardID){
 
+        Properties params = new Properties();
+        params.put("id", toolCardID);
+
         try{
 
             Document document = XMLFileReader.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
             //Parse from xml the number of rows of the pattern
-            String toolCardTitle = document.getElementsByTagName("title").item(0).getTextContent();
-            String toolCardImageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
-            String toolCardDescription = document.getElementsByTagName("description").item(0).getTextContent();
-            int neededTokens = Integer.parseInt( document.getElementsByTagName("neededTokens").item(0).getTextContent() );
-            int tokensUsageMultiplier = Integer.parseInt( document.getElementsByTagName("tokensUsageMultiplier").item(0).getTextContent() );
+            params.put("title", document.getElementsByTagName("title").item(0).getTextContent());
+            params.put("imageURL", document.getElementsByTagName("imageURL").item(0).getTextContent());
+            params.put("description", document.getElementsByTagName("description").item(0).getTextContent());
+            params.put("neededTokens", document.getElementsByTagName("neededTokens").item(0).getTextContent());
+            params.put("tokensUsageMultiplier", document.getElementsByTagName("tokensUsageMultiplier").item(0).getTextContent());
 
             //Placement Rules PARSING
 
@@ -168,7 +168,7 @@ public class ToolCardsManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(toolCardID,toolCardTitle,toolCardDescription,toolCardImageURL,neededTokens,tokensUsageMultiplier,controllerStateRules,placementRule);
+            return new ToolCard(params,controllerStateRules,placementRule);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
