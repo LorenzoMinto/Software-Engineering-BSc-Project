@@ -1,5 +1,6 @@
 package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.PlacementRule;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.HashMap;
@@ -87,11 +88,12 @@ public class ControllerStateManager {
         try {
 
             //Checks that the class it is created is a subclass of ControllerState
-            if( ! Class.forName(controllerStateID).isAssignableFrom(ControllerState.class) ){
+            Class<?> cs = Class.forName(ControllerState.class.getPackage().getName() + "." + controllerStateID);
+            if( ! ControllerState.class.isAssignableFrom(cs) ){
                 throw new BadBehaviourRuntimeException("Asked to create state: "+controllerStateID+" that seems to not being subclass of ControllerState");
             }
 
-            return (ControllerState) Class.forName(controllerStateID).getConstructor(Controller.class).newInstance(controller);
+            return (ControllerState) cs.getConstructor(Controller.class).newInstance(controller);
 
         } catch( Exception e ){
             throw new BadBehaviourRuntimeException("Something during the creation of a controller state by id failed. This is the asked ID: "+controllerStateID);
