@@ -16,16 +16,17 @@ import static org.junit.Assert.*;
 
 public class StartControllerStateTest {
     private Controller controller;
+    private Properties prop;
 
     @Before
     public void setUp() throws Exception {
         Game game = new Game(4,4);
-        Properties prop = new Properties();
-        prop.setProperty("numberOfDicesPerColor","18");
-        prop.setProperty("numberOfToolCards","3");
-        prop.setProperty("numberOfPublicObjectiveCards","2");
-        prop.setProperty("maxNumberOfPlayers","4");
-        controller = new Controller(game, prop);
+        Properties gprop = new Properties();
+        gprop.setProperty("numberOfDicesPerColor","18");
+        gprop.setProperty("numberOfToolCards","3");
+        gprop.setProperty("numberOfPublicObjectiveCards","2");
+        gprop.setProperty("maxNumberOfPlayers","4");
+        controller = new Controller(game, gprop);
 
         User user1 = new User(1, "johnniffer");
         User user2 = new User(2, "rubens");
@@ -39,6 +40,14 @@ public class StartControllerStateTest {
             p.setWindowPattern(wp);
         }
 
+        prop = new Properties();
+        prop.put("id", "id");
+        prop.put("title", "title");
+        prop.put("description", "desc");
+        prop.put("neededTokens", "1");
+        prop.put("tokensUsageMultiplier", "2");
+        prop.put("imageURL", "imageURL");
+
         controller.startGame();
     }
 
@@ -50,7 +59,7 @@ public class StartControllerStateTest {
         Round currentRound = controller.game.getCurrentRound();
         Turn currentTurn = currentRound.getCurrentTurn();
         assertEquals(dice, currentTurn.getDraftedDice());
-        assertFalse(currentRound.getDraftPool().getDices().contains(dice));
+        //assertFalse(currentRound.getDraftPool().getDices().contains(dice)); this is not true if two dices are drawn the same
     }
 
     @Test
@@ -78,13 +87,6 @@ public class StartControllerStateTest {
 
     @Test
     public void testUseToolCardWhenNotDrawn() {
-        Properties prop = new Properties();
-        prop.put("id", "id");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
         ToolCard toolCard = new ToolCard(prop, new HashMap<>(), new EmptyPlacementRule());
 
         try {
@@ -98,13 +100,6 @@ public class StartControllerStateTest {
 
     @Test
     public void testUseToolCardWhenNotAllowed() {
-        Properties prop = new Properties();
-        prop.put("id", "id");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
         HashMap<String, String> controllerStateRules = new HashMap<>();
 
         controllerStateRules.put("StartControllerState","DraftControllerState");
