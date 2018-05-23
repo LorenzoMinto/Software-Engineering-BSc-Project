@@ -1,6 +1,6 @@
 package it.polimi.se2018.model;
 
-import org.junit.After;
+import it.polimi.se2018.utils.BadDiceReferenceException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +47,11 @@ public class TrackSlotTest {
     public void testRemoveDice() {
         TrackSlot slot = new TrackSlot(dices);
 
-        slot.removeDice(dice1);
+        try {
+            slot.removeDice(dice1);
+        } catch (BadDiceReferenceException e) {
+            fail();
+        }
 
         assertFalse(slot.getDices().contains(dice1));
     }
@@ -60,8 +64,7 @@ public class TrackSlotTest {
         try {
             slot.removeDice(dice);
             fail();
-            //TODO: invalidDiceException
-        } catch (IllegalArgumentException e) {}
+        } catch (BadDiceReferenceException e) {}
     }
 
     @Test

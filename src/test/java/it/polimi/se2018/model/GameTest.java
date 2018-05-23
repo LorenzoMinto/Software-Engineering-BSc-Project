@@ -8,10 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -28,11 +25,15 @@ public class GameTest {
     private static PrivateObjectiveCard privateObjectiveCard;
     private static Player player;
     private static ToolCard toolCard;
+    private static ToolCard toolCard1;
+    private static ToolCard toolCard2;
+    private static ToolCard toolCard3;
 
     private static List<PublicObjectiveCard> publicObjectiveCards;
     private static List<ToolCard> toolCards;
     private static List<Dice> dices;
     private static Map<Player, Integer> rankings;
+    private static Properties properties;
 
     @BeforeClass
     public static void initializeVariables(){
@@ -45,6 +46,39 @@ public class GameTest {
                 null,null, null, Dice::getColor));
 
         toolCard = ToolCard.createTestInstance();
+    }
+
+    @BeforeClass
+    public static void initializeToolCards(){
+        properties = new Properties();
+
+        properties.put("id","ID1");
+        properties.put("title","title1");
+        properties.put("description","description1");
+        properties.put("imageURL","imageURL1");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard1 = new ToolCard(properties, null, null );
+
+        properties.put("id","ID2");
+        properties.put("title","title2");
+        properties.put("description","description2");
+        properties.put("imageURL","imageURL2");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard2 = new ToolCard(properties, null, null );
+
+        properties.put("id","ID3");
+        properties.put("title","title3");
+        properties.put("description","description3");
+        properties.put("imageURL","imageURL3");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard2 = new ToolCard(properties, null, null );
+
     }
 
     @Before
@@ -217,10 +251,26 @@ public class GameTest {
 
     @Test
     public void testUseToolCardNotInDrawnSet(){
-        ToolCard toolCard1 = new ToolCard("ID1","title1",null, null, 3,
-                3, null, null );
-        ToolCard toolCard2 = new ToolCard("ID2","title2",null, null, 3,
-                3, null, null );
+        Properties properties1 = new Properties();
+
+        properties1.put("id","ID1");
+        properties1.put("title","title1");
+        properties1.put("description","description1");
+        properties1.put("imageURL","imageURL1");
+        properties1.put("neededTokens", "1");
+        properties1.put("tokensUsageMultiplier", "2");
+
+        ToolCard toolCard1 = new ToolCard(properties1, null, null );
+
+        Properties properties2 = new Properties();
+        properties2.put("id","ID2");
+        properties2.put("title","title2");
+        properties2.put("description","description2");
+        properties2.put("imageURL","imageURL2");
+        properties2.put("neededTokens", "1");
+        properties2.put("tokensUsageMultiplier", "2");
+
+        ToolCard toolCard2 = new ToolCard(properties2, null, null );
 
         toolCards.clear();
         toolCards.add(toolCard1);
@@ -264,12 +314,6 @@ public class GameTest {
 
     @Test
     public void testGetToolCardNotInDrawnToolCards(){
-        ToolCard toolCard1 = new ToolCard("ID1","title1",null, null, 3,
-                3, null, null );
-        ToolCard toolCard2 = new ToolCard("ID2","title2",null, null, 3,
-                3, null, null );
-        ToolCard toolCard3 = new ToolCard("ID3","title3",null, null, 3,
-                3, null, null );
 
         toolCards.clear();
         toolCards.add(toolCard1);

@@ -79,11 +79,11 @@ public class ToolCard {
         //the description of the tool card.
         this.description = p.getProperty("description");
         //the tokens needed to activate the tool card.
-        this.neededTokens = Integer.getInteger( p.getProperty("neededTokens") );
-        this.baseNeededTokens = Integer.getInteger( p.getProperty("neededTokens") );
+        this.neededTokens = Integer.parseInt( p.getProperty("neededTokens") );
+        this.baseNeededTokens = Integer.parseInt( p.getProperty("neededTokens") );
         this.tokensUsed = 0;
         //the factor that multiplies needed tokens after the first activation.
-        this.tokensUsageMultiplier = Integer.getInteger( p.getProperty("tokensUsageMultiplier") );
+        this.tokensUsageMultiplier = Integer.parseInt( p.getProperty("tokensUsageMultiplier") );
         //the URL of the tool card image.
         this.imageURL = p.getProperty("imageURL");
 

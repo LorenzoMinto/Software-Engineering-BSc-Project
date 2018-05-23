@@ -1,33 +1,35 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.*;
-import it.polimi.se2018.utils.ConfigImporter;
-import it.polimi.se2018.utils.NoConfigParamFoundException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Lorenzo Minto
+ */
 public class ToolCardTest {
     private ToolCard toolcard;
 
-    private String id = "ID";
-    private String title = "ID";
-    private String description = "ID";
-    private String imageURL = "ID";
-    private int neededTokens = 1;
-    private int tokenUsageMultiplier = 2;
-    private HashMap<String,String> controllerStateRules;
-    private PlacementRule rule;
+    private static String id = "ID";
+    private static String title = "title";
+    private static String description = "description";
+    private static String imageURL = "imageURL";
+    private static Integer neededTokens = 1;
+    private static Integer tokenUsageMultiplier = 2;
+    private static HashMap<String,String> controllerStateRules;
+    private static PlacementRule rule;
+    private static Properties properties;
 
 
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void initializeVariables(){
         rule = new ColorPlacementRuleDecorator(new EmptyPlacementRule());
         controllerStateRules = new HashMap<>();
 
@@ -35,8 +37,18 @@ public class ToolCardTest {
         controllerStateRules.put("DraftControllerState","ChangeDiceValueControllerState");
         controllerStateRules.put("ChangeDiceValueControllerState","EndControllerState");
 
-        toolcard = new ToolCard(id, title, description, imageURL, neededTokens, tokenUsageMultiplier,
-        controllerStateRules, rule);
+        properties = new Properties();
+        properties.put("id",id);
+        properties.put("title",title);
+        properties.put("description",description);
+        properties.put("imageURL",imageURL);
+        properties.put("neededTokens", neededTokens.toString());
+        properties.put("tokensUsageMultiplier", tokenUsageMultiplier.toString());
+    }
+
+    @Before
+    public void setUp(){
+        toolcard = new ToolCard(properties, controllerStateRules, rule);
     }
 
     @Test
@@ -50,7 +62,7 @@ public class ToolCardTest {
 
     @Test
     public void testGetNeededTokens(){
-        assertEquals(neededTokens, toolcard.getNeededTokens());
+        assertEquals(neededTokens.intValue(), toolcard.getNeededTokens());
     }
 
     @Test
@@ -107,16 +119,24 @@ public class ToolCardTest {
 
     @Test
     public void testEquals() {
-        ToolCard toolCard2 = new ToolCard(id, title, description, imageURL, neededTokens, tokenUsageMultiplier,
-                controllerStateRules, rule);
+        ToolCard toolCard2 = new ToolCard(properties, controllerStateRules, rule);
 
         assertTrue(toolCard2.equals(toolcard));
     }
 
     @Test
     public void testEqualsWhenNotEqual() {
-        ToolCard toolCard3 = new ToolCard("ID2", "title2", "description2", "imageURL2", 1, 2,
-                controllerStateRules, rule);
+
+        Properties properties2 = new Properties();
+
+        properties2.put("id","ID2");
+        properties2.put("title","title2");
+        properties2.put("description","description2");
+        properties2.put("imageURL","imageURL2");
+        properties2.put("neededTokens", "1");
+        properties2.put("tokensUsageMultiplier", "2");
+
+        ToolCard toolCard3 = new ToolCard(properties2, controllerStateRules, rule);
 
         assertFalse(toolCard3.equals(toolcard));
     }

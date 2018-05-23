@@ -1,8 +1,11 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,9 @@ public class TrackTest {
         track.processDices(dices);
     }
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
     public void testProcessDices() {
         assertEquals(dices, track.getDicesFromSlotNumber(0));
@@ -48,27 +54,31 @@ public class TrackTest {
 
     @Test
     public void testGetDicesFromNonExistingSlotNumber() {
-
-        try {
-            track.getDicesFromSlotNumber(1);
-            fail();
-        } catch (ValueOutOfBoundsException e) {}
+        expectedException.expect(ValueOutOfBoundsException.class);
+        track.getDicesFromSlotNumber(1);
     }
 
     @Test
-    public void testTakeDice() {
-        track.takeDice(dice1, 0);
+    public void testTakeDice()  {
+        try {
+            track.takeDice(dice1, 0);
+        } catch (BadDiceReferenceException e) {
+            fail();
+        }
         assertFalse(track.getDicesFromSlotNumber(0).contains(dice1));
     }
 
     @Test
-    public void testTakeDiceNotInTrackSlot() {
-        track.takeDice(dice1, 0);
+    public void testTakeDiceNotInTrackSlot(){
+        try {
+            track.takeDice(dice1, 0);
+        } catch (BadDiceReferenceException e) {
+            fail();
+        }
         try {
             track.takeDice(dice1, 0);
             fail();
-            //TODO: invalidDiceException
-        } catch (IllegalArgumentException e) {}
+        } catch (BadDiceReferenceException e) {}
     }
 
     @Test
@@ -76,7 +86,9 @@ public class TrackTest {
         try {
             track.takeDice(dice1, 2);
             fail();
-        } catch (ValueOutOfBoundsException e) {}
+        }catch (BadDiceReferenceException e){
+            fail();
+        }catch (ValueOutOfBoundsException e) {}
     }
 
     @Test
