@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.ToolCard;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -26,8 +26,8 @@ public class ToolCardControllerState extends ControllerState {
             controller.setActiveToolCard(toolcard);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new ControllerMessage("Can't use this toolcard.");
+            return new CVMessage("Can't use this toolcard.");
         }
-        return new ControllerMessage("Toolcard activated.");
+        return new CVMessage("Toolcard activated.");
     }
 }

@@ -1,8 +1,8 @@
 package it.polimi.se2018.networking.message;
 
-public class ViewMessage extends Message {
+public class CVMessage extends Message {
 
-    public ViewMessage(String content) {
+    public CVMessage(String content) {
         this.content = content;
     }
 }

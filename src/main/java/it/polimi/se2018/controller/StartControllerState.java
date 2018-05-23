@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -28,9 +28,9 @@ public class StartControllerState extends ControllerState {
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
             controller.setControllerState(controller.stateManager.getPlaceState());
-            return new ControllerMessage("Dice drafted.");
+            return new CVMessage("Dice drafted.");
         } else {
-            return new ControllerMessage("Dice not in the draft pool.");
+            return new CVMessage("Dice not in the draft pool.");
         }
     }
 
@@ -40,8 +40,8 @@ public class StartControllerState extends ControllerState {
             controller.setActiveToolCard(toolcard);
             controller.stateManager.getNextState(this);
         } else {
-            return new ControllerMessage("Can't use this toolcard.");
+            return new CVMessage("Can't use this toolcard.");
         }
-        return new ControllerMessage("Toolcard activated.");
+        return new CVMessage("Toolcard activated.");
     }
 }

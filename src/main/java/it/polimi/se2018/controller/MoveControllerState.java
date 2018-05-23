@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -33,13 +33,13 @@ public class MoveControllerState extends ControllerState {
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new ControllerMessage("Move made.");
+                return new CVMessage("Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
-                return new ControllerMessage("Move made.");
+                return new CVMessage("Move made.");
             }
         } else {
-            return new ControllerMessage("Can't make this move.");
+            return new CVMessage("Can't make this move.");
         }
     }
 }
