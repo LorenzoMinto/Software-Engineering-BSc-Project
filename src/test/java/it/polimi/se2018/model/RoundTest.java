@@ -25,7 +25,6 @@ public class RoundTest {
     private Turn turn;
 
     private static DraftPool draftPool;
-    private static User user;
     private static PrivateObjectiveCard privateObjectiveCard;
 
     private static List<Player> players;
@@ -33,12 +32,10 @@ public class RoundTest {
     private static Player p2;
     private static Player p3;
     private static Player p4;
-    private static Dice dice;
-    private static ToolCard toolCard;
 
     @BeforeClass
     public static void initializeVariables(){
-        user = new User(1,"username");
+        User user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
         p1 = new Player(user, "p1", privateObjectiveCard);

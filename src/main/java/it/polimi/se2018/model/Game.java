@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
+import it.polimi.se2018.networking.message.MVMessage;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.Observable;

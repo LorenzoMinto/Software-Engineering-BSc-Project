@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -36,7 +36,7 @@ public class DraftControllerState extends ControllerState {
         } else {
             controller.setControllerState(controller.stateManager.getPlaceState());
         }
-        return new ControllerMessage("Dice drafted.");
+        return new CVMessage("Dice drafted.");
     }
 
     @Override

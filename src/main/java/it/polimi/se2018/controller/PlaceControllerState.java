@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -32,16 +32,16 @@ public class PlaceControllerState extends ControllerState {
 
                 if (controller.getActiveToolCard() != null) {
                     controller.setControllerState(controller.stateManager.getNextState(this));
-                    return new ControllerMessage("Dice placed!");
+                    return new CVMessage("Dice placed!");
                 } else {
                     controller.setControllerState(controller.stateManager.getToolCardState());
-                    return new ControllerMessage("Dice placed!");
+                    return new CVMessage("Dice placed!");
                 }
             } else {
-                return new ControllerMessage("Move is illegal. There's another dice in that position.");
+                return new CVMessage("Move is illegal. There's another dice in that position.");
             }
         } else {
-            return new ControllerMessage("No drafted dice.");
+            return new CVMessage("No drafted dice.");
         }
 
     }

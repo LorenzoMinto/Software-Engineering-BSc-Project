@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -16,34 +16,34 @@ public abstract class ControllerState {
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
      */
-    static final ControllerMessage MIDDLE_OF_EFFECT = new ControllerMessage("Can't do. You are in the middle of " +
+    static final CVMessage MIDDLE_OF_EFFECT = new CVMessage("Can't do. You are in the middle of " +
             "a Toolcard effect");
 
     /**
      * String to be printed if a method that requires drafting is called before any dice was drafted.
      */
-    static final ControllerMessage NO_DICE_DRAFTED = new ControllerMessage("Can't do. No dice has been drafted.");
+    static final CVMessage NO_DICE_DRAFTED = new CVMessage("Can't do. No dice has been drafted.");
 
     /**
      * String to be printed if only action possible is to draft and place.
      */
-    static final ControllerMessage ONLY_DRAFT_AND_PLACE = new ControllerMessage("Can't do. You can only draft and place");
+    static final CVMessage ONLY_DRAFT_AND_PLACE = new CVMessage("Can't do. You can only draft and place");
 
     /**
      * String to be printed if there's a drafted dice that needs to be placed.
      */
-    static final ControllerMessage PLACE_DICE = new ControllerMessage("Can't do. You have to place the drafted dice");
+    static final CVMessage PLACE_DICE = new CVMessage("Can't do. You have to place the drafted dice");
 
     /**
      * String to be printed if the only action possible is a ToolCard activation.
      */
-    static final ControllerMessage TOOLCARD_ONLY = new ControllerMessage("Can't do. You have already drafted and placed." +
+    static final CVMessage TOOLCARD_ONLY = new CVMessage("Can't do. You have already drafted and placed." +
             " You can only use a Toolcard");
 
     /**
      * Default message
      */
-    ControllerMessage defaultMessage = new ControllerMessage("Default Message. Actually I don't know what to say.");
+    CVMessage defaultMessage = new CVMessage("Default Message. Actually I don't know what to say.");
 
 
     /**

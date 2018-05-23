@@ -1,8 +1,8 @@
 package it.polimi.se2018.networking.message;
 
-public class ModelMessage extends Message {
+public class VCMessage extends Message {
 
-    public ModelMessage(String content) {
+    public VCMessage(String content) {
         this.content = content;
     }
 }

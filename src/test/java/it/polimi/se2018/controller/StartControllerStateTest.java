@@ -7,25 +7,25 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
 
 public class StartControllerStateTest {
     private Controller controller;
+    private ToolCard toolCard;
+
 
     @Before
     public void setUp() throws Exception {
         Game game = new Game(4,4);
-        Properties prop = new Properties();
-        prop.setProperty("numberOfDicesPerColor","18");
-        prop.setProperty("numberOfToolCards","3");
-        prop.setProperty("numberOfPublicObjectiveCards","2");
-        prop.setProperty("maxNumberOfPlayers","4");
-        controller = new Controller(game, prop);
+        Properties properties = new Properties();
+        properties.setProperty("numberOfDicesPerColor","18");
+        properties.setProperty("numberOfToolCards","3");
+        properties.setProperty("numberOfPublicObjectiveCards","2");
+        properties.setProperty("maxNumberOfPlayers","4");
+        controller = new Controller(game, properties);
 
         User user1 = new User(1, "johnniffer");
         User user2 = new User(2, "rubens");
@@ -39,8 +39,34 @@ public class StartControllerStateTest {
             p.setWindowPattern(wp);
         }
 
+        properties = new Properties();
+
+        properties.put("id","ID1");
+        properties.put("title","title1");
+        properties.put("description","description1");
+        properties.put("imageURL","imageURL1");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard = new ToolCard(properties, new HashMap<>(), new EmptyPlacementRule());
+
         controller.startGame();
     }
+
+    @Test
+    public void testConstructor(){
+        ControllerState state = new StartControllerState(controller);
+        assertNotNull(state);
+    }
+
+    @Test
+    public void testConstructorWithNullController(){
+        try{
+            new StartControllerState(null);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
 
     @Test
     public void testDraftDiceFromDraftPool() {
@@ -77,9 +103,6 @@ public class StartControllerStateTest {
 
     @Test
     public void testUseToolCardWhenNotDrawn() {
-        ToolCard toolCard = new ToolCard("ID", "title", "desc", "imageURL", 1
-                , 2, new HashMap<>(), new EmptyPlacementRule());
-
         try {
             controller.controllerState.useToolCard(toolCard);
             fail();
@@ -89,5 +112,4 @@ public class StartControllerStateTest {
         assertFalse(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
     }
 
-    //TODO: Test constructor, and fix constructor to check for null.
 }

@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.ControllerMessage;
+import it.polimi.se2018.networking.message.CVMessage;
 import it.polimi.se2018.networking.message.Message;
 
 /**
@@ -32,7 +32,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
         } else {
             return NO_DICE_DRAFTED;
         }
-        return new ControllerMessage("Dice incremented.");
+        return new CVMessage("Dice incremented.");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
         } else {
             return NO_DICE_DRAFTED;
         }
-        return new ControllerMessage("Dice decremented.");
+        return new CVMessage("Dice decremented.");
     }
 
     @Override
@@ -60,6 +60,6 @@ public class ChangeDiceValueControllerState extends ControllerState {
         } else {
             return NO_DICE_DRAFTED;
         }
-        return new ControllerMessage("Dice value changed.");
+        return new CVMessage("Dice value changed.");
     }
 }
