@@ -72,13 +72,20 @@ public class StartControllerStateTest {
         controller.controllerState.useToolCard(toolCard);
 
         assertEquals(toolCard, controller.getActiveToolCard());
+        assertEquals(controller.placementRule, toolCard.getPlacementRule());
         assertTrue(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
     }
 
     @Test
     public void testUseToolCardWhenNotDrawn() {
-        ToolCard toolCard = new ToolCard("ID", "title", "desc", "imageURL", 1
-                , 2, new HashMap<>(), new EmptyPlacementRule());
+        Properties prop = new Properties();
+        prop.put("id", "id");
+        prop.put("title", "title");
+        prop.put("description", "desc");
+        prop.put("neededTokens", "1");
+        prop.put("tokensUsageMultiplier", "2");
+        prop.put("imageURL", "imageURL");
+        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), new EmptyPlacementRule());
 
         try {
             controller.controllerState.useToolCard(toolCard);
@@ -89,5 +96,35 @@ public class StartControllerStateTest {
         assertFalse(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
     }
 
-    //TODO: Test constructor, and fix constructor to check for null.
+    @Test
+    public void testUseToolCardWhenNotAllowed() {
+        Properties prop = new Properties();
+        prop.put("id", "id");
+        prop.put("title", "title");
+        prop.put("description", "desc");
+        prop.put("neededTokens", "1");
+        prop.put("tokensUsageMultiplier", "2");
+        prop.put("imageURL", "imageURL");
+        HashMap<String, String> controllerStateRules = new HashMap<>();
+
+        controllerStateRules.put("StartControllerState","DraftControllerState");
+        controllerStateRules.put("DraftControllerState","ChangeDiceValueControllerState");
+        controllerStateRules.put("ChangeDiceValueControllerState","EndControllerState");
+
+        ToolCard toolCard = new ToolCard(prop, controllerStateRules, new EmptyPlacementRule());
+
+        controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColors.BLUE));
+        controller.controllerState.useToolCard(toolCard);
+
+        assertNull(controller.getActiveToolCard());
+        assertFalse(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
+    }
+
+    @Test
+    public void testConstructorWithNullController() {
+        try {
+            ControllerState state = new StartControllerState(null);
+            fail();
+        } catch (IllegalArgumentException e) { }
+    }
 }

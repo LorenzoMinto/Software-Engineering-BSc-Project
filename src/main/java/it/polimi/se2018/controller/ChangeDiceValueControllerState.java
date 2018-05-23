@@ -41,6 +41,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
             if (currentTurn.getDraftedDice().decrementValue()) {
+
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
