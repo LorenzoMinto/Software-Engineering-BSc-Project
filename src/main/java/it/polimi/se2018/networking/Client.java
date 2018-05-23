@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Client implements Observer, SenderInterface, ReceiverInterface {
@@ -36,12 +37,14 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
                 server = new RMIClientGateway("//localhost/sagradaserver", 1098, this);
             } catch (RemoteException e) {
                 LOGGER.severe("Failed connecting to RMI server.");
-                //TODO: say it to view
+                view.showMessage("Failed connecting to Sagrada Server through RMI");
                 return;
             }
 
         } else if (type == ConnectionType.SOCKET) {
             server = new SocketClientGateway("localhost", 1111, this);
+            /*SocketClientGateway is a thread. So exception that could be thrown in it
+            * are sent to this class (Client) throught the .fail() method. */
         }
 
         addGateway(server);
@@ -87,7 +90,10 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
                     continue;
                 }
                 correctlySent = true;
-                LOGGER.info("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
+
+                if(LOGGER.isLoggable(Level.INFO)){
+                    LOGGER.info("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
+                }
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
             if(!correctlySent){ somethingFailed=true; }

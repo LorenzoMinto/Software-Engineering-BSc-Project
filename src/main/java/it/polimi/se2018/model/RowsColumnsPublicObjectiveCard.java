@@ -103,7 +103,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
             //If the current row is incomplete, then skip to the next row
             if(rowIsIncomplete(pattern[row])) continue;
 
-            numberOfDifferentProperties = getRowDifferentPropertiesNumber(pattern[row], numberOfColumns);
+            numberOfDifferentProperties = getRowDifferentPropertiesNumber(pattern[row]);
 
             if(numberOfDifferentProperties == numberOfColumns){
                 numberOfValidRows += 1;
@@ -117,11 +117,9 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
      * Gets the number of different property values of a specific row
      *
      * @param row the row to calculate the number of different properties of
-     * @param numberOfColumns the number of columns of the windowpattern
      * @return the number of different property values of a specific row
      */
-    //TODO: refactor: eliminare numberOfColumns si deduce da row
-    private int getRowDifferentPropertiesNumber(Cell[] row, int numberOfColumns) {
+    private int getRowDifferentPropertiesNumber(Cell[] row) {
 
         Set<Object> differentProperties = new HashSet<>();
         Dice dice1;
@@ -134,7 +132,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
             If their properties are different add the properties to the set of different properties
             Otherwise return 0 since there are at least two dice with the same property on the row
         */
-        for(int col = 0; col +1 < numberOfColumns; col++) {
+        for(int col = 0; col +1 < row.length; col++) {
 
             dice1 = row[col].getDice();
             dice2 = row[col+1].getDice();

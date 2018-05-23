@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.util.ArrayList;
@@ -53,7 +54,8 @@ public class Track {
      * @param slotNumber the TrackSlot number from which to remove the dice.
      * @return whether or not the specified dice could be removed from the specified TrackSlot.
      */
-    public void takeDice(Dice dice, int slotNumber){
+    public void takeDice(Dice dice, int slotNumber) throws BadDiceReferenceException {
+
         if (slotNumber >= slots.size()) {
             throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }

@@ -352,7 +352,9 @@ public class Controller extends Observable {
     }
 
     /**
-     * @return Dictionary of parameters
+     * Returns Dictionary of configuration's parameters
+     *
+     * @return Dictionary of configuration's parameters
      */
     public int getConfigProperty(String p){
         return Integer.parseInt( this.properties.getProperty(p) );
