@@ -1,15 +1,12 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.message.Message;
+import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.*;

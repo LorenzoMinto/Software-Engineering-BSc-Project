@@ -2,8 +2,8 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
-import it.polimi.se2018.networking.message.CVMessage;
-import it.polimi.se2018.networking.message.Message;
+import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.message.Message;
 
 /**
  * Abstract class that represents a generic state of the {@link Controller}.

@@ -1,6 +1,6 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.networking.message.CVMessage;
+import it.polimi.se2018.utils.message.CVMessage;
 
 /**
  * @author Federico Haag

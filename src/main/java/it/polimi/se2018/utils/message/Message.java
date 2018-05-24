@@ -1,4 +1,4 @@
-package it.polimi.se2018.networking.message;
+package it.polimi.se2018.utils.message;
 
 import java.io.Serializable;
 
