@@ -4,7 +4,9 @@ import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
+import it.polimi.se2018.utils.message.Message;
 
 import java.util.*;
 
@@ -15,7 +17,7 @@ import java.util.*;
  *
  * This class implements the OBSERVER PATTERN in order to notify all the Views connected.
  */
-public class Game extends Observable {
+public class Game extends Observable implements Observer{
 
     /**
      * The number of rounds the game is composed of
@@ -46,7 +48,7 @@ public class Game extends Observable {
     /**
      * List of players playing the game
      */
-    private List<Player> players;
+    private Set<Player> players;
 
     /**
      * List of ToolCards that were assigned to this game at the beginning of it
@@ -83,7 +85,7 @@ public class Game extends Observable {
             throw new ValueOutOfBoundsException("Can't create a game with negative number of players"); }
         this.currentRound = null;
         this.track = new Track();
-        this.players = new ArrayList<>();
+        this.players = new HashSet<>();
         this.status = GameStatus.WAITING_FOR_CARDS;
         this.rankings = null;
 
@@ -116,7 +118,7 @@ public class Game extends Observable {
      * @return the list of players
      */
     public List<Player> getPlayers() {
-        return players;
+        return new ArrayList<>(this.players);
     }
 
     /**
@@ -193,11 +195,18 @@ public class Game extends Observable {
     public boolean addPlayer(Player player){
         if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("Can't add player if game is not waiting for players. Controller should not ask for it. Bad unhandleable behaviour.");}
 
-        if( !players.contains(player) && players.size() < maxNumberOfPlayers){
-            players.add(player);
-            return true;
+        return  players.size() < maxNumberOfPlayers &&
+                players.add(player);
+    }
+
+    //TODO: commenta
+    public void assignWindowPatternToPlayer(WindowPattern windowPattern, Player player){
+        for(Player p: players){
+            if(p.equals(player)){
+                windowPattern.register(this);
+                p.setWindowPattern(windowPattern);
+            }
         }
-        return false;
     }
 
     /**
@@ -285,6 +294,14 @@ public class Game extends Observable {
             throw new NoMoreRoundsAvailableException();
         }
 
-        this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound,this.players,new DraftPool(dices));
+        DraftPool draftPool = new DraftPool(dices);
+        draftPool.register(this);
+        this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound,getPlayers(),draftPool);
+    }
+
+    @Override
+    public boolean update(Message m) {
+        notify(m);
+        return true;
     }
 }

@@ -78,7 +78,7 @@ public class Player {
      *
      * @param windowPattern the windowpattern to be assigned to this player
      */
-    public void setWindowPattern(WindowPattern windowPattern) {
+    void setWindowPattern(WindowPattern windowPattern) {
         if(windowPattern==null) throw new IllegalArgumentException();
 
         this.windowPattern = windowPattern;
@@ -155,7 +155,7 @@ public class Player {
 
         Player p = (Player) o;
 
-        return this.nickname == p.getNickname();
+        return this.nickname.equals(p.getNickname());
     }
 
     /**

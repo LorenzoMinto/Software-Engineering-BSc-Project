@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.Observable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  *
  * @author Federico Haag
  */
-public class DraftPool {
+public class DraftPool extends Observable{
 
     /**
      * List of dices of the draftpool

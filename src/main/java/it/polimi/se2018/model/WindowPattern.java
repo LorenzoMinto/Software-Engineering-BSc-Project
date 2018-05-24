@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.Observable;
+
 /**
  * Class representing Window Pattern.
  *
  * @author Federico Haag
  */
-public class WindowPattern {
+public class WindowPattern extends Observable {
 
 
     /**
