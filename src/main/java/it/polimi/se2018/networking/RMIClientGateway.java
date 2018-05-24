@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.message.Message;
+
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -30,11 +32,11 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
         this.client = client;
     }
 
-    public void sendMessage(String message) throws RemoteException{
+    public void sendMessage(Message message) throws RemoteException{
         this.recipient.receiveMessage(message,this.proxySender);
     }
 
-    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException{
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException{
         this.client.receiveMessage(message,sender);
     }
 }

@@ -36,11 +36,12 @@ public class SocketServerGatherer extends Thread{
 
         //Starts a thread listening for messages
         new Thread(new Runnable() {
-            String message;
+            String socketMessage;
             @Override
             public void run() {
                 try(BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
-                    while ( (message = in.readLine()) != null ){
+                    while ( (socketMessage = in.readLine()) != null ){
+                        //TODO: implementare deserializzazione dell'oggetto
                         server.receiveMessage(message,socketServer);
                     }
                 } catch(IOException e){

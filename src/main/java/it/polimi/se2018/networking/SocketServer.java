@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.message.Message;
+
 import java.io.*;
 import java.rmi.RemoteException;
 
@@ -11,7 +13,7 @@ public class SocketServer implements ReceiverInterface {
         this.stream = stream;
     }
 
-    private void receiveMessage(String message) throws RemoteException {
+    private void receiveMessage(Message message) throws RemoteException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream));
         try {
             out.write(message + "\n");
@@ -22,7 +24,7 @@ public class SocketServer implements ReceiverInterface {
     }
 
     @Override
-    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
         receiveMessage(message);
         //Just for compatibility reasons. Sender is not needed (and could be null): something related to RMI
     }
