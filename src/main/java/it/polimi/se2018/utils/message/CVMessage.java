@@ -1,6 +1,5 @@
 package it.polimi.se2018.utils.message;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CVMessage extends Message {
