@@ -9,7 +9,10 @@ import it.polimi.se2018.utils.Observable;
  */
 public class WindowPattern extends Observable {
 
-
+    /**
+     * Window Pattern ID
+     */
+    private String id;
     /**
      * Name of the pattern
      */
@@ -33,13 +36,15 @@ public class WindowPattern extends Observable {
     /**
      * Constructor of a new Window Pattern
      *
+     * @param id the id of the pattern
      * @param title the title of the pattern
      * @param difficulty the difficulty of the pattern
      * @param pattern the pattern structured as array of cells with already set constraints
      */
-    public WindowPattern(String title, int difficulty, Cell[][] pattern) {
+    public WindowPattern(String id, String title, int difficulty, Cell[][] pattern) {
         if(pattern==null) throw new IllegalArgumentException("Can't create a window pattern with null pattern.");
 
+        this.id = id;
         this.title = title;
         this.difficulty = difficulty;
         this.pattern = pattern;
@@ -72,6 +77,15 @@ public class WindowPattern extends Observable {
      */
     public int getNumberOfColumns(){
         return pattern[0].length;
+    }
+
+    /**
+     * Returns the id of the pattern.
+     *
+     * @return id of the pattern
+     */
+    public String getId() {
+        return id;
     }
 
     /**
@@ -175,7 +189,7 @@ public class WindowPattern extends Observable {
      */
     public WindowPattern copy(){
 
-        return new WindowPattern(this.title,this.difficulty,this.getPattern());
+        return new WindowPattern(this.id,this.title,this.difficulty,this.getPattern());
     }
 
     /**

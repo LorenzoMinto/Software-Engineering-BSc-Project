@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern>
+    <title>Kaleidoscopic Dream</title>
+    <partnerID>Virtus</partnerID>
     <rows>4</rows>
     <cols>5</cols>
     <difficulty>4</difficulty>

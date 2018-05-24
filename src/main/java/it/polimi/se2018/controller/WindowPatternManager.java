@@ -78,6 +78,9 @@ public class WindowPatternManager {
 
             Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
 
+            //Parse from xml the pattern's id
+            String title = document.getElementsByTagName("title").item(0).getTextContent();
+
             //Parse from xml the number of rows of the pattern
             int rows = Integer.parseInt( document.getElementsByTagName("rows").item(0).getTextContent() );
 
@@ -113,9 +116,24 @@ public class WindowPatternManager {
                 pattern[row][col] = new Cell(value,color);
             }
 
-            return new WindowPattern(patternID,diff,pattern);
+            return new WindowPattern(patternID,title,diff,pattern);
 
         } catch (Exception e) {
+            //Bad formatting of xml is caught and method returns false
+            throw new BadFormattedPatternFileException();
+        }
+    }
+
+    /**
+     * Returns the id of the partner pattern of the given pattern
+     * @param patternID the id of the pattern to check
+     * @return the id of the partner pattern of the given pattern
+     */
+    public String getPartnerPatternID(String patternID){
+        try{
+            Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
+            return document.getElementsByTagName("partnerID").item(0).getTextContent();
+        } catch( Exception e ){
             //Bad formatting of xml is caught and method returns false
             throw new BadFormattedPatternFileException();
         }

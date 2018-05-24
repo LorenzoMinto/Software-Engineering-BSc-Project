@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <pattern>
+   <title>Ripples of Light</title>
+   <partnerID>WaterOfLife</partnerID>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>5</difficulty>

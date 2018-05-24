@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <pattern>
+   <title>Aurora Sagradis</title>
+   <partnerID>Industria</partnerID>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>4</difficulty>

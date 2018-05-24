@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <pattern>
+   <title>Fulgor del Cielo</title>
+   <partnerID>SunsGlory</partnerID>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>5</difficulty>
