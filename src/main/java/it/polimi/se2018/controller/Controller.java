@@ -239,7 +239,7 @@ public class Controller extends Observable {
 
         //Proceed with turns / rounds
         try {
-            game.getCurrentRound().nextTurn();
+            game.nextTurn();
         } catch (NoMoreTurnsAvailableException e) {
 
             try {
@@ -250,7 +250,7 @@ public class Controller extends Observable {
             }
 
             try {
-                game.getCurrentRound().nextTurn();
+                game.nextTurn();
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }

@@ -16,6 +16,8 @@ public class MVMessage extends Message {
      * Enum for all types of MCMessage instances
      */
     public enum types {
-        //TODO: complete
+        SETUP,                  //TODO: nella view impostare il currentTurn e currentRound a 1
+        NEXT_ROUND,             //TODO: nella view aumentare il currentRound e reset currentTurn
+        NEXT_TURN, USED_TOOLCARD, RANKINGS, WINDOWPATTERN,              //TODO: nella view aumentare il currentTurn
     }
 }

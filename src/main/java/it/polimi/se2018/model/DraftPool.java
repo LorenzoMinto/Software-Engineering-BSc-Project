@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Federico Haag
  */
-public class DraftPool extends Observable{
+public class DraftPool extends Observable implements Serializable {
 
     /**
      * List of dices of the draftpool

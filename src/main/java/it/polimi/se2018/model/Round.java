@@ -153,6 +153,14 @@ public class Round {
         return players.get(playerShouldPlayingIndex);
     }
 
+    protected List<Player> getPlayersInOrderFromTurn(List<Player> playersOfGame, int numberOfTurns){
+        List<Player> players = new LinkedList<>();
+        for(int i=0; i < playersOfGame.size(); i++){
+            players.add(getPlayerForTurn(playersOfGame, currentTurnIndex+i, numberOfTurns));
+        }
+        return players;
+    }
+
     /**
      * Removes the next turn of the specified player
      *

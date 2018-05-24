@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * Abstract class for Objective Cards. Each type is described by specific subclasses
  *
@@ -10,7 +12,7 @@ package it.polimi.se2018.model;
  * @see RowsColumnsPublicObjectiveCard
  * @see SetPublicObjectiveCard
  */
-public abstract class ObjectiveCard {
+public abstract class ObjectiveCard implements Serializable {
 
     /**
      * The title of the Objective Card

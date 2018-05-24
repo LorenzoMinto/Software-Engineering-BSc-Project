@@ -1,12 +1,13 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Federico Haag
  */
-public class Player {
+public class Player implements Serializable {
 
     /**
      * Favor Tokens of the player.

@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ import java.util.Random;
  *
  * @author Federico Haag
  */
-public class Dice {
+public class Dice implements Serializable {
 
     /**
      * The value of the Dice

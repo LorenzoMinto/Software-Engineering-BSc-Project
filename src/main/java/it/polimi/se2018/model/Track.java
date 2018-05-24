@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Lorenzo Minto
  */
-public class Track {
+public class Track implements Serializable {
 
 
     /**

@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.ControllerState;
 import it.polimi.se2018.controller.DraftControllerState;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Properties;
  *
  * @author Lorenzo Minto
  */
-public class ToolCard {
+public class ToolCard implements Serializable{
 
     private final String toolCardID;
 

@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
+import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
+import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 
 import java.util.*;
@@ -184,6 +186,16 @@ public class Game extends Observable implements Observer{
         if(rankings == null){ throw new IllegalArgumentException("Can't set rankings to null");}
 
         this.rankings = rankings;
+
+        //NOTIFYING
+        Map <String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("rankings", rankings);
+        messageAttributes.put("winner", rankings.get(0));
+
+        notify(new MVMessage(MVMessage.types.RANKINGS, messageAttributes));
+
+
     }
 
     /**
@@ -205,6 +217,8 @@ public class Game extends Observable implements Observer{
             if(p.equals(player)){
                 windowPattern.register(this);
                 p.setWindowPattern(windowPattern);
+                windowPattern.setOwner(p);
+                return;
             }
         }
     }
@@ -232,6 +246,16 @@ public class Game extends Observable implements Observer{
         }
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
         this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
+
+        //NOTIFYING
+        Map <String, Object> messageAttributes = new HashMap<>();
+
+        //updates the toolcards as their tokens were updated
+        messageAttributes.put("toolcards", drawnToolCards);
+        //updates the player as their tokens were updated
+        messageAttributes.put("currentPlayer", currentRound.getCurrentTurn().getPlayer());
+
+        notify(new MVMessage(MVMessage.types.USED_TOOLCARD, messageAttributes));
 
     }
 
@@ -268,6 +292,17 @@ public class Game extends Observable implements Observer{
         } catch (NoMoreRoundsAvailableException e) {
             throw new BadBehaviourRuntimeException();
         }
+
+        //NOTIFYING
+        Map <String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("drawnToolCards", drawnToolCards);
+        messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
+        messageAttributes.put("players", players);
+        messageAttributes.put("track", track);
+        messageAttributes.put("draftPoolDices", dices);
+
+        notify(new MVMessage(MVMessage.types.SETUP, messageAttributes));
     }
 
     /**
@@ -289,14 +324,55 @@ public class Game extends Observable implements Observer{
             nextRoundNumber = this.currentRound.getNumber() + 1;
         }
 
+        //get the remaining dices in draftpool and put them in the track
+        if(currentRound != null && currentRound.getNumber() != 0) {
+            for (Dice dice : currentRound.getDraftPool().getDices()) {
+                this.track.putDice(dice, currentRound.getNumber());
+            }
+        }
+
         if(nextRoundNumber > numberOfRounds - 1){
             this.status = GameStatus.ENDED;
             throw new NoMoreRoundsAvailableException();
         }
 
+
+
         DraftPool draftPool = new DraftPool(dices);
         draftPool.register(this);
-        this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound,getPlayers(),draftPool);
+        this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound, getPlayers(), draftPool);
+
+        //NOTIFYING
+        Map <String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("track", track);
+        messageAttributes.put("draftPoolDices", dices);
+
+        notify(new MVMessage(MVMessage.types.NEXT_ROUND, messageAttributes));
+
+    }
+
+    public void nextTurn() throws NoMoreTurnsAvailableException {
+        try {
+            getCurrentRound().nextTurn();
+
+            //NOTIFYING
+            List<Player> nextPlayers = getCurrentRound().getPlayersInOrderFromTurn(getPlayers(), numberOfTurnsPerRound);
+
+            Map <String, Object> messageAttributes = new HashMap<>();
+
+            //to be displayed in view
+            messageAttributes.put("nextPlayers", nextPlayers);
+            //draftpool was necessarily updated
+            messageAttributes.put("draftPool", getCurrentRound().getDraftPool());
+            //toolcards may have been used
+            messageAttributes.put("toolcards", drawnToolCards);
+
+            notify(new MVMessage(MVMessage.types.NEXT_TURN, messageAttributes));
+
+        } catch (NoMoreTurnsAvailableException e) {
+            throw new NoMoreTurnsAvailableException();
+        }
     }
 
     @Override

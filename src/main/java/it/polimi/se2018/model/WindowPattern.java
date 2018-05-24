@@ -1,13 +1,18 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.message.MVMessage;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class representing Window Pattern.
  *
  * @author Federico Haag
  */
-public class WindowPattern extends Observable {
+public class WindowPattern extends Observable implements Serializable{
 
     /**
      * Window Pattern ID
@@ -32,6 +37,12 @@ public class WindowPattern extends Observable {
      * Boolean value stating if the pattern is empty or not (true=empty)
      */
     private boolean isEmpty;
+
+    private Player owner;
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
 
     /**
      * Constructor of a new Window Pattern
@@ -156,6 +167,15 @@ public class WindowPattern extends Observable {
 
         this.pattern[row][col].setDice(dice);
         isEmpty = false;
+
+        //NOTIFYING
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("windowPattern", this);
+        messageAttributes.put("currentPlayer", owner);
+
+        notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
+
         return true;
     }
 
@@ -176,6 +196,15 @@ public class WindowPattern extends Observable {
         if (pattern[fromRow][fromCol].hasDice() && !pattern[toRow][toCol].hasDice()) {
             Dice removedDice = pattern[fromRow][fromCol].removeDice();
             pattern[toRow][toCol].setDice(removedDice);
+
+            //NOTIFYING
+            Map<String, Object> messageAttributes = new HashMap<>();
+
+            messageAttributes.put("windowPattern", this);
+            messageAttributes.put("currentPlayer", owner);
+
+            notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
+
             return true;
         } else {
             return false;
