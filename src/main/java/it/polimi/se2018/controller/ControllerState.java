@@ -16,34 +16,32 @@ public abstract class ControllerState {
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
      */
-    static final CVMessage MIDDLE_OF_EFFECT = new CVMessage("Can't do. You are in the middle of " +
-            "a Toolcard effect");
+    static final CVMessage MIDDLE_OF_EFFECT = new CVMessage(CVMessage.types.MIDDLE_OF_EFFECT);
 
     /**
      * String to be printed if a method that requires drafting is called before any dice was drafted.
      */
-    static final CVMessage NO_DICE_DRAFTED = new CVMessage("Can't do. No dice has been drafted.");
+    static final CVMessage NO_DICE_DRAFTED = new CVMessage(CVMessage.types.NO_DICE_DRAFTED);
 
     /**
      * String to be printed if only action possible is to draft and place.
      */
-    static final CVMessage ONLY_DRAFT_AND_PLACE = new CVMessage("Can't do. You can only draft and place");
+    static final CVMessage ONLY_DRAFT_AND_PLACE = new CVMessage(CVMessage.types.ONLY_DRAFT_AND_PLACE);
 
     /**
      * String to be printed if there's a drafted dice that needs to be placed.
      */
-    static final CVMessage PLACE_DICE = new CVMessage("Can't do. You have to place the drafted dice");
+    static final CVMessage PLACE_DICE = new CVMessage(CVMessage.types.PLACE_DICE);
 
     /**
      * String to be printed if the only action possible is a ToolCard activation.
      */
-    static final CVMessage TOOLCARD_ONLY = new CVMessage("Can't do. You have already drafted and placed." +
-            " You can only use a Toolcard");
+    static final CVMessage TOOLCARD_ONLY = new CVMessage(CVMessage.types.TOOLCARD_ONLY);
 
     /**
      * Default message
      */
-    CVMessage defaultMessage = new CVMessage("Default Message. Actually I don't know what to say.");
+    CVMessage defaultMessage = new CVMessage(null);
 
 
     /**

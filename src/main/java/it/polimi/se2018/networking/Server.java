@@ -7,6 +7,7 @@ import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.ConfigImporter;
 import it.polimi.se2018.utils.NoConfigParamFoundException;
 import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.utils.message.NetworkMessage;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
 
         LOGGER.info(()->"Received message: "+message);
 
@@ -147,26 +148,19 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             if( canJoin(message) ){
 
                 addGateway(sender);
-
-                String replyMessage = "Welcome to SagradaServer. You are now an authorized client.";
-                sender.receiveMessage(replyMessage,this.proxyServer);
-
+                sender.receiveMessage(new NetworkMessage(NetworkMessage.types.CONNECTED), this.proxyServer);
                 LOGGER.info("A new client has been authorized");
-
             } else {
 
-                String replyMessage = "You can't join this server";
-                sender.receiveMessage(replyMessage,this.proxyServer);
-
+                sender.receiveMessage(new NetworkMessage(NetworkMessage.types.REFUSED),this.proxyServer);
                 LOGGER.info("A new client asked to join but refused");
-
             }
 
         }
     }
 
     @Override
-    public void sendMessage(String message) throws RemoteException {
+    public void sendMessage(Message message) throws RemoteException {
         boolean somethingFailed = false;
         for(ReceiverInterface o : gateways){
             int attempts = 0;
@@ -197,9 +191,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      * @param m the message received
      * @return true if the message contains something that enables who sent it to be added to the clients of this server
      */
-    private boolean canJoin(String m){
+    private boolean canJoin(Message m){
         return m.equals("federico");
-    }
+    } //TODO:inserire quì il criterio corretto
 
 
     /**
@@ -207,7 +201,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      * @param m the message received
      * @return True if the message is a join request
      */
-    private boolean isJoinRequest(String m){
+    private boolean isJoinRequest(Message m){
         return m.equals("federico"); //TODO:inserire quì il criterio corretto
     }
 
@@ -226,13 +220,14 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             String text = scanner.nextLine();
 
             //Just for testing comunication
-            try {
+
+            //TODO: implementa quì metodi di servizio per debug
+            /*try {
                 sendMessage(text);
             } catch (RemoteException e) {
                 LOGGER.severe("Exception while sending a message from the Server console");
             }
-
-            //TODO: implementa quì metodi di servizio per debug
+            */
 
             if(text.equals("exit")){ break; }
         }
@@ -242,7 +237,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     @Override
     public boolean update(Message m) {
         try {
-            sendMessage(m.getMessage());
+            sendMessage(m);
         } catch (RemoteException e) {
             LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
             return false;

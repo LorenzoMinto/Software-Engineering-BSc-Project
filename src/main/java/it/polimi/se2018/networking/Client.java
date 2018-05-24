@@ -70,12 +70,12 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
     }
 
     @Override
-    public void receiveMessage(String message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
         LOGGER.info(()->"Received message: "+message);
     }
 
     @Override
-    public void sendMessage(String message) throws RemoteException {
+    public void sendMessage(Message message) throws RemoteException {
         boolean somethingFailed = false;
         for(SenderInterface o : gateways){
             int attempts = 0;
@@ -105,7 +105,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
     @Override
     public boolean update(Message m) {
         try {
-            sendMessage(m.getMessage());
+            sendMessage(m);
         } catch (RemoteException e) {
             LOGGER.severe("Exception while sending a message from Client to Server (asked by update call)");
             return false;
@@ -134,11 +134,13 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
             if(text.equals("exit")){ return; }
 
-            try {
-                sendMessage(text);
+            //TODO implement here sendMessage from console
+
+            /*try {
+                sendMessage(...);
             } catch (RemoteException e) {
                 LOGGER.severe("Exception while sending a message from the Client console");
-            }
+            }*/
         }
         //Fine codice per inviare messaggio da riga di comando
     }
