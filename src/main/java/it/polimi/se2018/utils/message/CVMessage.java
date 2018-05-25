@@ -1,15 +1,21 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.model.Player;
+
 import java.util.Map;
 
 public class CVMessage extends Message {
 
-    public CVMessage(types type) {
-        super(type);
+    public CVMessage(Enum type, Map<String, Object> params, Player player) {
+        super(type, params, player);
     }
 
-    public CVMessage(types type, Map<String, Object> params) {
+    public CVMessage(Enum type, Map<String, Object> params) {
         super(type, params);
+    }
+
+    public CVMessage(Enum type) {
+        super(type);
     }
 
     /**

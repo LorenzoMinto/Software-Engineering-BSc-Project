@@ -1,15 +1,21 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.model.Player;
+
 import java.util.Map;
 
 public class MVMessage extends Message {
 
-    public MVMessage(types type) {
-        super(type);
+    public MVMessage(Enum type, Map<String, Object> params, Player player) {
+        super(type, params, player);
     }
 
-    public MVMessage(types type, Map<String, Object> params) {
+    public MVMessage(Enum type, Map<String, Object> params) {
         super(type, params);
+    }
+
+    public MVMessage(Enum type) {
+        super(type);
     }
 
     /**

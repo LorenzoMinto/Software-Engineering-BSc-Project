@@ -1,15 +1,21 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.model.Player;
+
 import java.util.Map;
 
 public class VCMessage extends Message {
-
-    public VCMessage(types type) {
-        super(type);
+    
+    public VCMessage(Enum type, Map<String, Object> params, Player player) {
+        super(type, params, player);
     }
 
-    public VCMessage(types type, Map<String, Object> params) {
+    public VCMessage(Enum type, Map<String, Object> params) {
         super(type, params);
+    }
+
+    public VCMessage(Enum type) {
+        super(type);
     }
 
     /**
