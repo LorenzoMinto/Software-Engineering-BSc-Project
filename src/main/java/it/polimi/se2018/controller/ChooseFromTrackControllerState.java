@@ -5,6 +5,9 @@ import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+
 /**
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
@@ -27,13 +30,13 @@ public class ChooseFromTrackControllerState extends ControllerState {
         try {
             controller.game.getTrack().takeDice(dice, slotNumber);
         } catch (BadDiceReferenceException e) {
-            return new CVMessage("Can't choose this Dice.");
+            return new CVMessage(ERROR_MESSAGE,"Can't choose this Dice.");
         }
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
         controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
         controller.setControllerState(controller.stateManager.getNextState(this));
 
-        return new CVMessage("Dice from Track chosen.");
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice from Track chosen.");
     }
 }

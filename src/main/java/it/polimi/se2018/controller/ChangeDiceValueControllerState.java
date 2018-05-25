@@ -4,6 +4,9 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+
 /**
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
@@ -30,9 +33,9 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            return NO_DICE_DRAFTED;
+            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
         }
-        return new CVMessage("Dice incremented.");
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
     }
 
     @Override
@@ -45,9 +48,9 @@ public class ChangeDiceValueControllerState extends ControllerState {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             }
         } else {
-            return NO_DICE_DRAFTED;
+            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
         }
-        return new CVMessage("Dice decremented.");
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
     }
 
     @Override
@@ -59,8 +62,8 @@ public class ChangeDiceValueControllerState extends ControllerState {
             currentTurn.getDraftedDice().setValue(value);
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return NO_DICE_DRAFTED;
+            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
         }
-        return new CVMessage("Dice value changed.");
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
     }
 }

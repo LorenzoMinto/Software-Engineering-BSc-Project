@@ -4,6 +4,9 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+
 /**
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
@@ -33,13 +36,13 @@ public class MoveControllerState extends ControllerState {
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new CVMessage("Move made.");
+                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
-                return new CVMessage("Move made.");
+                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
         } else {
-            return new CVMessage("Can't make this move.");
+            return new CVMessage(ERROR_MESSAGE,"Can't make this move.");
         }
     }
 }

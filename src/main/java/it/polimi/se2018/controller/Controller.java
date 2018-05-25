@@ -3,11 +3,19 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
+import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.message.VCMessage.types.*;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -33,7 +41,6 @@ import java.util.Properties;
  */
 public class Controller extends Observable {
 
-    private static final String NOT_YOUR_TURN = "It is not your turn.";
     /**
      * The controlled {@link Game}
      */
@@ -43,7 +50,6 @@ public class Controller extends Observable {
      * The current state of the {@link Controller}
      */
     protected ControllerState controllerState; //State pattern
-    //TODO: capire perchè IntelliJ consigli di mettere controllerState private. Non dovrebbe consigliarlo. Sicuri che gli state funzioni correttamente?
 
     /**
      * Contains an instance of a {@link ControllerStateManager} that is the one
@@ -155,7 +161,67 @@ public class Controller extends Observable {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-    //TODO: handle moves (Message)
+    public void handleMove(Message message) throws Exception {
+        //NOTE: should handleMove return a message or directly notify it itself
+        VCMessage m = (VCMessage) message;
+        VCMessage.types type = (VCMessage.types) m.getType();
+        Message returnMessage;
+        //TODO:returnMessage comes from ContrState, so it doesn't have a player. Options: Player in CS, CS returns string
+        if (type == CHOOSE_WINDOW_PATTERN) {
+            Player player = m.getSendingPlayer();
+            WindowPattern wp = (WindowPattern) m.getParam("windowPattern");
+            game.assignWindowPatternToPlayer(wp, player);
+            //TODO: ^^^ should have an assign method in the controller in case other things needs to be done? Message
+            //needs to be assigned to returnMessage
+        } else {
+            if (game.isCurrentPlayer(m.getSendingPlayer())) {
+                switch ((VCMessage.types)m.getType()) {
+                    case DRAFT_DICE_FROM_DRAFTPOOL:
+                        Dice dice = (Dice) m.getParam("dice");
+                        returnMessage = controllerState.draftDiceFromDraftPool(dice);
+                        break;
+                    case PLACE_DICE:
+                        int row = (int) m.getParam("row");
+                        int col = (int) m.getParam("col");
+                        returnMessage = controllerState.placeDice(row, col);
+                        break;
+                    case USE_TOOLCARD:
+                        ToolCard toolCard = (ToolCard) m.getParam("toolcard");
+                        returnMessage = controllerState.useToolCard(toolCard);
+                        break;
+                    case MOVE_DICE:
+                        int rowFrom = (int) m.getParam("rowFrom");
+                        int colFrom = (int) m.getParam("colFrom");
+                        int rowTo = (int) m.getParam("rowTo");
+                        int colTo = (int) m.getParam("colTo");
+                        returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
+                        break;
+                    case CHOOSE_DICE_VALUE:
+                        int value = (int) m.getParam("value");
+                        returnMessage = controllerState.chooseDiceValue(value);
+                        break;
+                    case INCREMENT_DICE:
+                        returnMessage = controllerState.incrementDice();
+                        break;
+                    case DECREMENT_DICE:
+                        returnMessage = controllerState.decrementDice();
+                        break;
+                    case CHOOSE_DICE_FROM_TRACK:
+                        int value2 = (int) m.getParam("value");
+                        returnMessage = controllerState.chooseDiceValue(value2);
+                        break;
+                    default:
+                        throw new Exception("Unrecognized event");
+                }
+            } else {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("message", "Not your turn!");
+                notify(new CVMessage(ERROR_MESSAGE, params, m.getSendingPlayer()));
+                return;
+            }
+            notify(returnMessage);
+        }
+    }
 
     /**
      * Checks if a given {@link ToolCard} can be used by the specified {@link Player}

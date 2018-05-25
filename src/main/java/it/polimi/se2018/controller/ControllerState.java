@@ -5,6 +5,8 @@ import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+
 /**
  * Abstract class that represents a generic state of the {@link Controller}.
  *
@@ -16,32 +18,32 @@ public abstract class ControllerState {
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
      */
-    static final CVMessage MIDDLE_OF_EFFECT = new CVMessage(CVMessage.types.MIDDLE_OF_EFFECT);
+    static final String MIDDLE_OF_EFFECT = "Can't do that. You're currently in the middle of a toolcard effect.";
 
     /**
      * String to be printed if a method that requires drafting is called before any dice was drafted.
      */
-    static final CVMessage NO_DICE_DRAFTED = new CVMessage(CVMessage.types.NO_DICE_DRAFTED);
+    static final String NO_DICE_DRAFTED = "Can't do that. You haven't drafted a die yet.";
 
     /**
      * String to be printed if only action possible is to draft and place.
      */
-    static final CVMessage ONLY_DRAFT_AND_PLACE = new CVMessage(CVMessage.types.ONLY_DRAFT_AND_PLACE);
+    static final String ONLY_DRAFT_AND_PLACE =  "Can't do that. You can only draft and place. ToolCard already used.";
 
     /**
      * String to be printed if there's a drafted dice that needs to be placed.
      */
-    static final CVMessage PLACE_DICE = new CVMessage(CVMessage.types.PLACE_DICE);
+    static final String PLACE_DICE = "Can't do that. You have to place the drafted dice first.";
 
     /**
      * String to be printed if the only action possible is a ToolCard activation.
      */
-    static final CVMessage TOOLCARD_ONLY = new CVMessage(CVMessage.types.TOOLCARD_ONLY);
+    static final String TOOLCARD_ONLY = "Can't do that. You can only use a toolcard that doesn't require drafting.";
 
     /**
      * Default message
      */
-    CVMessage defaultMessage = new CVMessage(null);
+    String defaultMessage = "Move not legal.";
 
 
     /**
@@ -55,28 +57,28 @@ public abstract class ControllerState {
      *  @param dice the dice to be drafted.
      *
      */
-    public Message draftDiceFromDraftPool(Dice dice){ return defaultMessage; }
+    public Message draftDiceFromDraftPool(Dice dice){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Places the drafted dice of the current turn on the specified cell (row and column).
      *  @param row the row index of the cell where the dice is to be placed.
      * @param col the column index of the cell where the dice is to be placed.
      */
-    public Message placeDice(int row, int col){ return defaultMessage; }
+    public Message placeDice(int row, int col){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
      * passed toolCard is set as activeToolCard in the Controller.
      * @param toolcard the toolcard to be activated.
      */
-    public Message useToolCard(ToolCard toolcard){ return defaultMessage; }
+    public Message useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.
      *  @param dice the chosen dice.
      * @param slotNumber the number of the TrackSlot where the dice is.
      */
-    public Message chooseDiceFromTrack(Dice dice, int slotNumber){ return defaultMessage; }
+    public Message chooseDiceFromTrack(Dice dice, int slotNumber){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Moves, if legal, the dice found at the cell designated by (rowFrom, colFrom) to the cell designated by (rowTo,
@@ -86,28 +88,28 @@ public abstract class ControllerState {
      * @param rowTo the row index of the cell TO which the dice is to be moved.
      * @param colTo the column index of the cell TO which the dice is to be moved.
      */
-    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return defaultMessage; }
+    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
      * Increments the value of the drafted dice found in the current turn.
      *
      */
-    public Message incrementDice(){ return defaultMessage; }
+    public Message incrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
      * Decrements the value of the drafted dice found in the current turn.
      *
      */
-    public Message decrementDice(){ return defaultMessage; }
+    public Message decrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Sets the value of the drafted dice found in the current turn to the specified value.
      *  @param value the chosen value for the drafted dice.
      *
      */
-    public Message chooseDiceValue(int value){ return defaultMessage; }
+    public Message chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.

@@ -12,11 +12,11 @@ public class ControllerBoundMessage extends Message {
     }
 
     public ControllerBoundMessage(Enum type, Map<String, Object> params) {
-        super(type, params);
+        this(type, params, null);
     }
 
     public ControllerBoundMessage(Enum type) {
-        super(type);
+        super(type, null, null);
     }
 
     public Player getSendingPlayer() {

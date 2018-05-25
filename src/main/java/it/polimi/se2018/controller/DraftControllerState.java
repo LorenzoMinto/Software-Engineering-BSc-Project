@@ -4,6 +4,9 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+
 /**
  *
  *  @author Lorenzo Minto
@@ -36,11 +39,11 @@ public class DraftControllerState extends ControllerState {
         } else {
             controller.setControllerState(controller.stateManager.getPlaceState());
         }
-        return new CVMessage("Dice drafted.");
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
     }
 
     @Override
     public Message placeDice(int row, int col) {
-        return NO_DICE_DRAFTED;
+        return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
     }
 }

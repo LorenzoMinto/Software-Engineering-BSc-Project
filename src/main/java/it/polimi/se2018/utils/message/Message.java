@@ -74,6 +74,10 @@ public abstract class Message implements Serializable{
         return this.params.get(key);
     }
 
+    void setParams(HashMap<String, Object> params) {
+        this.params = params;
+    }
+
     /**
      * Returns all the message's params
      * @return all the message's params

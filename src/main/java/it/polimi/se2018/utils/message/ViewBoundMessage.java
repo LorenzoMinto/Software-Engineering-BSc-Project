@@ -12,11 +12,11 @@ public abstract class ViewBoundMessage extends Message {
     }
 
     public ViewBoundMessage(Enum type, Map<String, Object> params) {
-        super(type, params);
+        this(type, params, null);
     }
 
     public ViewBoundMessage(Enum type) {
-        super(type);
+        this(type, null, null);
     }
 
     /**
