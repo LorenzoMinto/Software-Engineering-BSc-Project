@@ -1,7 +1,10 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.controller.AcceptingPlayerException;
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
+import it.polimi.se2018.model.Player;
+import it.polimi.se2018.model.User;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.ConfigImporter;
@@ -10,10 +13,7 @@ import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.NetworkMessage;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +38,8 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      * List of gateways for communicating with clients
      */
     private final List<ReceiverInterface> gateways = new ArrayList<>();
+
+    private HashMap<Player,ReceiverInterface> gatewayPlayerMap = new HashMap<>();
 
     /**
      * Controller created by the server
@@ -145,24 +147,39 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
         if(isJoinRequest(message)){
 
-            if( canJoin(message) ){
+            Player player;
+            User user = (User) message.getParam("user");
+            String nickname = (String) message.getParam("nickname");
+            try{
+                player = controller.acceptPlayer(user,nickname);
 
                 addGateway(sender);
+
+                gatewayPlayerMap.put(player,sender);
+
                 sender.receiveMessage(new NetworkMessage(NetworkMessage.types.CONNECTED), this.proxyServer);
                 LOGGER.info("A new client has been authorized");
-            } else {
 
+            } catch(AcceptingPlayerException e){
                 sender.receiveMessage(new NetworkMessage(NetworkMessage.types.REFUSED),this.proxyServer);
                 LOGGER.info("A new client asked to join but refused");
             }
-
         }
     }
 
     @Override
     public void sendMessage(Message message) throws RemoteException {
         boolean somethingFailed = false;
-        for(ReceiverInterface o : gateways){
+        List<ReceiverInterface> g;
+
+        if(message.isBroadcast()){
+            g = gateways;
+        } else {
+            g = new ArrayList<>();
+            g.add(gatewayPlayerMap.get(message.getRecipientPlayer()));
+        }
+
+        for(ReceiverInterface o : g){
             int attempts = 0;
             boolean correctlySent = false;
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
