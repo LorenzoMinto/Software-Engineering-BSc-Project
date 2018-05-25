@@ -53,7 +53,7 @@ public abstract class Message implements Serializable{
      * @param type the type of the message
      */
     public Message(Enum type){
-        this(type,null);
+        this(type,null,null);
     }
 
     /**
