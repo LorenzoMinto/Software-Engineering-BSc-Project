@@ -168,13 +168,7 @@ public class WindowPattern extends Observable implements Serializable{
         this.pattern[row][col].setDice(dice);
         isEmpty = false;
 
-        //NOTIFYING
-        Map<String, Object> messageAttributes = new HashMap<>();
-
-        messageAttributes.put("windowPattern", this);
-        messageAttributes.put("currentPlayer", owner);
-
-        notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
+        notifyGame();
 
         return true;
     }
@@ -197,19 +191,14 @@ public class WindowPattern extends Observable implements Serializable{
             Dice removedDice = pattern[fromRow][fromCol].removeDice();
             pattern[toRow][toCol].setDice(removedDice);
 
-            //NOTIFYING
-            Map<String, Object> messageAttributes = new HashMap<>();
-
-            messageAttributes.put("windowPattern", this);
-            messageAttributes.put("currentPlayer", owner);
-
-            notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
+            notifyGame();
 
             return true;
         } else {
             return false;
         }
     }
+
 
     /**
      * Makes a copy of the Window Pattern and returns it.
@@ -240,6 +229,20 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public boolean isEmpty() {
         return isEmpty;
+    }
+
+    /**
+     * Method to notify observers (Game) with the updated window pattern and its owner
+     *
+     * @author Jacopo Pio Gargano
+     */
+    private void notifyGame() {
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("windowPattern", this);
+        messageAttributes.put("currentPlayer", owner);
+
+        notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
     }
 
     /**
