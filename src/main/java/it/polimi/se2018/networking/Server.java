@@ -5,12 +5,14 @@ import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.User;
+import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.ConfigImporter;
 import it.polimi.se2018.utils.NoConfigParamFoundException;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.NetworkMessage;
+import it.polimi.se2018.utils.message.ViewBoundMessage;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -39,7 +41,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private final List<ReceiverInterface> gateways = new ArrayList<>();
 
-    private HashMap<Player,ReceiverInterface> gatewayPlayerMap = new HashMap<>();
+    private HashMap<Player,ReceiverInterface> playerToGatewayMap = new HashMap<>();
+
+    private HashMap<ReceiverInterface, Player> gatewayToPlayerMap = new HashMap<>();
 
     /**
      * Controller created by the server
@@ -143,7 +147,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
 
-        LOGGER.info(()->"Received message: "+message);
+        message = new CVMessage(message.getType(), message.getAllParams(), gatewayToPlayerMap.get(sender));
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("Received message: "+message);
+        }
 
         if(isJoinRequest(message)){
 
@@ -155,7 +163,8 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
                 addGateway(sender);
 
-                gatewayPlayerMap.put(player,sender);
+                playerToGatewayMap.put(player,sender);
+                gatewayToPlayerMap.put(sender, player);
 
                 sender.receiveMessage(new NetworkMessage(NetworkMessage.types.CONNECTED), this.proxyServer);
                 LOGGER.info("A new client has been authorized");
@@ -168,15 +177,17 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException {
+    public void sendMessage(Message m) throws RemoteException {
         boolean somethingFailed = false;
         List<ReceiverInterface> g;
+
+        ViewBoundMessage message = (ViewBoundMessage) m;
 
         if(message.isBroadcast()){
             g = gateways;
         } else {
             g = new ArrayList<>();
-            g.add(gatewayPlayerMap.get(message.getRecipientPlayer()));
+            g.add(playerToGatewayMap.get(message.getRecievingPlayer()));
         }
 
         for(ReceiverInterface o : g){

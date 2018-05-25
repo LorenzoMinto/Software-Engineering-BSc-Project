@@ -40,9 +40,6 @@ public class WindowPattern extends Observable implements Serializable{
 
     private Player owner;
 
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
 
     /**
      * Constructor of a new Window Pattern

@@ -1,9 +1,9 @@
 package it.polimi.se2018.utils.message;
 
 import it.polimi.se2018.model.Player;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public abstract class Message implements Serializable{
     /**
      * The player to send the message (null if broadcasting)
      */
-    private final Player recipientPlayer;
+    private final Player player;
 
     /**
      * Full constructor for Message with possibility to send it in broadcast or specifically to a player
@@ -36,7 +36,7 @@ public abstract class Message implements Serializable{
     public Message(Enum type, Map<String, Object> params, Player player) {
         this.type = type;
         this.params = (HashMap<String,Object>)params;
-        this.recipientPlayer = player;
+        this.player = player;
     }
 
     /**
@@ -75,12 +75,12 @@ public abstract class Message implements Serializable{
     }
 
     /**
-     * Returns if the message is sent in broadcast.
-     *
-     * @return if the message is sent in broadcast
+     * Returns all the message's params
+     * @return all the message's params
      */
-    public boolean isBroadcast(){
-        return recipientPlayer == null;
+    public Map<String,Object> getAllParams(){
+
+        return Collections.unmodifiableMap(this.params);
     }
 
     /**
@@ -88,10 +88,7 @@ public abstract class Message implements Serializable{
      *
      * @return the recipient player if the message is specific (not in broadcast)
      */
-    public Player getRecipientPlayer(){
-        if(isBroadcast()){
-            throw new BadBehaviourRuntimeException("Can't ask for a Recipient Player in a Broadcast message");
-        }
-        return recipientPlayer;
+     Player getPlayer(){
+        return player;
     }
 }

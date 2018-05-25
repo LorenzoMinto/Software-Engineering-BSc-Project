@@ -217,7 +217,6 @@ public class Game extends Observable implements Observer{
             if(p.equals(player)){
                 windowPattern.register(this);
                 p.setWindowPattern(windowPattern);
-                windowPattern.setOwner(p);
                 return;
             }
         }

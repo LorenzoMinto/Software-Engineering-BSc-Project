@@ -34,7 +34,7 @@ public class StartControllerStateTest {
         WindowPattern wp = wpmanager.getPatterns(1).get(0);
 
         for (Player p : controller.game.getPlayers()) {
-            p.setWindowPattern(wp);
+            game.assignWindowPatternToPlayer(wp, p);
         }
 
         prop = new Properties();

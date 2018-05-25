@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Player;
 
 import java.util.Map;
 
-public class MVMessage extends Message {
+public class MVMessage extends ViewBoundMessage {
 
     public MVMessage(Enum type, Map<String, Object> params, Player player) {
         super(type, params, player);

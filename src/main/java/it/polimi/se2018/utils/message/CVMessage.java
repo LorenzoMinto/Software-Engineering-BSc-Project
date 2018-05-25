@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Player;
 
 import java.util.Map;
 
-public class CVMessage extends Message {
+public class CVMessage extends ViewBoundMessage {
 
     public CVMessage(Enum type, Map<String, Object> params, Player player) {
         super(type, params, player);
@@ -27,6 +27,6 @@ public class CVMessage extends Message {
         ONLY_DRAFT_AND_PLACE,
         PLACE_DICE,
         TOOLCARD_ONLY,
-        //TODO: complete
+        //TODO: complet
     }
 }
