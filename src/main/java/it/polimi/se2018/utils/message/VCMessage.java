@@ -5,7 +5,7 @@ import it.polimi.se2018.model.Player;
 import java.util.Map;
 
 public class VCMessage extends Message {
-    
+
     public VCMessage(Enum type, Map<String, Object> params, Player player) {
         super(type, params, player);
     }
