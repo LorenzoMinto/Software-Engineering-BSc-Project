@@ -363,10 +363,6 @@ public class Game extends Observable implements Observer{
 
             //to be displayed in view
             messageAttributes.put("nextPlayers", nextPlayers);
-            //draftpool was necessarily updated
-            messageAttributes.put("draftPool", getCurrentRound().getDraftPool());
-            //toolcards may have been used
-            messageAttributes.put("toolcards", drawnToolCards);
 
             notify(new MVMessage(MVMessage.types.NEXT_TURN, messageAttributes));
 

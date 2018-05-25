@@ -1,10 +1,13 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.message.MVMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the DraftPool: the place of the game where the drafted dices are left
@@ -18,6 +21,7 @@ public class DraftPool extends Observable implements Serializable {
      * List of dices of the draftpool
      */
     private List<Dice> dices;
+
 
     /**
      * Constructor of an empty DraftPool
@@ -45,6 +49,8 @@ public class DraftPool extends Observable implements Serializable {
         for (Dice dice : dices) {
             dice.roll();
         }
+
+        notifyGame();
     }
 
     /**
@@ -70,8 +76,16 @@ public class DraftPool extends Observable implements Serializable {
      */
     public boolean draftDice(Dice dice) {
 
-        return dices.remove(dice);
+        if(dices.remove(dice)) {
+
+            notifyGame();
+            return true;
+
+        }else {
+            return false;
+        }
     }
+
 
     /**
      * Add the specified dice to the draftpool
@@ -81,6 +95,29 @@ public class DraftPool extends Observable implements Serializable {
      */
     public boolean putDice(Dice dice) {
 
-        return dices.add(dice);
+        if(dices.add(dice)) {
+
+            notifyGame();
+            return true;
+
+        }else {
+            return false;
+        }
+
+    }
+
+    /**
+     * Method to notify observers (Game) with the updated draftpool
+     *
+     * @author Jacopo Pio Gargano
+     */
+    private void notifyGame() {
+        //NOTIFYING
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        //draftpool was necessarily updated
+        messageAttributes.put("draftPool", this);
+
+        notify(new MVMessage(MVMessage.types.DRAFTPOOL, messageAttributes));
     }
 }
