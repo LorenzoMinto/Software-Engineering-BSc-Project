@@ -9,16 +9,16 @@ import static org.junit.Assert.assertTrue;
 
 public class AdjacentDicePlacementRuleDecoratorTest {
 
-    static Cell[][] pattern;
-    static Cell[][] pattern2;
+    private static Cell[][] pattern;
+    private static Cell[][] pattern2;
 
-    PlacementRule rule;
-    PlacementRule decoratedRule;
+    private PlacementRule rule;
+    private PlacementRule decoratedRule;
 
-    WindowPattern windowPattern;
+    private WindowPattern windowPattern;
 
-    Dice threeDice;
-    Dice fourDice;
+    private Dice threeDice;
+    private Dice fourDice;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -39,7 +39,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
         rule = new AdjacentDicePlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("", "", 0, pattern);
         threeDice = new Dice(DiceColors.BLUE, 3);
         fourDice = new Dice(DiceColors.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);
@@ -57,7 +57,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
 
     @Test
     public void testCheckIfMoveIsAllowedWhenNotAllowed() {
-        WindowPattern wp = new WindowPattern("",0, pattern2);
+        WindowPattern wp = new WindowPattern("", "",0, pattern2);
         Dice dice = new Dice(DiceColors.BLUE);
         assertFalse(rule.checkIfMoveIsAllowed(wp, dice, 1,1));
         assertFalse(rule.checkIfMoveIsAllowed(wp, dice, 1,2));

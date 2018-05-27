@@ -10,15 +10,15 @@ import static org.junit.Assert.*;
 
 public class AdjacentColorPlacementRuleDecoratorTest {
 
-    static Cell[][] pattern;
+    private static Cell[][] pattern;
 
-    PlacementRule rule;
-    PlacementRule decoratedRule;
+    private PlacementRule rule;
+    private PlacementRule decoratedRule;
 
-    WindowPattern windowPattern;
+    private WindowPattern windowPattern;
 
-    Dice redDice;
-    Dice blueDice;
+    private Dice redDice;
+    private Dice blueDice;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -37,7 +37,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
         rule = new AdjacentColorPlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentColorPlacementRuleDecorator(new ColorPlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("","", 0, pattern);
         redDice = new Dice(DiceColors.RED);
         blueDice = new Dice(DiceColors.BLUE);
         windowPattern.putDiceOnCell(redDice, 1,1);

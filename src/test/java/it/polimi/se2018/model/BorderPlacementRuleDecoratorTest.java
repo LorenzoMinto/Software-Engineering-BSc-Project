@@ -36,7 +36,7 @@ public class BorderPlacementRuleDecoratorTest {
         rule = new BorderPlacementRuleDecorator(emptyRule);
         decoratedRule = new BorderPlacementRuleDecorator(new ColorPlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("", "",0, pattern);
         redDice = new Dice(DiceColors.RED);
         blueDice = new Dice(DiceColors.BLUE);
     }

@@ -79,7 +79,7 @@ public class Player implements Serializable {
      *
      * @param windowPattern the windowpattern to be assigned to this player
      */
-    void setWindowPattern(WindowPattern windowPattern) {
+    public void setWindowPattern(WindowPattern windowPattern) {
         if(windowPattern==null) throw new IllegalArgumentException();
 
         this.windowPattern = windowPattern;
