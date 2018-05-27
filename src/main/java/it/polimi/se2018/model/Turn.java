@@ -182,6 +182,11 @@ public class Turn {
         this.usedToolCard = toolCard;
     }
 
+    public void resetTrackChosenDice() {
+        this.trackChosenDice = null;
+        this.slotOfTrackChosenDice = -1;
+    }
+
     /**
      * Check if the given player is the one playing this turn.
      *

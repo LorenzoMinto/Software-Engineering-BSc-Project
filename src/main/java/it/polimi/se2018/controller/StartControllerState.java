@@ -40,7 +40,7 @@ public class StartControllerState extends ControllerState {
     public CVMessage useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
-            controller.stateManager.getNextState(this);
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
             return new CVMessage(ERROR_MESSAGE,"Can't use this toolcard.");
         }

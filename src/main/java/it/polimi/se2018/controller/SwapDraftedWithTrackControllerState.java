@@ -26,6 +26,7 @@ public class SwapDraftedWithTrackControllerState extends ImplicitControllerState
         Turn turn = game.getCurrentRound().getCurrentTurn();
         game.getTrack().putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
         turn.setDraftedDice(turn.getTrackChosenDice());
+        turn.resetTrackChosenDice();
         controller.setControllerState(controller.stateManager.getNextState(this));
     }
 }

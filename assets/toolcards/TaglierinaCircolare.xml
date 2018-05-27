@@ -8,5 +8,6 @@
     <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
     <controllerStateRule prevState="DraftControllerState" nextState="ChooseFromTrackControllerState" />
     <controllerStateRule prevState="ChooseFromTrackControllerState" nextState="SwapDraftedWithTrackControllerState" />
-    <controllerStateRule prevState="ChooseFromTrackControllerState" nextState="EndControllerState" />
+    <controllerStateRule prevState="SwapDraftedWithTrackControllerState" nextState="PlaceControllerState" />
+    <controllerStateRule prevState="PlaceControllerState" nextState="EndControllerState" />
 </toolcard>

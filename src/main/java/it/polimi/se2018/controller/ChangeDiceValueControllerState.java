@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.CVMessage;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
@@ -27,12 +28,10 @@ public class ChangeDiceValueControllerState extends ControllerState {
     public CVMessage incrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-        if (currentTurn.hasDrafted()) {
-            if (currentTurn.getDraftedDice().incrementValue()) {
-                controller.setControllerState(controller.stateManager.getNextState(this));
-            }
+        if (currentTurn.getDraftedDice().incrementValue()) {
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
+            return new CVMessage(ERROR_MESSAGE, "Cannot increment drafted dice's value.");
         }
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
     }
@@ -41,13 +40,11 @@ public class ChangeDiceValueControllerState extends ControllerState {
     public CVMessage decrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-        if (currentTurn.hasDrafted()) {
-            if (currentTurn.getDraftedDice().decrementValue()) {
 
-                controller.setControllerState(controller.stateManager.getNextState(this));
-            }
+        if (currentTurn.getDraftedDice().decrementValue()) {
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
+            return new CVMessage(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
         }
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
     }
@@ -56,13 +53,12 @@ public class ChangeDiceValueControllerState extends ControllerState {
     public CVMessage chooseDiceValue(int value) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-        if (currentTurn.hasDrafted()) {
-            //NOTE: this assumes value is a legal value, otherwise need bool returned from setValue
+        try {
             currentTurn.getDraftedDice().setValue(value);
-            controller.setControllerState(controller.stateManager.getNextState(this));
-        } else {
-            return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
+        } catch (ValueOutOfBoundsException e) {
+            return new CVMessage(ERROR_MESSAGE, "Illegal value for dice.");
         }
+        controller.setControllerState(controller.stateManager.getNextState(this));
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
     }
 }
