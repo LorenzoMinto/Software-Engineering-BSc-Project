@@ -1,5 +1,5 @@
 package it.polimi.se2018.controller;
-
+/*
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.Message;
 import org.junit.Before;
@@ -124,4 +124,4 @@ public class ChangeDiceValueControllerStateTest {
         assertEquals(value, currentTurn.getDraftedDice().getValue());
         assertEquals(ERROR_MESSAGE, m.getType());
     }
-}
+}*/
