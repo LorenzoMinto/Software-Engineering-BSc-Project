@@ -36,7 +36,7 @@ public class ColorPlacementRuleDecoratorTest {
         rule = new ColorPlacementRuleDecorator(emptyRule);
         decoratedRule = new ColorPlacementRuleDecorator(new AdjacentColorPlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("","", 0, pattern);
         redDice = new Dice(DiceColors.RED);
         blueDice = new Dice(DiceColors.BLUE);
     }

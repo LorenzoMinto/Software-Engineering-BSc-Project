@@ -1,25 +1,22 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.model.Player;
-
 import java.util.Map;
 
 public class ControllerBoundMessage extends Message {
 
-
-    public ControllerBoundMessage(Enum type, Map<String, Object> params, Player player) {
-        super(type, params, player);
+    public ControllerBoundMessage(MessageType type, Map<String, Object> params, String playerID) {
+        super(type, params, playerID);
     }
 
-    public ControllerBoundMessage(Enum type, Map<String, Object> params) {
-        this(type, params, null);
+    public ControllerBoundMessage(MessageType type, Map<String, Object> params) {
+        super(type, params);
     }
 
-    public ControllerBoundMessage(Enum type) {
-        super(type, null, null);
+    public ControllerBoundMessage(MessageType type) {
+        super(type);
     }
 
-    public Player getSendingPlayer() {
-        return getPlayer();
+    public String getSendingPlayerID() {
+        return getPlayerID();
     }
 }

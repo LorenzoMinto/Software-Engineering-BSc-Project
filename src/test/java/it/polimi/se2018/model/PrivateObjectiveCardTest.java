@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
@@ -53,7 +55,7 @@ public class PrivateObjectiveCardTest {
 
         try {
 
-            wp = windowPatternManager.getPatterns(1).get(0);
+            wp = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
             wp.putDiceOnCell(new Dice(YELLOW, 1), 0, 1);
@@ -72,14 +74,14 @@ public class PrivateObjectiveCardTest {
             wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
-            oneDiceWindowPattern = windowPatternManager.getPatterns(1).get(0);
+            oneDiceWindowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             oneDiceWindowPattern.putDiceOnCell(uniqueDiceOnWindowPattern,1,1);
 
 
             nullWP = null;
 
-            emptyWP = windowPatternManager.getPatterns(1).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException e){
             e.printStackTrace();

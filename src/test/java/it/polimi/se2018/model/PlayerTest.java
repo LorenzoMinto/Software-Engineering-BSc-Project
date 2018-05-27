@@ -17,7 +17,7 @@ public class PlayerTest {
     public void setUp() throws Exception {
         user = new User(8,"nickname");
         ObjectiveCardManager ocm = new ObjectiveCardManager();
-        p = new Player(user,"nickname",ocm.getPrivateObjectiveCard());
+        p = new Player("nickname",ocm.getPrivateObjectiveCard());
     }
 
     @Test
@@ -49,10 +49,10 @@ public class PlayerTest {
     public void canUseToolCard() {
     }
 
-    @Test
+    /*@Test
     public void getUser() {
         assertTrue(user.equals(p.getUser()));
-    }
+    }*/
 
     @Test
     public void testEquals() {

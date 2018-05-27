@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
@@ -46,7 +48,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
         try {
 
-            diagonalsWP = windowPatternManager.getPatterns(1).get(0);
+            diagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             diagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             diagonalsWP.putDiceOnCell(new Dice(RED), 0, 1);
@@ -68,7 +70,7 @@ public class DiagonalsPublicObjectiveCardTest {
             diagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
-            rightDiagonalsWP = windowPatternManager.getPatterns(1).get(0);
+            rightDiagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             rightDiagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             rightDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -87,7 +89,7 @@ public class DiagonalsPublicObjectiveCardTest {
             rightDiagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
-            leftDiagonalsWP = windowPatternManager.getPatterns(1).get(0);
+            leftDiagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 0);
             leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -107,18 +109,15 @@ public class DiagonalsPublicObjectiveCardTest {
             leftDiagonalsWP.putDiceOnCell(new Dice(RED), 3, 0);
 
 
-            twoDiceWP = windowPatternManager.getPatterns(1).get(0);
+            twoDiceWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 0, 0);
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 1, 1);
 
-
-
-
             nullWP = null;
 
-            emptyWP = windowPatternManager.getPatterns(1).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException e){
             e.printStackTrace();

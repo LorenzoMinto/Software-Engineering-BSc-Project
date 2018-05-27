@@ -38,10 +38,10 @@ public class RoundTest {
         User user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
-        p1 = new Player(user, "p1", privateObjectiveCard);
-        p2 = new Player(user, "p2", privateObjectiveCard);
-        p3 = new Player(user, "p3", privateObjectiveCard);
-        p4 = new Player(user, "p4", privateObjectiveCard);
+        p1 = new Player( "p1", privateObjectiveCard);
+        p2 = new Player( "p2", privateObjectiveCard);
+        p3 = new Player( "p3", privateObjectiveCard);
+        p4 = new Player( "p4", privateObjectiveCard);
 
         players = new ArrayList<>();
         draftPool = new DraftPool();

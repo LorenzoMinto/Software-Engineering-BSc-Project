@@ -2,15 +2,12 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.naming.ldap.Control;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
-
+/*
 public class ControllerStateManagerTest {
 
     private Controller controller;
@@ -97,4 +94,4 @@ public class ControllerStateManagerTest {
     public void testGetPlaceControllerState() {
         assertNotNull(controller.stateManager.getPlaceState());
     }
-}
+}*/

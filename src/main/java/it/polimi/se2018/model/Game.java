@@ -212,9 +212,9 @@ public class Game extends Observable implements Observer{
     }
 
     //TODO: commenta
-    public void assignWindowPatternToPlayer(WindowPattern windowPattern, Player player){
+    public void assignWindowPatternToPlayer(WindowPattern windowPattern, String playerID){
         for(Player p: players){
-            if(p.equals(player)){
+            if(p.getID().equals(playerID)){
                 windowPattern.register(this);
                 p.setWindowPattern(windowPattern);
                 return;
@@ -228,8 +228,8 @@ public class Game extends Observable implements Observer{
      * @param player the player to be checked
      * @return if the given player is the current playing one
      */
-    public boolean isCurrentPlayer(Player player) {
-        return getCurrentRound().getCurrentTurn().isCurrentPlayer(player);
+    public boolean isCurrentPlayer(String playerID) {
+        return getCurrentRound().getCurrentTurn().isCurrentPlayer(playerID);
     }
 
     /**
@@ -272,6 +272,14 @@ public class Game extends Observable implements Observer{
             if (card.equals(toolCardCopy)) { return card;}
         }
         throw new BadBehaviourRuntimeException("Asked to use a toolcard but it is not in the drawn set");
+    }
+
+    public void setStatusAsWaitingForPatternsChoice(){
+        if(status==GameStatus.WAITING_FOR_PLAYERS){
+            this.status = GameStatus.WAITING_FOR_PATTERNS_CHOICE;
+        } else {
+            throw new BadBehaviourRuntimeException();
+        }
     }
 
     /**

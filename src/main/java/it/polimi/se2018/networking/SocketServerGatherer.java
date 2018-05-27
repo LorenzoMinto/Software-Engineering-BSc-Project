@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.message.CVMessage;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,6 +44,7 @@ public class SocketServerGatherer extends Thread{
                 try(BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
                     while ( (socketMessage = in.readLine()) != null ){
                         //TODO: implementare deserializzazione dell'oggetto
+                        CVMessage message = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE); //placeholder da sostituire
                         server.receiveMessage(message,socketServer);
                     }
                 } catch(IOException e){

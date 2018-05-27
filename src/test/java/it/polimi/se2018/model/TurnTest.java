@@ -28,10 +28,10 @@ public class TurnTest {
 
     @BeforeClass
     public static void initializeVariables() {
-        user = new User(1, "username");
+        //user = new User(1, "username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null, null, RED);
         playerName = "player";
-        player = new Player(user, playerName, privateObjectiveCard);
+        player = new Player(playerName, privateObjectiveCard);
         dice = new Dice(RED);
         toolCard = ToolCard.createTestInstance();
 
@@ -166,19 +166,19 @@ public class TurnTest {
     @Test
     public void testIsCurrentPlayer(){
         Player playerTest = turn.getPlayer();
-        assertTrue(turn.isCurrentPlayer(playerTest));
+        assertTrue(turn.isCurrentPlayer(playerTest.getID()));
     }
 
     @Test
     public void testIsCurrentPlayerSameName(){
-        Player playerTest = new Player(user, playerName, privateObjectiveCard);
-        assertTrue(turn.isCurrentPlayer(playerTest));
+        Player playerTest = new Player(playerName, privateObjectiveCard);
+        assertTrue(turn.isCurrentPlayer(playerTest.getID()));
     }
 
     @Test
     public void testDifferentPlayerIsCurrentPlayer(){
-        Player playerTest = new Player(user, "differentName", privateObjectiveCard);
-        assertFalse(turn.isCurrentPlayer(playerTest));
+        Player playerTest = new Player( "differentName", privateObjectiveCard);
+        assertFalse(turn.isCurrentPlayer(playerTest.getID()));
     }
 
     @Test

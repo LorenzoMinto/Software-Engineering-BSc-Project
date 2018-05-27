@@ -1,22 +1,21 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.Map;
 
 public abstract class ViewBoundMessage extends Message {
 
-    public ViewBoundMessage(Enum type, Map<String, Object> params, Player player) {
-        super(type, params, player);
+    public ViewBoundMessage(MessageType type, Map<String, Object> params, String playerID) {
+        super(type, params, playerID);
     }
 
-    public ViewBoundMessage(Enum type, Map<String, Object> params) {
-        this(type, params, null);
+    public ViewBoundMessage(MessageType type, Map<String, Object> params) {
+        super(type, params);
     }
 
-    public ViewBoundMessage(Enum type) {
-        this(type, null, null);
+    public ViewBoundMessage(MessageType type) {
+        super(type);
     }
 
     /**
@@ -25,7 +24,7 @@ public abstract class ViewBoundMessage extends Message {
      * @return if the message is sent in broadcast
      */
     public boolean isBroadcast(){
-        return this.getPlayer() == null;
+        return this.getPlayerID() == null;
     }
 
     /**
@@ -33,10 +32,10 @@ public abstract class ViewBoundMessage extends Message {
      *
      * @return the recipient player if the message is specific (not in broadcast)
      */
-    public Player getRecievingPlayer() {
+    public String getReceivingPlayerID() {
         if(this.isBroadcast()){
             throw new BadBehaviourRuntimeException("Can't ask for a Recipient Player in a Broadcast message");
         }
-        return getPlayer();
+        return getPlayerID();
     }
 }

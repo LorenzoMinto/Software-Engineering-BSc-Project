@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -25,7 +24,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public Message incrementDice() {
+    public CVMessage incrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
@@ -39,7 +38,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public Message decrementDice() {
+    public CVMessage decrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {
@@ -54,7 +53,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public Message chooseDiceValue(int value) {
+    public CVMessage chooseDiceValue(int value) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.hasDrafted()) {

@@ -1,13 +1,11 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.model.Player;
-
 import java.util.Map;
 
 public class MVMessage extends ViewBoundMessage {
 
-    public MVMessage(types type, Map<String, Object> params, Player player) {
-        super(type, params, player);
+    public MVMessage(types type, Map<String, Object> params, String playerID) {
+        super(type, params, playerID);
     }
 
     public MVMessage(types type, Map<String, Object> params) {
@@ -21,7 +19,7 @@ public class MVMessage extends ViewBoundMessage {
     /**
      * Enum for all types of MCMessage instances
      */
-    public enum types {
+    public enum types implements MessageType{
         SETUP,                  //TODO: nella view impostare il currentTurnNumber e currentRoundNumber a 1
         NEXT_ROUND,             //TODO: nella view aumentare il currentRoundNumber e reset currentTurnNumber
         NEXT_TURN,              //TODO: nella view aumentare il currentTurnNumber

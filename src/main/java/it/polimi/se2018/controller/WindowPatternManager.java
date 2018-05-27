@@ -8,9 +8,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Manages the loading and creation of {@link WindowPattern}
@@ -129,7 +127,7 @@ public class WindowPatternManager {
      * @param patternID the id of the pattern to check
      * @return the id of the partner pattern of the given pattern
      */
-    public String getPartnerPatternID(String patternID){
+    private String getPartnerPatternID(String patternID){
         try{
             Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
             return document.getElementsByTagName("partnerID").item(0).getTextContent();
@@ -142,54 +140,47 @@ public class WindowPatternManager {
     /**
      * Returns a list of the requested quantity of Window Patterns
      *
-     * @param quantity the amount of patterns that are asked to be created
+     * @param numberOfCouples the number of couples of window patterns that must be created
      * @return the list of the requested quantity of Window Patterns
      * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    public List<WindowPattern> getPatterns(int quantity) {
-        List<WindowPattern> patterns = new ArrayList<>();
-        List<String> usedPatterns = new ArrayList<>();
+    public Set<WindowPattern> getCouplesOfPatterns(int numberOfCouples) {
+        int quantity = numberOfCouples * 2;
+        Set<WindowPattern> patterns = new HashSet<>();
 
         if( availablePatterns.size() >= quantity ){
 
             Random r = new Random();
 
-            for(int i=0; i<quantity; i++){
+            for(int i=0; i<numberOfCouples; i++){
 
                 //Choose randomly one of the available patterns
                 int randomIndex = r.nextInt(availablePatterns.size());
                 String randomPatternID = availablePatterns.get(randomIndex);
-
-                //Add the selected pattern to a list tracking all the selected patterns
-                usedPatterns.add(randomPatternID);
 
                 //Removes the selected pattern from the available to avoid double choise
                 availablePatterns.remove(randomPatternID);
 
                 //Load the randomly selected pattern
                 WindowPattern randomPattern;
+                WindowPattern randomPartnerPattern;
                 try {
-
                     randomPattern = loadPatternFromFileSystem(randomPatternID);
-
+                    randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
                 } catch (BadFormattedPatternFileException e){
-
-                    //re-insert the pattern to the available ones before rethrowing to the caller
-                    availablePatterns.addAll(usedPatterns);
-
                     throw new BadFormattedPatternFileException();
                 }
 
-                //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
+                //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
                 patterns.add(randomPattern);
+                patterns.add(randomPartnerPattern);
             }
         } else {
             throw new BadBehaviourRuntimeException("Cant create the number of window pattern requested. This error is not handlable at all");
         }
 
         return patterns;
-
     }
 
 }

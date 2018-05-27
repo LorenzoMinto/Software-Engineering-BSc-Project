@@ -39,7 +39,7 @@ public class GameTest {
     public static void initializeVariables(){
         user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
-        player = new Player(user, "player", privateObjectiveCard);
+        player = new Player( "player", privateObjectiveCard);
 
         publicObjectiveCards = new ArrayList<>();
         publicObjectiveCards.add(new DiagonalsPublicObjectiveCard(

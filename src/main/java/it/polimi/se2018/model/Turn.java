@@ -185,11 +185,11 @@ public class Turn {
     /**
      * Check if the given player is the one playing this turn.
      *
-     * @param player the player to be checked
+     * @param playerID the player to be checked
      * @return if the given player is the one playing this turn
      */
-    public boolean isCurrentPlayer(Player player){
+    public boolean isCurrentPlayer(String playerID){
         if(player == null){throw new IllegalArgumentException("ERROR: Can't check if null player is current player");}
-        return ( this.player.equals(player) );
+        return ( this.player.getID().equals(playerID) );
     }
 }

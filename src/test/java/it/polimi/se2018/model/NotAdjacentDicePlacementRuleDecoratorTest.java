@@ -41,12 +41,12 @@ public class NotAdjacentDicePlacementRuleDecoratorTest {
         rule = new NotAdjacentDicePlacementRuleDecorator(emptyRule);
         decoratedRule = new NotAdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("", "",0, pattern);
         threeDice = new Dice(DiceColors.BLUE, 3);
         fourDice = new Dice(DiceColors.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);
 
-        windowPattern2 = new WindowPattern("",0, pattern2);
+        windowPattern2 = new WindowPattern("","",0, pattern2);
     }
 
     @Test

@@ -3,11 +3,13 @@ package it.polimi.se2018.networking;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import it.polimi.se2018.view.CLIView;
 import it.polimi.se2018.view.View;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -50,7 +52,14 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         addGateway(server);
 
         LOGGER.info("Started a Sagrada Client and connected to Sagrada Server as guest.");
-        LOGGER.info("Remember that in order to receive message from server you have to send a message with content 'federico'");
+
+        try {
+            HashMap<String,Object> params = new HashMap<>();
+            params.put("nickname","federico");
+            sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,params));
+        } catch (RemoteException e) {
+            LOGGER.severe("Failed asking to join game.");
+        }
 
         listenForMessagesFromConsole();
     }

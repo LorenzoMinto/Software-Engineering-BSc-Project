@@ -1,7 +1,5 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.model.Player;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,10 +10,12 @@ import java.util.Map;
  */
 public abstract class Message implements Serializable{
 
+    interface MessageType extends Serializable{}
+
     /**
      * Type of message (answering the question: "what is this message aim?")
      */
-    private Enum type;
+    private MessageType type;
 
     /**
      * Parameters passed in the message
@@ -23,20 +23,21 @@ public abstract class Message implements Serializable{
     private HashMap<String,Object> params;
 
     /**
-     * The player to send the message (null if broadcasting)
+     * The player to send the message (null if broadcasting) or the player sending the message
+     * Depending on type of message (ControllerBound or ViewBound)
      */
-    private final Player player;
+    private final String playerID;
 
     /**
      * Full constructor for Message with possibility to send it in broadcast or specifically to a player
      * @param type the type of the message
      * @param params the parameters of the message
-     * @param player the player to send the message (null if broadcasting)
+     * @param playerID the player to send the message (null if broadcasting)
      */
-    public Message(Enum type, Map<String, Object> params, Player player) {
+    public Message(MessageType type, Map<String, Object> params, String playerID) {
         this.type = type;
         this.params = (HashMap<String,Object>)params;
-        this.player = player;
+        this.playerID = playerID;
     }
 
     /**
@@ -44,7 +45,7 @@ public abstract class Message implements Serializable{
      * @param type the type of the message
      * @param params the parameters of the message
      */
-    public Message(Enum type, Map<String, Object> params) {
+    public Message(MessageType type, Map<String, Object> params) {
         this(type,params,null);
     }
 
@@ -52,7 +53,7 @@ public abstract class Message implements Serializable{
      * Constructor of broadcasting Message without parameters, just type
      * @param type the type of the message
      */
-    public Message(Enum type){
+    public Message(MessageType type){
         this(type,null,null);
     }
 
@@ -61,8 +62,8 @@ public abstract class Message implements Serializable{
      *
      * @return the type of the message
      */
-    public Enum getType() {
-        return type;
+    public MessageType getType(){
+        return this.type;
     }
 
     /**
@@ -92,7 +93,7 @@ public abstract class Message implements Serializable{
      *
      * @return the recipient player if the message is specific (not in broadcast)
      */
-     Player getPlayer(){
-        return player;
+     String getPlayerID(){
+        return playerID;
     }
 }

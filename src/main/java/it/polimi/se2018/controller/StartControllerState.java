@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -25,7 +24,7 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public Message draftDiceFromDraftPool(Dice dice) {
+    public CVMessage draftDiceFromDraftPool(Dice dice) {
         Round currentRound = controller.game.getCurrentRound();
 
         if (currentRound.getDraftPool().draftDice(dice)) {
@@ -38,7 +37,7 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public Message useToolCard(ToolCard toolcard) {
+    public CVMessage useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
             controller.stateManager.getNextState(this);

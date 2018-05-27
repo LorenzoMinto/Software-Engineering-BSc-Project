@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.EmptyListException;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,6 +14,7 @@ import static org.junit.Assert.*;
 /**
  * @author Jacopo Pio Gargano
  */
+/*
 public class ScorerTest {
 
     private static Scorer scorer;
@@ -127,7 +127,7 @@ public class ScorerTest {
         }
 
         try {
-            genericWP = windowPatternManager.getPatterns(1).get(0);
+            genericWP = windowPatternManager.getCouplesOfPatterns(1).get(0);
 
             wp1 = genericWP.copy();
 
@@ -783,4 +783,4 @@ public class ScorerTest {
         p4Score = 17 + p4.getFavorTokens();
 
     }
-}
+}*/

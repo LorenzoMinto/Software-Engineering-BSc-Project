@@ -37,7 +37,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
         rule = new AdjacentColorPlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentColorPlacementRuleDecorator(new ColorPlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", 0, pattern);
+        windowPattern = new WindowPattern("", "",0, pattern);
         redDice = new Dice(DiceColors.RED);
         blueDice = new Dice(DiceColors.BLUE);
         windowPattern.putDiceOnCell(redDice, 1,1);

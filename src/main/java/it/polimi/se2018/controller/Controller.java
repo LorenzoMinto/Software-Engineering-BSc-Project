@@ -7,12 +7,9 @@ import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
-import static it.polimi.se2018.utils.message.VCMessage.types.*;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -106,6 +103,8 @@ public class Controller extends Observable {
 
     private final Properties properties;
 
+    private Timer timerForStartingGame;
+
     int movesCounter = 0;
 
 
@@ -147,7 +146,6 @@ public class Controller extends Observable {
         this.game.setCards(toolCards,publicObjectiveCards);
     }
 
-
     /**
      * Set as current state the one passed as method's argument
      *
@@ -158,64 +156,77 @@ public class Controller extends Observable {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-    private void assignWindowPatternToPlayer(WindowPattern wp, Player player){
-        game.assignWindowPatternToPlayer(wp, player);
+    private void assignWindowPatternToPlayer(WindowPattern wp, String playerID){
+        game.assignWindowPatternToPlayer(wp, playerID);
     }
 
     public CVMessage handleMove(VCMessage message) {
+
         VCMessage.types type = (VCMessage.types) message.getType();
         CVMessage returnMessage;
 
-        if (type == CHOOSE_WINDOW_PATTERN) {
-            Player player = message.getSendingPlayer();
-            WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
-            assignWindowPatternToPlayer(wp,player);
-            returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
-        } else {
-            if (game.isCurrentPlayer(message.getSendingPlayer())) {
-                switch (type) {
-                    case DRAFT_DICE_FROM_DRAFTPOOL:
-                        Dice dice = (Dice) message.getParam("dice");
-                        returnMessage = controllerState.draftDiceFromDraftPool(dice);
-                        break;
-                    case PLACE_DICE:
-                        int row = (int) message.getParam("row");
-                        int col = (int) message.getParam("col");
-                        returnMessage = controllerState.placeDice(row, col);
-                        break;
-                    case USE_TOOLCARD:
-                        ToolCard toolCard = (ToolCard) message.getParam("toolcard");
-                        returnMessage = controllerState.useToolCard(toolCard);
-                        break;
-                    case MOVE_DICE:
-                        int rowFrom = (int) message.getParam("rowFrom");
-                        int colFrom = (int) message.getParam("colFrom");
-                        int rowTo = (int) message.getParam("rowTo");
-                        int colTo = (int) message.getParam("colTo");
-                        returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
-                        break;
-                    case CHOOSE_DICE_VALUE:
-                        int value = (int) message.getParam("value");
-                        returnMessage = controllerState.chooseDiceValue(value);
-                        break;
-                    case INCREMENT_DICE:
-                        returnMessage = controllerState.incrementDice();
-                        break;
-                    case DECREMENT_DICE:
-                        returnMessage = controllerState.decrementDice();
-                        break;
-                    case CHOOSE_DICE_FROM_TRACK:
-                        int value2 = (int) message.getParam("value");
-                        returnMessage = controllerState.chooseDiceValue(value2);
-                        break;
-                    default:
-                        returnMessage = new CVMessage(CVMessage.types.ERROR_MESSAGE,"UnrecognizedMove");
-                        break;
+        switch(game.getStatus()){
+            case WAITING_FOR_PATTERNS_CHOICE:
+                String playerID = message.getSendingPlayerID();
+                WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
+                assignWindowPatternToPlayer(wp,playerID);
+                returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                //TODO: a causa della chiamata diretta di startGame, l'ultimo che setta il wp potrebbe vedere prima l'inizio del gioco e poi l'acknowledge
+                if(checkIfAllPlayersHaveChoosenWPattern()){
+                    this.timerForStartingGame.cancel();
+                    startGame();
                 }
-            } else {
-                returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
-            }
+                break;
+            case PLAYING:
+                if (game.isCurrentPlayer(message.getSendingPlayerID())) {
+                    switch (type) {
+                        case DRAFT_DICE_FROM_DRAFTPOOL:
+                            Dice dice = (Dice) message.getParam("dice");
+                            returnMessage = controllerState.draftDiceFromDraftPool(dice);
+                            break;
+                        case PLACE_DICE:
+                            int row = (int) message.getParam("row");
+                            int col = (int) message.getParam("col");
+                            returnMessage = controllerState.placeDice(row, col);
+                            break;
+                        case USE_TOOLCARD:
+                            ToolCard toolCard = (ToolCard) message.getParam("toolcard");
+                            returnMessage = controllerState.useToolCard(toolCard);
+                            break;
+                        case MOVE_DICE:
+                            int rowFrom = (int) message.getParam("rowFrom");
+                            int colFrom = (int) message.getParam("colFrom");
+                            int rowTo = (int) message.getParam("rowTo");
+                            int colTo = (int) message.getParam("colTo");
+                            returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
+                            break;
+                        case CHOOSE_DICE_VALUE:
+                            int value = (int) message.getParam("value");
+                            returnMessage = controllerState.chooseDiceValue(value);
+                            break;
+                        case INCREMENT_DICE:
+                            returnMessage = controllerState.incrementDice();
+                            break;
+                        case DECREMENT_DICE:
+                            returnMessage = controllerState.decrementDice();
+                            break;
+                        case CHOOSE_DICE_FROM_TRACK:
+                            int value2 = (int) message.getParam("value");
+                            returnMessage = controllerState.chooseDiceValue(value2);
+                            break;
+                        default:
+                            returnMessage = new CVMessage(CVMessage.types.ERROR_MESSAGE,"UnrecognizedMove");
+                            break;
+                    }
+                } else {
+                    returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
+                }
+                break;
+            default:
+                returnMessage = new CVMessage(ERROR_MESSAGE);
+                break;
         }
+
         return returnMessage;
     }
 
@@ -275,12 +286,41 @@ public class Controller extends Observable {
      * Starts the game
      * @return true if game was started successfully, false if not
      */
-    protected boolean startGame(){
-        if( game.getPlayers().size()>=2 && game.getStatus()==GameStatus.WAITING_FOR_PLAYERS ){
-            game.startGame( getDicesForNewRound() );
-            return true;
+    public void launchGame(Set<String> nicknames){
+
+        Player player;
+        for(String nickname : nicknames){
+            player = new Player(nickname,objectiveCardManager.getPrivateObjectiveCard());
+
+            game.addPlayer(player);
+
+            Set<WindowPattern> patterns = windowPatternManager.getCouplesOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put("patterns",patterns);
+            notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));
         }
-        return false;
+
+        game.setStatusAsWaitingForPatternsChoice();
+
+        this.timerForStartingGame = new Timer();
+        this.timerForStartingGame.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                startGame();
+            }
+        },getConfigProperty("timeoutChoosingPatterns")*1000);
+
+    }
+
+    private boolean checkIfAllPlayersHaveChoosenWPattern(){
+        for(Player p : game.getPlayers()){
+            if(p.getWindowPattern()==null){ return false; }
+        }
+        return true;
+    }
+
+    private void startGame(){
+        game.startGame( getDicesForNewRound() );
     }
 
     /**
@@ -327,7 +367,7 @@ public class Controller extends Observable {
     /**
      * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
-    protected void endGame(){
+    private void endGame(){
 
         Map<Player, Integer> rankings = getRankingsAndScores();
 
@@ -341,7 +381,7 @@ public class Controller extends Observable {
      * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
-    protected Map<Player,Integer> getRankingsAndScores() {
+    private Map<Player,Integer> getRankingsAndScores() {
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
 
@@ -351,11 +391,10 @@ public class Controller extends Observable {
     /**
      * Sends scores and rankings to players profiles ({@link User})
      * in order to increase statistics of wins and played games.
-     *
-     * @param rankings
      */
     private void registerRankingsOnUsersProfiles(Map<Player, Integer> rankings){
-
+        /*
+        TODO: valutare a seconda di cosa si deciderà di fare con User
         for(Player player : game.getPlayers()){
 
             User user = player.getUser();
@@ -367,6 +406,7 @@ public class Controller extends Observable {
                 user.increaseGamesWon();
             }
         }
+        */
     }
 
     /**
@@ -374,7 +414,7 @@ public class Controller extends Observable {
      *
      * @return the default {@link PlacementRule}
      */
-    protected PlacementRule getDefaultPlacementRule(){
+    private PlacementRule getDefaultPlacementRule(){
 
         return new AdjacentValuePlacementRuleDecorator(
                 new AdjacentDicePlacementRuleDecorator(
@@ -382,34 +422,6 @@ public class Controller extends Observable {
                                 new ColorPlacementRuleDecorator(
                                         new ValuePlacementRuleDecorator(
                                                 new EmptyPlacementRule())))));
-
-    }
-
-    /**
-     * Checks if the specified {@link User} with speficied nickname
-     * can join the current {@link Game}.
-     *
-     * @param user the {@link User} asking to join the {@link Game}
-     * @param nickname the nickname that the {@link User} whould use in this {@link Game}
-     * @return if the specified {@link User} with speficied nickname
-     * can join the current {@link Game}. True means "can join".
-     * @throws AcceptingPlayerException if the user was already added or no more players
-     * can be accepted in this game (maximum number of players reached)
-     */
-    //TODO: chi lo chiama deve verificare se è raggiunto il massimo numero di giocatori e fare startGame()
-    public Player acceptPlayer(User user, String nickname) throws AcceptingPlayerException {
-
-        if( game.getPlayers().size() < this.getConfigProperty("maxNumberOfPlayers") ){
-            PrivateObjectiveCard card = objectiveCardManager.getPrivateObjectiveCard();
-            Player player = new Player(user,nickname,card);
-
-            if( game.addPlayer(player) ){ return player; }
-
-            throw new AcceptingPlayerException("Player was already added");
-
-        }
-
-        throw new AcceptingPlayerException("No more players can be accepted");
 
     }
 

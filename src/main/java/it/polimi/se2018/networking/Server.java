@@ -1,10 +1,7 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.controller.AcceptingPlayerException;
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
-import it.polimi.se2018.model.Player;
-import it.polimi.se2018.model.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.*;
@@ -15,6 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server implements Observer, ReceiverInterface, SenderInterface{
+
+    private static final String MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
+
+    private Timer timerForLaunchingGame;
 
     /**
      * Logger class
@@ -31,14 +32,23 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private ReceiverInterface proxyServer;
 
+    private HashMap<String,ReceiverInterface> waitingList = new HashMap<>();
+
     /**
      * List of gateways for communicating with clients
      */
     private final List<ReceiverInterface> gateways = new ArrayList<>();
 
-    private HashMap<Player,ReceiverInterface> playerToGatewayMap = new HashMap<>();
+    private HashMap<String,ReceiverInterface> playerIDToGatewayMap = new HashMap<>();
 
-    private HashMap<ReceiverInterface, Player> gatewayToPlayerMap = new HashMap<>();
+    private HashMap<ReceiverInterface, String> gatewayToPlayerIDMap = new HashMap<>();
+
+    private enum ServerState {
+        WAITING_ROOM,
+        FORWARDING_TO_CONTROLLER
+    }
+
+    private ServerState serverState = ServerState.WAITING_ROOM;
 
     /**
      * Controller created by the server
@@ -116,78 +126,122 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         //Creates the game
         Game game = new Game(
                 Integer.parseInt( properties.getProperty("numberOfRounds") ),
-                Integer.parseInt( properties.getProperty("maxNumberOfPlayers") )
+                Integer.parseInt( properties.getProperty(MAX_NUMBER_OF_PLAYERS) )
         );
         game.register(this);
 
         return new Controller(game,properties);
     }
 
-    /**
-     * Add the specified gateway from the list of gateways
-     * @param gateway the gateway to add
-     */
-    private void addGateway(ReceiverInterface gateway) {
-        gateways.add(gateway);
-    }
-
-    /**
-     * Remove the specified gateway from the list of gateways
-     * @param gateway the gateway to remove
-     */
-    private void removeGateway(ReceiverInterface gateway) {
-        gateways.remove(gateway);
-    }
-
-    private void addNewPlayer(ReceiverInterface playerClient, Player player){
-        addGateway(playerClient);
-
-        playerToGatewayMap.put(player,playerClient);
-        gatewayToPlayerMap.put(playerClient, player);
-    }
-
     @Override
-    public void receiveMessage(Message m, ReceiverInterface sender) throws RemoteException {
-        //Handle the message
-        Message returnMessage = this.handleMessage(m,sender);
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
+
+        Message returnMessage;
+
+        if(message instanceof WaitingRoomMessage){
+
+            returnMessage = handleWaitingRoomMessage((WaitingRoomMessage)message,sender);
+
+        } else if(message instanceof VCMessage) {
+
+            //Add the Player reference to the message in order to let controller manage the move correctly
+            VCMessage vcMessage = new VCMessage((VCMessage.types)message.getType(), message.getAllParams(), gatewayToPlayerIDMap.get(sender));
+            //Send message to controller
+            returnMessage = controller.handleMove(vcMessage);
+
+        } else {
+            returnMessage = new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+        }
 
         //Send answer message back to the sender
         sender.receiveMessage(returnMessage, this.proxyServer);
-
-        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+m+". Answered with: "+returnMessage+"."); }
+        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
     }
 
-    private ViewBoundMessage handleMessage(Message message, ReceiverInterface sender){
-        //Check if the message received is correctly formatted
-        VCMessage.types type;
-        try {
-            type = (VCMessage.types) message.getType();
-        } catch (ClassCastException e){
-            return new NetworkMessage(NetworkMessage.types.BAD_FORMATTED);
+    private Message handleWaitingRoomMessage(WaitingRoomMessage message, ReceiverInterface client){
+        if(serverState != ServerState.WAITING_ROOM){
+            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED);
         }
 
-        ViewBoundMessage returnMessage;
+        String nickname = (String) message.getParam("nickname");
 
-        if(isJoinRequest(message)){
+        switch (message.getType()){
+            case JOIN:
+                return addInWaitingRoom(nickname,client);
+            case LEAVE:
+                return removeFromWaitingRoom(nickname,client);
+            default:
+                return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+        }
+    }
 
-            Player player;
-            User user = (User) message.getParam("user");
-            String nickname = (String) message.getParam("nickname");
-            try{
-                player = controller.acceptPlayer(user,nickname); //can throw exception
-                addNewPlayer(sender,player);
-                returnMessage = new NetworkMessage(NetworkMessage.types.CONNECTED);
-            } catch(AcceptingPlayerException e){
-                returnMessage = new NetworkMessage(NetworkMessage.types.REFUSED);
-            }
+    private Message addInWaitingRoom(String nickname, ReceiverInterface client){
+        Message message;
+
+        if(waitingList.size() < controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
+            waitingList.putIfAbsent(nickname,client);
+            message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
         } else {
-            //Add the Player reference to the message in order to let controller manage the move correctly
-            VCMessage m = new VCMessage(type, message.getAllParams(), gatewayToPlayerMap.get(sender));
-            //Send message to controller
-            returnMessage = controller.handleMove(m);
+            //Should never happen because server status should change to FORWARDING_TO_CONTROLLER
+            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED);
         }
 
-        return returnMessage;
+        if(waitingList.size() == controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
+            launchGame();
+        }
+
+        if(waitingList.size() >= controller.getConfigProperty("minNumberOfPlayers")){
+            startTimerForLaunchingGame();
+        }
+
+        return message;
+    }
+
+    private Message removeFromWaitingRoom(String nickname, ReceiverInterface client){
+        if( waitingList.get(nickname) == client ){
+            waitingList.remove(nickname);
+
+            if(waitingList.size() < controller.getConfigProperty("minNumberOfPlayers")){
+                cancelTimerForLaunchingGame();
+            }
+
+            return new WaitingRoomMessage(WaitingRoomMessage.types.REMOVED);
+        } else {
+            return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+        }
+    }
+
+    private void launchGame(){
+        //Forward future messages to controller and prevent that waitinglist is changed
+        this.serverState = ServerState.FORWARDING_TO_CONTROLLER;
+        //Add ReceiverInterfaces of players to gateways that will manage the bi-directional communication during game
+        gateways.addAll(waitingList.values());
+        //Map players id with gateway and vice versa
+        playerIDToGatewayMap.putAll(waitingList);
+        for(Map.Entry<String, ReceiverInterface> entry : playerIDToGatewayMap.entrySet()){
+            gatewayToPlayerIDMap.put(entry.getValue(), entry.getKey());
+        }
+        //Send players to controller and let it actually starting the game
+        controller.launchGame(waitingList.keySet());
+    }
+
+    private void startTimerForLaunchingGame(){
+        cancelTimerForLaunchingGame();
+
+        this.timerForLaunchingGame = new Timer();
+        this.timerForLaunchingGame.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                launchGame();
+            }
+        },controller.getConfigProperty("timeoutLaunchingGame")*1000);
+    }
+
+    private void cancelTimerForLaunchingGame(){
+        if(this.timerForLaunchingGame == null){
+            return;
+        }
+        this.timerForLaunchingGame.cancel();
     }
 
     @Override
@@ -201,7 +255,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             g = gateways;
         } else {
             g = new ArrayList<>();
-            g.add(playerToGatewayMap.get(message.getRecievingPlayer()));
+            g.add(playerIDToGatewayMap.get(message.getReceivingPlayerID()));
         }
 
         for(ReceiverInterface o : g){
@@ -229,66 +283,40 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
-
     /**
-     * This method returns true if the message contains something that
-     * enables who sent it to be added to the clients of this server
-     * @param m the message received
-     * @return true if the message contains something that enables who sent it to be added to the clients of this server
+     * Metodo per inviare messaggi ai client dalla console del server
      */
-    private boolean canJoin(Message m){
-        return m.equals("federico");
-    } //TODO:inserire quì il criterio corretto
-
-
-    /**
-     * Returns true if the message is a join request
-     * @param m the message received
-     * @return True if the message is a join request
-     */
-    private boolean isJoinRequest(Message m){
-        return m.equals("federico"); //TODO:inserire quì il criterio corretto
-    }
-
-
-
-
-    //Just for testing
-
     private void listenForCommandsFromConsole(){
-        //Codice per inviare messaggio da riga di comando
         LOGGER.info("Start listening for messages...");
 
+        /*
         Scanner scanner = new Scanner(System.in);
         while(true){
             System.out.print("Inserisci messaggio: ");
             String text = scanner.nextLine();
 
-            //Just for testing comunication
-
-            //TODO: implementa quì metodi di servizio per debug
-            /*try {
-                sendMessage(text);
+            try {
+                sendMessage(...);
             } catch (RemoteException e) {
                 LOGGER.severe("Exception while sending a message from the Server console");
             }
-            */
 
             if(text.equals("exit")){ break; }
         }
-        //Fine codice per inviare messaggio da riga di comando
+        */
     }
 
     @Override
     public boolean update(Message m) {
+        boolean succeeded;
         try {
             sendMessage(m);
+            succeeded = true;
         } catch (RemoteException e) {
             LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
-            return false;
+            succeeded = false;
         }
-
-        return true;
+        return succeeded;
     }
 
     void fail(String m){

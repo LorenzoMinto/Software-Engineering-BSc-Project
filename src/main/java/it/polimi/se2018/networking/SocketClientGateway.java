@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 
 import java.io.*;
@@ -51,8 +52,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
             while ( (socketMessage = in.readLine()) != null ){
 
                 //TODO: implementare deserializzazione dell'oggetto
-                //Message message = ...
-
+                Message message = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE); //placeholder da sostituire
                 receiveMessage(message,new SocketServer(echoSocket.getOutputStream()));
             }
 

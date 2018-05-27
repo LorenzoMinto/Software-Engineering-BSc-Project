@@ -17,7 +17,7 @@ public class Player implements Serializable {
     /**
      * Nickname of the player.
      */
-    private String nickname;
+    private final String nickname;
 
     /**
      * WindowPattern chosen by the player.
@@ -25,30 +25,21 @@ public class Player implements Serializable {
     private WindowPattern windowPattern;
 
     /**
-     * A player is just the relationship between a user and the game
-     * the user is playing. This is the user.
-     */
-    private User user;  //TODO: verificare se ha ancora senso la classe user o se va rimossa
-
-    /**
      * Private Objective Card assigned to the player.
      */
     private PrivateObjectiveCard privateObjectiveCard;
 
     /**
-     * Constructor: creates a new Player based on given user, nickname and private objective card.
+     * Constructor: creates a new Player based on given nickname and private objective card.
      *
-     * @param user the user playing in this game
      * @param nickname the nickname the user choose before entering the game
      * @param card the private objective card assigned randomly to the player
      */
-    public Player(User user, String nickname, PrivateObjectiveCard card) {
+    public Player(String nickname, PrivateObjectiveCard card) {
 
         //Checks for bad params
-        if(user==null){ throw new IllegalArgumentException("Asked to create a player giving null user"); }
         if(card==null){ throw new IllegalArgumentException("Asked to create a player giving null card"); }
 
-        this.user = user;
         this.nickname = nickname;
         this.windowPattern = null;
         this.favorTokens = 0;
@@ -69,7 +60,7 @@ public class Player implements Serializable {
      *
      * @return the player's nickname
      */
-    public String getNickname() {
+    public String getID() {
         return nickname;
     }
 
@@ -130,15 +121,6 @@ public class Player implements Serializable {
     }
 
     /**
-     * Returns the user.
-     *
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
      * Indicates whether some other Player is "equal to" this one.
      *
      * @param o some other Player
@@ -156,7 +138,7 @@ public class Player implements Serializable {
 
         Player p = (Player) o;
 
-        return this.nickname.equals(p.getNickname());
+        return this.getID().equals(p.getID());
     }
 
     /**
@@ -167,6 +149,6 @@ public class Player implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(favorTokens,nickname,windowPattern,user,privateObjectiveCard);
+        return Objects.hash(nickname,windowPattern,privateObjectiveCard,favorTokens);
     }
 }
