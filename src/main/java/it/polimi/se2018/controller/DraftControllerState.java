@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -26,7 +25,7 @@ public class DraftControllerState extends ControllerState {
     }
 
     @Override
-    public Message draftDiceFromDraftPool(Dice dice) {
+    public CVMessage draftDiceFromDraftPool(Dice dice) {
         Game game = controller.game;
         Round currentRound = game.getCurrentRound();
 
@@ -43,7 +42,7 @@ public class DraftControllerState extends ControllerState {
     }
 
     @Override
-    public Message placeDice(int row, int col) {
+    public CVMessage placeDice(int row, int col) {
         return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
     }
 }

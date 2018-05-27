@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
@@ -25,7 +24,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
     }
 
     @Override
-    public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
+    public CVMessage chooseDiceFromTrack(Dice dice, int slotNumber) {
 
         try {
             controller.game.getTrack().takeDice(dice, slotNumber);

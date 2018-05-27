@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -24,7 +23,7 @@ public class MoveControllerState extends ControllerState {
     }
 
     @Override
-    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo) {
+    public CVMessage moveDice(int rowFrom, int colFrom, int rowTo, int colTo) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();

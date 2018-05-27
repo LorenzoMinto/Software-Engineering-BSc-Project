@@ -3,7 +3,6 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
@@ -54,62 +53,62 @@ public abstract class ControllerState {
 
     /**
      * Drafts a specified dice from the current draft pool and sets it as the drafted dice on the current turn.
-     *  @param dice the dice to be drafted.
+     * @param dice the dice to be drafted.
      *
      */
-    public Message draftDiceFromDraftPool(Dice dice){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage draftDiceFromDraftPool(Dice dice){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Places the drafted dice of the current turn on the specified cell (row and column).
-     *  @param row the row index of the cell where the dice is to be placed.
+     * @param row the row index of the cell where the dice is to be placed.
      * @param col the column index of the cell where the dice is to be placed.
      */
-    public Message placeDice(int row, int col){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage placeDice(int row, int col){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
      * passed toolCard is set as activeToolCard in the Controller.
      * @param toolcard the toolcard to be activated.
      */
-    public Message useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.
-     *  @param dice the chosen dice.
+     * @param dice the chosen dice.
      * @param slotNumber the number of the TrackSlot where the dice is.
      */
-    public Message chooseDiceFromTrack(Dice dice, int slotNumber){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage chooseDiceFromTrack(Dice dice, int slotNumber){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Moves, if legal, the dice found at the cell designated by (rowFrom, colFrom) to the cell designated by (rowTo,
      * colTo).
-     *  @param rowFrom the row index of the cell FROM which the dice is to be moved.
+     * @param rowFrom the row index of the cell FROM which the dice is to be moved.
      * @param colFrom the column index of the cell FROM which the dice is to be moved.
      * @param rowTo the row index of the cell TO which the dice is to be moved.
      * @param colTo the column index of the cell TO which the dice is to be moved.
      */
-    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
      * Increments the value of the drafted dice found in the current turn.
      *
      */
-    public Message incrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage incrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
      * Decrements the value of the drafted dice found in the current turn.
      *
      */
-    public Message decrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage decrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Sets the value of the drafted dice found in the current turn to the specified value.
-     *  @param value the chosen value for the drafted dice.
+     * @param value the chosen value for the drafted dice.
      *
      */
-    public Message chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
