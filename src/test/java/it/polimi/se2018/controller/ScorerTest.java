@@ -14,12 +14,13 @@ import static org.junit.Assert.*;
 /**
  * @author Jacopo Pio Gargano
  */
-/*
 public class ScorerTest {
 
     private static Scorer scorer;
 
     private static WindowPatternManager windowPatternManager;
+
+    private static List<WindowPattern> windowPatterns;
 
     private static WindowPattern genericWP;
 
@@ -127,7 +128,9 @@ public class ScorerTest {
         }
 
         try {
-            genericWP = windowPatternManager.getCouplesOfPatterns(1).get(0);
+            windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+            genericWP = windowPatterns.get(0);
+
 
             wp1 = genericWP.copy();
 
@@ -452,10 +455,10 @@ public class ScorerTest {
 
     @Before
     public void initializePlayersWithPrivateObjectiveCards(){
-        p1 = new Player(user, "p1", card1);
-        p2 = new Player(user, "p2", card2);
-        p3 = new Player(user, "p3", card3);
-        p4 = new Player(user, "p4", card4);
+        p1 = new Player("p1", card1);
+        p2 = new Player("p2", card2);
+        p3 = new Player("p3", card3);
+        p4 = new Player("p4", card4);
     }
 
     @BeforeClass
@@ -574,10 +577,8 @@ public class ScorerTest {
 
     @Test
     public void testGetWinnerOfNullRankings(){
-        rankings = null;
-
         try {
-            winner = scorer.getWinner(rankings);
+            winner = scorer.getWinner(null);
             fail();
         }catch (NullPointerException e){}
     }
@@ -783,4 +784,4 @@ public class ScorerTest {
         p4Score = 17 + p4.getFavorTokens();
 
     }
-}*/
+}

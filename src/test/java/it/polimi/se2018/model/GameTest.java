@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
+import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
@@ -98,6 +99,17 @@ public class GameTest {
         game = new Game(numberOfRounds, maxNumberOfPlayers);
     }
 
+    private void runAllRounds() {
+        game.startGame(dices);
+
+        for(int i=1; i <= numberOfRounds; i++){
+            try {
+                game.nextRound(dices);
+            } catch (IllegalArgumentException | BadBehaviourRuntimeException e){
+                fail();
+            } catch (NoMoreRoundsAvailableException e){}
+        }
+    }
 
     @Test
     public void testConstructor(){
@@ -205,13 +217,8 @@ public class GameTest {
     public void testSetRankingsToNull(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
-        game.startGame(dices);
 
-        for(int i=1; i <= numberOfRounds; i++){
-            try {
-                game.nextRound(dices);
-            } catch (NoMoreRoundsAvailableException e){}
-        }
+        runAllRounds();
 
         try{
             game.setRankings(null);
@@ -223,17 +230,12 @@ public class GameTest {
     public void testSetRankings(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
-        game.startGame(dices);
-
-        for(int i=1; i <= numberOfRounds; i++){
-            try {
-                game.nextRound(dices);
-            } catch (NoMoreRoundsAvailableException e) {}
-        }
+        runAllRounds();
 
         game.setRankings(rankings);
         assertEquals(rankings, game.getRankings());
     }
+
 
     @Test
     public void testUseToolCard(){
@@ -400,9 +402,7 @@ public class GameTest {
         try {
             game.nextRound(null);
             fail();
-        } catch (NoMoreRoundsAvailableException e) {
-            fail();
-        } catch (EmptyListException e){
+        } catch (NoMoreRoundsAvailableException | EmptyListException e) {
             fail();
         } catch (IllegalArgumentException e){}
     }
@@ -426,9 +426,7 @@ public class GameTest {
         try {
             game.nextRound(dices);
             fail();
-        } catch (IllegalArgumentException e) {
-            fail();
-        }catch (NoMoreRoundsAvailableException e){
+        } catch (IllegalArgumentException | NoMoreRoundsAvailableException e) {
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }

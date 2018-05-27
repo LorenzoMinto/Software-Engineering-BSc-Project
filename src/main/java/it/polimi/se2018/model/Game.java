@@ -188,10 +188,12 @@ public class Game extends Observable implements Observer{
         this.rankings = rankings;
 
         //NOTIFYING
+        List<Player> rankingsAsList = new ArrayList<>(rankings.keySet());
+
         Map <String, Object> messageAttributes = new HashMap<>();
 
         messageAttributes.put("rankings", rankings);
-        messageAttributes.put("winner", rankings.get(0));
+        messageAttributes.put("winner", rankingsAsList.get(0));
 
         notify(new MVMessage(MVMessage.types.RANKINGS, messageAttributes));
 
@@ -225,7 +227,7 @@ public class Game extends Observable implements Observer{
     /**
      * Returns if the given player is the current playing one.
      *
-     * @param player the player to be checked
+     * @param playerID the playerID to be checked
      * @return if the given player is the current playing one
      */
     public boolean isCurrentPlayer(String playerID) {
@@ -285,7 +287,6 @@ public class Game extends Observable implements Observer{
     /**
      * Starts the game and creates the first round with the given dices
      * @param dices list of dices to be used for the first round
-     * @return true if game was created, false if not
      */
     public void startGame(List<Dice> dices){
         if(dices == null){ throw new IllegalArgumentException("ERROR: Can't start game with null dices.");}
@@ -333,9 +334,7 @@ public class Game extends Observable implements Observer{
 
         //get the remaining dices in draftpool and put them in the track
         if(currentRound != null && currentRound.getNumber() != 0) {
-            for (Dice dice : currentRound.getDraftPool().getDices()) {
-                this.track.putDice(dice, currentRound.getNumber());
-            }
+            this.track.processDices(currentRound.getDraftPool().getDices());
         }
 
         if(nextRoundNumber > numberOfRounds - 1){

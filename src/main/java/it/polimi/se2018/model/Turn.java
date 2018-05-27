@@ -194,7 +194,7 @@ public class Turn {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(String playerID){
-        if(player == null){throw new IllegalArgumentException("ERROR: Can't check if null player is current player");}
+        if(playerID == null){throw new IllegalArgumentException("ERROR: Can't check if null player is current player");}
         return ( this.player.getID().equals(playerID) );
     }
 }
