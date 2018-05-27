@@ -1,12 +1,12 @@
 package it.polimi.se2018.controller;
-/*
+
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.VCMessage;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 import static org.junit.Assert.*;
@@ -19,22 +19,29 @@ public class ChangeDiceValueControllerStateTest {
     public void setUp() throws Exception {
         Game game = new Game(4,4);
         Properties gprop = new Properties();
+        gprop.setProperty("numberOfRounds","10");
         gprop.setProperty("numberOfDicesPerColor","18");
         gprop.setProperty("numberOfToolCards","12");
         gprop.setProperty("numberOfPublicObjectiveCards","2");
         gprop.setProperty("maxNumberOfPlayers","4");
+        gprop.setProperty("minNumberOfPlayers","2");
+        gprop.setProperty("timeoutLaunchingGame","30");
+        gprop.setProperty("timeoutChoosingPatterns","30");
+        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
+
         controller = new Controller(game, gprop);
 
-        User user1 = new User(1, "johnniffer");
-        User user2 = new User(2, "rubens");
-        controller.acceptPlayer(user1, "a");
-        controller.acceptPlayer(user2, "b");
+        Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getPatterns(1).get(0);
+        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+
+        controller.launchGame(nicknames);
 
         for (Player p : controller.game.getPlayers()) {
-            game.assignWindowPatternToPlayer(wp, p);
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("windowPattern", wp);
+            controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
         }
 
         prop = new Properties();
@@ -43,8 +50,6 @@ public class ChangeDiceValueControllerStateTest {
         prop.put("neededTokens", "1");
         prop.put("tokensUsageMultiplier", "2");
         prop.put("imageURL", "imageURL");
-
-        controller.startGame();
 
         prop.put("id", "PinzaSgrossatrice");
         ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
@@ -124,4 +129,4 @@ public class ChangeDiceValueControllerStateTest {
         assertEquals(value, currentTurn.getDraftedDice().getValue());
         assertEquals(ERROR_MESSAGE, m.getType());
     }
-}*/
+}

@@ -291,7 +291,7 @@ public class Game extends Observable implements Observer{
     public void startGame(List<Dice> dices){
         if(dices == null){ throw new IllegalArgumentException("ERROR: Can't start game with null dices.");}
         if(dices.isEmpty()){ throw new EmptyListException("Can't start game with no dices.");}
-        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("ERROR: Can't start game if not waiting for players.");}
+        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException("ERROR: Can't start game if not waiting for players.");}
 
         this.status = GameStatus.PLAYING;
 

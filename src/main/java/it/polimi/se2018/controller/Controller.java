@@ -167,16 +167,22 @@ public class Controller extends Observable {
 
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
-                String playerID = message.getSendingPlayerID();
-                WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
-                assignWindowPatternToPlayer(wp,playerID);
-                returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
-                //TODO: a causa della chiamata diretta di startGame, l'ultimo che setta il wp potrebbe vedere prima l'inizio del gioco e poi l'acknowledge
-                if(checkIfAllPlayersHaveChoosenWPattern()){
-                    this.timerForStartingGame.cancel();
-                    startGame();
+                if(type==VCMessage.types.CHOOSE_WINDOW_PATTERN){
+                    String playerID = message.getSendingPlayerID();
+                    WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
+                    assignWindowPatternToPlayer(wp,playerID);
+                    returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                    //TODO: a causa della chiamata diretta di startGame, l'ultimo che setta il wp potrebbe vedere prima l'inizio del gioco e poi l'acknowledge
+                    if(checkIfAllPlayersHaveChoosenWPattern()){
+                        this.timerForStartingGame.cancel();
+                        startGame();
+                    }
+                    break;
+                } else {
+                    returnMessage = new CVMessage(ERROR_MESSAGE);
                 }
                 break;
+
             case PLAYING:
                 if (game.isCurrentPlayer(message.getSendingPlayerID())) {
                     switch (type) {
