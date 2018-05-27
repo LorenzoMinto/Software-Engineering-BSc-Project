@@ -9,17 +9,17 @@ import static org.junit.Assert.assertTrue;
 
 public class NotAdjacentDicePlacementRuleDecoratorTest {
 
-    static Cell[][] pattern;
-    static Cell[][] pattern2;
+    private static Cell[][] pattern;
+    private static Cell[][] pattern2;
 
-    PlacementRule rule;
-    PlacementRule decoratedRule;
+    private PlacementRule rule;
+    private PlacementRule decoratedRule;
 
-    WindowPattern windowPattern;
-    WindowPattern windowPattern2;
+    private WindowPattern windowPattern;
+    private WindowPattern windowPattern2;
 
-    Dice threeDice;
-    Dice fourDice;
+    private Dice threeDice;
+    private Dice fourDice;
 
     @BeforeClass
     public static void setUpClass() throws Exception {

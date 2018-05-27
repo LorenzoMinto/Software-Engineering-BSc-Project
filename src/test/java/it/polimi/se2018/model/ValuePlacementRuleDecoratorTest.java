@@ -36,7 +36,7 @@ public class ValuePlacementRuleDecoratorTest {
         rule = new ValuePlacementRuleDecorator(emptyRule);
         decoratedRule = new ValuePlacementRuleDecorator(new AdjacentValuePlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", "",0, pattern);
+        windowPattern = new WindowPattern("","", 0, pattern);
         threeDice = new Dice(DiceColors.RED, 3);
         fourDice = new Dice(DiceColors.BLUE, 4);
     }

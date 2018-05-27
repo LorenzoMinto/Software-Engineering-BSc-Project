@@ -34,7 +34,7 @@ public class EmptyPlacementRuleTest {
     public void setUp() throws Exception {
         rule = new EmptyPlacementRule();
 
-        windowPattern = new WindowPattern("","", 0, pattern);
+        windowPattern = new WindowPattern("", "",0, pattern);
         redDice = new Dice(DiceColors.RED);
         blueDice = new Dice(DiceColors.BLUE);
     }
