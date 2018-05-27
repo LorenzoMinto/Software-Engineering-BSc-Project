@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Player;
 
 import java.util.Map;
 
-public class NetworkMessage extends Message {
+public class NetworkMessage extends ViewBoundMessage {
 
     public NetworkMessage(Enum type, Map<String, Object> params, Player player) {
         super(type, params, player);
@@ -23,6 +23,7 @@ public class NetworkMessage extends Message {
      */
     public enum types {
         CONNECTED,
-        REFUSED
+        REFUSED,
+        BAD_FORMATTED
     }
 }

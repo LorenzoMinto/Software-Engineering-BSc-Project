@@ -4,12 +4,9 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
-import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -161,43 +158,44 @@ public class Controller extends Observable {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-    public void handleMove(Message message) throws Exception {
-        //NOTE: should handleMove return a message or directly notify it itself
-        VCMessage m = (VCMessage) message;
-        VCMessage.types type = (VCMessage.types) m.getType();
-        Message returnMessage;
-        //TODO:returnMessage comes from ContrState, so it doesn't have a player. Options: Player in CS, CS returns string
+    private void assignWindowPatternToPlayer(WindowPattern wp, Player player){
+        game.assignWindowPatternToPlayer(wp, player);
+    }
+
+    public CVMessage handleMove(VCMessage message) {
+        VCMessage.types type = (VCMessage.types) message.getType();
+        CVMessage returnMessage;
+
         if (type == CHOOSE_WINDOW_PATTERN) {
-            Player player = m.getSendingPlayer();
-            WindowPattern wp = (WindowPattern) m.getParam("windowPattern");
-            game.assignWindowPatternToPlayer(wp, player);
-            //TODO: ^^^ should have an assign method in the controller in case other things needs to be done? Message
-            //needs to be assigned to returnMessage
+            Player player = message.getSendingPlayer();
+            WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
+            assignWindowPatternToPlayer(wp,player);
+            returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
         } else {
-            if (game.isCurrentPlayer(m.getSendingPlayer())) {
-                switch ((VCMessage.types)m.getType()) {
+            if (game.isCurrentPlayer(message.getSendingPlayer())) {
+                switch (type) {
                     case DRAFT_DICE_FROM_DRAFTPOOL:
-                        Dice dice = (Dice) m.getParam("dice");
+                        Dice dice = (Dice) message.getParam("dice");
                         returnMessage = controllerState.draftDiceFromDraftPool(dice);
                         break;
                     case PLACE_DICE:
-                        int row = (int) m.getParam("row");
-                        int col = (int) m.getParam("col");
+                        int row = (int) message.getParam("row");
+                        int col = (int) message.getParam("col");
                         returnMessage = controllerState.placeDice(row, col);
                         break;
                     case USE_TOOLCARD:
-                        ToolCard toolCard = (ToolCard) m.getParam("toolcard");
+                        ToolCard toolCard = (ToolCard) message.getParam("toolcard");
                         returnMessage = controllerState.useToolCard(toolCard);
                         break;
                     case MOVE_DICE:
-                        int rowFrom = (int) m.getParam("rowFrom");
-                        int colFrom = (int) m.getParam("colFrom");
-                        int rowTo = (int) m.getParam("rowTo");
-                        int colTo = (int) m.getParam("colTo");
+                        int rowFrom = (int) message.getParam("rowFrom");
+                        int colFrom = (int) message.getParam("colFrom");
+                        int rowTo = (int) message.getParam("rowTo");
+                        int colTo = (int) message.getParam("colTo");
                         returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
                         break;
                     case CHOOSE_DICE_VALUE:
-                        int value = (int) m.getParam("value");
+                        int value = (int) message.getParam("value");
                         returnMessage = controllerState.chooseDiceValue(value);
                         break;
                     case INCREMENT_DICE:
@@ -207,20 +205,18 @@ public class Controller extends Observable {
                         returnMessage = controllerState.decrementDice();
                         break;
                     case CHOOSE_DICE_FROM_TRACK:
-                        int value2 = (int) m.getParam("value");
+                        int value2 = (int) message.getParam("value");
                         returnMessage = controllerState.chooseDiceValue(value2);
                         break;
                     default:
-                        throw new Exception("Unrecognized event");
+                        returnMessage = new CVMessage(CVMessage.types.ERROR_MESSAGE,"UnrecognizedMove");
+                        break;
                 }
             } else {
-                HashMap<String, Object> params = new HashMap<>();
-                params.put("message", "Not your turn!");
-                notify(new CVMessage(ERROR_MESSAGE, params, m.getSendingPlayer()));
-                return;
+                returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
             }
-            notify(returnMessage);
         }
+        return returnMessage;
     }
 
     /**

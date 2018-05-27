@@ -6,15 +6,15 @@ import java.util.Map;
 
 public class VCMessage extends ControllerBoundMessage {
 
-    public VCMessage(Enum type, Map<String, Object> params, Player player) {
+    public VCMessage(types type, Map<String, Object> params, Player player) {
         super(type, params, player);
     }
 
-    public VCMessage(Enum type, Map<String, Object> params) {
+    public VCMessage(types type, Map<String, Object> params) {
         super(type, params);
     }
 
-    public VCMessage(Enum type) {
+    public VCMessage(types type) {
         super(type);
     }
 

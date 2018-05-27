@@ -5,14 +5,9 @@ import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.User;
-import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.ConfigImporter;
-import it.polimi.se2018.utils.NoConfigParamFoundException;
+import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.message.NetworkMessage;
-import it.polimi.se2018.utils.message.ViewBoundMessage;
+import it.polimi.se2018.utils.message.*;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -144,14 +139,34 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         gateways.remove(gateway);
     }
 
+    private void addNewPlayer(ReceiverInterface playerClient, Player player){
+        addGateway(playerClient);
+
+        playerToGatewayMap.put(player,playerClient);
+        gatewayToPlayerMap.put(playerClient, player);
+    }
+
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message m, ReceiverInterface sender) throws RemoteException {
+        //Handle the message
+        Message returnMessage = this.handleMessage(m,sender);
 
-        message = new CVMessage(message.getType(), message.getAllParams(), gatewayToPlayerMap.get(sender));
+        //Send answer message back to the sender
+        sender.receiveMessage(returnMessage, this.proxyServer);
 
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("Received message: "+message);
+        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+m+". Answered with: "+returnMessage+"."); }
+    }
+
+    private ViewBoundMessage handleMessage(Message message, ReceiverInterface sender){
+        //Check if the message received is correctly formatted
+        VCMessage.types type;
+        try {
+            type = (VCMessage.types) message.getType();
+        } catch (ClassCastException e){
+            return new NetworkMessage(NetworkMessage.types.BAD_FORMATTED);
         }
+
+        ViewBoundMessage returnMessage;
 
         if(isJoinRequest(message)){
 
@@ -159,21 +174,20 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             User user = (User) message.getParam("user");
             String nickname = (String) message.getParam("nickname");
             try{
-                player = controller.acceptPlayer(user,nickname);
-
-                addGateway(sender);
-
-                playerToGatewayMap.put(player,sender);
-                gatewayToPlayerMap.put(sender, player);
-
-                sender.receiveMessage(new NetworkMessage(NetworkMessage.types.CONNECTED), this.proxyServer);
-                LOGGER.info("A new client has been authorized");
-
+                player = controller.acceptPlayer(user,nickname); //can throw exception
+                addNewPlayer(sender,player);
+                returnMessage = new NetworkMessage(NetworkMessage.types.CONNECTED);
             } catch(AcceptingPlayerException e){
-                sender.receiveMessage(new NetworkMessage(NetworkMessage.types.REFUSED),this.proxyServer);
-                LOGGER.info("A new client asked to join but refused");
+                returnMessage = new NetworkMessage(NetworkMessage.types.REFUSED);
             }
+        } else {
+            //Add the Player reference to the message in order to let controller manage the move correctly
+            VCMessage m = new VCMessage(type, message.getAllParams(), gatewayToPlayerMap.get(sender));
+            //Send message to controller
+            returnMessage = controller.handleMove(m);
         }
+
+        return returnMessage;
     }
 
     @Override
@@ -194,16 +208,19 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             int attempts = 0;
             boolean correctlySent = false;
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
-            while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent){
+            while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent) {
                 attempts++;
-                try{
-                    o.receiveMessage(message,this.proxyServer);
-                } catch(Exception e){
-                    LOGGER.warning("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
+                try {
+                    o.receiveMessage(message, this.proxyServer);
+                } catch (Exception e) {
+                    LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
                 }
                 correctlySent = true;
-                LOGGER.info("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
+
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.info("Attempt #" + attempts + ": Successfully sent message to: " + o + ". The message was: " + message);
+                }
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
             if(!correctlySent){ somethingFailed=true; }

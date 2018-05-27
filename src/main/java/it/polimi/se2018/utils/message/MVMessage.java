@@ -6,15 +6,15 @@ import java.util.Map;
 
 public class MVMessage extends ViewBoundMessage {
 
-    public MVMessage(Enum type, Map<String, Object> params, Player player) {
+    public MVMessage(types type, Map<String, Object> params, Player player) {
         super(type, params, player);
     }
 
-    public MVMessage(Enum type, Map<String, Object> params) {
+    public MVMessage(types type, Map<String, Object> params) {
         super(type, params);
     }
 
-    public MVMessage(Enum type) {
+    public MVMessage(types type) {
         super(type);
     }
 
