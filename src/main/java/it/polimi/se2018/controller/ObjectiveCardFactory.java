@@ -61,7 +61,7 @@ public class ObjectiveCardFactory {
      * @return the specified {@link PublicObjectiveCard}
      */
     protected PublicObjectiveCard createPublicObjectiveCardCardByIndex(int index) {
-        Set<Object> items;
+        HashSet<Object> items;
         switch (index){
             case 0:
                 return createRowsColorPublicObjectiveCard();
@@ -132,7 +132,7 @@ public class ObjectiveCardFactory {
      *               dice per color specified in this list
      * @return a {@link SetPublicObjectiveCard} evaluating the specified dices' values
      */
-    private PublicObjectiveCard createValueSetPublicObjectiveCard(Set<Object> values){
+    private PublicObjectiveCard createValueSetPublicObjectiveCard(HashSet<Object> values){
         if(values == null){ throw new IllegalArgumentException("ERROR: Value set cannot be null."); }
 
         String title;

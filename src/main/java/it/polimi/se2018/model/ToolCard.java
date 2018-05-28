@@ -204,12 +204,11 @@ public class ToolCard implements Serializable{
 
         ToolCard c = (ToolCard) o;
 
-        return this.toolCardID.equals(c.getToolCardID());
+        return this.getToolCardID().equals(c.getToolCardID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title,description,tokensUsed,neededTokens,tokensUsageMultiplier,imageURL,
-                controllerStateRules,placementRule);
+        return Objects.hash(toolCardID);
     }
 }

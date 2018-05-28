@@ -33,11 +33,11 @@ public class SetPublicObjectiveCardTest {
     private static PublicObjectiveCard allValuesPublicObjectiveCard;
     private static PublicObjectiveCard allColorsPublicObjectiveCard;
 
-    private static Set<Object> oneTwoSet;
-    private static Set<Object> threeFourSet;
-    private static Set<Object> fiveSixSet;
-    private static Set<Object> allValuesSet;
-    private static Set<Object> allColorsSet;
+    private static HashSet<Object> oneTwoSet;
+    private static HashSet<Object> threeFourSet;
+    private static HashSet<Object> fiveSixSet;
+    private static HashSet<Object> allValuesSet;
+    private static HashSet<Object> allColorsSet;
 
     private static int oneTwoSetScore;
     private static int threeFourSetScore;

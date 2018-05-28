@@ -70,6 +70,7 @@ public class ControllerTest {
 
     @Test
     public void getConfigProperty() {
-        assertEquals(2,controller.getConfigProperty("maxNumberOfPlayers"));
+        assertEquals(4,controller.getConfigProperty("maxNumberOfPlayers"));
+        assertEquals(10,controller.getConfigProperty("numberOfRounds"));
     }
 }

@@ -149,6 +149,6 @@ public class Player implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(nickname,windowPattern,privateObjectiveCard,favorTokens);
+        return Objects.hash(getID());
     }
 }
