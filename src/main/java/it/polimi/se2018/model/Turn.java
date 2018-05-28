@@ -187,6 +187,10 @@ public class Turn {
         this.slotOfTrackChosenDice = -1;
     }
 
+    public void resetDraftedDice() {
+        this.draftedDice = null;
+    }
+
     /**
      * Check if the given player is the one playing this turn.
      *

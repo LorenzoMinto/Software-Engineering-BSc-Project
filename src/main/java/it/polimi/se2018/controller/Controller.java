@@ -364,7 +364,9 @@ public class Controller extends Observable {
     }
 
     private void startGame(){
-        game.startGame( getDicesForNewRound() );
+        game.startGame(getDicesForNewRound());
+        this.advanceGame();
+
         startPlayerMoveTimer();
     }
 
@@ -427,7 +429,10 @@ public class Controller extends Observable {
 
         //if player's window pattern is empty
         if(getCurrentPlayer().getWindowPattern().isEmpty()){
-            this.placementRule = new BorderPlacementRuleDecorator( getDefaultPlacementRule() );
+            this.placementRule = new BorderPlacementRuleDecorator(
+                    new ColorPlacementRuleDecorator(
+                            new ValuePlacementRuleDecorator(
+                                    new EmptyPlacementRule())));
         }
 
         //Proceed with turns / rounds
