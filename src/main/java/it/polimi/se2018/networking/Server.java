@@ -290,7 +290,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             public void run() {
                 launchGame();
             }
-        },controller.getConfigProperty("timeoutLaunchingGame")*1000);
+        },(long)(controller.getConfigProperty("timeoutLaunchingGame")*1000));
     }
 
     /**
