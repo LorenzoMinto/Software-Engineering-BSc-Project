@@ -26,6 +26,9 @@ public class CVMessage extends ViewBoundMessage {
     public enum types implements MessageType{
         ERROR_MESSAGE,
         ACKNOWLEDGMENT_MESSAGE,
+        INACTIVE_PLAYER,
+        BACK_TO_GAME, //NOTE: if view receive this message, must assume that permissions are "waiting for your turn"
+        INACTIVE, //NOTE: if view receive this message, must assume that permissions are "come back to game!"
         GIVE_WINDOW_PATTERNS
     }
 }

@@ -163,7 +163,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         );
         game.register(this);
 
-        return new Controller(game,properties);
+        return new Controller(game,properties,LOGGER);
     }
 
     @Override

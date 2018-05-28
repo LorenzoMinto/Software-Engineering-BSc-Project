@@ -48,7 +48,7 @@ public class Game extends Observable implements Observer{
     private Track track;
 
     /**
-     * List of players playing the game
+     * Group of players playing the game
      */
     private Set<Player> players;
 
@@ -204,24 +204,30 @@ public class Game extends Observable implements Observer{
      * If possible, adds the given player to the game.
      *
      * @param player player to add to the game
-     * @return if the action succeeded
      */
-    public boolean addPlayer(Player player){
+    public void addPlayer(Player player){
         if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("Can't add player if game is not waiting for players. Controller should not ask for it. Bad unhandleable behaviour.");}
+        if(players.size() >= maxNumberOfPlayers){ throw new BadBehaviourRuntimeException("Controller should not ask for it"); }
 
-        return  players.size() < maxNumberOfPlayers &&
-                players.add(player);
+        players.add(player);
     }
 
-    //TODO: commenta
-    public void assignWindowPatternToPlayer(WindowPattern windowPattern, String playerID){
+
+    /**
+     * Try to assign the given window pattern to the given player
+     * @param windowPattern the window pattern to assign to the player
+     * @param playerID the player id of the player that choose the given windowpattern
+     * @return true if windowpattern was succesfully assigned to the given player. false if not.
+     */
+    public boolean assignWindowPatternToPlayer(WindowPattern windowPattern, String playerID){
         for(Player p: players){
-            if(p.getID().equals(playerID)){
+            if(p.getID().equals(playerID) && p.getWindowPattern()==null){
                 windowPattern.register(this);
                 p.setWindowPattern(windowPattern);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -301,7 +307,7 @@ public class Game extends Observable implements Observer{
             throw new BadBehaviourRuntimeException();
         }
 
-        //NOTIFYING
+        //Send to all players all the needed data about game
         Map <String, Object> messageAttributes = new HashMap<>();
 
         messageAttributes.put("drawnToolCards", drawnToolCards);

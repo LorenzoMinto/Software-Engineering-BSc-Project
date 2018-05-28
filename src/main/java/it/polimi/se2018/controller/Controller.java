@@ -8,6 +8,7 @@ import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
@@ -34,6 +35,8 @@ import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
  * @see WindowPatternManager
  */
 public class Controller extends Observable {
+
+    private final Logger logger;
 
     /**
      * The controlled {@link Game}
@@ -101,11 +104,23 @@ public class Controller extends Observable {
      */
     private ToolCardsManager toolCardsManager;
 
+    /**
+     * Configuration properties loaded from config file
+     */
     private final Properties properties;
 
-    private Timer timerForStartingGame;
+    /**
+     * Timer used to start game after a while after it's asked to players to choose window pattern
+     */
+    private static final Timer TIMER = new Timer();
 
+    private TimerTask waitingForPatternsChoice;
+    private TimerTask waitingForPlayerMove;
+
+    //TODO: commentare
     int movesCounter = 0;
+
+    private HashSet<String> inactivePlayers = new HashSet<>();
 
 
     /**
@@ -116,8 +131,8 @@ public class Controller extends Observable {
      * @param game the game instance to be controlled
      * @param properties dictionary of parameters loaded from config file
      */
-    public Controller(Game game, Properties properties) {
-
+    public Controller(Game game, Properties properties, Logger logger) {
+        this.logger = logger;
         this.properties = properties;
 
         int numberOfDicesPerColor = Integer.parseInt( properties.getProperty("numberOfDicesPerColor") );
@@ -151,13 +166,20 @@ public class Controller extends Observable {
      *
      * @param controllerState state that must be setted to the controller
      */
-    public void setControllerState(ControllerState controllerState) {
+    protected void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-    private void assignWindowPatternToPlayer(WindowPattern wp, String playerID){
-        game.assignWindowPatternToPlayer(wp, playerID);
+    private CVMessage assignWindowPatternToPlayer(WindowPattern wp, String playerID){
+
+        boolean assigned = game.assignWindowPatternToPlayer(wp, playerID);
+
+        if( assigned ){
+            return new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+        } else {
+            return new CVMessage(CVMessage.types.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
+        }
     }
 
     public CVMessage handleMove(VCMessage message) {
@@ -170,13 +192,8 @@ public class Controller extends Observable {
                 if(type==VCMessage.types.CHOOSE_WINDOW_PATTERN){
                     String playerID = message.getSendingPlayerID();
                     WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
-                    assignWindowPatternToPlayer(wp,playerID);
-                    returnMessage = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
-                    //TODO: a causa della chiamata diretta di startGame, l'ultimo che setta il wp potrebbe vedere prima l'inizio del gioco e poi l'acknowledge
-                    if(checkIfAllPlayersHaveChoosenWPattern()){
-                        this.timerForStartingGame.cancel();
-                        startGame();
-                    }
+                    returnMessage = assignWindowPatternToPlayer(wp,playerID);
+                    checkIfAllPlayersHaveChosenWindowPattern(); //may call startGame()
                     break;
                 } else {
                     returnMessage = new CVMessage(ERROR_MESSAGE);
@@ -184,7 +201,12 @@ public class Controller extends Observable {
                 break;
 
             case PLAYING:
-                if (game.isCurrentPlayer(message.getSendingPlayerID())) {
+                if(type==VCMessage.types.BACK_GAMING){
+                    inactivePlayers.remove(message.getSendingPlayerID()); //this cause that the next turn of this player will not be skipped and player will be notified
+                    returnMessage = new CVMessage(CVMessage.types.BACK_TO_GAME);
+                    logger.info("Received BACK_GAMING message from: "+message.getSendingPlayerID());
+
+                } else if (game.isCurrentPlayer(message.getSendingPlayerID())) {
                     switch (type) {
                         case DRAFT_DICE_FROM_DRAFTPOOL:
                             Dice dice = (Dice) message.getParam("dice");
@@ -227,6 +249,13 @@ public class Controller extends Observable {
                 } else {
                     returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
                 }
+
+                //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
+                if(returnMessage.getType()==CVMessage.types.ACKNOWLEDGMENT_MESSAGE){
+                    logger.info(()->"Resetted PlayerMoveTimer due to move:"+type);
+                    resetPlayerMoveTimer();
+                }
+
                 break;
             default:
                 returnMessage = new CVMessage(ERROR_MESSAGE);
@@ -288,10 +317,6 @@ public class Controller extends Observable {
         return activeToolcard;
     }
 
-    /**
-     * Starts the game
-     * @return true if game was started successfully, false if not
-     */
     public void launchGame(Set<String> nicknames){
 
         Player player;
@@ -308,25 +333,74 @@ public class Controller extends Observable {
 
         game.setStatusAsWaitingForPatternsChoice();
 
-        this.timerForStartingGame = new Timer();
-        this.timerForStartingGame.schedule(new TimerTask() {
+        //Start the timer for patterns choice
+        this.waitingForPatternsChoice = new TimerTask() {
             @Override
             public void run() {
+                logger.info("waitingForPatternsChoice timer has expired. Calling startGame()...");
                 startGame();
             }
-        },getConfigProperty("timeoutChoosingPatterns")*1000);
-
+        };
+        TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));
     }
 
-    private boolean checkIfAllPlayersHaveChoosenWPattern(){
+    private void checkIfAllPlayersHaveChosenWindowPattern(){
+
         for(Player p : game.getPlayers()){
-            if(p.getWindowPattern()==null){ return false; }
+            if(p.getWindowPattern()==null){ return; }
         }
-        return true;
+
+        //Next lines are executed only if all window patterns are setted
+        this.waitingForPatternsChoice.cancel();
+        startGame();
     }
 
     private void startGame(){
         game.startGame( getDicesForNewRound() );
+        startPlayerMoveTimer();
+    }
+
+    private void resetPlayerMoveTimer(){
+        this.waitingForPlayerMove.cancel();
+        startPlayerMoveTimer();
+    }
+
+    private void startPlayerMoveTimer(){
+        this.waitingForPlayerMove = new TimerTask() {
+            @Override
+            public void run() {
+                logger.info("waitingForPlayerMove timer has expired. Calling advanceGameDueToPlayerInactivity()...");
+                advanceGameDueToPlayerInactivity();
+            }
+        };
+    }
+
+    private void advanceGameDueToPlayerInactivity() {
+
+        String currentPlayerID = getCurrentPlayer().getID();
+
+        //If statement prevents sending every turn the notification for all inactive players
+        if( inactivePlayers.add(currentPlayerID) ){
+            notify(new CVMessage(CVMessage.types.INACTIVE_PLAYER,currentPlayerID)); //notify everyone that the player is now inactive
+            notify(new CVMessage(CVMessage.types.INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
+        }
+
+        //Checks if due to players inactivity game can continuing or not
+        if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
+            endGame(inactivePlayers);
+        }
+
+        //NOTE: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player
+
+        advanceGame();
+    }
+
+    /**
+     * Method used just to increase code readability
+     * @return the current player
+     */
+    private Player getCurrentPlayer(){
+        return game.getCurrentRound().getCurrentTurn().getPlayer();
     }
 
     /**
@@ -338,10 +412,13 @@ public class Controller extends Observable {
     protected void advanceGame() {
 
         resetActiveToolCard();
+
+        //NOTE: aggiungere quì eventuale codice aggiuntivo di pulizia del turno precedente
+
         setControllerState(stateManager.getStartState());
 
         //if player's window pattern is empty
-        if(game.getCurrentRound().getCurrentTurn().getPlayer().getWindowPattern().isEmpty()){
+        if(getCurrentPlayer().getWindowPattern().isEmpty()){
             this.placementRule = new BorderPlacementRuleDecorator( getDefaultPlacementRule() );
         }
 
@@ -362,8 +439,44 @@ public class Controller extends Observable {
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }
-
         }
+
+        if( inactivePlayers.contains(getCurrentPlayer().getID()) ){
+            /*
+
+            advanceGame() è chiamato subito se il giocatore è inattivo.
+            Questo serve per accelerare lo svolgimento del gioco. E' inutile che i giocatori attivi
+            aspettino ogni volta lo scadere del timer del turno per ogni giocatore inattivo.
+            I turni vengono saltati immediatamente; se il giocatore inattivo vuole riunirsi deve mandare
+            un messaggio specifico (BACK_GAMING).
+            Questo approccio è stato scelto per rispettare le specifiche di progetto.
+
+             */
+
+            advanceGame();
+
+            /*
+
+            NOTA SUI SIDE EFFECTS DI QUESTO APPROCCIO
+
+            Dal punto di vista del MODEL, il giocatore ha ricevuto - per un attimo - il suo turno,
+            per questo motivo il model invierà un messaggio a tale player notificando la possibilità
+            di giocare. Tuttavia la view impedisce azioni a tale giocatore se in stato "inattivo" ignorando
+            tale messaggio.
+
+            Certamente una view malevola potrebbe ignorare tale blocco e provare a eseguire comune una mossa,
+            sperando che il messaggio giunga al controller prima che questo abbia eseguito advanceGame() - evento
+            altamente improbabile visto che si parla da un alto di velocità di rete e dall'altro di velocità
+            di esecuzione di codice java sicrono su server.
+
+            Tale eventualità però non costituisce una vulnerabilità, infatti nell'ipotesi di view malevola questa
+            potrebbe benissimo evitare questa complessa operazione e semplicemente:
+            o non diventare mai inattivo
+            o inviare un messaggio di BACK_GAMING per rientrare in gioco dopo eventuale inattività.
+
+            */
+        }
+
     }
 
     private List<Dice> getDicesForNewRound(){
@@ -374,31 +487,52 @@ public class Controller extends Observable {
      * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
     private void endGame(){
+        endGame(new HashSet<>());
+    }
 
-        Map<Player, Integer> rankings = getRankingsAndScores();
+    private void endGame(HashSet<String> inactivePlayers){
+        Map<String, Integer> rankings = getRankingsAndScores(inactivePlayers);
 
         registerRankingsOnUsersProfiles(rankings);
 
         //TODO: notify view of winners and scores
-
     }
 
     /**
      * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
-    private Map<Player,Integer> getRankingsAndScores() {
-        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
+    private Map<String,Integer> getRankingsAndScores(HashSet<String> inactivePlayers) {
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
+        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
 
-        return Scorer.getInstance().getRankings(playersOfLastRound, publicObjectiveCards);
+        //The evaluation is made only on players who completed the game (inactive players are excluded)
+        List<Player> playersToEvaluate = new ArrayList<>();
+        for(Player p : playersOfLastRound){
+            if(!inactivePlayers.contains(p.getID())){
+                playersToEvaluate.add(p);
+            }
+        }
+        Map<Player,Integer> activePlayersRankingsAndScores = Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
+
+        //Convert from Player,Integer to String,Integer as required by method signature
+        LinkedHashMap<String,Integer> allPlayersRankingsAndScores = new LinkedHashMap<>();
+        for (Map.Entry<Player, Integer> entry : activePlayersRankingsAndScores.entrySet()){
+            allPlayersRankingsAndScores.put(entry.getKey().getID(),entry.getValue());
+        }
+        //The returned map must contain a score for all players, so inactive players are added
+        for(String inactivePlayerID : inactivePlayers){
+            allPlayersRankingsAndScores.put(inactivePlayerID,0);
+        }
+
+        return allPlayersRankingsAndScores;
     }
 
     /**
      * Sends scores and rankings to players profiles ({@link User})
      * in order to increase statistics of wins and played games.
      */
-    private void registerRankingsOnUsersProfiles(Map<Player, Integer> rankings){
+    private void registerRankingsOnUsersProfiles(Map<String, Integer> rankings){
         /*
         TODO: valutare a seconda di cosa si deciderà di fare con User
         for(Player player : game.getPlayers()){
