@@ -10,12 +10,10 @@ import static org.junit.Assert.*;
 
 public class PlayerTest {
 
-    User user;
-    Player p;
+    private Player p;
 
     @Before
     public void setUp() throws Exception {
-        user = new User(8,"nickname");
         ObjectiveCardManager ocm = new ObjectiveCardManager();
         p = new Player("nickname",ocm.getPrivateObjectiveCard());
     }

@@ -16,12 +16,12 @@ import java.util.List;
  *
  * @author Federico Haag
  */
-public final class XMLFileReader {
+public final class XMLFileFinder {
 
     /**
      * Private constructor just for preventing instantiation
      */
-    private XMLFileReader(){}
+    private XMLFileFinder(){}
 
     /**
      * Given a path returns the list of all .xml files in that path as a list of
@@ -70,7 +70,7 @@ public final class XMLFileReader {
      * @throws ParserConfigurationException if build of a new document fails
      * @throws SAXException if parsing of the document fails
      */
-        public static Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException{
+    public static Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException{
         File file = new File(path);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

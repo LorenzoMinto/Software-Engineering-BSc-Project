@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.XMLFileReader;
+import it.polimi.se2018.utils.XMLFileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -40,7 +40,7 @@ public class ToolCardsManager {
         this.defaultPlacementRule = defaultPlacementRule;
 
         try{
-            this.availableToolCards = XMLFileReader.getFilesNames(PATH);
+            this.availableToolCards = XMLFileFinder.getFilesNames(PATH);
         } catch (IOException e) {
             throw new NoToolCardsFoundInFileSystemException();
         }
@@ -79,17 +79,8 @@ public class ToolCardsManager {
 
                 //Load the randomly selected pattern
                 ToolCard randomToolCard;
-                try {
 
-                    randomToolCard = loadToolCardFromFileSystem(randomToolCardID);
-
-                } catch (BadFormattedToolCardFileException e){
-
-                    //re-insert the pattern to the available ones before rethrowing to the caller
-                    availableToolCards.addAll(usedToolCards);
-
-                    throw new BadFormattedToolCardFileException();
-                }
+                randomToolCard = loadToolCardFromFileSystem(randomToolCardID);
 
                 //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
                 toolCards.add(randomToolCard);
@@ -116,7 +107,7 @@ public class ToolCardsManager {
 
         try{
 
-            Document document = XMLFileReader.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
+            Document document = XMLFileFinder.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
             //Parse from xml the number of rows of the pattern
             params.put("title", document.getElementsByTagName("title").item(0).getTextContent());

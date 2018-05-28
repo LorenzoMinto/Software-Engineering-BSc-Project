@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.XMLFileReader;
+import it.polimi.se2018.utils.XMLFileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -34,7 +34,7 @@ public class WindowPatternManager {
     public WindowPatternManager() {
 
         try{
-            this.availablePatterns = XMLFileReader.getFilesNames(PATH);
+            this.availablePatterns = XMLFileFinder.getFilesNames(PATH);
         } catch (IOException e){
             throw new NoPatternsFoundInFileSystemException();
         }
@@ -74,7 +74,7 @@ public class WindowPatternManager {
 
             Cell[][] pattern;
 
-            Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
+            Document document = XMLFileFinder.getFileDocument(PATH.concat(patternID).concat(".xml"));
 
             //Parse from xml the pattern's id
             String title = document.getElementsByTagName("title").item(0).getTextContent();
@@ -129,7 +129,7 @@ public class WindowPatternManager {
      */
     private String getPartnerPatternID(String patternID){
         try{
-            Document document = XMLFileReader.getFileDocument(PATH.concat(patternID).concat(".xml"));
+            Document document = XMLFileFinder.getFileDocument(PATH.concat(patternID).concat(".xml"));
             return document.getElementsByTagName("partnerID").item(0).getTextContent();
         } catch( Exception e ){
             //Bad formatting of xml is caught and method returns false
@@ -165,12 +165,9 @@ public class WindowPatternManager {
                 //Load the randomly selected pattern
                 WindowPattern randomPattern;
                 WindowPattern randomPartnerPattern;
-                try {
-                    randomPattern = loadPatternFromFileSystem(randomPatternID);
-                    randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
-                } catch (BadFormattedPatternFileException e){
-                    throw new BadFormattedPatternFileException();
-                }
+
+                randomPattern = loadPatternFromFileSystem(randomPatternID);
+                randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
 
                 //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
                 patterns.add(randomPattern);

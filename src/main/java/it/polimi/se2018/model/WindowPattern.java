@@ -92,7 +92,7 @@ public class WindowPattern extends Observable implements Serializable{
      *
      * @return id of the pattern
      */
-    public String getId() {
+    public String getID() {
         return id;
     }
 

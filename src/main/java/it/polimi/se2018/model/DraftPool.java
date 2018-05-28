@@ -93,17 +93,9 @@ public class DraftPool extends Observable implements Serializable {
      * @param dice the dice to be added to the DraftPool
      * @return if the operation succeeded
      */
-    public boolean putDice(Dice dice) {
-
-        if(dices.add(dice)) {
-
-            notifyGame();
-            return true;
-
-        }else {
-            return false;
-        }
-
+    public void putDice(Dice dice) {
+        dices.add(dice);
+        notifyGame();
     }
 
     /**
