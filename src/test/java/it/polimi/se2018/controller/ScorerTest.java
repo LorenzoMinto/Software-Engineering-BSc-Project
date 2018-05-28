@@ -123,7 +123,6 @@ public class ScorerTest {
         try {
             windowPatternManager = new WindowPatternManager();
         }catch (NoPatternsFoundInFileSystemException e){
-            e.printStackTrace();
             fail();
         }
 

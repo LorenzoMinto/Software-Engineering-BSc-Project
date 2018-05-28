@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
+import it.polimi.se2018.controller.WindowPatternManager;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
@@ -19,6 +20,7 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
+    private static WindowPattern windowPattern;
     private Game game;
     private static final int numberOfRounds = 10;
     private static final int maxNumberOfPlayers = 4;
@@ -36,6 +38,7 @@ public class GameTest {
     private static Map<Player, Integer> rankings;
     private static Properties properties;
 
+
     @BeforeClass
     public static void initializeVariables(){
         user = new User(1,"username");
@@ -47,6 +50,9 @@ public class GameTest {
                 null,null, null, Dice::getColor));
 
         toolCard = ToolCard.createTestInstance();
+        WindowPatternManager windowPatternManager = new WindowPatternManager();
+        List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+        windowPattern = windowPatterns.get(0);
     }
 
     @BeforeClass
@@ -137,6 +143,8 @@ public class GameTest {
     public void testGetCurrentRound(){
             game.setCards(toolCards, publicObjectiveCards);
             game.addPlayer(player);
+            game.setStatusAsWaitingForPatternsChoice();
+            game.assignWindowPatternToPlayer(windowPattern, player.getID());
             game.startGame(dices);
             assertNotNull(game.getCurrentRound());
     }
@@ -217,6 +225,8 @@ public class GameTest {
     public void testSetRankingsToNull(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
 
         runAllRounds();
 
@@ -230,6 +240,8 @@ public class GameTest {
     public void testSetRankings(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         runAllRounds();
 
         game.setRankings(rankings);
@@ -241,6 +253,8 @@ public class GameTest {
     public void testUseToolCard(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         try {
             game.startGame(dices);
         } catch (BadBehaviourRuntimeException e) {
@@ -279,6 +293,8 @@ public class GameTest {
 
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         try {
             game.startGame(dices);
         } catch (BadBehaviourRuntimeException e) {
@@ -333,6 +349,8 @@ public class GameTest {
     public void testStartGame(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
 
         try {
             game.startGame(dices);
@@ -382,6 +400,8 @@ public class GameTest {
     public void testNextRound(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         game.startGame(dices);
 
         try {
@@ -397,6 +417,8 @@ public class GameTest {
     public void testNextRoundWithNullDices(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         game.startGame(dices);
 
         try {
@@ -411,6 +433,8 @@ public class GameTest {
     public void testNextRoundWithEmptyDices(){
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
         game.startGame(dices);
 
         try {

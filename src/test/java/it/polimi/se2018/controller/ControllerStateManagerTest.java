@@ -1,13 +1,14 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.message.VCMessage;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
-/*
+
 public class ControllerStateManagerTest {
 
     private Controller controller;
@@ -18,18 +19,19 @@ public class ControllerStateManagerTest {
     public void setUp() throws Exception {
         Game game = new Game(4,4);
         Properties gprop = new Properties();
+        gprop.setProperty("numberOfRounds","10");
         gprop.setProperty("numberOfDicesPerColor","18");
-        //so that all toolCards are drawn
         gprop.setProperty("numberOfToolCards","12");
-        gprop.setProperty("maxNumberOfPlayers","4");
         gprop.setProperty("numberOfPublicObjectiveCards","2");
+        gprop.setProperty("maxNumberOfPlayers","4");
+        gprop.setProperty("minNumberOfPlayers","2");
+        gprop.setProperty("timeoutLaunchingGame","30");
+        gprop.setProperty("timeoutChoosingPatterns","30");
+        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
 
         controller = new Controller(game, gprop);
 
-        User user1 = new User(1, "johnniffer");
-        User user2 = new User(2, "rubens");
-        controller.acceptPlayer(user1, "a");
-        controller.acceptPlayer(user2, "b");
+        Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         stateManager = controller.stateManager;
 
@@ -45,7 +47,17 @@ public class ControllerStateManagerTest {
 
         ToolCard toolCard = new ToolCard(prop, controllerStateRules, new EmptyPlacementRule());
 
-        controller.startGame();
+        controller.launchGame(nicknames);
+
+        WindowPatternManager wpmanager = new WindowPatternManager();
+        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+
+
+        for (Player p : controller.game.getPlayers()) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("windowPattern", wp);
+            controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
+        }
 
         controller.setActiveToolCard(toolCard);
     }
@@ -94,4 +106,4 @@ public class ControllerStateManagerTest {
     public void testGetPlaceControllerState() {
         assertNotNull(controller.stateManager.getPlaceState());
     }
-}*/
+}
