@@ -8,6 +8,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInterface, Remote {
 
     private static final int PORT = 1099; // porta di default

@@ -18,6 +18,10 @@ import java.util.*;
  * An instance of this class represent a specific real game going on on the server.
  *
  * This class implements the OBSERVER PATTERN in order to notify all the Views connected.
+ *
+ * @author Federico Haag
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
  */
 public class Game extends Observable implements Observer{
 

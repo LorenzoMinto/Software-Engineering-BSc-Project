@@ -7,6 +7,10 @@ import java.io.*;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class SocketClientGateway extends Thread implements SenderInterface, ReceiverInterface {
 
     private BufferedWriter out;

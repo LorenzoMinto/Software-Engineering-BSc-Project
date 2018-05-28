@@ -6,6 +6,11 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ *
+ * @author Federico Haag
+ * @author Jacopo Pio Gargano
+ */
 public class SocketServerGatherer extends Thread{
 
     private final ReceiverInterface server;

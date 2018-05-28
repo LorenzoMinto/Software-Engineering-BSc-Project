@@ -7,6 +7,8 @@ import java.util.Map;
 
 /**
  * Message class used for comunication between Model, Controller, View, Server, Client
+ *
+ * @author Federico Haag
  */
 public abstract class Message implements Serializable{
 

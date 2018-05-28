@@ -4,6 +4,11 @@ import it.polimi.se2018.utils.message.Message;
 
 import java.rmi.RemoteException;
 
+/**
+ *
+ * @author Federico Haag
+ * @author Jacopo Pio Gargano
+ */
 public class SocketServerGateway implements ReceiverInterface {
 
     private ReceiverInterface receiver;

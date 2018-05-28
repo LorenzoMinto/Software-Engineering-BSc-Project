@@ -6,6 +6,10 @@ import it.polimi.se2018.utils.message.Message;
 /**
  * A class can implement the {@link Observer} interface when it
  * wants to be informed of changes in observable objects.
+ *
+ * @author Federico Haag
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
  */
 public interface Observer {
 

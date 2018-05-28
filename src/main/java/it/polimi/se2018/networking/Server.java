@@ -11,6 +11,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class Server implements Observer, ReceiverInterface, SenderInterface{
 
     /**

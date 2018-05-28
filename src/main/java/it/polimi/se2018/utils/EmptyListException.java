@@ -1,5 +1,9 @@
 package it.polimi.se2018.utils;
 
+/**
+ *
+ * @author Jacopo Pio Gargano
+ */
 public class EmptyListException extends IllegalArgumentException {
 
     public EmptyListException() {

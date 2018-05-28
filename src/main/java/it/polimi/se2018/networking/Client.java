@@ -15,6 +15,10 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     private static final Logger LOGGER = Logger.getLogger(Client.class.getName());

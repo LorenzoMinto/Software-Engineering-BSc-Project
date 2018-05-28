@@ -5,6 +5,10 @@ import it.polimi.se2018.utils.message.Message;
 import java.io.*;
 import java.rmi.RemoteException;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class SocketServer implements ReceiverInterface {
 
     private OutputStream stream;

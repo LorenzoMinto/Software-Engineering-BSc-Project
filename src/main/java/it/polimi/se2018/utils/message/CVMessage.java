@@ -2,6 +2,10 @@ package it.polimi.se2018.utils.message;
 
 import java.util.Map;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class CVMessage extends ViewBoundMessage {
 
     public CVMessage(types type, Map<String, Object> params, String playerID) {

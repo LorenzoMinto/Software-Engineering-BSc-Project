@@ -2,6 +2,8 @@ package it.polimi.se2018.model;
 
 /**
  * Enum representing the various states the game can be in
+ *
+ * @author Federico Haag
  */
 public enum GameStatus {
     WAITING_FOR_CARDS, //the game is created and is waiting for toolcards and public objective cards

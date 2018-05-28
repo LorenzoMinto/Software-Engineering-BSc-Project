@@ -8,6 +8,8 @@ package it.polimi.se2018.utils;
  * This class is used to recognize behaviours that should not happens:
  * 1) Controller asks Model for something that should not (with reference to game status)
  * 2) Access to file system or connection fails in a way that is hard to handle
+ *
+ * @author Federico Haag
  */
 public class BadBehaviourRuntimeException extends RuntimeException {
     /**

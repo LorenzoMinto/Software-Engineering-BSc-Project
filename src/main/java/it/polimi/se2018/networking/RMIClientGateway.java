@@ -7,8 +7,12 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-//Extends RMIReceiverInterface because can receive messages from Server,
-//so from the perspective of Server this class it is also a server
+/**
+ * Extends RMIReceiverInterface because can receive messages from Server,
+ * so from the perspective of Server this class it is also a server
+ *
+ * @author Federico Haag
+ */
 public class RMIClientGateway implements SenderInterface, ReceiverInterface, Remote {
 
     private ReceiverInterface recipient;

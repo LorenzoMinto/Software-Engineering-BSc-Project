@@ -23,6 +23,10 @@ import java.util.List;
  *
  * When an observable object is newly created, its set of observers is
  * empty.
+ *
+ * @author Federico Haag
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
  */
 public class Observable {
 

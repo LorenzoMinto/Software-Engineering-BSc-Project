@@ -2,6 +2,10 @@ package it.polimi.se2018.utils.message;
 
 import java.util.Map;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class MVMessage extends ViewBoundMessage {
 
     public MVMessage(types type, Map<String, Object> params, String playerID) {

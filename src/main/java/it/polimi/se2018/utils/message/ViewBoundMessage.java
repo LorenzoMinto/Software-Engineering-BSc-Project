@@ -4,6 +4,10 @@ import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.Map;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public abstract class ViewBoundMessage extends Message {
 
     public ViewBoundMessage(MessageType type, Map<String, Object> params, String playerID) {

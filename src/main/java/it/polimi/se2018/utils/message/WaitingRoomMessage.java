@@ -2,6 +2,10 @@ package it.polimi.se2018.utils.message;
 
 import java.util.Map;
 
+/**
+ *
+ * @author Federico Haag
+ */
 public class WaitingRoomMessage extends Message {
 
     public WaitingRoomMessage(MessageType type, Map<String, Object> params, String playerID) {
