@@ -3,7 +3,6 @@ package it.polimi.se2018.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -20,7 +19,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * The set of colors or values that form a set.
      */
-    private Set<Object> items;
+    private HashSet<Object> items;
 
     /**
      * The score multiplier that is specific for each different set of colors or values.
@@ -36,7 +35,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
      * @param propertyFunction function of Dice used to get a certain property of it
      * @param multiplier the card multiplier used in the scoring process
      */
-    public SetPublicObjectiveCard(String title, String description, String imageURL, Set<Object> items,
+    public SetPublicObjectiveCard(String title, String description, String imageURL, HashSet<Object> items,
                                   Function<Dice, Object> propertyFunction, int multiplier) {
         super(title, description, imageURL, propertyFunction);
         this.items = items;

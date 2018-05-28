@@ -123,14 +123,8 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             return;
         }
 
-        try{
-            LOGGER.info("Starting Socket...");
-            new SocketServerGateway(1111,this);
-
-        } catch (RemoteException e) {
-            LOGGER.severe("Failed Socket setup");
-            return;
-        }
+        LOGGER.info("Starting Socket...");
+        new SocketServerGateway(1111,this);
 
         LOGGER.info("Sagrada Server is up.");
     }

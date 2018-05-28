@@ -31,7 +31,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     public void sendMessage(Message message) throws RemoteException {
         try {
             //TODO: implementare serializzazione del messaggio
-            String socketMessage = new String();
+            String socketMessage = "";
 
             this.out.write(socketMessage + "\n");
             this.out.flush();

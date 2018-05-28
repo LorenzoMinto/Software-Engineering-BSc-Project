@@ -58,12 +58,12 @@ public class ToolCard implements Serializable{
     /**
      * The tool card's state transition table. Represents the tool card's effect (when active).
      */
-    private HashMap<String,String> controllerStateRules;
+    private transient HashMap<String,String> controllerStateRules;
 
     /**
      * The tool card's own placement rule. Enforced on the game only when active.
      */
-    private PlacementRule placementRule;
+    private transient PlacementRule placementRule;
 
     /**
      * Class constructor.

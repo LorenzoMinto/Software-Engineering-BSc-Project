@@ -71,7 +71,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
     public static void main (String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("1. RMI\n2. Socket");
+        LOGGER.info("Scegli metodo di comunicazione: 1. RMI\n2. Socket");
         int choice = scanner.nextInt();
 
         ConnectionType type = ConnectionType.RMI;
@@ -131,18 +131,13 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         gateways.add(gateway);
     }
 
-    private void removeGateway(SenderInterface gateway) {
-        gateways.remove(gateway);
-    }
-
-
     //Just for testing
 
     private void listenForMessagesFromConsole(){
         //Codice per inviare messaggio da riga di comando
         Scanner scanner = new Scanner(System.in);
         while(true){
-            System.out.print("Inserisci messaggio:\n");
+            LOGGER.info("Inserisci messaggio:\n");
             String text = scanner.next();
 
             if(text.equals("exit")){ return; }

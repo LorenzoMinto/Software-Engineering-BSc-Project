@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * Represent a cell of a {@link WindowPattern}. May contains a {@link Dice}.
  *
@@ -7,7 +9,7 @@ package it.polimi.se2018.model;
  * @see Dice
  * @see WindowPattern
  */
-public class Cell{
+public class Cell implements Serializable{
 
 
     /**

@@ -14,7 +14,7 @@ public abstract class PublicObjectiveCard extends ObjectiveCard{
     /**
      * Function of Dice used to get a certain property of it
      */
-    private Function<Dice,Object> propertyFunction;
+    private transient Function<Dice,Object> propertyFunction;
 
     /**
      * @param title the title of the card

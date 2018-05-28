@@ -122,6 +122,14 @@ public class Controller extends Observable {
 
     private HashSet<String> inactivePlayers = new HashSet<>();
 
+    /**
+     * Just for testing
+     * @param game the game instance to be controlled
+     * @param properties dictionary of parameters loaded from config file
+     */
+    public Controller(Game game, Properties properties){
+        this(game,properties,Logger.getLogger("TestLogger"));
+    }
 
     /**
      * Construct a controller with reference to a game instance

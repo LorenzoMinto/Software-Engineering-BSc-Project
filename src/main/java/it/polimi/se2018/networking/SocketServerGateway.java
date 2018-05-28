@@ -13,7 +13,7 @@ public class SocketServerGateway implements ReceiverInterface {
 
     private ReceiverInterface receiver;
 
-    SocketServerGateway(Integer portNumber, ReceiverInterface receiver) throws RemoteException {
+    SocketServerGateway(Integer portNumber, ReceiverInterface receiver) {
         this.receiver = receiver;
 
         SocketServerGatherer socketServerGatherer = new SocketServerGatherer(portNumber,receiver);
