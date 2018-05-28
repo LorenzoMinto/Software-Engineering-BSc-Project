@@ -1,6 +1,5 @@
 package it.polimi.se2018.utils.message;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CVMessage extends ViewBoundMessage {
@@ -18,13 +17,7 @@ public class CVMessage extends ViewBoundMessage {
     }
 
     public CVMessage(types type, String message) {
-        super(type, getHashMapWithMessage(message), null);
-    }
-
-    private static HashMap<String, Object> getHashMapWithMessage(String message){
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("message", message);
-        return params;
+        super(type, createHashMapWithMessage(message), null);
     }
 
     /**

@@ -8,12 +8,16 @@ public class WaitingRoomMessage extends Message {
         super(type, params, playerID);
     }
 
-    public WaitingRoomMessage(MessageType type, Map<String, Object> params) {
+    public WaitingRoomMessage(types type, Map<String, Object> params) {
         super(type, params);
     }
 
-    public WaitingRoomMessage(MessageType type) {
+    public WaitingRoomMessage(types type) {
         super(type);
+    }
+
+    public WaitingRoomMessage(types type, String message) {
+        super(type, createHashMapWithMessage(message));
     }
 
     @Override

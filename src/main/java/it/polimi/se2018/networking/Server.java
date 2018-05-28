@@ -13,9 +13,20 @@ import java.util.logging.Logger;
 
 public class Server implements Observer, ReceiverInterface, SenderInterface{
 
+    /**
+     * String constant made during refactor to simplify code readibility
+     */
     private static final String MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
 
+    /**
+     * Timer used to call launchGame() after a specified time
+     */
     private Timer timerForLaunchingGame;
+
+    /**
+     * Variable used to know if the timerForLaunchingGame is running or not
+     */
+    private boolean isTimerForLaunchingGameActive = false;
 
     /**
      * Logger class
@@ -32,6 +43,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private ReceiverInterface proxyServer;
 
+    /**
+     * List of players waiting for playing. Implemented as a map to store coupling of player id and respective client
+     */
     private HashMap<String,ReceiverInterface> waitingList = new HashMap<>();
 
     /**
@@ -39,15 +53,28 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private final List<ReceiverInterface> gateways = new ArrayList<>();
 
+    /**
+     * Map each player id to respective gateway
+     */
     private HashMap<String,ReceiverInterface> playerIDToGatewayMap = new HashMap<>();
 
+    /**
+     * Map each gateway to respective player id
+     */
     private HashMap<ReceiverInterface, String> gatewayToPlayerIDMap = new HashMap<>();
 
+    /**
+     * Enum representing the possibile server states
+     */
     private enum ServerState {
         WAITING_ROOM,
         FORWARDING_TO_CONTROLLER
     }
 
+    /**
+     * State of the server to distinguish from waiting room
+     * handling and forwarding to controller.
+     */
     private ServerState serverState = ServerState.WAITING_ROOM;
 
     /**
@@ -55,6 +82,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private final Controller controller;
 
+    /**
+     * The main class for server in order to make it runnable.
+     *
+     * @param args arguments passed by command line
+     */
     public static void main (String[] args) {
         new Server();
     }
@@ -100,7 +132,8 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     /**
-     * Creates an returns the instance of a new controller
+     * Creates an returns the instance of a new controller.
+     *
      * @return an returns the instance of a new controller
      */
     private Controller createController(){
@@ -158,9 +191,15 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
     }
 
+    /**
+     * Reads the type of message and calls needed methods depending on that.     *
+     * @param message the message received
+     * @param client the sender of the message
+     * @return a message containing if the operation went good or not
+     */
     private Message handleWaitingRoomMessage(WaitingRoomMessage message, ReceiverInterface client){
         if(serverState != ServerState.WAITING_ROOM){
-            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED);
+            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"GAME_IS_PLAYING");
         }
 
         String nickname = (String) message.getParam("nickname");
@@ -175,28 +214,38 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
     }
 
+    /**
+     * Adds the given couple nickname - client from the waiting room
+     * @param nickname the nickname to add from the waiting room
+     * @param client the client to add from the waiting room
+     * @return a message containing if the operation went good or not
+     */
     private Message addInWaitingRoom(String nickname, ReceiverInterface client){
         Message message;
 
         if(waitingList.size() < controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
-            waitingList.putIfAbsent(nickname,client);
-            message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
+            if(!waitingList.containsKey(nickname)){
+                waitingList.put(nickname,client);
+                message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
+            } else {
+                message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"EXISTING_NICKNAME");
+            }
         } else {
             //Should never happen because server status should change to FORWARDING_TO_CONTROLLER
-            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED);
+            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"MAX_LIMIT_REACHED");
         }
 
-        if(waitingList.size() == controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
-            launchGame();
-        }
-
-        if(waitingList.size() >= controller.getConfigProperty("minNumberOfPlayers")){
-            startTimerForLaunchingGame();
-        }
+        checkForLaunchingGame();
 
         return message;
     }
 
+    /**
+     * Remove the given couple nickname - client from the waiting room
+     * @param nickname the nickname to remove from the waiting room
+     * @param client the client to remove from the waiting room
+     * @return a message containing if the operation went good or not
+     */
     private Message removeFromWaitingRoom(String nickname, ReceiverInterface client){
         if( waitingList.get(nickname) == client ){
             waitingList.remove(nickname);
@@ -211,6 +260,55 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
     }
 
+    /**
+     * Launch the game if 4 players are in waiting room and manages the TimerForLaunchingGame
+     */
+    private void checkForLaunchingGame(){
+        if(waitingList.size() == controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
+            //The game can be launched. Eventual timer is stopped. Game is launched.
+            cancelTimerForLaunchingGame();
+            launchGame();
+        } else if(waitingList.size() >= controller.getConfigProperty("minNumberOfPlayers")){
+            //The game can be launched. If timer was not already started, it is started now.
+            if(!this.isTimerForLaunchingGameActive){ startTimerForLaunchingGame(); }
+        } else {
+            //Players are not enough for starting game. If timer was started, now it is stopped
+            if(this.isTimerForLaunchingGameActive){ cancelTimerForLaunchingGame(); }
+        }
+    }
+
+    /**
+     * Start the TimerForLaunchingGame.
+     * Before calling this method, check that isTimerForLaunchingGameActive is false.
+     */
+    private void startTimerForLaunchingGame(){
+        this.isTimerForLaunchingGameActive = true;
+
+        this.timerForLaunchingGame = new Timer();
+        this.timerForLaunchingGame.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                launchGame();
+            }
+        },controller.getConfigProperty("timeoutLaunchingGame")*1000);
+    }
+
+    /**
+     * Stop the TimerForLaunchingGame.
+     * Before calling this method, check that isTimerForLaunchingGameActive is true.
+     */
+    private void cancelTimerForLaunchingGame(){
+        this.isTimerForLaunchingGameActive = false;
+        this.timerForLaunchingGame.cancel();
+    }
+
+    /**
+     * Sets the server state to FORWARDING_TO_CONTROLLER in order to forward
+     * future messages to controller instance (for move handling). It also
+     * sets the gateways for handling bidirectional communication server to/from client
+     * and register in bidirectional map the coupling of players with respective client interface
+     * and vice versa.
+     */
     private void launchGame(){
         //Forward future messages to controller and prevent that waitinglist is changed
         this.serverState = ServerState.FORWARDING_TO_CONTROLLER;
@@ -223,25 +321,6 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
         //Send players to controller and let it actually starting the game
         controller.launchGame(waitingList.keySet());
-    }
-
-    private void startTimerForLaunchingGame(){
-        cancelTimerForLaunchingGame();
-
-        this.timerForLaunchingGame = new Timer();
-        this.timerForLaunchingGame.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                launchGame();
-            }
-        },controller.getConfigProperty("timeoutLaunchingGame")*1000);
-    }
-
-    private void cancelTimerForLaunchingGame(){
-        if(this.timerForLaunchingGame == null){
-            return;
-        }
-        this.timerForLaunchingGame.cancel();
     }
 
     @Override
@@ -319,6 +398,12 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         return succeeded;
     }
 
+    /**
+     * Method used by server threads that have to notify server of some kind
+     * of unhandlable failure that happened during their running.
+     *
+     * @param m the string containing the explanation of the failure
+     */
     void fail(String m){
         throw new BadBehaviourRuntimeException(m);
     }

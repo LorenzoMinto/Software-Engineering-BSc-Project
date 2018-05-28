@@ -96,4 +96,10 @@ public abstract class Message implements Serializable{
      String getPlayerID(){
         return playerID;
     }
+
+    static HashMap<String, Object> createHashMapWithMessage(String message){
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("message", message);
+        return params;
+    }
 }
