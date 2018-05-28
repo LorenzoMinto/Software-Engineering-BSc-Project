@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.*;
 
-/*
+
 public class ControllerTest {
 
     private static Controller controller;
@@ -17,18 +17,19 @@ public class ControllerTest {
     @BeforeClass
     public static void init(){
 
-        Properties properties = new Properties();
-        properties.put("numberOfRounds","10");
-        properties.put("maxNumberOfPlayers","2"); //non cambiare
-        properties.put("numberOfDicesPerColor","18");
-        properties.put("numberOfToolCards","3");
-        properties.put("numberOfPublicObjectiveCards","3");
+        Game game = new Game(4,4);
+        Properties gprop = new Properties();
+        gprop.setProperty("numberOfRounds","10");
+        gprop.setProperty("numberOfDicesPerColor","18");
+        gprop.setProperty("numberOfToolCards","12");
+        gprop.setProperty("numberOfPublicObjectiveCards","2");
+        gprop.setProperty("maxNumberOfPlayers","4");
+        gprop.setProperty("minNumberOfPlayers","2");
+        gprop.setProperty("timeoutLaunchingGame","30");
+        gprop.setProperty("timeoutChoosingPatterns","30");
+        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
 
-        Game game = new Game(
-                Integer.parseInt( properties.getProperty("numberOfRounds") ),
-                Integer.parseInt( properties.getProperty("maxNumberOfPlayers") )
-        );
-        controller = new Controller(game,properties);
+        controller = new Controller(game, gprop);
     }
 
     @Test
@@ -68,37 +69,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void acceptPlayer() {
-
-        try {
-            controller.acceptPlayer(new User(0,"myusername"),"mynickname");
-        } catch (AcceptingPlayerException e) {
-            fail();
-        }
-
-        try {
-            controller.acceptPlayer(new User(0,"myusername"),"mynickname");
-        } catch (AcceptingPlayerException e) {
-
-            try {
-                controller.acceptPlayer(new User(1,"mysecondusername"),"mysecondusername");
-            } catch (AcceptingPlayerException ex) {
-                fail();
-            }
-
-            try {
-                controller.acceptPlayer(new User(2,"mythirdusername"),"mythirdusername");
-            } catch (AcceptingPlayerException ex) {
-                return;
-            }
-        }
-
-        fail();
-
-    }
-
-    @Test
     public void getConfigProperty() {
         assertEquals(2,controller.getConfigProperty("maxNumberOfPlayers"));
     }
-}*/
+}
