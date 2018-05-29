@@ -55,7 +55,7 @@ public class PrivateObjectiveCardTest {
 
         try {
 
-            wp = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            wp = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
             wp.putDiceOnCell(new Dice(YELLOW, 1), 0, 1);
@@ -74,14 +74,14 @@ public class PrivateObjectiveCardTest {
             wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
-            oneDiceWindowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            oneDiceWindowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             oneDiceWindowPattern.putDiceOnCell(uniqueDiceOnWindowPattern,1,1);
 
 
             nullWP = null;
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException e){
             e.printStackTrace();

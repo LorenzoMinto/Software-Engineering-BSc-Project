@@ -86,7 +86,7 @@ public class ScorerTest {
 
         try {
             WindowPatternManager windowPatternManager = new WindowPatternManager();
-            List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+            List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
             WindowPattern genericWP = windowPatterns.get(0);
 
 

@@ -34,7 +34,7 @@ public class StartControllerStateTest {
         Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 

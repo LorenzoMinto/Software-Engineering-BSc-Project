@@ -1,7 +1,6 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
-import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.controller.WindowPatternManager;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
@@ -51,7 +50,7 @@ public class GameTest {
 
         toolCard = ToolCard.createTestInstance();
         WindowPatternManager windowPatternManager = new WindowPatternManager();
-        List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+        List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
         windowPattern = windowPatterns.get(0);
     }
 

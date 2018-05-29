@@ -63,21 +63,21 @@ public class WindowPatternManager {
     /**
      * Returns a list of the requested quantity of Window Patterns
      *
-     * @param numberOfCouples the number of couples of window patterns that must be created
+     * @param numberOfPairs the number of pairs of window patterns that must be created
      * @return the list of the requested quantity of Window Patterns
      * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
-    public Set<WindowPattern> getCouplesOfPatterns(int numberOfCouples) {
-        if(numberOfCouples < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of couples of windowpatterns");}
+    public Set<WindowPattern> getPairsOfPatterns(int numberOfPairs) {
+        if(numberOfPairs < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of couples of windowpatterns");}
 
         Set<WindowPattern> couplesOfPatterns = new HashSet<>();
 
-        if( availablePatterns.size() >= numberOfCouples * 2 ){
+        if( availablePatterns.size() >= numberOfPairs * 2 ){
 
             Random r = new Random();
 
-            for(int i=0; i<numberOfCouples; i++){
+            for(int i=0; i<numberOfPairs; i++){
 
                 //Choose randomly one of the available patterns
                 int randomIndex = r.nextInt(availablePatterns.size());

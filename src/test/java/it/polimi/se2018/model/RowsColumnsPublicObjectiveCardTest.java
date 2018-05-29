@@ -1,7 +1,6 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,7 +42,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
             WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            windowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -65,7 +64,7 @@ public class RowsColumnsPublicObjectiveCardTest {
             windowPattern.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();

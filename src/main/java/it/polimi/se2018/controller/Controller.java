@@ -333,7 +333,7 @@ public class Controller extends Observable {
 
             game.addPlayer(player);
 
-            Set<WindowPattern> patterns = windowPatternManager.getCouplesOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
+            Set<WindowPattern> patterns = windowPatternManager.getPairsOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
             HashMap<String,Object> params = new HashMap<>();
             params.put("patterns",patterns);
             notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));

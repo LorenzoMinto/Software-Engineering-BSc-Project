@@ -6,7 +6,6 @@ import it.polimi.se2018.controller.WindowPatternManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -53,7 +52,7 @@ public class SetPublicObjectiveCardTest {
 
             WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            windowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -76,7 +75,7 @@ public class SetPublicObjectiveCardTest {
             windowPattern.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
             windowPattern.putDiceOnCell(new Dice(GREEN, 1), 3, 4);
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();

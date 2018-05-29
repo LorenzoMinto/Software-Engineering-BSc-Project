@@ -42,7 +42,7 @@ public class DiagonalsPublicObjectiveCardTest {
         try {
             WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            diagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            diagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             diagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             diagonalsWP.putDiceOnCell(new Dice(RED), 0, 1);
@@ -64,7 +64,7 @@ public class DiagonalsPublicObjectiveCardTest {
             diagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
-            rightDiagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            rightDiagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             rightDiagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             rightDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -83,7 +83,7 @@ public class DiagonalsPublicObjectiveCardTest {
             rightDiagonalsWP.putDiceOnCell(new Dice(PURPLE), 3, 3);
 
 
-            leftDiagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            leftDiagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 0);
             leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -103,13 +103,13 @@ public class DiagonalsPublicObjectiveCardTest {
             leftDiagonalsWP.putDiceOnCell(new Dice(RED), 3, 0);
 
 
-            twoDiceWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            twoDiceWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 0, 0);
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 1, 1);
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
