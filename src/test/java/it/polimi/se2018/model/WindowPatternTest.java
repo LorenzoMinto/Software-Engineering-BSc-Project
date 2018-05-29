@@ -118,7 +118,9 @@ public class WindowPatternTest {
      */
     @Test
     public void testPutDiceOnIllegalCell(){
-        assertFalse(windowPattern.putDiceOnCell(dice, rows, cols));
+        try{
+            windowPattern.putDiceOnCell(dice, rows, cols);
+        }catch (ValueOutOfBoundsException e){}
     }
 
     /**
@@ -191,7 +193,7 @@ public class WindowPatternTest {
         }catch (ValueOutOfBoundsException e){}
 
         try{
-            windowPattern.putDiceOnCell(dice, rows,cols);
+            windowPattern.putDiceOnCell(dice, rows, cols);
             fail();
         }catch (ValueOutOfBoundsException e){}
 

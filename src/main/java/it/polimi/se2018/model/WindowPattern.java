@@ -164,7 +164,7 @@ public class WindowPattern extends Observable implements Serializable{
 
         //Checks if location row,col is correct
         if(!isLegalPosition(row, col)){
-            return false;
+            throw new ValueOutOfBoundsException("ERROR: Can't put dice on an illegal position.");
         }
 
         //Checks if no dice is present on the specified cell
