@@ -136,7 +136,7 @@ public class SetPublicObjectiveCardTest {
 
 
     /**
-     * Tests the impossibility of calculating the score of a null windowpattern
+     * Tests the impossibility of calculating the score of a null window pattern
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -148,7 +148,7 @@ public class SetPublicObjectiveCardTest {
 
 
     /**
-     * Tests the scoring of an empty windowpattern. Score must be 0
+     * Tests the scoring of an empty window pattern. Score must be 0
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -158,7 +158,7 @@ public class SetPublicObjectiveCardTest {
 
 
     /**
-     * Tests the scoring of a windowpattern by a OneTwo {@link SetPublicObjectiveCard} 
+     * Tests the scoring of a window pattern by a OneTwo {@link SetPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreOneTwoSet() {
@@ -167,7 +167,7 @@ public class SetPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern by a ThreeFour {@link SetPublicObjectiveCard}
+     * Tests the scoring of a window pattern by a ThreeFour {@link SetPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreThreeFourSet() {
@@ -176,7 +176,7 @@ public class SetPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern by a FiveSix {@link SetPublicObjectiveCard}
+     * Tests the scoring of a window pattern by a FiveSix {@link SetPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreFiveSixSet() {
@@ -185,7 +185,7 @@ public class SetPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern by an AllValues {@link SetPublicObjectiveCard}
+     * Tests the scoring of a window pattern by an AllValues {@link SetPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreAllValuesSet() {
@@ -194,7 +194,7 @@ public class SetPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern by an AllColors {@link SetPublicObjectiveCard}
+     * Tests the scoring of a window pattern by an AllColors {@link SetPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreAllColorsSet() {

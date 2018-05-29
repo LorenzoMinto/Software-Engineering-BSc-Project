@@ -92,7 +92,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the impossibility of calculating the score of a null windowpattern
+     * Tests the impossibility of calculating the score of a null window pattern
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -103,7 +103,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of an empty windowpattern. Score must be 0
+     * Tests the scoring of an empty window pattern. Score must be 0
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -112,7 +112,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreRowsColor() {
@@ -121,7 +121,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreColumnsColor() {
@@ -130,7 +130,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreRowsValue() {
@@ -139,7 +139,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreColumnsValue() {

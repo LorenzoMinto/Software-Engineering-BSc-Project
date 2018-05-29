@@ -67,8 +67,7 @@ public class MoveControllerStateTest {
         prop.put("imageURL", "imageURL");
 
         ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
-        Message m = controller.controllerState.useToolCard(toolCard);
-        System.out.println(controller.controllerState.getClass().getSimpleName());
+        controller.controllerState.useToolCard(toolCard);
     }
 
     @Test
