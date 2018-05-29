@@ -13,7 +13,6 @@ import static org.junit.Assert.*;
 
 public class ChangeDiceValueControllerStateTest {
     private Controller controller;
-    private Properties prop;
 
     @Before
     public void setUp() throws Exception {
@@ -44,7 +43,7 @@ public class ChangeDiceValueControllerStateTest {
             controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
         }
 
-        prop = new Properties();
+        Properties prop = new Properties();
         prop.put("title", "title");
         prop.put("description", "desc");
         prop.put("neededTokens", "1");

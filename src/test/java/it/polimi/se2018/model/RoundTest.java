@@ -183,6 +183,7 @@ public class RoundTest {
         try {
             round.nextTurn();
         } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -202,6 +203,7 @@ public class RoundTest {
                 round.nextTurn();
             }
         } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
             fail();
         }
 

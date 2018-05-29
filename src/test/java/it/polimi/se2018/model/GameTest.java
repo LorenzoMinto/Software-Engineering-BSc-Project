@@ -112,6 +112,7 @@ public class GameTest {
             try {
                 game.nextRound(dices);
             } catch (IllegalArgumentException | BadBehaviourRuntimeException e){
+                e.printStackTrace();
                 fail();
             } catch (NoMoreRoundsAvailableException e){}
         }
@@ -159,6 +160,7 @@ public class GameTest {
         try{
             game.setCards(toolCards,publicObjectiveCards);
         }catch (BadBehaviourRuntimeException e){
+            e.printStackTrace();
             fail();
         }
     }
@@ -258,6 +260,7 @@ public class GameTest {
         try {
             game.startGame(dices);
         } catch (BadBehaviourRuntimeException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -298,6 +301,7 @@ public class GameTest {
         try {
             game.startGame(dices);
         } catch (BadBehaviourRuntimeException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -355,6 +359,7 @@ public class GameTest {
         try {
             game.startGame(dices);
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
         assertNotNull(game.getCurrentRound());
@@ -369,6 +374,7 @@ public class GameTest {
             game.startGame(null);
             fail();
         } catch (BadBehaviourRuntimeException e) {
+            e.printStackTrace();
             fail();
         } catch (IllegalArgumentException e){}
     }
@@ -382,6 +388,7 @@ public class GameTest {
             game.startGame(new ArrayList<>());
             fail();
         } catch (BadBehaviourRuntimeException e) {
+            e.printStackTrace();
             fail();
         } catch (EmptyListException e){}
     }
@@ -392,6 +399,7 @@ public class GameTest {
             game.startGame(dices);
             fail();
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             fail();
         } catch (BadBehaviourRuntimeException e){}
     }
@@ -407,6 +415,7 @@ public class GameTest {
         try {
             game.nextRound(dices);
         } catch (NoMoreRoundsAvailableException e) {
+            e.printStackTrace();
             fail();
         }
 
@@ -425,6 +434,7 @@ public class GameTest {
             game.nextRound(null);
             fail();
         } catch (NoMoreRoundsAvailableException | EmptyListException e) {
+            e.printStackTrace();
             fail();
         } catch (IllegalArgumentException e){}
     }
@@ -441,6 +451,7 @@ public class GameTest {
             game.nextRound(new ArrayList<>());
             fail();
         } catch (NoMoreRoundsAvailableException e) {
+            e.printStackTrace();
             fail();
         } catch (EmptyListException e){}
     }

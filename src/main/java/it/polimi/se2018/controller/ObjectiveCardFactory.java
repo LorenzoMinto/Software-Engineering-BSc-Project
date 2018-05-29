@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.util.*;
 
@@ -103,7 +104,7 @@ public class ObjectiveCardFactory {
                 }
                 return createColorSetPublicObjectiveCard();
             default:
-                throw new IllegalArgumentException("The selected (by index) card does not exist.");
+                throw new ValueOutOfBoundsException("The selected card does not exist. Index out of bounds.");
         }
     }
 
@@ -133,7 +134,6 @@ public class ObjectiveCardFactory {
      * @return a {@link SetPublicObjectiveCard} evaluating the specified dices' values
      */
     private PublicObjectiveCard createValueSetPublicObjectiveCard(HashSet<Object> values){
-        if(values == null){ throw new IllegalArgumentException("ERROR: Value set cannot be null."); }
 
         String title;
         String description;

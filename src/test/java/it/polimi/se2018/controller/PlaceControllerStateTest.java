@@ -67,7 +67,6 @@ public class PlaceControllerStateTest {
     @Test
     public void testPlaceDice() {
         Message m = controller.controllerState.placeDice(0,0);
-        System.out.println(m.getParam("message"));
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         WindowPattern wp = currentTurn.getPlayer().getWindowPattern();

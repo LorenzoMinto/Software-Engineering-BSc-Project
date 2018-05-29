@@ -15,6 +15,7 @@ public class ConfigImporterTest {
         try {
             p = configImporter.getProperties();
         } catch (NoConfigParamFoundException e) {
+            e.printStackTrace();
             fail();
         }
         p.getProperty("numberOfRounds").equals("10");

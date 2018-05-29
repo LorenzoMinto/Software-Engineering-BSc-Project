@@ -11,7 +11,7 @@ import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 /**
- * Test for Scorer Class
+ * Test for {@link Scorer} Class
  *
  * @author Jacopo Pio Gargano
  */
@@ -383,6 +383,7 @@ public class ScorerTest {
             wpSame4.putDiceOnCell(new Dice(GREEN, 1), 3,4);
 
         }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
+            e.printStackTrace();
             fail();
         }
     }
@@ -412,6 +413,7 @@ public class ScorerTest {
 
     /**
      * Tests the singleton getInstance method does not return null, even if called multiple times
+     * @see Scorer#getInstance()
      */
     @Test
     public void testSingletonInstanceIsNotNull(){
@@ -422,6 +424,7 @@ public class ScorerTest {
 
     /**
      * Tests that the two instances of the singleton are the same instance
+     * * @see Scorer#getInstance()
      */
     @Test
     public void testSingletonInstance(){
