@@ -185,14 +185,17 @@ public class WindowPatternTest {
 
         try {
             windowPattern.putDiceOnCell(dice, rows,2);
+            fail();
         }catch (ValueOutOfBoundsException e){}
 
         try{
             windowPattern.putDiceOnCell(dice, 2,cols);
+            fail();
         }catch (ValueOutOfBoundsException e){}
 
         try{
             windowPattern.putDiceOnCell(dice, rows,cols);
+            fail();
         }catch (ValueOutOfBoundsException e){}
 
         assertTrue(windowPattern.putDiceOnCell(dice, 1, 4));
