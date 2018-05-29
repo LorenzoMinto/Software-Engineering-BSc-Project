@@ -6,13 +6,26 @@ import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
+ * Test for {@link DiceColor} class
+ *
  * @author Jacopo Pio Gargano
  */
 public class DiceColorTest {
 
-    private DiceColor color;
 
+    /**
+     * Tests the retrieval of a random color. The retrieved color must not be NOCOLOR
+     */
+    @Test
+    public void testGetRandomColor(){
+        DiceColor color = DiceColor.getRandomColor();
+        assertNotNull(color);
+        assertNotEquals(DiceColor.NOCOLOR, color);
+    }
 
+    /**
+     * Tests the toOneLetter method. Size of the returned string must be 1 and must be uppercase
+     */
     @Test
     public void testToOneLetterSizeIsOne(){
         for (DiceColor color: DiceColor.values()) {
@@ -20,15 +33,18 @@ public class DiceColorTest {
             String oneLetter = color.toOneLetter();
 
             assertEquals(1, oneLetter.length());
+            assertEquals(oneLetter.toUpperCase(), oneLetter);
         }
     }
 
+    /**
+     * Tests the toString method of {@link DiceColor}
+     */
     @Test
     public void testToString(){
-        color = RED;
-        String colorString = color.toString();
+        String colorToString = RED.toString();
 
-        assertEquals("red", colorString);
+        assertEquals("red", colorToString);
     }
 
 

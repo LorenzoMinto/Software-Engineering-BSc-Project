@@ -28,16 +28,9 @@ public class DraftPool extends Observable implements Serializable {
 
 
     /**
-     * Constructor of an empty DraftPool
-     */
-    public DraftPool() {
-        this(new ArrayList<>());
-    }
-
-    /**
-     * Constructor of a DraftPool containing the give dices
+     * Constructor of a DraftPool containing the given dices
      *
-     * @param dices the dices that are contained in the new DraftPool
+     * @param dices the dices that will be contained in the new draft pool
      */
     public DraftPool(List<Dice> dices){
         if(dices == null){ throw new IllegalArgumentException("ERROR: Can't create a draftpool with null dices.");}
@@ -45,7 +38,7 @@ public class DraftPool extends Observable implements Serializable {
     }
 
     /**
-     * Rolls each dice in draftpool.
+     * Rolls each dice in draft pool.
      * @see Dice#roll()
      */
     public void reroll() {
@@ -98,6 +91,7 @@ public class DraftPool extends Observable implements Serializable {
      * @return if the operation succeeded
      */
     public void putDice(Dice dice) {
+        if(dice == null) {throw new IllegalArgumentException("ERROR: Can't put a null dice in draft pool.");}
         dices.add(dice);
         notifyGame();
     }

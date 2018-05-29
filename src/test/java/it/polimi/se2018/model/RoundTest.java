@@ -43,7 +43,7 @@ public class RoundTest {
         p4 = new Player( "p4", privateObjectiveCard);
 
         players = new ArrayList<>();
-        draftPool = new DraftPool();
+        draftPool = new DraftPool(new ArrayList<>());
 
     }
 
@@ -222,7 +222,7 @@ public class RoundTest {
 
     @Test
     public void testGetDraftPool(){
-        draftPool = new DraftPool();
+        draftPool = new DraftPool(new ArrayList<>());
         round = new Round(0,players.size()*2, players, draftPool);
 
         assertEquals(draftPool, round.getDraftPool());

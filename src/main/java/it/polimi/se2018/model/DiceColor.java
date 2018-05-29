@@ -19,7 +19,7 @@ public enum DiceColor {
     /**
      * Returns a random color, except the NOCOLOR.
      *
-     * @return a random color, except the NOCOLOR
+     * @return a random color
      */
     public static DiceColor getRandomColor(){
         Random random = new Random();

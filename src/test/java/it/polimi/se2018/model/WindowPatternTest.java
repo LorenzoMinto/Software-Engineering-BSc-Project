@@ -78,6 +78,15 @@ public class WindowPatternTest {
     }
 
     /**
+     * Tests the retrieval of the id of a window pattern
+     */
+    @Test
+    public void testGetID(){
+        windowPattern = new WindowPattern("id","title", 1, pattern);
+        assertEquals("id", windowPattern.getID());
+    }
+
+    /**
      * Tests the impossibility of retrieving a dice from an illegal position
      */
     @Test
@@ -145,10 +154,19 @@ public class WindowPatternTest {
     }
 
     /**
-     * Tests the impossibility of moving a dice from a cell without a dice to another cell
+     * Tests the impossibility of moving a dice from a cell without a dice to a cell without a dice
      */
     @Test
-    public void testMoveDiceFromCellWithoutDiceToCell(){
+    public void testMoveDiceFromCellWithoutDiceToCellWithOutDice(){
+        assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 1,2));
+    }
+
+    /**
+     * Tests the impossibility of moving a dice from a cell without a dice to a cell with a dice
+     */
+    @Test
+    public void testMoveDiceFromCellWithoutDiceToCellWithDice(){
+        windowPattern.putDiceOnCell(dice,1,2);
         assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 1,2));
     }
 
