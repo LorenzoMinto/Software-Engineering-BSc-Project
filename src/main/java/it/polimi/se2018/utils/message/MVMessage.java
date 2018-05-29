@@ -1,12 +1,19 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.MovePermission;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author Federico Haag
  */
 public class MVMessage extends ViewBoundMessage {
+
+    public MVMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        super(type, params, playerID, permissions);
+    }
 
     public MVMessage(types type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);

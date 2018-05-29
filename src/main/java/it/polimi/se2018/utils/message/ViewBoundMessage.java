@@ -1,14 +1,20 @@
 package it.polimi.se2018.utils.message;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.MovePermission;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author Federico Haag
  */
 public abstract class ViewBoundMessage extends Message {
+
+    public ViewBoundMessage(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        super(type, params, playerID, permissions);
+    }
 
     public ViewBoundMessage(Enum type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
