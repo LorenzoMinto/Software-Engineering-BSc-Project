@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.awt.*;
 import java.util.*;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
 public class MoveControllerStateTest {
@@ -16,10 +17,10 @@ public class MoveControllerStateTest {
     private Properties prop;
 
     private Dice redDice;
-    int r0 = 0;
-    int c0 = 0;
-    int r1 = 1;
-    int c1 = 1;
+    private int r0 = 0;
+    private int c0 = 0;
+    private int r1 = 1;
+    private int c1 = 1;
 
     @Before
     public void setUp() throws Exception {
@@ -83,5 +84,7 @@ public class MoveControllerStateTest {
 
     @Test
     public void testMoveDiceWhenNoDiceInPosition() {
+        Message m = controller.controllerState.moveDice(r1,c1,r0,c0);
+        assertEquals(ERROR_MESSAGE, m.getType());
     }
 }
