@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.EmptyListException;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,51 +11,45 @@ import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 /**
+ * Test for {@link Scorer} Class
+ *
  * @author Jacopo Pio Gargano
  */
 public class ScorerTest {
 
     private static Scorer scorer;
 
-    private static WindowPatternManager windowPatternManager;
-
-    private static List<WindowPattern> windowPatterns;
-
-    private static WindowPattern genericWP;
-
+    //generic patterns
     private static WindowPattern wp1;
     private static WindowPattern wp2;
     private static WindowPattern wp3;
     private static WindowPattern wp4;
 
-    private static WindowPattern wpWithSamePrivateScore;
-
+    //patterns with same total score
     private static WindowPattern wpSameScore1;
     private static WindowPattern wpSameScore2;
     private static WindowPattern wpSameScore3;
     private static WindowPattern wpSameScore4;
 
+    //patterns with same private objective card score
     private static WindowPattern wpSamePrivateScore1;
     private static WindowPattern wpSamePrivateScore2;
     private static WindowPattern wpSamePrivateScore3;
     private static WindowPattern wpSamePrivateScore4;
 
+    //patterns with same total score and same private objective card score
     private static WindowPattern wpSame1;
     private static WindowPattern wpSame2;
     private static WindowPattern wpSame3;
     private static WindowPattern wpSame4;
 
-
-
-    private static User user = new User(1,null);
-
-    private List<Player> playersOfLastRound;
+    //players used in the test
     private static Player p1;
     private static Player p2;
     private static Player p3;
     private static Player p4;
 
-    private static final int numberOfPublicObjectiveCardsPerGame = 3;
+    //list of players to be completed with the players of the last round
 
     private int p1Score;
     private int p2Score;
@@ -64,9 +57,7 @@ public class ScorerTest {
     private int p4Score;
 
 
-    private ObjectiveCardManager manager;
-    private ObjectiveCardFactory factory = ObjectiveCardFactory.getInstance();
-
+    //players' private objective cards
     private static final PrivateObjectiveCard card1 = new PrivateObjectiveCard(
             null, null, null, RED);
     private static final PrivateObjectiveCard card2 = new PrivateObjectiveCard(
@@ -76,59 +67,27 @@ public class ScorerTest {
     private static final PrivateObjectiveCard card4 = new PrivateObjectiveCard(
             null, null, null, YELLOW);
 
-    private List<PublicObjectiveCard> publicObjectiveCards;
-    private PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
-            null, null, null, Dice::getColor, 6, true);
-    private PublicObjectiveCard columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
-            null, null, null, Dice::getValue, 4, false);
-    private DiagonalsPublicObjectiveCard diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(
-            null, null, null, Dice::getColor);
-
-    private static int private1wp1Score;
-    private static int private2wp2Score;
-    private static int private3wp3Score;
-    private static int private4wp4Score;
-
-    private static int public1wp1Score;
-    private static int public2wp1Score;
-    private static int public3wp1Score;
-    private static int public1wp2Score;
-    private static int public2wp2Score;
-    private static int public3wp2Score;
-    private static int public1wp3Score;
-    private static int public2wp3Score;
-    private static int public3wp3Score;
-    private static int public1wp4Score;
-    private static int public2wp4Score;
-    private static int public3wp4Score;
+    private static List<PublicObjectiveCard> publicObjectiveCards;
 
 
-    private List<Player> playersByScore;
-    private List<Player> testPlayersByScore;
-    private Player winner;
-
-    private Map<Player, Integer> testRankings;
-
-    private Map<Player, Integer> rankings;
-
-
+    /**
+     * Getting the singleton instance of scorer
+     */
     @BeforeClass
     public static void getSingleton(){
         scorer = Scorer.getInstance();
     }
 
+    /**
+     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the test
+     */
     @BeforeClass
     public static void buildWindowPatterns(){
 
         try {
-            windowPatternManager = new WindowPatternManager();
-        }catch (NoPatternsFoundInFileSystemException e){
-            fail();
-        }
-
-        try {
-            windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
-            genericWP = windowPatterns.get(0);
+            WindowPatternManager windowPatternManager = new WindowPatternManager();
+            List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+            WindowPattern genericWP = windowPatterns.get(0);
 
 
             wp1 = genericWP.copy();
@@ -225,29 +184,6 @@ public class ScorerTest {
             wp4.putDiceOnCell(new Dice(RED, 4), 3, 0);
             wp4.putDiceOnCell(new Dice(PURPLE, 5), 3, 3);
             wp4.putDiceOnCell(new Dice(RED, 1), 3, 4);
-
-
-            wpWithSamePrivateScore = genericWP.copy();
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(PURPLE, 4), 0, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(GREEN, 6), 0, 4);
-
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(RED, 5), 1, 3);
-
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(PURPLE, 6), 2, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(BLUE, 1), 2, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(RED, 4), 2, 4);
-
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 6), 3, 0);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 4), 3, 2);
-            wpWithSamePrivateScore.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
 
             wpSameScore1 = genericWP.copy();
@@ -446,86 +382,94 @@ public class ScorerTest {
             wpSame4.putDiceOnCell(new Dice(PURPLE, 1), 3,3);
             wpSame4.putDiceOnCell(new Dice(GREEN, 1), 3,4);
 
-        }catch (BadFormattedPatternFileException e){
+        }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
             fail();
         }
     }
 
-    @Before
-    public void initializePlayersWithPrivateObjectiveCards(){
+    /**
+     * Giving private objective cards to players and setting the public objective cards for the tests
+     */
+    @BeforeClass
+    public static void initializePlayersAndCards(){
         p1 = new Player("p1", card1);
         p2 = new Player("p2", card2);
         p3 = new Player("p3", card3);
         p4 = new Player("p4", card4);
+
+        PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+                null, null, null, Dice::getColor, 6, true);
+        PublicObjectiveCard columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+                null, null, null, Dice::getValue, 4, false);
+        DiagonalsPublicObjectiveCard diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(
+                null, null, null, Dice::getColor);
+
+        publicObjectiveCards = new ArrayList<>();
+        publicObjectiveCards.add(columnsValuePublicObjectiveCard);
+        publicObjectiveCards.add(rowsColorPublicObjectiveCard);
+        publicObjectiveCards.add(diagonalsPublicObjectiveCard);
     }
 
-    @BeforeClass
-    public static void initializeScores(){
-        private1wp1Score = 9;
-        private2wp2Score = 12;
-        private3wp3Score = 13;
-        private4wp4Score = 5;
-
-        public1wp1Score = 6;
-        public2wp1Score = 8;
-        public3wp1Score = 12;
-
-        public1wp2Score = 0;
-        public2wp2Score = 4;
-        public3wp2Score = 6;
-
-        public1wp3Score = 6;
-        public2wp3Score = 8;
-        public3wp3Score = 9;
-
-        public1wp4Score = 0;
-        public2wp4Score = 8;
-        public3wp4Score = 9;
-    }
-
-    @Before
-    public void initializeListsOfPlayers(){
-        playersOfLastRound = new ArrayList<>();
-        testPlayersByScore = new ArrayList<>();
-    }
-
-    @Before
-    public void initializeManagerAndGetPublicObjectiveCards(){
-        manager = new ObjectiveCardManager();
-        publicObjectiveCards = manager.getPublicObjectiveCards(numberOfPublicObjectiveCardsPerGame);
-    }
-
-
+    /**
+     * Tests the singleton getInstance method does not return null, even if called multiple times
+     * @see Scorer#getInstance()
+     */
     @Test
     public void testSingletonInstanceIsNotNull(){
         assertNotNull(Scorer.getInstance());
+        assertNotNull(Scorer.getInstance());
+        assertNotNull(Scorer.getInstance());
     }
 
+    /**
+     * Tests that the two instances of the singleton are the same instance
+     * * @see Scorer#getInstance()
+     */
+    @Test
+    public void testSingletonInstance(){
+        Scorer scorer1 = Scorer.getInstance();
+        Scorer scorer2 = Scorer.getInstance();
+        assertEquals(scorer1, scorer2);
+    }
+
+    /**
+     * Tests that if a game has only one player, then that player is the winner
+     */
     @Test
     public void testSinglePlayerIsWinner(){
         p1.setWindowPattern(wp1);
+
+        List<Player> playersOfLastRound = new ArrayList<>();
         playersOfLastRound.add(p1);
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        winner = scorer.getWinner(rankings);
+
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Player winner = scorer.getWinner(rankings);
         assertEquals(p1, winner);
     }
 
+    /**
+     * Tests the rankings of a game with four players, all with different scores
+     * @see ScorerTest#initializeDefaultGame()
+     */
     @Test
     public void testGetRankings(){
-        initializeDefaultGame();
+        List<Player> playersOfLastRound = initializeDefaultGame();
 
-        testRankings = new LinkedHashMap<>();
-        testRankings.put(p3,p3Score);
-        testRankings.put(p1,p1Score);
-        testRankings.put(p2,p2Score);
-        testRankings.put(p4,p4Score);
+        Map<Player, Integer> expectedRankings = new LinkedHashMap<>();
+        expectedRankings.put(p3,p3Score);
+        expectedRankings.put(p1,p1Score);
+        expectedRankings.put(p2,p2Score);
+        expectedRankings.put(p4,p4Score);
 
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
 
-        assertEquals(testRankings, rankings);
+        assertEquals(expectedRankings, rankings);
     }
 
+    /**
+     * Tests the throwing of a NullPointerException if playersOfLastRound parameter is null
+     */
     @Test
     public void testGetRankingsOfNullPlayersOfLastRound(){
         try {
@@ -534,6 +478,9 @@ public class ScorerTest {
         }catch (NullPointerException e){}
     }
 
+    /**
+     * Tests the throwing of an EmptyListException if playersOfLastRound parameter is empty
+     */
     @Test
     public void testGetRankingsOfEmptyPlayersOfLastRound(){
         try {
@@ -542,8 +489,12 @@ public class ScorerTest {
         }catch (EmptyListException e){}
     }
 
+    /**
+     * Tests the throwing of a NullPointerException if publicObjectiveCards parameter is null
+     */
     @Test
     public void testGetRankingsOfNullPublicObjectiveCards(){
+        List<Player> playersOfLastRound = new ArrayList<>();
         playersOfLastRound.add(p1);
         try {
             scorer.getRankings(playersOfLastRound, null);
@@ -551,8 +502,12 @@ public class ScorerTest {
         }catch (NullPointerException e){}
     }
 
+    /**
+     * Tests the throwing of an EmptyListException if publicObjectiveCards parameter is empty
+     */
     @Test
     public void testGetRankingsOfEmptyPublicObjectiveCards(){
+        List<Player> playersOfLastRound = new ArrayList<>();
         playersOfLastRound.add(p1);
         try {
             scorer.getRankings(playersOfLastRound, new ArrayList<>());
@@ -561,89 +516,101 @@ public class ScorerTest {
     }
 
 
+    /**
+     * Tests the winner of a game with four players, all with different scores
+     * Rankings are manually created
+     * Rankings should be ordered by descending score
+     */
     @Test
     public void testGetWinner(){
-        rankings = new LinkedHashMap<>();
+        Map<Player, Integer> rankings = new LinkedHashMap<>();
         rankings.put(p1,p1Score);
         rankings.put(p2,p2Score);
         rankings.put(p3,p3Score);
         rankings.put(p4,p4Score);
 
-        winner = scorer.getWinner(rankings);
+        Player winner = scorer.getWinner(rankings);
 
         assertEquals(p1, winner);
     }
 
+    /**
+     * Tests the winner of a game with four players, all with different scores
+     * Rankings are computed by the scorer
+     * Rankings should be ordered by descending score
+     * @see ScorerTest#initializeDefaultGame()
+     */
+    @Test
+    public void testGetWinnerFromRankings(){
+        List<Player> playersOfLastRound = initializeDefaultGame();
+
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Player winner = scorer.getWinner(rankings);
+        Player expectedWinner = p3;
+
+        assertEquals(expectedWinner, winner);
+    }
+
+    /**
+     * Tests the throwing of a NullPointerException if rankings parameter is null
+     */
     @Test
     public void testGetWinnerOfNullRankings(){
         try {
-            winner = scorer.getWinner(null);
+            Player winner = scorer.getWinner(null);
             fail();
         }catch (NullPointerException e){}
     }
 
-
+    /**
+     * Tests the throwing of an EmptyListException if rankings parameter is empty
+     */
     @Test
     public void testGetWinnerOfEmptyRankings(){
-        rankings = new LinkedHashMap<>();
+        Map<Player, Integer> rankings = new LinkedHashMap<>();
 
         try {
-            winner = scorer.getWinner(rankings);
+            Player winner = scorer.getWinner(rankings);
             fail();
         }catch (EmptyListException e){}
     }
 
 
-
-
-    @Test
-    public void testGetWinnerFromRankings(){
-        initializeDefaultGame();
-
-        testRankings = new LinkedHashMap<>();
-        testRankings.put(p3,p3Score);
-        testRankings.put(p1,p1Score);
-        testRankings.put(p2,p2Score);
-        testRankings.put(p4,p4Score);
-
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        winner = scorer.getWinner(rankings);
-        Player testWinner = p3;
-
-        assertEquals(testWinner, winner);
-    }
-
+    /**
+     * Tests the calculation of the winner score
+     * Rankings are computed by the scorer
+     * Rankings should be ordered by descending score
+     * @see ScorerTest#initializeDefaultGame()
+     */
     @Test
     public void testGetWinnerScore(){
-        initializeDefaultGame();
+        List<Player> playersOfLastRound = initializeDefaultGame();
 
-        testRankings = new LinkedHashMap<>();
-        testRankings.put(p3,p3Score);
-        testRankings.put(p1,p1Score);
-        testRankings.put(p2,p2Score);
-        testRankings.put(p4,p4Score);
-
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        winner = scorer.getWinner(rankings);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Player winner = scorer.getWinner(rankings);
         int winnerScore = rankings.get(winner);
 
         assertEquals(p3Score, winnerScore);
     }
 
 
-
+    /**
+     * Tests the rankings of a game with four players
+     * All players have the same score
+     * All players have different PrivateObjectiveCard score
+     * Rankings should be ordered by descending PrivateObjectiveCard score
+     * @see ScorerTest#assignSameScoreWindowPatterns()
+     */
     @Test
     public void testSameScoreRankings(){
         assignSameScoreWindowPatterns();
 
-        addDefaultPlayersToLists();
-
-        setCustomPublicObjectiveCards();
+        List<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
 
         p2.decreaseTokens(1);
 
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        List<Player> playersByScore = new ArrayList<>(rankings.keySet());
 
         int score = rankings.get(p1);
 
@@ -651,31 +618,38 @@ public class ScorerTest {
             assertTrue(score == playerScore);
         }
 
-        testPlayersByScore.add(p1);
-        testPlayersByScore.add(p2);
-        testPlayersByScore.add(p4);
-        testPlayersByScore.add(p3);
+        List<Player> expectedPlayersByScore = new ArrayList<>();
+        expectedPlayersByScore.add(p1);
+        expectedPlayersByScore.add(p2);
+        expectedPlayersByScore.add(p4);
+        expectedPlayersByScore.add(p3);
 
-        assertEquals(testPlayersByScore, playersByScore);
+        assertEquals(expectedPlayersByScore, playersByScore);
     }
 
 
-    //Also same score
+    /**
+     * Tests the rankings of a game with four players
+     * All players have the same score
+     * All players have the same PrivateObjectiveCard score
+     * All players have a different number of tokens
+     * Rankings should be ordered by descending number of tokens
+     * @see ScorerTest#assignSamePrivateScoreWindowPatterns() ()
+     */
     @Test
-    public void testSamePrivateScoreRankings(){
+    public void testSamePrivateObjectiveCardScoreRankings(){
         assignSamePrivateScoreWindowPatterns();
 
-        addDefaultPlayersToLists();
+        List<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
 
-        setCustomPublicObjectiveCards();
-
+        //decreasing the tokens in order to make all players have the same score
         p1.decreaseTokens(1);
         p2.decreaseTokens(3);
         p3.decreaseTokens(2);
         p4.decreaseTokens(0);
 
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        List<Player> playersByScore = new ArrayList<>(rankings.keySet());
 
         int score = rankings.get(p1);
 
@@ -683,30 +657,35 @@ public class ScorerTest {
             assertTrue(score == playerScore);
         }
 
-        testPlayersByScore.add(p4);
-        testPlayersByScore.add(p1);
-        testPlayersByScore.add(p3);
-        testPlayersByScore.add(p2);
+        List<Player> expectedPlayersByScore = new ArrayList<>();
+        expectedPlayersByScore.add(p4);
+        expectedPlayersByScore.add(p1);
+        expectedPlayersByScore.add(p3);
+        expectedPlayersByScore.add(p2);
 
-        assertEquals(testPlayersByScore, playersByScore);
+        assertEquals(expectedPlayersByScore, playersByScore);
     }
 
-    //Also same score and same private objective card score
+    /**
+     * Tests the rankings of a game with four players
+     * All players have the same score
+     * All players have the same PrivateObjectiveCard score
+     * All players have the same number of tokens
+     * The rankings should be the same as the ordered list of players of last round (reverse turn order)
+     * @see ScorerTest#assignSameScoreAndSamePrivateScoreWindowPatterns()
+     */
     @Test
     public void testSameFavorTokensRankings(){
         assignSameScoreAndSamePrivateScoreWindowPatterns();
 
+        List<Player> playersOfLastRound = new ArrayList<>();
         playersOfLastRound.add(p2);
         playersOfLastRound.add(p4);
         playersOfLastRound.add(p3);
         playersOfLastRound.add(p1);
 
-        testPlayersByScore = new ArrayList<>(playersOfLastRound);
-
-        setCustomPublicObjectiveCards();
-
-        rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        playersByScore = new ArrayList<>(rankings.keySet());
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        List<Player> playersByScore = new ArrayList<>(rankings.keySet());
 
         int score = rankings.get(p1);
 
@@ -714,18 +693,23 @@ public class ScorerTest {
             assertTrue(score == playerScore);
         }
 
-        assertEquals(testPlayersByScore, playersByScore);
+        assertEquals(playersOfLastRound, playersByScore);
     }
 
 
-
-    private void assignDefaultWindowPatterns() {
+    /**
+     * Assigns different score windowpatterns to players
+     */
+    private void assignDifferentScoreWindowPatterns() {
         p1.setWindowPattern(wp1);
         p2.setWindowPattern(wp2);
         p3.setWindowPattern(wp3);
         p4.setWindowPattern(wp4);
     }
 
+    /**
+     * Assigns same score, different PrivateObjectiveCard score windowpatterns to players
+     */
     private void assignSameScoreWindowPatterns() {
         p1.setWindowPattern(wpSameScore1);
         p2.setWindowPattern(wpSameScore2);
@@ -733,6 +717,9 @@ public class ScorerTest {
         p4.setWindowPattern(wpSameScore4);
     }
 
+    /**
+     * Assigns different score, same PrivateObjectiveCard score windowpatterns to players
+     */
     private void assignSamePrivateScoreWindowPatterns() {
         p1.setWindowPattern(wpSamePrivateScore1);
         p2.setWindowPattern(wpSamePrivateScore2);
@@ -740,6 +727,9 @@ public class ScorerTest {
         p4.setWindowPattern(wpSamePrivateScore4);
     }
 
+    /**
+     * Assigns same score, same PrivateObjectiveCard score windowpatterns to players
+     */
     private void assignSameScoreAndSamePrivateScoreWindowPatterns() {
         p1.setWindowPattern(wpSame1);
         p2.setWindowPattern(wpSame2);
@@ -747,40 +737,34 @@ public class ScorerTest {
         p4.setWindowPattern(wpSame4);
     }
 
-    private void addDefaultPlayersToLists() {
+    /**
+     * Adds p1 to p4 players to the playersOfLastRound list
+     */
+    private List<Player> addDefaultPlayersToPlayersOfLastRound() {
+
+        List<Player> playersOfLastRound = new ArrayList<>();
 
         playersOfLastRound.add(p1);
         playersOfLastRound.add(p2);
         playersOfLastRound.add(p3);
         playersOfLastRound.add(p4);
 
+        return playersOfLastRound;
     }
 
-    private void setCustomPublicObjectiveCards() {
-        publicObjectiveCards.clear();
-        publicObjectiveCards.add(columnsValuePublicObjectiveCard);
-        publicObjectiveCards.add(rowsColorPublicObjectiveCard);
-        publicObjectiveCards.add(diagonalsPublicObjectiveCard);
-    }
-
-
-
-    private void initializeDefaultGame() {
-        assignDefaultWindowPatterns();
-
-        addDefaultPlayersToLists();
-
-        setCustomPublicObjectiveCards();
-
-        testPlayersByScore.add(p3);
-        testPlayersByScore.add(p1);
-        testPlayersByScore.add(p2);
-        testPlayersByScore.add(p4);
+    /**
+     * Initializes a default game used in multiple tests
+     * @see ScorerTest#assignDifferentScoreWindowPatterns()
+     * @see ScorerTest#addDefaultPlayersToPlayersOfLastRound()
+     */
+    private List<Player> initializeDefaultGame() {
+        assignDifferentScoreWindowPatterns();
 
         p1Score = 32 + p1.getFavorTokens();
         p2Score = 19 + p2.getFavorTokens();
         p3Score = 33 + p3.getFavorTokens();
         p4Score = 17 + p4.getFavorTokens();
 
+        return addDefaultPlayersToPlayersOfLastRound();
     }
 }

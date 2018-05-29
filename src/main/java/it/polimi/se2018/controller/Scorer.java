@@ -61,13 +61,13 @@ public class Scorer {
      * Calculates and returns the rankings of a given list of players
      * based on a given list of public objective cards.
      *
-     * @param playersOfLastRound ordered list of players of last round
+     * @param playersOfLastRound sorted list of players of last round
      * @param publicObjectiveCards public objective cards of the game, players will be scored according to these
      * @return rankings as a Map<Player,Score(Integer)>
      * @see Scorer#getScores(List, List)
-     * @see Scorer#orderRankingsByFavorTokens(Map)
-     * @see Scorer#orderRankingsByPrivateObjectiveCardScore(Map)
-     * @see Scorer#orderRankingsByScore(Map)
+     * @see Scorer#sortRankingsByFavorTokens(Map)
+     * @see Scorer#sortRankingsByPrivateObjectiveCardScore(Map)
+     * @see Scorer#sortRankingsByScore(Map)
      */
      public Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
                                      List<PublicObjectiveCard> publicObjectiveCards){
@@ -81,9 +81,9 @@ public class Scorer {
         //calculate score for each player
         rankings = getScores(playersOfLastRound, publicObjectiveCards);
 
-        rankings = orderRankingsByFavorTokens(rankings);
-        rankings = orderRankingsByPrivateObjectiveCardScore(rankings);
-        rankings = orderRankingsByScore(rankings);
+        rankings = sortRankingsByFavorTokens(rankings);
+        rankings = sortRankingsByPrivateObjectiveCardScore(rankings);
+        rankings = sortRankingsByScore(rankings);
 
         return rankings;
     }
@@ -111,10 +111,10 @@ public class Scorer {
     /**
      * Orders a given list of players by favor tokens.
      *
-     * @param rankings player rankings to be ordered
-     * @return rankings ordered by favor tokens
+     * @param rankings player rankings to be sorted
+     * @return rankings sorted by favor tokens
      */
-    private Map<Player, Integer> orderRankingsByFavorTokens(Map<Player, Integer> rankings) {
+    private Map<Player, Integer> sortRankingsByFavorTokens(Map<Player, Integer> rankings) {
 
         Map<Player, Integer> rankingsByFavorTokens = new LinkedHashMap<>();
 
@@ -131,16 +131,17 @@ public class Scorer {
     /**
      * Orders players rankings based on the Private Objective Cards score
      *
-     * @param rankings rankings to be ordered
-     * @return rankings ordered by Private Objective Cards score
-     * @see Scorer#orderRankingsByCriteria(Map, Map)
+     * @param rankings rankings to be
+     * @return rankings sorted by Private Objective Cards score
+     * @see Scorer#sortRankingsBy(Map, Map)
      */
-    private Map<Player, Integer> orderRankingsByPrivateObjectiveCardScore(Map<Player, Integer> rankings) {
+    private Map<Player, Integer> sortRankingsByPrivateObjectiveCardScore(Map<Player, Integer> rankings) {
 
         Set<Player> players = rankings.keySet();
         Map<Player, Integer> privateObjectiveCardsScores = getPrivateObjectiveCardScores(players);
 
-        return orderRankingsByCriteria(rankings, privateObjectiveCardsScores);
+
+        return sortRankingsBy(privateObjectiveCardsScores, rankings);
     }
 
 
@@ -149,34 +150,35 @@ public class Scorer {
     /**
      * Orders rankings by score
      *
-     * @param rankings rankings to be ordered
-     * @return rankings ordered by score
-     * @see Scorer#orderRankingsByCriteria(Map, Map)
+     * @param rankings rankings to be sorted
+     * @return rankings sorted by each player's score (descending order)
+     * @see Scorer#sortRankingsBy(Map, Map)
      */
-    private Map<Player, Integer> orderRankingsByScore(Map<Player, Integer> rankings) {
+    private Map<Player, Integer> sortRankingsByScore(Map<Player, Integer> rankings) {
 
-        //TODO: commenta
-        return orderRankingsByCriteria(rankings, rankings);
+        //Rankings are here sorted by each player score that is in 'rankings' itself. This is why both the parameters
+        //passed to 'sortRankingsBy' are 'rankings'
+        return sortRankingsBy(rankings, rankings);
     }
 
 
     /**
-     * Orders rankings ( Map <Players, Scores(Integer) ) by descending value of the criteria Map criteriaRankings
+     * Orders rankings ( Map <Players, Scores(Integer) ) by descending value of the criteria Map criteria
      *
-     * @param playerRankings rankings to be ordered
-     * @param criteriaRankings criteria rankings to follow
-     * @return rankings ordered by criteria specified in method parameter
+     * @param criteria criteria rankings to follow
+     * @param playerRankings rankings to be sorted
+     * @return rankings sorted by criteria specified in method parameter
      */
-    //TODO: rename
-    private Map<Player, Integer> orderRankingsByCriteria(Map<Player, Integer> playerRankings, Map<Player, Integer> criteriaRankings) {
-        Map<Player, Integer> rankingsByCriteria = new LinkedHashMap<>();
-        Map<Player, Integer> criteriaScoresCopy = new LinkedHashMap<>(criteriaRankings);
 
-        while(!criteriaScoresCopy.isEmpty()) {
-            Player playerWithMaxScoreByCriteria = getPlayerWithMaxScore(criteriaScoresCopy);
-            int playerScore = playerRankings.get(playerWithMaxScoreByCriteria);
-            rankingsByCriteria.put(playerWithMaxScoreByCriteria, playerScore);
-            criteriaScoresCopy.remove(playerWithMaxScoreByCriteria);
+    private Map<Player, Integer> sortRankingsBy(Map<Player, Integer> criteria, Map<Player, Integer> playerRankings) {
+        Map<Player, Integer> rankingsByCriteria = new LinkedHashMap<>();
+        Map<Player, Integer> criteriaCopy = new LinkedHashMap<>(criteria);
+
+        while(!criteriaCopy.isEmpty()) {
+            Player playerWithMaxScore = getPlayerWithMaxScore(criteriaCopy);
+            int playerScore = playerRankings.get(playerWithMaxScore);
+            rankingsByCriteria.put(playerWithMaxScore, playerScore);
+            criteriaCopy.remove(playerWithMaxScore);
         }
         return rankingsByCriteria;
     }

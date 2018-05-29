@@ -50,6 +50,7 @@ public class TrackSlotTest {
         try {
             slot.removeDice(dice1);
         } catch (BadDiceReferenceException e) {
+            e.printStackTrace();
             fail();
         }
 

@@ -12,16 +12,14 @@ import static org.junit.Assert.*;
 
 
 /**
+ * Test for {@link RowsColumnsPublicObjectiveCard} class
+ *
  * @author Jacopo Pio Gargano
  */
 
-//TODO: tests with factory
 public class RowsColumnsPublicObjectiveCardTest {
 
-    private static WindowPatternManager windowPatternManager;
-
-    private static WindowPattern wp;
-    private static WindowPattern nullWP;
+    private static WindowPattern windowPattern;
     private static WindowPattern emptyWP;
 
     private static PublicObjectiveCard rowsColumnsPublicObjectiveCard;
@@ -30,70 +28,56 @@ public class RowsColumnsPublicObjectiveCardTest {
     private static PublicObjectiveCard rowsValuePublicObjectiveCard;
     private static PublicObjectiveCard columnsValuePublicObjectiveCard;
 
+    private static final int scoreRowsColor = 12;
+    private static final int scoreColumnsColor = 5;
+    private static final int scoreRowsValue = 5;
+    private static final int scoreColumnsValue = 4;
 
-    private static int scoreRowsColor;
-    private static int scoreColumnsColor;
-    private static int scoreRowsValue;
-    private static int scoreColumnsValue;
-
-    private int testScore;
-
-
+    /**
+     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the test
+     */
     @BeforeClass
     public static void buildWindowPatterns(){
-        try {
-            windowPatternManager = new WindowPatternManager();
-        }catch (NoPatternsFoundInFileSystemException e){
-            e.printStackTrace();
-            fail();
-        }
 
         try {
 
-            wp = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
-            wp.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
-            wp.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
-            wp.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
+            windowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
-            wp.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
-            wp.putDiceOnCell(new Dice(RED, 5), 1, 3);
+            windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            windowPattern.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            windowPattern.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
-            wp.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
-            wp.putDiceOnCell(new Dice(RED, 4), 2, 4);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            windowPattern.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wp.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
+            windowPattern.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            windowPattern.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            windowPattern.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
-
-            nullWP = null;
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
             emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
-        }catch (BadFormattedPatternFileException e){
+        }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
             fail();
         }
     }
 
-
+    /**
+     * Creates the the instances of {@link RowsColumnsPublicObjectiveCard} used in the tests
+     */
     @BeforeClass
-    public static void initializeScores(){
-        scoreRowsColor = 12;
-        scoreColumnsColor = 5;
-        scoreRowsValue = 5;
-        scoreColumnsValue = 4;
-    }
-
-    @Before
-    public void initializeCards(){
+    public static void initializeCards(){
 
         rowsColumnsPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance();
 
@@ -107,61 +91,78 @@ public class RowsColumnsPublicObjectiveCardTest {
                 null, Dice::getValue, 4, false);
     }
 
-    @Before
-    public void resetScore(){
-        testScore = 0;
-    }
-
-
-
-
+    /**
+     * Tests the impossibility of calculating the score of a null windowpattern
+     */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
         try {
-            testScore = rowsColumnsPublicObjectiveCard.calculateScore(nullWP);
+            rowsColumnsPublicObjectiveCard.calculateScore(null);
             fail();
         }catch (NullPointerException e){}
     }
 
+    /**
+     * Tests the scoring of an empty windowpattern
+     * Score must be 0
+     */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
-        testScore = rowsColumnsPublicObjectiveCard.calculateScore(emptyWP);
-        assertEquals(0, testScore);
+        int score = rowsColumnsPublicObjectiveCard.calculateScore(emptyWP);
+        assertEquals(0, score);
     }
 
+    /**
+     * Tests the scoring of a generic windowpattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreRowsColor() {
-        testScore = rowsColorPublicObjectiveCard.calculateScore(wp);
-        assertEquals(scoreRowsColor, testScore);
+        int score = rowsColorPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(scoreRowsColor, score);
     }
 
+    /**
+     * Tests the scoring of a generic windowpattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreColumnsColor() {
-        testScore = columnsColorPublicObjectiveCard.calculateScore(wp);
-        assertEquals(scoreColumnsColor, testScore);
+        int score = columnsColorPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(scoreColumnsColor, score);
     }
 
+    /**
+     * Tests the scoring of a generic windowpattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreRowsValue() {
-        testScore = rowsValuePublicObjectiveCard.calculateScore(wp);
-        assertEquals(scoreRowsValue, testScore);
+        int score = rowsValuePublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(scoreRowsValue, score);
     }
 
+    /**
+     * Tests the scoring of a generic windowpattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreColumnsValue() {
-        testScore = columnsValuePublicObjectiveCard.calculateScore(wp);
-        assertEquals(scoreColumnsValue, testScore);
+        int score = columnsValuePublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(scoreColumnsValue, score);
     }
 
+    /**
+     * Tests the toString method of {@link RowsColumnsPublicObjectiveCard}
+     */
     @Test
     public void testToString(){
-        rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+        rowsColumnsPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
                 "title", "description", null, Dice::getValue, 4, true);
-        String toString = rowsColorPublicObjectiveCard.toString();
+        String toString = rowsColumnsPublicObjectiveCard.toString();
         String expectedString = "title"+System.lineSeparator()+"description"+System.lineSeparator()+"Multiplier: 4"+System.lineSeparator();
         assertEquals(expectedString, toString);
     }
 
+    /**
+     * Tests the copy method of {@link RowsColumnsPublicObjectiveCard} (copy must not be null)
+     */
     @Test
     public void testCopy(){
         assertNotNull(rowsColorPublicObjectiveCard.copy());

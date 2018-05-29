@@ -31,8 +31,8 @@ public class ObjectiveCardManager {
      * @return new instance of a {@link PrivateObjectiveCard}
      */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
-        if(assignedColors.size() == DiceColors.values().length-1){ throw new BadBehaviourRuntimeException("ERROR: Cannot get more than 5 Private Objective Card " +
-                "as all of them were already created.");}
+        if(assignedColors.size() == DiceColors.values().length-1){ throw new BadBehaviourRuntimeException(
+                "ERROR: Cannot get more than 5 Private Objective Card as all of them were already created.");}
 
         DiceColors color;
 

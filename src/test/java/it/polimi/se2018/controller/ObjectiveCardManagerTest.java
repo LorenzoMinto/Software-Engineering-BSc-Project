@@ -11,6 +11,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
+ * Test for the {@link ObjectiveCardManager} class
+ *
  * @author Jacopo Pio Gargano
  */
 
@@ -21,18 +23,24 @@ public class ObjectiveCardManagerTest {
     private PublicObjectiveCard publicObjectiveCard;
     private List<PublicObjectiveCard> publicObjectiveCards;
 
-    private static int numberOfPublicObjectiveCards = 10;
+    private static final int numberOfPublicObjectiveCards = 10;
 
     //length -1 because NOCOLOR must not be considered
-    private static int numberOfPrivateObjectiveCards = DiceColors.values().length -1;
+    private static final int numberOfPrivateObjectiveCards = DiceColors.values().length -1;
 
 
-    //done to reset assignedColors private field of manager
+    /**
+     * Gets a new instance of the ObjectiveCardManager in order to reset its assignedColors private field
+     */
     @Before
     public void initializeManager(){
         manager = new ObjectiveCardManager();
     }
 
+    /**
+     * Sets the publicObjectiveCard and the privateObjectiveCard to null
+     * Creates a new instance for publicObjectiveCards (list)
+     */
     @Before
     public void initializeCards(){
         publicObjectiveCard = null;
@@ -40,23 +48,34 @@ public class ObjectiveCardManagerTest {
         publicObjectiveCards = new ArrayList<>();
     }
 
+    /**
+     * Tests the retrieval of one {@link PrivateObjectiveCard} asserting the retrieved card is not null
+     */
     @Test
     public void testGetOnePrivateObjectiveCard(){
         privateObjectiveCard = manager.getPrivateObjectiveCard();
         assertNotNull(privateObjectiveCard);
     }
 
+    /**
+     * Tests the retrieval of all {@link PrivateObjectiveCard} asserting all the retrieved cards are not null
+     * Fails if all PrivateObjectiveCards were already created
+     */
     @Test
     public void testGetAllPrivateObjectiveCards(){
         for(int i=0; i < numberOfPrivateObjectiveCards; i++){
             try{
                 privateObjectiveCard = manager.getPrivateObjectiveCard();
+                assertNotNull(privateObjectiveCard);
             } catch (BadBehaviourRuntimeException e ){
                 fail();
             }
         }
     }
 
+    /**
+     * Tests the impossibility of getting more PrivateObjectiveCards than existing
+     */
     @Test
     public void testGetMorePrivateObjectiveCardsThanExisting(){
         //getting all private objective cards
@@ -71,23 +90,43 @@ public class ObjectiveCardManagerTest {
     }
 
     //TODO: to be run with testGetAllPrivateObjectiveCards
+
+    /**
+     * Tests that there are no PrivateObjectiveCards retrieved with NoColor as color
+     */
     @Test
     public void testPrivateObjectiveCardColorIsNotNoColor(){
         for(int i = 0; i < numberOfPrivateObjectiveCards; i++){
             privateObjectiveCard = manager.getPrivateObjectiveCard();
+            assertNotNull(privateObjectiveCard);
             assertNotEquals(privateObjectiveCard.getColor(), DiceColors.NOCOLOR);
         }
+        try{
+            privateObjectiveCard = manager.getPrivateObjectiveCard();
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the retrieval of one {@link PublicObjectiveCard} asserting the retrieved card is not null
+     */
     @Test
     public void testGetOnePublicObjectiveCard(){
         publicObjectiveCard = manager.getPublicObjectiveCards(1).get(0);
         assertNotNull(publicObjectiveCard);
     }
 
+    /**
+     * Tests the retrieval of three {@link PublicObjectiveCard} asserting the retrieved cards are not null
+     */
     @Test
     public void testGetThreePublicObjectiveCards(){
-        publicObjectiveCards = manager.getPublicObjectiveCards(3);
+        try{
+            publicObjectiveCards = manager.getPublicObjectiveCards(3);
+        }catch (ValueOutOfBoundsException e){
+            e.printStackTrace();
+            fail();
+        }
         assertEquals(3, publicObjectiveCards.size());
         for(PublicObjectiveCard card: publicObjectiveCards){
             assertNotNull(card);
@@ -95,6 +134,10 @@ public class ObjectiveCardManagerTest {
     }
 
     //TODO: to be run with testAllPublicObjectiveCardsTitlesAreDifferent of ObjectiveCardFactoryTest
+
+    /**
+     * Tests that all {@link PublicObjectiveCard} retrieved are different by comparing their titles
+     */
     @Test
     public void testAllPublicObjectiveCardsRetrievedAreDifferent(){
 
@@ -103,6 +146,7 @@ public class ObjectiveCardManagerTest {
         //compare each pair of cards to verify they are different
         for(int i=0; i < numberOfPublicObjectiveCards-1; i++){
             PublicObjectiveCard currentCard = publicObjectiveCards.get(i);
+            assertNotNull(currentCard);
             for(int j=i+1; j < numberOfPublicObjectiveCards; j++){
                 PublicObjectiveCard comparisonCard = publicObjectiveCards.get(j);
                 if(currentCard.getTitle().equals(comparisonCard.getTitle())){
@@ -112,22 +156,22 @@ public class ObjectiveCardManagerTest {
         }
     }
 
+    /**
+     * Tests the impossibility of getting more PublicObjectiveCards than existing or a negative quantity
+     */
     @Test
     public void testGetMorePublicObjectiveCardsThanExisting(){
         try{
             publicObjectiveCards = manager.getPublicObjectiveCards(numberOfPublicObjectiveCards+1);
             fail();
         }catch (ValueOutOfBoundsException e){}
-    }
 
-    @Test
-    public void testGetNegativeQuantityOfPublicObjectiveCards(){
         try{
             publicObjectiveCards = manager.getPublicObjectiveCards(-1);
             fail();
-        }catch (RuntimeException e){}
-    }
+        }catch (ValueOutOfBoundsException e){}
 
+    }
 }
 
 

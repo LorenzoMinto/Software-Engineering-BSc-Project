@@ -63,6 +63,7 @@ public class TrackTest {
         try {
             track.takeDice(dice1, 0);
         } catch (BadDiceReferenceException e) {
+            e.printStackTrace();
             fail();
         }
         assertFalse(track.getDicesFromSlotNumber(0).contains(dice1));
@@ -73,6 +74,7 @@ public class TrackTest {
         try {
             track.takeDice(dice1, 0);
         } catch (BadDiceReferenceException e) {
+            e.printStackTrace();
             fail();
         }
         try {
@@ -87,6 +89,7 @@ public class TrackTest {
             track.takeDice(dice1, 2);
             fail();
         }catch (BadDiceReferenceException e){
+            e.printStackTrace();
             fail();
         }catch (ValueOutOfBoundsException e) {}
     }
