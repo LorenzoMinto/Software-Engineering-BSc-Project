@@ -31,7 +31,6 @@ public class MoveControllerState extends ControllerState {
         //check if move conforms to current placementRules and general physical constraints
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
-            //TODO: what if multiple messages needs to be returned to the view, sequentially
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
