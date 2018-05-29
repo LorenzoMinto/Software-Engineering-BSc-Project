@@ -23,7 +23,6 @@ public class GameTest {
     private Game game;
     private static final int numberOfRounds = 10;
     private static final int maxNumberOfPlayers = 4;
-    private static User user;
     private static PrivateObjectiveCard privateObjectiveCard;
     private static Player player;
     private static ToolCard toolCard;
@@ -40,7 +39,6 @@ public class GameTest {
 
     @BeforeClass
     public static void initializeVariables(){
-        user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
         player = new Player( "player", privateObjectiveCard);
 

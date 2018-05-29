@@ -542,16 +542,13 @@ public class Controller extends Observable {
     }
 
     /**
-     * Sends scores and rankings to players profiles ({@link User})
+     * Update scores and rankings of players profiles
      * in order to increase statistics of wins and played games.
      */
     private void registerRankingsOnUsersProfiles(Map<String, Integer> rankings){
         /*
-        TODO: valutare a seconda di cosa si deciderà di fare con User
+        TODO: implementare
         for(Player player : game.getPlayers()){
-
-            User user = player.getUser();
-            user.increaseGamesPlayed();
 
             Player winner = Scorer.getInstance().getWinner(rankings);
 

@@ -1,7 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Game;
-import it.polimi.se2018.model.User;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

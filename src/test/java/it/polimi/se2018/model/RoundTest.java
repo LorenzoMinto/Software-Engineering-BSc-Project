@@ -35,7 +35,6 @@ public class RoundTest {
 
     @BeforeClass
     public static void initializeVariables(){
-        User user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
         p1 = new Player( "p1", privateObjectiveCard);
