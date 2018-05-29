@@ -383,14 +383,10 @@ public class Game extends Observable implements Observer{
             getCurrentRound().nextTurn();
 
             //NOTIFYING
-            List<Player> nextPlayers = getCurrentRound().getPlayersOfNextTurns(getPlayers(), numberOfTurnsPerRound);
-
             Map <String, Object> messageAttributes = new HashMap<>();
-
-            //to be displayed in view
-            messageAttributes.put("nextPlayers", nextPlayers);
-
-            notify(new MVMessage(MVMessage.types.NEXT_TURN, messageAttributes));
+            messageAttributes.put("currentPlayer", getCurrentRound().getCurrentTurn().getPlayer().getID());
+            //TODO: aggiungere permissions che ha l'utente che inizia ora a giocare. chi non gioca le ignorerà
+            notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
 
         } catch (NoMoreTurnsAvailableException e) {
             throw new NoMoreTurnsAvailableException();

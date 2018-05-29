@@ -154,22 +154,6 @@ public class Round {
     }
 
     /**
-     * Gets the list of players that will play the following turns
-     *
-     * @param playersOfGame the list of players of the game
-     * @param numberOfTurns the number of turns for each round
-     * @return the ordered list of players
-     * @author Jacopo Pio Gargano
-     */
-    protected List<Player> getPlayersOfNextTurns(List<Player> playersOfGame, int numberOfTurns){
-        List<Player> players = new LinkedList<>();
-        for(int i=0; i < playersOfGame.size(); i++){
-            players.add(getPlayerForTurn(playersOfGame, currentTurnIndex+i, numberOfTurns));
-        }
-        return players;
-    }
-
-    /**
      * Removes the next turn of the specified player
      *
      * @param player the player whose turn needs to be removed
