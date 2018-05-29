@@ -149,7 +149,7 @@ public class WindowPatternManager {
 
                 //Parse from xml proper constraint features (value,color)
                 int value = Integer.parseInt( attributes.getNamedItem("value").getNodeValue() );
-                DiceColors color = DiceColors.valueOf( attributes.getNamedItem("color").getNodeValue() );
+                DiceColor color = DiceColor.valueOf( attributes.getNamedItem("color").getNodeValue() );
 
                 //Set constraints to corresponding pattern cell
                 pattern[row][col] = new Cell(value,color);

@@ -31,8 +31,8 @@ public class NotAdjacentDicePlacementRuleDecoratorTest {
                 pattern2[i][j] = new Cell();
             }
         }
-        pattern[1][0] = new Cell(3, DiceColors.NOCOLOR);
-        pattern2[1][0] = new Cell(3, DiceColors.NOCOLOR);
+        pattern[1][0] = new Cell(3, DiceColor.NOCOLOR);
+        pattern2[1][0] = new Cell(3, DiceColor.NOCOLOR);
     }
 
     @Before
@@ -42,8 +42,8 @@ public class NotAdjacentDicePlacementRuleDecoratorTest {
         decoratedRule = new NotAdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
         windowPattern = new WindowPattern("", "",0, pattern);
-        threeDice = new Dice(DiceColors.BLUE, 3);
-        fourDice = new Dice(DiceColors.BLUE, 4);
+        threeDice = new Dice(DiceColor.BLUE, 3);
+        fourDice = new Dice(DiceColor.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);
 
         windowPattern2 = new WindowPattern("","",0, pattern2);

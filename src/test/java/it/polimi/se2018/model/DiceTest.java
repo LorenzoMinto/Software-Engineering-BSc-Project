@@ -2,10 +2,9 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 

@@ -26,7 +26,7 @@ public class ObjectiveCardManagerTest {
     private static final int numberOfPublicObjectiveCards = 10;
 
     //length -1 because NOCOLOR must not be considered
-    private static final int numberOfPrivateObjectiveCards = DiceColors.values().length -1;
+    private static final int numberOfPrivateObjectiveCards = DiceColor.values().length -1;
 
 
     /**
@@ -99,7 +99,7 @@ public class ObjectiveCardManagerTest {
         for(int i = 0; i < numberOfPrivateObjectiveCards; i++){
             privateObjectiveCard = manager.getPrivateObjectiveCard();
             assertNotNull(privateObjectiveCard);
-            assertNotEquals(privateObjectiveCard.getColor(), DiceColors.NOCOLOR);
+            assertNotEquals(privateObjectiveCard.getColor(), DiceColor.NOCOLOR);
         }
         try{
             privateObjectiveCard = manager.getPrivateObjectiveCard();

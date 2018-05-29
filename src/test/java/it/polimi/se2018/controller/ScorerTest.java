@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**

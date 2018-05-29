@@ -8,7 +8,7 @@ import java.util.Random;
  *
  * @author Federico Haag
  */
-public enum DiceColors {
+public enum DiceColor {
     RED,
     YELLOW,
     GREEN,
@@ -21,13 +21,13 @@ public enum DiceColors {
      *
      * @return a random color, except the NOCOLOR
      */
-    public static DiceColors getRandomColor(){
+    public static DiceColor getRandomColor(){
         Random random = new Random();
-        DiceColors randomColor;
+        DiceColor randomColor;
 
         do{
             randomColor = values()[random.nextInt(values().length)];
-        } while (randomColor.equals(DiceColors.NOCOLOR));
+        } while (randomColor.equals(DiceColor.NOCOLOR));
 
         return randomColor;
     }

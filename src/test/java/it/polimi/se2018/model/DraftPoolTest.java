@@ -20,18 +20,18 @@ public class DraftPoolTest {
 
     @Test
     public void reroll() {
-        Dice dice1 = new Dice(DiceColors.RED,3);
-        Dice dice2 = new Dice(DiceColors.BLUE,1);
+        Dice dice1 = new Dice(DiceColor.RED,3);
+        Dice dice2 = new Dice(DiceColor.BLUE,1);
         draftPool.putDice(dice1);
         draftPool.putDice(dice2);
         boolean foundRed = false;
         boolean foundBlue = false;
         for (Dice d : draftPool.getDices()){
-            if(d.getColor()==DiceColors.BLUE && d.getValue()==1){
+            if(d.getColor()== DiceColor.BLUE && d.getValue()==1){
                 assertFalse(foundBlue);
                 foundBlue = true;
             }
-            if(d.getColor()==DiceColors.RED && d.getValue()==3){
+            if(d.getColor()== DiceColor.RED && d.getValue()==3){
                 assertFalse(foundRed);
                 foundRed = true;
             }
@@ -42,11 +42,11 @@ public class DraftPoolTest {
         foundRed = false;
         foundBlue = false;
         for (Dice d : draftPool.getDices()){
-            if(d.getColor()==DiceColors.BLUE && d.getValue()>=1 && d.getValue()<=6){
+            if(d.getColor()== DiceColor.BLUE && d.getValue()>=1 && d.getValue()<=6){
                 assertFalse(foundBlue);
                 foundBlue = true;
             }
-            if(d.getColor()==DiceColors.RED && d.getValue()>=1 && d.getValue()<=6){
+            if(d.getColor()== DiceColor.RED && d.getValue()>=1 && d.getValue()<=6){
                 assertFalse(foundRed);
                 foundRed = true;
             }
@@ -57,7 +57,7 @@ public class DraftPoolTest {
 
     @Test
     public void draftDice() {
-        Dice dice = new Dice(DiceColors.RED,3);
+        Dice dice = new Dice(DiceColor.RED,3);
         assertEquals(0,draftPool.getDices().size());
         draftPool.putDice(dice);
         assertEquals(1,draftPool.getDices().size());
@@ -67,7 +67,7 @@ public class DraftPoolTest {
 
     @Test
     public void putAndGetDices() {
-        Dice dice = new Dice(DiceColors.RED,3);
+        Dice dice = new Dice(DiceColor.RED,3);
         assertEquals(0,draftPool.getDices().size());
         draftPool.putDice(dice);
         assertEquals(dice,draftPool.getDices().get(0));

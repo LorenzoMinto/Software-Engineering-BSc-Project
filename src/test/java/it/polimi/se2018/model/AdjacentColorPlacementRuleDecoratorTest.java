@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class AdjacentColorPlacementRuleDecoratorTest {
@@ -28,7 +26,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
                 pattern[i][j] = new Cell();
             }
         }
-        pattern[1][0] = new Cell(0, DiceColors.RED);
+        pattern[1][0] = new Cell(0, DiceColor.RED);
     }
 
     @Before
@@ -38,8 +36,8 @@ public class AdjacentColorPlacementRuleDecoratorTest {
         decoratedRule = new AdjacentColorPlacementRuleDecorator(new ColorPlacementRuleDecorator(emptyRule));
 
         windowPattern = new WindowPattern("","", 0, pattern);
-        redDice = new Dice(DiceColors.RED);
-        blueDice = new Dice(DiceColors.BLUE);
+        redDice = new Dice(DiceColor.RED);
+        blueDice = new Dice(DiceColor.BLUE);
         windowPattern.putDiceOnCell(redDice, 1,1);
     }
 

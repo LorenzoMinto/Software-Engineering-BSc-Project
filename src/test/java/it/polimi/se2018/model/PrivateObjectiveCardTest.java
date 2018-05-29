@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
@@ -182,7 +182,7 @@ public class PrivateObjectiveCardTest {
     public void testCalculateScoreWithCardFromCardManager() {
 
         privateObjectiveCard = cardManager.getPrivateObjectiveCard();
-        DiceColors cardColor = privateObjectiveCard.getColor();
+        DiceColor cardColor = privateObjectiveCard.getColor();
 
         testScore = privateObjectiveCard.calculateScore(wp);
 

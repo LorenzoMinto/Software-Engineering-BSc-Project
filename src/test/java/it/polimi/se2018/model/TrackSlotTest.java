@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 public class TrackSlotTest {
@@ -35,7 +35,7 @@ public class TrackSlotTest {
 
     @Test
     public void testAddDice() {
-        Dice dice = new Dice(DiceColors.BLUE, 2);
+        Dice dice = new Dice(DiceColor.BLUE, 2);
         TrackSlot slot = new TrackSlot(new ArrayList<>());
 
         slot.addDice(dice);
@@ -60,7 +60,7 @@ public class TrackSlotTest {
     @Test
     public void testRemoveDiceNotInTrackSlot() {
         TrackSlot slot = new TrackSlot(dices);
-        Dice dice = new Dice(DiceColors.BLUE, 2);
+        Dice dice = new Dice(DiceColor.BLUE, 2);
 
         try {
             slot.removeDice(dice);

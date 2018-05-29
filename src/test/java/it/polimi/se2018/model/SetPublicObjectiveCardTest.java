@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
@@ -107,7 +107,7 @@ public class SetPublicObjectiveCardTest {
         }
 
         allColorsSet = new HashSet<>();
-        for(DiceColors color: values()){
+        for(DiceColor color: values()){
             if(!color.equals(NOCOLOR)) {
                 allColorsSet.add(color);
             }

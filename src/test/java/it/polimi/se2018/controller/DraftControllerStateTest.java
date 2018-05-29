@@ -67,9 +67,9 @@ public class DraftControllerStateTest {
 
     @Test
     public void testDraftDiceFromDraftPoolWhenDiceNotInDraftPool() {
-        Dice dice = new Dice(DiceColors.BLUE);
+        Dice dice = new Dice(DiceColor.BLUE);
         while (controller.game.getCurrentRound().getDraftPool().getDices().contains(dice)) {
-            dice = new Dice(DiceColors.getRandomColor());
+            dice = new Dice(DiceColor.getRandomColor());
         }
         Message m = controller.controllerState.draftDiceFromDraftPool(dice);
 

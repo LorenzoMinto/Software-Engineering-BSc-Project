@@ -25,14 +25,14 @@ public class Dice implements Serializable {
     /**
      * The color of the Dice
      */
-    private DiceColors color;
+    private DiceColor color;
 
     /**
      * Constructor of a new Dice of a given color
      *
      * @param color the color of the new Dice
      */
-    public Dice(DiceColors color) {
+    public Dice(DiceColor color) {
         this(color,1);
         this.roll();
     }
@@ -43,8 +43,8 @@ public class Dice implements Serializable {
      * @param color the color of the new Dice
      * @param value the value of the new Dice
      */
-    public Dice(DiceColors color, int value) {
-        if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a Dice with no color."); }
+    public Dice(DiceColor color, int value) {
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a Dice with no color."); }
         if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("ERROR: Cannot create a dice with value not in range [1,6]."); }
 
         this.color = color;
@@ -76,7 +76,7 @@ public class Dice implements Serializable {
      *
      * @return the color of the Dice
      */
-    public DiceColors getColor() {
+    public DiceColor getColor() {
         return color;
     }
 

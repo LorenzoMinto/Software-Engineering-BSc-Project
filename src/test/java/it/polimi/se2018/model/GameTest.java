@@ -39,7 +39,7 @@ public class GameTest {
 
     @BeforeClass
     public static void initializeVariables(){
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null,DiceColors.RED);
+        privateObjectiveCard = new PrivateObjectiveCard(null,null,null, DiceColor.RED);
         player = new Player( "player", privateObjectiveCard);
 
         publicObjectiveCards = new ArrayList<>();
@@ -91,7 +91,7 @@ public class GameTest {
         toolCards.add(toolCard);
 
         dices = new ArrayList<>();
-        dices.add(new Dice(DiceColors.RED));
+        dices.add(new Dice(DiceColor.RED));
 
         rankings = new HashMap<>();
         rankings.put(player, 0);

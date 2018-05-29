@@ -27,7 +27,7 @@ public class ValuePlacementRuleDecoratorTest {
                 pattern[i][j] = new Cell();
             }
         }
-        pattern[1][1] = new Cell(3, DiceColors.RED);
+        pattern[1][1] = new Cell(3, DiceColor.RED);
     }
 
     @Before
@@ -37,8 +37,8 @@ public class ValuePlacementRuleDecoratorTest {
         decoratedRule = new ValuePlacementRuleDecorator(new AdjacentValuePlacementRuleDecorator(emptyRule));
 
         windowPattern = new WindowPattern("","", 0, pattern);
-        threeDice = new Dice(DiceColors.RED, 3);
-        fourDice = new Dice(DiceColors.BLUE, 4);
+        threeDice = new Dice(DiceColor.RED, 3);
+        fourDice = new Dice(DiceColor.BLUE, 4);
     }
 
     @Test

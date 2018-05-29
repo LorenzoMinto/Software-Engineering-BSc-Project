@@ -6,7 +6,6 @@ import it.polimi.se2018.utils.message.VCMessage;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.*;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -46,7 +45,7 @@ public class MoveControllerStateTest {
                 pattern[i][j] = new Cell();
             }
         }
-        redDice = new Dice(DiceColors.RED);
+        redDice = new Dice(DiceColor.RED);
         pattern[r0][c0].setDice(redDice);
         WindowPattern wp = new WindowPattern("id", "title", 5, pattern);
 

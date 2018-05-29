@@ -44,8 +44,8 @@ public class ObjectiveCardFactory {
      * @param color color of the card
      * @return the {@link PrivateObjectiveCard} of the specified color
      */
-    protected PrivateObjectiveCard createPrivateObjectiveCard(DiceColors color) {
-        if(color==DiceColors.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
+    protected PrivateObjectiveCard createPrivateObjectiveCard(DiceColor color) {
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
                 "Private Objective Card with no color"); }
 
         String title = "Shades of " + color.toString()+ " - Private";
@@ -97,8 +97,8 @@ public class ObjectiveCardFactory {
                 return createDiagonalsColorPublicObjectiveCard();
             case 9:
                 items = new HashSet<>();
-                for(DiceColors color: DiceColors.values()){
-                    if(!color.equals(DiceColors.NOCOLOR)) {
+                for(DiceColor color: DiceColor.values()){
+                    if(!color.equals(DiceColor.NOCOLOR)) {
                         items.add(color);
                     }
                 }
@@ -120,7 +120,7 @@ public class ObjectiveCardFactory {
                 "Color Variety",
                 "Sets of one of each color anywhere",
                 null,
-                new HashSet<>(Arrays.asList(DiceColors.values())),
+                new HashSet<>(Arrays.asList(DiceColor.values())),
                 Dice::getColor,
                 4
         );

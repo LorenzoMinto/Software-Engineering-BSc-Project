@@ -1,14 +1,14 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
-import it.polimi.se2018.model.DiceColors;
+import it.polimi.se2018.model.DiceColor;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
@@ -72,7 +72,7 @@ public class DiceBagTest {
     @Test
     public void testGetMoreDicesThanAvailable(){
         try{
-            diceBag.getDices(numberOfDicesPerColor*(DiceColors.values().length-1));
+            diceBag.getDices(numberOfDicesPerColor*(DiceColor.values().length-1));
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }
@@ -83,7 +83,7 @@ public class DiceBagTest {
     @Test
     public void testHasAllDifferentColorDices() {
         DiceBag diceBag = new DiceBag(1);
-        List<Dice> dices = diceBag.getDices(DiceColors.values().length-1);
+        List<Dice> dices = diceBag.getDices(DiceColor.values().length-1);
 
         for (Dice dice: dices) {
             dice.setValue(3);

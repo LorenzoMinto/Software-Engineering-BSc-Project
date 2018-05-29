@@ -1,9 +1,9 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.MovePermission;
+
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Message class used for comunication between Model, Controller, View, Server, Client
@@ -34,15 +34,25 @@ public abstract class Message implements Serializable{
     private final String playerID;
 
     /**
+     * If the message is the reply to a move, it contains the new permissions set for the player recipient of this message
+     */
+    private final EnumSet<MovePermission> permissions;
+
+    public Message(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        this.type = type;
+        this.params = (HashMap<String,Object>)params;
+        this.playerID = playerID;
+        this.permissions = (EnumSet<MovePermission>)permissions;
+    }
+
+    /**
      * Full constructor for Message with possibility to send it in broadcast or specifically to a player
      * @param type the type of the message
      * @param params the parameters of the message
      * @param playerID the player to send the message (null if broadcasting)
      */
     public Message(Enum type, Map<String, Object> params, String playerID) {
-        this.type = type;
-        this.params = (HashMap<String,Object>)params;
-        this.playerID = playerID;
+        this(type,params,playerID,null);
     }
 
     /**
@@ -59,7 +69,7 @@ public abstract class Message implements Serializable{
      * @param type the type of the message
      */
     public Message(Enum type){
-        this(type,null,null);
+        this(type,null);
     }
 
     /**
@@ -69,6 +79,15 @@ public abstract class Message implements Serializable{
      */
     public Enum getType(){
         return this.type;
+    }
+
+    /**
+     * Returns the permissions sent within the message.
+     *
+     * @return the permissions sent within the message
+     */
+    public Set<MovePermission> getPermissions() {
+        return permissions.clone();
     }
 
     /**

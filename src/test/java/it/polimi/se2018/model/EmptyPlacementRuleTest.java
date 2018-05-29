@@ -27,7 +27,7 @@ public class EmptyPlacementRuleTest {
                 pattern[i][j] = new Cell();
             }
         }
-        pattern[1][1] = new Cell(0, DiceColors.RED);
+        pattern[1][1] = new Cell(0, DiceColor.RED);
     }
 
     @Before
@@ -35,8 +35,8 @@ public class EmptyPlacementRuleTest {
         rule = new EmptyPlacementRule();
 
         windowPattern = new WindowPattern("", "",0, pattern);
-        redDice = new Dice(DiceColors.RED);
-        blueDice = new Dice(DiceColors.BLUE);
+        redDice = new Dice(DiceColor.RED);
+        blueDice = new Dice(DiceColor.BLUE);
     }
 
     @Test

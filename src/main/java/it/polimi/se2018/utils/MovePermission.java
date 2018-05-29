@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils;
 
-public enum MovePermissions {
+public enum MovePermission {
     END_TURN,
     DRAFT_DICE_FROM_DRAFTPOOL,
     PLACE_DICE_ON_WINDOWPATTERN,
