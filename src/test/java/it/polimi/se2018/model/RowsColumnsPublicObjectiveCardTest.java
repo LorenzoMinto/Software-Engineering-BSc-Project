@@ -74,6 +74,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link RowsColumnsPublicObjectiveCard} used in the tests
+     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -88,6 +89,14 @@ public class RowsColumnsPublicObjectiveCardTest {
                 null, Dice::getValue, 5, true);
         columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
                 null, Dice::getValue, 4, false);
+    }
+
+    /**
+     * Tests that the test instance of {@link RowsColumnsPublicObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(rowsColorPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance());
     }
 
     /**

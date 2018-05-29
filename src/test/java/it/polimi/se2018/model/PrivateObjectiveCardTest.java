@@ -81,6 +81,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link PrivateObjectiveCard} used in the tests
+     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -95,6 +96,14 @@ public class PrivateObjectiveCardTest {
 
         oneDicePatternPrivateObjectiveCard = new PrivateObjectiveCard
                 (null,null,null, uniqueDiceOnWindowPattern.getColor());
+    }
+
+    /**
+     * Tests that the test instance of {@link PrivateObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(privateObjectiveCard = PrivateObjectiveCard.createTestInstance());
     }
 
     /**

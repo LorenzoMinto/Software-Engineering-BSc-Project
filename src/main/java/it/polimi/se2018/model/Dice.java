@@ -149,7 +149,7 @@ public class Dice implements Serializable {
     }
 
     /**
-     * Indicates whether some other Dice is "equal to" this one.
+     * Returns whether or not some other Dice is "equal to" this one. Comparison is based on value and color
      *
      * @param o some other Dice
      * @return if the other Dice is equal to this

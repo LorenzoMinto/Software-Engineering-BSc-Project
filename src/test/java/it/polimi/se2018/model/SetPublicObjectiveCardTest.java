@@ -116,6 +116,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link SetPublicObjectiveCard} used in the tests
+     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -133,6 +134,14 @@ public class SetPublicObjectiveCardTest {
                 allColorsSet, Dice::getColor,4);
     }
 
+
+    /**
+     * Tests that the test instance of {@link SetPublicObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(setPublicObjectiveCard = SetPublicObjectiveCard.createTestInstance());
+    }
 
     /**
      * Tests the impossibility of calculating the score of a null window pattern

@@ -4,6 +4,8 @@ import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Properties;
+
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
@@ -160,16 +162,58 @@ public class DiceTest {
      */
     @Test
     public void testEquals() {
-        assertTrue(dice.equals(dice));
-        assertTrue(dice.equals(dice.copy()));
-        assertFalse(dice.equals(new Cell()));
+        Dice dice1 = new Dice(GREEN, 2);
+
+        assertTrue(dice.equals(dice1));
     }
 
     /**
+     * Tests the equals method of {@link Dice} when two Dice are not equal
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenNotEqual() {
+
+        Dice dice1 = new Dice(RED, 4);
+
+        assertFalse(dice.equals(dice1));
+    }
+
+    /**
+     * Tests the equals method of {@link Dice} comparing the same object
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenGivenSameObject() {
+        assertTrue(dice.equals(dice));
+    }
+
+    /**
+     * Tests the equals method of {@link Dice} comparing two different classes
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenGivenAnotherTypeOfObject() {
+        assertFalse(dice.equals("this"));
+    }
+
+
+    /**
      * Tests the hash code of a dice is not null
+     * @see Dice#hashCode()
      */
     @Test
     public void testHashCode() {
         assertNotNull(dice.hashCode());
     }
+
+    /**
+     * Tests the copy method of {@link Dice}
+     * @see Dice#copy()
+     */
+    @Test
+    public void testCopy(){
+        assertNotNull(dice.copy());
+    }
+
 }

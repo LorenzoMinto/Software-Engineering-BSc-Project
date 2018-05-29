@@ -119,6 +119,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Creates the two instances of {@link DiagonalsPublicObjectiveCard} used in the tests
+     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -126,6 +127,14 @@ public class DiagonalsPublicObjectiveCardTest {
 
         colorDiagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(null,null,null,
                 Dice::getColor);
+    }
+
+    /**
+     * Tests that the test instance of {@link DiagonalsPublicObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(diagonalsPublicObjectiveCard = DiagonalsPublicObjectiveCard.createTestInstance());
     }
 
     /**
