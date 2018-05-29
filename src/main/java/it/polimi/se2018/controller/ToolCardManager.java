@@ -16,7 +16,7 @@ import java.util.*;
  *
  * @author Federico Haag
  */
-public class ToolCardsManager {
+public class ToolCardManager {
 
     /**
      * The file system path to find toolcards .xml files
@@ -28,6 +28,9 @@ public class ToolCardsManager {
      */
     private List<String> availableToolCards;
 
+    /**
+     * Default {@link PlacementRule}
+     */
     private PlacementRule defaultPlacementRule;
 
     /**
@@ -36,7 +39,7 @@ public class ToolCardsManager {
      *
      * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
      */
-    public ToolCardsManager(PlacementRule defaultPlacementRule){
+    public ToolCardManager(PlacementRule defaultPlacementRule){
         this.defaultPlacementRule = defaultPlacementRule;
 
         try{
@@ -57,9 +60,9 @@ public class ToolCardsManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public List<ToolCard> getRandomToolCards(int quantity){
+        if(quantity < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of random toolcards");}
 
         List<ToolCard> toolCards = new ArrayList<>();
-        List<String> usedToolCards = new ArrayList<>();
 
         if( availableToolCards.size() >= quantity ){
 
@@ -71,16 +74,11 @@ public class ToolCardsManager {
                 int randomIndex = r.nextInt(availableToolCards.size());
                 String randomToolCardID = availableToolCards.get(randomIndex);
 
-                //Add the selected toolcard to a list tracking all the selected patterns
-                usedToolCards.add(randomToolCardID);
-
-                //Removes the selected toolcard from the available to avoid double choice
+                //Remove the selected toolcard from the available ones to avoid double choice
                 availableToolCards.remove(randomToolCardID);
 
                 //Load the randomly selected pattern
-                ToolCard randomToolCard;
-
-                randomToolCard = loadToolCardFromFileSystem(randomToolCardID);
+                ToolCard randomToolCard = loadToolCardFromFileSystem(randomToolCardID);
 
                 //The successfully loaded pattern is added in a list that will be returned at the end of bulk loading
                 toolCards.add(randomToolCard);
@@ -109,7 +107,7 @@ public class ToolCardsManager {
 
             Document document = XMLFileFinder.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
-            //Parse from xml the number of rows of the pattern
+            //Parse from xml the properties of the toolcard
             params.put("title", document.getElementsByTagName("title").item(0).getTextContent());
             params.put("imageURL", document.getElementsByTagName("imageURL").item(0).getTextContent());
             params.put("description", document.getElementsByTagName("description").item(0).getTextContent());
@@ -117,30 +115,31 @@ public class ToolCardsManager {
             params.put("tokensUsageMultiplier", document.getElementsByTagName("tokensUsageMultiplier").item(0).getTextContent());
 
             //Placement Rules PARSING
-
             PlacementRule placementRule;
             NodeList placementRules = document.getElementsByTagName("placementRule");
 
             if(placementRules.getLength()==0){
-                //If no placement rules are specified in the file, the default one is applied
+                //If no placement rules are specified in the file, set the default one
                 placementRule = this.defaultPlacementRule;
 
             } else {
-                //The placement rule is built by decorating additional rules according to the "Decorator Pattern"
+                //Build the placement rule by decorating it with additional rules, following the Decorator Pattern
                 placementRule = new EmptyPlacementRule();
                 for(int i=0; i<placementRules.getLength(); i++){
 
-                    NamedNodeMap a = placementRules.item(i).getAttributes();
+                    NamedNodeMap attributes = placementRules.item(i).getAttributes();
 
                     //Parse from xml the decoratorName constraint
-                    String decoratorName = a.getNamedItem("decoratorName").getNodeValue();
+                    String decoratorName = attributes.getNamedItem("decoratorName").getNodeValue();
 
-                    /*Creates a PlacementRule decorator of the type specified in "decoratorName"
-                     **and then decorates it with the previous rules (default is EmptyPlacementRule*/
+                    /*
+                    Creates a PlacementRule decorator of the specified type in "decoratorName"
+                    and then decorates it with the previous rules (default is EmptyPlacementRule)
+                    */
 
-                    Class<?> classe = Class.forName(PlacementRule.class.getPackage().getName()+"."+decoratorName);
-                    Constructor<?> costru = classe.getConstructor(PlacementRule.class);
-                    placementRule = (PlacementRule) costru.newInstance(placementRule);
+                    Class<?> currentClass = Class.forName(PlacementRule.class.getPackage().getName()+"."+decoratorName);
+                    Constructor<?> currentConstructor = currentClass.getConstructor(PlacementRule.class);
+                    placementRule = (PlacementRule) currentConstructor.newInstance(placementRule);
                 }
             }
 
