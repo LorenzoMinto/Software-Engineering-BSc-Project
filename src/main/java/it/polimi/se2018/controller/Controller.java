@@ -28,7 +28,7 @@ import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
  * @see ControllerState
  * @see ControllerStateManager
  * @see ToolCard
- * @see ToolCardsManager
+ * @see ToolCardManager
  * @see DiceBag
  * @see ObjectiveCardManager
  * @see PlacementRule
@@ -99,10 +99,10 @@ public class Controller extends Observable {
     private WindowPatternManager windowPatternManager;
 
     /**
-     * Contains an instance of a {@link ToolCardsManager} that is the one
+     * Contains an instance of a {@link ToolCardManager} that is the one
      * that creates the {@link ToolCard} (s) to be assigned to the {@link Game}
      */
-    private ToolCardsManager toolCardsManager;
+    private ToolCardManager toolCardManager;
 
     /**
      * Configuration properties loaded from config file
@@ -152,7 +152,7 @@ public class Controller extends Observable {
 
         this.windowPatternManager = new WindowPatternManager();
 
-        this.toolCardsManager = new ToolCardsManager(this.getDefaultPlacementRule());
+        this.toolCardManager = new ToolCardManager(this.getDefaultPlacementRule());
 
         this.objectiveCardManager = new ObjectiveCardManager();
 
@@ -163,7 +163,7 @@ public class Controller extends Observable {
         this.diceBag = new DiceBag(numberOfDicesPerColor);
 
         //Produces and sets cards to the game
-        List<ToolCard> toolCards = toolCardsManager.getRandomToolCards(numberOfToolCards);
+        List<ToolCard> toolCards = toolCardManager.getRandomToolCards(numberOfToolCards);
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
 
         this.game.setCards(toolCards,publicObjectiveCards);

@@ -21,8 +21,6 @@ import static org.junit.Assert.*;
 
 public class SetPublicObjectiveCardTest {
 
-    private static WindowPatternManager windowPatternManager;
-
     private static WindowPattern windowPattern;
     private static WindowPattern emptyWP;
 

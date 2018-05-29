@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.MVMessage;
 
 import java.io.Serializable;
@@ -133,10 +134,15 @@ public class WindowPattern extends Observable implements Serializable{
      * @return the Dice that is placed on the cell corresponding to the given row and column numbers.
      */
     public Dice getDiceOnCell(int row, int col) {
+        if (!isLegalPosition(row, col)){
+            throw new ValueOutOfBoundsException("ERROR: Can't get dice from an illegal position.");}
+
         Dice dice = null;
-        if (isLegalPosition(row, col) && pattern[row][col].hasDice()) {
+
+        if (pattern[row][col].hasDice()) {
             dice = pattern[row][col].getDice();
         }
+
         return dice;
     }
 
@@ -182,8 +188,8 @@ public class WindowPattern extends Observable implements Serializable{
     public boolean moveDiceFromCellToCell(int fromRow, int fromCol, int toRow, int toCol) {
         //check if positions are legal
         if (!isLegalPosition(fromRow, fromCol) || !isLegalPosition(toRow, toCol)) {
-            return false;
-        }
+            throw new ValueOutOfBoundsException("ERROR: Can't move the dice from or to an illegal position.");}
+
         if (pattern[fromRow][fromCol].hasDice() && !pattern[toRow][toCol].hasDice()) {
             Dice removedDice = pattern[fromRow][fromCol].removeDice();
             pattern[toRow][toCol].setDice(removedDice);
