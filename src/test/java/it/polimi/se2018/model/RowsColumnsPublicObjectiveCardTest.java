@@ -103,8 +103,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of an empty windowpattern
-     * Score must be 0
+     * Tests the scoring of an empty windowpattern. Score must be 0
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){

@@ -3,50 +3,44 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.BadFormattedPatternFileException;
 import it.polimi.se2018.controller.NoPatternsFoundInFileSystemException;
 import it.polimi.se2018.controller.WindowPatternManager;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static it.polimi.se2018.model.DiceColors.*;
 import static org.junit.Assert.*;
 
 
 /**
+ * Test for {@link DiagonalsPublicObjectiveCard} class
+ *
  * @author Jacopo Pio Gargano
  */
 public class DiagonalsPublicObjectiveCardTest {
-
-    private static WindowPatternManager windowPatternManager;
 
     private static WindowPattern diagonalsWP;
     private static WindowPattern rightDiagonalsWP;
     private static WindowPattern leftDiagonalsWP;
     private static WindowPattern twoDiceWP;
-    private static WindowPattern nullWP;
     private static WindowPattern emptyWP;
 
     private static PublicObjectiveCard diagonalsPublicObjectiveCard;
     private static PublicObjectiveCard colorDiagonalsPublicObjectiveCard;
 
-    private static int diagonalsScore;
-    private static int rightDiagonalsScore;
-    private static int leftDiagonalsScore;
-
-    private int testScore;
+    private static final int diagonalsScore = 13;
+    private static final int rightDiagonalsScore = 9;
+    private static final int leftDiagonalsScore = 9;
 
 
+    /**
+     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the tests
+     */
     @BeforeClass
     public static void buildWindowPatterns(){
         try {
-            windowPatternManager = new WindowPatternManager();
-        }catch (NoPatternsFoundInFileSystemException e){
-            e.printStackTrace();
-            fail();
-        }
-
-        try {
+            WindowPatternManager windowPatternManager = new WindowPatternManager();
 
             diagonalsWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
@@ -115,16 +109,17 @@ public class DiagonalsPublicObjectiveCardTest {
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 1, 1);
 
-            nullWP = null;
-
             emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
 
-        }catch (BadFormattedPatternFileException e){
+        }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
             fail();
         }
     }
 
+    /**
+     * Creates the two instances of {@link DiagonalsPublicObjectiveCard} used in the tests
+     */
     @BeforeClass
     public static void initializeCards(){
         diagonalsPublicObjectiveCard = DiagonalsPublicObjectiveCard.createTestInstance();
@@ -133,56 +128,71 @@ public class DiagonalsPublicObjectiveCardTest {
                 Dice::getColor);
     }
 
-    @BeforeClass
-    public static void initializeScore(){
-        diagonalsScore = 13;
-        rightDiagonalsScore = 9;
-        leftDiagonalsScore = 9;
-    }
-
-    @Before
-    public void resetScore(){
-        testScore = 0;
-    }
-
+    /**
+     * Tests the impossibility of calculating the score of a null windowpattern
+     */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
         try {
-            testScore = diagonalsPublicObjectiveCard.calculateScore(nullWP);
+            diagonalsPublicObjectiveCard.calculateScore(null);
             fail();
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the scoring of an empty windowpattern. Score must be 0
+     */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
-        testScore = diagonalsPublicObjectiveCard.calculateScore(emptyWP);
-        assertEquals(0, testScore);
+        int score = diagonalsPublicObjectiveCard.calculateScore(emptyWP);
+        assertEquals(0, score);
     }
 
+    /**
+     * Tests the scoring of a generic windowpattern
+     */
     @Test
     public void testCalculateScoreDiagonals(){
-        testScore = colorDiagonalsPublicObjectiveCard.calculateScore(diagonalsWP);
-        assertEquals(diagonalsScore, testScore);
+        int score = colorDiagonalsPublicObjectiveCard.calculateScore(diagonalsWP);
+        assertEquals(diagonalsScore, score);
     }
 
+    /**
+     * Tests the scoring of a windowpattern with left to right diagonals only
+     * Implicitly tests getScoreLeftToRight method of {@link DiagonalsPublicObjectiveCard}
+     * @see DiagonalsPublicObjectiveCard#getScoreLeftToRight(WindowPattern, List)
+     */
     @Test
-    public void testCalculateScoreRightDiagonals(){
-        testScore = colorDiagonalsPublicObjectiveCard.calculateScore(rightDiagonalsWP);
-        assertEquals(rightDiagonalsScore, testScore);
+    public void testCalculateScoreLeftToRightDiagonals(){
+        int score = colorDiagonalsPublicObjectiveCard.calculateScore(rightDiagonalsWP);
+        assertEquals(rightDiagonalsScore, score);
     }
 
+    /**
+     * Tests the scoring of a windowpattern with right to left diagonals only
+     * Implicitly tests getScoreRightToLeft method of {@link DiagonalsPublicObjectiveCard}
+     * @see DiagonalsPublicObjectiveCard#getScoreRightToLeft(WindowPattern, List) (WindowPattern, List)
+     */
     @Test
-    public void testCalculateScoreLeftDiagonals(){
-        testScore = colorDiagonalsPublicObjectiveCard.calculateScore(leftDiagonalsWP);
-        assertEquals(leftDiagonalsScore, testScore);
+    public void testCalculateScoreRighToLeftDiagonals(){
+        int score = colorDiagonalsPublicObjectiveCard.calculateScore(leftDiagonalsWP);
+        assertEquals(leftDiagonalsScore, score);
     }
 
+    /**
+     * Tests the scoring of a windowpattern with two diagonally adjacent dice only
+     * Implicitly tests getCellPairScore method of {@link DiagonalsPublicObjectiveCard}
+     * @see DiagonalsPublicObjectiveCard#getCellPairScore(WindowPattern, List, int, int, int)
+     */
     @Test
     public void testCalculateScoreCellPair(){
-        testScore = colorDiagonalsPublicObjectiveCard.calculateScore(twoDiceWP);
-        assertEquals(2, testScore);
+        int score = colorDiagonalsPublicObjectiveCard.calculateScore(twoDiceWP);
+        assertEquals(2, score);
     }
 
+    /**
+     * Tests the copy method of {@link DiagonalsPublicObjectiveCard} (copy must not be null)
+     */
     @Test
     public void testCopy() {
         assertNotNull(diagonalsPublicObjectiveCard.copy());
