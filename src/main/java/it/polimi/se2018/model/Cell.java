@@ -86,7 +86,7 @@ public class Cell implements Serializable{
     /**
      * Sets the given {@link Dice} to the cell.
      *
-     * @param dice the dice that must be putted on the cell
+     * @param dice the dice that must be put on the cell
      */
     public void setDice(Dice dice) {
         if(dice==null){ throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]"); }
@@ -103,7 +103,7 @@ public class Cell implements Serializable{
     }
 
     /**
-     * Removes from the Cell the Dice and returns it.     *
+     * Removes from the Cell the Dice and returns it.
      *
      * @return the Dice that was placed on the Cell. If no Dice was placed, null is returned.
      */
