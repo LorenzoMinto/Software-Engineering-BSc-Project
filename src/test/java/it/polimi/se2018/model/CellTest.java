@@ -85,6 +85,7 @@ public class CellTest {
 
     /**
      * Tests the toString method of {@link Cell}
+     * @see Cell#toString()
      */
     @Test
     public void testToString() {

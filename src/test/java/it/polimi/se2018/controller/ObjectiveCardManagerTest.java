@@ -25,7 +25,7 @@ public class ObjectiveCardManagerTest {
 
     private static final int numberOfPublicObjectiveCards = 10;
 
-    //length -1 because NOCOLOR must not be considered
+    //length -1 because no color must not be considered
     private static final int numberOfPrivateObjectiveCards = DiceColor.values().length -1;
 
 
@@ -92,7 +92,7 @@ public class ObjectiveCardManagerTest {
     //TODO: to be run with testGetAllPrivateObjectiveCards
 
     /**
-     * Tests that there are no PrivateObjectiveCards retrieved with NoColor as color
+     * Tests that there are no PrivateObjectiveCards retrieved with no color
      */
     @Test
     public void testPrivateObjectiveCardColorIsNotNoColor(){

@@ -228,6 +228,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the toString method of {@link WindowPattern}
+     * @see WindowPattern#toString() ()
      */
     @Test
     public void testToString(){
@@ -250,6 +251,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the copy method of {@link WindowPattern} (copy must not be null)
+     * @see WindowPattern#copy()
      */
     @Test
     public void testCopy(){

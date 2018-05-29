@@ -192,6 +192,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Tests the copy method of {@link DiagonalsPublicObjectiveCard} (copy must not be null)
+     * @see DiagonalsPublicObjectiveCard#copy()
      */
     @Test
     public void testCopy() {

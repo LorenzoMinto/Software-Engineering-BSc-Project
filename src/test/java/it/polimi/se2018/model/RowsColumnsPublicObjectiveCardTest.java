@@ -148,6 +148,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the toString method of {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#toString()
      */
     @Test
     public void testToString(){
@@ -160,6 +161,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the copy method of {@link RowsColumnsPublicObjectiveCard} (copy must not be null)
+     * @see RowsColumnsPublicObjectiveCard#copy()
      */
     @Test
     public void testCopy(){

@@ -14,7 +14,7 @@ public class DiceColorTest {
 
 
     /**
-     * Tests the retrieval of a random color. The retrieved color must not be NOCOLOR
+     * Tests the retrieval of a random color. The retrieved color must not be no color
      */
     @Test
     public void testGetRandomColor(){

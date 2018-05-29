@@ -173,6 +173,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the copy method of {@link PrivateObjectiveCard} (copy must not be null)
+     * @see PrivateObjectiveCard#copy()
      */
     @Test
     public void testCopy(){

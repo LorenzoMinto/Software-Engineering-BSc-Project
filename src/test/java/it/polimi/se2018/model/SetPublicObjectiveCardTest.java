@@ -203,6 +203,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the toString method of {@link SetPublicObjectiveCard}
+     * @see PrivateObjectiveCard#toString()
      */
     @Test
     public void testToString(){
@@ -215,6 +216,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the copy method of {@link SetPublicObjectiveCard} (copy must not be null)
+     * @see SetPublicObjectiveCard#copy()
      */
     @Test
     public void testCopy(){

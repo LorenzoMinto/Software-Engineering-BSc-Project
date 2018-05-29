@@ -115,7 +115,7 @@ public class ObjectiveCardFactoryTest {
     }
 
     /**
-     * Tests the impossibility of creating a NOCOLOR private objective card
+     * Tests the impossibility of creating a no color private objective card
      */
     @Test
     public void testCreateNoColorPrivateObjectiveCard(){
