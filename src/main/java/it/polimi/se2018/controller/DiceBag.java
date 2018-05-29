@@ -27,6 +27,8 @@ public class DiceBag {
      * @see DiceColors
      */
     public DiceBag(int numberOfDicesPerColor) {
+        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException("ERROR: Can't create a dicebag with a negative number of dices per color");}
+
         this.availableDices = new EnumMap<>(DiceColors.class);
         for(int i=0; i<DiceColors.values().length-1; i++){
             this.availableDices.put(DiceColors.values()[i],numberOfDicesPerColor);
@@ -37,14 +39,16 @@ public class DiceBag {
      * Gets the specified quantity of dices from the DiceBag if there are enough availables.
      * If not, a RuntimeException is thrown
      * @param quantity how many dices have to be getted
-     * @return a list of dices of lenght same of param quantity
+     * @return a list of dices of length same of param quantity
      * @see Dice
      */
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
 
+        if(quantity <0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of dices.");}
+
         if( quantity > this.numberOfAvailableDices() ){
-            throw new BadBehaviourRuntimeException("Asked DiceBag to produce "+quantity+" of dices but only "+numberOfAvailableDices()+" dices are available");
+            throw new BadBehaviourRuntimeException("Asked DiceBag to get "+quantity+" dices but only "+numberOfAvailableDices()+" dices are available");
         } else {
             for(int i=0; i<quantity; i++){
 
@@ -76,7 +80,7 @@ public class DiceBag {
     }
 
     /**
-     * Gets the number of available dices
+     * Gets the number of available dices summing the available dices for each Dice Color in availableDices (map)
      *
      * @return the number of available dices
      */

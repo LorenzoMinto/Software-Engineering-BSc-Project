@@ -129,7 +129,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the impossibility of calculating the score of a null windowpattern
+     * Tests the impossibility of calculating the score of a null window pattern
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -140,7 +140,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of an empty windowpattern. Score must be 0
+     * Tests the scoring of an empty window pattern. Score must be 0
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -149,7 +149,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern
+     * Tests the scoring of a generic window pattern
      */
     @Test
     public void testCalculateScoreDiagonals(){
@@ -158,7 +158,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern with left to right diagonals only
+     * Tests the scoring of a window pattern with left to right diagonals only
      * Implicitly tests getScoreLeftToRight method of {@link DiagonalsPublicObjectiveCard}
      * @see DiagonalsPublicObjectiveCard#getScoreLeftToRight(WindowPattern, List)
      */
@@ -169,7 +169,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern with right to left diagonals only
+     * Tests the scoring of a window pattern with right to left diagonals only
      * Implicitly tests getScoreRightToLeft method of {@link DiagonalsPublicObjectiveCard}
      * @see DiagonalsPublicObjectiveCard#getScoreRightToLeft(WindowPattern, List) (WindowPattern, List)
      */
@@ -180,7 +180,7 @@ public class DiagonalsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a windowpattern with two diagonally adjacent dice only
+     * Tests the scoring of a window pattern with two diagonally adjacent dice only
      * Implicitly tests getCellPairScore method of {@link DiagonalsPublicObjectiveCard}
      * @see DiagonalsPublicObjectiveCard#getCellPairScore(WindowPattern, List, int, int, int)
      */
