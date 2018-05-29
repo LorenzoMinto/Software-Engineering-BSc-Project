@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
@@ -29,7 +30,9 @@ public class ChooseFromTrackControllerState extends ControllerState {
         try {
             controller.game.getTrack().takeDice(dice, slotNumber);
         } catch (BadDiceReferenceException e) {
-            return new CVMessage(ERROR_MESSAGE,"Can't choose this Dice.");
+            return new CVMessage(ERROR_MESSAGE,"Dice not in selected TrackSlot.");
+        } catch (ValueOutOfBoundsException e) {
+            return new CVMessage(ERROR_MESSAGE,"Selected TrackSlot does not exist.");
         }
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);

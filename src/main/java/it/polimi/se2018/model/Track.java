@@ -53,7 +53,6 @@ public class Track implements Serializable {
      *
      * @param dice the dice to be removed.
      * @param slotNumber the TrackSlot number from which to remove the dice.
-     * @return whether or not the specified dice could be removed from the specified TrackSlot.
      */
     public void takeDice(Dice dice, int slotNumber) throws BadDiceReferenceException {
 
@@ -61,7 +60,7 @@ public class Track implements Serializable {
             throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
-        slot.removeDice(dice);
+        slot.removeDice(dice); //throws BadDiceReferenceException
     }
 
     /**
