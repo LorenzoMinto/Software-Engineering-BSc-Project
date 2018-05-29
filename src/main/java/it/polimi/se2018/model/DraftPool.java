@@ -18,6 +18,10 @@ import java.util.Map;
 public class DraftPool extends Observable implements Serializable {
 
     /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -3098979090910253586L;
+    /**
      * List of dices of the draftpool
      */
     private List<Dice> dices;

@@ -14,6 +14,10 @@ import java.util.Random;
 public class Dice implements Serializable {
 
     /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -5969531893571901155L;
+    /**
      * The value of the Dice
      */
     private int value;

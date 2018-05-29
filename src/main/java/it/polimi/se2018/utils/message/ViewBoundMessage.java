@@ -10,15 +10,15 @@ import java.util.Map;
  */
 public abstract class ViewBoundMessage extends Message {
 
-    public ViewBoundMessage(MessageType type, Map<String, Object> params, String playerID) {
+    public ViewBoundMessage(Enum type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
     }
 
-    public ViewBoundMessage(MessageType type, Map<String, Object> params) {
+    public ViewBoundMessage(Enum type, Map<String, Object> params) {
         super(type, params);
     }
 
-    public ViewBoundMessage(MessageType type) {
+    public ViewBoundMessage(Enum type) {
         super(type);
     }
 

@@ -18,6 +18,13 @@ import java.util.Properties;
  */
 public class ToolCard implements Serializable{
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = 3828562971059857480L;
+    /**
+     * The id of the toolcard
+     */
     private final String toolCardID;
 
     /**

@@ -27,7 +27,7 @@ public class CVMessage extends ViewBoundMessage {
     /**
      * Enum for all types of CVMessage instances
      */
-    public enum types implements MessageType{
+    public enum types {
         ERROR_MESSAGE,
         ACKNOWLEDGMENT_MESSAGE,
         INACTIVE_PLAYER,
