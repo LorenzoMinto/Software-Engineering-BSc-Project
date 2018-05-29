@@ -79,7 +79,7 @@ public class ScorerTest {
     }
 
     /**
-     * Creates a new Window Pattern Manager, which is used to create the specific patterns of the players
+     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the test
      */
     @BeforeClass
     public static void buildWindowPatterns(){
