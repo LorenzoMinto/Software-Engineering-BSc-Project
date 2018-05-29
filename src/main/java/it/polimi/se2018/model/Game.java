@@ -286,6 +286,9 @@ public class Game extends Observable implements Observer{
         throw new BadBehaviourRuntimeException("Asked to use a toolcard but it is not in the drawn set");
     }
 
+    /**
+     * Sets the game status to waiting for patterns choice
+     */
     public void setStatusAsWaitingForPatternsChoice(){
         if(status==GameStatus.WAITING_FOR_PLAYERS){
             this.status = GameStatus.WAITING_FOR_PATTERNS_CHOICE;
@@ -368,12 +371,19 @@ public class Game extends Observable implements Observer{
 
     }
 
+    /**
+     * Advances the game to the following turn
+     * Notifies the observers (View) with the list of the players that will play the following turns
+     *
+     * @throws NoMoreTurnsAvailableException
+     * @author Jacopo Pio Gargano
+     */
     public void nextTurn() throws NoMoreTurnsAvailableException {
         try {
             getCurrentRound().nextTurn();
 
             //NOTIFYING
-            List<Player> nextPlayers = getCurrentRound().getPlayersInOrderFromTurn(getPlayers(), numberOfTurnsPerRound);
+            List<Player> nextPlayers = getCurrentRound().getPlayersOfNextTurns(getPlayers(), numberOfTurnsPerRound);
 
             Map <String, Object> messageAttributes = new HashMap<>();
 
