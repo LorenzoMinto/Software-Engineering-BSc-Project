@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
+import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.controller.WindowPatternManager;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
@@ -14,16 +15,18 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
+ * Test for {@link Game} class
+ *
  * @author Jacopo Pio Gargano
  */
 
 public class GameTest {
 
-    private static WindowPattern windowPattern;
     private Game game;
+
+    private static WindowPattern windowPattern;
     private static final int numberOfRounds = 10;
     private static final int maxNumberOfPlayers = 4;
-    private static PrivateObjectiveCard privateObjectiveCard;
     private static Player player;
     private static ToolCard toolCard;
     private static ToolCard toolCard1;
@@ -34,12 +37,14 @@ public class GameTest {
     private static List<ToolCard> toolCards;
     private static List<Dice> dices;
     private static Map<Player, Integer> rankings;
-    private static Properties properties;
 
 
+    /**
+     * Initializing the variables needed in the tests
+     */
     @BeforeClass
     public static void initializeVariables(){
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null, DiceColor.RED);
+        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, DiceColor.RED);
         player = new Player( "player", privateObjectiveCard);
 
         publicObjectiveCards = new ArrayList<>();
@@ -52,9 +57,12 @@ public class GameTest {
         windowPattern = windowPatterns.get(0);
     }
 
+    /**
+     * Initializing the ToolCards needed in the tests
+     */
     @BeforeClass
     public static void initializeToolCards(){
-        properties = new Properties();
+        Properties properties = new Properties();
 
         properties.put("id","ID1");
         properties.put("title","title1");
@@ -83,8 +91,13 @@ public class GameTest {
 
         toolCard2 = new ToolCard(properties, null, null );
 
+        toolCard3 = ToolCard.createTestInstance();
+
     }
 
+    /**
+     * Initializing the lists needed in the tests. This is done before each test
+     */
     @Before
     public void initializeLists(){
         toolCards = new ArrayList<>();
@@ -97,17 +110,28 @@ public class GameTest {
         rankings.put(player, 0);
     }
 
+    /**
+     * Initializing the game. This is done before each test to reset properties
+     */
     @Before
     public void initializeGame(){
         game = new Game(numberOfRounds, maxNumberOfPlayers);
     }
 
+    /**
+     * Runs all rounds of a game
+     */
     private void runAllRounds() {
         game.startGame(dices);
 
         for(int i=1; i <= numberOfRounds; i++){
             try {
                 game.nextRound(dices);
+                for(int j=0; j < 1; j++){
+                    try{
+                        game.nextTurn();
+                    }catch (NoMoreTurnsAvailableException e ){}
+                }
             } catch (IllegalArgumentException | BadBehaviourRuntimeException e){
                 e.printStackTrace();
                 fail();
@@ -115,12 +139,18 @@ public class GameTest {
         }
     }
 
+    /**
+     * Tests the constructor of {@link Game} class with legal parameters
+     */
     @Test
     public void testConstructor(){
         game = new Game(numberOfRounds, maxNumberOfPlayers);
         assertNotNull(game);
     }
 
+    /**
+     * Tests the impossibility of creating a {@link Game} with a negative number of rounds
+     */
     @Test
     public void testConstructorWithNegativeNumberOfRounds(){
         try{
@@ -129,6 +159,9 @@ public class GameTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a {@link Game} with a negative number of players
+     */
     @Test
     public void testConstructorWithNegativeMaxNumberOfPlayers(){
         try{
@@ -137,6 +170,9 @@ public class GameTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the retrieval of the current round after starting the game
+     */
     @Test
     public void testGetCurrentRound(){
             game.setCards(toolCards, publicObjectiveCards);
@@ -147,11 +183,26 @@ public class GameTest {
             assertNotNull(game.getCurrentRound());
     }
 
+    /**
+     * Tests the retrieval of the PublicObjectiveCards
+     */
+    @Test
+    public void testGetDrawnPublicObjectiveCards(){
+        game.setCards(toolCards, publicObjectiveCards);
+        assertEquals(publicObjectiveCards, game.getDrawnPublicObjectiveCards());
+    }
+
+    /**
+     * Tests that the {@link Track} in the game is not null
+     */
     @Test
     public void testTrackNotNull(){
         assertNotNull(game.getTrack());
     }
 
+    /**
+     * Tests setting the game ToolCards and PublicObjectiveCards
+     */
     @Test
     public void testSetCards(){
         try{
@@ -162,6 +213,9 @@ public class GameTest {
         }
     }
 
+    /**
+     * Tests the impossibility of setting the cards of a game twice
+     */
     @Test
     public void testSetCardsTwice(){
         game.setCards(toolCards,publicObjectiveCards);
@@ -172,6 +226,70 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the current {@link Player} of the game
+     */
+    @Test
+    public void testIsCurrentPlayer(){
+        Player player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
+        game.startGame(dices);
+        assertTrue(game.isCurrentPlayer(player.getID()));
+    }
+
+    /**
+     * Tests the impossibility of checking the current player if the game has not started
+     */
+    @Test
+    public void testIsCurrentPlayerWhenIllegalStatus(){
+        Player player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+        try{
+            game.isCurrentPlayer(player.getID());
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
+    }
+
+    /**
+     * Tests setting the game status to waiting for patterns choice
+     */
+    @Test
+    public void testSetStatusAsWaitingForPatternsChoice(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+
+        try{
+            game.setStatusAsWaitingForPatternsChoice();
+        }catch (BadBehaviourRuntimeException e){
+            e.printStackTrace();
+            fail();
+        }
+
+        try{
+            game.assignWindowPatternToPlayer(windowPattern, player.getID());
+        }catch (BadBehaviourRuntimeException e){
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    /**
+     * Tests setting the game status to waiting for patterns choice when game is not waiting for players
+     */
+    @Test
+    public void testSetStatusAsWaitingForPatternsChoiceWhenIllegalStatus(){
+
+        try{
+            game.setStatusAsWaitingForPatternsChoice();
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
+    }
+
+    /**
+     * Tests the impossibility of adding a player when the game is not waiting for players
+     */
     @Test
     public void testAddPlayerWhenIllegalStatus(){
         try {
@@ -180,6 +298,9 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests adding a player when the game is waiting for players
+     */
     @Test
     public void testAddPlayer(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -194,6 +315,9 @@ public class GameTest {
         assertEquals(expectedPlayersOfGame, players);
     }
 
+    /**
+     * Tests the impossibility of adding the same player twice
+     */
     @Test
     public void testAddSamePlayerTwice(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -210,7 +334,9 @@ public class GameTest {
     }
 
 
-
+    /**
+     * Tests the impossibility of setting the game rankings when the game has not ended
+     */
     @Test
     public void testSetRankingsWhenIllegalStatus(){
         rankings.put(player,9);
@@ -220,6 +346,9 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e) {}
     }
 
+    /**
+     * Tests the impossibility of setting the game rankings to null
+     */
     @Test
     public void testSetRankingsToNull(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -235,6 +364,9 @@ public class GameTest {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests setting the game rankings when the game has ended
+     */
     @Test
     public void testSetRankings(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -248,6 +380,9 @@ public class GameTest {
     }
 
 
+    /**
+     * Tests the usage of a {@link ToolCard} when the game has started
+     */
     @Test
     public void testUseToolCard(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -265,6 +400,9 @@ public class GameTest {
         assertTrue(game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
     }
 
+    /**
+     * Tests the impossibility of using a {@link ToolCard} that is not part of the ToolCards of the game
+     */
     @Test
     public void testUseToolCardNotInDrawnSet(){
         Properties properties1 = new Properties();
@@ -308,6 +446,9 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the impossibility of using a {@link ToolCard} when the game has not started
+     */
     @Test
     public void testUseToolCardWhenIllegalStatus(){
         try {
@@ -316,6 +457,9 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the retrieval of a {@link ToolCard}
+     */
     @Test
     public void testGetToolCard(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -323,6 +467,9 @@ public class GameTest {
         assertEquals(toolCard, gameToolCard);
     }
 
+    /**
+     * Tests the impossibility of retrieving a null {@link ToolCard}
+     */
     @Test
     public void testGetNullToolCard(){
         try {
@@ -331,6 +478,9 @@ public class GameTest {
         }catch (NullPointerException e){}
     }
 
+    /**
+     * Tests the impossibility of getting a {@link ToolCard} that is not in the drawn set
+     */
     @Test
     public void testGetToolCardNotInDrawnToolCards(){
 
@@ -346,6 +496,9 @@ public class GameTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the normal start of a game
+     */
     @Test
     public void testStartGame(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -362,6 +515,9 @@ public class GameTest {
         assertNotNull(game.getCurrentRound());
     }
 
+    /**
+     * Tests the impossibility of starting a game with null dices
+     */
     @Test
     public void testStartGameWithNullDices(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -376,6 +532,9 @@ public class GameTest {
         } catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the impossibility of starting a game with a list of no dices
+     */
     @Test
     public void testStartGameWithEmptyDices(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -390,8 +549,11 @@ public class GameTest {
         } catch (EmptyListException e){}
     }
 
+    /**
+     * Tests the impossibility of starting a game when not waiting for patterns choice
+     */
     @Test
-    public void testStartGameIllegalStatus(){
+    public void testStartGameWhenIllegalStatus(){
         try {
             game.startGame(dices);
             fail();
@@ -401,6 +563,9 @@ public class GameTest {
         } catch (BadBehaviourRuntimeException e){}
     }
 
+    /**
+     * Tests the progress of a game by proceeding to the next {@link Round}
+     */
     @Test
     public void testNextRound(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -419,6 +584,9 @@ public class GameTest {
         assertEquals(1, game.getCurrentRound().getNumber());
     }
 
+    /**
+     * Tests the impossibility of proceeding to the next {@link Round} with null dices
+     */
     @Test
     public void testNextRoundWithNullDices(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -436,6 +604,10 @@ public class GameTest {
         } catch (IllegalArgumentException e){}
     }
 
+
+    /**
+     * Tests the impossibility of proceeding to the next {@link Round} with a list of no dices
+     */
     @Test
     public void testNextRoundWithEmptyDices(){
         game.setCards(toolCards, publicObjectiveCards);
@@ -453,12 +625,51 @@ public class GameTest {
         } catch (EmptyListException e){}
     }
 
+    /**
+     * Tests the impossibility of proceeding to the next {@link Round} if the game has not started
+     */
     @Test
-    public void testNextRoundIllegalStatus(){
+    public void testNextRoundWhenIllegalStatus(){
         try {
             game.nextRound(dices);
             fail();
         } catch (IllegalArgumentException | NoMoreRoundsAvailableException e) {
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
+    }
+
+    /**
+     * Tests the progress of a game by proceeding to the next {@link Round}
+     */
+    @Test
+    public void testNextTurn(){
+        game.setCards(toolCards, publicObjectiveCards);
+        game.addPlayer(player);
+        game.setStatusAsWaitingForPatternsChoice();
+        game.assignWindowPatternToPlayer(windowPattern, player.getID());
+        game.startGame(dices);
+
+        try {
+            game.nextRound(dices);
+            game.nextTurn();
+            game.nextTurn();
+        } catch (NoMoreRoundsAvailableException | NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertEquals(2, game.getCurrentRound().getCurrentTurn().getNumber());
+    }
+
+    /**
+     * Tests the impossibility of proceeding to the next {@link Round} if the game has not started
+     */
+    @Test
+    public void testNextTurnWhenIllegalStatus(){
+        try {
+            game.nextTurn();
+            fail();
+        } catch (NoMoreTurnsAvailableException e) {
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }

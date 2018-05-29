@@ -241,6 +241,7 @@ public class Game extends Observable implements Observer{
      * @return if the given player is the current playing one
      */
     public boolean isCurrentPlayer(String playerID) {
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't determine if current player if game is not running");}
         return getCurrentRound().getCurrentTurn().isCurrentPlayer(playerID);
     }
 
@@ -250,7 +251,7 @@ public class Game extends Observable implements Observer{
      * @param toolCard toolCard used in the current Turn
      */
     public void useToolCard(ToolCard toolCard){
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if not playing");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if game is not running");}
 
         if( !this.drawnToolCards.contains(toolCard) ) {
             throw new BadBehaviourRuntimeException("Asked to use a toolcard that is not in the drawn set");
@@ -379,6 +380,7 @@ public class Game extends Observable implements Observer{
      * @author Jacopo Pio Gargano
      */
     public void nextTurn() throws NoMoreTurnsAvailableException {
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next turn if game is not already running"); }
         try {
             getCurrentRound().nextTurn();
 
