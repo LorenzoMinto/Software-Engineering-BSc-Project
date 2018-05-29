@@ -16,6 +16,10 @@ import java.util.Map;
 public class WindowPattern extends Observable implements Serializable{
 
     /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = 2377367135661621968L;
+    /**
      * Window Pattern ID
      */
     private String id;

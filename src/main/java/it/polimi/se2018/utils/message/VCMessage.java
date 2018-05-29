@@ -23,7 +23,7 @@ public class VCMessage extends ControllerBoundMessage {
     /**
      * Enum for all types of VCMessage instances
      */
-    public enum types implements MessageType {
+    public enum types {
         CHOOSE_DICE_VALUE,
         CHOOSE_DICE_FROM_TRACK,
         DRAFT_DICE_FROM_DRAFTPOOL,

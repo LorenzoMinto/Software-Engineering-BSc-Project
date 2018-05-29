@@ -10,6 +10,10 @@ import java.util.Objects;
 public class Player implements Serializable {
 
     /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -3361603123980854887L;
+    /**
      * Favor Tokens of the player.
      */
     private int favorTokens;

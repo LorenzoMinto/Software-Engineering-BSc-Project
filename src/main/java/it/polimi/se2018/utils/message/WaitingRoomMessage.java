@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class WaitingRoomMessage extends Message {
 
-    public WaitingRoomMessage(MessageType type, Map<String, Object> params, String playerID) {
+    public WaitingRoomMessage(Enum type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
     }
 
@@ -32,7 +32,7 @@ public class WaitingRoomMessage extends Message {
     /**
      * Enum for all types of WaitingRoomMessage instances
      */
-    public enum types implements MessageType {
+    public enum types {
         BAD_FORMATTED,
         DENIED,
         JOIN,

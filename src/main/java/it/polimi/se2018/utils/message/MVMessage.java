@@ -23,7 +23,7 @@ public class MVMessage extends ViewBoundMessage {
     /**
      * Enum for all types of MCMessage instances
      */
-    public enum types implements MessageType{
+    public enum types {
         SETUP,                  //NOTE: nella view impostare il currentTurnNumber e currentRoundNumber a 1
         NEXT_ROUND,             //NOTE: nella view aumentare il currentRoundNumber e reset currentTurnNumber
         NEXT_TURN,              //NOTE: nella view aumentare il currentTurnNumber

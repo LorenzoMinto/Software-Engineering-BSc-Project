@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,12 @@ import java.util.List;
  *
  * @author Lorenzo Minto
  */
-public class TrackSlot {
+public class TrackSlot implements Serializable {
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -5716313610769359452L;
     /**
      * List of dices kept in the TrackSlot
      */

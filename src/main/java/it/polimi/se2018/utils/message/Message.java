@@ -12,12 +12,15 @@ import java.util.Map;
  */
 public abstract class Message implements Serializable{
 
-    interface MessageType extends Serializable{}
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = 4259191690541234881L;
 
     /**
      * Type of message (answering the question: "what is this message aim?")
      */
-    private MessageType type;
+    private Enum type;
 
     /**
      * Parameters passed in the message
@@ -36,7 +39,7 @@ public abstract class Message implements Serializable{
      * @param params the parameters of the message
      * @param playerID the player to send the message (null if broadcasting)
      */
-    public Message(MessageType type, Map<String, Object> params, String playerID) {
+    public Message(Enum type, Map<String, Object> params, String playerID) {
         this.type = type;
         this.params = (HashMap<String,Object>)params;
         this.playerID = playerID;
@@ -47,7 +50,7 @@ public abstract class Message implements Serializable{
      * @param type the type of the message
      * @param params the parameters of the message
      */
-    public Message(MessageType type, Map<String, Object> params) {
+    public Message(Enum type, Map<String, Object> params) {
         this(type,params,null);
     }
 
@@ -55,7 +58,7 @@ public abstract class Message implements Serializable{
      * Constructor of broadcasting Message without parameters, just type
      * @param type the type of the message
      */
-    public Message(MessageType type){
+    public Message(Enum type){
         this(type,null,null);
     }
 
@@ -64,7 +67,7 @@ public abstract class Message implements Serializable{
      *
      * @return the type of the message
      */
-    public MessageType getType(){
+    public Enum getType(){
         return this.type;
     }
 

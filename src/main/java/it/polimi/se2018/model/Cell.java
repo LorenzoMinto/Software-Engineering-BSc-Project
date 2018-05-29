@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 public class Cell implements Serializable{
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -3774521266275346050L;
 
     /**
      * The value that a Dice must have to be putted in this Cell. '0' means every value is allowed.
