@@ -3,9 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +11,23 @@ import java.util.List;
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link Track} class
+ *
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
+ */
 public class TrackTest {
 
-    Track track;
-    List<Dice> dices;
-    Dice dice1;
+    private Track track;
+    private List<Dice> dices;
+    private Dice dice1;
 
+    /**
+     * Initializes variables for the tests before each test
+     */
     @Before
-    public void setUp() throws Exception {
+    public void initializeVariables(){
         dices = new ArrayList<>();
 
         dice1 = new Dice(BLUE, 5);
@@ -39,25 +46,51 @@ public class TrackTest {
         track.processDices(dices);
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
+    /**
+     * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#initializeVariables()}
+     * @see Track#processDices(List)
+     */
     @Test
     public void testProcessDices() {
         assertEquals(dices, track.getDicesFromSlotNumber(0));
     }
 
+    /**
+     * Tests the impossibility of processing null dices
+     * @see Track#processDices(List)
+     */
+    @Test
+    public void testProcessNullDices() {
+        try{
+            track.processDices(null);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests the retrieval of dices from a certain {@link TrackSlot} number
+     * @see Track#getDicesFromSlotNumber(int)
+     */
     @Test
     public void testGetDicesFromSlotNumber() {
         assertEquals(dices, track.getDicesFromSlotNumber(0));
     }
 
+    /**
+     * Tests the impossibility of retrieving dices from a non existing {@link TrackSlot} number
+     * @see Track#getDicesFromSlotNumber(int)
+     */
     @Test
     public void testGetDicesFromNonExistingSlotNumber() {
-        expectedException.expect(ValueOutOfBoundsException.class);
-        track.getDicesFromSlotNumber(1);
+        try {
+            track.getDicesFromSlotNumber(1);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests taking a dice from a {@link TrackSlot}, which implies removing the {@link Dice} from the {@link TrackSlot}
+     */
     @Test
     public void testTakeDice()  {
         try {
@@ -69,6 +102,9 @@ public class TrackTest {
         assertFalse(track.getDicesFromSlotNumber(0).contains(dice1));
     }
 
+    /**
+     * Tests the impossibility of taking a {@link Dice} from a {@link TrackSlot} that does not contain it
+     */
     @Test
     public void testTakeDiceNotInTrackSlot(){
         try {
@@ -83,6 +119,9 @@ public class TrackTest {
         } catch (BadDiceReferenceException e) {}
     }
 
+    /**
+     * Tests the impossibility of taking a {@link Dice} from a non existing {@link TrackSlot}
+     */
     @Test
     public void testTakeDiceFromNonExistingTrackSlot() {
         try {
@@ -94,6 +133,9 @@ public class TrackTest {
         }catch (ValueOutOfBoundsException e) {}
     }
 
+    /**
+     * Tests putting a {@link Dice} in a {@link TrackSlot}
+     */
     @Test
     public void testPutDice() {
         Dice dice6 = new Dice(DiceColor.RED, 6);
@@ -101,6 +143,20 @@ public class TrackTest {
         assertTrue(track.getDicesFromSlotNumber(0).contains(dice6));
     }
 
+    /**
+     * Tests putting a null {@link Dice} in a {@link TrackSlot}
+     */
+    @Test
+    public void testPutNullDice() {
+        try{
+            track.putDice(null, 0);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests the impossibility of putting a {@link Dice} in a non existing {@link TrackSlot}
+     */
     @Test
     public void testPutDiceInNonExistingTrackSlot() {
         try {
