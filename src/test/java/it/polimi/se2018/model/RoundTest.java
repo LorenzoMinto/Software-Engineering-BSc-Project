@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Test for {@link Round} class
+ *
  * @author Jacopo Pio Gargano
  */
 
@@ -22,7 +24,6 @@ public class RoundTest {
 
 
     private Round round;
-    private Turn turn;
 
     private static DraftPool draftPool;
     private static PrivateObjectiveCard privateObjectiveCard;
@@ -33,6 +34,9 @@ public class RoundTest {
     private static Player p3;
     private static Player p4;
 
+    /**
+     * Initializes variables for the tests
+     */
     @BeforeClass
     public static void initializeVariables(){
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
@@ -48,6 +52,9 @@ public class RoundTest {
     }
 
 
+    /**
+     * Initializes players list before each test
+     */
     @Before
     public void initializePlayersList(){
         players.add(p1);
@@ -56,17 +63,26 @@ public class RoundTest {
         players.add(p4);
     }
 
+    /**
+     * Clears the players list after each test
+     */
     @After
     public void clearList(){
         players.clear();
     }
 
+    /**
+     * Tests the constructor with allowed parameters
+     */
     @Test
     public void testConstructor(){
         round = new Round(0,players.size(), players, draftPool);
         assertNotNull(round);
     }
 
+    /**
+     * Tests the impossibility of creating a round with a negative number
+     */
     @Test
     public void testConstructorWithNegativeRoundNumber(){
         try{
@@ -75,6 +91,9 @@ public class RoundTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a round with a negative number of turns
+     */
     @Test
     public void testConstructorWithNegativeNumberOfTurns(){
         try{
@@ -83,6 +102,9 @@ public class RoundTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a round with a null list of players
+     */
     @Test
     public void testConstructorWithNullListOfPlayers(){
         try{
@@ -91,6 +113,9 @@ public class RoundTest {
         }catch (NullPointerException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a round with a list of no players
+     */
     @Test
     public void testConstructorWithEmptyListOfPlayers(){
         try{
@@ -99,6 +124,9 @@ public class RoundTest {
         }catch (EmptyListException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a round with a null {@link DraftPool}
+     */
     @Test
     public void testConstructorWithNullDraftPool(){
         try{
@@ -107,17 +135,23 @@ public class RoundTest {
         }catch (IllegalArgumentException e){}
     }
 
-
+    /**
+     * Tests the retrieval of the current {@link Turn}
+     */
     @Test
     public void testGetCurrentTurn(){
         round = new Round(0,players.size()*2, players, draftPool);
 
-        turn = round.getCurrentTurn();
+        Turn turn = round.getCurrentTurn();
         assertNotNull(turn);
     }
 
+    /**
+     * Tests the retrieval of the players of the last round in reverse turn order
+     * @see Round#getPlayersByReverseTurnOrder()
+     */
     @Test
-    public void testGetPlayersByReverseTurnOrderOfLastRound(){
+    public void testGetPlayersOfLastRoundByReverseTurnOrder(){
         List<Player> expectedPlayers = new ArrayList<>();
         expectedPlayers.add(p2);
         expectedPlayers.add(p3);
@@ -130,8 +164,12 @@ public class RoundTest {
         assertEquals(expectedPlayers, playersByReverseTurnOrder);
     }
 
+    /**
+     * Tests the retrieval of the players of the last round in reverse turn order when there is only one player playing
+     * @see Round#getPlayersByReverseTurnOrder()
+     */
     @Test
-    public void testGetPlayersByReverseTurnOrderWithOnePlayer(){
+    public void testGetPlayersOfLastRoundByReverseTurnOrderWhenOnePlayer(){
         List<Player> expectedPlayers = new ArrayList<>();
         expectedPlayers.add(p2);
 
@@ -144,8 +182,12 @@ public class RoundTest {
         assertEquals(expectedPlayers, playersByReverseTurnOrder);
     }
 
+    /**
+     * Tests the retrieval of the player for the first turn of the game using the getPlayersByReverseTurnOrder method
+     * @see Round#getPlayersByReverseTurnOrder()
+     */
     @Test
-    public void testGetPlayerForFirstTurn(){
+    public void testGetPlayerForFirstTurnOfGame(){
         Player expectedPlayer = p1;
 
         round = new Round(0,players.size()*2, players, draftPool);
@@ -155,8 +197,12 @@ public class RoundTest {
         assertEquals(expectedPlayer, firstPlayer);
     }
 
+    /**
+     * Tests the retrieval of the player for the last turn of the game using the getPlayersByReverseTurnOrder method
+     * @see Round#getPlayersByReverseTurnOrder()
+     */
     @Test
-    public void testGetPlayerForLastTurn(){
+    public void testGetPlayerForLastTurnOfGame(){
         Player expectedPlayer = p2;
 
         round = new Round(9,players.size()*2, players, draftPool);
@@ -166,6 +212,9 @@ public class RoundTest {
         assertEquals(expectedPlayer, lastPlayer);
     }
 
+    /**
+     * Tests that the first turn of a round has 0 as index
+     */
     @Test
     public void testFirstTurnOfRoundHasZeroIndex(){
         round = new Round(0,players.size()*2, players, draftPool);
@@ -175,6 +224,9 @@ public class RoundTest {
         assertEquals(0,currentTurnNumber);
     }
 
+    /**
+     * Tests proceeding to the next turn of a round from the first turn of the round
+     */
     @Test
     public void testNextTurnFromFirstTurnOfRound(){
         round = new Round(0,players.size()*2, players, draftPool);
@@ -191,6 +243,9 @@ public class RoundTest {
         assertEquals(1,currentTurnNumber);
     }
 
+    /**
+     * Tests the impossibility of proceeding to the next turn when no more turns are available
+     */
     @Test
     public void testNextTurnWhenNoMoreTurnsAvailable(){
         int numberOfTurnsPerRound = players.size()*2;
@@ -212,14 +267,19 @@ public class RoundTest {
         }catch (NoMoreTurnsAvailableException e){}
     }
 
+    /**
+     * Tests the retrieval of the round number
+     */
     @Test
     public void testGetNumber(){
-        int roundNumber = 7;
-        round = new Round(roundNumber,players.size()*2, players, draftPool);
+        round = new Round(7,players.size()*2, players, draftPool);
 
-        assertEquals(roundNumber,round.getNumber());
+        assertEquals(7,round.getNumber());
     }
 
+    /**
+     * Tests the retrieval of the {@link DraftPool}
+     */
     @Test
     public void testGetDraftPool(){
         draftPool = new DraftPool(new ArrayList<>());
@@ -228,6 +288,9 @@ public class RoundTest {
         assertEquals(draftPool, round.getDraftPool());
     }
 
+    /**
+     * Tests the removal of the next turn of a player
+     */
     @Test
     public void testRemoveNextTurnOfPlayer(){
 
@@ -250,18 +313,39 @@ public class RoundTest {
         }
     }
 
+    /**
+     * Tests the impossibility of removing the next turn of the current player twice
+     */
     @Test
-    public void testTryToRemoveNextTurnOfPlayer(){
+    public void testRemoveNextTurnOfCurrentPlayerTwice(){
 
         int numberOfTurns = players.size() * 2;
         round = new Round(0, numberOfTurns, players, draftPool);
         Player currentPlayer = round.getCurrentTurn().getPlayer();
 
-        round.removeNextTurnOfPlayer(currentPlayer);
+        assertTrue(round.removeNextTurnOfPlayer(currentPlayer));
         assertFalse(round.removeNextTurnOfPlayer(currentPlayer));
 
     }
 
+    /**
+     * Tests the impossibility of removing the next turn of a player three times
+     */
+    @Test
+    public void testRemoveNextTurnOfPlayerThreeTimes(){
+
+        int numberOfTurns = players.size() * 2;
+        round = new Round(0, numberOfTurns, players, draftPool);
+
+        assertTrue(round.removeNextTurnOfPlayer(p2));
+        assertTrue(round.removeNextTurnOfPlayer(p2));
+        assertFalse(round.removeNextTurnOfPlayer(p2));
+
+    }
+
+    /**
+     * Tests the impossibility of removing the next turn of a null player
+     */
     @Test
     public void testRemoveNextTurnOfNullPlayer(){
         round = new Round(0, players.size()*2, players, draftPool);

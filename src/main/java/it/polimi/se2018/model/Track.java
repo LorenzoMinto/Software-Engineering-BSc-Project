@@ -31,6 +31,7 @@ public class Track implements Serializable {
      * @param dices list of dices passed.
      */
     public void processDices(List<Dice> dices) {
+        if(dices == null){ throw new IllegalArgumentException("Can't process null dices");}
         TrackSlot slot = new TrackSlot(dices);
         slots.add(slot);
     }
@@ -74,6 +75,7 @@ public class Track implements Serializable {
      * @return whether or not the specified dice could be put on the specified TrackSlot.
      */
     public boolean putDice(Dice dice, int slotNumber){
+        if(dice == null){ throw new IllegalArgumentException("Can't add nul dice to the track");}
         if (slotNumber >= slots.size()) {
             throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }

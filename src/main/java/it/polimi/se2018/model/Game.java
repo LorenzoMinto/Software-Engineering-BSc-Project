@@ -312,7 +312,7 @@ public class Game extends Observable implements Observer{
         try {
             nextRound(dices);
         } catch (NoMoreRoundsAvailableException e) {
-            throw new BadBehaviourRuntimeException();
+            throw new BadBehaviourRuntimeException("Can't start a game with no rounds");
         }
 
         //Send to all players all the needed data about game

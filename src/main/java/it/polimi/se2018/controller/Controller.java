@@ -358,13 +358,14 @@ public class Controller extends Observable {
             if(p.getWindowPattern()==null){ return; }
         }
 
-        //Next lines are executed only if all window patterns are setted
+        //Next lines are executed only if all window patterns are set
         this.waitingForPatternsChoice.cancel();
         startGame();
     }
 
     private void startGame(){
         game.startGame(getDicesForNewRound());
+        //TODO: verificare la correttezza della chiamata a advanceGame (secondo me va rimosso perché chiama game.nextTurn, che è sbagliato, perché così non si eseguirebbe il primo turn del game), ma va copiata la restante logica che c'è dentro advanceGame
         this.advanceGame();
 
         startPlayerMoveTimer();
