@@ -32,7 +32,7 @@ public class ToolCardTest {
      * Initializes variables for the tests
      */
     @BeforeClass
-    public static void initializeVariables(){
+    public static void setUp(){
         rule = new ColorPlacementRuleDecorator(new EmptyPlacementRule());
         controllerStateRules = new HashMap<>();
 

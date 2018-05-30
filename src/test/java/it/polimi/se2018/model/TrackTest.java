@@ -27,7 +27,7 @@ public class TrackTest {
      * Initializes variables for the tests before each test
      */
     @Before
-    public void initializeVariables(){
+    public void setUp(){
         dices = new ArrayList<>();
 
         dice1 = new Dice(BLUE, 5);
@@ -47,7 +47,7 @@ public class TrackTest {
     }
 
     /**
-     * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#initializeVariables()}
+     * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#setUp()}
      * @see Track#processDices(List)
      */
     @Test

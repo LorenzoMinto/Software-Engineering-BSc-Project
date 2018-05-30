@@ -30,7 +30,7 @@ public class TurnTest {
      * Initializes variables for the tests
      */
     @BeforeClass
-    public static void initializeVariables() {
+    public static void setUp() {
         privateObjectiveCard = new PrivateObjectiveCard(null,null, null, RED);
         playerName = "player";
         player = new Player(playerName, privateObjectiveCard);

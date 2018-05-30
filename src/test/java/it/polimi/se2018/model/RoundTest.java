@@ -38,7 +38,7 @@ public class RoundTest {
      * Initializes variables for the tests
      */
     @BeforeClass
-    public static void initializeVariables(){
+    public static void setUp(){
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
         p1 = new Player( "p1", privateObjectiveCard);

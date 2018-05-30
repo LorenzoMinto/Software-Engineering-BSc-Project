@@ -43,7 +43,7 @@ public class GameTest {
      * Initializes variables for the tests
      */
     @BeforeClass
-    public static void initializeVariables(){
+    public static void setUp(){
         PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, DiceColor.RED);
         player = new Player( "player", privateObjectiveCard);
 

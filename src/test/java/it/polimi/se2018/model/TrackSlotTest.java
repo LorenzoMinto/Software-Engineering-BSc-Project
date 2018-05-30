@@ -17,7 +17,7 @@ public class TrackSlotTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         dices = new ArrayList<>();
 
         dice1 = new Dice(BLUE, 5);
