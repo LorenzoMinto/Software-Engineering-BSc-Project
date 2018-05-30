@@ -138,6 +138,7 @@ public class Controller extends Observable {
      *
      * @param game the game instance to be controlled
      * @param properties dictionary of parameters loaded from config file
+     * @param logger the logger instance sent from server
      */
     public Controller(Game game, Properties properties, Logger logger) {
         this.logger = logger;
@@ -578,6 +579,7 @@ public class Controller extends Observable {
     /**
      * Returns Dictionary of configuration's parameters
      *
+     * @param p the configuration property to retrieve
      * @return Dictionary of configuration's parameters
      */
     public int getConfigProperty(String p){

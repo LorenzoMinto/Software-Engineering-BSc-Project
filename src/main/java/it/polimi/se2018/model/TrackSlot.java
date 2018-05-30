@@ -44,7 +44,7 @@ public class TrackSlot implements Serializable {
      * Removes, if possible, a specified dice from the TrackSlot's dices.
      *
      * @param dice the dice to be removed.
-     * @return whether or not specified dice could be removed from the TrackSlot's dices.
+     * @throws BadDiceReferenceException if the dice does not exists
      */
     public void removeDice(Dice dice) throws BadDiceReferenceException {
         if (dices.contains(dice)) {

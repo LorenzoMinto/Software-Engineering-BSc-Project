@@ -23,7 +23,7 @@ public class BadBehaviourRuntimeException extends RuntimeException {
     /**
      * Constructor with message. Just calls the super().
      *
-     * @param message message sent to the exception
+     * @param message message sent within the exception
      */
     public BadBehaviourRuntimeException(String message) {
         super(message);

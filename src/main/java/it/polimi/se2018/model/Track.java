@@ -56,6 +56,7 @@ public class Track implements Serializable {
      *
      * @param dice the dice to be removed.
      * @param slotNumber the TrackSlot number from which to remove the dice.
+     * @throws BadDiceReferenceException if the dice does not exist
      */
     public void takeDice(Dice dice, int slotNumber) throws BadDiceReferenceException {
 

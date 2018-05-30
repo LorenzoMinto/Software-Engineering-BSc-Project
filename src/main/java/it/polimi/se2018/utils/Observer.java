@@ -20,6 +20,7 @@ public interface Observer {
      * observers notified of the change.
      *
      * @param m an argument passed to the {@link Observable#notify(Message)} method
+     * @return true if message is successfully sent
      */
     boolean update(Message m);
 }

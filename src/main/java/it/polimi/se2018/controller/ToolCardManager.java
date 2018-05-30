@@ -37,6 +37,8 @@ public class ToolCardManager {
      * Constructor of the class. Checks if there are toolcards than can be loaded
      * from file system and if yes loads them.
      *
+     * @param defaultPlacementRule the default placement rule to apply to toolcards that in the xml file
+     *                             does not include specifications about what should be placement rule
      * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
      */
     public ToolCardManager(PlacementRule defaultPlacementRule){

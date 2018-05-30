@@ -9,6 +9,10 @@ package it.polimi.se2018.controller;
  * @author Federico Haag
  */
 public class NoToolCardsFoundInFileSystemException extends RuntimeException {
+
+    /**
+     * Basic constructor for exception
+     */
     public NoToolCardsFoundInFileSystemException() {
         super();
     }
