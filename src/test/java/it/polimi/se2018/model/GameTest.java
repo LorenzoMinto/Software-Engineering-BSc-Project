@@ -26,7 +26,7 @@ public class GameTest {
 
     private static WindowPattern windowPattern;
     private static final int numberOfRounds = 10;
-    private static final int maxNumberOfPlayers = 4;
+    private static final int maxNumberOfPlayers = 1;
     private static Player player;
     private static ToolCard toolCard;
     private static ToolCard toolCard1;
@@ -40,7 +40,7 @@ public class GameTest {
 
 
     /**
-     * Initializing the variables needed in the tests
+     * Initializes variables for the tests
      */
     @BeforeClass
     public static void initializeVariables(){
@@ -58,7 +58,7 @@ public class GameTest {
     }
 
     /**
-     * Initializing the ToolCards needed in the tests
+     * Initializes the ToolCards needed in the tests
      */
     @BeforeClass
     public static void initializeToolCards(){
@@ -96,7 +96,7 @@ public class GameTest {
     }
 
     /**
-     * Initializing the lists needed in the tests. This is done before each test
+     * Initializes the lists needed in the tests before each test
      */
     @Before
     public void initializeLists(){
@@ -111,7 +111,7 @@ public class GameTest {
     }
 
     /**
-     * Initializing the game. This is done before each test to reset properties
+     * Initializes the game before each test to reset properties
      */
     @Before
     public void initializeGame(){
@@ -127,7 +127,7 @@ public class GameTest {
         for(int i=1; i <= numberOfRounds; i++){
             try {
                 game.nextRound(dices);
-                for(int j=0; j < 1; j++){
+                for(int j=1; j <= 2; j++){
                     try{
                         game.nextTurn();
                     }catch (NoMoreTurnsAvailableException e ){}
@@ -320,17 +320,33 @@ public class GameTest {
      */
     @Test
     public void testAddSamePlayerTwice(){
-        game.setCards(toolCards, publicObjectiveCards);
+        Game game1 = new Game (numberOfRounds, 2);
+        game1.setCards(toolCards, publicObjectiveCards);
 
-        game.addPlayer(player);
-        game.addPlayer(player);
+        game1.addPlayer(player);
+        game1.addPlayer(player);
 
         List<Player> expectedPlayersOfGame = new ArrayList<>();
         expectedPlayersOfGame.add(player);
 
-        List<Player> players = game.getPlayers();
+        List<Player> players = game1.getPlayers();
 
         assertEquals(expectedPlayersOfGame, players);
+    }
+
+    /**
+     * Tests the impossibility of adding more players than allowed
+     */
+    @Test
+    public void testAddMorePlayersThanAllowed(){
+        Game game1 = new Game (numberOfRounds, 1);
+        game1.setCards(toolCards, publicObjectiveCards);
+
+        game1.addPlayer(player);
+        try{
+            game1.addPlayer(player);
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
     }
 
 
@@ -516,6 +532,25 @@ public class GameTest {
     }
 
     /**
+     * Tests the impossibility of starting a game with no {@link Round}
+     */
+    @Test
+    public void testStartGameWithNoRounds(){
+        Game game1 = new Game(0, maxNumberOfPlayers);
+        game1.setCards(toolCards, publicObjectiveCards);
+        game1.addPlayer(player);
+        game1.setStatusAsWaitingForPatternsChoice();
+        game1.assignWindowPatternToPlayer(windowPattern, player.getID());
+
+        try {
+            game1.startGame(dices);
+            fail();
+        }catch (BadBehaviourRuntimeException e){}
+    }
+
+
+
+    /**
      * Tests the impossibility of starting a game with null dices
      */
     @Test
@@ -639,7 +674,7 @@ public class GameTest {
     }
 
     /**
-     * Tests the progress of a game by proceeding to the next {@link Round}
+     * Tests the progress of a game by proceeding to the next {@link Turn}
      */
     @Test
     public void testNextTurn(){
@@ -650,19 +685,17 @@ public class GameTest {
         game.startGame(dices);
 
         try {
-            game.nextRound(dices);
             game.nextTurn();
-            game.nextTurn();
-        } catch (NoMoreRoundsAvailableException | NoMoreTurnsAvailableException e) {
+        } catch (NoMoreTurnsAvailableException e) {
             e.printStackTrace();
             fail();
         }
 
-        assertEquals(2, game.getCurrentRound().getCurrentTurn().getNumber());
+        assertEquals(1, game.getCurrentRound().getCurrentTurn().getNumber());
     }
 
     /**
-     * Tests the impossibility of proceeding to the next {@link Round} if the game has not started
+     * Tests the impossibility of proceeding to the next {@link Turn} if the game has not started
      */
     @Test
     public void testNextTurnWhenIllegalStatus(){
