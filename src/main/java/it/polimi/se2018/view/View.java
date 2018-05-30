@@ -3,20 +3,24 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.Observable;
 
+import java.util.logging.Logger;
+
 public abstract class View extends Observable {
 
-    private Player player;
+    private String playerID;
 
-    public View() {
-        //does nothing
+    private final Logger logger;
+
+    public View(Logger logger) {
+        this.logger = logger;
     }
 
-    public Player getPlayer() {
-        return player;
+    public String getPlayerID() {
+        return playerID;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayer(String playerID) {
+        this.playerID = playerID;
     }
 
     public void showMessage(String message){}

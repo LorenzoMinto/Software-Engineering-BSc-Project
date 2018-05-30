@@ -376,7 +376,7 @@ public class Game extends Observable implements Observer{
      * Advances the game to the following turn
      * Notifies the observers (View) with the list of the players that will play the following turns
      *
-     * @throws NoMoreTurnsAvailableException
+     * @throws NoMoreTurnsAvailableException if no more turns are available in this round
      * @author Jacopo Pio Gargano
      */
     public void nextTurn() throws NoMoreTurnsAvailableException {

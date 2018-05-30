@@ -88,7 +88,6 @@ public class DraftPool extends Observable implements Serializable {
      * Add the specified dice to the draftpool
      *
      * @param dice the dice to be added to the DraftPool
-     * @return if the operation succeeded
      */
     public void putDice(Dice dice) {
         if(dice == null) {throw new IllegalArgumentException("ERROR: Can't put a null dice in draft pool.");}

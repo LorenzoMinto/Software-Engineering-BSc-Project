@@ -9,6 +9,10 @@ package it.polimi.se2018.controller;
  * @author Federico Haag
  */
 public class NoPatternsFoundInFileSystemException extends RuntimeException {
+
+    /**
+     * Basic constructor for exception
+     */
     public NoPatternsFoundInFileSystemException() {
         super();
     }

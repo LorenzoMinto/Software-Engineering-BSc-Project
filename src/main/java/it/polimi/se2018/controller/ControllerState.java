@@ -54,7 +54,7 @@ public abstract class ControllerState {
     /**
      * Drafts a specified dice from the current draft pool and sets it as the drafted dice on the current turn.
      * @param dice the dice to be drafted.
-     *
+     * @return a message containing the result of the mov
      */
     public CVMessage draftDiceFromDraftPool(Dice dice){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -62,6 +62,7 @@ public abstract class ControllerState {
      * Places the drafted dice of the current turn on the specified cell (row and column).
      * @param row the row index of the cell where the dice is to be placed.
      * @param col the column index of the cell where the dice is to be placed.
+     * @return a message containing the result of the mov
      */
     public CVMessage placeDice(int row, int col){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -69,6 +70,7 @@ public abstract class ControllerState {
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
      * passed toolCard is set as activeToolCard in the Controller.
      * @param toolcard the toolcard to be activated.
+     * @return a message containing the result of the mov
      */
     public CVMessage useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -76,6 +78,7 @@ public abstract class ControllerState {
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.
      * @param dice the chosen dice.
      * @param slotNumber the number of the TrackSlot where the dice is.
+     * @return a message containing the result of the mov
      */
     public CVMessage chooseDiceFromTrack(Dice dice, int slotNumber){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -86,6 +89,7 @@ public abstract class ControllerState {
      * @param colFrom the column index of the cell FROM which the dice is to be moved.
      * @param rowTo the row index of the cell TO which the dice is to be moved.
      * @param colTo the column index of the cell TO which the dice is to be moved.
+     * @return a message containing the result of the mov
      */
     public CVMessage moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -93,6 +97,7 @@ public abstract class ControllerState {
     /**
      * Increments the value of the drafted dice found in the current turn.
      *
+     * @return a message containing the result of the mov     *
      */
     public CVMessage incrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
@@ -100,13 +105,14 @@ public abstract class ControllerState {
     /**
      * Decrements the value of the drafted dice found in the current turn.
      *
+     * @return a message containing the result of the mov
      */
     public CVMessage decrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Sets the value of the drafted dice found in the current turn to the specified value.
      * @param value the chosen value for the drafted dice.
-     *
+     * @return a message containing the result of the mov
      */
     public CVMessage chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
