@@ -19,7 +19,7 @@ public class CellTest {
     private Dice dice = new Dice(GREEN,4);
 
     /**
-     * Initializing the cell for the tests
+     * Initializes the cell for the tests
      */
     @Before
     public void initializeCell(){

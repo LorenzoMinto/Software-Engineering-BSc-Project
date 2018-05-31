@@ -29,10 +29,10 @@ public class ToolCardTest {
 
 
     /**
-     * Initializing all needed variables for the tests
+     * Initializes variables for the tests
      */
     @BeforeClass
-    public static void initializeVariables(){
+    public static void setUp(){
         rule = new ColorPlacementRuleDecorator(new EmptyPlacementRule());
         controllerStateRules = new HashMap<>();
 
@@ -50,7 +50,7 @@ public class ToolCardTest {
     }
 
     /**
-     * Initializing the ToolCard. This is done before each test
+     * Initiales the ToolCard before each test
      */
     @Before
     public void initializeToolCard(){

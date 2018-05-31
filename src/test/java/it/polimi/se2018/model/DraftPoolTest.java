@@ -18,7 +18,7 @@ public class DraftPoolTest {
     private static DraftPool draftPool;
 
     /**
-     * Initializing draft pool
+     * Initializes draft pool
      */
     @Before
     public void initializeDraftPool() {

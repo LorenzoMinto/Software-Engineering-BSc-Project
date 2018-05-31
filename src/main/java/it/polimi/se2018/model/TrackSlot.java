@@ -37,6 +37,7 @@ public class TrackSlot implements Serializable {
      * @param dice the dice to be added.
      */
     public void addDice(Dice dice) {
+        if(dice == null){ throw new IllegalArgumentException("Can't add null dice to the track slot");}
         dices.add(dice);
     }
 
