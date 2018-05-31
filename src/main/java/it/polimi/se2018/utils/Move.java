@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils;
 
-public enum MovePermission {
+public enum Move {
     END_TURN,
     DRAFT_DICE_FROM_DRAFTPOOL,
     PLACE_DICE_ON_WINDOWPATTERN,
@@ -9,5 +9,6 @@ public enum MovePermission {
     DECREMENT_DRAFTED_DICE,
     CHANGE_DRAFTED_DICE_VALUE,
     CHOOSE_DICE_FROM_TRACK,
-    MOVE_DICE
+    MOVE_DICE,
+    JOIN_GAME
 }

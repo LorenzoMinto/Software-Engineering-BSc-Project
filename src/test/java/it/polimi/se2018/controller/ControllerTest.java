@@ -24,8 +24,8 @@ public class ControllerTest {
         gprop.setProperty("numberOfPublicObjectiveCards","2");
         gprop.setProperty("maxNumberOfPlayers","4");
         gprop.setProperty("minNumberOfPlayers","2");
-        gprop.setProperty("timeoutLaunchingGame","30");
-        gprop.setProperty("timeoutChoosingPatterns","30");
+        gprop.setProperty("timeoutLaunchingGame","1000");
+        gprop.setProperty("timeoutChoosingPatterns","1000");
         gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
 
         controller = new Controller(game, gprop);

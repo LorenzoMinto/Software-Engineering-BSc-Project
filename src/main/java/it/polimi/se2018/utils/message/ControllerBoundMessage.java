@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.utils.MovePermission;
+import it.polimi.se2018.utils.Move;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public abstract class ControllerBoundMessage extends Message {
 
-    public ControllerBoundMessage(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+    public ControllerBoundMessage(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         super(type, params, playerID, permissions);
     }
 

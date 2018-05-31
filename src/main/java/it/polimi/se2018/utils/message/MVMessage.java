@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.utils.MovePermission;
+import it.polimi.se2018.utils.Move;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +11,9 @@ import java.util.Set;
  */
 public class MVMessage extends ViewBoundMessage {
 
-    public MVMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+    private static final long serialVersionUID = -519162435752587549L;
+
+    public MVMessage(types type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         super(type, params, playerID, permissions);
     }
 
@@ -38,5 +40,6 @@ public class MVMessage extends ViewBoundMessage {
         RANKINGS,
         WINDOWPATTERN,
         DRAFTPOOL,
+        YOUR_TURN
     }
 }

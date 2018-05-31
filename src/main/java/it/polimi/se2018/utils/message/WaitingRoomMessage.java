@@ -8,6 +8,8 @@ import java.util.Map;
  */
 public class WaitingRoomMessage extends Message {
 
+    private static final long serialVersionUID = -2346949723822160140L;
+
     public WaitingRoomMessage(Enum type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
     }
@@ -21,7 +23,7 @@ public class WaitingRoomMessage extends Message {
     }
 
     public WaitingRoomMessage(types type, String message) {
-        super(type, createHashMapWithMessage(message));
+        super(type, fastMap("message",message));
     }
 
     @Override
