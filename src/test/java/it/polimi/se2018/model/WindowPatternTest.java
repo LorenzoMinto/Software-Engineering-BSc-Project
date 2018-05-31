@@ -1,15 +1,16 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.time.Year;
-
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
+ * Test for {@link WindowPattern} class
+ *
  * @author Jacopo Pio Gargano
  */
 public class WindowPatternTest {
@@ -23,8 +24,11 @@ public class WindowPatternTest {
     private static Dice dice;
 
 
+    /**
+     * Initializes pattern and dice
+     */
     @BeforeClass
-    public static void initializeVariables(){
+    public static void initializePatternAndDice(){
         pattern = new Cell[rows][cols];
         for(int i=0; i<rows; i++){
             for(int j=0; j<cols; j++){
@@ -35,17 +39,27 @@ public class WindowPatternTest {
         dice = new Dice(RED);
     }
 
+    /**
+     * Initializes window pattern before each test in order to have an empty window pattern in each one of them
+     */
     @Before
     public void initializeWindowPattern(){
         windowPattern = new WindowPattern("id","title", 1, pattern);
     }
 
+
+    /**
+     * Tests the constructor with allowed parameters
+     */
     @Test
     public void testConstructor(){
         windowPattern = new WindowPattern("id","title", 1, pattern);
         assertNotNull(windowPattern);
     }
 
+    /**
+     * Tests the impossibility of creating a window pattern with a null pattern
+     */
     @Test
     public void testConstructorNullPattern(){
         try {
@@ -54,42 +68,82 @@ public class WindowPatternTest {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the retrieval of the title of a window pattern
+     */
     @Test
     public void testGetTitle(){
         windowPattern = new WindowPattern("id","title", 1, pattern);
         assertEquals("title", windowPattern.getTitle());
     }
 
+    /**
+     * Tests the retrieval of the id of a window pattern
+     */
     @Test
-    public void testGetDiceOnIllegalCell(){
-        assertNull(windowPattern.getDiceOnCell( -1, 3));
+    public void testGetID(){
+        windowPattern = new WindowPattern("id","title", 1, pattern);
+        assertEquals("id", windowPattern.getID());
     }
 
+    /**
+     * Tests the impossibility of retrieving a dice from an illegal position
+     */
+    @Test
+    public void testGetDiceOnIllegalCell(){
+        try {
+            windowPattern.getDiceOnCell( -1, 3);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try {
+            windowPattern.getDiceOnCell( 1, -1);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+    }
+
+    /**
+     * Tests putting a dice on a cell of the window pattern
+     */
     @Test
     public void testPutDiceOnCell(){
         windowPattern.putDiceOnCell(dice, 2, 4);
         assertEquals(dice, windowPattern.getDiceOnCell(2,4));
     }
 
+    /**
+     * Tests the impossibility of putting a null dice on a cell
+     */
     @Test
     public void testPutNullDiceOnCell(){
         try {
-            windowPattern.putDiceOnCell(null, 0,0);
+            windowPattern.putDiceOnCell(null, 1,2);
             fail();
         }catch (IllegalArgumentException e ){}
     }
 
+    /**
+     * Tests the impossibility of putting a dice on an illegal cell
+     */
     @Test
-    public void testPutDiceOnCellIllegalPosition(){
-        assertFalse(windowPattern.putDiceOnCell(dice, rows, cols));
+    public void testPutDiceOnIllegalCell(){
+        try{
+            windowPattern.putDiceOnCell(dice, rows, cols);
+        }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the impossibility of putting a dice on a cell that already has a dice
+     */
     @Test
     public void testPutDiceOnCellWithDice(){
         windowPattern.putDiceOnCell(dice, 0,0);
         assertFalse(windowPattern.putDiceOnCell(new Dice(YELLOW), 0,0));
     }
 
+    /**
+     * Tests moving a dice from a cell to another cell
+     */
     @Test
     public void testMoveDiceFromCellToCell(){
         windowPattern.putDiceOnCell(dice, 1, 1);
@@ -99,11 +153,26 @@ public class WindowPatternTest {
 
     }
 
+    /**
+     * Tests the impossibility of moving a dice from a cell without a dice to a cell without a dice
+     */
     @Test
-    public void testMoveDiceFromCellWithoutDiceToCell(){
+    public void testMoveDiceFromCellWithoutDiceToCellWithOutDice(){
         assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 1,2));
     }
 
+    /**
+     * Tests the impossibility of moving a dice from a cell without a dice to a cell with a dice
+     */
+    @Test
+    public void testMoveDiceFromCellWithoutDiceToCellWithDice(){
+        windowPattern.putDiceOnCell(dice,1,2);
+        assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 1,2));
+    }
+
+    /**
+     * Tests the impossibility of moving a dice from a cell to another cell without a dice
+     */
     @Test
     public void testMoveDiceFromCellToCellWithDice(){
         windowPattern.putDiceOnCell(dice, 1, 1);
@@ -111,28 +180,56 @@ public class WindowPatternTest {
         assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 1,2));
     }
 
-    @Test
-    public void testCopy(){
-        assertNotNull(windowPattern.copy());
-    }
-
+    /**
+     * Tests the legality of a position (cell) implicitly testing {@link WindowPattern#isLegalPosition(int, int)}
+     */
     @Test
     public void testIsLegalPosition(){
-        assertNull(windowPattern.getDiceOnCell( -1, 3));
-        assertFalse(windowPattern.moveDiceFromCellToCell(1,1, 2,6));
-        assertFalse(windowPattern.moveDiceFromCellToCell(-1,-1, 2,6));
-        assertFalse(windowPattern.putDiceOnCell(dice, rows,2));
-        assertFalse(windowPattern.putDiceOnCell(dice, 2,cols));
-        assertFalse(windowPattern.putDiceOnCell(dice, rows,cols));
+        try{
+            windowPattern.getDiceOnCell( -1, 3);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try{
+            windowPattern.moveDiceFromCellToCell(1,1, 2,6);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try{
+            windowPattern.moveDiceFromCellToCell(-1,-1, 2,6);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try {
+            windowPattern.putDiceOnCell(dice, rows,2);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try{
+            windowPattern.putDiceOnCell(dice, 2,cols);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try{
+            windowPattern.putDiceOnCell(dice, rows, cols);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
         assertTrue(windowPattern.putDiceOnCell(dice, 1, 4));
     }
 
+    /**
+     * Tests that an empty window pattern is actually empty
+     */
     @Test
     public void testIsEmpty(){
         assertTrue(windowPattern.isEmpty());
     }
 
-
+    /**
+     * Tests the toString method of {@link WindowPattern}
+     * @see WindowPattern#toString() ()
+     */
     @Test
     public void testToString(){
         Cell[][] smallPattern = new Cell[2][2];
@@ -150,6 +247,15 @@ public class WindowPatternTest {
 
         assertEquals(expectedString, windowPatternToString);
 
+    }
+
+    /**
+     * Tests the copy method of {@link WindowPattern} (copy must not be null)
+     * @see WindowPattern#copy()
+     */
+    @Test
+    public void testCopy(){
+        assertNotNull(windowPattern.copy());
     }
 
 

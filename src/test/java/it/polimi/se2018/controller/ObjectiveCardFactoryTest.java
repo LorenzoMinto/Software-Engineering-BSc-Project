@@ -69,9 +69,9 @@ public class ObjectiveCardFactoryTest {
      */
     @Test
     public void testCreateRedPrivateObjectiveCard(){
-        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.RED);
+        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.RED);
         assertNotNull(privateObjectiveCard);
-        assertEquals(DiceColors.RED, privateObjectiveCard.getColor());
+        assertEquals(DiceColor.RED, privateObjectiveCard.getColor());
     }
 
     /**
@@ -79,9 +79,9 @@ public class ObjectiveCardFactoryTest {
      */
     @Test
     public void testCreateYellowPrivateObjectiveCard(){
-        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.YELLOW);
+        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.YELLOW);
         assertNotNull(privateObjectiveCard);
-        assertEquals(DiceColors.YELLOW, privateObjectiveCard.getColor());
+        assertEquals(DiceColor.YELLOW, privateObjectiveCard.getColor());
     }
 
     /**
@@ -89,9 +89,9 @@ public class ObjectiveCardFactoryTest {
      */
     @Test
     public void testCreateGreenPrivateObjectiveCard(){
-        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.GREEN);
+        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.GREEN);
         assertNotNull(privateObjectiveCard);
-        assertEquals(DiceColors.GREEN, privateObjectiveCard.getColor());
+        assertEquals(DiceColor.GREEN, privateObjectiveCard.getColor());
     }
 
     /**
@@ -99,9 +99,9 @@ public class ObjectiveCardFactoryTest {
      */
     @Test
     public void testCreateBluePrivateObjectiveCard(){
-        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.BLUE);
+        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.BLUE);
         assertNotNull(privateObjectiveCard);
-        assertEquals(DiceColors.BLUE, privateObjectiveCard.getColor());
+        assertEquals(DiceColor.BLUE, privateObjectiveCard.getColor());
     }
 
     /**
@@ -109,18 +109,18 @@ public class ObjectiveCardFactoryTest {
      */
     @Test
     public void testCreatePurplePrivateObjectiveCard(){
-        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.PURPLE);
+        privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.PURPLE);
         assertNotNull(privateObjectiveCard);
-        assertEquals(DiceColors.PURPLE, privateObjectiveCard.getColor());
+        assertEquals(DiceColor.PURPLE, privateObjectiveCard.getColor());
     }
 
     /**
-     * Tests the impossibility of creating a NoColor private objective card
+     * Tests the impossibility of creating a no color private objective card
      */
     @Test
     public void testCreateNoColorPrivateObjectiveCard(){
         try {
-            privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColors.NOCOLOR);
+            privateObjectiveCard = factory.createPrivateObjectiveCard(DiceColor.NOCOLOR);
             fail();
         }catch(IllegalArgumentException e){
             assertNull(privateObjectiveCard);

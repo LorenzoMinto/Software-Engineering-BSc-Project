@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,12 @@ import java.util.List;
  *
  * @author Lorenzo Minto
  */
-public class TrackSlot {
+public class TrackSlot implements Serializable {
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -5716313610769359452L;
     /**
      * List of dices kept in the TrackSlot
      */
@@ -39,7 +44,7 @@ public class TrackSlot {
      * Removes, if possible, a specified dice from the TrackSlot's dices.
      *
      * @param dice the dice to be removed.
-     * @return whether or not specified dice could be removed from the TrackSlot's dices.
+     * @throws BadDiceReferenceException if the dice does not exists
      */
     public void removeDice(Dice dice) throws BadDiceReferenceException {
         if (dices.contains(dice)) {

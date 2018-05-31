@@ -1,50 +1,50 @@
 package it.polimi.se2018.model;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 
 /**
+ * Test for {@link Cell} class
+ *
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
 public class CellTest {
 
     private Cell cell;
-    private static Dice dice;
+    private Dice dice = new Dice(GREEN,4);
 
-    @BeforeClass
-    public static void initializeVariables(){
-        dice = new Dice(GREEN,4);
-    }
-
+    /**
+     * Initializing the cell for the tests
+     */
     @Before
     public void initializeCell(){
         cell = new Cell(3, PURPLE);
     }
 
+    /**
+     * Tests the retrieval of the allowed value
+     */
     @Test
     public void testGetAllowedValue() {
-        int allowedValue = 3;
-
-        cell = new Cell(allowedValue, PURPLE);
-
-        assertEquals(allowedValue, cell.getAllowedValue());
+        assertEquals(3, cell.getAllowedValue());
     }
 
+    /**
+     * Tests the retrieval of the allowed color
+     */
     @Test
     public void testGetAllowedColor() {
-        DiceColors allowedColor = PURPLE;
-
-        cell = new Cell(3, allowedColor);
-
-        assertEquals(allowedColor, cell.getAllowedColor());
+        assertEquals(PURPLE, cell.getAllowedColor());
     }
 
+    /**
+     * Tests setting a dice on a cell
+     */
     @Test
     public void testSetDice(){
         cell.setDice(dice);
@@ -52,6 +52,9 @@ public class CellTest {
         assertTrue(cell.hasDice());
     }
 
+    /**
+     * Tests setting a null dice on a cell
+     */
     @Test
     public void testSetNullDice(){
         try{
@@ -60,6 +63,9 @@ public class CellTest {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the removal of a dice from a cell with a dice
+     */
     @Test
     public void testRemoveDice() {
         cell.setDice(dice);
@@ -67,6 +73,9 @@ public class CellTest {
         assertEquals(dice, removedDice);
     }
 
+    /**
+     * Tests the impossibility of removing a dice from a cell with no dice
+     */
     @Test
     public void testRemoveDiceIfCellHasNoDice(){
         assertFalse(cell.hasDice());
@@ -74,6 +83,10 @@ public class CellTest {
         assertNull(removedDice);
     }
 
+    /**
+     * Tests the toString method of {@link Cell}
+     * @see Cell#toString()
+     */
     @Test
     public void testToString() {
         cell.setDice(dice);

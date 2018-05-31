@@ -28,7 +28,7 @@ import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
  * @see ControllerState
  * @see ControllerStateManager
  * @see ToolCard
- * @see ToolCardsManager
+ * @see ToolCardManager
  * @see DiceBag
  * @see ObjectiveCardManager
  * @see PlacementRule
@@ -99,10 +99,10 @@ public class Controller extends Observable {
     private WindowPatternManager windowPatternManager;
 
     /**
-     * Contains an instance of a {@link ToolCardsManager} that is the one
+     * Contains an instance of a {@link ToolCardManager} that is the one
      * that creates the {@link ToolCard} (s) to be assigned to the {@link Game}
      */
-    private ToolCardsManager toolCardsManager;
+    private ToolCardManager toolCardManager;
 
     /**
      * Configuration properties loaded from config file
@@ -138,6 +138,7 @@ public class Controller extends Observable {
      *
      * @param game the game instance to be controlled
      * @param properties dictionary of parameters loaded from config file
+     * @param logger the logger instance sent from server
      */
     public Controller(Game game, Properties properties, Logger logger) {
         this.logger = logger;
@@ -152,7 +153,7 @@ public class Controller extends Observable {
 
         this.windowPatternManager = new WindowPatternManager();
 
-        this.toolCardsManager = new ToolCardsManager(this.getDefaultPlacementRule());
+        this.toolCardManager = new ToolCardManager(this.getDefaultPlacementRule());
 
         this.objectiveCardManager = new ObjectiveCardManager();
 
@@ -163,7 +164,7 @@ public class Controller extends Observable {
         this.diceBag = new DiceBag(numberOfDicesPerColor);
 
         //Produces and sets cards to the game
-        List<ToolCard> toolCards = toolCardsManager.getRandomToolCards(numberOfToolCards);
+        List<ToolCard> toolCards = toolCardManager.getRandomToolCards(numberOfToolCards);
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
 
         this.game.setCards(toolCards,publicObjectiveCards);
@@ -333,7 +334,7 @@ public class Controller extends Observable {
 
             game.addPlayer(player);
 
-            Set<WindowPattern> patterns = windowPatternManager.getCouplesOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
+            Set<WindowPattern> patterns = windowPatternManager.getPairsOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
             HashMap<String,Object> params = new HashMap<>();
             params.put("patterns",patterns);
             notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));
@@ -542,16 +543,13 @@ public class Controller extends Observable {
     }
 
     /**
-     * Sends scores and rankings to players profiles ({@link User})
+     * Update scores and rankings of players profiles
      * in order to increase statistics of wins and played games.
      */
     private void registerRankingsOnUsersProfiles(Map<String, Integer> rankings){
         /*
-        TODO: valutare a seconda di cosa si deciderà di fare con User
+        TODO: implementare
         for(Player player : game.getPlayers()){
-
-            User user = player.getUser();
-            user.increaseGamesPlayed();
 
             Player winner = Scorer.getInstance().getWinner(rankings);
 
@@ -581,6 +579,7 @@ public class Controller extends Observable {
     /**
      * Returns Dictionary of configuration's parameters
      *
+     * @param p the configuration property to retrieve
      * @return Dictionary of configuration's parameters
      */
     public int getConfigProperty(String p){

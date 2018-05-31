@@ -5,7 +5,7 @@ package it.polimi.se2018.controller;
  * that is used to notify that an .xml file representing a toolcard is bad formatted
  * and due to this can't be correctly processed.
  *
- * This usually happens in the {@link ToolCardsManager} during the creation
+ * This usually happens in the {@link ToolCardManager} during the creation
  * of a requested ToolCard.
  *
  * This exception should not happen if no custom tool cards are added to the directory.
@@ -15,6 +15,10 @@ package it.polimi.se2018.controller;
  * @author Federico Haag
  */
 public class BadFormattedToolCardFileException extends RuntimeException {
+
+    /**
+     * Basic constructor for exception
+     */
     public BadFormattedToolCardFileException() {
         super();
     }

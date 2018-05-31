@@ -3,20 +3,24 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.Observable;
 
+import java.util.logging.Logger;
+
 public abstract class View extends Observable {
 
-    private Player player;
+    private String playerID;
 
-    public View() {
-        //does nothing
+    private final Logger logger;
+
+    public View(Logger logger) {
+        this.logger = logger;
     }
 
-    public Player getPlayer() {
-        return player;
+    public String getPlayerID() {
+        return playerID;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayer(String playerID) {
+        this.playerID = playerID;
     }
 
     public void showMessage(String message){}
@@ -31,5 +35,7 @@ public abstract class View extends Observable {
     //TODO: view must enter "active status" if receives BACK_GAME message from controller (CVMessage)
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern
+
+    //TODO: riceve un messaggio MVMessage di tipo NEW_TURN e se il player della view è uguale a param:currentPlayer allora imposta le permissions, sennò setta permissions vuote fino ad un nuovo NEW_TURN
 
 }

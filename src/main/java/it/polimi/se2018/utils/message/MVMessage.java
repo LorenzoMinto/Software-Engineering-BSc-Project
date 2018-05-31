@@ -1,12 +1,19 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.MovePermission;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author Federico Haag
  */
 public class MVMessage extends ViewBoundMessage {
+
+    public MVMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        super(type, params, playerID, permissions);
+    }
 
     public MVMessage(types type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
@@ -23,10 +30,10 @@ public class MVMessage extends ViewBoundMessage {
     /**
      * Enum for all types of MCMessage instances
      */
-    public enum types implements MessageType{
+    public enum types {
         SETUP,                  //NOTE: nella view impostare il currentTurnNumber e currentRoundNumber a 1
         NEXT_ROUND,             //NOTE: nella view aumentare il currentRoundNumber e reset currentTurnNumber
-        NEXT_TURN,              //NOTE: nella view aumentare il currentTurnNumber
+        NEW_TURN,              //NOTE: nella view aumentare il currentTurnNumber
         USED_TOOLCARD,
         RANKINGS,
         WINDOWPATTERN,

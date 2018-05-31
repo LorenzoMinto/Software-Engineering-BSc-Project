@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 public class Cell implements Serializable{
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -3774521266275346050L;
 
     /**
      * The value that a Dice must have to be putted in this Cell. '0' means every value is allowed.
@@ -21,7 +25,7 @@ public class Cell implements Serializable{
     /**
      * The color that a Dice must have to be putted in this Cell. 'NOCOLOR' means every color is allowed.
      */
-    private DiceColors allowedColor;
+    private DiceColor allowedColor;
 
 
     /**
@@ -34,7 +38,7 @@ public class Cell implements Serializable{
      * No constraints are inserted.
      */
     public Cell() {
-        this(0, DiceColors.NOCOLOR);
+        this(0, DiceColor.NOCOLOR);
     }
 
     /**
@@ -43,7 +47,7 @@ public class Cell implements Serializable{
      * @param allowedValue Dice value constraint
      * @param allowedColor Dice color constraint
      */
-    public Cell(int allowedValue, DiceColors allowedColor){
+    public Cell(int allowedValue, DiceColor allowedColor){
         this.allowedColor = allowedColor;
         this.allowedValue = allowedValue;
         this.dice = null;
@@ -65,7 +69,7 @@ public class Cell implements Serializable{
      *
      * @return the allowed color for the dice
      */
-    public DiceColors getAllowedColor() {
+    public DiceColor getAllowedColor() {
         return allowedColor;
     }
 
@@ -82,7 +86,7 @@ public class Cell implements Serializable{
     /**
      * Sets the given {@link Dice} to the cell.
      *
-     * @param dice the dice that must be putted on the cell
+     * @param dice the dice that must be put on the cell
      */
     public void setDice(Dice dice) {
         if(dice==null){ throw new IllegalArgumentException("Asked to set a null dice on a cell [I am the cell]"); }
@@ -99,7 +103,7 @@ public class Cell implements Serializable{
     }
 
     /**
-     * Removes from the Cell the Dice and returns it.     *
+     * Removes from the Cell the Dice and returns it.
      *
      * @return the Dice that was placed on the Cell. If no Dice was placed, null is returned.
      */

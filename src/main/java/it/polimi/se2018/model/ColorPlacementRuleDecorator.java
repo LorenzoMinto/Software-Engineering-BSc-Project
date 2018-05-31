@@ -44,7 +44,7 @@ public class ColorPlacementRuleDecorator extends PlacementRuleDecorator {
      * @see ColorPlacementRuleDecorator for formal rule.
      */
     private boolean checkColorConstraints(WindowPattern windowPattern, Dice dice, int row, int col){
-        return windowPattern.getPattern()[row][col].getAllowedColor() == DiceColors.NOCOLOR
+        return windowPattern.getPattern()[row][col].getAllowedColor() == DiceColor.NOCOLOR
                 || windowPattern.getPattern()[row][col].getAllowedColor() == dice.getColor();
     }
 

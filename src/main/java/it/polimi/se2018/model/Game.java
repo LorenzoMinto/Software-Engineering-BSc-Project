@@ -241,6 +241,7 @@ public class Game extends Observable implements Observer{
      * @return if the given player is the current playing one
      */
     public boolean isCurrentPlayer(String playerID) {
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't determine if current player if game is not running");}
         return getCurrentRound().getCurrentTurn().isCurrentPlayer(playerID);
     }
 
@@ -250,7 +251,7 @@ public class Game extends Observable implements Observer{
      * @param toolCard toolCard used in the current Turn
      */
     public void useToolCard(ToolCard toolCard){
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if not playing");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if game is not running");}
 
         if( !this.drawnToolCards.contains(toolCard) ) {
             throw new BadBehaviourRuntimeException("Asked to use a toolcard that is not in the drawn set");
@@ -375,22 +376,19 @@ public class Game extends Observable implements Observer{
      * Advances the game to the following turn
      * Notifies the observers (View) with the list of the players that will play the following turns
      *
-     * @throws NoMoreTurnsAvailableException
+     * @throws NoMoreTurnsAvailableException if no more turns are available in this round
      * @author Jacopo Pio Gargano
      */
     public void nextTurn() throws NoMoreTurnsAvailableException {
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next turn if game is not already running"); }
         try {
             getCurrentRound().nextTurn();
 
             //NOTIFYING
-            List<Player> nextPlayers = getCurrentRound().getPlayersOfNextTurns(getPlayers(), numberOfTurnsPerRound);
-
             Map <String, Object> messageAttributes = new HashMap<>();
-
-            //to be displayed in view
-            messageAttributes.put("nextPlayers", nextPlayers);
-
-            notify(new MVMessage(MVMessage.types.NEXT_TURN, messageAttributes));
+            messageAttributes.put("currentPlayer", getCurrentRound().getCurrentTurn().getPlayer().getID());
+            //TODO: aggiungere permissions che ha l'utente che inizia ora a giocare. chi non gioca le ignorerà
+            notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
 
         } catch (NoMoreTurnsAvailableException e) {
             throw new NoMoreTurnsAvailableException();

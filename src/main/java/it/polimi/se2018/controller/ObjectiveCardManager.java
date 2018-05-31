@@ -19,7 +19,7 @@ public class ObjectiveCardManager {
      * to ensure that the same card can not be distributed
      * more than once
      */
-    private Set<DiceColors> assignedColors = new HashSet<>();
+    private Set<DiceColor> assignedColors = new HashSet<>();
 
     /**
      * Number of public objective cards that exists and can be created
@@ -31,13 +31,13 @@ public class ObjectiveCardManager {
      * @return new instance of a {@link PrivateObjectiveCard}
      */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
-        if(assignedColors.size() == DiceColors.values().length-1){ throw new BadBehaviourRuntimeException(
+        if(assignedColors.size() == DiceColor.values().length-1){ throw new BadBehaviourRuntimeException(
                 "ERROR: Cannot get more than 5 Private Objective Card as all of them were already created.");}
 
-        DiceColors color;
+        DiceColor color;
 
         do{
-            color = DiceColors.getRandomColor();
+            color = DiceColor.getRandomColor();
         }while (assignedColors.contains(color));
 
         assignedColors.add(color);

@@ -1,13 +1,12 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 
@@ -43,7 +42,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
             WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            windowPattern = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
             windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -65,7 +64,7 @@ public class RowsColumnsPublicObjectiveCardTest {
             windowPattern.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
         }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
@@ -75,6 +74,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link RowsColumnsPublicObjectiveCard} used in the tests
+     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -92,7 +92,15 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the impossibility of calculating the score of a null windowpattern
+     * Tests that the test instance of {@link RowsColumnsPublicObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(rowsColorPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance());
+    }
+
+    /**
+     * Tests the impossibility of calculating the score of a null window pattern
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -103,8 +111,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of an empty windowpattern
-     * Score must be 0
+     * Tests the scoring of an empty window pattern. Score must be 0
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -113,7 +120,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreRowsColor() {
@@ -122,7 +129,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreColumnsColor() {
@@ -131,7 +138,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreRowsValue() {
@@ -140,7 +147,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     }
 
     /**
-     * Tests the scoring of a generic windowpattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
+     * Tests the scoring of a generic window pattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
      */
     @Test
     public void testCalculateScoreColumnsValue() {
@@ -150,6 +157,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the toString method of {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#toString()
      */
     @Test
     public void testToString(){
@@ -162,6 +170,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the copy method of {@link RowsColumnsPublicObjectiveCard} (copy must not be null)
+     * @see RowsColumnsPublicObjectiveCard#copy()
      */
     @Test
     public void testCopy(){

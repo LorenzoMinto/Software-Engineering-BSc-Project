@@ -7,6 +7,10 @@ package it.polimi.se2018.controller;
  * @author Federico Haag
  */
 public class NoMoreTurnsAvailableException extends Exception {
+
+    /**
+     * Basic constructor for exception
+     */
     public NoMoreTurnsAvailableException() {
         super();
     }

@@ -30,7 +30,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
                 pattern2[i][j] = new Cell();
             }
         }
-        pattern[1][0] = new Cell(3, DiceColors.NOCOLOR);
+        pattern[1][0] = new Cell(3, DiceColor.NOCOLOR);
     }
 
     @Before
@@ -40,8 +40,8 @@ public class AdjacentDicePlacementRuleDecoratorTest {
         decoratedRule = new AdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
         windowPattern = new WindowPattern("", "", 0, pattern);
-        threeDice = new Dice(DiceColors.BLUE, 3);
-        fourDice = new Dice(DiceColors.BLUE, 4);
+        threeDice = new Dice(DiceColor.BLUE, 3);
+        fourDice = new Dice(DiceColor.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);
     }
 
@@ -58,7 +58,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
     @Test
     public void testCheckIfMoveIsAllowedWhenNotAllowed() {
         WindowPattern wp = new WindowPattern("", "",0, pattern2);
-        Dice dice = new Dice(DiceColors.BLUE);
+        Dice dice = new Dice(DiceColor.BLUE);
         assertFalse(rule.checkIfMoveIsAllowed(wp, dice, 1,1));
         assertFalse(rule.checkIfMoveIsAllowed(wp, dice, 1,2));
         assertFalse(rule.checkIfMoveIsAllowed(wp, dice, 0,0));

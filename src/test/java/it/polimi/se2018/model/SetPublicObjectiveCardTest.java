@@ -3,27 +3,24 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.BadFormattedPatternFileException;
 import it.polimi.se2018.controller.NoPatternsFoundInFileSystemException;
 import it.polimi.se2018.controller.WindowPatternManager;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
+ * Test for {@link SetPublicObjectiveCard} class
+ *
  * @author Jacopo Pio Gargano
  */
 
 public class SetPublicObjectiveCardTest {
 
-    private static WindowPatternManager windowPatternManager;
-
-    private static WindowPattern wp;
-    private static WindowPattern nullWP;
+    private static WindowPattern windowPattern;
     private static WindowPattern emptyWP;
 
     private static PublicObjectiveCard setPublicObjectiveCard;
@@ -39,58 +36,56 @@ public class SetPublicObjectiveCardTest {
     private static HashSet<Object> allValuesSet;
     private static HashSet<Object> allColorsSet;
 
-    private static int oneTwoSetScore;
-    private static int threeFourSetScore;
-    private static int fiveSixSetScore;
-    private static int allValuesSetScore;
-    private static int allColorsSetScore;
+    private static final int oneTwoSetScore = 2;
+    private static final int threeFourSetScore = 6;
+    private static final int fiveSixSetScore = 2;
+    private static final int allValuesSetScore = 5;
+    private static final int allColorsSetScore = 8;
 
-    private int testScore;
-
+    /**
+     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the test
+     */
     @BeforeClass
     public static void buildWindowPatterns(){
-        try {
-            windowPatternManager = new WindowPatternManager();
-        }catch (NoPatternsFoundInFileSystemException e){
-            e.printStackTrace();
-            fail();
-        }
 
         try {
 
-            wp = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
+            WindowPatternManager windowPatternManager = new WindowPatternManager();
 
-            wp.putDiceOnCell(new Dice(RED, 1), 0, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
-            wp.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
-            wp.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
-            wp.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
+            windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            wp.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
-            wp.putDiceOnCell(new Dice(RED, 5), 1, 3);
+            windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
+            windowPattern.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 5), 0, 3);
+            windowPattern.putDiceOnCell(new Dice(GREEN, 4), 0, 4);
 
-            wp.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
-            wp.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
-            wp.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
-            wp.putDiceOnCell(new Dice(RED, 4), 2, 4);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 3), 1, 0);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 1, 1);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 1, 2);
+            windowPattern.putDiceOnCell(new Dice(RED, 5), 1, 3);
 
-            wp.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
-            wp.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
+            windowPattern.putDiceOnCell(new Dice(PURPLE, 5), 2, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 6), 2, 1);
+            windowPattern.putDiceOnCell(new Dice(BLUE, 3), 2, 2);
+            windowPattern.putDiceOnCell(new Dice(GREEN, 3), 2, 3);
+            windowPattern.putDiceOnCell(new Dice(RED, 4), 2, 4);
 
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 4), 3, 0);
+            windowPattern.putDiceOnCell(new Dice(YELLOW, 5), 3, 3);
+            windowPattern.putDiceOnCell(new Dice(GREEN, 1), 3, 4);
 
-            nullWP = null;
+            emptyWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            emptyWP = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1)).get(0);
-
-        }catch (BadFormattedPatternFileException e){
+        }catch (BadFormattedPatternFileException | NoPatternsFoundInFileSystemException e){
             e.printStackTrace();
             fail();
         }
     }
 
+    /**
+     * Initializes the sets that are passed as parameters to the constructors of {@link SetPublicObjectiveCard} 
+     */
     @BeforeClass
     public static void initializeSets(){
 
@@ -112,13 +107,17 @@ public class SetPublicObjectiveCardTest {
         }
 
         allColorsSet = new HashSet<>();
-        for(DiceColors color: values()){
+        for(DiceColor color: values()){
             if(!color.equals(NOCOLOR)) {
                 allColorsSet.add(color);
             }
         }
     }
 
+    /**
+     * Creates the the instances of {@link SetPublicObjectiveCard} used in the tests
+     * Implicitly tests the constructor
+     */
     @BeforeClass
     public static void initializeCards(){
         setPublicObjectiveCard = SetPublicObjectiveCard.createTestInstance();
@@ -135,68 +134,86 @@ public class SetPublicObjectiveCardTest {
                 allColorsSet, Dice::getColor,4);
     }
 
-    @BeforeClass
-    public static void initializeScores() {
-        oneTwoSetScore = 2 * 1;
-        threeFourSetScore = 2 * 3;
-        fiveSixSetScore = 2 * 1;
-        allValuesSetScore = 5 * 1;
-        allColorsSetScore = 4 * 2;
+
+    /**
+     * Tests that the test instance of {@link SetPublicObjectiveCard} is not null
+     */
+    @Test
+    public void testCreateTestInstance(){
+        assertNotNull(setPublicObjectiveCard = SetPublicObjectiveCard.createTestInstance());
     }
 
-    @Before
-    public void resetScore(){
-        testScore = 0;
-    }
-
-
-
-
+    /**
+     * Tests the impossibility of calculating the score of a null window pattern
+     */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
-        try {
-            testScore = setPublicObjectiveCard.calculateScore(nullWP);
+        try { 
+            setPublicObjectiveCard.calculateScore(null);
             fail();
         }catch (NullPointerException e){}
     }
 
+
+    /**
+     * Tests the scoring of an empty window pattern. Score must be 0
+     */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
-        testScore = setPublicObjectiveCard.calculateScore(emptyWP);
-        assertEquals(0, testScore);
+        int score = setPublicObjectiveCard.calculateScore(emptyWP);
+        assertEquals(0, score);
     }
 
 
+    /**
+     * Tests the scoring of a window pattern by a OneTwo {@link SetPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreOneTwoSet() {
-        testScore = oneTwoPublicObjectiveCard.calculateScore(wp);
-        assertEquals(oneTwoSetScore, testScore);
+        int score = oneTwoPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(oneTwoSetScore, score);
     }
 
+    /**
+     * Tests the scoring of a window pattern by a ThreeFour {@link SetPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreThreeFourSet() {
-        testScore = threeFourPublicObjectiveCard.calculateScore(wp);
-        assertEquals(threeFourSetScore, testScore);
+        int score = threeFourPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(threeFourSetScore, score);
     }
 
+    /**
+     * Tests the scoring of a window pattern by a FiveSix {@link SetPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreFiveSixSet() {
-        testScore = fiveSixPublicObjectiveCard.calculateScore(wp);
-        assertEquals(fiveSixSetScore, testScore);
+        int score = fiveSixPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(fiveSixSetScore, score);
     }
 
+    /**
+     * Tests the scoring of a window pattern by an AllValues {@link SetPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreAllValuesSet() {
-        testScore = allValuesPublicObjectiveCard.calculateScore(wp);
-        assertEquals(allValuesSetScore, testScore);
+        int score = allValuesPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(allValuesSetScore, score);
     }
 
+    /**
+     * Tests the scoring of a window pattern by an AllColors {@link SetPublicObjectiveCard}
+     */
     @Test
     public void testCalculateScoreAllColorsSet() {
-        testScore = allColorsPublicObjectiveCard.calculateScore(wp);
-        assertEquals(allColorsSetScore, testScore);
+        int score = allColorsPublicObjectiveCard.calculateScore(windowPattern);
+        assertEquals(allColorsSetScore, score);
     }
 
+    /**
+     * Tests the toString method of {@link SetPublicObjectiveCard}
+     * @see PrivateObjectiveCard#toString()
+     */
     @Test
     public void testToString(){
         setPublicObjectiveCard = new SetPublicObjectiveCard(
@@ -206,6 +223,10 @@ public class SetPublicObjectiveCardTest {
         assertEquals(expectedString, toString);
     }
 
+    /**
+     * Tests the copy method of {@link SetPublicObjectiveCard} (copy must not be null)
+     * @see SetPublicObjectiveCard#copy()
+     */
     @Test
     public void testCopy(){
         assertNotNull(setPublicObjectiveCard.copy());

@@ -14,7 +14,7 @@ public class PrivateObjectiveCard extends ObjectiveCard {
     /**
      * The color of the Private Objective Card
      */
-    private DiceColors color;
+    private DiceColor color;
 
     /**
      * Constructor for a new Private Objective Card
@@ -23,7 +23,7 @@ public class PrivateObjectiveCard extends ObjectiveCard {
      * @param imageURL the image url of the card
      * @param color the color of the card
      */
-    public PrivateObjectiveCard(String title, String description, String imageURL, DiceColors color) {
+    public PrivateObjectiveCard(String title, String description, String imageURL, DiceColor color) {
         super(title, description, imageURL);
         this.color = color;
     }
@@ -56,7 +56,7 @@ public class PrivateObjectiveCard extends ObjectiveCard {
      *
      * @return the color of the card
      */
-    public DiceColors getColor() {
+    public DiceColor getColor() {
         return color;
     }
 

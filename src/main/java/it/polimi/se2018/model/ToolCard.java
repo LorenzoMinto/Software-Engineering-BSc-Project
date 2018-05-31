@@ -18,6 +18,13 @@ import java.util.Properties;
  */
 public class ToolCard implements Serializable{
 
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = 3828562971059857480L;
+    /**
+     * The id of the toolcard
+     */
     private final String toolCardID;
 
     /**
@@ -193,6 +200,13 @@ public class ToolCard implements Serializable{
         return controllerStateRules.containsKey(DraftControllerState.class.getSimpleName());
     }
 
+    /**
+     * Returns whether or not some other ToolCard is "equal to" this one. Comparison is based on the ID
+     *
+     * @param o some other ToolCard
+     * @return if the other ToolCard is equal to this
+     * @see Object#equals(Object)
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -207,6 +221,12 @@ public class ToolCard implements Serializable{
         return this.getToolCardID().equals(c.getToolCardID());
     }
 
+    /**
+     * Returns a hash code value for the ToolCard.
+     *
+     * @return a hash code value for the ToolCard.
+     * @see Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return Objects.hash(toolCardID);

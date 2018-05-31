@@ -1,12 +1,19 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.MovePermission;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author Federico Haag
  */
 public class VCMessage extends ControllerBoundMessage {
+
+    public VCMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        super(type, params, playerID, permissions);
+    }
 
     public VCMessage(types type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
@@ -23,7 +30,7 @@ public class VCMessage extends ControllerBoundMessage {
     /**
      * Enum for all types of VCMessage instances
      */
-    public enum types implements MessageType {
+    public enum types {
         CHOOSE_DICE_VALUE,
         CHOOSE_DICE_FROM_TRACK,
         DRAFT_DICE_FROM_DRAFTPOOL,

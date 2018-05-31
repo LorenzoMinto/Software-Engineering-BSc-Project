@@ -34,7 +34,7 @@ public class StartControllerStateTest {
         Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -67,9 +67,9 @@ public class StartControllerStateTest {
 
     @Test
     public void testDraftDiceFromDraftPoolWhenDiceNotInDraftPool() {
-        Dice dice = new Dice(DiceColors.BLUE);
+        Dice dice = new Dice(DiceColor.BLUE);
         while (controller.game.getCurrentRound().getDraftPool().getDices().contains(dice)) {
-            dice = new Dice(DiceColors.getRandomColor());
+            dice = new Dice(DiceColor.getRandomColor());
         }
         Message m = controller.controllerState.draftDiceFromDraftPool(dice);
 
@@ -111,7 +111,7 @@ public class StartControllerStateTest {
 
         ToolCard toolCard = new ToolCard(prop, controllerStateRules, new EmptyPlacementRule());
 
-        controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColors.BLUE));
+        controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColor.BLUE));
         controller.controllerState.useToolCard(toolCard);
 
         assertNull(controller.getActiveToolCard());

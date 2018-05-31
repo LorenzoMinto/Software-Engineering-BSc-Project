@@ -63,7 +63,7 @@ public class Scorer {
      *
      * @param playersOfLastRound sorted list of players of last round
      * @param publicObjectiveCards public objective cards of the game, players will be scored according to these
-     * @return rankings as a Map<Player,Score(Integer)>
+     * @return rankings as a Map of Player and Integer(score)
      * @see Scorer#getScores(List, List)
      * @see Scorer#sortRankingsByFavorTokens(Map)
      * @see Scorer#sortRankingsByPrivateObjectiveCardScore(Map)

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
@@ -17,7 +17,6 @@ public class TurnTest {
 
     private Turn turn;
 
-    private static User user;
     private static PrivateObjectiveCard privateObjectiveCard;
     private static Player player;
     private static Dice dice;
@@ -28,7 +27,6 @@ public class TurnTest {
 
     @BeforeClass
     public static void initializeVariables() {
-        //user = new User(1, "username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null, null, RED);
         playerName = "player";
         player = new Player(playerName, privateObjectiveCard);

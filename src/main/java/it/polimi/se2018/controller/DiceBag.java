@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
-import it.polimi.se2018.model.DiceColors;
+import it.polimi.se2018.model.DiceColor;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 
 import java.util.*;
@@ -17,19 +17,21 @@ import java.util.*;
  */
 public class DiceBag {
 
-    private Map<DiceColors,Integer> availableDices;
+    private Map<DiceColor,Integer> availableDices;
 
     /**
-     * Creates a {@link DiceBag} containing specified number of dices of all colors ({@link DiceColors})
+     * Creates a {@link DiceBag} containing specified number of dices of all colors ({@link DiceColor})
      * @param numberOfDicesPerColor how many dices for each color have to be created
      *
      * @see Dice
-     * @see DiceColors
+     * @see DiceColor
      */
     public DiceBag(int numberOfDicesPerColor) {
-        this.availableDices = new EnumMap<>(DiceColors.class);
-        for(int i=0; i<DiceColors.values().length-1; i++){
-            this.availableDices.put(DiceColors.values()[i],numberOfDicesPerColor);
+        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException("ERROR: Can't create a dicebag with a negative number of dices per color");}
+
+        this.availableDices = new EnumMap<>(DiceColor.class);
+        for(int i = 0; i< DiceColor.values().length-1; i++){
+            this.availableDices.put(DiceColor.values()[i],numberOfDicesPerColor);
         }
     }
 
@@ -37,22 +39,24 @@ public class DiceBag {
      * Gets the specified quantity of dices from the DiceBag if there are enough availables.
      * If not, a RuntimeException is thrown
      * @param quantity how many dices have to be getted
-     * @return a list of dices of lenght same of param quantity
+     * @return a list of dices of length same of param quantity
      * @see Dice
      */
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
 
+        if(quantity <0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of dices.");}
+
         if( quantity > this.numberOfAvailableDices() ){
-            throw new BadBehaviourRuntimeException("Asked DiceBag to produce "+quantity+" of dices but only "+numberOfAvailableDices()+" dices are available");
+            throw new BadBehaviourRuntimeException("Asked DiceBag to get "+quantity+" dices but only "+numberOfAvailableDices()+" dices are available");
         } else {
             for(int i=0; i<quantity; i++){
 
                 //Looks for a color dice that can be created, and creates it
                 int availableDicesForRandomColor;
-                DiceColors randomColor;
+                DiceColor randomColor;
                 do {
-                    randomColor = DiceColors.getRandomColor();
+                    randomColor = DiceColor.getRandomColor();
                     availableDicesForRandomColor = availableDices.get(randomColor);
                 } while (availableDicesForRandomColor<=0);
 
@@ -69,14 +73,14 @@ public class DiceBag {
      * @param dice the dice to be added to
      */
     public void addDice(Dice dice) {
-        DiceColors diceColor = dice.getColor();
+        DiceColor diceColor = dice.getColor();
 
         int availableDicesForColor = availableDices.get(diceColor);
         availableDices.put(diceColor, availableDicesForColor+1);
     }
 
     /**
-     * Gets the number of available dices
+     * Gets the number of available dices summing the available dices for each Dice Color in availableDices (map)
      *
      * @return the number of available dices
      */

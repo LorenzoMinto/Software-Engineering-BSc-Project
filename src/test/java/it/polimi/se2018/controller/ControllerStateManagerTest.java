@@ -50,7 +50,7 @@ public class ControllerStateManagerTest {
         controller.launchGame(nicknames);
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
 
 
         for (Player p : controller.game.getPlayers()) {

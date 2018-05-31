@@ -15,6 +15,10 @@ import java.io.Serializable;
 public abstract class ObjectiveCard implements Serializable {
 
     /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -463196229987501893L;
+    /**
      * The title of the Objective Card
      */
     private String title;

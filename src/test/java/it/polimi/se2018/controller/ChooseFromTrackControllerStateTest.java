@@ -35,7 +35,7 @@ public class ChooseFromTrackControllerStateTest {
         Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -69,8 +69,8 @@ public class ChooseFromTrackControllerStateTest {
         Dice draftedDice = currentTurn.getDraftedDice();
 
         List<Dice> dices = new ArrayList<>();
-        Dice dice1 = new Dice(DiceColors.BLUE, 2);
-        Dice dice2 = new Dice(DiceColors.RED, 3);
+        Dice dice1 = new Dice(DiceColor.BLUE, 2);
+        Dice dice2 = new Dice(DiceColor.RED, 3);
         dices.add(dice1);
         dices.add(dice2);
 
@@ -88,7 +88,7 @@ public class ChooseFromTrackControllerStateTest {
     @Test
     public void testChooseDiceFromTrackWhenTrackSlotDoesNotExist() {
         int slotNumber = 0;
-        Dice dice1 = new Dice(DiceColors.BLUE, 2);
+        Dice dice1 = new Dice(DiceColor.BLUE, 2);
         Message m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -96,8 +96,8 @@ public class ChooseFromTrackControllerStateTest {
     @Test
     public void testChooseDiceFromTrackWhenDiceNotInTrackSlot() {
         List<Dice> dices = new ArrayList<>();
-        Dice dice1 = new Dice(DiceColors.BLUE, 2);
-        Dice dice2 = new Dice(DiceColors.RED, 3);
+        Dice dice1 = new Dice(DiceColor.BLUE, 2);
+        Dice dice2 = new Dice(DiceColor.RED, 3);
         dices.add(dice1);
 
         int slotNumber = 0;

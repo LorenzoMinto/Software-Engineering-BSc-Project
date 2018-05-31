@@ -15,7 +15,10 @@ import java.util.List;
  * @author Lorenzo Minto
  */
 public class Track implements Serializable {
-
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = 5006029947494003833L;
 
     /**
      * List of {@link TrackSlot}, on which the leftover dices of the draft pool of every round are kept.
@@ -53,6 +56,7 @@ public class Track implements Serializable {
      *
      * @param dice the dice to be removed.
      * @param slotNumber the TrackSlot number from which to remove the dice.
+     * @throws BadDiceReferenceException if the dice does not exist
      */
     public void takeDice(Dice dice, int slotNumber) throws BadDiceReferenceException {
 

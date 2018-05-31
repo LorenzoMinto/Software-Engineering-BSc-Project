@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -35,7 +35,6 @@ public class RoundTest {
 
     @BeforeClass
     public static void initializeVariables(){
-        User user = new User(1,"username");
         privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
 
         p1 = new Player( "p1", privateObjectiveCard);
@@ -44,7 +43,7 @@ public class RoundTest {
         p4 = new Player( "p4", privateObjectiveCard);
 
         players = new ArrayList<>();
-        draftPool = new DraftPool();
+        draftPool = new DraftPool(new ArrayList<>());
 
     }
 
@@ -223,7 +222,7 @@ public class RoundTest {
 
     @Test
     public void testGetDraftPool(){
-        draftPool = new DraftPool();
+        draftPool = new DraftPool(new ArrayList<>());
         round = new Round(0,players.size()*2, players, draftPool);
 
         assertEquals(draftPool, round.getDraftPool());

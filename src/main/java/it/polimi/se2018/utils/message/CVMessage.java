@@ -1,6 +1,9 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.MovePermission;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -8,15 +11,19 @@ import java.util.Map;
  */
 public class CVMessage extends ViewBoundMessage {
 
-    public CVMessage(types type, Map<String, Object> params, String playerID) {
+    public CVMessage(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+        super(type, params, playerID, permissions);
+    }
+
+    public CVMessage(Enum type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
     }
 
-    public CVMessage(types type, Map<String, Object> params) {
+    public CVMessage(Enum type, Map<String, Object> params) {
         super(type, params);
     }
 
-    public CVMessage(types type) {
+    public CVMessage(Enum type) {
         super(type);
     }
 
@@ -27,7 +34,7 @@ public class CVMessage extends ViewBoundMessage {
     /**
      * Enum for all types of CVMessage instances
      */
-    public enum types implements MessageType{
+    public enum types {
         ERROR_MESSAGE,
         ACKNOWLEDGMENT_MESSAGE,
         INACTIVE_PLAYER,

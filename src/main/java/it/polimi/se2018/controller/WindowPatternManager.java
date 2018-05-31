@@ -61,6 +61,47 @@ public class WindowPatternManager {
     }
 
     /**
+     * Returns a list of the requested quantity of Window Patterns
+     *
+     * @param numberOfPairs the number of pairs of window patterns that must be created
+     * @return the list of the requested quantity of Window Patterns
+     * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
+     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
+     */
+    public Set<WindowPattern> getPairsOfPatterns(int numberOfPairs) {
+        if(numberOfPairs < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of couples of windowpatterns");}
+
+        Set<WindowPattern> couplesOfPatterns = new HashSet<>();
+
+        if( availablePatterns.size() >= numberOfPairs * 2 ){
+
+            Random r = new Random();
+
+            for(int i=0; i<numberOfPairs; i++){
+
+                //Choose randomly one of the available patterns
+                int randomIndex = r.nextInt(availablePatterns.size());
+                String randomPatternID = availablePatterns.get(randomIndex);
+
+                //Removes the selected pattern from the available to avoid double choise
+                availablePatterns.remove(randomPatternID);
+
+                //Load the randomly selected pattern
+                WindowPattern randomPattern = loadPatternFromFileSystem(randomPatternID);
+                WindowPattern randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
+
+                //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
+                couplesOfPatterns.add(randomPattern);
+                couplesOfPatterns.add(randomPartnerPattern);
+            }
+        } else {
+            throw new BadBehaviourRuntimeException("Cant create the number of window pattern requested. This error is not handlable at all");
+        }
+
+        return couplesOfPatterns;
+    }
+
+    /**
      * Loads from file the specified toolcard loading all its properties in a new {@link WindowPattern} class.
      *
      * @param patternID the ID String representing the window pattern to be loaded
@@ -86,7 +127,7 @@ public class WindowPatternManager {
             int cols = Integer.parseInt( document.getElementsByTagName("cols").item(0).getTextContent() );
 
             //Parse from xml the difficulty of the pattern
-            int diff = Integer.parseInt( document.getElementsByTagName("difficulty").item(0).getTextContent() );
+            int difficulty = Integer.parseInt( document.getElementsByTagName("difficulty").item(0).getTextContent() );
 
             //Creates the pattern
             pattern = new Cell[rows][cols];
@@ -100,21 +141,21 @@ public class WindowPatternManager {
             NodeList constraints = document.getElementsByTagName("constraint");
             for(int i=0; i<constraints.getLength(); i++){
 
-                NamedNodeMap a = constraints.item(i).getAttributes();
+                NamedNodeMap attributes = constraints.item(i).getAttributes();
 
                 //Parse from xml the constraint location (row,col)
-                int row = Integer.parseInt( a.getNamedItem("row").getNodeValue() );
-                int col = Integer.parseInt( a.getNamedItem("col").getNodeValue() );
+                int row = Integer.parseInt( attributes.getNamedItem("row").getNodeValue() );
+                int col = Integer.parseInt( attributes.getNamedItem("col").getNodeValue() );
 
                 //Parse from xml proper constraint features (value,color)
-                int value = Integer.parseInt( a.getNamedItem("value").getNodeValue() );
-                DiceColors color = DiceColors.valueOf( a.getNamedItem("color").getNodeValue() );
+                int value = Integer.parseInt( attributes.getNamedItem("value").getNodeValue() );
+                DiceColor color = DiceColor.valueOf( attributes.getNamedItem("color").getNodeValue() );
 
                 //Set constraints to corresponding pattern cell
                 pattern[row][col] = new Cell(value,color);
             }
 
-            return new WindowPattern(patternID,title,diff,pattern);
+            return new WindowPattern(patternID,title,difficulty,pattern);
 
         } catch (Exception e) {
             //Bad formatting of xml is caught and method returns false
@@ -137,47 +178,6 @@ public class WindowPatternManager {
         }
     }
 
-    /**
-     * Returns a list of the requested quantity of Window Patterns
-     *
-     * @param numberOfCouples the number of couples of window patterns that must be created
-     * @return the list of the requested quantity of Window Patterns
-     * @throws BadFormattedPatternFileException if during the loading of a window pattern it comes out that
-     * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
-     */
-    public Set<WindowPattern> getCouplesOfPatterns(int numberOfCouples) {
-        int quantity = numberOfCouples * 2;
-        Set<WindowPattern> patterns = new HashSet<>();
 
-        if( availablePatterns.size() >= quantity ){
-
-            Random r = new Random();
-
-            for(int i=0; i<numberOfCouples; i++){
-
-                //Choose randomly one of the available patterns
-                int randomIndex = r.nextInt(availablePatterns.size());
-                String randomPatternID = availablePatterns.get(randomIndex);
-
-                //Removes the selected pattern from the available to avoid double choise
-                availablePatterns.remove(randomPatternID);
-
-                //Load the randomly selected pattern
-                WindowPattern randomPattern;
-                WindowPattern randomPartnerPattern;
-
-                randomPattern = loadPatternFromFileSystem(randomPatternID);
-                randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
-
-                //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
-                patterns.add(randomPattern);
-                patterns.add(randomPartnerPattern);
-            }
-        } else {
-            throw new BadBehaviourRuntimeException("Cant create the number of window pattern requested. This error is not handlable at all");
-        }
-
-        return patterns;
-    }
 
 }

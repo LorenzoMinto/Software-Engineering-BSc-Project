@@ -33,7 +33,7 @@ public class ChangeDiceValueControllerStateTest {
         Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
 
         WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getCouplesOfPatterns(1).iterator().next();
+        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -62,7 +62,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testIncrementDice() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 3;
-        Dice dice = new Dice(DiceColors.BLUE, value);
+        Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
         controller.controllerState.incrementDice();
 
@@ -73,7 +73,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testIncrementDiceWhenDiceValueIsSix() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 6;
-        Dice dice = new Dice(DiceColors.BLUE, value);
+        Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
         Message m = controller.controllerState.incrementDice();
 
@@ -85,7 +85,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testDecrementDice() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 3;
-        Dice dice = new Dice(DiceColors.BLUE, value);
+        Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
         controller.controllerState.decrementDice();
 
@@ -97,7 +97,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testDecrementDiceWhenDiceValueIsOne() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 1;
-        Dice dice = new Dice(DiceColors.BLUE, value);
+        Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
         Message m = controller.controllerState.decrementDice();
 
@@ -110,7 +110,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testChangeDiceValue() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 5;
-        Dice dice = new Dice(DiceColors.BLUE, 3);
+        Dice dice = new Dice(DiceColor.BLUE, 3);
         currentTurn.setDraftedDice(dice);
         controller.controllerState.chooseDiceValue(value);
 
@@ -121,7 +121,7 @@ public class ChangeDiceValueControllerStateTest {
     public void testChangeDiceValueWhenValueNotAllowed() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 3;
-        Dice dice = new Dice(DiceColors.BLUE, value);
+        Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
         Message m = controller.controllerState.chooseDiceValue(7);
 

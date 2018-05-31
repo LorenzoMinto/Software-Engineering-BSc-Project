@@ -33,7 +33,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     private Client(ConnectionType type) {
         //Creates View and connects itself as observer
-        this.view = new CLIView();
+        this.view = new CLIView(LOGGER);
         this.view.register(this);
 
         SenderInterface server = null;

@@ -10,7 +10,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 public class TrackTest {
@@ -96,7 +96,7 @@ public class TrackTest {
 
     @Test
     public void testPutDice() {
-        Dice dice6 = new Dice(DiceColors.RED, 6);
+        Dice dice6 = new Dice(DiceColor.RED, 6);
         track.putDice(dice6, 0);
         assertTrue(track.getDicesFromSlotNumber(0).contains(dice6));
     }

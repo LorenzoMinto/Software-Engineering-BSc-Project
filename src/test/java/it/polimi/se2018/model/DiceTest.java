@@ -2,15 +2,18 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import java.util.Properties;
+
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 
 
 /**
+ * Test for {@link Dice} class
+ *
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
@@ -18,16 +21,25 @@ public class DiceTest {
 
     private Dice dice;
 
+    /**
+     * Initializes the dice
+     */
     @Before
     public  void initializeDice(){
         dice = new Dice(GREEN,2);
     }
 
+    /**
+     * Tests the creation of a generic dice
+     */
     @Test
     public void testConstructor(){
         dice = new Dice(GREEN, 2);
     }
 
+    /**
+     * Tests the impossibility of creating a dice with no color
+     */
     @Test
     public void testConstructorWithNoColor(){
         try{
@@ -36,6 +48,9 @@ public class DiceTest {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the impossibility of creating a dice with value out of bounds [1,6]
+     */
     @Test
     public void testConstructorWithValueOutOfBounds(){
         try{
@@ -49,14 +64,20 @@ public class DiceTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests setting the value of a dice
+     */
     @Test
-    public void testSetValue() {
+    public void testSetAndGetValue() {
         int value = 5;
         dice.setValue(value);
 
         assertEquals(value,dice.getValue());
     }
 
+    /**
+     * Tests setting the value of a dice to a value out of bounds [1,6]
+     */
     @Test
     public void testSetIllegalValue(){
         try{
@@ -70,6 +91,10 @@ public class DiceTest {
         }catch (ValueOutOfBoundsException e){}
     }
 
+    /**
+     * Tests the rollOver method
+     * @see Dice#rollOver()
+     */
     @Test
     public void testRollOver() {
         for(int i=1; i <= 6; i++){
@@ -79,6 +104,9 @@ public class DiceTest {
         }
     }
 
+    /**
+     * Tests the increment of the value of a dice
+     */
     @Test
     public void testIncrementValue() {
         dice.setValue(5);
@@ -87,6 +115,9 @@ public class DiceTest {
         assertEquals(6,dice.getValue());
     }
 
+    /**
+     * Tests the increment of the value of a dice when the value is already the maximum value in bounds [1,6]
+     */
     @Test
     public void testIncrementValueFromMaxValue() {
         dice.setValue(6);
@@ -94,6 +125,9 @@ public class DiceTest {
         assertFalse(dice.incrementValue());
     }
 
+    /**
+     * Tests the decrement of the value of a dice
+     */
     @Test
     public void testDecrementValue() {
         dice.setValue(2);
@@ -102,6 +136,9 @@ public class DiceTest {
         assertEquals(1,dice.getValue());
     }
 
+    /**
+     * Tests the decrement of the value of a dice when the value is already the minimum value in bounds [1,6]
+     */
     @Test
     public void testDecrementValueFromMin() {
         dice.setValue(1);
@@ -109,21 +146,74 @@ public class DiceTest {
         assertFalse(dice.decrementValue());
     }
 
+    /**
+     * Tests the toString method of {@link Dice}
+     * @see Dice#toString()
+     */
     @Test
     public void testToString() {
         dice.setValue(2);
         assertEquals("2:G",dice.toString());
     }
 
+    /**
+     * Tests the equals method of {@link Dice}
+     * @see Dice#equals(Object)
+     */
     @Test
     public void testEquals() {
-        assertTrue(dice.equals(dice));
-        assertTrue(dice.equals(dice.copy()));
-        assertFalse(dice.equals(new Cell()));
+        Dice dice1 = new Dice(GREEN, 2);
+
+        assertTrue(dice.equals(dice1));
     }
 
+    /**
+     * Tests the equals method of {@link Dice} when two Dice are not equal
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenNotEqual() {
+
+        Dice dice1 = new Dice(RED, 4);
+
+        assertFalse(dice.equals(dice1));
+    }
+
+    /**
+     * Tests the equals method of {@link Dice} comparing the same object
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenGivenSameObject() {
+        assertTrue(dice.equals(dice));
+    }
+
+    /**
+     * Tests the equals method of {@link Dice} comparing two different classes
+     * @see Dice#equals(Object)
+     */
+    @Test
+    public void testEqualsWhenGivenAnotherTypeOfObject() {
+        assertFalse(dice.equals("this"));
+    }
+
+
+    /**
+     * Tests the hash code of a dice is not null
+     * @see Dice#hashCode()
+     */
     @Test
     public void testHashCode() {
         assertNotNull(dice.hashCode());
     }
+
+    /**
+     * Tests the copy method of {@link Dice}
+     * @see Dice#copy()
+     */
+    @Test
+    public void testCopy(){
+        assertNotNull(dice.copy());
+    }
+
 }

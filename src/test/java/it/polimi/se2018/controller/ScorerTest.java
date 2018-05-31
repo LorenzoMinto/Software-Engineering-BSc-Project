@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static it.polimi.se2018.model.DiceColors.*;
+import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
 /**
@@ -86,7 +86,7 @@ public class ScorerTest {
 
         try {
             WindowPatternManager windowPatternManager = new WindowPatternManager();
-            List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getCouplesOfPatterns(1));
+            List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
             WindowPattern genericWP = windowPatterns.get(0);
 
 
@@ -698,7 +698,7 @@ public class ScorerTest {
 
 
     /**
-     * Assigns different score windowpatterns to players
+     * Assigns different score window patterns to players
      */
     private void assignDifferentScoreWindowPatterns() {
         p1.setWindowPattern(wp1);
@@ -708,7 +708,7 @@ public class ScorerTest {
     }
 
     /**
-     * Assigns same score, different PrivateObjectiveCard score windowpatterns to players
+     * Assigns same score, different PrivateObjectiveCard score window patterns to players
      */
     private void assignSameScoreWindowPatterns() {
         p1.setWindowPattern(wpSameScore1);
@@ -718,7 +718,7 @@ public class ScorerTest {
     }
 
     /**
-     * Assigns different score, same PrivateObjectiveCard score windowpatterns to players
+     * Assigns different score, same PrivateObjectiveCard score window patterns to players
      */
     private void assignSamePrivateScoreWindowPatterns() {
         p1.setWindowPattern(wpSamePrivateScore1);
@@ -728,7 +728,7 @@ public class ScorerTest {
     }
 
     /**
-     * Assigns same score, same PrivateObjectiveCard score windowpatterns to players
+     * Assigns same score, same PrivateObjectiveCard score window patterns to players
      */
     private void assignSameScoreAndSamePrivateScoreWindowPatterns() {
         p1.setWindowPattern(wpSame1);

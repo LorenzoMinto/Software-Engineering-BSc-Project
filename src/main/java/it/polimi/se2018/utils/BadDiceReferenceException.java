@@ -10,6 +10,7 @@ package it.polimi.se2018.utils;
 public class BadDiceReferenceException extends Exception{
     /**
      * Constructor for BadDiceReference Exception
+     * @param message the message sent within the exception
      */
     public BadDiceReferenceException(String message) {
         super(message);
