@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class VCMessage extends ControllerBoundMessage {
 
+    private static final long serialVersionUID = 3510649137929416077L;
+
     public VCMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
         super(type, params, playerID, permissions);
     }

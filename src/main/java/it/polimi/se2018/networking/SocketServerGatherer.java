@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.message.Message;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -39,21 +39,29 @@ public class SocketServerGatherer extends Thread{
     private void acceptConnection(ServerSocket socket) throws IOException{
         Socket clientSocket = socket.accept();
 
-        SocketServer socketServer = new SocketServer(clientSocket.getOutputStream());
+        ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+        outputStream.flush();
 
         //Starts a thread listening for messages
-        new Thread(new Runnable() {
-            String socketMessage;
-            @Override
-            public void run() {
-                try(BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
-                    while ( (socketMessage = in.readLine()) != null ){
-                        //TODO: implementare deserializzazione dell'oggetto
-                        CVMessage message = new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE); //placeholder da sostituire
-                        server.receiveMessage(message,socketServer);
-                    }
-                } catch(IOException e){
-                    ((Server)server).fail("IOException thrown reading socket input stream");
+        new Thread(() -> {
+
+            ObjectInputStream in;
+            try {
+                in = new ObjectInputStream(clientSocket.getInputStream());
+            } catch (IOException e) {
+                return;
+            }
+
+            boolean c = true;
+            while(c) {
+                Message message;
+                try {
+                    message = (Message) in.readObject();
+                    server.receiveMessage(message, new SocketServer(outputStream));
+                } catch( Exception e ){
+                    e.printStackTrace();
+                    ((Server)server).fail("Exception thrown reading socket input stream");
+                    c = false;
                 }
             }
         }).start();

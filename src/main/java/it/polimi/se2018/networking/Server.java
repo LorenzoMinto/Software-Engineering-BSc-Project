@@ -200,7 +200,12 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"GAME_IS_PLAYING");
         }
 
-        String nickname = (String) message.getParam("nickname");
+        String nickname = null;
+        try {
+            nickname = (String) message.getParam("nickname");
+        } catch (NoSuchAParamInMessageException e) {
+            return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+        }
 
         switch (message.getType()){
             case JOIN:

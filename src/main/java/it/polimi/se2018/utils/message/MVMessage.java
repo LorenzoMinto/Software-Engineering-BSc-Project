@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class MVMessage extends ViewBoundMessage {
 
+    private static final long serialVersionUID = -519162435752587549L;
+
     public MVMessage(types type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
         super(type, params, playerID, permissions);
     }

@@ -95,7 +95,10 @@ public abstract class Message implements Serializable{
      * @param key the key of the requested param
      * @return the message's param of the given key
      */
-    public Object getParam(String key){
+    public Object getParam(String key) throws NoSuchAParamInMessageException {
+        if(!params.containsKey(key)){
+            throw new NoSuchAParamInMessageException();
+        }
         return this.params.get(key);
     }
 
@@ -121,9 +124,14 @@ public abstract class Message implements Serializable{
         return playerID;
     }
 
-    static HashMap<String, Object> createHashMapWithMessage(String message){
+    public static HashMap<String, Object> fastMap(String key, Object value){
         HashMap<String, Object> params = new HashMap<>();
-        params.put("message", message);
+        params.put(key, value);
         return params;
+    }
+
+    @Override
+    public String toString() {
+        return type.toString().concat(" ").concat((params==null)?"_":params.toString());
     }
 }

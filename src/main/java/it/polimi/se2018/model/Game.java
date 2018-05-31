@@ -320,7 +320,7 @@ public class Game extends Observable implements Observer{
 
         messageAttributes.put("drawnToolCards", drawnToolCards);
         messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
-        messageAttributes.put("players", players);
+        messageAttributes.put("players", players.stream().map(Player::getID).toArray());
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 

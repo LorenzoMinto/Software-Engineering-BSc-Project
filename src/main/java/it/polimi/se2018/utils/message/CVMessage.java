@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class CVMessage extends ViewBoundMessage {
 
+    private static final long serialVersionUID = -8563816844656911792L;
+
     public CVMessage(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
         super(type, params, playerID, permissions);
     }
@@ -28,7 +30,7 @@ public class CVMessage extends ViewBoundMessage {
     }
 
     public CVMessage(types type, String message) {
-        super(type, createHashMapWithMessage(message), null);
+        super(type, fastMap("message",message), null);
     }
 
     /**
@@ -40,6 +42,7 @@ public class CVMessage extends ViewBoundMessage {
         INACTIVE_PLAYER,
         BACK_TO_GAME, //NOTE: if view receive this message, must assume that permissions are "waiting for your turn"
         INACTIVE, //NOTE: if view receive this message, must assume that permissions are "come back to game!"
-        GIVE_WINDOW_PATTERNS
+        GIVE_WINDOW_PATTERNS,
+        GAME_ENDED
     }
 }

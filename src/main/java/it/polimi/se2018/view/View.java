@@ -2,17 +2,37 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.Observer;
 
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-public abstract class View extends Observable {
+public abstract class View extends Observable implements Observer {
 
     private String playerID;
 
-    private final Logger logger;
+    final Logger logger;
 
-    public View(Logger logger) {
-        this.logger = logger;
+    public View() {
+        logger = createLogger();
+    }
+
+    private Logger createLogger(){
+        Logger newLogger = Logger.getLogger(View.class.getName());
+        newLogger.setUseParentHandlers(false);
+        newLogger.setLevel(Level.FINE);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.FINE);
+        handler.setFormatter(new SimpleFormatter(){
+            private static final String FORMAT = "[VIEW] %1$s %n";
+
+            @Override
+            public synchronized String format(LogRecord lr) {
+                return String.format(FORMAT,lr.getMessage());
+            }
+
+        });
+        newLogger.addHandler(handler);
+        return newLogger;
     }
 
     public String getPlayerID() {

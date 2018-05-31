@@ -4,6 +4,8 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.NoSuchAParamInMessageException;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
@@ -117,6 +119,8 @@ public class Controller extends Observable {
     private TimerTask waitingForPatternsChoice;
     private TimerTask waitingForPlayerMove;
 
+    private HashMap<String,List<WindowPattern>> assignedWindowPatterns = new HashMap<>();
+
     //TODO: commentare
     int movesCounter = 0;
 
@@ -191,6 +195,14 @@ public class Controller extends Observable {
         }
     }
 
+    private CVMessage errorMessage(){
+        return errorMessage("BadFormatted");
+    }
+
+    private CVMessage errorMessage(String m){
+        return new CVMessage(CVMessage.types.ERROR_MESSAGE,m);
+    }
+
     public CVMessage handleMove(VCMessage message) {
 
         VCMessage.types type = (VCMessage.types) message.getType();
@@ -200,7 +212,12 @@ public class Controller extends Observable {
             case WAITING_FOR_PATTERNS_CHOICE:
                 if(type==VCMessage.types.CHOOSE_WINDOW_PATTERN){
                     String playerID = message.getSendingPlayerID();
-                    WindowPattern wp = (WindowPattern) message.getParam("windowPattern");
+                    WindowPattern wp = null;
+                    try {
+                        wp = (WindowPattern) message.getParam("windowPattern");
+                    } catch (NoSuchAParamInMessageException e) {
+                        return errorMessage("Bad Formatted");
+                    }
                     returnMessage = assignWindowPatternToPlayer(wp,playerID);
                     checkIfAllPlayersHaveChosenWindowPattern(); //may call startGame()
                     break;
@@ -218,27 +235,56 @@ public class Controller extends Observable {
                 } else if (game.isCurrentPlayer(message.getSendingPlayerID())) {
                     switch (type) {
                         case DRAFT_DICE_FROM_DRAFTPOOL:
-                            Dice dice = (Dice) message.getParam("dice");
+                            Dice dice;
+                            try {
+                                dice = (Dice) message.getParam("dice");
+                            } catch (NoSuchAParamInMessageException e) {
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.draftDiceFromDraftPool(dice);
                             break;
                         case PLACE_DICE:
-                            int row = (int) message.getParam("row");
-                            int col = (int) message.getParam("col");
+                            int row;
+                            int col;
+                            try {
+                                row = (int) message.getParam("row");
+                                col = (int) message.getParam("col");
+                            } catch (NoSuchAParamInMessageException e) {
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.placeDice(row, col);
                             break;
                         case USE_TOOLCARD:
-                            ToolCard toolCard = (ToolCard) message.getParam("toolcard");
+                            ToolCard toolCard;
+                            try {
+                                toolCard = (ToolCard) message.getParam("toolcard");
+                            } catch (NoSuchAParamInMessageException e) {
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.useToolCard(toolCard);
                             break;
                         case MOVE_DICE:
-                            int rowFrom = (int) message.getParam("rowFrom");
-                            int colFrom = (int) message.getParam("colFrom");
-                            int rowTo = (int) message.getParam("rowTo");
-                            int colTo = (int) message.getParam("colTo");
+                            int rowFrom;
+                            int colFrom;
+                            int rowTo;
+                            int colTo;
+                            try {
+                                rowFrom = (int) message.getParam("rowFrom");
+                                colFrom = (int) message.getParam("colFrom");
+                                rowTo = (int) message.getParam("rowTo");
+                                colTo = (int) message.getParam("colTo");
+                            } catch (NoSuchAParamInMessageException e){
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
                             break;
                         case CHOOSE_DICE_VALUE:
-                            int value = (int) message.getParam("value");
+                            int value;
+                            try {
+                                value = (int) message.getParam("value");
+                            } catch (NoSuchAParamInMessageException e) {
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.chooseDiceValue(value);
                             break;
                         case INCREMENT_DICE:
@@ -248,11 +294,16 @@ public class Controller extends Observable {
                             returnMessage = controllerState.decrementDice();
                             break;
                         case CHOOSE_DICE_FROM_TRACK:
-                            int value2 = (int) message.getParam("value");
+                            int value2;
+                            try {
+                                value2 = (int) message.getParam("value");
+                            } catch (NoSuchAParamInMessageException e) {
+                                return errorMessage();
+                            }
                             returnMessage = controllerState.chooseDiceValue(value2);
                             break;
                         default:
-                            returnMessage = new CVMessage(CVMessage.types.ERROR_MESSAGE,"UnrecognizedMove");
+                            returnMessage = errorMessage("UnrecognizedMove");
                             break;
                     }
                 } else {
@@ -335,6 +386,9 @@ public class Controller extends Observable {
             game.addPlayer(player);
 
             Set<WindowPattern> patterns = windowPatternManager.getPairsOfPatterns(getConfigProperty("amountOfCouplesOfPatternsPerPlayer"));
+
+            assignedWindowPatterns.put(nickname,new ArrayList<>(patterns));
+
             HashMap<String,Object> params = new HashMap<>();
             params.put("patterns",patterns);
             notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));
@@ -347,6 +401,14 @@ public class Controller extends Observable {
             @Override
             public void run() {
                 logger.info("waitingForPatternsChoice timer has expired. Calling startGame()...");
+
+                //Assign the first of the given windowpattern to players that did not choose
+                for(Player p : game.getPlayers()){
+                    if(p.getWindowPattern()==null){
+                        p.setWindowPattern(assignedWindowPatterns.get(p.getID()).get(0));
+                    }
+                }
+
                 startGame();
             }
         };
@@ -366,7 +428,6 @@ public class Controller extends Observable {
 
     private void startGame(){
         game.startGame(getDicesForNewRound());
-        this.advanceGame();
 
         startPlayerMoveTimer();
     }
@@ -384,6 +445,7 @@ public class Controller extends Observable {
                 advanceGameDueToPlayerInactivity();
             }
         };
+        TIMER.schedule(waitingForPlayerMove,getConfigProperty("timeoutPlayerMove"));
     }
 
     private void advanceGameDueToPlayerInactivity() {
@@ -399,6 +461,7 @@ public class Controller extends Observable {
         //Checks if due to players inactivity game can continuing or not
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
             endGame(inactivePlayers);
+            return;
         }
 
         //NOTE: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player
@@ -446,6 +509,7 @@ public class Controller extends Observable {
             } catch (NoMoreRoundsAvailableException e1) {
 
                 endGame();
+                return;
             }
 
             try {
@@ -454,6 +518,8 @@ public class Controller extends Observable {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }
         }
+
+        resetPlayerMoveTimer();
 
         if( inactivePlayers.contains(getCurrentPlayer().getID()) ){
             /*
@@ -506,6 +572,8 @@ public class Controller extends Observable {
 
     private void endGame(HashSet<String> inactivePlayers){
         Map<String, Integer> rankings = getRankingsAndScores(inactivePlayers);
+
+        notify(new CVMessage(CVMessage.types.GAME_ENDED, Message.fastMap("rankings",rankings)));
 
         registerRankingsOnUsersProfiles(rankings);
 

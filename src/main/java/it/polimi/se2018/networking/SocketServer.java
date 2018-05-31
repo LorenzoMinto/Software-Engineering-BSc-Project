@@ -11,17 +11,15 @@ import java.rmi.RemoteException;
  */
 public class SocketServer implements ReceiverInterface {
 
-    private OutputStream stream;
+    private ObjectOutputStream stream;
 
-    SocketServer(OutputStream stream) {
+    SocketServer(ObjectOutputStream stream) throws IOException {
         this.stream = stream;
     }
 
     private void receiveMessage(Message message) throws RemoteException {
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream));
         try {
-            out.write(message + "\n");
-            out.flush();
+            this.stream.writeObject(message);
         } catch (IOException e) {
             throw new RemoteException("IOException thrown writing in socket stream during receiveMessage method call");
         }
