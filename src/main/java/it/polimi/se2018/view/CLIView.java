@@ -1,23 +1,16 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class CLIView extends View {
 
     private static final Scanner scanner = new Scanner(System.in);
-
-    private Move currentMove;
-
-    private EnumSet<Move> permissions;
 
     private HashMap<Move,String> movesToCLICommands = new HashMap<>();
     private HashMap<Integer,Move> cliCommandsToMoves = new HashMap<>();
@@ -33,122 +26,109 @@ public class CLIView extends View {
         new Thread(this::console).start();
     }
 
-    private void console(){
-
-        askForMove();
-
-        try {
-            parseMoveChoise();
-
-        } catch (ExitCommandException e) {
-            writeToConsole("Console closed.");
-            return;
-        }
-
-        try {
-            handleMove();
-
-        } catch (ExitCommandException e) {
-            abortMove();
-        }
-
-        console(); //Infinite loop until parseMoveChoise() -> ExitCommandException
+    @Override
+    Message handleEndTurnMove() {
+        return null;
     }
 
-    private void askForMove() {
-
-        String messaggio;
-
-        if(permissions.isEmpty()){
-            messaggio = "Nessuna mossa eseguibile, per il momento.";
-        } else {
-            String options = permissions.stream().map(move -> movesToCLICommands.get(move)).reduce((x,y) -> x.concat(System.lineSeparator()).concat(y)).get();
-            messaggio = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
-        }
-
-        writeToConsole(messaggio);
+    @Override
+    Message handleDraftDiceFromDraftPoolMove() {
+        return null;
     }
 
-    private void parseMoveChoise() throws ExitCommandException {
-
-        int input = Integer.parseInt(readFromConsole()); //throws ExitCommandException
-
-        currentMove = cliCommandsToMoves.get(input);
+    @Override
+    Message handlePlaceDiceOnWindowPatternMove() {
+        return null;
     }
 
-    private void handleMove() throws ExitCommandException {
-        //Check if currentMove is a valid one
-        if(currentMove==null){
-            writeToConsole("Mossa non riconosciuta");
-            return;
-        }
-
-        Message message = null;
-
-        //Here the code that handles each move. Each case can contain multiple writeToConsole and / or readFromConsole
-        switch (currentMove) {
-            case END_TURN:
-                break;
-            case DRAFT_DICE_FROM_DRAFTPOOL:
-                break;
-            case PLACE_DICE_ON_WINDOWPATTERN:
-                break;
-            case USE_TOOLCARD:
-                break;
-            case INCREMENT_DRAFTED_DICE:
-                break;
-            case DECREMENT_DRAFTED_DICE:
-                break;
-            case CHANGE_DRAFTED_DICE_VALUE:
-                break;
-            case CHOOSE_DICE_FROM_TRACK:
-                break;
-            case MOVE_DICE:
-                break;
-            case JOIN_GAME:
-                writeToConsole("Inserisci il tuo nickname: ");
-                String nickname = readFromConsole();
-                message = new WaitingRoomMessage( WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",nickname) );
-                break;
-        }
-
-        //Send message (if created) to server (through client)
-        if(message!=null){
-            notify(message);
-        }
+    @Override
+    Message handleUseToolCardMove() {
+        return null;
     }
 
-    private void abortMove() {
-        currentMove = null;
-        writeToConsole("Move aborted");
+    @Override
+    Message handleIncrementDraftedDiceMove() {
+        return null;
     }
 
-    private String readFromConsole() throws ExitCommandException {
-        String text = scanner.nextLine();
-        if(text.equals("exit")){ throw new ExitCommandException(); }
-        return text;
+    @Override
+    Message handleDecrementDraftedDiceMove() {
+        return null;
     }
 
-    private void writeToConsole(String m){
-        this.logger.info(m);
+    @Override
+    Message handleChangeDraftedDiceValueMove() {
+        return null;
     }
 
+    @Override
+    Message handleChooseDiceFromTrackMove() {
+        return null;
+    }
 
-    private class ExitCommandException extends Exception{
-        ExitCommandException() {
-            //do nothing
-        }
+    @Override
+    Message handleMoveDiceMove() {
+        return null;
+    }
+
+    @Override
+    Message handleJoinGameMove() {
+        showMessage("Inserisci il tuo nickname: ");
+        String nickname = readFromConsole();
+        return new WaitingRoomMessage( WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",nickname) );
+    }
+
+    @Override
+    public void showMessage(String message) {
+        writeToConsole(message);
     }
 
     @Override
     public boolean update(Message m) {
         logger.info(()->"Ricevuto: "+m.getType().toString());
 
-        handleReceivedMessage(m);
+        receiveMessage(m);
 
         askForMove();
 
         return true;
+    }
+
+    @Override
+    void askForMove() {
+        String messaggio;
+
+        if(getPermissions().isEmpty()){
+            messaggio = "Nessuna mossa eseguibile, per il momento.";
+        } else {
+            String options = getPermissions().stream().map(move -> movesToCLICommands.get(move)).reduce((x,y) -> x.concat(System.lineSeparator()).concat(y)).orElse("");
+            messaggio = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
+        }
+
+        writeToConsole(messaggio);
+    }
+
+    private void console(){
+
+        askForMove();
+
+        parseMoveChoiseFromConsole();
+
+        handleMove();
+
+        console(); //Infinite loop until parseMoveChoise() -> ExitCommandException
+    }
+
+    private void parseMoveChoiseFromConsole() {
+        setCurrentMove(cliCommandsToMoves.get(Integer.parseInt(readFromConsole())));
+    }
+
+    private String readFromConsole() {
+        return scanner.nextLine();
+    }
+
+    private void writeToConsole(String m){
+        this.logger.info(m);
     }
 
     private void mapMoveWithPermission(Move move){
@@ -202,66 +182,5 @@ public class CLIView extends View {
 
         movesToCLICommands.put(move,Integer.toString(choiceNumber).concat(". ").concat(text));
         cliCommandsToMoves.put(choiceNumber,move);
-    }
-
-    private void handleReceivedMessage(Message m) {
-
-        EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
-        if(p!=null && !p.isEmpty()){
-            this.permissions = p;
-        }//else keep same permissions
-
-        if(m instanceof CVMessage){
-            switch ((CVMessage.types) m.getType()) {
-                case ERROR_MESSAGE:
-                    break;
-                case ACKNOWLEDGMENT_MESSAGE:
-                    break;
-                case INACTIVE_PLAYER:
-                    break;
-                case BACK_TO_GAME:
-                    break;
-                case INACTIVE:
-                    break;
-                case GIVE_WINDOW_PATTERNS:
-                    break;
-                case GAME_ENDED:
-                    break;
-            }
-        } else if(m instanceof MVMessage){
-            switch ((MVMessage.types) m.getType()) {
-                case SETUP:
-                    break;
-                case NEXT_ROUND:
-                    break;
-                case NEW_TURN:
-                    break;
-                case USED_TOOLCARD:
-                    break;
-                case RANKINGS:
-                    break;
-                case WINDOWPATTERN:
-                    break;
-                case DRAFTPOOL:
-                    break;
-            }
-        } else if(m instanceof WaitingRoomMessage){
-            switch ((WaitingRoomMessage.types) m.getType()) {
-                case BAD_FORMATTED:
-                    break;
-                case DENIED:
-                    break;
-                case JOIN:
-                    break;
-                case ADDED:
-                    break;
-                case LEAVE:
-                    break;
-                case REMOVED:
-                    break;
-            }
-        } else {
-            //do nothing
-        }
     }
 }
