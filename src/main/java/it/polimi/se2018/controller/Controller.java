@@ -445,7 +445,7 @@ public class Controller extends Observable {
                 advanceGameDueToPlayerInactivity();
             }
         };
-        TIMER.schedule(waitingForPlayerMove,getConfigProperty("timeoutPlayerMove"));
+        TIMER.schedule(waitingForPlayerMove,(long)(getConfigProperty("timeoutPlayerMove")*1000));
     }
 
     private void advanceGameDueToPlayerInactivity() {

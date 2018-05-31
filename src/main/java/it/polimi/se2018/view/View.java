@@ -21,7 +21,7 @@ public abstract class View extends Observable implements Observer {
 
     private Move currentMove;
 
-    private EnumSet<Move> permissions;
+    private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
     private ViewState state = ViewState.INACTIVE;
 

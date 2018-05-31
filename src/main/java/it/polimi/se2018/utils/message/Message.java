@@ -87,7 +87,7 @@ public abstract class Message implements Serializable{
      * @return the permissions sent within the message
      */
     public Set<Move> getPermissions() {
-        return permissions.clone();
+        return (permissions==null)?null:permissions.clone();
     }
 
     /**

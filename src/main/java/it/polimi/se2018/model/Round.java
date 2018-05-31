@@ -60,7 +60,7 @@ public class Round {
             turns.add( new Turn(turnNumber,player) );
         }
 
-        this.currentTurnIndex = 0;
+        this.currentTurnIndex = -1;
         this.draftPool = draftPool;
     }
 

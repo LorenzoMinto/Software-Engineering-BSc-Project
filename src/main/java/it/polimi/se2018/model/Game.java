@@ -368,6 +368,11 @@ public class Game extends Observable implements Observer{
 
         notify(new MVMessage(MVMessage.types.NEXT_ROUND, messageAttributes));
 
+        try {
+            nextTurn();
+        } catch (NoMoreTurnsAvailableException e) {
+            //can't happen
+        }
     }
 
     /**

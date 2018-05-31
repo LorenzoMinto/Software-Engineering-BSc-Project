@@ -93,12 +93,11 @@ public class CLIView extends View {
         askForMove();
 
         return true;
-    }
+    } //TODO: sposta su view
 
     @Override
     void askForMove() {
         String messaggio;
-
         if(getPermissions().isEmpty()){
             messaggio = "Nessuna mossa eseguibile, per il momento.";
         } else {
