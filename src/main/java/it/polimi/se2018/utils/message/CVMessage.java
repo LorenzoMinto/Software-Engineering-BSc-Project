@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.utils.MovePermission;
+import it.polimi.se2018.utils.Move;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +13,7 @@ public class CVMessage extends ViewBoundMessage {
 
     private static final long serialVersionUID = -8563816844656911792L;
 
-    public CVMessage(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+    public CVMessage(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         super(type, params, playerID, permissions);
     }
 

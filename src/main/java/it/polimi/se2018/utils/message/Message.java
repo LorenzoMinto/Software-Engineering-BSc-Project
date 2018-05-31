@@ -1,6 +1,6 @@
 package it.polimi.se2018.utils.message;
 
-import it.polimi.se2018.utils.MovePermission;
+import it.polimi.se2018.utils.Move;
 
 import java.io.Serializable;
 import java.util.*;
@@ -36,13 +36,13 @@ public abstract class Message implements Serializable{
     /**
      * If the message is the reply to a move, it contains the new permissions set for the player recipient of this message
      */
-    private final EnumSet<MovePermission> permissions;
+    private final EnumSet<Move> permissions;
 
-    public Message(Enum type, Map<String, Object> params, String playerID, Set<MovePermission> permissions) {
+    public Message(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         this.type = type;
         this.params = (HashMap<String,Object>)params;
         this.playerID = playerID;
-        this.permissions = (EnumSet<MovePermission>)permissions;
+        this.permissions = (EnumSet<Move>)permissions;
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class Message implements Serializable{
      *
      * @return the permissions sent within the message
      */
-    public Set<MovePermission> getPermissions() {
+    public Set<Move> getPermissions() {
         return permissions.clone();
     }
 
@@ -124,7 +124,7 @@ public abstract class Message implements Serializable{
         return playerID;
     }
 
-    public static HashMap<String, Object> fastMap(String key, Object value){
+    public static Map<String, Object> fastMap(String key, Object value){
         HashMap<String, Object> params = new HashMap<>();
         params.put(key, value);
         return params;
