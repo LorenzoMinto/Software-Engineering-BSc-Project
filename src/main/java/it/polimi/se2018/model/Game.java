@@ -2,11 +2,9 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.NoMoreRoundsAvailableException;
 import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 
@@ -384,11 +382,16 @@ public class Game extends Observable implements Observer{
         try {
             getCurrentRound().nextTurn();
 
+            String nextPlayer = getCurrentRound().getCurrentTurn().getPlayer().getID();
+
             //NOTIFYING
             Map <String, Object> messageAttributes = new HashMap<>();
-            messageAttributes.put("currentPlayer", getCurrentRound().getCurrentTurn().getPlayer().getID());
-            //TODO: aggiungere permissions che ha l'utente che inizia ora a giocare. chi non gioca le ignorerà
+            messageAttributes.put("whoIsPlaying", nextPlayer);
             notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
+
+            //TODO: aggiungere permissions che ha l'utente che inizia ora a giocare
+            EnumSet<Move> permissions = EnumSet.allOf(Move.class);
+            notify(new MVMessage(MVMessage.types.YOUR_TURN, null, nextPlayer, permissions));
 
         } catch (NoMoreTurnsAvailableException e) {
             throw new NoMoreTurnsAvailableException();

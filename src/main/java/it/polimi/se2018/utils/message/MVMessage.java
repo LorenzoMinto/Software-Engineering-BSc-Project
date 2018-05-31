@@ -40,5 +40,6 @@ public class MVMessage extends ViewBoundMessage {
         RANKINGS,
         WINDOWPATTERN,
         DRAFTPOOL,
+        YOUR_TURN
     }
 }

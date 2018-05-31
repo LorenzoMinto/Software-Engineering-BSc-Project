@@ -27,9 +27,10 @@ public class ChooseFromTrackControllerStateTest {
         gprop.setProperty("numberOfPublicObjectiveCards","2");
         gprop.setProperty("maxNumberOfPlayers","4");
         gprop.setProperty("minNumberOfPlayers","2");
-        gprop.setProperty("timeoutLaunchingGame","30");
-        gprop.setProperty("timeoutChoosingPatterns","30");
+        gprop.setProperty("timeoutLaunchingGame","1000");
+        gprop.setProperty("timeoutChoosingPatterns","1000");
         gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
+        gprop.setProperty("timeoutPlayerMove","1000");
         controller = new Controller(game, gprop);
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));

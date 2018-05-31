@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
@@ -22,16 +23,19 @@ public abstract class View extends Observable implements Observer {
 
     private EnumSet<Move> permissions;
 
+    private ViewState state = ViewState.INACTIVE;
+
+    private enum ViewState{
+        INACTIVE,
+        ACTIVE
+    }
+
     public View() {
         logger = createLogger();
     }
 
     public String getPlayerID() {
         return playerID;
-    }
-
-    Move getCurrentMove() {
-        return currentMove;
     }
 
     public Set<Move> getPermissions() {
@@ -54,7 +58,7 @@ public abstract class View extends Observable implements Observer {
 
     void handleMove() {
         //Check if currentMove is a valid one
-        if(getCurrentMove()==null){
+        if(currentMove==null){
             showMessage("Mossa non riconosciuta");
             return;
         }
@@ -62,7 +66,7 @@ public abstract class View extends Observable implements Observer {
         Message message = null;
 
         //Here the code that handles each move. Each case can contain multiple writeToConsole and / or readFromConsole
-        switch (getCurrentMove()) {
+        switch (currentMove) {
             case END_TURN:
                 message = handleEndTurnMove();
                 break;
@@ -137,15 +141,26 @@ public abstract class View extends Observable implements Observer {
                 case INACTIVE_PLAYER:
                     break;
                 case BACK_TO_GAME:
+                    state = ViewState.ACTIVE;
                     break;
                 case INACTIVE:
+                    state = ViewState.INACTIVE;
                     break;
                 case GIVE_WINDOW_PATTERNS:
                     break;
                 case GAME_ENDED:
                     break;
+                default:
+                    //if cases are updated with CVMessage.types, should never enter here
+                    throw new BadBehaviourRuntimeException();
             }
         } else if(m instanceof MVMessage){
+
+            if(state==ViewState.INACTIVE){
+                //TODO: implementato così perchè trovata annotazione che diceva di farlo, ma verificare che effettivamente sia corretto
+                return;
+            }
+
             switch ((MVMessage.types) m.getType()) {
                 case SETUP:
                     break;
@@ -161,6 +176,12 @@ public abstract class View extends Observable implements Observer {
                     break;
                 case DRAFTPOOL:
                     break;
+                case YOUR_TURN:
+                    //needed just for setting permissions
+                    break;
+                default:
+                    //if cases are updated with MVMessage.types, should never enter here
+                    throw new BadBehaviourRuntimeException();
             }
         } else if(m instanceof WaitingRoomMessage){
             switch ((WaitingRoomMessage.types) m.getType()) {
@@ -176,9 +197,13 @@ public abstract class View extends Observable implements Observer {
                     break;
                 case REMOVED:
                     break;
+                default:
+                    //if cases are updated with WaitingRoomMessage.types, should never enter here
+                    throw new BadBehaviourRuntimeException();
             }
         } else {
-            //do nothing
+            //should never enter here
+            throw new BadBehaviourRuntimeException();
         }
     }
 
@@ -206,10 +231,6 @@ public abstract class View extends Observable implements Observer {
 
     //TODO: view must assume permissions (see CVMessage types comments) in case of receiving CVMessage of INACTIVE or BACK_GAME. Otherwise permissions are usually sent by Model through MVMessage
 
-    //TODO: view must ignore MVMessages if it is in "inactive status"
-
-    //TODO: view must enter "inactive status" if receives INACTIVE message from controller (CVMessage)
-    //TODO: view must enter "active status" if receives BACK_GAME message from controller (CVMessage)
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern
 

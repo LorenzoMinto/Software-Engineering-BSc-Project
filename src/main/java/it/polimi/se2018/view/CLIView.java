@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
@@ -108,27 +109,23 @@ public class CLIView extends View {
         writeToConsole(messaggio);
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     private void console(){
 
-        askForMove();
-
-        parseMoveChoiseFromConsole();
-
-        handleMove();
-
-        console(); //Infinite loop until parseMoveChoise() -> ExitCommandException
+        do {
+            askForMove();
+            parseMoveChoiceFromConsole();
+            handleMove();
+        } while (true);
     }
 
-    private void parseMoveChoiseFromConsole() {
+    /**
+     * Depending on the value inserted in console, recognize the move to perform
+     *
+     * @see CLIView#mapMoveWithPermission(Move)
+     */
+    private void parseMoveChoiceFromConsole() {
         setCurrentMove(cliCommandsToMoves.get(Integer.parseInt(readFromConsole())));
-    }
-
-    private String readFromConsole() {
-        return scanner.nextLine();
-    }
-
-    private void writeToConsole(String m){
-        this.logger.info(m);
     }
 
     private void mapMoveWithPermission(Move move){
@@ -178,9 +175,20 @@ public class CLIView extends View {
                 text = "Unisciti al gioco";
                 choiceNumber = 10;
                 break;
+            default:
+                //if cases are updated with Move.class, should never enter here
+                throw new BadBehaviourRuntimeException();
         }
 
         movesToCLICommands.put(move,Integer.toString(choiceNumber).concat(". ").concat(text));
         cliCommandsToMoves.put(choiceNumber,move);
+    }
+
+    private String readFromConsole() {
+        return scanner.nextLine();
+    }
+
+    private void writeToConsole(String m){
+        this.logger.info(m);
     }
 }
