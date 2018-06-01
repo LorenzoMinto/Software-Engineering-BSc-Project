@@ -95,9 +95,9 @@ public abstract class Message implements Serializable{
      * @param key the key of the requested param
      * @return the message's param of the given key
      */
-    public Object getParam(String key) throws NoSuchAParamInMessageException {
+    public Object getParam(String key) throws NoSuchParamInMessageException {
         if(!params.containsKey(key)){
-            throw new NoSuchAParamInMessageException();
+            throw new NoSuchParamInMessageException();
         }
         return this.params.get(key);
     }

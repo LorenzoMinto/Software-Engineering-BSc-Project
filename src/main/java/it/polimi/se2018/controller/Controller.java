@@ -5,7 +5,7 @@ import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.NoSuchAParamInMessageException;
+import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.view.View;
 
@@ -215,7 +215,7 @@ public class Controller extends Observable {
                     WindowPattern wp = null;
                     try {
                         wp = (WindowPattern) message.getParam("windowPattern");
-                    } catch (NoSuchAParamInMessageException e) {
+                    } catch (NoSuchParamInMessageException e) {
                         return errorMessage("Bad Formatted");
                     }
                     returnMessage = assignWindowPatternToPlayer(wp,playerID);
@@ -238,7 +238,7 @@ public class Controller extends Observable {
                             Dice dice;
                             try {
                                 dice = (Dice) message.getParam("dice");
-                            } catch (NoSuchAParamInMessageException e) {
+                            } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
                             returnMessage = controllerState.draftDiceFromDraftPool(dice);
@@ -249,7 +249,7 @@ public class Controller extends Observable {
                             try {
                                 row = (int) message.getParam("row");
                                 col = (int) message.getParam("col");
-                            } catch (NoSuchAParamInMessageException e) {
+                            } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
                             returnMessage = controllerState.placeDice(row, col);
@@ -258,7 +258,7 @@ public class Controller extends Observable {
                             ToolCard toolCard;
                             try {
                                 toolCard = (ToolCard) message.getParam("toolcard");
-                            } catch (NoSuchAParamInMessageException e) {
+                            } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
                             returnMessage = controllerState.useToolCard(toolCard);
@@ -273,7 +273,7 @@ public class Controller extends Observable {
                                 colFrom = (int) message.getParam("colFrom");
                                 rowTo = (int) message.getParam("rowTo");
                                 colTo = (int) message.getParam("colTo");
-                            } catch (NoSuchAParamInMessageException e){
+                            } catch (NoSuchParamInMessageException e){
                                 return errorMessage();
                             }
                             returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
@@ -282,7 +282,7 @@ public class Controller extends Observable {
                             int value;
                             try {
                                 value = (int) message.getParam("value");
-                            } catch (NoSuchAParamInMessageException e) {
+                            } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
                             returnMessage = controllerState.chooseDiceValue(value);
@@ -297,7 +297,7 @@ public class Controller extends Observable {
                             int value2;
                             try {
                                 value2 = (int) message.getParam("value");
-                            } catch (NoSuchAParamInMessageException e) {
+                            } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
                             returnMessage = controllerState.chooseDiceValue(value2);

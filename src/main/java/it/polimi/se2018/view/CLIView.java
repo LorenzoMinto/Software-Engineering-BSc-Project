@@ -101,7 +101,12 @@ public class CLIView extends View {
         if(getPermissions().isEmpty()){
             messaggio = "Nessuna mossa eseguibile, per il momento.";
         } else {
-            String options = getPermissions().stream().map(move -> movesToCLICommands.get(move)).reduce((x,y) -> x.concat(System.lineSeparator()).concat(y)).orElse("");
+            String options =    getPermissions()
+                                .stream()
+                                .map(move -> movesToCLICommands.get(move))
+                                .reduce((x,y) -> x.concat(System.lineSeparator()).concat(y))
+                                .orElse("");
+
             messaggio = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
         }
 

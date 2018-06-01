@@ -99,10 +99,7 @@ public class Scorer {
     private Map<Player, Integer> getScores(List<Player> players, List<PublicObjectiveCard> publicObjectiveCards) {
         Map <Player, Integer> scores = new LinkedHashMap<>();
 
-        for (Player player: players) {
-            int playerScore = calculatePlayerScore(player, publicObjectiveCards);
-            scores.put(player,playerScore);
-        }
+        players.forEach(player -> scores.put(player,calculatePlayerScore(player,publicObjectiveCards)));
 
         return scores;
     }
@@ -193,19 +190,11 @@ public class Scorer {
     private Player getPlayerWithMaxScore(Map<Player, Integer> rankings){
 
         List<Player> players = new ArrayList<>(rankings.keySet());
-
-        Player playerWithMaxScore = players.get(0);
-        int maxScore = rankings.get(playerWithMaxScore);
-
-        for (Player player: players) {
-            int score = rankings.get(player);
-
-            if(score > maxScore){
-                playerWithMaxScore = player;
-                maxScore = score;
-            }
-        }
-        return playerWithMaxScore;
+        
+        return  players
+                .stream()
+                .max(Comparator.comparing(rankings::get))
+                .orElse(players.get(0));
     }
 
     /**

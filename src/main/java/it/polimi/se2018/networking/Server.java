@@ -203,7 +203,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         String nickname = null;
         try {
             nickname = (String) message.getParam("nickname");
-        } catch (NoSuchAParamInMessageException e) {
+        } catch (NoSuchParamInMessageException e) {
             return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
         }
 
