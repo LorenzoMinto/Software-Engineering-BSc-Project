@@ -33,8 +33,9 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         SenderInterface server = null;
         if (type == ConnectionType.RMI) {
             try {
-                server = new RMIClientGateway("//localhost/sagradaserver", 1098, this);
+                server = new RMIClientGateway("//localhost/sagradaserver", 0, this);
             } catch (RemoteException e) {
+                e.printStackTrace();
                 view = null;
                 info("Failed connecting to RMI server.");
                 return;
