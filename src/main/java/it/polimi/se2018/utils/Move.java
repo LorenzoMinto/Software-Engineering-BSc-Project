@@ -10,5 +10,6 @@ public enum Move {
     CHANGE_DRAFTED_DICE_VALUE,
     CHOOSE_DICE_FROM_TRACK,
     MOVE_DICE,
-    JOIN_GAME
+    JOIN_GAME,
+    NAVIGATE_INFOS //just for CLI
 }

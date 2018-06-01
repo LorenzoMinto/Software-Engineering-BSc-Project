@@ -5,7 +5,6 @@ import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
@@ -238,6 +237,9 @@ public class CLIView extends View {
             case JOIN_GAME:
                 message = handleJoinGameMove();
                 break;
+            case NAVIGATE_INFOS:
+                //TODO: implementa navigazione delle informazioni (carte, pattern eccetra...)
+                break;
             default:
                 //if cases are updated with Move.class, should never enter here
                 throw new BadBehaviourRuntimeException();
@@ -256,6 +258,10 @@ public class CLIView extends View {
 
         //Assign every move to a textual description and int identifier
         switch (move) {
+            case NAVIGATE_INFOS:
+                text = "Naviga nelle informazioni di gioco";
+                choiceNumber = 0;
+                break;
             case END_TURN:
                 text = "Concludi il turno";
                 choiceNumber = 1;
@@ -314,6 +320,6 @@ public class CLIView extends View {
     }
 
     private void printAllTheGameInfo(){
-        //TODO
+        //TODO: implementa questo metodo
     }
 }
