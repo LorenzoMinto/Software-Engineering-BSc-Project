@@ -25,6 +25,8 @@ public abstract class View implements Observer {
 
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
+    private EnumSet<Move> basicPermissions;
+
     private ViewState state = ViewState.INACTIVE;
 
     private SenderInterface client;
@@ -37,6 +39,7 @@ public abstract class View implements Observer {
     int roundNumber;
     String playingPlayerID;
     Dice draftedDice;
+    WindowPattern windowPattern;
 
     private enum ViewState{
         INACTIVE,
@@ -87,7 +90,6 @@ public abstract class View implements Observer {
         Message message = null;
 
         if(state==ViewState.INACTIVE){
-            //TODO: aggiungi quì le cose che si possono fare se inattivo
             if(m.getType()==CVMessage.types.BACK_TO_GAME){
                 changeStateTo(ViewState.ACTIVE);
                 showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
@@ -138,6 +140,9 @@ public abstract class View implements Observer {
     private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
+            if(!p.contains(Move.NAVIGATE_INFOS)){
+                p.add(Move.NAVIGATE_INFOS);
+            }
             setPermissions(p);
         }//else keep same permissions
     }
@@ -209,7 +214,7 @@ public abstract class View implements Observer {
 
     private Message handleMVMessages(Message m){
         Message message = null;
-
+        Object o;
         switch ((MVMessage.types) m.getType()) {
             case SETUP:
                 if( handleSetup(m) ){
@@ -221,7 +226,6 @@ public abstract class View implements Observer {
             case NEW_ROUND:
                 if( handleNewRound(m) ){
                     showMessage("Inizia il #"+this.roundNumber+" round!");
-                    notifyGameVariablesChanged();
                 } else {
                     showMessage("Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.");
                 }
@@ -231,23 +235,44 @@ public abstract class View implements Observer {
                     if(!playingPlayerID.equals(playerID)){
                         showMessage("E' ora il turno di "+playingPlayerID);
                     }
-
-                    notifyGameVariablesChanged();
                 } else {
                     showMessage("Il setup del nuovo turn è fallito. Potresti riscontrare difficoltà a giocare.");
                 }
                 break;
             case USED_TOOLCARD:
-                //TODO: verificare con Jacopo e Lorenzo questo evento
+                handleUsedToolCard(m);
                 break;
             case RANKINGS:
-                //TODO: verificare con Jacopo e Lorenzo questo evento
+                try {
+                    o = m.getParam("winner");
+                } catch (NoSuchParamInMessageException e) {
+                    break;
+                }
+                @SuppressWarnings("unchecked")
+                String winner = (String) o;
+                //TODO: aggiungere anche gestione della classifica (getParam(rankings))
+                showMessage("Il vincitore è "+winner);
                 break;
             case WINDOWPATTERN:
-                //TODO: verificare con Jacopo e Lorenzo questo evento
+                try {
+                    o = m.getParam("windopattern");
+                } catch (NoSuchParamInMessageException e) {
+                    break;
+                }
+                @SuppressWarnings("unchecked")
+                WindowPattern wp = (WindowPattern) o;
+                setWindowPattern(wp);
+                showMessage("Ti è stato assegnato questo windowpattern: "+windowPattern);
                 break;
             case DRAFTPOOL:
-                //TODO: verificare con Jacopo e Lorenzo questo evento
+                try {
+                    o = m.getParam("draftPoolDices");
+                } catch (NoSuchParamInMessageException e) {
+                    break;
+                }
+                @SuppressWarnings("unchecked")
+                List<Dice> mDraftPoolDices = (List<Dice>) o;
+                setDraftPoolDices(mDraftPoolDices);
                 break;
             case YOUR_TURN: //needed just for setting permissions
                 showMessage("Tocca a te! E' il tuo turno!");
@@ -299,14 +324,16 @@ public abstract class View implements Observer {
 
     abstract void notifyGameVariablesChanged();
 
+    abstract void notifyGameVariablesChanged(boolean forceClean);
+
     abstract void notifyGameStarted();
 
     private void changeStateTo(ViewState state){
 
         if(state==ViewState.INACTIVE){
-            //TODO: setta permissions di gioco solo a BACK_GAME
+            setPermissions(EnumSet.of(Move.BACK_GAME));
         } else {
-            //TODO: setta permissions di gioco base
+            setPermissions(this.basicPermissions);
         }
 
         this.state = state;
@@ -323,6 +350,37 @@ public abstract class View implements Observer {
     }
 
     //UTILS
+
+    private void handleUsedToolCard(Message m){
+        Object o;
+        try {
+            o = m.getParam("toolcard");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        ToolCard toolcard = (ToolCard) o;
+
+        try {
+            o = m.getParam("toolcards");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<ToolCard> toolcards = (List<ToolCard>) o;
+
+        try {
+            o = m.getParam("player");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String p = (String) o;
+
+        setDrawnToolCards(toolcards);
+
+        showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
+    }
 
     private boolean handleSetup(Message m){
         Object o;
@@ -366,14 +424,25 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<Dice> mDraftPoolDices = (List<Dice>) o;
 
-        //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
-        this.drawnToolCards=mDrawnToolCards;
-        this.drawnPublicObjectiveCards=mDrawnPublicObjectiveCards;
-        this.players=mPlayers;
-        this.track=mTrack;
-        this.draftPoolDices=mDraftPoolDices;
+        try {
+            o = m.getParam("basicPermissions");
+        } catch (NoSuchParamInMessageException e) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        EnumSet<Move> mBasicPermissions = (EnumSet<Move>) o;
 
-        notifyGameVariablesChanged();
+        this.basicPermissions = mBasicPermissions;
+        setPermissions(this.basicPermissions);
+
+        //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
+        setDrawnToolCards(mDrawnToolCards);
+        setDraftPoolDices(mDraftPoolDices);
+        setDrawnPublicObjectiveCards(mDrawnPublicObjectiveCards);
+        setPlayers(mPlayers);
+        setTrack(mTrack);
+
+        notifyGameVariablesChanged(true);
 
         return true;
     }
@@ -404,9 +473,9 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<Dice> mDraftPoolDices = (List<Dice>) o;
 
-        this.roundNumber = number;
-        this.draftPoolDices = mDraftPoolDices;
-        this.track = mTrack;
+        setRoundNumber(number);
+        setDraftPoolDices(mDraftPoolDices);
+        setTrack(mTrack);
 
         return true;
     }
@@ -422,7 +491,7 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         String whoIsPlaying = (String) o;
 
-        this.playingPlayerID = whoIsPlaying;
+        setPlayingPlayerID(whoIsPlaying);
         return true;
     }
 
@@ -478,12 +547,41 @@ public abstract class View implements Observer {
         this.permissions = (EnumSet<Move>)permissions;
     }
 
+    public void setDrawnToolCards(List<ToolCard> drawnToolCards) {
+        this.drawnToolCards = drawnToolCards;
+    }
 
-    //TODO: view must assume permissions (see CVMessage types comments) in case of receiving CVMessage of INACTIVE or BACK_GAME. Otherwise permissions are usually sent by Model through MVMessage
+    public void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
+        this.drawnPublicObjectiveCards = drawnPublicObjectiveCards;
+    }
 
+    public void setPlayers(List<String> players) {
+        this.players = players;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
+    }
+
+    public void setDraftPoolDices(List<Dice> draftPoolDices) {
+        this.draftPoolDices = draftPoolDices;
+    }
+
+    public void setRoundNumber(int roundNumber) {
+        this.roundNumber = roundNumber;
+    }
+
+    public void setPlayingPlayerID(String playingPlayerID) {
+        this.playingPlayerID = playingPlayerID;
+    }
+
+    public void setDraftedDice(Dice draftedDice) {
+        this.draftedDice = draftedDice;
+    }
+
+    public void setWindowPattern(WindowPattern windowPattern) {
+        this.windowPattern = windowPattern;
+    }
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern
-
-    //TODO: riceve un messaggio MVMessage di tipo NEW_TURN e se il player della view è uguale a param:currentPlayer allora imposta le permissions, sennò setta permissions vuote fino ad un nuovo NEW_TURN
-
 }

@@ -11,5 +11,6 @@ public enum Move {
     CHOOSE_DICE_FROM_TRACK,
     MOVE_DICE,
     JOIN_GAME,
+    BACK_GAME,
     NAVIGATE_INFOS //just for CLI
 }

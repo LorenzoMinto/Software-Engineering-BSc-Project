@@ -89,8 +89,29 @@ public class CLIView extends View {
 
     @Override
     Message handlePlaceDiceOnWindowPatternMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("This is your window pattern:"+this.windowPattern);
+        writeToConsole("Inserisci la riga dove vuoi inserire il dado:");
+        int row;
+        try{
+            row = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handlePlaceDiceOnWindowPatternMove();
+        }
+
+        writeToConsole("Inserisci la colonna dove vuoi inserire il dado:");
+        int col;
+        try{
+            col = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handlePlaceDiceOnWindowPatternMove();
+        }
+
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("row",row);
+        params.put("col",col);
+        return new VCMessage(VCMessage.types.PLACE_DICE,params);
     }
 
     @Override
@@ -130,8 +151,15 @@ public class CLIView extends View {
 
     @Override
     Message handleChangeDraftedDiceValueMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Il valore corrente del dado è: "+this.draftedDice.getValue());
+        writeToConsole("Inserisci il nuovo valore che vuoi attribuire");
+        int value;
+        try{
+            value = Integer.parseInt(readFromConsole());
+        } catch(NumberFormatException e){
+            return handleChangeDraftedDiceValueMove();
+        }
+        return new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",value));
     }
 
     @Override
@@ -261,6 +289,17 @@ public class CLIView extends View {
     }
 
     @Override
+    void notifyGameVariablesChanged(boolean forceClean) {
+        if(forceClean){
+            cleanConsole();
+        }
+    }
+
+    private void cleanConsole() {
+        //TODO: implementa questo metodo
+    }
+
+    @Override
     void askForMove() {
         String messaggio;
         if(getPermissions().isEmpty()){
@@ -346,8 +385,11 @@ public class CLIView extends View {
             case JOIN_GAME:
                 message = handleJoinGameMove();
                 break;
+            case BACK_GAME:
+                message = new VCMessage(VCMessage.types.BACK_GAMING);
+                break;
             case NAVIGATE_INFOS:
-                //TODO: implementa navigazione delle informazioni (carte, pattern eccetra...)
+                printAllTheGameInfo();
                 break;
             default:
                 //if cases are updated with Move.class, should never enter here
@@ -367,6 +409,10 @@ public class CLIView extends View {
 
         //Assign every move to a textual description and int identifier
         switch (move) {
+            case BACK_GAME:
+                text = "Rientra nel gioco";
+                choiceNumber = 11;
+                break;
             case NAVIGATE_INFOS:
                 text = "Naviga nelle informazioni di gioco";
                 choiceNumber = 0;
