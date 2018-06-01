@@ -18,7 +18,9 @@ public class CLIView extends View {
     private EnumMap<Move,String> movesToCLICommands = new EnumMap<>(Move.class);
     private HashMap<Integer,Move> cliCommandsToMoves = new HashMap<>();
 
-    public CLIView() {
+    public static void main (String[] args) { new CLIView(); }
+
+    private CLIView() {
         super();
 
         //Set the textual description and integer identifier for all moves
@@ -28,7 +30,7 @@ public class CLIView extends View {
 
         new Thread(this::console).start();
     }
-    
+
     private void askForConnectionType(){
         writeToConsole("1. Per giocare con RMI. 2. Per giocare con Socket.");
         if(readFromConsole().equals("1")){

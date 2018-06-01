@@ -37,7 +37,7 @@ public abstract class View implements Observer {
         ACTIVE
     }
 
-    public View() {
+    View() {
         logger = createLogger();
     }
 

@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 
 public class GUIView extends View {
 
-    public GUIView() {
+    public static void main (String[] args) { new GUIView(); }
+
+    private GUIView() {
         super();
     }
 
