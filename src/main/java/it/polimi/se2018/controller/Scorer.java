@@ -190,7 +190,7 @@ public class Scorer {
     private Player getPlayerWithMaxScore(Map<Player, Integer> rankings){
 
         List<Player> players = new ArrayList<>(rankings.keySet());
-        
+
         return  players
                 .stream()
                 .max(Comparator.comparing(rankings::get))
@@ -207,14 +207,11 @@ public class Scorer {
     private Player getPlayerWithMaxFavorTokens(Map<Player, Integer> scores) {
 
         List<Player> players = new ArrayList<>(scores.keySet());
-        Player playerWithMaxFavorTokens = players.get(0);
 
-        for (Player player: players) {
-            if(player.getFavorTokens() > playerWithMaxFavorTokens.getFavorTokens()){
-                playerWithMaxFavorTokens = player;
-            }
-        }
-        return playerWithMaxFavorTokens;
+        return  players
+                .stream()
+                .max(Comparator.comparing(Player::getFavorTokens))
+                .orElse(players.get(0));
     }
 
     /**
