@@ -1,5 +1,8 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.message.Message;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -20,12 +24,19 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class ViewGUI extends Application {
+public class ViewGUI extends Application implements Observer {
 
+    //LOGIN SCENE
     private TextField userTextField;
+    private CheckBox rmiBox;
+    private CheckBox socketBox;
+
+    private int rmiOrSocket = 2;
+
+    //SAGRADA SCENE
+    private SagradaSceneController sagradaSceneController;
 
     private Scene sagradaScene;
-    private Text welcomeMessage;
 
     public static void main(String[] args) {
         launch(args);
@@ -41,12 +52,43 @@ public class ViewGUI extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 20, 20, 20));
 
-        Text scenetitle = new Text("Welcome");
+        Text scenetitle = new Text("Welcome to Sagrada");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
         Label userName = new Label("User Name:");
         grid.add(userName, 0, 2);
+
+        rmiBox = new CheckBox("RMI");
+        grid.add(rmiBox, 0,3);
+        rmiBox.setSelected(true);
+        rmiBox.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (rmiBox.isSelected()) {
+                    rmiOrSocket = 0;
+                    socketBox.setSelected(false);
+                } else {
+                    rmiOrSocket = 2;
+                }
+            }
+        });
+
+        socketBox = new CheckBox("Socket");
+        grid.add(socketBox, 1,3);
+        socketBox.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (socketBox.isSelected()) {
+                    rmiOrSocket = 1;
+                    rmiBox.setSelected(false);
+                } else {
+                    rmiOrSocket = 2;
+                }
+            }
+        });
 
         userTextField = new TextField("Rubens");
         grid.add(userTextField, 1, 2);
@@ -57,8 +99,11 @@ public class ViewGUI extends Application {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.setScene(sagradaScene);
-                welcomeMessage.setText(welcomeMessage.getText() + " " + userTextField.getText());
                 primaryStage.show();
+                sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
+                        "All good, welcome "+ userTextField.getText()+"."));
+                sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
+                        rmiOrSocket==0 ? "RMI" : "Socket" + " selected."));
             }
         });
         HBox hbBtn = new HBox(10);
@@ -71,10 +116,19 @@ public class ViewGUI extends Application {
         primaryStage.setScene(loginScene);
 
         URL fxmlUrl = getClass().getClassLoader().getResource("fxml/SagradaScene.fxml");
-        Parent root = FXMLLoader.load(fxmlUrl);
-        sagradaScene = new Scene(root, 1800,1000);
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 
+        Parent root = fxmlLoader.load();
+        sagradaScene = new Scene(root, primaryStage.getMaxWidth(),primaryStage.getMaxHeight());
+        sagradaSceneController = fxmlLoader.getController();
 
         primaryStage.show();
+    }
+
+
+    @Override
+    public boolean update(Message m) {
+        //TODO: Implement handling here of ViewBoundMessages
+        return false;
     }
 }
