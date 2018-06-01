@@ -29,13 +29,13 @@ public abstract class View implements Observer {
 
     private SenderInterface client;
 
-    private List<ToolCard> drawnToolCards;
-    private List<PublicObjectiveCard> drawnPublicObjectiveCards;
-    private List<String> players;
-    private Track track;
-    private List<Dice> draftPoolDices;
-    private int roundNumber;
-    private String playingPlayerID;
+    List<ToolCard> drawnToolCards;
+    List<PublicObjectiveCard> drawnPublicObjectiveCards;
+    List<String> players;
+    Track track;
+    List<Dice> draftPoolDices;
+    int roundNumber;
+    String playingPlayerID;
 
     private enum ViewState{
         INACTIVE,

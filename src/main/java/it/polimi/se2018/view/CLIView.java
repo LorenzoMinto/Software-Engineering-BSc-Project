@@ -88,8 +88,25 @@ public class CLIView extends View {
 
     @Override
     Message handleChooseDiceFromTrackMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Di seguito il contenuto attuale della track");
+        int slotNumber = 0;
+        for(TrackSlot trackSlot: track){
+            writeToConsole("Slot #"+slotNumber+": "+trackSlot);
+            slotNumber++;
+        }
+        writeToConsole("Da quale slot vuoi prelevare il dado?");
+        slotNumber = Integer.parseInt(readFromConsole());
+        int diceNumber = 0;
+        for(Dice dice : track.getDicesFromSlotNumber(slotNumber)){
+            writeToConsole("Inserisci "+diceNumber+" per prendere il dado "+dice);
+            diceNumber++;
+        }
+
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("slotNumber",slotNumber);
+        params.put("dice",diceNumber);
+
+        return new VCMessage(VCMessage.types.CHOOSE_DICE_FROM_TRACK,params);
     }
 
     @Override
