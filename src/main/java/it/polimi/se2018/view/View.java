@@ -1,9 +1,6 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.model.Dice;
-import it.polimi.se2018.model.PublicObjectiveCard;
-import it.polimi.se2018.model.ToolCard;
-import it.polimi.se2018.model.Track;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.networking.SenderInterface;
@@ -24,7 +21,7 @@ public abstract class View implements Observer {
 
     final Logger logger;
 
-    private Move currentMove;
+    Move currentMove;
 
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
@@ -56,76 +53,7 @@ public abstract class View implements Observer {
         }
     }
 
-    public String getPlayerID() {
-        return playerID;
-    }
-
-    public Set<Move> getPermissions() {
-        return permissions;
-    }
-
-    public void setPlayer(String playerID) {
-        this.playerID = playerID;
-    }
-
-    void setCurrentMove(Move currentMove) {
-        this.currentMove = currentMove;
-    }
-
-    public void setPermissions(Set<Move> permissions) {
-        this.permissions = (EnumSet<Move>)permissions;
-    }
-
     abstract void askForMove();
-
-    void handleCurrentMove() {
-        //Check if currentMove is a valid one
-        if(currentMove==null){
-            showMessage("Mossa non riconosciuta");
-            return;
-        }
-
-        Message message = null;
-
-        //Here the code that handles each move. Each case can contain multiple writeToConsole and / or readFromConsole
-        switch (currentMove) {
-            case END_TURN:
-                message = handleEndTurnMove();
-                break;
-            case DRAFT_DICE_FROM_DRAFTPOOL:
-                message = handleDraftDiceFromDraftPoolMove();
-                break;
-            case PLACE_DICE_ON_WINDOWPATTERN:
-                message = handlePlaceDiceOnWindowPatternMove();
-                break;
-            case USE_TOOLCARD:
-                message = handleUseToolCardMove();
-                break;
-            case INCREMENT_DRAFTED_DICE:
-                message = handleIncrementDraftedDiceMove();
-                break;
-            case DECREMENT_DRAFTED_DICE:
-                message = handleDecrementDraftedDiceMove();
-                break;
-            case CHANGE_DRAFTED_DICE_VALUE:
-                message = handleChangeDraftedDiceValueMove();
-                break;
-            case CHOOSE_DICE_FROM_TRACK:
-                message = handleChooseDiceFromTrackMove();
-                break;
-            case MOVE_DICE:
-                message = handleMoveDiceMove();
-                break;
-            case JOIN_GAME:
-                message = handleJoinGameMove();
-                break;
-        }
-
-        //Send message (if created) to server (through client)
-        if(message!=null){
-            sendMessage(message);
-        }
-    }
 
     abstract Message handleEndTurnMove();
 
@@ -149,7 +77,7 @@ public abstract class View implements Observer {
 
     abstract Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings);
 
-    abstract Message handleGiveWindowPatterns(Message m);
+    abstract Message handleGiveWindowPatterns(List<WindowPattern> patterns);
 
     abstract Message handleAddedWL();
 
@@ -250,7 +178,15 @@ public abstract class View implements Observer {
                 showMessage("Sei stato scollegato dal gioco per inattività. I tuoi turni saranno saltati.");
                 break;
             case GIVE_WINDOW_PATTERNS:
-                message = handleGiveWindowPatterns(m);
+                try {
+                    o = m.getParam("patterns");
+                } catch (NoSuchParamInMessageException e) {
+                    return null;
+                }
+                @SuppressWarnings("unchecked")
+                List<WindowPattern> patterns = (List<WindowPattern>) o;
+
+                message = handleGiveWindowPatterns(patterns);
                 break;
             case GAME_ENDED:
                 try {
@@ -301,12 +237,16 @@ public abstract class View implements Observer {
                 }
                 break;
             case USED_TOOLCARD:
+                //TODO: verificare con Jacopo e Lorenzo questo evento
                 break;
             case RANKINGS:
+                //TODO: verificare con Jacopo e Lorenzo questo evento
                 break;
             case WINDOWPATTERN:
+                //TODO: verificare con Jacopo e Lorenzo questo evento
                 break;
             case DRAFTPOOL:
+                //TODO: verificare con Jacopo e Lorenzo questo evento
                 break;
             case YOUR_TURN: //needed just for setting permissions
                 showMessage("Tocca a te! E' il tuo turno!");
@@ -354,23 +294,30 @@ public abstract class View implements Observer {
 
     abstract void showMessage(String message);
 
+    abstract void errorMessage(String message);
+
     abstract void notifyGameVariablesChanged();
 
     abstract void notifyGameStarted();
 
     private void changeStateTo(ViewState state){
+
+        if(state==ViewState.INACTIVE){
+            //TODO: setta permissions di gioco solo a BACK_GAME
+        } else {
+            //TODO: setta permissions di gioco base
+        }
+
         this.state = state;
-        //TODO: aggiungi cambio di permissions
     }
 
-    private void sendMessage(Message m){
+    void sendMessage(Message m){
         try {
             this.client.sendMessage(m);
         } catch (RemoteException e) {
-            showMessage("Error sending message: ".concat(m.toString()));
-            //TODO: da rivedere il fatto che stampi l'errore
+            errorMessage("Error sending message: ".concat(m.toString()));
         } catch (NullPointerException ex){
-            showMessage(MUST_CONNECT);
+            errorMessage(MUST_CONNECT);
         }
     }
 
@@ -507,6 +454,29 @@ public abstract class View implements Observer {
 
         return true;
     }
+
+    //GETTERS AND SETTERS
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public Set<Move> getPermissions() {
+        return permissions;
+    }
+
+    public void setPlayer(String playerID) {
+        this.playerID = playerID;
+    }
+
+    void setCurrentMove(Move currentMove) {
+        this.currentMove = currentMove;
+    }
+
+    public void setPermissions(Set<Move> permissions) {
+        this.permissions = (EnumSet<Move>)permissions;
+    }
+
 
     //TODO: view must assume permissions (see CVMessage types comments) in case of receiving CVMessage of INACTIVE or BACK_GAME. Otherwise permissions are usually sent by Model through MVMessage
 

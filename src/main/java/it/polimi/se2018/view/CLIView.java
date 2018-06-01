@@ -42,46 +42,55 @@ public class CLIView extends View {
 
     @Override
     Message handleEndTurnMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleDraftDiceFromDraftPoolMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handlePlaceDiceOnWindowPatternMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleUseToolCardMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleIncrementDraftedDiceMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleDecrementDraftedDiceMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleChangeDraftedDiceValueMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleChooseDiceFromTrackMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
     @Override
     Message handleMoveDiceMove() {
+        //TODO: implementa questo metodo
         return null;
     }
 
@@ -107,14 +116,7 @@ public class CLIView extends View {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    Message handleGiveWindowPatterns(Message m) {
-        List<WindowPattern> patterns;
-        try {
-            patterns = (List<WindowPattern>) m.getParam("patterns");
-        } catch (NoSuchParamInMessageException e) {
-            return null;
-        }
+    Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
         writeToConsole("Scegli uno fra i seguenti window pattern:");
         int index = 0;
         for(WindowPattern windowPattern : patterns){
@@ -128,7 +130,7 @@ public class CLIView extends View {
         } else {
             writeToConsole("Scelta non valida");
 
-            return handleGiveWindowPatterns(m);
+            return handleGiveWindowPatterns(patterns);
         }
     }
 
@@ -141,6 +143,11 @@ public class CLIView extends View {
     @Override
     void notifyGameStarted() {
         printAllTheGameInfo();
+    }
+
+    @Override
+    public void errorMessage(String message) {
+        showMessage("[[[ERRORE]]] "+message);
     }
 
     @Override
@@ -188,6 +195,58 @@ public class CLIView extends View {
      */
     private void parseMoveChoiceFromConsole() {
         setCurrentMove(cliCommandsToMoves.get(Integer.parseInt(readFromConsole())));
+    }
+
+    private void handleCurrentMove() {
+        //Check if currentMove is a valid one
+        if(currentMove==null){
+            showMessage("Mossa non riconosciuta");
+            return;
+        }
+
+        Message message = null;
+
+        //Here the code that handles each move. Each case can contain multiple writeToConsole and / or readFromConsole
+        switch (currentMove) {
+            case END_TURN:
+                message = handleEndTurnMove();
+                break;
+            case DRAFT_DICE_FROM_DRAFTPOOL:
+                message = handleDraftDiceFromDraftPoolMove();
+                break;
+            case PLACE_DICE_ON_WINDOWPATTERN:
+                message = handlePlaceDiceOnWindowPatternMove();
+                break;
+            case USE_TOOLCARD:
+                message = handleUseToolCardMove();
+                break;
+            case INCREMENT_DRAFTED_DICE:
+                message = handleIncrementDraftedDiceMove();
+                break;
+            case DECREMENT_DRAFTED_DICE:
+                message = handleDecrementDraftedDiceMove();
+                break;
+            case CHANGE_DRAFTED_DICE_VALUE:
+                message = handleChangeDraftedDiceValueMove();
+                break;
+            case CHOOSE_DICE_FROM_TRACK:
+                message = handleChooseDiceFromTrackMove();
+                break;
+            case MOVE_DICE:
+                message = handleMoveDiceMove();
+                break;
+            case JOIN_GAME:
+                message = handleJoinGameMove();
+                break;
+            default:
+                //if cases are updated with Move.class, should never enter here
+                throw new BadBehaviourRuntimeException();
+        }
+
+        //Send message (if created) to server (through client)
+        if(message!=null){
+            sendMessage(message);
+        }
     }
 
     private void mapMoveWithPermission(Move move){
