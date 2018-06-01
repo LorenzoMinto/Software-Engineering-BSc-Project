@@ -36,6 +36,7 @@ public abstract class View implements Observer {
     List<Dice> draftPoolDices;
     int roundNumber;
     String playingPlayerID;
+    Dice draftedDice;
 
     private enum ViewState{
         INACTIVE,
