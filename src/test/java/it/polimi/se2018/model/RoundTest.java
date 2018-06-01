@@ -141,7 +141,12 @@ public class RoundTest {
     @Test
     public void testGetCurrentTurn(){
         round = new Round(0,players.size()*2, players, draftPool);
-
+        try {
+            round.nextTurn();
+        } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
+            fail();
+        }
         Turn turn = round.getCurrentTurn();
         assertNotNull(turn);
     }
@@ -218,7 +223,12 @@ public class RoundTest {
     @Test
     public void testFirstTurnOfRoundHasZeroIndex(){
         round = new Round(0,players.size()*2, players, draftPool);
-
+        try {
+            round.nextTurn();
+        } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
+            fail();
+        }
         int currentTurnNumber = round.getCurrentTurn().getNumber();
 
         assertEquals(0,currentTurnNumber);
@@ -232,6 +242,7 @@ public class RoundTest {
         round = new Round(0,players.size()*2, players, draftPool);
 
         try {
+            round.nextTurn();
             round.nextTurn();
         } catch (NoMoreTurnsAvailableException e) {
             e.printStackTrace();
@@ -253,7 +264,7 @@ public class RoundTest {
         round = new Round(0,numberOfTurnsPerRound, players, draftPool);
 
         try {
-            for(int i = 0; i < numberOfTurnsPerRound-1; i++) {
+            for(int i = 0; i < numberOfTurnsPerRound; i++) {
                 round.nextTurn();
             }
         } catch (NoMoreTurnsAvailableException e) {
@@ -296,6 +307,12 @@ public class RoundTest {
 
         int numberOfTurns = players.size() * 2;
         round = new Round(0, numberOfTurns, players, draftPool);
+        try {
+            round.nextTurn();
+        } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
+            fail();
+        }
         Player currentPlayer = round.getCurrentTurn().getPlayer();
 
         assertTrue(round.removeNextTurnOfPlayer(currentPlayer));
@@ -321,6 +338,12 @@ public class RoundTest {
 
         int numberOfTurns = players.size() * 2;
         round = new Round(0, numberOfTurns, players, draftPool);
+        try {
+            round.nextTurn();
+        } catch (NoMoreTurnsAvailableException e) {
+            e.printStackTrace();
+            fail();
+        }
         Player currentPlayer = round.getCurrentTurn().getPlayer();
 
         assertTrue(round.removeNextTurnOfPlayer(currentPlayer));

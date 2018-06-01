@@ -307,12 +307,6 @@ public class Game extends Observable implements Observer{
 
         this.status = GameStatus.PLAYING;
 
-        try {
-            nextRound(dices);
-        } catch (NoMoreRoundsAvailableException e) {
-            throw new BadBehaviourRuntimeException("Can't start a game with no rounds");
-        }
-
         //Send to all players all the needed data about game
         Map <String, Object> messageAttributes = new HashMap<>();
 
@@ -323,6 +317,13 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("draftPoolDices", dices);
 
         notify(new MVMessage(MVMessage.types.SETUP, messageAttributes));
+
+        try {
+            nextRound(dices);
+        } catch (NoMoreRoundsAvailableException e) {
+            //Should never happen
+            throw new BadBehaviourRuntimeException("Can't start a game with no rounds");
+        }
     }
 
     /**
