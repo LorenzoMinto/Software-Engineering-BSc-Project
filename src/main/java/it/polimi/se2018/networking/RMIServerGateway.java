@@ -14,14 +14,13 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInterface, Remote {
 
-    private static final int PORT = 1099; // porta di default
     private transient ReceiverInterface receiver;
 
-    RMIServerGateway(String name, ReceiverInterface receiver) throws RemoteException {
+    RMIServerGateway(String name, int port, ReceiverInterface receiver) throws RemoteException {
         this.receiver = receiver;
 
         try {
-            LocateRegistry.createRegistry(PORT);
+            LocateRegistry.createRegistry(port);
         } catch(Exception ex) {
             throw new RemoteException("Failed creating RMI registry");
         }
@@ -36,4 +35,6 @@ public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInt
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException{
         receiver.receiveMessage(message,sender);
     }
+
+    //TODO: intellij consiglia di fare ovveride del metodo equals. Capire perchè.
 }

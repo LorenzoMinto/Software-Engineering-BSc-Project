@@ -32,11 +32,16 @@ public class CLIView extends View {
 
     private void askForConnectionType(){
         writeToConsole("1. Per giocare con RMI. 2. Per giocare con Socket.");
-        if(readFromConsole().equals("1")){
-            connectToRemoteServer(ConnectionType.RMI);
-        } else {
-            connectToRemoteServer(ConnectionType.SOCKET);
-        }
+        String choice = readFromConsole();
+
+        writeToConsole("Inserisci l'indirizzo del server:");
+        String serverName = readFromConsole();
+        writeToConsole("Inserisci la porta da utilizzare:");
+        int port = Integer.parseInt(readFromConsole());
+
+        ConnectionType type = choice.equals("1") ? ConnectionType.RMI : ConnectionType.SOCKET;
+
+        connectToRemoteServer(type,serverName,port);
     }
 
     @Override

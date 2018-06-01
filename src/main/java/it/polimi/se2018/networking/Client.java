@@ -24,14 +24,18 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
 
     private final List<SenderInterface> gateways = new ArrayList<>();
 
-    //private final View view;
+    private final String serverName;
+
+    private final int port;
 
     private final ConnectionType type;
 
-    public Client(ConnectionType type, Observer view, boolean debug) {
+    public Client(ConnectionType type, String serverName, int port, Observer view, boolean debug) {
         this.logger = createLogger(debug);
         this.type = type;
         this.register(view);
+        this.serverName = serverName;
+        this.port = port;
         setup();
     }
 
@@ -39,13 +43,13 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
         SenderInterface server = null;
         if (type == ConnectionType.RMI) {
             try {
-                server = new RMIClientGateway("//localhost/sagradaserver", 0, this);
+                server = new RMIClientGateway(this.serverName, this.port, this);
             } catch (RemoteException e) {
                 fail("Failed connecting to RMI server.");
             }
 
         } else if (type == ConnectionType.SOCKET) {
-            server = new SocketClientGateway("localhost", 1111, this);
+            server = new SocketClientGateway(this.serverName, this.port, this);
             /*SocketClientGateway is a thread. So exception that could be thrown in it
              * are sent to this class (Client) throught the .fail() method. */
         }

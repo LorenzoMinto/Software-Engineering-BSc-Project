@@ -46,10 +46,10 @@ public abstract class View implements Observer {
         logger = createLogger();
     }
 
-    void connectToRemoteServer(ConnectionType type){
+    void connectToRemoteServer(ConnectionType type, String serverName, int port){
 
         if(client==null){ //client is effectively final
-            this.client = new Client(type,this, false);
+            this.client = new Client(type,serverName,port,this, false);
         }
     }
 

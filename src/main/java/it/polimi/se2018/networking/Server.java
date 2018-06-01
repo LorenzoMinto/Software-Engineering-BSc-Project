@@ -18,9 +18,19 @@ import java.util.logging.Logger;
 public class Server implements Observer, ReceiverInterface, SenderInterface{
 
     /**
-     * String constant made during refactor to simplify code readibility
+     * Name of the controller's config property containing the value of max number of players
      */
-    private static final String MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
+    private static final String CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
+
+    /**
+     * Name of the controller's config property containing the number of rounds
+     */
+    private static final String CONFIG_PROPERTY_NUMBER_OF_ROUNDS = "numberOfRounds";
+
+    /**
+     * Name of the default config file
+     */
+    private static final String DEFAULT_CONFIG_FILE_NAME = "default";
 
     /**
      * Timer used to call launchGame() after a specified time
@@ -40,7 +50,15 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     /**
      * How many attempts must be done before declaring sending of a message failed
      */
-    private static final int MAX_NUMBER_OF_ATTEMPTS = 5;
+    private final int maxNumberOfAttempts;
+
+    private final String serverName;
+
+    private final int portNumberRMI;
+
+    private final int portNumberSOCKET;
+
+    private final String configFileName;
 
     /**
      * Server representation for RMI
@@ -92,14 +110,60 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      * @param args arguments passed by command line
      */
     public static void main (String[] args) {
-        new Server();
+
+        String serverName;
+        try{
+            serverName = args[0];
+        } catch (IndexOutOfBoundsException e){
+            LOGGER.info("First parameter (name of the server) is compulsory");
+            return;
+        }
+
+        int portNumberRMI;
+        try{
+            portNumberRMI = Integer.parseInt(args[1]);
+        } catch (IndexOutOfBoundsException e){
+            LOGGER.info("Second parameter (port number for RMI) is compulsory");
+            return;
+        }
+
+        int portNumberSOCKET;
+        try{
+            portNumberSOCKET = Integer.parseInt(args[2]);
+        } catch (IndexOutOfBoundsException e){
+            LOGGER.info("Third parameter (port number for SOCKET) is compulsory");
+            return;
+        }
+
+        int maxNumberOfAttempts;
+        try{
+            maxNumberOfAttempts = Integer.parseInt(args[3]);
+        } catch (IndexOutOfBoundsException e){
+            LOGGER.info("Fourth parameter (max number of attempts) is compulsory");
+            return;
+        }
+
+        String configFileName;
+        try{
+            configFileName = args[4];
+        } catch (IndexOutOfBoundsException e){
+            configFileName = DEFAULT_CONFIG_FILE_NAME;
+        }
+
+        new Server(serverName,portNumberRMI,portNumberSOCKET,maxNumberOfAttempts,configFileName);
     }
 
     /**
      * Server constructor. Do the netwroking setup, creates controller and game
      */
-    private Server() {
+    private Server(String serverName, int portNumberRMI, int portNumberSOCKET, int maxNumberOfAttempts, String configFileName) {
         LOGGER.setLevel(Level.ALL);
+
+        this.serverName = serverName;
+        this.portNumberRMI = portNumberRMI;
+        this.portNumberSOCKET = portNumberSOCKET;
+        this.configFileName = configFileName;
+        this.maxNumberOfAttempts = maxNumberOfAttempts;
 
         setupNetworking();
 
@@ -116,7 +180,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     private void setupNetworking() {
         try {
             LOGGER.info("Starting RMI...");
-            this.proxyServer = new RMIServerGateway("sagradaserver",this);
+            this.proxyServer = new RMIServerGateway(this.serverName,this.portNumberRMI,this);
 
         } catch (RemoteException e) {
             LOGGER.severe("Failed RMI setup");
@@ -124,7 +188,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
 
         LOGGER.info("Starting Socket...");
-        new SocketServerGateway(1111,this);
+        new SocketServerGateway(this.portNumberSOCKET,this);
 
         LOGGER.info("Sagrada Server is up.");
     }
@@ -137,7 +201,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     private Controller createController(){
 
         //Loads config parameters
-        ConfigImporter configImporter = new ConfigImporter("default");
+        ConfigImporter configImporter = new ConfigImporter(this.configFileName);
         Properties properties;
         try{
             properties = configImporter.getProperties();
@@ -156,8 +220,8 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
         //Creates the game
         Game game = new Game(
-                Integer.parseInt( properties.getProperty("numberOfRounds") ),
-                Integer.parseInt( properties.getProperty(MAX_NUMBER_OF_PLAYERS) )
+                Integer.parseInt( properties.getProperty(CONFIG_PROPERTY_NUMBER_OF_ROUNDS) ),
+                Integer.parseInt( properties.getProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS) )
         );
         game.register(this);
 
@@ -190,7 +254,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     /**
-     * Reads the type of message and calls needed methods depending on that.     *
+     * Reads the type of message and calls needed methods depending on that.
      * @param message the message received
      * @param client the sender of the message
      * @return a message containing if the operation went good or not
@@ -200,7 +264,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_PLAYING,"GAME_IS_PLAYING");
         }
 
-        String nickname = null;
+        String nickname;
         try {
             nickname = (String) message.getParam("nickname");
         } catch (NoSuchParamInMessageException e) {
@@ -226,7 +290,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     private Message addInWaitingRoom(String nickname, ReceiverInterface client){
         Message message;
 
-        if(waitingList.size() < controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
+        if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
                 message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
@@ -267,7 +331,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      * Launch the game if 4 players are in waiting room and manages the TimerForLaunchingGame
      */
     private void checkForLaunchingGame(){
-        if(waitingList.size() == controller.getConfigProperty(MAX_NUMBER_OF_PLAYERS)){
+        if(waitingList.size() == controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             //The game can be launched. Eventual timer is stopped. Game is launched.
             cancelTimerForLaunchingGame();
             launchGame();
@@ -344,7 +408,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             int attempts = 0;
             boolean correctlySent = false;
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
-            while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent) {
+            while(attempts< maxNumberOfAttempts && !correctlySent) {
                 attempts++;
                 try {
                     o.receiveMessage(message, this.proxyServer);
