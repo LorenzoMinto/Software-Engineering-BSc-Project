@@ -1,19 +1,24 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.networking.SenderInterface;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
+import java.rmi.RemoteException;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.*;
 
-public abstract class View extends Observable implements Observer {
+public abstract class View implements Observer {
+
+    private static final String MUST_CONNECT = "You have to connect to the server";
 
     private String playerID;
 
@@ -25,6 +30,8 @@ public abstract class View extends Observable implements Observer {
 
     private ViewState state = ViewState.INACTIVE;
 
+    private SenderInterface client;
+
     private enum ViewState{
         INACTIVE,
         ACTIVE
@@ -32,6 +39,13 @@ public abstract class View extends Observable implements Observer {
 
     public View() {
         logger = createLogger();
+    }
+
+    void connectToRemoteServer(ConnectionType type){
+
+        if(client==null){ //client is effectively final
+            this.client = new Client(type,this, false);
+        }
     }
 
     public String getPlayerID() {
@@ -101,7 +115,7 @@ public abstract class View extends Observable implements Observer {
 
         //Send message (if created) to server (through client)
         if(message!=null){
-            notify(message);
+            sendMessage(message);
         }
     }
 
@@ -125,7 +139,7 @@ public abstract class View extends Observable implements Observer {
 
     abstract Message handleJoinGameMove();
 
-    void receiveMessage(Message m) {
+    private void receiveMessage(Message m) {
 
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
@@ -209,6 +223,17 @@ public abstract class View extends Observable implements Observer {
 
     abstract void showMessage(String message);
 
+    private void sendMessage(Message m){
+        try {
+            this.client.sendMessage(m);
+        } catch (RemoteException e) {
+            showMessage("Error sending message: ".concat(m.toString()));
+            //TODO: da rivedere il fatto che stampi l'errore
+        } catch (NullPointerException ex){
+            showMessage(MUST_CONNECT);
+        }
+    }
+
     //UTILS
     private Logger createLogger(){
         Logger newLogger = Logger.getLogger(View.class.getName());
@@ -227,6 +252,17 @@ public abstract class View extends Observable implements Observer {
         });
         newLogger.addHandler(handler);
         return newLogger;
+    }
+
+    @Override
+    public boolean update(Message m) {
+        logger.info(()->"Received: "+m.getType().toString());
+
+        receiveMessage(m);
+
+        askForMove();
+
+        return true;
     }
 
     //TODO: view must assume permissions (see CVMessage types comments) in case of receiving CVMessage of INACTIVE or BACK_GAME. Otherwise permissions are usually sent by Model through MVMessage

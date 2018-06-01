@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
@@ -15,7 +16,7 @@ import java.util.logging.*;
  *
  * @author Federico Haag
  */
-public class Client implements Observer, SenderInterface, ReceiverInterface {
+public class Client extends Observable implements SenderInterface, ReceiverInterface {
 
     private final Logger logger;
 
@@ -23,22 +24,24 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     private final List<SenderInterface> gateways = new ArrayList<>();
 
-    private final View view;
+    //private final View view;
 
-    public enum ConnectionType {RMI,SOCKET}
+    private final ConnectionType type;
 
-    private Client(ConnectionType type, boolean debug) {
+    public Client(ConnectionType type, Observer view, boolean debug) {
         this.logger = createLogger(debug);
+        this.type = type;
+        this.register(view);
+        setup();
+    }
 
+    private void setup(){
         SenderInterface server = null;
         if (type == ConnectionType.RMI) {
             try {
                 server = new RMIClientGateway("//localhost/sagradaserver", 0, this);
             } catch (RemoteException e) {
-                e.printStackTrace();
-                view = null;
-                info("Failed connecting to RMI server.");
-                return;
+                fail("Failed connecting to RMI server.");
             }
 
         } else if (type == ConnectionType.SOCKET) {
@@ -50,38 +53,6 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         addGateway(server);
 
         info("Started a Sagrada Client and connected to Sagrada Server as guest.");
-
-        //Creates View and connects itself as observer
-        this.view = new CLIView();
-        this.view.register(this);
-    }
-
-    public static void main (String[] args) {
-
-        ConnectionType type;
-
-        switch (args[0]){
-            case "RMI":
-                type = ConnectionType.RMI;
-                break;
-            case "SOCKET":
-                type = ConnectionType.SOCKET;
-                break;
-            default:
-                throw new BadBehaviourRuntimeException("Unrecognized communication param");
-        }
-
-        boolean debug = false;
-
-        try{
-            if(args[1].equals("DEBUG")){
-                debug = true;
-            }
-        } catch (ArrayIndexOutOfBoundsException e){
-            //No debug
-        }
-
-        new Client(type,debug);
     }
 
     private Logger createLogger(boolean debug){
@@ -116,8 +87,7 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
 
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
-        view.update(message);
-        //fine("Received message: "+message);
+        notify(message);
     }
 
     @Override
@@ -148,18 +118,6 @@ public class Client implements Observer, SenderInterface, ReceiverInterface {
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
         if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
-
-    @Override
-    public boolean update(Message m) {
-        try {
-            sendMessage(m);
-        } catch (RemoteException e) {
-            fine("Exception while sending a message from Client to Server (asked by update call)");
-            return false;
-        }
-        return true;
-    }
-
 
     private void addGateway(SenderInterface gateway) {
         gateways.add(gateway);
