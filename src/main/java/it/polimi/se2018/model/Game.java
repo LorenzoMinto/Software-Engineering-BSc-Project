@@ -309,10 +309,11 @@ public class Game extends Observable implements Observer{
 
         //Send to all players all the needed data about game
         Map <String, Object> messageAttributes = new HashMap<>();
+        String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
 
         messageAttributes.put("drawnToolCards", drawnToolCards);
         messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
-        messageAttributes.put("players", players.stream().map(Player::getID).toArray());
+        messageAttributes.put("players", Arrays.asList(playersIDs));
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 
@@ -364,10 +365,11 @@ public class Game extends Observable implements Observer{
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
 
+        messageAttributes.put("number", nextRoundNumber);
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 
-        notify(new MVMessage(MVMessage.types.NEXT_ROUND, messageAttributes));
+        notify(new MVMessage(MVMessage.types.NEW_ROUND, messageAttributes));
 
         try {
             nextTurn();

@@ -454,7 +454,7 @@ public class Controller extends Observable {
 
         //If statement prevents sending every turn the notification for all inactive players
         if( inactivePlayers.add(currentPlayerID) ){
-            notify(new CVMessage(CVMessage.types.INACTIVE_PLAYER,currentPlayerID)); //notify everyone that the player is now inactive
+            notify(new CVMessage(CVMessage.types.INACTIVE_PLAYER,Message.fastMap("player",currentPlayerID))); //notify everyone that the player is now inactive
             notify(new CVMessage(CVMessage.types.INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
         }
 

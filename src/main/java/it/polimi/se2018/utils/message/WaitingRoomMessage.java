@@ -36,7 +36,9 @@ public class WaitingRoomMessage extends Message {
      */
     public enum types {
         BAD_FORMATTED,
-        DENIED,
+        DENIED_PLAYING,
+        DENIED_NICKNAME,
+        DENIED_LIMIT,
         JOIN,
         ADDED,
         LEAVE,

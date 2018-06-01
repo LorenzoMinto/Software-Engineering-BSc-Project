@@ -197,7 +197,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private Message handleWaitingRoomMessage(WaitingRoomMessage message, ReceiverInterface client){
         if(serverState != ServerState.WAITING_ROOM){
-            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"GAME_IS_PLAYING");
+            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_PLAYING,"GAME_IS_PLAYING");
         }
 
         String nickname = null;
@@ -231,11 +231,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
                 waitingList.put(nickname,client);
                 message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
             } else {
-                message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"EXISTING_NICKNAME");
+                message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_NICKNAME);
             }
         } else {
             //Should never happen because server status should change to FORWARDING_TO_CONTROLLER
-            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED,"MAX_LIMIT_REACHED");
+            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_LIMIT);
         }
 
         checkForLaunchingGame();

@@ -1,15 +1,15 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
+import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class CLIView extends View {
 
@@ -87,14 +87,70 @@ public class CLIView extends View {
 
     @Override
     Message handleJoinGameMove() {
-        showMessage("Inserisci il tuo nickname: ");
+        writeToConsole("Inserisci il tuo nickname: ");
         String nickname = readFromConsole();
         return new WaitingRoomMessage( WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",nickname) );
     }
 
     @Override
+    Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings) {
+        int count=1;
+        for (Map.Entry<String, Integer> entry : rankings.entrySet()) {
+            if(count==1){
+                writeToConsole("Il vincitore è "+entry.getKey()+" con "+entry.getValue()+" punti.");
+            } else {
+                writeToConsole(count+" classificato: "+entry.getKey()+" con "+entry.getValue()+" punti.");
+            }
+            count++;
+        }
+        return null;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    Message handleGiveWindowPatterns(Message m) {
+        List<WindowPattern> patterns;
+        try {
+            patterns = (List<WindowPattern>) m.getParam("patterns");
+        } catch (NoSuchParamInMessageException e) {
+            return null;
+        }
+        writeToConsole("Scegli uno fra i seguenti window pattern:");
+        int index = 0;
+        for(WindowPattern windowPattern : patterns){
+            writeToConsole("OPZIONE #".concat(Integer.toString(index)).concat(System.lineSeparator()));
+            writeToConsole(windowPattern.toString());
+        }
+        int choice = Integer.parseInt(readFromConsole());
+        if(choice<patterns.size()){
+            return new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",patterns.get(choice)));
+
+        } else {
+            writeToConsole("Scelta non valida");
+
+            return handleGiveWindowPatterns(m);
+        }
+    }
+
+    @Override
+    Message handleAddedWL() {
+        writeToConsole("Sei stato aggiunto correttamente alla partita");
+        return null;
+    }
+
+    @Override
+    void notifyGameStarted() {
+        printAllTheGameInfo();
+    }
+
+    @Override
     public void showMessage(String message) {
         writeToConsole(message);
+    }
+
+    @Override
+    void notifyGameVariablesChanged() {
+        //do nothing
     }
 
     @Override
@@ -121,7 +177,7 @@ public class CLIView extends View {
         do {
             askForMove();
             parseMoveChoiceFromConsole();
-            handleMove();
+            handleCurrentMove();
         } while (true);
     }
 
@@ -136,46 +192,46 @@ public class CLIView extends View {
 
     private void mapMoveWithPermission(Move move){
 
-        String text = "";
-        int choiceNumber = 0;
+        String text;
+        int choiceNumber;
 
         //Assign every move to a textual description and int identifier
         switch (move) {
             case END_TURN:
-                text = "";
-                choiceNumber = 0;
+                text = "Concludi il turno";
+                choiceNumber = 1;
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
-                text = "";
-                choiceNumber = 0;
+                text = "Pesca un dado dalla draftpool";
+                choiceNumber = 2;
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
-                text = "";
-                choiceNumber = 0;
+                text = "Posiziona un dado sul windowpattern";
+                choiceNumber = 3;
                 break;
             case USE_TOOLCARD:
-                text = "";
-                choiceNumber = 0;
+                text = "Usa toolcard";
+                choiceNumber = 4;
                 break;
             case INCREMENT_DRAFTED_DICE:
-                text = "";
-                choiceNumber = 0;
+                text = "Incrementa il valore del dado";
+                choiceNumber = 5;
                 break;
             case DECREMENT_DRAFTED_DICE:
-                text = "";
-                choiceNumber = 0;
+                text = "Decrementa il valore del dado";
+                choiceNumber = 6;
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
-                text = "";
-                choiceNumber = 0;
+                text = "Cambia il valore del dado";
+                choiceNumber = 7;
                 break;
             case CHOOSE_DICE_FROM_TRACK:
-                text = "";
-                choiceNumber = 0;
+                text = "Scegli il dado dalla track";
+                choiceNumber = 8;
                 break;
             case MOVE_DICE:
-                text = "";
-                choiceNumber = 0;
+                text = "Sposta il dado";
+                choiceNumber = 9;
                 break;
             case JOIN_GAME:
                 text = "Unisciti al gioco";
@@ -196,5 +252,9 @@ public class CLIView extends View {
 
     private void writeToConsole(String m){
         this.logger.info(m);
+    }
+
+    private void printAllTheGameInfo(){
+        //TODO
     }
 }
