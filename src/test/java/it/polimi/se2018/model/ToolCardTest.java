@@ -84,7 +84,7 @@ public class ToolCardTest {
     public void testGetTokensUsed(){
         int prevTokens = toolCard.getNeededTokens();
         toolCard.use();
-        assertEquals(prevTokens, toolCard.getTokensUsed());
+        assertEquals(prevTokens, toolCard.getUsedTokens());
     }
 
     /**
