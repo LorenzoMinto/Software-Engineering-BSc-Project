@@ -1,11 +1,13 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -13,18 +15,29 @@ public class CLIView extends View {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    private HashMap<Move,String> movesToCLICommands = new HashMap<>();
+    private EnumMap<Move,String> movesToCLICommands = new EnumMap<>(Move.class);
     private HashMap<Integer,Move> cliCommandsToMoves = new HashMap<>();
 
-    public CLIView() {
+    public static void main (String[] args) { new CLIView(); }
+
+    private CLIView() {
         super();
 
         //Set the textual description and integer identifier for all moves
         Arrays.stream(Move.values()).forEach(this::mapMoveWithPermission);
 
-        this.logger.fine("Ciao sono la CLI");
+        askForConnectionType();
 
         new Thread(this::console).start();
+    }
+
+    private void askForConnectionType(){
+        writeToConsole("1. Per giocare con RMI. 2. Per giocare con Socket.");
+        if(readFromConsole().equals("1")){
+            connectToRemoteServer(ConnectionType.RMI);
+        } else {
+            connectToRemoteServer(ConnectionType.SOCKET);
+        }
     }
 
     @Override
@@ -83,17 +96,6 @@ public class CLIView extends View {
     public void showMessage(String message) {
         writeToConsole(message);
     }
-
-    @Override
-    public boolean update(Message m) {
-        logger.info(()->"Ricevuto: "+m.getType().toString());
-
-        receiveMessage(m);
-
-        askForMove();
-
-        return true;
-    } //TODO: sposta su view
 
     @Override
     void askForMove() {
