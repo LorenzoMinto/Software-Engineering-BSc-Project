@@ -262,13 +262,8 @@ public class Scorer {
      * @return the score of the given {@link WindowPattern} based on the given public objective cards
      */
     private int getPublicObjectiveCardsScore(WindowPattern windowPattern, List<PublicObjectiveCard> cards){
-        int score = 0;
 
-        for (PublicObjectiveCard card: cards) {
-            score += card.calculateScore(windowPattern);
-        }
-
-        return score;
+        return cards.stream().mapToInt(card->card.calculateScore(windowPattern)).sum();
     }
 
 
@@ -280,17 +275,7 @@ public class Scorer {
      */
     private int getNumberOfEmptySpaces(WindowPattern wp){
 
-        int numberOfOpenSpaces = 0;
-
-        for(int i=0; i < wp.getNumberOfRows(); i++){
-            for(int j=0; j < wp.getNumberOfColumns(); j++){
-                if(!wp.getPattern()[i][j].hasDice()){
-                    numberOfOpenSpaces++;
-                }
-            }
-        }
-
-        return numberOfOpenSpaces;
+        return (int) Arrays.stream(wp.getPattern()).flatMap(Arrays::stream).filter(cell -> !cell.hasDice()).count();
     }
 
 
