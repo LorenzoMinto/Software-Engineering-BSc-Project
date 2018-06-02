@@ -2,7 +2,6 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
-import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import javafx.application.Application;
@@ -92,13 +91,13 @@ public class ViewGUI extends Application {
         Label portLabel = new Label("Port:");
         grid.add(portLabel, 0,5);
 
-        portTextField = new TextField("");
+        portTextField = new TextField("0");
         grid.add(portTextField, 1,5);
 
         Label serverLabel = new Label("Server name:");
         grid.add(serverLabel, 0,4);
 
-        serverNameTextField = new TextField("");
+        serverNameTextField = new TextField("//localhost/sagradaserver");
         grid.add(serverNameTextField, 1,4);
 
         userTextField = new TextField("Johnnyfer");
@@ -120,10 +119,8 @@ public class ViewGUI extends Application {
                 }
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
-                sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
-                        "All good, welcome "+ userTextField.getText()+"."));
-                sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
-                        rmiBox.isSelected() ? "RMI" : "Socket" + " selected."));
+                sagradaSceneController.printOnConsole("All good, welcome "+ userTextField.getText()+".");
+                sagradaSceneController.printOnConsole(rmiBox.isSelected() ? "RMI" : "Socket" + " selected.");
             }
         });
         HBox hbBtn = new HBox(10);

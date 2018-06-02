@@ -101,13 +101,8 @@
                </children>
             </Pane>
             <Pane prefHeight="111.0" prefWidth="192.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange;" GridPane.columnSpan="2" GridPane.rowIndex="2">
-               <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Dynamic choices" />
-                  <Button fx:id="john" layoutX="67.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Button" textAlignment="CENTER" />
-               </children>
-            </Pane>
-            <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="This is where the Controller's messages are going to be displayed." wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="Welcome to Sagrada." wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <HBox fx:id="dynamicChoicesPane" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
