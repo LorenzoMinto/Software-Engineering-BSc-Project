@@ -1,8 +1,10 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,15 +25,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 
-public class ViewGUI extends Application implements Observer {
+public class ViewGUI extends Application {
+
+    private Client client;
 
     //LOGIN SCENE
     private TextField userTextField;
     private CheckBox rmiBox;
     private CheckBox socketBox;
-
-    private int rmiOrSocket = 2;
+    private TextField portTextField;
+    private TextField serverNameTextField;
 
     //SAGRADA SCENE
     private SagradaSceneController sagradaSceneController;
@@ -67,10 +72,7 @@ public class ViewGUI extends Application implements Observer {
             @Override
             public void handle(ActionEvent e) {
                 if (rmiBox.isSelected()) {
-                    rmiOrSocket = 0;
                     socketBox.setSelected(false);
-                } else {
-                    rmiOrSocket = 2;
                 }
             }
         });
@@ -82,37 +84,55 @@ public class ViewGUI extends Application implements Observer {
             @Override
             public void handle(ActionEvent e) {
                 if (socketBox.isSelected()) {
-                    rmiOrSocket = 1;
                     rmiBox.setSelected(false);
-                } else {
-                    rmiOrSocket = 2;
                 }
             }
         });
 
-        userTextField = new TextField("Rubens");
+        Label portLabel = new Label("Port:");
+        grid.add(portLabel, 0,5);
+
+        portTextField = new TextField("");
+        grid.add(portTextField, 1,5);
+
+        Label serverLabel = new Label("Server name:");
+        grid.add(serverLabel, 0,4);
+
+        serverNameTextField = new TextField("");
+        grid.add(serverNameTextField, 1,4);
+
+        userTextField = new TextField("Johnnyfer");
         grid.add(userTextField, 1, 2);
 
         Button btn = new Button("Log in to Sagrada");
         btn.setOnAction(new EventHandler<ActionEvent>() {
-
+            //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
             @Override
             public void handle(ActionEvent e) {
+                client = new Client(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
+                        serverNameTextField.getText(), Integer.parseInt(portTextField.getText()), sagradaSceneController, false);
+                sagradaSceneController.setClient(client);
+                try {
+                    //TODO: Remote exception handling should not be here, client should handle and return other kind of exception
+                    client.sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",userTextField.getText())));
+                } catch (RemoteException r) {
+                    System.out.println("Error sending join message.");
+                }
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
                 sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
                         "All good, welcome "+ userTextField.getText()+"."));
                 sagradaSceneController.handleMessage(new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,
-                        rmiOrSocket==0 ? "RMI" : "Socket" + " selected."));
+                        rmiBox.isSelected() ? "RMI" : "Socket" + " selected."));
             }
         });
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 5);
+        grid.add(hbBtn, 1, 6);
 
         //grid.setGridLinesVisible(true); //this is useful to understand the layout
-        Scene loginScene = new Scene(grid, 500, 275);
+        Scene loginScene = new Scene(grid, 600, 350);
         primaryStage.setScene(loginScene);
 
         URL fxmlUrl = getClass().getClassLoader().getResource("fxml/SagradaScene.fxml");
@@ -123,12 +143,5 @@ public class ViewGUI extends Application implements Observer {
         sagradaSceneController = fxmlLoader.getController();
 
         primaryStage.show();
-    }
-
-
-    @Override
-    public boolean update(Message m) {
-        //TODO: Implement handling here of ViewBoundMessages
-        return false;
     }
 }

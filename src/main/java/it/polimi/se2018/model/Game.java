@@ -190,7 +190,7 @@ public class Game extends Observable implements Observer{
         this.rankings = rankings;
 
         //NOTIFYING
-        List<Player> rankingsAsList = new ArrayList<>(rankings.keySet());
+        List<String> rankingsAsList = Arrays.asList(rankings.keySet().stream().map(Player::getID).toArray(String[]::new));
 
         Map <String, Object> messageAttributes = new HashMap<>();
 
@@ -198,8 +198,6 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("winner", rankingsAsList.get(0));
 
         notify(new MVMessage(MVMessage.types.RANKINGS, messageAttributes));
-
-
     }
 
     /**
@@ -260,10 +258,11 @@ public class Game extends Observable implements Observer{
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
 
+        messageAttributes.put("toolcard", toolCard);
         //updates the toolcards as their tokens were updated
         messageAttributes.put("toolcards", drawnToolCards);
         //updates the player as their tokens were updated
-        messageAttributes.put("currentPlayer", currentRound.getCurrentTurn().getPlayer());
+        messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
 
         notify(new MVMessage(MVMessage.types.USED_TOOLCARD, messageAttributes));
 
@@ -311,11 +310,14 @@ public class Game extends Observable implements Observer{
         Map <String, Object> messageAttributes = new HashMap<>();
         String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
 
+        EnumSet<Move> basicPermissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL,Move.USE_TOOLCARD); //TODO: check
+
         messageAttributes.put("drawnToolCards", drawnToolCards);
         messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
         messageAttributes.put("players", Arrays.asList(playersIDs));
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
+        messageAttributes.put("basicPermissions", basicPermissions);
 
         notify(new MVMessage(MVMessage.types.SETUP, messageAttributes));
 

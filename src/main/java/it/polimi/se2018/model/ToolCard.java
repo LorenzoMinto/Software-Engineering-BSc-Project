@@ -151,7 +151,7 @@ public class ToolCard implements Serializable{
      *
      * @return the number of tokens spent on the tool card.
      */
-    public int getTokensUsed() { return tokensUsed; }
+    public int getUsedTokens() { return tokensUsed; }
 
     /**
      * Returns the number of tokens needed to activate the tool card.
@@ -230,5 +230,10 @@ public class ToolCard implements Serializable{
     @Override
     public int hashCode() {
         return Objects.hash(toolCardID);
+    }
+
+    @Override
+    public String toString() {
+        return "["+getTitle()+"](Needed: "+getNeededTokens()+"| Used: "+ getUsedTokens()+") "+getDescription()+"";
     }
 }

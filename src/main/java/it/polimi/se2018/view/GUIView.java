@@ -1,8 +1,11 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.utils.message.Message;
 import javafx.application.Application;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 public class GUIView extends View {
@@ -71,7 +74,37 @@ public class GUIView extends View {
     }
 
     @Override
+    Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings) {
+        return null;
+    }
+
+    @Override
+    Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
+        return null;
+    }
+
+    @Override
+    Message handleAddedWL() {
+        return null;
+    }
+
+    @Override
     void showMessage(String message) {
+
+    }
+
+    @Override
+    void errorMessage(String message) {
+
+    }
+
+    @Override
+    void notifyGameVariablesChanged() {
+
+    }
+
+    @Override
+    void notifyGameStarted() {
 
     }
 

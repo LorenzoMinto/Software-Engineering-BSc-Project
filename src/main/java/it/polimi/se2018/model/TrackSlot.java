@@ -65,4 +65,12 @@ public class TrackSlot implements Serializable {
         return new ArrayList<>(dices);
     }
 
+    public TrackSlot copy(){
+        return new TrackSlot( new ArrayList<>(this.dices) );
+    }
+
+    @Override
+    public String toString() {
+        return this.dices.toString();
+    }
 }

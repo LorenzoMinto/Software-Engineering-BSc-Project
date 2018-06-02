@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
 import javafx.event.ActionEvent;
@@ -7,7 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
-public class SagradaSceneController {
+public class SagradaSceneController implements Observer {
+    private Client client;
+
     @FXML private Button john;
     @FXML private TextArea playerTerminal;
 
@@ -25,4 +29,13 @@ public class SagradaSceneController {
         playerTerminal.appendText(msg);
     }
 
+    public void setClient(Client c) {
+        this.client = c;
+    }
+
+    @Override
+    public boolean update(Message m) {
+        this.handleMessage(m);
+        return false;
+    }
 }

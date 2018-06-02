@@ -13,6 +13,7 @@ import java.util.*;
 public class CLIView extends View {
 
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String BAD_DATA_INSERTED = "Inserimento errato.";
 
     private EnumMap<Move,String> movesToCLICommands = new EnumMap<>(Move.class);
     private HashMap<Integer,Move> cliCommandsToMoves = new HashMap<>();
@@ -32,59 +33,180 @@ public class CLIView extends View {
 
     private void askForConnectionType(){
         writeToConsole("1. Per giocare con RMI. 2. Per giocare con Socket.");
-        if(readFromConsole().equals("1")){
-            connectToRemoteServer(ConnectionType.RMI);
-        } else {
-            connectToRemoteServer(ConnectionType.SOCKET);
+        String choice = readFromConsole();
+
+        writeToConsole("Inserisci l'indirizzo del server:");
+        String serverName = readFromConsole();
+        if(serverName.equals("")){
+            writeToConsole(BAD_DATA_INSERTED);
+            askForConnectionType();
+            return;
         }
+
+        writeToConsole("Inserisci la porta da utilizzare:");
+
+        int port;
+        try{
+            port = Integer.parseInt(readFromConsole());
+        } catch (NumberFormatException e){
+            writeToConsole(BAD_DATA_INSERTED);
+            askForConnectionType();
+            return;
+        }
+
+        ConnectionType type = choice.equals("1") ? ConnectionType.RMI : ConnectionType.SOCKET;
+
+        connectToRemoteServer(type,serverName,port);
     }
 
     @Override
     Message handleEndTurnMove() {
-        //TODO: implementa questo metodo
-        return null;
+
+        return new VCMessage(VCMessage.types.END_TURN);
     }
 
     @Override
     Message handleDraftDiceFromDraftPoolMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Di seguito i dadi disponibili");
+        int index = 0;
+        for(Dice dice : this.draftPoolDices){
+            writeToConsole("Dice #"+index+": "+dice);
+        }
+        writeToConsole("Inserisci il numero rispettivo al dado che vuoi pescare");
+        try{
+            index = Integer.parseInt(readFromConsole());
+        } catch (NumberFormatException e){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleDraftDiceFromDraftPoolMove();
+        }
+        if(index>=draftPoolDices.size()){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleDraftDiceFromDraftPoolMove();
+        }
+
+        return new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(index)));
     }
 
     @Override
     Message handlePlaceDiceOnWindowPatternMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("This is your window pattern:"+this.windowPattern);
+        writeToConsole("Inserisci la riga dove vuoi inserire il dado:");
+        int row;
+        try{
+            row = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handlePlaceDiceOnWindowPatternMove();
+        }
+
+        writeToConsole("Inserisci la colonna dove vuoi inserire il dado:");
+        int col;
+        try{
+            col = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handlePlaceDiceOnWindowPatternMove();
+        }
+
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("row",row);
+        params.put("col",col);
+        return new VCMessage(VCMessage.types.PLACE_DICE,params);
     }
 
     @Override
     Message handleUseToolCardMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Di seguito le toolcards disponibili");
+        int index = 0;
+        for(ToolCard toolCard : drawnToolCards){
+            writeToConsole("ToolCard #"+index+": "+toolCard);
+        }
+        writeToConsole("Inserisci il numero rispettivo alla toolcard che vuoi usare");
+
+        try{
+            index = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleUseToolCardMove();
+        }
+
+        if(index>=drawnToolCards.size()){
+            return handleUseToolCardMove();
+        }
+
+        return new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(index)));
     }
 
     @Override
     Message handleIncrementDraftedDiceMove() {
-        //TODO: implementa questo metodo
-        return null;
+
+        return new VCMessage(VCMessage.types.INCREMENT_DICE,Message.fastMap("dice",draftedDice));
     }
 
     @Override
     Message handleDecrementDraftedDiceMove() {
-        //TODO: implementa questo metodo
-        return null;
+
+        return new VCMessage(VCMessage.types.DECREMENT_DICE,Message.fastMap("dice",draftedDice));
     }
 
     @Override
     Message handleChangeDraftedDiceValueMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Il valore corrente del dado è: "+this.draftedDice.getValue());
+        writeToConsole("Inserisci il nuovo valore che vuoi attribuire");
+        int value;
+        try{
+            value = Integer.parseInt(readFromConsole());
+        } catch(NumberFormatException e){
+            return handleChangeDraftedDiceValueMove();
+        }
+        return new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",value));
     }
 
     @Override
     Message handleChooseDiceFromTrackMove() {
-        //TODO: implementa questo metodo
-        return null;
+        writeToConsole("Di seguito il contenuto attuale della track");
+        int slotNumber = 0;
+        for(TrackSlot trackSlot: track){
+            writeToConsole("Slot #"+slotNumber+": "+trackSlot);
+            slotNumber++;
+        }
+        writeToConsole("Da quale slot vuoi prelevare il dado?");
+
+        try{
+            slotNumber = Integer.parseInt(readFromConsole());
+        } catch( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleChooseDiceFromTrackMove();
+        }
+
+        if(slotNumber>=track.size()){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleChooseDiceFromTrackMove();
+        }
+
+        int diceNumber = 0;
+        for(Dice dice : track.getDicesFromSlotNumber(slotNumber)){
+            writeToConsole("Inserisci "+diceNumber+" per prendere il dado "+dice);
+            diceNumber++;
+        }
+
+        try{
+            diceNumber = Integer.parseInt(readFromConsole());
+        } catch ( NumberFormatException e ){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleChooseDiceFromTrackMove();
+        }
+
+        if(diceNumber>=track.getDicesFromSlotNumber(slotNumber).size()){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleChooseDiceFromTrackMove();
+        }
+
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("slotNumber",slotNumber);
+        params.put("dice",diceNumber);
+
+        return new VCMessage(VCMessage.types.CHOOSE_DICE_FROM_TRACK,params);
     }
 
     @Override
@@ -122,7 +244,14 @@ public class CLIView extends View {
             writeToConsole("OPZIONE #".concat(Integer.toString(index)).concat(System.lineSeparator()));
             writeToConsole(windowPattern.toString());
         }
-        int choice = Integer.parseInt(readFromConsole());
+        int choice;
+        try {
+            choice = Integer.parseInt(readFromConsole());
+        } catch (NumberFormatException e){
+            writeToConsole(BAD_DATA_INSERTED);
+            return handleGiveWindowPatterns(patterns);
+        }
+
         if(choice<patterns.size()){
             return new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",patterns.get(choice)));
 
@@ -160,6 +289,17 @@ public class CLIView extends View {
     }
 
     @Override
+    void notifyGameVariablesChanged(boolean forceClean) {
+        if(forceClean){
+            cleanConsole();
+        }
+    }
+
+    private void cleanConsole() {
+        //TODO: implementa questo metodo
+    }
+
+    @Override
     void askForMove() {
         String messaggio;
         if(getPermissions().isEmpty()){
@@ -193,7 +333,15 @@ public class CLIView extends View {
      * @see CLIView#mapMoveWithPermission(Move)
      */
     private void parseMoveChoiceFromConsole() {
-        setCurrentMove(cliCommandsToMoves.get(Integer.parseInt(readFromConsole())));
+        int choice;
+        try{
+            choice = Integer.parseInt(readFromConsole());
+        } catch(NumberFormatException e){
+            parseMoveChoiceFromConsole();
+            return;
+        }
+
+        setCurrentMove(cliCommandsToMoves.get(choice));
     }
 
     private void handleCurrentMove() {
@@ -237,8 +385,11 @@ public class CLIView extends View {
             case JOIN_GAME:
                 message = handleJoinGameMove();
                 break;
+            case BACK_GAME:
+                message = new VCMessage(VCMessage.types.BACK_GAMING);
+                break;
             case NAVIGATE_INFOS:
-                //TODO: implementa navigazione delle informazioni (carte, pattern eccetra...)
+                printAllTheGameInfo();
                 break;
             default:
                 //if cases are updated with Move.class, should never enter here
@@ -258,6 +409,10 @@ public class CLIView extends View {
 
         //Assign every move to a textual description and int identifier
         switch (move) {
+            case BACK_GAME:
+                text = "Rientra nel gioco";
+                choiceNumber = 11;
+                break;
             case NAVIGATE_INFOS:
                 text = "Naviga nelle informazioni di gioco";
                 choiceNumber = 0;

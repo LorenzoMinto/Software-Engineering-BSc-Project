@@ -78,6 +78,7 @@ public class Player implements Serializable {
         if(windowPattern==null) throw new IllegalArgumentException();
 
         this.windowPattern = windowPattern;
+        this.windowPattern.assignToPlayer(this);
         this.favorTokens = windowPattern.getDifficulty();
     }
 

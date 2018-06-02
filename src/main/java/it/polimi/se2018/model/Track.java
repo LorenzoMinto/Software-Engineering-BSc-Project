@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.ValueOutOfBoundsException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Lorenzo Minto
  */
-public class Track implements Serializable {
+public class Track implements Serializable, Iterable<TrackSlot> {
     /**
      * Serial Version UID
      */
@@ -84,5 +85,33 @@ public class Track implements Serializable {
         slot.addDice(dice);
         return true;
     }
+
+    public int size(){
+        return slots.size();
+    }
+
+    @Override
+    public Iterator<TrackSlot> iterator() {
+        return new Iterator<TrackSlot>() {
+
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < slots.size();
+            }
+
+            @Override
+            public TrackSlot next() {
+                return slots.get(currentIndex++).copy();
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
 
 }
