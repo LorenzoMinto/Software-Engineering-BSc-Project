@@ -43,7 +43,6 @@ public class DraftControllerState extends ControllerState {
             next = controller.setControllerState(controller.stateManager.getPlaceState());
         }
 
-        EnumSet<Move> permissions = next.getStatePermissions();
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
     }
 

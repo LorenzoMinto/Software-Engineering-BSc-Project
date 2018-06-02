@@ -40,11 +40,9 @@ public class MoveControllerState extends ControllerState {
             if (controller.movesCounter <= 2) {
                 next = controller.setControllerState(controller.stateManager.getNextState(this));
 
-                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
                 next = controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
-                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
         } else {

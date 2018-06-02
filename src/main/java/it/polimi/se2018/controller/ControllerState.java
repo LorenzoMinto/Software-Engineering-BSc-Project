@@ -6,6 +6,7 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
@@ -137,7 +138,7 @@ public abstract class ControllerState {
         //do nothing by default
     }
 
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         //do nothing by default
         return EnumSet.of(Move.END_TURN);
     }

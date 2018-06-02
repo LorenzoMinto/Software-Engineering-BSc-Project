@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.message.Message;
@@ -311,8 +312,12 @@ public class Controller extends Observable {
                     returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
                 }
 
-                //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
+
                 if(returnMessage.getType()==CVMessage.types.ACKNOWLEDGMENT_MESSAGE){
+
+                    returnMessage.setPermissions( controllerState.getStatePermissions() );
+
+                    //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
                     logger.info(()->"Resetted PlayerMoveTimer due to move:"+type);
                     resetPlayerMoveTimer();
                 }

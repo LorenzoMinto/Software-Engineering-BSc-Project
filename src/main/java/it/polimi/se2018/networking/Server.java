@@ -247,7 +247,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         } else {
             returnMessage = new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
         }
-
+        
         //Send answer message back to the sender
         sender.receiveMessage(returnMessage, this.proxyServer);
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }

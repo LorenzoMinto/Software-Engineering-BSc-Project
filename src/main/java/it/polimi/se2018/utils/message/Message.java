@@ -36,7 +36,7 @@ public abstract class Message implements Serializable{
     /**
      * If the message is the reply to a move, it contains the new permissions set for the player recipient of this message
      */
-    private final EnumSet<Move> permissions;
+    private EnumSet<Move> permissions;
 
     public Message(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         this.type = type;
@@ -88,6 +88,12 @@ public abstract class Message implements Serializable{
      */
     public Set<Move> getPermissions() {
         return (permissions==null)?null:permissions.clone();
+    }
+
+    public void setPermissions(Set<Move> permissions){
+        if(this.permissions==null){
+            this.permissions = (EnumSet<Move>) permissions;
+        }
     }
 
     /**
