@@ -81,9 +81,14 @@ public class TrackTest {
      * @see Track#getDicesFromSlotNumber(int)
      */
     @Test
-    public void testGetDicesFromNonExistingSlotNumber() {
+    public void testGetDicesFromOutOfBoundsSlotNumber() {
         try {
             track.getDicesFromSlotNumber(1);
+            fail();
+        }catch (ValueOutOfBoundsException e){}
+
+        try {
+            track.getDicesFromSlotNumber(-1);
             fail();
         }catch (ValueOutOfBoundsException e){}
     }

@@ -48,10 +48,11 @@ public class TrackSlot implements Serializable {
      * @throws BadDiceReferenceException if the dice does not exists
      */
     public void removeDice(Dice dice) throws BadDiceReferenceException {
+        if(dice == null){ throw new IllegalArgumentException("Can't remove a null dice from the track slot.");}
         if (dices.contains(dice)) {
             dices.remove(dice);
         } else {
-            throw new BadDiceReferenceException("Asked to remove a dice that is not present in the TrackSlot.");
+            throw new BadDiceReferenceException("Asked to remove a dice that is not present in the track slot.");
         }
     }
 

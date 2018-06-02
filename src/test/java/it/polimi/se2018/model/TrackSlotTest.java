@@ -1,7 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadDiceReferenceException;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,14 +10,22 @@ import java.util.List;
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link TrackSlot} class
+ *
+ * @author Lorenzo Minto
+ */
 public class TrackSlotTest {
 
-    private List<Dice> dices;
-    private Dice dice1;
+    private static List<Dice> dices;
+    private static Dice dice1;
 
 
-    @Before
-    public void setUp(){
+    /**
+     * Initializes variables for the tests
+     */
+    @BeforeClass
+    public static void setUp(){
         dices = new ArrayList<>();
 
         dice1 = new Dice(BLUE, 5);
@@ -33,6 +41,9 @@ public class TrackSlotTest {
         dices.add(dice5);
     }
 
+    /**
+     * Tests adding a {@link Dice} to the {@link TrackSlot}
+     */
     @Test
     public void testAddDice() {
         Dice dice = new Dice(DiceColor.BLUE, 2);
@@ -43,6 +54,22 @@ public class TrackSlotTest {
         assertTrue(slot.getDices().contains(dice));
     }
 
+    /**
+     * Tests the impossibility of adding a null {@link Dice} to the {@link TrackSlot}
+     */
+    @Test
+    public void testAddNullDice() {
+        TrackSlot slot = new TrackSlot(new ArrayList<>());
+
+        try{
+            slot.addDice(null);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests the removal of a {@link Dice} from a {@link TrackSlot}
+     */
     @Test
     public void testRemoveDice() {
         TrackSlot slot = new TrackSlot(dices);
@@ -57,6 +84,25 @@ public class TrackSlotTest {
         assertFalse(slot.getDices().contains(dice1));
     }
 
+    /**
+     * Tests the impossibility of removing a null {@link Dice} from a {@link TrackSlot}
+     */
+    @Test
+    public void testRemoveNullDice() {
+        TrackSlot slot = new TrackSlot(dices);
+
+        try {
+            slot.removeDice(null);
+            fail();
+        } catch (BadDiceReferenceException e) {
+            e.printStackTrace();
+            fail();
+        } catch (IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests the impossibility of removing a {@link Dice} that is not in the {@link TrackSlot} from it
+     */
     @Test
     public void testRemoveDiceNotInTrackSlot() {
         TrackSlot slot = new TrackSlot(dices);
@@ -68,10 +114,13 @@ public class TrackSlotTest {
         } catch (BadDiceReferenceException e) {}
     }
 
+    /**
+     * Tests the retrieval of the dices from the {@link TrackSlot}
+     */
     @Test
     public void testGetDices() {
-        TrackSlot slot = new TrackSlot(this.dices);
+        TrackSlot slot = new TrackSlot(dices);
 
-        assertEquals(this.dices, slot.getDices());
+        assertEquals(dices, slot.getDices());
     }
 }
