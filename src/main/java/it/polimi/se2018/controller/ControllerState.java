@@ -2,7 +2,10 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
@@ -38,6 +41,11 @@ public abstract class ControllerState {
      * String to be printed if the only action possible is a ToolCard activation.
      */
     static final String TOOLCARD_ONLY = "Can't do that. You can only use a toolcard that doesn't require drafting.";
+
+    /**
+     * String to be printed if the only action possible is to end the Turn.
+     */
+    static final String END_TURN_ONLY = "Can't do that. You are out of moves.";
 
     /**
      * Default message
@@ -117,10 +125,20 @@ public abstract class ControllerState {
     public CVMessage chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
+     * Ends the current turn.
+     * @return a message containing the result of the mov
+     */
+    public CVMessage endCurrentTurn() { return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+
+    /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
      */
     public void executeImplicitBehaviour(){
         //do nothing by default
     }
 
+    public EnumSet<Move> getStatePermissions() {
+        //do nothing by default
+        return EnumSet.of(Move.END_TURN);
+    }
 }

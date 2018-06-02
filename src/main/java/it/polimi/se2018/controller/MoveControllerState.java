@@ -1,7 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -28,19 +31,29 @@ public class MoveControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
-        //check if move conforms to current placementRules and general physical constraints
+        ControllerState next;
+        EnumSet<Move> permissions;
+
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
-                controller.setControllerState(controller.stateManager.getNextState(this));
+                next = controller.setControllerState(controller.stateManager.getNextState(this));
+
+                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
-                controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
+                next = controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
+                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
         } else {
             return new CVMessage(ERROR_MESSAGE,"Can't make this move.");
         }
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.MOVE_DICE);
     }
 }

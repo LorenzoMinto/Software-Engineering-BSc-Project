@@ -1,7 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -27,20 +30,32 @@ public class PlaceControllerState extends ControllerState {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
-        boolean t = controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col);
+
+        ControllerState next;
+        EnumSet<Move> permissions;
+
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col)
                 && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {
-                controller.setControllerState(controller.stateManager.getNextState(this));
+                next = controller.setControllerState(controller.stateManager.getNextState(this));
+
+                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             } else {
-                controller.setControllerState(controller.stateManager.getToolCardState());
+                next = controller.setControllerState(controller.stateManager.getToolCardState());
+
+                permissions = next.getStatePermissions();
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             }
         } else {
             return new CVMessage(ERROR_MESSAGE,"Move is illegal. There's another dice in that position.");
         }
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.PLACE_DICE_ON_WINDOWPATTERN);
     }
 
 }

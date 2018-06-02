@@ -1,7 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.ToolCard;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -26,10 +29,17 @@ public class ToolCardControllerState extends ControllerState {
     public CVMessage useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
-            controller.setControllerState(controller.stateManager.getNextState(this));
+            ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
+
+            EnumSet<Move> permissions = next.getStatePermissions();
+            return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {
             return new CVMessage(ERROR_MESSAGE,"Can't use this toolcard.");
         }
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.USE_TOOLCARD);
     }
 }

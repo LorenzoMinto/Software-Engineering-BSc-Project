@@ -1,9 +1,13 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.BadDiceReferenceException;
+import it.polimi.se2018.utils.message.Message;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -37,8 +41,14 @@ public class ChooseFromTrackControllerState extends ControllerState {
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
         controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
-        controller.setControllerState(controller.stateManager.getNextState(this));
+        ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
 
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice from Track chosen.");
+        EnumSet<Move> permissions = next.getStatePermissions();
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE, Message.fastMap("message","Dice from Track chosen."));
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.CHOOSE_DICE_FROM_TRACK);
     }
 }

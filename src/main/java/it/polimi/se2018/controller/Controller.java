@@ -179,9 +179,10 @@ public class Controller extends Observable {
      *
      * @param controllerState state that must be setted to the controller
      */
-    protected void setControllerState(ControllerState controllerState) {
+    protected ControllerState setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
+        return this.controllerState;
     }
 
     private CVMessage assignWindowPatternToPlayer(WindowPattern wp, String playerID){

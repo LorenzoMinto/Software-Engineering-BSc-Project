@@ -1,7 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -33,16 +36,24 @@ public class DraftControllerState extends ControllerState {
             currentRound.getCurrentTurn().setDraftedDice(dice);
         }
 
+        ControllerState next;
         if (controller.getActiveToolCard() != null) {
-            controller.setControllerState(controller.stateManager.getNextState(this));
+            next = controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            controller.setControllerState(controller.stateManager.getPlaceState());
+            next = controller.setControllerState(controller.stateManager.getPlaceState());
         }
+
+        EnumSet<Move> permissions = next.getStatePermissions();
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
     }
 
     @Override
     public CVMessage placeDice(int row, int col) {
         return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.END_TURN);
     }
 }
