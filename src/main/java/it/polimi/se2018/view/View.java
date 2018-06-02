@@ -195,7 +195,7 @@ public abstract class View implements Observer {
                 }
                 @SuppressWarnings("unchecked")
                 List<WindowPattern> patterns = (List<WindowPattern>) o;
-
+                showMessage("Ricevuti windowpattern da scegliere");
                 message = handleGiveWindowPatterns(patterns);
                 break;
             case GAME_ENDED:

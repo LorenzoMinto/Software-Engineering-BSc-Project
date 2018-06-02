@@ -24,7 +24,6 @@ public class CLIView extends View {
 
     private CLIView() {
         super();
-
         //Set the textual description and integer identifier for all moves
         Arrays.stream(Move.values()).forEach(this::mapMoveWithPermission);
 
@@ -38,9 +37,11 @@ public class CLIView extends View {
 
         this.consoleLoop = new Thread(this::askForMove);
         this.consoleLoop.start();
+        System.out.println("Iniziando "+consoleLoop.getName());
     }
 
     private void stopConsoleLoop(){
+        System.out.println("Fermo "+consoleLoop.getName());
         if(this.consoleLoop!=null){
             this.consoleLoop.interrupt();
         }
@@ -48,10 +49,20 @@ public class CLIView extends View {
 
     private void askForConnectionType(){
         writeToConsole("1. Per giocare con RMI. 2. Per giocare con Socket.");
-        String choice = readFromConsole();
+        String choice = null;
+        try {
+            choice = readFromConsole();
+        } catch (InterruptedCLIException e) {
+            throw new BadBehaviourRuntimeException();
+        }
 
         writeToConsole("Inserisci l'indirizzo del server:");
-        String serverName = readFromConsole();
+        String serverName = null;
+        try {
+            serverName = readFromConsole();
+        } catch (InterruptedCLIException e) {
+            throw new BadBehaviourRuntimeException();
+        }
         if(serverName.equals("")){
             writeToConsole(BAD_DATA_INSERTED);
             askForConnectionType();
@@ -67,6 +78,8 @@ public class CLIView extends View {
             writeToConsole(BAD_DATA_INSERTED);
             askForConnectionType();
             return;
+        } catch(InterruptedCLIException e){
+            throw new BadBehaviourRuntimeException();
         }
 
         ConnectionType type = choice.equals("1") ? ConnectionType.RMI : ConnectionType.SOCKET;
@@ -93,6 +106,8 @@ public class CLIView extends View {
         } catch (NumberFormatException e){
             writeToConsole(BAD_DATA_INSERTED);
             return handleDraftDiceFromDraftPoolMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
         if(index>=draftPoolDices.size()){
             writeToConsole(BAD_DATA_INSERTED);
@@ -112,6 +127,8 @@ public class CLIView extends View {
         } catch( NumberFormatException e ){
             writeToConsole(BAD_DATA_INSERTED);
             return handlePlaceDiceOnWindowPatternMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         writeToConsole("Inserisci la colonna dove vuoi inserire il dado:");
@@ -121,6 +138,8 @@ public class CLIView extends View {
         } catch( NumberFormatException e ){
             writeToConsole(BAD_DATA_INSERTED);
             return handlePlaceDiceOnWindowPatternMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         HashMap<String,Object> params = new HashMap<>();
@@ -143,6 +162,8 @@ public class CLIView extends View {
         } catch( NumberFormatException e){
             writeToConsole(BAD_DATA_INSERTED);
             return handleUseToolCardMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         if(index>=drawnToolCards.size()){
@@ -173,6 +194,8 @@ public class CLIView extends View {
             value = Integer.parseInt(readFromConsole());
         } catch(NumberFormatException e){
             return handleChangeDraftedDiceValueMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
         return new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",value));
     }
@@ -192,6 +215,8 @@ public class CLIView extends View {
         } catch( NumberFormatException e ){
             writeToConsole(BAD_DATA_INSERTED);
             return handleChooseDiceFromTrackMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         if(slotNumber>=track.size()){
@@ -210,6 +235,8 @@ public class CLIView extends View {
         } catch ( NumberFormatException e ){
             writeToConsole(BAD_DATA_INSERTED);
             return handleChooseDiceFromTrackMove();
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         if(diceNumber>=track.getDicesFromSlotNumber(slotNumber).size()){
@@ -233,7 +260,12 @@ public class CLIView extends View {
     @Override
     Message handleJoinGameMove() {
         writeToConsole("Inserisci il tuo nickname: ");
-        String nickname = readFromConsole();
+        String nickname = null;
+        try {
+            nickname = readFromConsole();
+        } catch (InterruptedCLIException e) {
+            return null;
+        }
         stopConsoleLoop();
         this.playerID = nickname;
         return new WaitingRoomMessage( WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",nickname) );
@@ -267,6 +299,8 @@ public class CLIView extends View {
         } catch (NumberFormatException e){
             writeToConsole(BAD_DATA_INSERTED);
             return handleGiveWindowPatterns(patterns);
+        } catch(InterruptedCLIException e){
+            return null;
         }
 
         if(index<patterns.size()){
@@ -339,8 +373,10 @@ public class CLIView extends View {
         message = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
         writeToConsole(message);
 
-        String input = readFromConsole();
-        if(Thread.currentThread().isInterrupted()){
+        String input = null;
+        try {
+            input = readFromConsole();
+        } catch(InterruptedCLIException e){
             return;
         }
 
@@ -352,26 +388,6 @@ public class CLIView extends View {
             return;
         }
 
-        handleMove(cliCommandsToMoves.get(choice));
-    }
-
-    /**
-     * Depending on the value inserted in console, recognize the move to perform
-     *
-     * @see CLIView#mapMoveWithPermission(Move)
-     */
-    private void parseMoveChoiceFromConsole() {
-        int choice;
-        try{
-            choice = Integer.parseInt(readFromConsole());
-        } catch(NumberFormatException e){
-            parseMoveChoiceFromConsole();
-            return;
-        }
-        if(choice<cliCommandsToMoves.size()){
-            parseMoveChoiceFromConsole();
-            return;
-        }
         handleMove(cliCommandsToMoves.get(choice));
     }
 
@@ -503,8 +519,14 @@ public class CLIView extends View {
         cliCommandsToMoves.put(choiceNumber,move);
     }
 
-    private String readFromConsole() {
-        return scanner.nextLine();
+    private String readFromConsole() throws InterruptedCLIException {
+        String text = scanner.nextLine();
+        System.out.println("leggo: "+text+" in "+Thread.currentThread().getName());
+        if(Thread.currentThread().isInterrupted()){
+            throw new InterruptedCLIException();
+        } else {
+            return text;
+        }
     }
 
     private void writeToConsole(String m){
