@@ -6,27 +6,43 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
+import java.io.File;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
-public class SagradaSceneController extends View {
+public class SagradaSceneController extends View implements Initializable {
     private Client client;
 
     @FXML private TextArea playerTerminal;
     @FXML private HBox dynamicChoicesPane;
+    @FXML private Pane cardsCarouselCardHBox;
+    @FXML private ImageView cardsCarouselCardImageView;
+
+    File file = new File("src/main/resources/images/toolcard1.png");
+    Image toolcard = new Image(file.toURI().toString());
 
 
-    @FXML
-    public void initialize() {
-        //TODO: SagradaSceneController initialization here.
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        cardsCarouselCardImageView.setImage(toolcard);
+        cardsCarouselCardImageView.setPreserveRatio(true);
+        cardsCarouselCardImageView.fitWidthProperty().bind(cardsCarouselCardHBox.widthProperty());
+        cardsCarouselCardImageView.fitHeightProperty().bind(cardsCarouselCardHBox.heightProperty());
     }
 
-    void askForMove() { //TODO: verificare questa funzione
+    @Override
+    void askForMove() {
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
@@ -165,4 +181,5 @@ public class SagradaSceneController extends View {
         String ss = "\n"+s;
         playerTerminal.appendText(ss);
     }
+
 }
