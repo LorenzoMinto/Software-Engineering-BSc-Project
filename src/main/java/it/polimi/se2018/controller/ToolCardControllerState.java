@@ -29,7 +29,6 @@ public class ToolCardControllerState extends ControllerState {
     public CVMessage useToolCard(ToolCard toolcard) {
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
-            ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
 
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {

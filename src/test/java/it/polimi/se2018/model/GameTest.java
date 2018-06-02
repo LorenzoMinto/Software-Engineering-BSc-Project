@@ -5,6 +5,7 @@ import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.controller.WindowPatternManager;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.EmptyListException;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -37,7 +38,7 @@ public class GameTest {
     private static List<ToolCard> toolCards;
     private static List<Dice> dices;
     private static Map<Player, Integer> rankings;
-
+    private static EnumSet<Move> permissions;
 
     /**
      * Initializes variables for the tests
@@ -55,6 +56,7 @@ public class GameTest {
         WindowPatternManager windowPatternManager = new WindowPatternManager();
         List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
         windowPattern = windowPatterns.get(0);
+        permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD);
     }
 
     /**
@@ -122,14 +124,14 @@ public class GameTest {
      * Runs all rounds of a game
      */
     private void runAllRounds() {
-        game.startGame(dices);
+        game.startGame(dices, permissions);
 
         for(int i=1; i <= numberOfRounds; i++){
             try {
-                game.nextRound(dices);
+                game.nextRound(dices, permissions);
                 for(int j=1; j <= 2; j++){
                     try{
-                        game.nextTurn();
+                        game.nextTurn(permissions);
                     }catch (NoMoreTurnsAvailableException e ){}
                 }
             } catch (IllegalArgumentException | BadBehaviourRuntimeException e){
@@ -179,7 +181,7 @@ public class GameTest {
             game.addPlayer(player);
             game.setStatusAsWaitingForPatternsChoice();
             game.assignWindowPatternToPlayer(windowPattern, player.getID());
-            game.startGame(dices);
+            game.startGame(dices, permissions);
             assertNotNull(game.getCurrentRound());
     }
 
@@ -236,7 +238,7 @@ public class GameTest {
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        game.startGame(dices);
+        game.startGame(dices, permissions);
         assertTrue(game.isCurrentPlayer(player.getID()));
     }
 
@@ -406,7 +408,7 @@ public class GameTest {
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
         try {
-            game.startGame(dices);
+            game.startGame(dices, permissions);
         } catch (BadBehaviourRuntimeException e) {
             e.printStackTrace();
             fail();
@@ -450,7 +452,7 @@ public class GameTest {
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
         try {
-            game.startGame(dices);
+            game.startGame(dices, permissions);
         } catch (BadBehaviourRuntimeException e) {
             e.printStackTrace();
             fail();
@@ -523,7 +525,7 @@ public class GameTest {
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
 
         try {
-            game.startGame(dices);
+            game.startGame(dices, permissions);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -543,7 +545,7 @@ public class GameTest {
         game1.assignWindowPatternToPlayer(windowPattern, player.getID());
 
         try {
-            game1.startGame(dices);
+            game1.startGame(dices, permissions);
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }
@@ -559,7 +561,7 @@ public class GameTest {
         game.addPlayer(player);
 
         try {
-            game.startGame(null);
+            game.startGame(null, permissions);
             fail();
         } catch (BadBehaviourRuntimeException e) {
             e.printStackTrace();
@@ -576,7 +578,7 @@ public class GameTest {
         game.addPlayer(player);
 
         try {
-            game.startGame(new ArrayList<>());
+            game.startGame(new ArrayList<>(), permissions);
             fail();
         } catch (BadBehaviourRuntimeException e) {
             e.printStackTrace();
@@ -590,7 +592,7 @@ public class GameTest {
     @Test
     public void testStartGameWhenIllegalStatus(){
         try {
-            game.startGame(dices);
+            game.startGame(dices, permissions);
             fail();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -607,10 +609,10 @@ public class GameTest {
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        game.startGame(dices);
+        game.startGame(dices, permissions);
 
         try {
-            game.nextRound(dices);
+            game.nextRound(dices, permissions);
         } catch (NoMoreRoundsAvailableException e) {
             e.printStackTrace();
             fail();
@@ -628,10 +630,10 @@ public class GameTest {
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        game.startGame(dices);
+        game.startGame(dices, permissions);
 
         try {
-            game.nextRound(null);
+            game.nextRound(null, permissions);
             fail();
         } catch (NoMoreRoundsAvailableException | EmptyListException e) {
             e.printStackTrace();
@@ -649,10 +651,10 @@ public class GameTest {
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        game.startGame(dices);
+        game.startGame(dices, permissions);
 
         try {
-            game.nextRound(new ArrayList<>());
+            game.nextRound(new ArrayList<>(), permissions);
             fail();
         } catch (NoMoreRoundsAvailableException e) {
             e.printStackTrace();
@@ -666,7 +668,7 @@ public class GameTest {
     @Test
     public void testNextRoundWhenIllegalStatus(){
         try {
-            game.nextRound(dices);
+            game.nextRound(dices,permissions);
             fail();
         } catch (IllegalArgumentException | NoMoreRoundsAvailableException e) {
             fail();
@@ -682,10 +684,10 @@ public class GameTest {
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
         game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        game.startGame(dices);
+        game.startGame(dices, permissions);
 
         try {
-            game.nextTurn();
+            game.nextTurn(permissions);
         } catch (NoMoreTurnsAvailableException e) {
             e.printStackTrace();
             fail();
@@ -700,7 +702,7 @@ public class GameTest {
     @Test
     public void testNextTurnWhenIllegalStatus(){
         try {
-            game.nextTurn();
+            game.nextTurn(permissions);
             fail();
         } catch (NoMoreTurnsAvailableException e) {
             fail();

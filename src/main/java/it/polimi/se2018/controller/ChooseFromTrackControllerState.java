@@ -41,7 +41,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
         controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
-        ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
+        controller.setControllerState(controller.stateManager.getNextState(this));
 
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE, Message.fastMap("message","Dice from Track chosen."));
     }

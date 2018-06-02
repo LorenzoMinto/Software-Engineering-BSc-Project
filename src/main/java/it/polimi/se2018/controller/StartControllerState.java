@@ -32,7 +32,6 @@ public class StartControllerState extends ControllerState {
 
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
-            ControllerState next = controller.setControllerState(controller.stateManager.getPlaceState());
 
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
         } else {
@@ -45,7 +44,6 @@ public class StartControllerState extends ControllerState {
 
         if (controller.canUseSpecificToolCard(toolcard)) {
             controller.setActiveToolCard(toolcard);
-            ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
 
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {

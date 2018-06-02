@@ -36,11 +36,10 @@ public class DraftControllerState extends ControllerState {
             currentRound.getCurrentTurn().setDraftedDice(dice);
         }
 
-        ControllerState next;
         if (controller.getActiveToolCard() != null) {
-            next = controller.setControllerState(controller.stateManager.getNextState(this));
+            controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            next = controller.setControllerState(controller.stateManager.getPlaceState());
+            controller.setControllerState(controller.stateManager.getPlaceState());
         }
 
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");

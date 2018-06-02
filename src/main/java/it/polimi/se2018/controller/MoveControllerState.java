@@ -31,18 +31,15 @@ public class MoveControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
-        ControllerState next;
-        EnumSet<Move> permissions;
-
         if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {
-                next = controller.setControllerState(controller.stateManager.getNextState(this));
+                controller.setControllerState(controller.stateManager.getNextState(this));
 
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
-                next = controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
+                controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
         } else {
