@@ -19,11 +19,6 @@ public class GUIView extends View {
     }
 
     @Override
-    void askForMove() {
-
-    }
-
-    @Override
     Message handleEndTurnMove() {
         return null;
     }
@@ -89,6 +84,11 @@ public class GUIView extends View {
     }
 
     @Override
+    void notifyHandlingOfMessageEnded() {
+
+    }
+
+    @Override
     void showMessage(String message) {
 
     }
@@ -100,6 +100,11 @@ public class GUIView extends View {
 
     @Override
     void notifyGameVariablesChanged() {
+
+    }
+
+    @Override
+    void notifyGameVariablesChanged(boolean forceClean) {
 
     }
 

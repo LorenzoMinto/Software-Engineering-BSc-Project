@@ -18,6 +18,8 @@ public class CLIView extends View {
     private EnumMap<Move,String> movesToCLICommands = new EnumMap<>(Move.class);
     private HashMap<Integer,Move> cliCommandsToMoves = new HashMap<>();
 
+    private Thread consoleLoop;
+
     public static void main (String[] args) { new CLIView(); }
 
     private CLIView() {
@@ -28,7 +30,20 @@ public class CLIView extends View {
 
         askForConnectionType();
 
-        new Thread(this::console).start();
+        startConsoleLoop();
+    }
+
+    private void startConsoleLoop(){
+        if(this.consoleLoop!=null){this.consoleLoop.interrupt();}
+
+        this.consoleLoop = new Thread(this::askForMove);
+        this.consoleLoop.start();
+    }
+
+    private void stopConsoleLoop(){
+        if(this.consoleLoop!=null){
+            this.consoleLoop.interrupt();
+        }
     }
 
     private void askForConnectionType(){
@@ -219,6 +234,8 @@ public class CLIView extends View {
     Message handleJoinGameMove() {
         writeToConsole("Inserisci il tuo nickname: ");
         String nickname = readFromConsole();
+        stopConsoleLoop();
+        this.playerID = nickname;
         return new WaitingRoomMessage( WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",nickname) );
     }
 
@@ -243,17 +260,17 @@ public class CLIView extends View {
         for(WindowPattern windowPattern : patterns){
             writeToConsole("OPZIONE #".concat(Integer.toString(index)).concat(System.lineSeparator()));
             writeToConsole(windowPattern.toString());
+            index++;
         }
-        int choice;
         try {
-            choice = Integer.parseInt(readFromConsole());
+            index = Integer.parseInt(readFromConsole());
         } catch (NumberFormatException e){
             writeToConsole(BAD_DATA_INSERTED);
             return handleGiveWindowPatterns(patterns);
         }
 
-        if(choice<patterns.size()){
-            return new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",patterns.get(choice)));
+        if(index<patterns.size()){
+            return new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",patterns.get(index)));
 
         } else {
             writeToConsole("Scelta non valida");
@@ -280,6 +297,7 @@ public class CLIView extends View {
 
     @Override
     public void showMessage(String message) {
+        stopConsoleLoop();
         writeToConsole(message);
     }
 
@@ -295,36 +313,46 @@ public class CLIView extends View {
         }
     }
 
+    @Override
+    void notifyHandlingOfMessageEnded(){
+        startConsoleLoop();
+    }
+
     private void cleanConsole() {
         //TODO: implementa questo metodo
     }
 
-    @Override
-    void askForMove() {
-        String messaggio;
-        if(getPermissions().isEmpty()){
-            messaggio = "Nessuna mossa eseguibile, per il momento.";
-        } else {
-            String options =    getPermissions()
-                                .stream()
-                                .map(move -> movesToCLICommands.get(move))
-                                .reduce((x,y) -> x.concat(System.lineSeparator()).concat(y))
-                                .orElse("");
+    private void askForMove(){
 
-            messaggio = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
+        String message;
+        if(getPermissions().isEmpty()){
+            writeToConsole("Nessuna mossa eseguibile, per il momento.");
+            return;
         }
 
-        writeToConsole(messaggio);
-    }
+        String options =    getPermissions()
+                .stream()
+                .map(move -> movesToCLICommands.get(move))
+                .reduce((x,y) -> x.concat(System.lineSeparator()).concat(y))
+                .orElse("");
 
-    @SuppressWarnings("InfiniteLoopStatement")
-    private void console(){
+        message = "Scegli la mossa che vuoi eseguire.".concat(System.lineSeparator()).concat(options);
+        writeToConsole(message);
 
-        do {
+        String input = readFromConsole();
+        if(Thread.currentThread().isInterrupted()){
+            return;
+        }
+
+        int choice;
+        try{
+            choice = Integer.parseInt(input);
+        } catch(NumberFormatException e){
             askForMove();
-            parseMoveChoiceFromConsole();
-            handleCurrentMove();
-        } while (true);
+            return;
+        }
+
+        handleMove(cliCommandsToMoves.get(choice));
     }
 
     /**
@@ -340,13 +368,15 @@ public class CLIView extends View {
             parseMoveChoiceFromConsole();
             return;
         }
-
-        setCurrentMove(cliCommandsToMoves.get(choice));
+        if(choice<cliCommandsToMoves.size()){
+            parseMoveChoiceFromConsole();
+            return;
+        }
+        handleMove(cliCommandsToMoves.get(choice));
     }
 
-    private void handleCurrentMove() {
-        //Check if currentMove is a valid one
-        if(currentMove==null){
+    private void handleMove(Move move) {
+        if(move==null){
             showMessage("Mossa non riconosciuta");
             return;
         }
@@ -354,7 +384,7 @@ public class CLIView extends View {
         Message message = null;
 
         //Here the code that handles each move. Each case can contain multiple writeToConsole and / or readFromConsole
-        switch (currentMove) {
+        switch (move) {
             case END_TURN:
                 message = handleEndTurnMove();
                 break;
@@ -388,6 +418,9 @@ public class CLIView extends View {
             case BACK_GAME:
                 message = new VCMessage(VCMessage.types.BACK_GAMING);
                 break;
+            case LEAVE:
+                message = new WaitingRoomMessage(WaitingRoomMessage.types.LEAVE,Message.fastMap("nickname",this.playerID));
+                break;
             case NAVIGATE_INFOS:
                 printAllTheGameInfo();
                 break;
@@ -412,6 +445,10 @@ public class CLIView extends View {
             case BACK_GAME:
                 text = "Rientra nel gioco";
                 choiceNumber = 11;
+                break;
+            case LEAVE:
+                text = "Abbandona la waiting room";
+                choiceNumber = 12;
                 break;
             case NAVIGATE_INFOS:
                 text = "Naviga nelle informazioni di gioco";

@@ -231,7 +231,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
 
-        Message returnMessage;
+        Message returnMessage = null;
 
         if(message instanceof WaitingRoomMessage){
 
@@ -245,7 +245,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             returnMessage = controller.handleMove(vcMessage);
 
         } else {
-            returnMessage = new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+            return;
         }
         
         //Send answer message back to the sender
@@ -293,7 +293,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
-                message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED);
+                message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED,null,null,EnumSet.of(Move.LEAVE));
             } else {
                 message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_NICKNAME);
             }

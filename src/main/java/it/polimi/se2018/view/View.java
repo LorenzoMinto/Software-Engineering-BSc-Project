@@ -17,7 +17,7 @@ public abstract class View implements Observer {
 
     private static final String MUST_CONNECT = "You have to connect to the server";
 
-    private String playerID;
+    String playerID;
 
     final Logger logger;
 
@@ -25,9 +25,9 @@ public abstract class View implements Observer {
 
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
-    private EnumSet<Move> basicPermissions;
+    private EnumSet<Move> basicPermissions = EnumSet.of(Move.NAVIGATE_INFOS);
 
-    private ViewState state = ViewState.INACTIVE;
+    private ViewState state = ViewState.ACTIVE;
 
     private SenderInterface client;
 
@@ -57,8 +57,6 @@ public abstract class View implements Observer {
         }
     }
 
-    abstract void askForMove();
-
     abstract Message handleEndTurnMove();
 
     abstract Message handleDraftDiceFromDraftPoolMove();
@@ -85,6 +83,8 @@ public abstract class View implements Observer {
 
     abstract Message handleAddedWL();
 
+    abstract void notifyHandlingOfMessageEnded();
+
     private void receiveMessage(Message m) {
 
         Message message = null;
@@ -101,6 +101,8 @@ public abstract class View implements Observer {
         if(message!=null){
             sendMessage(message);
         }
+
+        notifyHandlingOfMessageEnded();
     }
 
     private Message handleMessage(Message m){
@@ -119,6 +121,8 @@ public abstract class View implements Observer {
 
         } else {
 
+            updatePermissions(m);
+
             if(m instanceof CVMessage){
                 message = handleCVMessages(m);
 
@@ -131,10 +135,6 @@ public abstract class View implements Observer {
             } else {
                 //should never enter here
                 throw new BadBehaviourRuntimeException();
-            }
-
-            if(message!=null){
-                updatePermissions(m);
             }
 
             return message;
@@ -513,7 +513,7 @@ public abstract class View implements Observer {
 
         receiveMessage(m);
 
-        askForMove();
+        //askForMove();
 
         return true;
     }

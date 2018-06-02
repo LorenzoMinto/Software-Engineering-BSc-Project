@@ -1,6 +1,9 @@
 package it.polimi.se2018.utils.message;
 
+import it.polimi.se2018.utils.Move;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -10,7 +13,11 @@ public class WaitingRoomMessage extends Message {
 
     private static final long serialVersionUID = -2346949723822160140L;
 
-    public WaitingRoomMessage(Enum type, Map<String, Object> params, String playerID) {
+    public WaitingRoomMessage(types type, Map<String, Object> params, String playerID, Set<Move> permissions) {
+        super(type, params, playerID, permissions);
+    }
+
+    public WaitingRoomMessage(types type, Map<String, Object> params, String playerID) {
         super(type, params, playerID);
     }
 

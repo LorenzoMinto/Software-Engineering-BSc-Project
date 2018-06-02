@@ -395,7 +395,7 @@ public class Controller extends Observable {
             assignedWindowPatterns.put(nickname,new ArrayList<>(patterns));
 
             HashMap<String,Object> params = new HashMap<>();
-            params.put("patterns",patterns);
+            params.put("patterns",new ArrayList<>(patterns));
             notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));
         }
 

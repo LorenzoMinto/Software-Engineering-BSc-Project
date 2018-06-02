@@ -26,8 +26,7 @@ public class SagradaSceneController extends View {
         //TODO: SagradaSceneController initialization here.
     }
 
-    @Override
-    void askForMove() {
+    void askForMove() { //TODO: verificare questa funzione
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
@@ -126,6 +125,11 @@ public class SagradaSceneController extends View {
     Message handleAddedWL() {
         printOnConsole("You have joined the waiting room!");
         return null;
+    }
+
+    @Override
+    void notifyHandlingOfMessageEnded() {
+
     }
 
     @Override
