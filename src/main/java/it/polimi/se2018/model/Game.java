@@ -299,7 +299,7 @@ public class Game extends Observable implements Observer{
      * Starts the game and creates the first round with the given dices
      * @param dices list of dices to be used for the first round
      */
-    public void startGame(List<Dice> dices){
+    public void startGame(List<Dice> dices, Set<Move> permissions){
         if(dices == null){ throw new IllegalArgumentException("ERROR: Can't start game with null dices.");}
         if(dices.isEmpty()){ throw new EmptyListException("Can't start game with no dices.");}
         if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException("ERROR: Can't start game if not waiting for patterns choice.");}
@@ -310,19 +310,19 @@ public class Game extends Observable implements Observer{
         Map <String, Object> messageAttributes = new HashMap<>();
         String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
 
-        EnumSet<Move> basicPermissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL,Move.USE_TOOLCARD); //TODO: check
-
         messageAttributes.put("drawnToolCards", drawnToolCards);
         messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
         messageAttributes.put("players", Arrays.asList(playersIDs));
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
-        messageAttributes.put("basicPermissions", basicPermissions);
 
-        notify(new MVMessage(MVMessage.types.SETUP, messageAttributes));
+        MVMessage message = new MVMessage(MVMessage.types.SETUP, messageAttributes);
+        message.setPermissions(permissions);
+
+        notify(message);
 
         try {
-            nextRound(dices);
+            nextRound(dices,permissions);
         } catch (NoMoreRoundsAvailableException e) {
             //Should never happen
             throw new BadBehaviourRuntimeException("Can't start a game with no rounds");
@@ -336,7 +336,7 @@ public class Game extends Observable implements Observer{
      * @throws NoMoreRoundsAvailableException if the method is called but all the rounds
      * that could have been played in this game were actually already played
      */
-    public void nextRound(List<Dice> dices) throws NoMoreRoundsAvailableException{
+    public void nextRound(List<Dice> dices, Set<Move> permissions) throws NoMoreRoundsAvailableException{
         if(dices == null){ throw new IllegalArgumentException("ERROR: Can't proceed to next round with null dices.");}
         if(dices.isEmpty()){ throw new EmptyListException("Can't proceed to next round with no dices.");}
         if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next round if game is not already running"); }
@@ -374,7 +374,7 @@ public class Game extends Observable implements Observer{
         notify(new MVMessage(MVMessage.types.NEW_ROUND, messageAttributes));
 
         try {
-            nextTurn();
+            nextTurn(permissions);
         } catch (NoMoreTurnsAvailableException e) {
             //can't happen
         }
@@ -387,7 +387,7 @@ public class Game extends Observable implements Observer{
      * @throws NoMoreTurnsAvailableException if no more turns are available in this round
      * @author Jacopo Pio Gargano
      */
-    public void nextTurn() throws NoMoreTurnsAvailableException {
+    public void nextTurn(Set<Move> permissions) throws NoMoreTurnsAvailableException {
         if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next turn if game is not already running"); }
         try {
             getCurrentRound().nextTurn();
@@ -399,8 +399,6 @@ public class Game extends Observable implements Observer{
             messageAttributes.put("whoIsPlaying", nextPlayer);
             notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
 
-            //TODO: aggiungere permissions che ha l'utente che inizia ora a giocare
-            EnumSet<Move> permissions = EnumSet.allOf(Move.class);
             notify(new MVMessage(MVMessage.types.YOUR_TURN, null, nextPlayer, permissions));
 
         } catch (NoMoreTurnsAvailableException e) {

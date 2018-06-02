@@ -34,7 +34,6 @@ public class StartControllerState extends ControllerState {
             currentRound.getCurrentTurn().setDraftedDice(dice);
             ControllerState next = controller.setControllerState(controller.stateManager.getPlaceState());
 
-            EnumSet<Move> permissions = next.getStatePermissions();
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
         } else {
             return new CVMessage(ERROR_MESSAGE,"Dice not in the draft pool.");
@@ -48,7 +47,6 @@ public class StartControllerState extends ControllerState {
             controller.setActiveToolCard(toolcard);
             ControllerState next = controller.setControllerState(controller.stateManager.getNextState(this));
 
-            EnumSet<Move> permissions = next.getStatePermissions();
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {
             return new CVMessage(ERROR_MESSAGE,"Can't use this toolcard.");

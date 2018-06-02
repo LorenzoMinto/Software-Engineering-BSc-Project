@@ -433,7 +433,8 @@ public class Controller extends Observable {
     }
 
     private void startGame(){
-        game.startGame(getDicesForNewRound());
+        EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
+        game.startGame(getDicesForNewRound(),permissions);
 
         startPlayerMoveTimer();
     }
@@ -506,12 +507,13 @@ public class Controller extends Observable {
         }
 
         //Proceed with turns / rounds
+        EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
         try {
-            game.nextTurn();
+            game.nextTurn(permissions);
         } catch (NoMoreTurnsAvailableException e) {
 
             try {
-                game.nextRound( getDicesForNewRound() );
+                game.nextRound( getDicesForNewRound(), permissions );
             } catch (NoMoreRoundsAvailableException e1) {
 
                 endGame();
@@ -519,7 +521,7 @@ public class Controller extends Observable {
             }
 
             try {
-                game.nextTurn();
+                game.nextTurn(permissions);
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }

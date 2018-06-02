@@ -105,7 +105,7 @@ public abstract class View implements Observer {
 
     private Message handleMessage(Message m){
 
-        updatePermissions(m);
+        Message message;
 
         if(state==ViewState.INACTIVE){
 
@@ -120,18 +120,24 @@ public abstract class View implements Observer {
         } else {
 
             if(m instanceof CVMessage){
-                return handleCVMessages(m);
+                message = handleCVMessages(m);
 
             } else if(m instanceof MVMessage){
-                return handleMVMessages(m);
+                message = handleMVMessages(m);
 
             } else if(m instanceof WaitingRoomMessage){
-                return handleWLMessages(m);
+                message = handleWLMessages(m);
 
             } else {
                 //should never enter here
                 throw new BadBehaviourRuntimeException();
             }
+
+            if(message!=null){
+                updatePermissions(m);
+            }
+
+            return message;
 
         }
 
@@ -140,9 +146,7 @@ public abstract class View implements Observer {
     private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
-            if(!p.contains(Move.NAVIGATE_INFOS)){
-                p.add(Move.NAVIGATE_INFOS);
-            }
+            p.add(Move.NAVIGATE_INFOS);
             setPermissions(p);
         }//else keep same permissions
     }
@@ -423,17 +427,6 @@ public abstract class View implements Observer {
         }
         @SuppressWarnings("unchecked")
         List<Dice> mDraftPoolDices = (List<Dice>) o;
-
-        try {
-            o = m.getParam("basicPermissions");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        EnumSet<Move> mBasicPermissions = (EnumSet<Move>) o;
-
-        this.basicPermissions = mBasicPermissions;
-        setPermissions(this.basicPermissions);
 
         //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
         setDrawnToolCards(mDrawnToolCards);
