@@ -40,7 +40,14 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
         this.recipient.receiveMessage(message,this.proxySender);
     }
 
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException{
-        this.client.receiveMessage(message,sender);
+    public void receiveMessage(Message message, ReceiverInterface sender){
+        //IL THREAD VIENE CREATO PER DISACCOPPIARE LA CHIAMATA REMOTA DA QUELLA EFFETTIVA
+        new Thread(()->{
+            try {
+                this.client.receiveMessage(message,sender);
+            } catch (RemoteException e) {
+                //can't happen because client is not remote
+            }
+        }).start();
     }
 }

@@ -215,7 +215,7 @@ public class Controller extends Observable {
                     String playerID = message.getSendingPlayerID();
                     WindowPattern wp = null;
                     try {
-                        wp = (WindowPattern) message.getParam("windowPattern");
+                        wp = (WindowPattern) message.getParam("windowpattern");
                     } catch (NoSuchParamInMessageException e) {
                         return errorMessage("Bad Formatted");
                     }
