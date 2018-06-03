@@ -7,11 +7,13 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
@@ -50,59 +52,111 @@
             <Pane prefHeight="111.0" prefWidth="192.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="Welcome to Sagrada." wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <HBox fx:id="dynamicChoicesPane" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <GridPane fx:id="cardsCarouselGridPane" alignment="CENTER" style="-fx-background-color: green;" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <GridPane fx:id="cardsCarouselGridPane" alignment="CENTER" style="-fx-background-image: &quot;;" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
                   <ColumnConstraints />
                   <ColumnConstraints />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" percentHeight="20.0" valignment="CENTER" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" percentHeight="10.0" valignment="CENTER" vgrow="ALWAYS" />
                 <RowConstraints minHeight="10.0" percentHeight="80.0" valignment="CENTER" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" percentHeight="20.0" valignment="CENTER" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" percentHeight="10.0" valignment="CENTER" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
                   <GridPane fx:id="cardCaouselCardsButtonsPane" GridPane.columnSpan="3">
                      <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="33.3" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" percentWidth="33.3" />
                         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="33.4" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="33.3" />
+                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" percentWidth="33.3" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="toolcardsButton" mnemonicParsing="false" text="Toolcards" textAlignment="CENTER">
+                        <Button fx:id="cardCarouselToolcardsButton" mnemonicParsing="false" onAction="#handleCardCarouselToolCardsButtonPressed" text="Toolcards" textAlignment="CENTER">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
+                        <Button fx:id="cardCarouselPublicsButton" mnemonicParsing="false" onAction="#handleCardCarouselPublicsButtonPressed" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
+                        <Button fx:id="cardCarouselPrivateButton" mnemonicParsing="false" onAction="#handleCardCarouselPrivateButtonPressed" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="14.0" />
                            </font>
                         </Button>
                      </children>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </GridPane.margin>
                   </GridPane>
                   <GridPane GridPane.columnSpan="3" GridPane.rowIndex="2">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="ALWAYS" percentWidth="33.3" />
-                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="33.4" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="33.3" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" percentWidth="40.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="20.0" />
+                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" percentWidth="40.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="cardsCarouselLeft" mnemonicParsing="false" text="SX" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                        <Button fx:id="cardsCarouselRight" mnemonicParsing="false" text="DX" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" text="FavorTokens" GridPane.columnIndex="1" />
+                        <HBox fx:id="cardsCarouselPreviousHBox" alignment="CENTER_RIGHT" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </GridPane.margin>
+                           <children>
+                              <Pane fx:id="cardsCarouselPreviousPane">
+                                 <children>
+                                    <ImageView fx:id="cardsCarouselPreviousImageView" fitHeight="35.0" fitWidth="64.0" nodeOrientation="INHERIT" onMouseClicked="#handleCardCarouselPrevious" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="cardsCarouselNextHBox" alignment="CENTER_LEFT" GridPane.columnIndex="2">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </GridPane.margin>
+                           <children>
+                              <Pane fx:id="cardsCarouselNextPane">
+                                 <children>
+                                    <ImageView fx:id="cardsCarouselNextImageView" fitHeight="35.0" fitWidth="64.0" nodeOrientation="INHERIT" onMouseClicked="#handleCardCarouselNext" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <StackPane fx:id="cardsCarouselFavorTokensStackPane" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Pane>
+                                       <children>
+                                          <ImageView fx:id="cardsCarouselFavorTokensImageView" fitHeight="28.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                    </Pane>
+                                 </children>
+                              </HBox>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                 <center>
+                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </StackPane>
                      </children>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin>
                   </GridPane>
                   <HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <children>
@@ -115,6 +169,9 @@
                               </ImageView>
                            </children></Pane>
                      </children>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </GridPane.margin>
                   </HBox>
                </children>
                <GridPane.margin>

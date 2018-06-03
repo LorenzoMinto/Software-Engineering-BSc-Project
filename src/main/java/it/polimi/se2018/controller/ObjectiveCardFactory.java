@@ -23,6 +23,9 @@ public class ObjectiveCardFactory {
      */
     private static ObjectiveCardFactory instance = null;
 
+    private static final String privateObjectiveCardsPath = "src/main/resources/images/PrivateObjectiveCards/";
+    private static final String publicObjectiveCardsPath = "src/main/resources/images/PublicObjectiveCards/";
+
     /**
      * Private Costructor in order to prevent from multiple instantiation of the class
      */
@@ -50,7 +53,7 @@ public class ObjectiveCardFactory {
 
         String title = "Shades of " + color.toString()+ " - Private";
         String description = "Sum of values on " + color.toString() + " dice";
-        String imageURL = "assets/"+color+"privateobjectivecard.jpg";
+        String imageURL = privateObjectiveCardsPath+color+"Private.jpg";
 
         return new PrivateObjectiveCard(title, description, imageURL, color);
 
@@ -119,7 +122,7 @@ public class ObjectiveCardFactory {
         return new SetPublicObjectiveCard(
                 "Color Variety",
                 "Sets of one of each color anywhere",
-                null,
+                publicObjectiveCardsPath + "ColorVariety.jpg",
                 new HashSet<>(Arrays.asList(DiceColor.values())),
                 Dice::getColor,
                 4
@@ -147,15 +150,15 @@ public class ObjectiveCardFactory {
                 if(values.contains(Integer.valueOf(1)) && values.contains(Integer.valueOf(2))){
                     title = "Light Shades";
                     description = "Sets of 1 & 2 values anywhere";
-                    imageURL = null;
+                    imageURL = publicObjectiveCardsPath + "LightShades.jpg";
                 }else if(values.contains(Integer.valueOf(3)) && values.contains(Integer.valueOf(4))){
                     title = "Medium Shades";
                     description = "Sets of 3 & 4 values anywhere";
-                    imageURL = null;
+                    imageURL = publicObjectiveCardsPath + "MediumShades.jpg";
                 }else if(values.contains(Integer.valueOf(5)) && values.contains(Integer.valueOf(6))){
                     title = "Deep Shades";
                     description = "Sets of 5 & 6 values anywhere";
-                    imageURL = null;
+                    imageURL = publicObjectiveCardsPath + "DeepShades.jpg";
                 }else{
                     throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
                             "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
@@ -166,7 +169,7 @@ public class ObjectiveCardFactory {
                 title = "Shade Variety";
                 description = "Sets of one of each value anywhere";
                 multiplier = 5;
-                imageURL = null;
+                imageURL = publicObjectiveCardsPath + "ShadeVariety.jpg";
                 break;
             default:
                 throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
@@ -184,7 +187,7 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createDiagonalsColorPublicObjectiveCard(){
         String title = "Color Diagonals";
         String description = "Count of diagonally adjacent same color dice";
-        String imageURL = null;
+        String imageURL = publicObjectiveCardsPath + "ColorDiagonals.jpg";
 
         return new DiagonalsPublicObjectiveCard(title, description, imageURL, Dice::getColor);
     }
@@ -196,7 +199,7 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createRowsColorPublicObjectiveCard() {
         String title = "Row Color Variety";
         String description = "Rows with no repeated colors";
-        String imageURL = null;
+        String imageURL = publicObjectiveCardsPath + "RowColorVariety.jpg";
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
                 Dice::getColor, 6, true);
     }
@@ -208,7 +211,7 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createColumnsColorPublicObjectiveCard() {
         String title = "Column Color Variety";
         String description = "Columns with no repeated colors";
-        String imageURL = null;
+        String imageURL = publicObjectiveCardsPath + "ColumnColorVariety.jpg";
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
                 Dice::getColor, 5, false);
     }
@@ -220,7 +223,7 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createRowsValuePublicObjectiveCard() {
         String title = "Row Shade Variety";
         String description = "Rows with no repeated values";
-        String imageURL = null;
+        String imageURL = publicObjectiveCardsPath + "RowShadeVariety.jpg";
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
                 Dice::getValue, 5, true);
     }
@@ -232,7 +235,7 @@ public class ObjectiveCardFactory {
     private PublicObjectiveCard createColumnsValuePublicObjectiveCard() {
         String title = "Column Shade Variety";
         String description = "Columns with no repeated values";
-        String imageURL = null;
+        String imageURL = publicObjectiveCardsPath + "ColumnShadeVariety.jpg";
         return new RowsColumnsPublicObjectiveCard(title, description, imageURL,
                 Dice::getValue, 4, false);
     }
