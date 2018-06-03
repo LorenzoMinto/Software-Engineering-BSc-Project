@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
@@ -526,6 +527,13 @@ public abstract class View implements Observer {
 
     public Set<Move> getPermissions() {
         return permissions;
+    }
+
+
+    public PrivateObjectiveCard getPrivateObjectiveCard() {
+        //TODO: change this temporary implementation
+        ObjectiveCardManager manager = new ObjectiveCardManager();
+        return manager.getPrivateObjectiveCard();
     }
 
     public void setPlayer(String playerID) {

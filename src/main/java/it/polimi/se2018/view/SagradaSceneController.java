@@ -1,47 +1,152 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.ObjectiveCardManager;
+import it.polimi.se2018.controller.ToolCardManager;
+import it.polimi.se2018.model.EmptyPlacementRule;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.Client;
-import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 
 import java.io.File;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class SagradaSceneController extends View implements Initializable {
     private Client client;
+    private List<Image> cards = new ArrayList<>();
+    private static final int numberOfToolCards = 3;
+    private static final int numberOfPublicObjectiveCards = 3;
+    private int cardCarouselCurrentIndex;
+
+    private ToolCardManager toolCardManager = new ToolCardManager(new EmptyPlacementRule());
+    private ObjectiveCardManager objectiveCardManager = new ObjectiveCardManager();
 
     @FXML private TextArea playerTerminal;
     @FXML private HBox dynamicChoicesPane;
-    @FXML private Pane cardsCarouselCardHBox;
+    @FXML private HBox cardsCarouselCardHBox;
     @FXML private ImageView cardsCarouselCardImageView;
+    @FXML private StackPane cardsCarouselFavorTokensStackPane;
 
-    File file = new File("src/main/resources/images/toolcard1.png");
-    Image toolcard = new Image(file.toURI().toString());
+    @FXML private ImageView cardsCarouselFavorTokensImageView;
+    @FXML private Label cardsCarouselFavorTokensValue;
+
+    @FXML private HBox cardsCarouselPreviousHBox;
+    @FXML private ImageView cardsCarouselPreviousImageView;
+
+    @FXML private HBox cardsCarouselNextHBox;
+    @FXML private ImageView cardsCarouselNextImageView;
+    @FXML private GridPane cardsCarouselGridPane;
+
+
+// DO NOT DELETE THIS COMMENT
+//
+// File file = new File("src/main/resources/images/toolcard1.png");
+// Image toolcard = new Image(file.toURI().toString());
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cardsCarouselCardImageView.setImage(toolcard);
-        cardsCarouselCardImageView.setPreserveRatio(true);
-        cardsCarouselCardImageView.fitWidthProperty().bind(cardsCarouselCardHBox.widthProperty());
-        cardsCarouselCardImageView.fitHeightProperty().bind(cardsCarouselCardHBox.heightProperty());
+
+        setDrawnToolCards(toolCardManager.getRandomToolCards(3));
+        setDrawnPublicObjectiveCards(objectiveCardManager.getPublicObjectiveCards(3));
+
+        //getting the cards images
+            drawnToolCards.forEach(card
+                    -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+        drawnPublicObjectiveCards.forEach(card
+                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+        cards.add(new Image((new File(getPrivateObjectiveCard().getImageURL())).toURI().toString()));
+
+        cardCarouselCurrentIndex = 0;
+        updateCardCarousel();
+
+        //setting favor tokens image and next and previous buttons
+        setImageWithHeightAndWidth(cardsCarouselFavorTokensImageView,
+                new Image((new File("src/main/resources/images/FavorToken.jpg")).toURI().toString()),
+                cardsCarouselFavorTokensStackPane);
+
+        setImageWithHeightAndWidth(cardsCarouselPreviousImageView,
+                new Image((new File("src/main/resources/images/Previous.jpg")).toURI().toString()),
+                cardsCarouselPreviousHBox);
+
+        setImageWithHeightAndWidth(cardsCarouselNextImageView,
+                new Image((new File("src/main/resources/images/Next.jpg")).toURI().toString()),
+                cardsCarouselNextHBox);
+
+
+        //setting a nice background
+        Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
+        cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
     }
 
-    @Override
+    @FXML
+    public void handleCardCarouselNext(){
+        if(cardCarouselCurrentIndex == cards.size()-1){
+            cardCarouselCurrentIndex = 0;
+        }else {
+            cardCarouselCurrentIndex ++;
+        }
+        updateCardCarousel();
+    }
+
+    @FXML
+    public void handleCardCarouselPrevious(){
+        if(cardCarouselCurrentIndex == 0){
+            cardCarouselCurrentIndex = cards.size()-1;
+        }else {
+            cardCarouselCurrentIndex --;
+        }
+        updateCardCarousel();
+    }
+
+    private void updateCardCarousel() {
+        setImageWithHeightAndWidth(
+                cardsCarouselCardImageView,
+                cards.get(cardCarouselCurrentIndex),
+                cardsCarouselCardHBox);
+
+        if(cardCarouselCurrentIndex<numberOfToolCards) {
+            cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getUsedTokens()));
+        }else{
+            cardsCarouselFavorTokensValue.setText("");
+        }
+    }
+
+    private void setImageWithHeightAndWidth(ImageView imageView, Image image, Pane pane) {
+        imageView.setImage(image);
+        imageView.setPreserveRatio(true);
+        imageView.fitWidthProperty().bind(pane.widthProperty());
+        imageView.fitHeightProperty().bind(pane.heightProperty());
+    }
+
+    public void handleCardCarouselToolCardsButtonPressed(){
+        cardCarouselCurrentIndex = 0;
+        updateCardCarousel();
+    }
+
+    public void handleCardCarouselPublicsButtonPressed(){
+        cardCarouselCurrentIndex = numberOfToolCards;
+        updateCardCarousel();
+    }
+
+    public void handleCardCarouselPrivateButtonPressed(){
+        cardCarouselCurrentIndex = numberOfToolCards + numberOfPublicObjectiveCards;
+        updateCardCarousel();
+    }
+
+
+    /*@Override
     void askForMove() {
         new Thread(new Runnable() {
             @Override public void run() {
@@ -64,7 +169,7 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             }
         }).start();
-    }
+    }*/
 
     private void checkID(Button button){
         //TODO: Button action handling here -> will correspond to the start of a move.
