@@ -119,8 +119,6 @@ public class ViewGUI extends Application {
                 }
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
-                sagradaSceneController.printOnConsole("All good, welcome "+ userTextField.getText()+".");
-                sagradaSceneController.printOnConsole(rmiBox.isSelected() ? "RMI" : "Socket" + " selected.");
             }
         });
         HBox hbBtn = new HBox(10);
