@@ -41,8 +41,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCardImageView.fitHeightProperty().bind(cardsCarouselCardHBox.heightProperty());
     }
 
-    @Override
-    void askForMove() {
+    void askForMove() { //TODO: controllare questo metodo
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {

@@ -520,11 +520,15 @@ public class CLIView extends View {
     }
 
     private String readFromConsole() throws InterruptedCLIException {
+        System.out.println(Thread.currentThread().getName()+" chiede di leggere da console");
+
         String text = scanner.nextLine();
-        System.out.println("leggo: "+text+" in "+Thread.currentThread().getName());
+
         if(Thread.currentThread().isInterrupted()){
+            System.out.println("Dovevo leggere "+text+" ma il mio thread ("+Thread.currentThread().getName()+") è interrotto.");
             throw new InterruptedCLIException();
         } else {
+            System.out.println("leggo: "+text+" in "+Thread.currentThread().getName());
             return text;
         }
     }
