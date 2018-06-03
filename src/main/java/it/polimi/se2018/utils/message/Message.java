@@ -31,7 +31,7 @@ public abstract class Message implements Serializable{
      * The player to send the message (null if broadcasting) or the player sending the message
      * Depending on type of message (ControllerBound or ViewBound)
      */
-    private final String playerID;
+    private String playerID;
 
     /**
      * If the message is the reply to a move, it contains the new permissions set for the player recipient of this message
@@ -110,6 +110,12 @@ public abstract class Message implements Serializable{
 
     void setParams(HashMap<String, Object> params) {
         this.params = params;
+    }
+
+    public void setPlayerID(String playerID){
+        if(this.playerID==null){
+            this.playerID = playerID;
+        }
     }
 
     /**

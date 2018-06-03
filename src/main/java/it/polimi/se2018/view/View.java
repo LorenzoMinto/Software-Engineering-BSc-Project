@@ -86,9 +86,13 @@ public abstract class View implements Observer {
 
     abstract void notifyHandlingOfMessageEnded();
 
+    abstract void notifyHandlingOfMessageStarted();
+
     private void receiveMessage(Message m) {
 
         Message message = null;
+
+        notifyHandlingOfMessageStarted();
 
         if(state==ViewState.INACTIVE){
             if(m.getType()==CVMessage.types.BACK_TO_GAME){
@@ -345,6 +349,7 @@ public abstract class View implements Observer {
     }
 
     void sendMessage(Message m){
+        System.out.println("Sending message "+m);
         try {
             this.client.sendMessage(m);
         } catch (RemoteException e) {

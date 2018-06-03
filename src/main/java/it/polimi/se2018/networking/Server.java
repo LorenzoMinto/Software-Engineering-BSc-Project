@@ -240,9 +240,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         } else if(message instanceof VCMessage) {
 
             //Add the Player reference to the message in order to let controller manage the move correctly
-            VCMessage vcMessage = new VCMessage((VCMessage.types)message.getType(), message.getAllParams(), gatewayToPlayerIDMap.get(sender));
+            message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
             //Send message to controller
-            returnMessage = controller.handleMove(vcMessage);
+            returnMessage = controller.handleMove((VCMessage) message);
 
         } else {
             return;

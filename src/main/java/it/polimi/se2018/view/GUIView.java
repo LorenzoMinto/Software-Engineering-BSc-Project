@@ -89,6 +89,11 @@ public class GUIView extends View {
     }
 
     @Override
+    void notifyHandlingOfMessageStarted() {
+
+    }
+
+    @Override
     void showMessage(String message) {
 
     }

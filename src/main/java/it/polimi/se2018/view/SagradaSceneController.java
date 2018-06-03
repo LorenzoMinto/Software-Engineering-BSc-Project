@@ -254,6 +254,11 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
+    void notifyHandlingOfMessageStarted() {
+
+    }
+
+    @Override
     void showMessage(String message) {
         printOnConsole(message);
     }
