@@ -22,11 +22,7 @@ public abstract class View implements Observer {
 
     final Logger logger;
 
-    Move currentMove;
-
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
-
-    private EnumSet<Move> basicPermissions = EnumSet.of(Move.NAVIGATE_INFOS);
 
     private ViewState state = ViewState.ACTIVE;
 
@@ -58,6 +54,8 @@ public abstract class View implements Observer {
         }
     }
 
+    abstract void handleLeaveWaitingRoomMove();
+
     abstract Message handleEndTurnMove();
 
     abstract Message handleDraftDiceFromDraftPoolMove();
@@ -78,11 +76,11 @@ public abstract class View implements Observer {
 
     abstract Message handleJoinGameMove();
 
-    abstract Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings);
 
-    abstract Message handleGiveWindowPatterns(List<WindowPattern> patterns);
 
-    abstract Message handleAddedWL();
+    abstract void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings);
+
+    abstract void handleGiveWindowPatternsEvent(List<WindowPattern> patterns);
 
     abstract void notifyHandlingOfMessageEnded();
 
@@ -100,19 +98,13 @@ public abstract class View implements Observer {
                 showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
             }
         } else {
-            message = handleMessage(m);
-        }
-
-        if(message!=null){
-            sendMessage(message);
+            handleMessage(m);
         }
 
         notifyHandlingOfMessageEnded();
     }
 
-    private Message handleMessage(Message m){
-
-        Message message;
+    private void handleMessage(Message m){
 
         if(state==ViewState.INACTIVE){
 
@@ -122,27 +114,23 @@ public abstract class View implements Observer {
                 showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
             }
 
-            return null;
-
         } else {
 
             updatePermissions(m);
 
             if(m instanceof CVMessage){
-                message = handleCVMessages(m);
+                handleCVMessages(m);
 
             } else if(m instanceof MVMessage){
-                message = handleMVMessages(m);
+                handleMVMessages(m);
 
             } else if(m instanceof WaitingRoomMessage){
-                message = handleWLMessages(m);
+                handleWLMessages(m);
 
             } else {
                 //should never enter here
                 throw new BadBehaviourRuntimeException();
             }
-
-            return message;
 
         }
 
@@ -151,13 +139,11 @@ public abstract class View implements Observer {
     private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
-            p.add(Move.NAVIGATE_INFOS);
             setPermissions(p);
         }//else keep same permissions
     }
 
-    private Message handleCVMessages(Message m){
-        Message message = null;
+    private void handleCVMessages(Message m){
         Object o;
 
         switch ((CVMessage.types) m.getType()) {
@@ -196,12 +182,12 @@ public abstract class View implements Observer {
                 try {
                     o = m.getParam("patterns");
                 } catch (NoSuchParamInMessageException e) {
-                    return null;
+                    break;
                 }
                 @SuppressWarnings("unchecked")
                 List<WindowPattern> patterns = (List<WindowPattern>) o;
                 showMessage("Ricevuti windowpattern da scegliere");
-                message = handleGiveWindowPatterns(patterns);
+                handleGiveWindowPatternsEvent(patterns);
                 break;
             case GAME_ENDED:
                 try {
@@ -211,18 +197,15 @@ public abstract class View implements Observer {
                 }
                 @SuppressWarnings("unchecked")
                 LinkedHashMap<String, Integer> rankings = (LinkedHashMap<String, Integer>) o;
-                message = handleGameEndedMove(rankings);
+                handleGameEndedEvent(rankings);
                 break;
             default:
                 //if cases are updated with CVMessage.types, should never enter here
                 throw new BadBehaviourRuntimeException();
         }
-
-        return message;
     }
 
-    private Message handleMVMessages(Message m){
-        Message message = null;
+    private void handleMVMessages(Message m){
         Object o;
         switch ((MVMessage.types) m.getType()) {
             case SETUP:
@@ -249,7 +232,7 @@ public abstract class View implements Observer {
                 }
                 break;
             case USED_TOOLCARD:
-                handleUsedToolCard(m);
+                handleUsedToolCardEvent(m);
                 break;
             case RANKINGS:
                 try {
@@ -290,12 +273,9 @@ public abstract class View implements Observer {
                 //if cases are updated with MVMessage.types, should never enter here
                 throw new BadBehaviourRuntimeException();
         }
-
-        return message;
     }
 
-    private Message handleWLMessages(Message m){
-        Message message = null;
+    private void handleWLMessages(Message m){
 
         switch ((WaitingRoomMessage.types) m.getType()) {
             case BAD_FORMATTED: //just for debug
@@ -312,20 +292,24 @@ public abstract class View implements Observer {
             case JOIN: //can't happen. is a message sent from the user
                 break;
             case ADDED:
-                message = handleAddedWL();
+                showMessage("You have joined the waiting room");
+                handleAddedEvent();
                 break;
             case LEAVE: //can't happen. is a message sent from the user
                 break;
             case REMOVED:
                 showMessage("Sei stato correttamente rimosso dal gioco");
+                handleRemovedEvent();
                 break;
             default:
                 //if cases are updated with WaitingRoomMessage.types, should never enter here
                 throw new BadBehaviourRuntimeException();
         }
-
-        return message;
     }
+
+    abstract void handleAddedEvent();
+
+    abstract void handleRemovedEvent();
 
     abstract void showMessage(String message);
 
@@ -342,7 +326,7 @@ public abstract class View implements Observer {
         if(state==ViewState.INACTIVE){
             setPermissions(EnumSet.of(Move.BACK_GAME));
         } else {
-            setPermissions(this.basicPermissions);
+            setPermissions(EnumSet.noneOf(Move.class));
         }
 
         this.state = state;
@@ -361,7 +345,7 @@ public abstract class View implements Observer {
 
     //UTILS
 
-    private void handleUsedToolCard(Message m){
+    private void handleUsedToolCardEvent(Message m){
         Object o;
         try {
             o = m.getParam("toolcard");
@@ -545,13 +529,12 @@ public abstract class View implements Observer {
         this.playerID = playerID;
     }
 
-    void setCurrentMove(Move currentMove) {
-        this.currentMove = currentMove;
-    }
-
     public void setPermissions(Set<Move> permissions) {
         this.permissions = (EnumSet<Move>)permissions;
+        notifyPermissionsChanged();
     }
+
+    abstract void notifyPermissionsChanged();
 
     public void setDrawnToolCards(List<ToolCard> drawnToolCards) {
         this.drawnToolCards = drawnToolCards;

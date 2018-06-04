@@ -12,6 +12,5 @@ public enum Move {
     MOVE_DICE,
     JOIN_GAME,
     BACK_GAME,
-    LEAVE,
-    NAVIGATE_INFOS //just for CLI
+    LEAVE
 }

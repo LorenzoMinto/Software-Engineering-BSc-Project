@@ -183,6 +183,11 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
+    void handleLeaveWaitingRoomMove() {
+
+    }
+
+    @Override
     Message handleEndTurnMove() {
         return null;
     }
@@ -233,19 +238,13 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings) {
-        return null;
+    void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
+        return;
     }
 
     @Override
-    Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
-        return null;
-    }
-
-    @Override
-    Message handleAddedWL() {
-        printOnConsole("You have joined the waiting room!");
-        return null;
+    void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
+        return;
     }
 
     @Override
@@ -255,6 +254,16 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyHandlingOfMessageStarted() {
+
+    }
+
+    @Override
+    void handleAddedEvent() {
+
+    }
+
+    @Override
+    void handleRemovedEvent() {
 
     }
 
@@ -280,6 +289,11 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameStarted() {
+
+    }
+
+    @Override
+    void notifyPermissionsChanged() {
 
     }
 
