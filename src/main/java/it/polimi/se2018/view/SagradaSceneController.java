@@ -242,6 +242,9 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
+        for (WindowPattern p: patterns) {
+            printOnConsole(p.toString());
+        }
         return null;
     }
 
