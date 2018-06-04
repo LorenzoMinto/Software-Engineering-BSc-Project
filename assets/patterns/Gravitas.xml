@@ -2,6 +2,7 @@
 <pattern>
    <title>Gravitas</title>
    <partnerID>FractalDrops</partnerID>
+   <imageURL>src/main/resources/images/WindowPatterns/Gravitas.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>5</difficulty>

@@ -48,7 +48,7 @@ public class MoveControllerStateTest {
         }
         redDice = new Dice(DiceColor.RED);
         pattern[r0][c0].setDice(redDice);
-        WindowPattern wp = new WindowPattern("id", "title", 5, pattern);
+        WindowPattern wp = new WindowPattern("id", "title","", 5, pattern);
 
         controller.launchGame(nicknames);
 

@@ -29,6 +29,11 @@ public class WindowPattern extends Observable implements Serializable{
     private String title;
 
     /**
+     * URL of the specific WindowPattern
+     */
+    private String imageURL;
+
+    /**
      * Difficulty of the pattern
      */
     private int difficulty;
@@ -54,11 +59,12 @@ public class WindowPattern extends Observable implements Serializable{
      * @param difficulty the difficulty of the pattern
      * @param pattern the pattern structured as array of cells with already set constraints
      */
-    public WindowPattern(String id, String title, int difficulty, Cell[][] pattern) {
+    public WindowPattern(String id, String title, String imageURL ,int difficulty, Cell[][] pattern) {
         if(pattern==null) throw new IllegalArgumentException("Can't create a window pattern with null pattern.");
 
         this.id = id;
         this.title = title;
+        this.imageURL = imageURL;
         this.difficulty = difficulty;
         this.pattern = pattern;
         this.isEmpty = true;
@@ -113,6 +119,15 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * Returns the URL of the pattern
+     *
+     * @return the URL of the pattern
+     */
+    public String getImageURL() {
+        return imageURL;
     }
 
 
@@ -219,7 +234,7 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public WindowPattern copy(){
 
-        return new WindowPattern(this.id,this.title,this.difficulty,this.getPattern());
+        return new WindowPattern(this.id,this.title,this.imageURL,this.difficulty,this.getPattern());
     }
 
     /**

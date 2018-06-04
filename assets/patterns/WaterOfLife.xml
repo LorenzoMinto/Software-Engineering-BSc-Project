@@ -2,6 +2,7 @@
 <pattern>
    <title>Water of Life</title>
    <partnerID>RipplesOfLight</partnerID>
+   <imageURL>src/main/resources/images/WindowPatterns/WaterOfLife.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>6</difficulty>

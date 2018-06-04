@@ -123,6 +123,8 @@ public class WindowPatternManager {
             //Parse from xml the number of rows of the pattern
             int rows = Integer.parseInt( document.getElementsByTagName("rows").item(0).getTextContent() );
 
+            String imageURL = document.getElementsByTagName("imageURL").item(0).getTextContent();
+
             //Parse from xml the number of columns of the pattern
             int cols = Integer.parseInt( document.getElementsByTagName("cols").item(0).getTextContent() );
 
@@ -155,7 +157,7 @@ public class WindowPatternManager {
                 pattern[row][col] = new Cell(value,color);
             }
 
-            return new WindowPattern(patternID,title,difficulty,pattern);
+            return new WindowPattern(patternID,title,imageURL,difficulty,pattern);
 
         } catch (Exception e) {
             //Bad formatting of xml is caught and method returns false

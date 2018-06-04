@@ -2,6 +2,7 @@
 <pattern>
     <title>Via Lux</title>
     <partnerID>AuroraeMagnificus</partnerID>
+    <imageURL>src/main/resources/images/WindowPatterns/ViaLux.jpg</imageURL>
     <rows>4</rows>
     <cols>5</cols>
     <difficulty>4</difficulty>

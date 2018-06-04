@@ -2,6 +2,7 @@
 <pattern>
    <title>Fulgor del Cielo</title>
    <partnerID>SunsGlory</partnerID>
+   <imageURL>src/main/resources/images/WindowPatterns/FulgorDelCielo.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>5</difficulty>

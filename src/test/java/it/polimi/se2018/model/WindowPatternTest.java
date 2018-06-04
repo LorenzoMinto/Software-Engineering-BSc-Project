@@ -44,7 +44,7 @@ public class WindowPatternTest {
      */
     @Before
     public void initializeWindowPattern(){
-        windowPattern = new WindowPattern("id","title", 1, pattern);
+        windowPattern = new WindowPattern("id","title", "",1, pattern);
     }
 
 
@@ -53,7 +53,7 @@ public class WindowPatternTest {
      */
     @Test
     public void testConstructor(){
-        windowPattern = new WindowPattern("id","title", 1, pattern);
+        windowPattern = new WindowPattern("id","title", "",1, pattern);
         assertNotNull(windowPattern);
     }
 
@@ -63,7 +63,7 @@ public class WindowPatternTest {
     @Test
     public void testConstructorNullPattern(){
         try {
-            windowPattern = new WindowPattern("id","title", 1, null);
+            windowPattern = new WindowPattern("id","title", "",1, null);
             fail();
         }catch (IllegalArgumentException e){}
     }
@@ -73,7 +73,7 @@ public class WindowPatternTest {
      */
     @Test
     public void testGetTitle(){
-        windowPattern = new WindowPattern("id","title", 1, pattern);
+        windowPattern = new WindowPattern("id","title", "",1, pattern);
         assertEquals("title", windowPattern.getTitle());
     }
 
@@ -82,7 +82,7 @@ public class WindowPatternTest {
      */
     @Test
     public void testGetID(){
-        windowPattern = new WindowPattern("id","title", 1, pattern);
+        windowPattern = new WindowPattern("id","title", "",1, pattern);
         assertEquals("id", windowPattern.getID());
     }
 
@@ -239,7 +239,7 @@ public class WindowPatternTest {
             }
         }
 
-        windowPattern = new WindowPattern("id","title", 5, smallPattern);
+        windowPattern = new WindowPattern("id","title", "",5, smallPattern);
 
         String windowPatternToString = windowPattern.toString();
         String br = System.lineSeparator();

@@ -36,7 +36,7 @@ public class AdjacentValuePlacementRuleDecoratorTest {
         rule = new AdjacentValuePlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentValuePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
-        windowPattern = new WindowPattern("", "",0, pattern);
+        windowPattern = new WindowPattern("", "","",0, pattern);
         threeDice = new Dice(DiceColor.BLUE, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);

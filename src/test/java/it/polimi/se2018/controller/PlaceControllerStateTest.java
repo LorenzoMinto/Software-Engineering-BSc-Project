@@ -43,7 +43,7 @@ public class PlaceControllerStateTest {
                 pattern[i][j] = new Cell();
             }
         }
-        WindowPattern wp = new WindowPattern("id", "title", 5, pattern);
+        WindowPattern wp = new WindowPattern("id", "title", "",5, pattern);
 
         controller.launchGame(nicknames);
 

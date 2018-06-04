@@ -2,6 +2,7 @@
 <pattern>
    <title>Firelight</title>
    <partnerID>LuzCelestial</partnerID>
+   <imageURL>src/main/resources/images/WindowPatterns/Firelight.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>5</difficulty>
