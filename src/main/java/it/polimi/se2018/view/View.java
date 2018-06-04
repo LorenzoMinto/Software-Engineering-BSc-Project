@@ -136,7 +136,11 @@ public abstract class View implements Observer {
 
     }
 
-    private void updatePermissions(Message m){
+    /**
+    Should be overridable and extensible, CLI and View have different implementations of this, NAVIGATE INFOS should NOT
+    be added at this level, its pertaining only to the CLI part.
+    **/
+    protected void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
             setPermissions(p);

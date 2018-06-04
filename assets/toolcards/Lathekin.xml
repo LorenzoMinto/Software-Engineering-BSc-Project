@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Lathekin</title>
-    <imageURL></imageURL>
+    <imageURL>src/main/resources/images/ToolCards/Lathekin.jpg</imageURL>
     <description>Move exactly two dice, obeying all placement restrictions.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>

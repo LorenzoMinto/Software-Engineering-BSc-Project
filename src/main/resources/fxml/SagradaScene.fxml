@@ -4,6 +4,7 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,6 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
@@ -34,23 +36,12 @@
             <RowConstraints minHeight="10.0" percentHeight="22.0" prefHeight="80.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <HBox alignment="CENTER" prefHeight="178.0" prefWidth="542.0" style="-fx-background-color: red;" GridPane.columnSpan="6" GridPane.rowSpan="2">
-               <children>
-                  <Label text="PLAYER'S WINDOWPATTERNS" />
-               </children>
-            </HBox>
+            <HBox alignment="CENTER" prefHeight="178.0" prefWidth="542.0" style="-fx-background-color: red;" GridPane.columnSpan="6" GridPane.rowSpan="2" />
             <Pane prefHeight="139.0" prefWidth="96.0" style="-fx-background-color: blue;" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
                <children>
                   <Label layoutX="19.0" layoutY="14.0" text="History" />
                </children>
             </Pane>
-            <Pane prefHeight="199.0" prefWidth="106.0" style="-fx-background-color: yellow;" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
-               <children>
-                  <Label layoutX="33.0" layoutY="14.0" text="Static" />
-               </children>
-            </Pane>
-            <Pane prefHeight="111.0" prefWidth="192.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="Welcome to Sagrada." wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <HBox fx:id="dynamicChoicesPane" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
             <GridPane fx:id="cardsCarouselGridPane" alignment="CENTER" style="-fx-background-image: &quot;;" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
               <columnConstraints>
@@ -178,6 +169,18 @@
                   <Insets />
                </GridPane.margin>
             </GridPane>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
+               <children>
+                  <Button mnemonicParsing="false" text="DRAFTPOOL" />
+                  <Button mnemonicParsing="false" text="ROUND TRACK" />
+                  <Button mnemonicParsing="false" text="EXIT" />
+               </children>
+            </VBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: black;" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <content>
+                  <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="Welcome to Sagrada." wrapText="true" />
+               </content>
+            </ScrollPane>
             
          </children>
          <padding>

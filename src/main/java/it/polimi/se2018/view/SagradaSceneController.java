@@ -5,7 +5,9 @@ import it.polimi.se2018.controller.ToolCardManager;
 import it.polimi.se2018.model.EmptyPlacementRule;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -145,9 +147,9 @@ public class SagradaSceneController extends View implements Initializable {
         updateCardCarousel();
     }
 
-
-    /*@Override
-    void askForMove() {
+    @Override
+    protected void updatePermissions(Message m) {
+        super.updatePermissions(m);
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
@@ -169,7 +171,8 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             }
         }).start();
-    }*/
+
+    }
 
     private void checkID(Button button){
         //TODO: Button action handling here -> will correspond to the start of a move.
@@ -180,11 +183,6 @@ public class SagradaSceneController extends View implements Initializable {
             default:
                 break;
         }
-    }
-
-    @Override
-    void handleLeaveWaitingRoomMove() {
-
     }
 
     @Override
@@ -238,13 +236,22 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
-        return;
+    Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings) {
+        return null;
     }
 
     @Override
-    void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
-        return;
+    Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
+        for (WindowPattern p: patterns) {
+            printOnConsole(p.toString());
+        }
+        return null;
+    }
+
+    @Override
+    Message handleAddedWL() {
+        printOnConsole("You have joined the waiting room!");
+        return null;
     }
 
     @Override
@@ -254,16 +261,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyHandlingOfMessageStarted() {
-
-    }
-
-    @Override
-    void handleAddedEvent() {
-
-    }
-
-    @Override
-    void handleRemovedEvent() {
 
     }
 
@@ -289,11 +286,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameStarted() {
-
-    }
-
-    @Override
-    void notifyPermissionsChanged() {
 
     }
 

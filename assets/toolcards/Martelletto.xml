@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Martelletto</title>
-    <imageURL></imageURL>
+    <imageURL>src/main/resources/images/ToolCards/Martelletto.jpg</imageURL>
     <description>After drafting, swap the drafted die with a die from the Round Track.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>

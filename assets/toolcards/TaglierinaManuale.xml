@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Taglierina Manuale</title>
-    <imageURL></imageURL>
+    <imageURL>src/main/resources/images/ToolCards/TaglierinaManuale.jpg</imageURL>
     <description>Muovi fino a due dadi dello stesso colore di un solo dado nel Tracciato dei Round. \n
     Devi rispettare tutte le restrizioni di piazzamento.</description>
     <neededTokens>1</neededTokens>

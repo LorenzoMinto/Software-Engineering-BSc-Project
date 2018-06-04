@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Diluente per Pasta Salda</title>
-    <imageURL></imageURL>
+    <imageURL>src/main/resources/images/ToolCards/DiluentePerPastaSalda.jpg</imageURL>
     <description>Dopo aver scelto un dado, riponilo nel Sacchetto, poi pescane uno dal Sacchetto. \n
     Scegli il valore del nuovo dado e piazzalo, rispettando tutte le restrizioni di piazzamento.</description>
     <neededTokens>1</neededTokens>
