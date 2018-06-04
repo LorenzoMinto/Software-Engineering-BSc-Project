@@ -12,5 +12,10 @@ public enum Move {
     MOVE_DICE,
     JOIN_GAME,
     BACK_GAME,
-    LEAVE
+    LEAVE;
+
+    public static String getTextualREP(){
+        //TODO: implementa
+        return null;
+    }
 }

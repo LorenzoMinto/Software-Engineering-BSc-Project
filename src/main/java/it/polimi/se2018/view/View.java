@@ -82,15 +82,7 @@ public abstract class View implements Observer {
 
     abstract void handleGiveWindowPatternsEvent(List<WindowPattern> patterns);
 
-    abstract void notifyHandlingOfMessageEnded();
-
-    abstract void notifyHandlingOfMessageStarted();
-
     private void receiveMessage(Message m) {
-
-        Message message = null;
-
-        notifyHandlingOfMessageStarted();
 
         if(state==ViewState.INACTIVE){
             if(m.getType()==CVMessage.types.BACK_TO_GAME){
@@ -100,8 +92,6 @@ public abstract class View implements Observer {
         } else {
             handleMessage(m);
         }
-
-        notifyHandlingOfMessageEnded();
     }
 
     private void handleMessage(Message m){

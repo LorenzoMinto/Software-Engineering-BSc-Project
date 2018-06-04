@@ -84,16 +84,6 @@ public class GUIView extends View {
     }
 
     @Override
-    void notifyHandlingOfMessageEnded() {
-
-    }
-
-    @Override
-    void notifyHandlingOfMessageStarted() {
-
-    }
-
-    @Override
     void handleAddedEvent() {
 
     }

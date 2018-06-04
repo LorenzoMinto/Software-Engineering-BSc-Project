@@ -23,16 +23,16 @@ public class CLIView extends View{
     }
 
     private class ConsoleMove {
-        private String description;
+        private Move move;
         private Runnable action;
 
-        private ConsoleMove(String description, Runnable action) {
-            this.description = description;
+        private ConsoleMove(Move move, Runnable action) {
+            this.move = move;
             this.action = action;
         }
 
         public String getDescription() {
-            return description;
+            return move.getTextualREP();
         }
 
         public void run(){
@@ -138,13 +138,13 @@ public class CLIView extends View{
                 consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
                 break;
             case JOIN_GAME:
-                consoleMove = new ConsoleMove("Join game",this::handleAskForNicknameMove);
+                consoleMove = new ConsoleMove(Move.JOIN_GAME,this::handleAskForNicknameMove);
                 break;
             case BACK_GAME:
                 consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
                 break;
             case LEAVE:
-                consoleMove = new ConsoleMove("Leave waiting room",this::handleLeaveWaitingRoomMove);
+                consoleMove = new ConsoleMove(Move.LEAVE,this::handleLeaveWaitingRoomMove);
                 break;
         }
         return consoleMove;
@@ -251,16 +251,6 @@ public class CLIView extends View{
 
             waitForMove(); //remember that if the consumer is the last operation to be formed, insert waitForMove().
         });
-    }
-
-    @Override
-    void notifyHandlingOfMessageEnded() {
-
-    }
-
-    @Override
-    void notifyHandlingOfMessageStarted() {
-
     }
 
     @Override
