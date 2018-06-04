@@ -65,17 +65,17 @@
                         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="cardCarouselToolcardsButton" mnemonicParsing="false" onAction="#handleCardCarouselToolCardsButtonPressed" text="Toolcards" textAlignment="CENTER">
+                        <Button fx:id="cardsCarouselToolCardsButton" mnemonicParsing="false" onAction="#handleCardCarouselToolCardsButtonPressed" text="Toolcards" textAlignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cardCarouselPublicsButton" mnemonicParsing="false" onAction="#handleCardCarouselPublicsButtonPressed" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
+                        <Button fx:id="cardsCarouselPublicsButton" mnemonicParsing="false" onAction="#handleCardCarouselPublicsButtonPressed" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cardCarouselPrivateButton" mnemonicParsing="false" onAction="#handleCardCarouselPrivateButtonPressed" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
+                        <Button fx:id="cardsCarouselPrivateButton" mnemonicParsing="false" onAction="#handleCardCarouselPrivateButtonPressed" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -132,7 +132,7 @@
                               </HBox>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>
-                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" text="0" textAlignment="CENTER" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font size="18.0" />
                                        </font>

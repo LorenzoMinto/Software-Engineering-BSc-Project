@@ -5,12 +5,14 @@ import it.polimi.se2018.controller.ToolCardManager;
 import it.polimi.se2018.model.EmptyPlacementRule;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -22,6 +24,7 @@ import javafx.scene.paint.ImagePattern;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SagradaSceneController extends View implements Initializable {
     private Client client;
@@ -35,10 +38,14 @@ public class SagradaSceneController extends View implements Initializable {
 
     @FXML private TextArea playerTerminal;
     @FXML private HBox dynamicChoicesPane;
+
+    //CARDS CAROUSEL COMPONENTS
+    private List<Node> cardsCarouselVisibleComponents = new ArrayList<>();
+
     @FXML private HBox cardsCarouselCardHBox;
     @FXML private ImageView cardsCarouselCardImageView;
-    @FXML private StackPane cardsCarouselFavorTokensStackPane;
 
+    @FXML private StackPane cardsCarouselFavorTokensStackPane;
     @FXML private ImageView cardsCarouselFavorTokensImageView;
     @FXML private Label cardsCarouselFavorTokensValue;
 
@@ -48,6 +55,10 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox cardsCarouselNextHBox;
     @FXML private ImageView cardsCarouselNextImageView;
     @FXML private GridPane cardsCarouselGridPane;
+
+    @FXML private Button cardsCarouselToolCardsButton;
+    @FXML private Button cardsCarouselPublicsButton;
+    @FXML private Button cardsCarouselPrivateButton;
 
 
 // DO NOT DELETE THIS COMMENT
@@ -59,18 +70,23 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setDrawnToolCards(toolCardManager.getRandomToolCards(3));
-        setDrawnPublicObjectiveCards(objectiveCardManager.getPublicObjectiveCards(3));
-
-        //getting the cards images
-            drawnToolCards.forEach(card
-                    -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
-        drawnPublicObjectiveCards.forEach(card
-                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
-        cards.add(new Image((new File(getPrivateObjectiveCard().getImageURL())).toURI().toString()));
+        cardsCarouselVisibleComponents.add(cardsCarouselCardImageView);
+        cardsCarouselVisibleComponents.add(cardsCarouselFavorTokensImageView);
+        cardsCarouselVisibleComponents.add(cardsCarouselNextImageView);
+        cardsCarouselVisibleComponents.add(cardsCarouselPreviousImageView);
+        cardsCarouselVisibleComponents.add(cardsCarouselToolCardsButton);
+        cardsCarouselVisibleComponents.add(cardsCarouselPublicsButton);
+        cardsCarouselVisibleComponents.add(cardsCarouselPrivateButton);
+        cardsCarouselVisibleComponents.add(cardsCarouselFavorTokensValue);
 
         cardCarouselCurrentIndex = 0;
-        updateCardCarousel();
+
+        cardsCarouselVisibleComponents.forEach(component->component.setVisible(false));
+        cardsCarouselCardImageView.setVisible(true);
+
+        Image cardsCarouselDefaultCard = (new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString()));
+
+        setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCard, cardsCarouselCardHBox);
 
         //setting favor tokens image and next and previous buttons
         setImageWithHeightAndWidth(cardsCarouselFavorTokensImageView,
@@ -281,12 +297,39 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameVariablesChanged(boolean forceClean) {
-
+        updateCards();
+        updateTrack();
+        updateDraftPool();
+        updatePlayers();
     }
+
+    private void updateCards() {
+        if(drawnToolCards.isEmpty() || drawnPublicObjectiveCards.isEmpty() || getPrivateObjectiveCard() == null){
+            throw new BadBehaviourRuntimeException("Cards shouldn't be empty");}
+        //getting the cards images
+        drawnToolCards.forEach(card
+                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+        drawnPublicObjectiveCards.forEach(card
+                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+        cards.add(new Image((new File(getPrivateObjectiveCard().getImageURL())).toURI().toString()));
+
+        updateCardCarousel();
+    }
+
+    private void updateTrack() {
+    }
+
+    private void updateDraftPool() {
+    }
+
+    private void updatePlayers() {
+    }
+
+
 
     @Override
     void notifyGameStarted() {
-
+        cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
     }
 
     public void setClient(Client c) {
