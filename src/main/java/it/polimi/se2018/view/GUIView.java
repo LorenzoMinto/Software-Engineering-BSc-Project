@@ -19,6 +19,11 @@ public class GUIView extends View {
     }
 
     @Override
+    void handleLeaveWaitingRoomMove() {
+
+    }
+
+    @Override
     Message handleEndTurnMove() {
         return null;
     }
@@ -69,27 +74,22 @@ public class GUIView extends View {
     }
 
     @Override
-    Message handleGameEndedMove(LinkedHashMap<String, Integer> rankings) {
-        return null;
-    }
-
-    @Override
-    Message handleGiveWindowPatterns(List<WindowPattern> patterns) {
-        return null;
-    }
-
-    @Override
-    Message handleAddedWL() {
-        return null;
-    }
-
-    @Override
-    void notifyHandlingOfMessageEnded() {
+    void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
 
     }
 
     @Override
-    void notifyHandlingOfMessageStarted() {
+    void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
+
+    }
+
+    @Override
+    void handleAddedEvent() {
+
+    }
+
+    @Override
+    void handleRemovedEvent() {
 
     }
 
@@ -121,5 +121,10 @@ public class GUIView extends View {
     @Override
     public boolean update(Message m) {
         return true;
+    }
+
+    @Override
+    void notifyPermissionsChanged() {
+
     }
 }

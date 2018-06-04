@@ -315,13 +315,14 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
      */
     private Message removeFromWaitingRoom(String nickname, ReceiverInterface client){
         if( waitingList.get(nickname) == client ){
+            //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
 
             if(waitingList.size() < controller.getConfigProperty("minNumberOfPlayers")){
                 cancelTimerForLaunchingGame();
             }
 
-            return new WaitingRoomMessage(WaitingRoomMessage.types.REMOVED);
+            return new WaitingRoomMessage(WaitingRoomMessage.types.REMOVED,null,null,EnumSet.of(Move.JOIN_GAME));
         } else {
             return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
         }

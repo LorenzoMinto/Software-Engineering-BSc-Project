@@ -12,6 +12,10 @@ public enum Move {
     MOVE_DICE,
     JOIN_GAME,
     BACK_GAME,
-    LEAVE,
-    NAVIGATE_INFOS //just for CLI
+    LEAVE;
+
+    public static String getTextualREP(){
+        //TODO: implementa
+        return null;
+    }
 }
