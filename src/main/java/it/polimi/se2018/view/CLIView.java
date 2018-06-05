@@ -6,6 +6,7 @@ import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
@@ -112,6 +113,12 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             }
         });
+
+        try {
+            print(this.windowPattern.toString());
+        }catch (NullPointerException e){
+            print("null");
+        }
     }
 
     private ConsoleMove convertMoveToConsoleMove(Move move){
@@ -390,7 +397,6 @@ public class CLIView extends View{
             } else {
                 print(INPUT_NOT_VALID);
             }
-
             waitForMove(); //remember that if the currentInputConsumer is the last operation to be formed, insert waitForMove().
         });
     }
@@ -409,87 +415,98 @@ public class CLIView extends View{
 
     @Override
     void handleCVAcknowledgmentEvent(Message m){
-
+        super.handleCVAcknowledgmentEvent(m);
     }
 
     @Override
     void handleInactivePlayerEvent(Message m){
-
+        super.handleInactivePlayerEvent(m);
     }
 
     @Override
     void handleBackToGameEvent(){
-
+        super.handleBackToGameEvent();
     }
 
     @Override
     void handleInactiveEvent(){
-
+        super.handleInactiveEvent();
     }
 
     @Override
     void handleCVErrorEvent(Message m){
-
+        super.handleCVErrorEvent(m);
     }
 
     @Override
     void handleSetupEvent(Message m){
-
+        super.handleSetupEvent(m);
     }
 
     @Override
     void handleNewRoundEvent(Message m){
-
+        super.handleNewRoundEvent(m);
     }
 
     @Override
     void handleNewTurnEvent(Message m){
-
+        super.handleNewTurnEvent(m);
     }
 
     @Override
     void handleRankingsEvent(Message m){
-
+        super.handleRankingsEvent(m);
     }
 
     @Override
     void handleAssignedWindowPatternEvent(Message m){
+        super.handleAssignedWindowPatternEvent(m);
 
+        Object o;
+        try {
+            o = m.getParam("windowpattern");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        WindowPattern windowPattern = (WindowPattern) o;
+        this.windowPattern = windowPattern;
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m){
-
+        super.handleChangedDraftPoolEvent(m);
     }
 
     @Override
     void handleYourTurnEvent(){
-
+        super.handleYourTurnEvent();
+        waitForMove();
     }
 
     @Override
     void handleBadFormattedEvent(){
-
+        super.handleBadFormattedEvent();
     }
 
     @Override
     void handleDeniedLimitEvent(){
-
+        super.handleDeniedLimitEvent();
     }
 
     @Override
     void handleDeniedNicknameEvent(){
-
+        super.handleDeniedNicknameEvent();
     }
 
     @Override
     void handleDeniedPlayingEvent(){
-
+        super.handleDeniedPlayingEvent();
     }
 
     @Override
     void handleUsedToolCardEvent(Message m){
-
+        super.handleUsedToolCardEvent(m);
     }
 
 
