@@ -153,7 +153,7 @@ public class DiceTest {
     @Test
     public void testToString() {
         dice.setValue(2);
-        assertEquals("2:G",dice.toString());
+        assertEquals("G2",dice.toString());
     }
 
     /**

@@ -1,10 +1,6 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.ObjectiveCardManager;
-import it.polimi.se2018.controller.ToolCardManager;
-import it.polimi.se2018.controller.WindowPatternManager;
-import it.polimi.se2018.model.EmptyPlacementRule;
-import it.polimi.se2018.model.PlacementRule;
+import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
@@ -40,7 +36,14 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox blackPane;
 
     @FXML private TextArea playerTerminal;
-    @FXML private HBox dynamicChoicesPane;
+    @FXML private FlowPane dynamicChoicesPane;
+    @FXML private FlowPane draftPoolPane;
+
+    //WINDOW PATTERNS DISPLAY
+    private List<WindowPatternPlayerView> wpViews;
+
+    @FXML private HBox windowPatternsBox;
+
 
     //CARDS CAROUSEL COMPONENTS
     private List<Node> cardsCarouselVisibleComponents = new ArrayList<>();
@@ -62,8 +65,6 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button cardsCarouselToolCardsButton;
     @FXML private Button cardsCarouselPublicsButton;
     @FXML private Button cardsCarouselPrivateButton;
-
-    Image backgroundImage;
 
 
 // DO NOT DELETE THIS COMMENT
@@ -110,9 +111,8 @@ public class SagradaSceneController extends View implements Initializable {
 
 
         //setting a nice background
-        backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
+        Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
         cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
-
     }
 
     @FXML
@@ -168,32 +168,6 @@ public class SagradaSceneController extends View implements Initializable {
     public void handleCardCarouselPrivateButtonPressed(){
         cardCarouselCurrentIndex = numberOfToolCards + numberOfPublicObjectiveCards;
         updateCardCarousel();
-    }
-
-    @Override
-    void notifyPermissionsChanged() {
-        new Thread(new Runnable() {
-            @Override public void run() {
-                if (getPermissions().isEmpty()) {
-                    //add message? No move available at the moment
-                } else {
-                    Set<Move> permissions = getPermissions();
-                    //TODO: each move should have a literal representation, not hardcoded here
-                    Platform.runLater(new Runnable() {
-                        @Override public void run() {
-                            dynamicChoicesPane.getChildren().clear();
-                            for (Move m : permissions) {
-                                Button button = new Button(m.toString());
-                                button.setId(m.toString());
-                                button.setOnAction(event -> checkID(button));
-                                dynamicChoicesPane.getChildren().add(button);
-                            }
-                        }
-                    });
-                }
-            }
-        }).start();
-
     }
 
     @Override
@@ -278,11 +252,6 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleGameEndedEvent(Message m) {
-
-    }
-
-    @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
         enableBlackPane();
@@ -301,6 +270,7 @@ public class SagradaSceneController extends View implements Initializable {
                 public void handle(MouseEvent event) {
                     windowPattern = pattern;
                     hasChosenWindowPattern();
+                    printOnConsole(pattern.getTitle() +" chosen.");
                 }
             });
 
@@ -344,6 +314,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameVariablesChanged() {
+        updateWindowPatterns();
         updateCards();
         updateTrack();
         updateDraftPool();
@@ -367,16 +338,80 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateDraftPool() {
+        for (Dice d: draftPoolDices) {
+            Button dice = new Button();
+            dice.setPrefWidth(80);
+            dice.setPrefHeight(80);
+
+            Image diceImage = new Image((new File("src/main/resources/images/Dices/"+d.toString()+".jpg")).toURI().toString());
+            dice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    draftPoolPane.getChildren().add(dice);
+                }
+            });
+        }
     }
 
     private void updatePlayers() {
     }
 
+    private void updateWindowPatterns() {
+        //SETTING UP WINDOWPATTERNS
 
+        System.out.println("Printing out wps. Total: "+ windowPatterns.size());
+        wpViews = new ArrayList<>();
+        int i = 0;
+
+        for (WindowPattern wp: windowPatterns) {
+            //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
+             String nickname = players.get(i);
+            WindowPatternPlayerView wpView = new WindowPatternPlayerView();
+            wpView.setFavourTokens(wp.getDifficulty());
+            wpView.setNickname(nickname);
+            wpView.setWindowPattern(wp);
+            wpViews.add(wpView);
+            i += 1;
+
+
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    windowPatternsBox.getChildren().add(wpView);
+                }
+            });
+        }
+
+    }
 
     @Override
     void notifyGameStarted() {
+        printOnConsole("The game has started!");
+    }
 
+    @Override
+    void notifyPermissionsChanged() {
+        new Thread(new Runnable() {
+            @Override public void run() {
+                if (getPermissions().isEmpty()) {
+                    //add message? No move available at the moment
+                } else {
+                    Set<Move> permissions = getPermissions();
+                    //TODO: each move should have a literal representation, not hardcoded here
+                    Platform.runLater(new Runnable() {
+                        @Override public void run() {
+                            dynamicChoicesPane.getChildren().clear();
+                            for (Move m : permissions) {
+                                Button button = new Button(m.toString());
+                                button.setId(m.toString());
+                                button.setOnAction(event -> checkID(button));
+                                dynamicChoicesPane.getChildren().add(button);
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     public void setClient(Client c) {

@@ -37,6 +37,7 @@ public abstract class View implements Observer {
     String playingPlayerID; //TODO: check if needed
     Dice draftedDice; //TODO: check if needed
     WindowPattern windowPattern; //TODO: check if needed
+    List<WindowPattern> windowPatterns;
     PrivateObjectiveCard privateObjectiveCard; //TODO: check if needed
 
 
@@ -244,6 +245,15 @@ public abstract class View implements Observer {
         List<Dice> mDraftPoolDices = (List<Dice>) o;
 
         try {
+            o = m.getParam("windowPatterns");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<WindowPattern> mWindowPatterns = (List<WindowPattern>) o;
+
+        try {
             o = m.getParam("privateObjectiveCard");
         } catch (NoSuchParamInMessageException e) {
             showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
@@ -259,6 +269,7 @@ public abstract class View implements Observer {
         setPlayers(mPlayers);
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
+        setWindowPatterns(mWindowPatterns);
 
         notifyGameVariablesChanged();
 
@@ -683,6 +694,10 @@ public abstract class View implements Observer {
 
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
+    }
+
+    public void setWindowPatterns(List<WindowPattern> windowPatterns) {
+        this.windowPatterns = windowPatterns;
     }
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern

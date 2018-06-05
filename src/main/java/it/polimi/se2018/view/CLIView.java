@@ -73,7 +73,7 @@ public class CLIView extends View{
             String text;
             do{
                 text = SCANNER.nextLine();
-                
+
                 if(currentInputConsumer !=null){
                     currentInputConsumer.accept(text);
                 } else {
@@ -82,7 +82,7 @@ public class CLIView extends View{
             } while(!text.equals(EXIT_FROM_READING_LOOP));
         }).start();
     }
-    
+
     private void waitForMove(){
 
         //Create a LinkedHashMap to map string choices from console to moves

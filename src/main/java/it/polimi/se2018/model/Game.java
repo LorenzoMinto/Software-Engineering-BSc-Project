@@ -8,7 +8,9 @@ import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Main class of the Model.
@@ -309,10 +311,12 @@ public class Game extends Observable implements Observer{
         //Send to all players all the needed data about game
         Map <String, Object> messageAttributes = new HashMap<>();
         String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
+        WindowPattern[] windowPatterns = players.stream().map(Player::getWindowPattern).toArray(WindowPattern[]::new);
 
         messageAttributes.put("drawnToolCards", drawnToolCards);
         messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
         messageAttributes.put("players", Arrays.asList(playersIDs));
+        messageAttributes.put("windowPatterns", Arrays.asList(windowPatterns));
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 
