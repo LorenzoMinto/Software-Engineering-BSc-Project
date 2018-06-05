@@ -446,6 +446,26 @@ public abstract class View implements Observer {
         showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
     }
 
+    void handleSlotOfTrackChosenDice(Message m) {
+        //TODO: implement here
+    }
+
+    void handleTrackChosenDiceEvent(Message m) {
+
+    }
+
+    void handleDraftedDiceEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("draftedDice");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        Dice mDraftedDice = (Dice) o;
+        setDraftedDice(mDraftedDice);
+    }
+
     // NOTIFY METHODS
 
     void notifyNewRound(){
@@ -462,7 +482,13 @@ public abstract class View implements Observer {
         showMessage("The game is started!");
     }
 
-    abstract void notifyGameVariablesChanged();
+    void notifyPermissionsChanged(){
+        //no behaviour in common between CLI and GUI
+    }
+
+    void notifyGameVariablesChanged(){
+        //no behaviour in common between CLI and GUI
+    }
 
     // MESSAGES HANDLING
 
@@ -557,6 +583,15 @@ public abstract class View implements Observer {
                 break;
             case DRAFTPOOL:
                 handleChangedDraftPoolEvent(m);
+                break;
+            case DRAFTED_DICE:
+                handleDraftedDiceEvent(m);
+                break;
+            case TRACK_CHOSEN_DICE:
+                handleTrackChosenDiceEvent(m);
+                break;
+            case SLOT_OF_TRACK_CHOSEN_DICE:
+                handleSlotOfTrackChosenDice(m);
                 break;
             case YOUR_TURN: //needed just for setting permissions
                 handleYourTurnEvent();
@@ -676,8 +711,6 @@ public abstract class View implements Observer {
         this.permissions = (EnumSet<Move>)permissions;
         notifyPermissionsChanged();
     }
-
-    abstract void notifyPermissionsChanged();
 
     public void setDrawnToolCards(List<ToolCard> drawnToolCards) {
         this.drawnToolCards = drawnToolCards;

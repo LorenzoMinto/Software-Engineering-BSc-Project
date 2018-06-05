@@ -1,12 +1,12 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 
@@ -21,16 +21,16 @@ public class CLIView extends View{
     private static final Scanner SCANNER = new Scanner(System.in);
 
     private class ConsoleMove {
-        private Move move;
+        private String description;
         private Runnable action;
 
-        private ConsoleMove(Move move, Runnable action) {
-            this.move = move;
+        private ConsoleMove(String description, Runnable action) {
+            this.description = description;
             this.action = action;
         }
 
         public String getDescription() {
-            return move.getTextualREP();
+            return description;
         }
 
         public void run(){
@@ -39,6 +39,8 @@ public class CLIView extends View{
     }
 
     private Consumer<String> currentInputConsumer;
+
+    private boolean gameStarted = false;
 
     public static void main(String[] args) {
         new CLIView();
@@ -96,7 +98,21 @@ public class CLIView extends View{
             index++;
         }
 
+        if(gameStarted){
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show my window pattern",this::printWindowPattern));
+            index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show my private objective card",this::printPrivateObjectiveCard));
+            index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show public objective cards",this::printPublicObjectiveCards));
+            index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show window patterns of other players",this::printOthersWindowPatterns));
+        }
+
         cleanConsole();
+
+        if(this.draftedDice!=null){
+            print("Remember you have drafted a dice ("+this.draftedDice+") that is waiting to be placed.");
+        }
 
         print("Which move would you like to perform?");
 
@@ -113,52 +129,46 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             }
         });
-
-        try {
-            print(this.windowPattern.toString());
-        }catch (NullPointerException e){
-            print("null");
-        }
     }
 
     private ConsoleMove convertMoveToConsoleMove(Move move){
         ConsoleMove consoleMove = null;
         switch (move) {
             case END_TURN:
-                consoleMove = new ConsoleMove(move,this::handleEndTurnMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleEndTurnMove);
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
-                consoleMove = new ConsoleMove(move,this::handleDraftDiceFromDraftPoolMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleDraftDiceFromDraftPoolMove);
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
-                consoleMove = new ConsoleMove(move,this::handlePlaceDiceOnWindowPatternMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handlePlaceDiceOnWindowPatternMove);
                 break;
             case USE_TOOLCARD:
-                consoleMove = new ConsoleMove(move,this::handleUseToolCardMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleUseToolCardMove);
                 break;
             case INCREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove(move,this::handleIncrementDraftedDiceMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleIncrementDraftedDiceMove);
                 break;
             case DECREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove(move,this::handleDecrementDraftedDiceMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleDecrementDraftedDiceMove);
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
-                consoleMove = new ConsoleMove(move,this::handleChangeDraftedDiceValueMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleChangeDraftedDiceValueMove);
                 break;
             case CHOOSE_DICE_FROM_TRACK:
-                consoleMove = new ConsoleMove(move,this::handleChooseDiceFromTrackMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleChooseDiceFromTrackMove);
                 break;
             case MOVE_DICE:
-                consoleMove = new ConsoleMove(move,this::handleMoveDiceMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleMoveDiceMove);
                 break;
             case JOIN_GAME:
-                consoleMove = new ConsoleMove(move,this::handleJoinGameMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleJoinGameMove);
                 break;
             case BACK_GAME:
-                consoleMove = new ConsoleMove(move,this::handleBackGameMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleBackGameMove);
                 break;
             case LEAVE:
-                consoleMove = new ConsoleMove(move,this::handleLeaveWaitingRoomMove);
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleLeaveWaitingRoomMove);
                 break;
         }
         return consoleMove;
@@ -176,7 +186,54 @@ public class CLIView extends View{
         //TODO: implement this method
     }
 
-    //TODO: inserisci metodi Event
+
+
+    private void printOthersWindowPatterns() {
+        if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
+            int index = 0;
+            for(WindowPattern windowPattern : windowPatterns){
+                print("Window pattern of "+players.get(index)); //assumes that windowpatterns and players are in the same order
+                print(windowPattern.toString());
+                index++;
+            }
+        } else {
+            print("Players have not already received window patterns.");
+        }
+        waitForMove();
+    }
+
+    private void printPublicObjectiveCards() {
+        if(this.drawnPublicObjectiveCards!=null && !this.drawnPublicObjectiveCards.isEmpty() ){
+            for(PublicObjectiveCard publicObjectiveCard : drawnPublicObjectiveCards){
+                print(publicObjectiveCard.toString());
+            }
+        } else {
+            print("There are no public objective cards yet.");
+        }
+        waitForMove();
+    }
+
+    private void printPrivateObjectiveCard() {
+        if(this.privateObjectiveCard==null){
+            print("You do not have a private objective card yet.");
+        } else {
+            print(this.privateObjectiveCard.toString());
+        }
+        waitForMove();
+    }
+
+    private void printWindowPattern() {
+        if(this.windowPattern==null){
+            print("You do not have a window pattern yet.");
+        } else {
+            print(this.windowPattern.toString());
+        }
+        waitForMove();
+    }
+
+
+
+
 
     @Override
     void handleLeaveWaitingRoomMove() {
@@ -287,11 +344,9 @@ public class CLIView extends View{
     void handleChooseDiceFromTrackMove() {
         super.handleChooseDiceFromTrackMove();
         print("Following the dices in the track");
-        ArrayList<Dice> dices = new ArrayList<>();
         for(int i=0; i<track.size(); i++){
             print("TRACK SLOT #"+(i+1));
             for(Dice dice : track.getDicesFromSlotNumber(i)){
-                dices.add(dice);
                 print(dice.toString());
             }
         }
@@ -301,7 +356,6 @@ public class CLIView extends View{
             print("Insert the index of the dice you want to pick:");
             int index = 1;
             for(Dice dice : track.getDicesFromSlotNumber(trackSlotNumber)){
-                dices.add(dice);
                 print(Integer.toString(index)+". "+dice);
                 index++;
             }
@@ -389,6 +443,7 @@ public class CLIView extends View{
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
+        print("Insert the index of the window pattern you want to choose:");
         waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
@@ -441,6 +496,7 @@ public class CLIView extends View{
     @Override
     void handleSetupEvent(Message m){
         super.handleSetupEvent(m);
+        this.gameStarted = true;
     }
 
     @Override
@@ -500,11 +556,20 @@ public class CLIView extends View{
         super.handleUsedToolCardEvent(m);
     }
 
+    @Override
+    void handleSlotOfTrackChosenDice(Message m){
+        super.handleSlotOfTrackChosenDice(m);
+    }
 
+    @Override
+    void handleTrackChosenDiceEvent(Message m){
+        super.handleTrackChosenDiceEvent(m);
+    }
 
-
-
-
+    @Override
+    void handleDraftedDiceEvent(Message m){
+        super.handleDraftedDiceEvent(m);
+    }
 
     @Override
     void showMessage(String message) {
@@ -519,17 +584,32 @@ public class CLIView extends View{
     }
 
     @Override
+    void notifyNewRound(){
+        super.notifyNewRound();
+        //do nothing else
+    }
+
+    @Override
+    void notifyNewTurn(){
+        super.notifyNewTurn();
+        //do nothing else
+    }
+
+    @Override
     void notifyGameVariablesChanged() {
-        //do nothing
+        super.notifyGameVariablesChanged();
+        //do nothing else
     }
 
     @Override
     void notifyGameStarted() {
-        print("The game is started!");
+        super.notifyGameStarted();
+        //do nothing else
     }
 
     @Override
     void notifyPermissionsChanged() {
-        //do nothing
+        super.notifyPermissionsChanged();
+        //do nothing else
     }
 }
