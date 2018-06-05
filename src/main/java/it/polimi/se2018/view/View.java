@@ -274,6 +274,8 @@ public abstract class View implements Observer {
         notifyGameVariablesChanged();
 
         notifyGameStarted();
+
+        setPermissions(EnumSet.noneOf(Move.class));
     }
 
     void handleNewRoundEvent(Message m) {
@@ -474,6 +476,10 @@ public abstract class View implements Observer {
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
             setPermissions(p);
+            System.out.println("Permissions granted by: "+m.getType().name());
+            for (Move perm: p) {
+                System.out.println(perm.name());
+            }
         }//else keep same permissions
     }
 

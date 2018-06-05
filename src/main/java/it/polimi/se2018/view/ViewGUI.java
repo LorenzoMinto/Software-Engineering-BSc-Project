@@ -126,16 +126,17 @@ public class ViewGUI extends Application {
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 6);
 
-        //grid.setGridLinesVisible(true); //this is useful to understand the layout
-        Scene loginScene = new Scene(grid, 600, 350);
+        Scene loginScene = new Scene(grid, 450, 300);
         primaryStage.setScene(loginScene);
+        primaryStage.centerOnScreen();
 
         URL fxmlUrl = getClass().getClassLoader().getResource("fxml/SagradaScene.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 
         Parent root = fxmlLoader.load();
-        sagradaScene = new Scene(root, primaryStage.getMaxWidth(),primaryStage.getMaxHeight());
+        sagradaScene = new Scene(root, 2000, 1000);
         sagradaSceneController = fxmlLoader.getController();
+        sagradaSceneController.setLoginScene(loginScene);
 
         primaryStage.show();
     }

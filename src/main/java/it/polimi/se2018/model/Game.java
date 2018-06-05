@@ -324,8 +324,6 @@ public class Game extends Observable implements Observer{
             messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard());
             Message message = new MVMessage(MVMessage.types.SETUP, messageAttributes, player.getID());
 
-            message.setPermissions(permissions);
-
             notify(message);
         }
 

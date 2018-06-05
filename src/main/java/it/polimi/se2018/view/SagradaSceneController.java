@@ -6,12 +6,14 @@ import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -20,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -28,6 +31,8 @@ import java.util.List;
 
 public class SagradaSceneController extends View implements Initializable {
     private Client client;
+    private Scene loginScene;
+
     private List<Image> cards = new ArrayList<>();
     private static final int numberOfToolCards = 3;
     private static final int numberOfPublicObjectiveCards = 3;
@@ -115,6 +120,10 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
+    public void setLoginScene(Scene loginScene) {
+        this.loginScene = loginScene;
+    }
+
     @FXML
     public void handleCardCarouselNext(){
         if(cardCarouselCurrentIndex == cards.size()-1){
@@ -180,11 +189,38 @@ public class SagradaSceneController extends View implements Initializable {
 
     }
 
-    private void checkID(Button button){
+    private void checkID(Move move){
         //TODO: Button action handling here -> will correspond to the start of a move.
-        switch (button.getId()) {
-            case "DRAFT_DICE_FROM_DRAFTPOOL":
-
+        switch (move) {
+            case END_TURN:
+                handleEndTurnMove();
+                printOnConsole("Turn ended.");
+                break;
+            case DRAFT_DICE_FROM_DRAFTPOOL:
+                break;
+            case PLACE_DICE_ON_WINDOWPATTERN:
+                break;
+            case USE_TOOLCARD:
+                break;
+            case INCREMENT_DRAFTED_DICE:
+                break;
+            case DECREMENT_DRAFTED_DICE:
+                break;
+            case CHANGE_DRAFTED_DICE_VALUE:
+                break;
+            case CHOOSE_DICE_FROM_TRACK:
+                break;
+            case MOVE_DICE:
+                break;
+            case BACK_GAME:
+                handleBackGameMove();
+                printOnConsole("Trying to reconnect to the the game...");
+                break;
+            case LEAVE:
+                handleLeaveWaitingRoomMove();
+                Stage stage = (Stage) playerTerminal.getScene().getWindow();
+                stage.setFullScreen(false);
+                stage.setScene(loginScene);
                 break;
             default:
                 break;
@@ -192,17 +228,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleLeaveWaitingRoomMove() {
-
-    }
-
-    @Override
     void handleBackGameMove() {
-
-    }
-
-    @Override
-    void handleEndTurnMove() {
 
     }
 
@@ -329,8 +355,6 @@ public class SagradaSceneController extends View implements Initializable {
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
         drawnPublicObjectiveCards.forEach(card
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
-        System.out.println(privateObjectiveCard.toString());
-        System.out.println(privateObjectiveCard.getImageURL());
         cards.add(new Image((new File(privateObjectiveCard.getImageURL())).toURI().toString()));
 
         updateCardCarousel();
@@ -362,7 +386,6 @@ public class SagradaSceneController extends View implements Initializable {
     private void updateWindowPatterns() {
         //SETTING UP WINDOWPATTERNS
 
-        System.out.println("Printing out wps. Total: "+ windowPatterns.size());
         wpViews = new ArrayList<>();
         int i = 0;
 
@@ -406,7 +429,7 @@ public class SagradaSceneController extends View implements Initializable {
                             for (Move m : permissions) {
                                 Button button = new Button(m.toString());
                                 button.setId(m.toString());
-                                button.setOnAction(event -> checkID(button));
+                                button.setOnAction(event -> checkID(m));
                                 dynamicChoicesPane.getChildren().add(button);
                             }
                         }
