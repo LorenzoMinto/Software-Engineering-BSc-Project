@@ -355,10 +355,10 @@ public class CLIView extends View{
         super.handleJoinGameMove();
 
         print("Insert your nickname");
-        String nickname = SCANNER.nextLine();
-
-        setPlayer(nickname);
-        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+        waitForConsoleInput(nickname->{
+            setPlayer(nickname);
+            sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+        });
     }
 
     @Override
