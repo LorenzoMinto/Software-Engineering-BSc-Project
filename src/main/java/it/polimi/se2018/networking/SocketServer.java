@@ -13,7 +13,7 @@ public class SocketServer implements ReceiverInterface {
 
     private ObjectOutputStream stream;
 
-    SocketServer(ObjectOutputStream stream) throws IOException {
+    SocketServer(ObjectOutputStream stream) {
         this.stream = stream;
     }
 

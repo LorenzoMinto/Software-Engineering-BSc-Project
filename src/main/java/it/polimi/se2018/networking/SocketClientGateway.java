@@ -67,7 +67,6 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
             }
 
         } catch(Exception e){
-            e.printStackTrace();
             ((Client)this.client).fail("Exception thrown opening socket or reading from stream");
         }
     }
