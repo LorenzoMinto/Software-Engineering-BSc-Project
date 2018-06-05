@@ -2,13 +2,16 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.ToolCardManager;
+import it.polimi.se2018.controller.WindowPatternManager;
 import it.polimi.se2018.model.EmptyPlacementRule;
+import it.polimi.se2018.model.PlacementRule;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -18,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 
@@ -33,8 +37,7 @@ public class SagradaSceneController extends View implements Initializable {
     private static final int numberOfPublicObjectiveCards = 3;
     private int cardCarouselCurrentIndex;
 
-    private ToolCardManager toolCardManager = new ToolCardManager(new EmptyPlacementRule());
-    private ObjectiveCardManager objectiveCardManager = new ObjectiveCardManager();
+    @FXML private HBox blackPane;
 
     @FXML private TextArea playerTerminal;
     @FXML private HBox dynamicChoicesPane;
@@ -60,6 +63,8 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button cardsCarouselPublicsButton;
     @FXML private Button cardsCarouselPrivateButton;
 
+    Image backgroundImage;
+
 
 // DO NOT DELETE THIS COMMENT
 //
@@ -84,6 +89,8 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselVisibleComponents.forEach(component->component.setVisible(false));
         cardsCarouselCardImageView.setVisible(true);
 
+        disableBlackPane();
+
         Image cardsCarouselDefaultCard = (new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString()));
 
         setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCard, cardsCarouselCardHBox);
@@ -103,7 +110,7 @@ public class SagradaSceneController extends View implements Initializable {
 
 
         //setting a nice background
-        Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
+        backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
         cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
@@ -148,7 +155,7 @@ public class SagradaSceneController extends View implements Initializable {
         imageView.fitHeightProperty().bind(pane.heightProperty());
     }
 
-    public void handleCardCarouselToolCardsButtonPressed(){
+    public void handleCardCarouselToolCardsButtonPressed() {
         cardCarouselCurrentIndex = 0;
         updateCardCarousel();
     }
@@ -274,16 +281,51 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
 
+        enableBlackPane();
+
+        List<ImageView> windowPatternPanes = new ArrayList<>();
+
+        for (WindowPattern pattern: patterns) {
+//            Pane pane = new Pane();
+//            pane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
+            Image patternImage = new Image((new File(pattern.getImageURL())).toURI().toString());
+            ImageView patternImageView = new ImageView(patternImage);
+            patternImageView.setOpacity(1);
+
+            patternImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    windowPattern = pattern;
+                    hasChosenWindowPattern();
+                }
+            });
+
+//            pane.getChildren().add(patternImageView);
+            windowPatternPanes.add(patternImageView);
+        }
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                blackPane.getChildren().clear();
+                windowPatternPanes.forEach(pane -> blackPane.getChildren().add(pane));
+            }
+        });
     }
 
-    @Override
-    void notifyHandlingOfMessageEnded() {
-
+    private void hasChosenWindowPattern() {
+        disableBlackPane();
+        cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
     }
 
-    @Override
-    void notifyHandlingOfMessageStarted() {
+    private void enableBlackPane() {
+        blackPane.setOpacity(0.8);
+        blackPane.setDisable(false);
+    }
 
+    private void disableBlackPane() {
+        blackPane.setOpacity(0);
+        blackPane.setDisable(true);
     }
 
     @Override
@@ -298,11 +340,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameVariablesChanged() {
-
-    }
-
-    @Override
-    void notifyGameVariablesChanged(boolean forceClean) {
         updateCards();
         updateTrack();
         updateDraftPool();
@@ -317,7 +354,7 @@ public class SagradaSceneController extends View implements Initializable {
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
         drawnPublicObjectiveCards.forEach(card
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
-        cards.add(new Image((new File(getPrivateObjectiveCard().getImageURL())).toURI().toString()));
+        cards.add(new Image((new File(privateObjectiveCard.getImageURL())).toURI().toString()));
 
         updateCardCarousel();
     }
@@ -335,7 +372,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameStarted() {
-        cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
+
     }
 
     @Override

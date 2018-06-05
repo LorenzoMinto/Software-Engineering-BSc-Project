@@ -109,11 +109,6 @@ public class GUIView extends View {
     }
 
     @Override
-    void notifyGameVariablesChanged(boolean forceClean) {
-
-    }
-
-    @Override
     void notifyGameStarted() {
 
     }

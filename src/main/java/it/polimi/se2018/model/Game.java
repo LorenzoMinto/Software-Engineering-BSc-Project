@@ -316,10 +316,15 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 
-        MVMessage message = new MVMessage(MVMessage.types.SETUP, messageAttributes);
-        message.setPermissions(permissions);
+        for (Player player: players) {
+            messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard());
+            Message message = new MVMessage(MVMessage.types.SETUP, messageAttributes, player.getID());
 
-        notify(message);
+            //TODO: check @fede
+            message.setPermissions(permissions);
+
+            notify(message);
+        }
 
         try {
             nextRound(dices,permissions);

@@ -37,6 +37,7 @@ public abstract class View implements Observer {
     String playingPlayerID;
     Dice draftedDice;
     WindowPattern windowPattern;
+    PrivateObjectiveCard privateObjectiveCard;
 
     private enum ViewState{
         INACTIVE,
@@ -311,8 +312,6 @@ public abstract class View implements Observer {
 
     abstract void notifyGameVariablesChanged();
 
-    abstract void notifyGameVariablesChanged(boolean forceClean);
-
     abstract void notifyGameStarted();
 
     private void changeStateTo(ViewState state){
@@ -370,7 +369,7 @@ public abstract class View implements Observer {
         showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
     }
 
-    private boolean handleSetup(Message m){
+    private boolean handleSetup(Message m) {
         Object o;
         try {
             o = m.getParam("drawnToolCards");
@@ -412,14 +411,23 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<Dice> mDraftPoolDices = (List<Dice>) o;
 
+        try {
+            o = m.getParam("privateObjectiveCard");
+        } catch (NoSuchParamInMessageException e) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        PrivateObjectiveCard mPrivateObjectiveCard = (PrivateObjectiveCard) o;
+
         //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
         setDrawnToolCards(mDrawnToolCards);
         setDraftPoolDices(mDraftPoolDices);
         setDrawnPublicObjectiveCards(mDrawnPublicObjectiveCards);
         setPlayers(mPlayers);
         setTrack(mTrack);
+        setPrivateObjectiveCard(mPrivateObjectiveCard);
 
-        notifyGameVariablesChanged(true);
+        notifyGameVariablesChanged();
 
         return true;
     }
@@ -564,6 +572,10 @@ public abstract class View implements Observer {
 
     public void setWindowPattern(WindowPattern windowPattern) {
         this.windowPattern = windowPattern;
+    }
+
+    public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
+        this.privateObjectiveCard = privateObjectiveCard;
     }
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern
