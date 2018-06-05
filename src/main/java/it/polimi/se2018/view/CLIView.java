@@ -355,11 +355,14 @@ public class CLIView extends View{
         super.handleJoinGameMove();
 
         print("Insert your nickname");
-        String nickname = SCANNER.nextLine();
-
-        setPlayer(nickname);
-        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+        waitForConsoleInput(nickname->{
+            setPlayer(nickname);
+            sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+        });
     }
+
+
+    //EVENTS
 
     @Override
     void handleGameEndedEvent(Message m) {
@@ -405,10 +408,100 @@ public class CLIView extends View{
     }
 
     @Override
+    void handleCVAcknowledgmentEvent(Message m){
+
+    }
+
+    @Override
+    void handleInactivePlayerEvent(Message m){
+
+    }
+
+    @Override
+    void handleBackToGameEvent(){
+
+    }
+
+    @Override
+    void handleInactiveEvent(){
+
+    }
+
+    @Override
+    void handleCVErrorEvent(Message m){
+
+    }
+
+    @Override
+    void handleSetupEvent(Message m){
+
+    }
+
+    @Override
+    void handleNewRoundEvent(Message m){
+
+    }
+
+    @Override
+    void handleNewTurnEvent(Message m){
+
+    }
+
+    @Override
+    void handleRankingsEvent(Message m){
+
+    }
+
+    @Override
+    void handleAssignedWindowPatternEvent(Message m){
+
+    }
+
+    @Override
+    void handleChangedDraftPoolEvent(Message m){
+
+    }
+
+    @Override
+    void handleYourTurnEvent(){
+
+    }
+
+    @Override
+    void handleBadFormattedEvent(){
+
+    }
+
+    @Override
+    void handleDeniedLimitEvent(){
+
+    }
+
+    @Override
+    void handleDeniedNicknameEvent(){
+
+    }
+
+    @Override
+    void handleDeniedPlayingEvent(){
+
+    }
+
+    @Override
+    void handleUsedToolCardEvent(Message m){
+
+    }
+
+
+
+
+
+
+
+    @Override
     void showMessage(String message) {
         cleanConsole();
         print(message);
-        waitForMove();
     }
 
     @Override
