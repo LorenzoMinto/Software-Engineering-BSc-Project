@@ -20,7 +20,7 @@ public abstract class View implements Observer {
 
     String playerID;
 
-    final Logger logger;
+    final Logger logger;  //TODO: check if needed
 
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
@@ -28,16 +28,20 @@ public abstract class View implements Observer {
 
     private SenderInterface client;
 
-    List<ToolCard> drawnToolCards;
-    List<PublicObjectiveCard> drawnPublicObjectiveCards;
-    List<String> players;
-    Track track;
-    List<Dice> draftPoolDices;
-    int roundNumber;
-    String playingPlayerID;
-    Dice draftedDice;
-    WindowPattern windowPattern;
-    PrivateObjectiveCard privateObjectiveCard;
+    List<ToolCard> drawnToolCards; //TODO: check if needed
+    List<PublicObjectiveCard> drawnPublicObjectiveCards; //TODO: check if needed
+    List<String> players; //TODO: check if needed
+    Track track; //TODO: check if needed
+    List<Dice> draftPoolDices; //TODO: check if needed
+    int roundNumber; //TODO: check if needed
+    String playingPlayerID; //TODO: check if needed
+    Dice draftedDice; //TODO: check if needed
+    WindowPattern windowPattern; //TODO: check if needed
+    PrivateObjectiveCard privateObjectiveCard; //TODO: check if needed
+
+
+    LinkedHashMap<String, Integer> rankings;
+    List<WindowPattern> drawnWindowPatterns;
 
     private enum ViewState{
         INACTIVE,
@@ -57,40 +61,371 @@ public abstract class View implements Observer {
 
     //MOVES
 
-    abstract void handleLeaveWaitingRoomMove();
+    void handleLeaveWaitingRoomMove(){
+        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.LEAVE,Message.fastMap("nickname",this.playerID)));
+    }
 
-    abstract void handleBackGameMove();
+    void handleBackGameMove(){
+        sendMessage(new VCMessage(VCMessage.types.BACK_GAMING,null,this.playerID));
+    }
 
-    abstract void handleEndTurnMove();
+    void handleEndTurnMove(){
+        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+    }
 
-    abstract void handleDraftDiceFromDraftPoolMove();
+    void handleDraftDiceFromDraftPoolMove(){
+        //TODO: implement
+    }
 
-    abstract void handlePlaceDiceOnWindowPatternMove();
+    void handlePlaceDiceOnWindowPatternMove(){
+        //TODO: implement
+    }
 
-    abstract void handleUseToolCardMove();
+    void handleUseToolCardMove(){
+        //TODO: implement
+    }
 
-    abstract void handleIncrementDraftedDiceMove();
+    void handleIncrementDraftedDiceMove(){
+        //TODO: implement
+    }
 
-    abstract void handleDecrementDraftedDiceMove();
+    void handleDecrementDraftedDiceMove(){
+        //TODO: implement
+    }
 
-    abstract void handleChangeDraftedDiceValueMove();
+    void handleChangeDraftedDiceValueMove(){
+        //TODO: implement
+    }
 
-    abstract void handleChooseDiceFromTrackMove();
+    void handleChooseDiceFromTrackMove(){
+        //TODO: implement
+    }
 
-    abstract void handleMoveDiceMove();
+    void handleMoveDiceMove(){
+        //TODO: implement
+    }
 
-    abstract void handleJoinGameMove();
+     void handleJoinGameMove(){
+         //TODO: implement
+     }
 
     //EVENTS
 
-    abstract void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings);
+    void handleGameEndedEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("rankings");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        LinkedHashMap<String, Integer> receivedRankings = (LinkedHashMap<String, Integer>) o;
+        this.rankings = receivedRankings;
+    }
 
-    abstract void handleGiveWindowPatternsEvent(List<WindowPattern> patterns);
+    void handleGiveWindowPatternsEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("patterns");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<WindowPattern> patterns = (List<WindowPattern>) o;
+        this.drawnWindowPatterns = patterns;
+        showMessage("Ricevuti windowpattern da scegliere");
+    }
 
-    abstract void handleAddedEvent();
+    void handleAddedEvent(){
+        showMessage("You have joined the waiting room");
+    }
 
-    abstract void handleRemovedEvent();
+    void handleRemovedEvent(){
+        showMessage("Sei stato correttamente rimosso dal gioco");
+    }
 
+    void handleCVAcknowledgmentEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("message");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String ack = (String) o;
+
+        if(!ack.equals("")){
+            showMessage(ack);
+        }
+    }
+
+    void handleInactivePlayerEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("player");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String pID = (String) o;
+
+        showMessage("Il giocatore ".concat(pID).concat(" è diventato inattivo. I suoi turni saranno saltati."));
+    }
+
+    void handleBackToGameEvent(){
+        showMessage("You are back to game, now.");
+    }
+
+    void handleInactiveEvent(){
+        changeStateTo(ViewState.INACTIVE);
+        showMessage("Sei stato scollegato dal gioco per inattività. I tuoi turni saranno saltati.");
+    }
+
+    void handleCVErrorEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("message");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String err = (String) o;
+
+        if(!err.equals("")){
+            errorMessage(err);
+        }
+    }
+
+    void handleSetupEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("drawnToolCards");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<ToolCard> mDrawnToolCards = (List<ToolCard>) o;
+
+        try {
+            o = m.getParam("drawnPublicObjectiveCards");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<PublicObjectiveCard> mDrawnPublicObjectiveCards = (List<PublicObjectiveCard>) o;
+
+        try {
+            o = m.getParam("players");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<String> mPlayers = (List<String>) o;
+
+        try {
+            o = m.getParam("track");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        Track mTrack = (Track) o;
+
+        try {
+            o = m.getParam("draftPoolDices");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Dice> mDraftPoolDices = (List<Dice>) o;
+
+        try {
+            o = m.getParam("privateObjectiveCard");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        PrivateObjectiveCard mPrivateObjectiveCard = (PrivateObjectiveCard) o;
+
+        //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
+        setDrawnToolCards(mDrawnToolCards);
+        setDraftPoolDices(mDraftPoolDices);
+        setDrawnPublicObjectiveCards(mDrawnPublicObjectiveCards);
+        setPlayers(mPlayers);
+        setTrack(mTrack);
+        setPrivateObjectiveCard(mPrivateObjectiveCard);
+
+        notifyGameVariablesChanged();
+
+        notifyGameStarted();
+    }
+
+    void handleNewRoundEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("number");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        int number = (int) o;
+
+        try {
+            o = m.getParam("track");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        Track mTrack = (Track) o;
+
+        try {
+            o = m.getParam("draftPoolDices");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Dice> mDraftPoolDices = (List<Dice>) o;
+
+        setRoundNumber(number);
+        setDraftPoolDices(mDraftPoolDices);
+        setTrack(mTrack);
+
+        notifyNewRound();
+    }
+
+    void handleNewTurnEvent(Message m) {
+        Object o;
+
+        try {
+            o = m.getParam("whoIsPlaying");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup del nuovo turn è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String whoIsPlaying = (String) o;
+
+        setPlayingPlayerID(whoIsPlaying);
+
+        notifyNewTurn();
+    }
+
+    void handleRankingsEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("winner");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String winner = (String) o;
+        //TODO: aggiungere anche gestione della classifica (getParam(rankings))
+        showMessage("Il vincitore è "+winner);
+    }
+
+    void handleAssignedWindowPatternEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("windopattern");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        WindowPattern wp = (WindowPattern) o;
+        setWindowPattern(wp);
+        showMessage("Ti è stato assegnato questo windowpattern: "+windowPattern);
+    }
+
+    void handleChangedDraftPoolEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("draftPoolDices");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Dice> mDraftPoolDices = (List<Dice>) o;
+        setDraftPoolDices(mDraftPoolDices);
+    }
+
+    void handleYourTurnEvent() {
+        showMessage("Tocca a te! E' il tuo turno!");
+    }
+
+    void handleBadFormattedEvent() {
+        //TODO: check if this method is never called
+    }
+
+    void handleDeniedLimitEvent() {
+        showMessage("Impossibile unirsi alla partita perché è stato raggiunto il limite massimo di giocatori.");
+    }
+
+    void handleDeniedNicknameEvent() {
+        showMessage("Impossibile unirsi alla partita perché il nickname indicato è già presente.");
+    }
+
+    void hadleDeniedPlayingEvent() {
+        showMessage("Impossibile unirsi alla partita perchè si sta già svolgendo");
+    }
+
+    void handleUsedToolCardEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("toolcard");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        ToolCard toolcard = (ToolCard) o;
+
+        try {
+            o = m.getParam("toolcards");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<ToolCard> toolcards = (List<ToolCard>) o;
+
+        try {
+            o = m.getParam("player");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String p = (String) o;
+
+        setDrawnToolCards(toolcards);
+
+        showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
+    }
+
+    // NOTIFY METHODS
+
+    void notifyNewRound(){
+        showMessage("The round #"+this.roundNumber+" now starts!");
+    }
+
+    void notifyNewTurn(){
+        if(!playingPlayerID.equals(playerID)){
+            showMessage("Now it's "+playingPlayerID+"'s turn");
+        }
+    }
+
+    void notifyGameStarted(){
+        showMessage("The game is started!");
+    }
+
+    abstract void notifyGameVariablesChanged();
+
+    // MESSAGES HANDLING
 
     private void receiveMessage(Message m){
 
@@ -132,61 +467,28 @@ public abstract class View implements Observer {
     }
 
     private void handleCVMessages(Message m){
-        Object o;
 
         switch ((CVMessage.types) m.getType()) {
             case ERROR_MESSAGE:
+                handleCVErrorEvent(m);
+                break;
             case ACKNOWLEDGMENT_MESSAGE:
-                try {
-                    o = m.getParam("message");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                String text = (String) o;
-
-                if(!text.equals("")){
-                    showMessage(text);
-                }
+                handleCVAcknowledgmentEvent(m);
                 break;
             case INACTIVE_PLAYER:
-                try {
-                    o = m.getParam("player");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                String pID = (String) o;
-
-                showMessage("Il giocatore ".concat(pID).concat(" è diventato inattivo. I suoi turni saranno saltati."));
+                handleInactivePlayerEvent(m);
                 break;
             case BACK_TO_GAME:
-                showMessage("You are back to game, now.");
+                handleBackToGameEvent();
                 break;
             case INACTIVE:
-                changeStateTo(ViewState.INACTIVE);
-                showMessage("Sei stato scollegato dal gioco per inattività. I tuoi turni saranno saltati.");
+                handleInactiveEvent();
                 break;
             case GIVE_WINDOW_PATTERNS:
-                try {
-                    o = m.getParam("patterns");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                List<WindowPattern> patterns = (List<WindowPattern>) o;
-                showMessage("Ricevuti windowpattern da scegliere");
-                handleGiveWindowPatternsEvent(patterns);
+                handleGiveWindowPatternsEvent(m);
                 break;
             case GAME_ENDED:
-                try {
-                    o = m.getParam("rankings");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                LinkedHashMap<String, Integer> rankings = (LinkedHashMap<String, Integer>) o;
-                handleGameEndedEvent(rankings);
+                handleGameEndedEvent(m);
                 break;
             default:
                 //if cases are updated with CVMessage.types, should never enter here
@@ -195,68 +497,30 @@ public abstract class View implements Observer {
     }
 
     private void handleMVMessages(Message m){
-        Object o;
         switch ((MVMessage.types) m.getType()) {
             case SETUP:
-                if( handleSetup(m) ){
-                    notifyGameStarted();
-                } else {
-                    showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
-                }
+                handleSetupEvent(m);
                 break;
             case NEW_ROUND:
-                if( handleNewRound(m) ){
-                    showMessage("Inizia il #"+this.roundNumber+" round!");
-                } else {
-                    showMessage("Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.");
-                }
+                handleNewRoundEvent(m);
                 break;
             case NEW_TURN:
-                if( handleNewTurn(m) ){
-                    if(!playingPlayerID.equals(playerID)){
-                        showMessage("E' ora il turno di "+playingPlayerID);
-                    }
-                } else {
-                    showMessage("Il setup del nuovo turn è fallito. Potresti riscontrare difficoltà a giocare.");
-                }
+                handleNewTurnEvent(m);
                 break;
             case USED_TOOLCARD:
                 handleUsedToolCardEvent(m);
                 break;
             case RANKINGS:
-                try {
-                    o = m.getParam("winner");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                String winner = (String) o;
-                //TODO: aggiungere anche gestione della classifica (getParam(rankings))
-                showMessage("Il vincitore è "+winner);
+                handleRankingsEvent(m);
                 break;
             case WINDOWPATTERN:
-                try {
-                    o = m.getParam("windopattern");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                WindowPattern wp = (WindowPattern) o;
-                setWindowPattern(wp);
-                showMessage("Ti è stato assegnato questo windowpattern: "+windowPattern);
+                handleAssignedWindowPatternEvent(m);
                 break;
             case DRAFTPOOL:
-                try {
-                    o = m.getParam("draftPoolDices");
-                } catch (NoSuchParamInMessageException e) {
-                    break;
-                }
-                @SuppressWarnings("unchecked")
-                List<Dice> mDraftPoolDices = (List<Dice>) o;
-                setDraftPoolDices(mDraftPoolDices);
+                handleChangedDraftPoolEvent(m);
                 break;
             case YOUR_TURN: //needed just for setting permissions
-                showMessage("Tocca a te! E' il tuo turno!");
+                handleYourTurnEvent();
                 break;
             default:
                 //if cases are updated with MVMessage.types, should never enter here
@@ -264,30 +528,29 @@ public abstract class View implements Observer {
         }
     }
 
-    private void handleWLMessages(Message m){
 
+    private void handleWLMessages(Message m){
         switch ((WaitingRoomMessage.types) m.getType()) {
             case BAD_FORMATTED: //just for debug
+                handleBadFormattedEvent();
                 break;
             case DENIED_LIMIT:
-                showMessage("Impossibile unirsi alla partita perché è stato raggiunto il limite massimo di giocatori.");
+                handleDeniedLimitEvent();
                 break;
             case DENIED_NICKNAME:
-                showMessage("Impossibile unirsi alla partita perché il nickname indicato è già presente.");
+                handleDeniedNicknameEvent();
                 break;
             case DENIED_PLAYING:
-                showMessage("Impossibile unirsi alla partita perchè si sta già svolgendo");
+                hadleDeniedPlayingEvent();
                 break;
             case JOIN: //can't happen. is a message sent from the user
                 break;
             case ADDED:
-                showMessage("You have joined the waiting room");
                 handleAddedEvent();
                 break;
             case LEAVE: //can't happen. is a message sent from the user
                 break;
             case REMOVED:
-                showMessage("Sei stato correttamente rimosso dal gioco");
                 handleRemovedEvent();
                 break;
             default:
@@ -300,9 +563,7 @@ public abstract class View implements Observer {
 
     abstract void errorMessage(String message);
 
-    abstract void notifyGameVariablesChanged();
-
-    abstract void notifyGameStarted();
+    //UTILS
 
     private void changeStateTo(ViewState state){
 
@@ -324,150 +585,6 @@ public abstract class View implements Observer {
         } catch (NullPointerException ex){
             errorMessage(MUST_CONNECT);
         }
-    }
-
-    //UTILS
-
-    private void handleUsedToolCardEvent(Message m){
-        Object o;
-        try {
-            o = m.getParam("toolcard");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        ToolCard toolcard = (ToolCard) o;
-
-        try {
-            o = m.getParam("toolcards");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        List<ToolCard> toolcards = (List<ToolCard>) o;
-
-        try {
-            o = m.getParam("player");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        String p = (String) o;
-
-        setDrawnToolCards(toolcards);
-
-        showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
-    }
-
-    private boolean handleSetup(Message m) {
-        Object o;
-        try {
-            o = m.getParam("drawnToolCards");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        List<ToolCard> mDrawnToolCards = (List<ToolCard>) o;
-
-        try {
-            o = m.getParam("drawnPublicObjectiveCards");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        List<PublicObjectiveCard> mDrawnPublicObjectiveCards = (List<PublicObjectiveCard>) o;
-
-        try {
-            o = m.getParam("players");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        List<String> mPlayers = (List<String>) o;
-
-        try {
-            o = m.getParam("track");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        Track mTrack = (Track) o;
-
-        try {
-            o = m.getParam("draftPoolDices");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        List<Dice> mDraftPoolDices = (List<Dice>) o;
-
-        try {
-            o = m.getParam("privateObjectiveCard");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        PrivateObjectiveCard mPrivateObjectiveCard = (PrivateObjectiveCard) o;
-
-        //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
-        setDrawnToolCards(mDrawnToolCards);
-        setDraftPoolDices(mDraftPoolDices);
-        setDrawnPublicObjectiveCards(mDrawnPublicObjectiveCards);
-        setPlayers(mPlayers);
-        setTrack(mTrack);
-        setPrivateObjectiveCard(mPrivateObjectiveCard);
-
-        notifyGameVariablesChanged();
-
-        return true;
-    }
-
-    private boolean handleNewRound(Message m){
-        Object o;
-        try {
-            o = m.getParam("number");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        int number = (int) o;
-
-        try {
-            o = m.getParam("track");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        Track mTrack = (Track) o;
-
-        try {
-            o = m.getParam("draftPoolDices");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        List<Dice> mDraftPoolDices = (List<Dice>) o;
-
-        setRoundNumber(number);
-        setDraftPoolDices(mDraftPoolDices);
-        setTrack(mTrack);
-
-        return true;
-    }
-
-    private boolean handleNewTurn(Message m) {
-        Object o;
-
-        try {
-            o = m.getParam("whoIsPlaying");
-        } catch (NoSuchParamInMessageException e) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        String whoIsPlaying = (String) o;
-
-        setPlayingPlayerID(whoIsPlaying);
-        return true;
     }
 
     private Logger createLogger(){
