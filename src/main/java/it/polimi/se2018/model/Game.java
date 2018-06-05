@@ -400,6 +400,8 @@ public class Game extends Observable implements Observer{
 
             String nextPlayer = getCurrentRound().getCurrentTurn().getPlayer().getID();
 
+            getCurrentRound().getCurrentTurn().register(this);
+
             //NOTIFYING
             Map <String, Object> messageAttributes = new HashMap<>();
             messageAttributes.put("whoIsPlaying", nextPlayer);

@@ -18,9 +18,7 @@ public abstract class View implements Observer {
 
     private static final String MUST_CONNECT = "You have to connect to the server";
 
-    String playerID;
-
-    final Logger logger;  //TODO: check if needed
+    private String playerID;
 
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
 
@@ -50,7 +48,7 @@ public abstract class View implements Observer {
     }
 
     View() {
-        logger = createLogger();
+        //do nothing
     }
 
     void connectToRemoteServer(ConnectionType type, String serverName, int port){
@@ -75,23 +73,23 @@ public abstract class View implements Observer {
     }
 
     void handleDraftDiceFromDraftPoolMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     void handlePlaceDiceOnWindowPatternMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     void handleUseToolCardMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     void handleIncrementDraftedDiceMove(){
-        //TODO: implement
+        sendMessage(new VCMessage(VCMessage.types.INCREMENT_DICE));
     }
 
     void handleDecrementDraftedDiceMove(){
-        //TODO: implement
+        sendMessage(new VCMessage(VCMessage.types.DECREMENT_DICE));
     }
 
     void handleChangeDraftedDiceValueMove(){
@@ -107,7 +105,7 @@ public abstract class View implements Observer {
     }
 
      void handleJoinGameMove(){
-         //TODO: implement
+         //no behaviour in common between CLI and GUI
      }
 
     //EVENTS
@@ -604,7 +602,7 @@ public abstract class View implements Observer {
         }
     }
 
-    private Logger createLogger(){
+    /*private Logger createLogger(){
         Logger newLogger = Logger.getLogger(View.class.getName());
         newLogger.setUseParentHandlers(false);
         newLogger.setLevel(Level.FINE);
@@ -621,16 +619,11 @@ public abstract class View implements Observer {
         });
         newLogger.addHandler(handler);
         return newLogger;
-    }
+    }*/
 
     @Override
     public boolean update(Message m) {
-        logger.info(()->"Received: "+m.getType().toString());
-
         receiveMessage(m);
-
-        //askForMove();
-
         return true;
     }
 

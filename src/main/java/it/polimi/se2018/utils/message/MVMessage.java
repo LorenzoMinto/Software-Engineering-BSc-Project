@@ -40,6 +40,9 @@ public class MVMessage extends ViewBoundMessage {
         RANKINGS,
         WINDOWPATTERN,
         DRAFTPOOL,
+        DRAFTED_DICE,
+        TRACK_CHOSEN_DICE,
+        SLOT_OF_TRACK_CHOSEN_DICE,
         YOUR_TURN
     }
 }

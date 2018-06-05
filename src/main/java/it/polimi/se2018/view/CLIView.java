@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.Move;
@@ -164,19 +166,6 @@ public class CLIView extends View{
     }
 
     private void cleanConsole(){
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
         //TODO: implement this method
     }
 
@@ -203,49 +192,162 @@ public class CLIView extends View{
     @Override
     void handleDraftDiceFromDraftPoolMove() {
         super.handleDraftDiceFromDraftPoolMove();
-        waitForMove(); //TODO: check
+
+        print("These are dices of draftpool:");
+        int index = 1;
+        for(Dice dice : draftPoolDices){
+            print(Integer.toString(index)+". "+dice);
+            index++;
+        }
+        print("Insert the index of the dice you want to draft:");
+        waitForConsoleInput(diceIndex -> {
+            int diceIndexInt = Integer.parseInt(diceIndex) - 1;
+            if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
+                sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt))));
+            } else {
+                print(INPUT_NOT_VALID);
+            }
+
+            waitForMove();
+        });
     }
 
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
         super.handlePlaceDiceOnWindowPatternMove();
-        waitForMove(); //TODO: check
+        print("Insert the row number of the window pattern");
+        waitForConsoleInput(rowString -> {
+            int row = Integer.parseInt(rowString) - 1;
+            print("Insert the col number of the window pattern");
+            waitForConsoleInput(colString -> {
+                int col = Integer.parseInt(colString) - 1;
+                if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put("row",row);
+                    params.put("col",col);
+                    sendMessage(new VCMessage(VCMessage.types.PLACE_DICE,params));
+                } else {
+                    print(INPUT_NOT_VALID);
+                }
+                waitForMove();
+            });
+        });
     }
 
     @Override
     void handleUseToolCardMove() {
         super.handleUseToolCardMove();
-        waitForMove(); //TODO: check
+        int index = 1;
+        for(ToolCard toolCard : drawnToolCards){
+            print(Integer.toString(index)+". "+toolCard);
+            index++;
+        }
+        waitForConsoleInput(toolcardIndexString -> {
+            int toolcardIndex = Integer.parseInt(toolcardIndexString);
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(toolcardIndex))));
+            waitForMove();
+        });
     }
 
     @Override
     void handleIncrementDraftedDiceMove() {
         super.handleIncrementDraftedDiceMove();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleDecrementDraftedDiceMove() {
         super.handleDecrementDraftedDiceMove();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleChangeDraftedDiceValueMove() {
         super.handleChangeDraftedDiceValueMove();
-        waitForMove(); //TODO: check
+        print("Insert the value you want to assign to the drafted dice");
+        waitForConsoleInput(diceValueString->{
+            int diceValue = Integer.parseInt(diceValueString);
+            if(diceValue<1 || diceValue>6){
+                print(INPUT_NOT_VALID);
+            } else {
+                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",diceValue)));
+            }
+            waitForMove();
+        });
     }
 
     @Override
     void handleChooseDiceFromTrackMove() {
         super.handleChooseDiceFromTrackMove();
-        waitForMove(); //TODO: check
+        print("Following the dices in the track");
+        ArrayList<Dice> dices = new ArrayList<>();
+        for(int i=0; i<track.size(); i++){
+            print("TRACK SLOT #"+(i+1));
+            for(Dice dice : track.getDicesFromSlotNumber(i)){
+                dices.add(dice);
+                print(dice.toString());
+            }
+        }
+        print("Insert the number of slot you want to draft the dice from");
+        waitForConsoleInput(trackSlotNumberString->{
+            int trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
+            print("Insert the index of the dice you want to pick:");
+            int index = 1;
+            for(Dice dice : track.getDicesFromSlotNumber(trackSlotNumber)){
+                dices.add(dice);
+                print(Integer.toString(index)+". "+dice);
+                index++;
+            }
+            waitForConsoleInput(choosenDiceIndexString->{
+                int choosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
+
+                HashMap<String,Object> params = new HashMap<>();
+                params.put("slotNumber",trackSlotNumber);
+                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(choosenDiceIndex));
+
+                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_FROM_TRACK,params));
+                waitForMove();
+            });
+        });
+
     }
 
     @Override
     void handleMoveDiceMove() {
         super.handleMoveDiceMove();
-        waitForMove(); //TODO: check
+        print("Insert the row number of the window pattern (origin)");
+        waitForConsoleInput(rowString -> {
+            int row = Integer.parseInt(rowString) - 1;
+            print("Insert the row number of the window pattern (origin)");
+            waitForConsoleInput(colString -> {
+                int col = Integer.parseInt(colString) - 1;
+                if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
+
+                    print("Insert the row number of the window pattern (destination)");
+                    waitForConsoleInput(rowDestString -> {
+                        int rowDest = Integer.parseInt(rowDestString) - 1;
+                        print("Insert the row number of the window pattern (destination)");
+                        waitForConsoleInput(colDestString -> {
+                            int colDest = Integer.parseInt(colDestString) - 1;
+                            if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
+                                HashMap<String,Object> params = new HashMap<>();
+                                params.put("rowFrom",row);
+                                params.put("colFrom",col);
+                                params.put("rowTo",rowDest);
+                                params.put("colTo",colDest);
+                                sendMessage(new VCMessage(VCMessage.types.MOVE_DICE,params));
+                            } else {
+                                print(INPUT_NOT_VALID);
+                            }
+                            waitForMove();
+                        });
+                    });
+
+                } else {
+                    print(INPUT_NOT_VALID);
+                }
+            });
+        });
     }
 
     @Override
@@ -262,6 +364,7 @@ public class CLIView extends View{
     @Override
     void handleGameEndedEvent(Message m) {
         super.handleGameEndedEvent(m);
+        print("Rankings: xxx");
         //TODO: print rankings
     }
 
@@ -270,6 +373,7 @@ public class CLIView extends View{
         super.handleGiveWindowPatternsEvent(m);
 
         //Print windowpattern
+        print("Choose a window pattern from the followings:");
         int index = 1;
         for(WindowPattern windowPattern : drawnWindowPatterns){
             print(Integer.toString(index)+". "+windowPattern);
@@ -278,7 +382,7 @@ public class CLIView extends View{
         waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
-                WindowPattern chosenWindowPattern = drawnWindowPatterns.get(Integer.parseInt(s));
+                WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
@@ -291,17 +395,18 @@ public class CLIView extends View{
     @Override
     void handleAddedEvent() {
         super.handleAddedEvent();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleRemovedEvent() {
         super.handleRemovedEvent();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void showMessage(String message) {
+        cleanConsole();
         print(message);
         waitForMove();
     }
