@@ -205,6 +205,7 @@ public class Controller extends Observable {
     }
 
     public CVMessage handleMove(VCMessage message) {
+        System.out.println("Handling move...");
 
         VCMessage.types type = (VCMessage.types) message.getType();
         CVMessage returnMessage;
@@ -306,8 +307,7 @@ public class Controller extends Observable {
                             returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
                             break;
                         case END_TURN:
-                            //TODO: implement here
-                            returnMessage = null;
+                            returnMessage = controllerState.endCurrentTurn();
                             break;
                         default:
                             returnMessage = errorMessage("UnrecognizedMove");

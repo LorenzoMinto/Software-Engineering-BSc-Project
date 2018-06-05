@@ -267,7 +267,7 @@ public class WindowPattern extends Observable implements Serializable{
         Map<String, Object> messageAttributes = new HashMap<>();
 
         messageAttributes.put("windowPattern", this);
-        messageAttributes.put("currentPlayer", owner);
+        messageAttributes.put("currentPlayer", owner.getID());
 
         notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
     }

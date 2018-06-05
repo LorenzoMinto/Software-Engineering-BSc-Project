@@ -6,6 +6,7 @@ import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.message.VCMessage;
 import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -194,7 +195,6 @@ public class SagradaSceneController extends View implements Initializable {
         switch (move) {
             case END_TURN:
                 handleEndTurnMove();
-                printOnConsole("Turn ended.");
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
                 break;
@@ -227,10 +227,6 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
-    @Override
-    void handleBackGameMove() {
-
-    }
 
     @Override
     void handleDraftDiceFromDraftPoolMove() {
@@ -273,11 +269,6 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleJoinGameMove() {
-
-    }
-
-    @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
         enableBlackPane();
@@ -294,7 +285,8 @@ public class SagradaSceneController extends View implements Initializable {
             patternImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    windowPattern = pattern;
+                    setWindowPattern(pattern);
+                    sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",pattern)));
                     hasChosenWindowPattern();
                     printOnConsole(pattern.getTitle() +" chosen.");
                 }

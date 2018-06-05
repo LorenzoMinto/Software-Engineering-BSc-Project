@@ -322,6 +322,7 @@ public class Game extends Observable implements Observer{
 
         for (Player player: players) {
             messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard());
+            messageAttributes.put("yourWindowPattern", player.getWindowPattern());
             Message message = new MVMessage(MVMessage.types.SETUP, messageAttributes, player.getID());
 
             notify(message);

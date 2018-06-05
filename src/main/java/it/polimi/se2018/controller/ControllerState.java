@@ -8,6 +8,7 @@ import it.polimi.se2018.utils.message.CVMessage;
 import java.util.EnumSet;
 import java.util.Set;
 
+import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
 /**
@@ -129,7 +130,11 @@ public abstract class ControllerState {
      * Ends the current turn.
      * @return a message containing the result of the mov
      */
-    public CVMessage endCurrentTurn() { return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage endCurrentTurn() {
+        System.out.println("End current turn called on" + this.getClass().getSimpleName());
+        controller.advanceGame();
+        return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
+    }
 
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
