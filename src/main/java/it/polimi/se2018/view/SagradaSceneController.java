@@ -252,18 +252,13 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
-
-    }
-
-    @Override
-    void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
-
+    void handleGiveWindowPatternsEvent(Message m) {
+        super.handleGiveWindowPatternsEvent(m);
         enableBlackPane();
 
         List<ImageView> windowPatternPanes = new ArrayList<>();
 
-        for (WindowPattern pattern: patterns) {
+        for (WindowPattern pattern: drawnWindowPatterns) {
 //            Pane pane = new Pane();
 //            pane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
             Image patternImage = new Image((new File(pattern.getImageURL())).toURI().toString());

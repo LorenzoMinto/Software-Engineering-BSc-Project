@@ -245,6 +245,15 @@ public abstract class View implements Observer {
         List<Dice> mDraftPoolDices = (List<Dice>) o;
 
         try {
+            o = m.getParam("windowPatterns");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<WindowPattern> mWindowPatterns = (List<WindowPattern>) o;
+
+        try {
             o = m.getParam("privateObjectiveCard");
         } catch (NoSuchParamInMessageException e) {
             showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
@@ -260,6 +269,7 @@ public abstract class View implements Observer {
         setPlayers(mPlayers);
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
+        setWindowPatterns(mWindowPatterns);
 
         notifyGameVariablesChanged();
 
