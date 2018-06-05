@@ -291,7 +291,37 @@ public class CLIView extends View{
     @Override
     void handleChooseDiceFromTrackMove() {
         super.handleChooseDiceFromTrackMove();
-        waitForMove(); //TODO: check
+        print("Following the dices in the track");
+        ArrayList<Dice> dices = new ArrayList<>();
+        for(int i=0; i<track.size(); i++){
+            print("TRACK SLOT #"+(i+1));
+            for(Dice dice : track.getDicesFromSlotNumber(i)){
+                dices.add(dice);
+                print(dice.toString());
+            }
+        }
+        print("Insert the number of slot you want to draft the dice from");
+        waitForConsoleInput(trackSlotNumberString->{
+            int trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
+            print("Insert the index of the dice you want to pick:");
+            int index = 1;
+            for(Dice dice : track.getDicesFromSlotNumber(trackSlotNumber)){
+                dices.add(dice);
+                print(Integer.toString(index)+". "+dice);
+                index++;
+            }
+            waitForConsoleInput(choosenDiceIndexString->{
+                int choosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
+
+                HashMap<String,Object> params = new HashMap<>();
+                params.put("slotNumber",trackSlotNumber);
+                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(choosenDiceIndex));
+
+                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_FROM_TRACK,params));
+                waitForMove();
+            });
+        });
+
     }
 
     @Override

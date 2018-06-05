@@ -295,13 +295,15 @@ public class Controller extends Observable {
                             returnMessage = controllerState.decrementDice();
                             break;
                         case CHOOSE_DICE_FROM_TRACK:
-                            int value2;
+                            Dice trackDice;
+                            int trackSlotNumber;
                             try {
-                                value2 = (int) message.getParam("value");
+                                trackDice = (Dice) message.getParam("dice");
+                                trackSlotNumber = (int) message.getParam("slotNumber");
                             } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }
-                            returnMessage = controllerState.chooseDiceValue(value2);
+                            returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
                             break;
                         case CHOOSE_WINDOW_PATTERN:
                             //TODO: implement here
