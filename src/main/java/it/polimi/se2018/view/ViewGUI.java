@@ -108,15 +108,11 @@ public class ViewGUI extends Application {
             //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
             @Override
             public void handle(ActionEvent e) {
-                client = new Client(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
-                        serverNameTextField.getText(), Integer.parseInt(portTextField.getText()), sagradaSceneController, false);
                 sagradaSceneController.setClient(client);
-                try {
-                    //TODO: Remote exception handling should not be here, client should handle and return other kind of exception
-                    client.sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN, Message.fastMap("nickname",userTextField.getText())));
-                } catch (RemoteException r) {
-                    System.out.println("Error sending join message.");
-                }
+                sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
+                        serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
+                sagradaSceneController.setPlayer(userTextField.getText());
+                sagradaSceneController.sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",userTextField.getText())));
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
             }

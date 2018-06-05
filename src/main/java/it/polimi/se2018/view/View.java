@@ -72,6 +72,10 @@ public abstract class View implements Observer {
         sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
     }
 
+    void handleWindowPatternSelection(WindowPattern wp){
+        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+    }
+
     void handleDraftDiceFromDraftPoolMove(){
         //no behaviour in common between CLI and GUI
     }
@@ -252,6 +256,15 @@ public abstract class View implements Observer {
         List<WindowPattern> mWindowPatterns = (List<WindowPattern>) o;
 
         try {
+            o = m.getParam("yourWindowPattern");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        WindowPattern mWindowPattern = (WindowPattern) o;
+
+        try {
             o = m.getParam("privateObjectiveCard");
         } catch (NoSuchParamInMessageException e) {
             showMessage("Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.");
@@ -268,6 +281,7 @@ public abstract class View implements Observer {
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
         setWindowPatterns(mWindowPatterns);
+        setWindowPattern(mWindowPattern);
 
         notifyGameVariablesChanged();
 
@@ -342,17 +356,31 @@ public abstract class View implements Observer {
         showMessage("Il vincitore è "+winner);
     }
 
-    void handleAssignedWindowPatternEvent(Message m) {
+    void handleUpdatedWindowPatternEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("windopattern");
+            o = m.getParam("windowpattern");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
         @SuppressWarnings("unchecked")
         WindowPattern wp = (WindowPattern) o;
-        setWindowPattern(wp);
-        showMessage("Ti è stato assegnato questo windowpattern: "+windowPattern);
+
+        try {
+            o = m.getParam("currentPlayer");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String pID = (String) o;
+
+        // Assume ordinamento corrispettivo PLAYERS_ID:WINDOWPATTERNS
+        int index = players.indexOf(pID);
+        windowPatterns.set(index, wp);
+
+        showMessage("A Window pattern has been updated ");
+
+        notifyGameVariablesChanged();
     }
 
     void handleChangedDraftPoolEvent(Message m) {
@@ -525,7 +553,7 @@ public abstract class View implements Observer {
                 handleRankingsEvent(m);
                 break;
             case WINDOWPATTERN:
-                handleAssignedWindowPatternEvent(m);
+                handleUpdatedWindowPatternEvent(m);
                 break;
             case DRAFTPOOL:
                 handleChangedDraftPoolEvent(m);

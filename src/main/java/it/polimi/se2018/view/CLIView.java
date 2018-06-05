@@ -453,11 +453,6 @@ public class CLIView extends View{
     }
 
     @Override
-    void handleAssignedWindowPatternEvent(Message m){
-
-    }
-
-    @Override
     void handleChangedDraftPoolEvent(Message m){
 
     }
