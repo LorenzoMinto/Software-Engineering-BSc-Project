@@ -579,7 +579,7 @@ public class CLIView extends View{
 
     @Override
     void errorMessage(String message) {
-        print("ERROR: "+message);
+        print(""+message);
         waitForMove();
     }
 

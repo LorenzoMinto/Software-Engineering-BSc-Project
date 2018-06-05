@@ -48,7 +48,7 @@ public class ObjectiveCardFactory {
      * @return the {@link PrivateObjectiveCard} of the specified color
      */
     protected PrivateObjectiveCard createPrivateObjectiveCard(DiceColor color) {
-        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a " +
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("Cannot create a " +
                 "Private Objective Card with no color"); }
 
         String title = "Shades of " + color.toString()+ " - Private";
@@ -160,7 +160,7 @@ public class ObjectiveCardFactory {
                     description = "Sets of 5 & 6 values anywhere";
                     imageURL = publicObjectiveCardsPath + "DeepShades.jpg";
                 }else{
-                    throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
+                    throw new BadBehaviourRuntimeException("The Value Set Public Objective Card " +
                             "cannot be created with couples of two different from the following: (1,2) (3,4) (5,6).");
                 }
                 multiplier = 2;
@@ -172,7 +172,7 @@ public class ObjectiveCardFactory {
                 imageURL = publicObjectiveCardsPath + "ShadeVariety.jpg";
                 break;
             default:
-                throw new BadBehaviourRuntimeException("ERROR: The Value Set Public Objective Card " +
+                throw new BadBehaviourRuntimeException("The Value Set Public Objective Card " +
                         "cannot be created with the values passed in the constructor. The values passed are:" +
                         values + " .");
         }

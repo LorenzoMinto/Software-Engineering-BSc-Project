@@ -60,7 +60,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
-        if(windowPattern==null){ throw new IllegalArgumentException("ERROR: Cannot calculate score of" +
+        if(windowPattern==null){ throw new IllegalArgumentException("Cannot calculate score of" +
                 " a null window pattern."); }
 
         int score = 0;

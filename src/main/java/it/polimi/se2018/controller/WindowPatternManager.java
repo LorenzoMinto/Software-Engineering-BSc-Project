@@ -69,7 +69,7 @@ public class WindowPatternManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public Set<WindowPattern> getPairsOfPatterns(int numberOfPairs) {
-        if(numberOfPairs < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of couples of windowpatterns");}
+        if(numberOfPairs < 0){ throw new IllegalArgumentException("Can't get a negative number of couples of windowpatterns");}
 
         Set<WindowPattern> couplesOfPatterns = new HashSet<>();
 

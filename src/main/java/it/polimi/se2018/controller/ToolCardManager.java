@@ -62,7 +62,7 @@ public class ToolCardManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public List<ToolCard> getRandomToolCards(int quantity){
-        if(quantity < 0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of random toolcards");}
+        if(quantity < 0){ throw new IllegalArgumentException("Can't get a negative number of random toolcards");}
 
         List<ToolCard> toolCards = new ArrayList<>();
 

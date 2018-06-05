@@ -99,7 +99,7 @@ public class Player implements Serializable {
      * @return true if the action succeeded, false if not (not enough tokens left)
      */
     public boolean decreaseTokens(int quantity) {
-        if(quantity < 0){ throw new IllegalArgumentException("ERROR: Cannot decrease tokens of a negative quantity.");}
+        if(quantity < 0){ throw new IllegalArgumentException("Cannot decrease tokens of a negative quantity.");}
         if(favorTokens<quantity) return false;
         favorTokens -= quantity;
         return true;

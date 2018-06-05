@@ -167,7 +167,7 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public Dice getDiceOnCell(int row, int col) {
         if (isPositionIllegal(row, col)){
-            throw new ValueOutOfBoundsException("ERROR: Can't get dice from an illegal position.");}
+            throw new ValueOutOfBoundsException("Can't get dice from an illegal position.");}
 
         Dice dice = null;
 

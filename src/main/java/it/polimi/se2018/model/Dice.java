@@ -44,8 +44,8 @@ public class Dice implements Serializable {
      * @param value the value of the new Dice
      */
     public Dice(DiceColor color, int value) {
-        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("ERROR: Cannot create a Dice with no color."); }
-        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("ERROR: Cannot create a dice with value not in range [1,6]."); }
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("Cannot create a Dice with no color."); }
+        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("Cannot create a dice with value not in range [1,6]."); }
 
         this.color = color;
         this.value = value;
@@ -57,7 +57,7 @@ public class Dice implements Serializable {
      * @param value the value to be setted to the Dice
      */
     public void setValue(int value) {
-        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("ERROR: Cannot create a dice with value not in range [1,6]."); }
+        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("Cannot create a dice with value not in range [1,6]."); }
         this.value = value;
     }
 

@@ -27,7 +27,7 @@ public class DiceBag {
      * @see DiceColor
      */
     public DiceBag(int numberOfDicesPerColor) {
-        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException("ERROR: Can't create a dicebag with a negative number of dices per color");}
+        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException("Can't create a dicebag with a negative number of dices per color");}
 
         this.availableDices = new EnumMap<>(DiceColor.class);
         for(int i = 0; i< DiceColor.values().length-1; i++){
@@ -45,7 +45,7 @@ public class DiceBag {
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
 
-        if(quantity <0){ throw new IllegalArgumentException("ERROR: Can't get a negative number of dices.");}
+        if(quantity <0){ throw new IllegalArgumentException("Can't get a negative number of dices.");}
 
         if( quantity > this.numberOfAvailableDices() ){
             throw new BadBehaviourRuntimeException("Asked DiceBag to get "+quantity+" dices but only "+numberOfAvailableDices()+" dices are available");

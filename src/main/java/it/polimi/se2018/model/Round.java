@@ -161,7 +161,7 @@ public class Round {
      * @author Jacopo Pio Gargano
      */
     public boolean removeNextTurnOfPlayer(Player player) {
-        if(player == null){throw new IllegalArgumentException("ERROR: Can't remove the next turn of a null player");}
+        if(player == null){throw new IllegalArgumentException("Can't remove the next turn of a null player");}
         for (int i = currentTurnIndex + 1; i < turns.size(); i++) {
             Turn currentTurn = turns.get(i);
             Player currentPlayer = currentTurn.getPlayer();

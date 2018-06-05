@@ -32,7 +32,7 @@ public class ObjectiveCardManager {
      */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
         if(assignedColors.size() == DiceColor.values().length-1){ throw new BadBehaviourRuntimeException(
-                "ERROR: Cannot get more than 5 Private Objective Card as all of them were already created.");}
+                "Cannot get more than 5 Private Objective Card as all of them were already created.");}
 
         DiceColor color;
 
@@ -54,7 +54,7 @@ public class ObjectiveCardManager {
     public List<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
         if(quantity < 1 || quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS){
-            throw new ValueOutOfBoundsException("ERROR: The quantity of Public Objective Cards asked is greater " +
+            throw new ValueOutOfBoundsException("The quantity of Public Objective Cards asked is greater " +
                     "than the number of Public Objective Cards.");
         }
 

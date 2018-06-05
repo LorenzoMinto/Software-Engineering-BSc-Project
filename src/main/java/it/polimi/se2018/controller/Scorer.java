@@ -49,7 +49,7 @@ public class Scorer {
      * @return the first player of certain rankings
      */
     public Player getWinner(Map<Player, Integer> rankings){
-        if(rankings.isEmpty()){ throw new EmptyListException("ERROR: Can't determine winner if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new EmptyListException("Can't determine winner if the list of players is empty.");}
 
         List<Player> playersOfRankings = new ArrayList<>( rankings.keySet() );
 
@@ -72,9 +72,9 @@ public class Scorer {
      public Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
                                      List<PublicObjectiveCard> publicObjectiveCards){
         if(playersOfLastRound.isEmpty()){ throw new EmptyListException(
-                "ERROR: Can't determine winner if the list of players is empty.");}
+                "Can't determine winner if the list of players is empty.");}
         if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(
-                "ERROR: Can't determine winner if the list of public objective cards is empty.");}
+                "Can't determine winner if the list of public objective cards is empty.");}
 
         Map<Player,Integer> rankings;
 

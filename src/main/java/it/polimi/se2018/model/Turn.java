@@ -150,7 +150,7 @@ public class Turn extends Observable implements Serializable {
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
-        if(value < 0) {throw new ValueOutOfBoundsException("ERROR: Can't set the slot of chosen dice to a negative value.");}
+        if(value < 0) {throw new ValueOutOfBoundsException("Can't set the slot of chosen dice to a negative value.");}
         this.slotOfTrackChosenDice = value;
 
         Map<String, Object> messageAttributes = new HashMap<>();
@@ -233,7 +233,7 @@ public class Turn extends Observable implements Serializable {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(String playerID){
-        if(playerID == null){throw new IllegalArgumentException("ERROR: Can't check if null player is current player");}
+        if(playerID == null){throw new IllegalArgumentException("Can't check if null player is current player");}
         return ( this.player.getID().equals(playerID) );
     }
 }

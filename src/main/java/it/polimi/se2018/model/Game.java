@@ -302,9 +302,9 @@ public class Game extends Observable implements Observer{
      * @param dices list of dices to be used for the first round
      */
     public void startGame(List<Dice> dices, Set<Move> permissions){
-        if(dices == null){ throw new IllegalArgumentException("ERROR: Can't start game with null dices.");}
+        if(dices == null){ throw new IllegalArgumentException("Can't start game with null dices.");}
         if(dices.isEmpty()){ throw new EmptyListException("Can't start game with no dices.");}
-        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException("ERROR: Can't start game if not waiting for patterns choice.");}
+        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException("Can't start game if not waiting for patterns choice.");}
 
         this.status = GameStatus.PLAYING;
 
@@ -344,7 +344,7 @@ public class Game extends Observable implements Observer{
      * that could have been played in this game were actually already played
      */
     public void nextRound(List<Dice> dices, Set<Move> permissions) throws NoMoreRoundsAvailableException{
-        if(dices == null){ throw new IllegalArgumentException("ERROR: Can't proceed to next round with null dices.");}
+        if(dices == null){ throw new IllegalArgumentException("Can't proceed to next round with null dices.");}
         if(dices.isEmpty()){ throw new EmptyListException("Can't proceed to next round with no dices.");}
         if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next round if game is not already running"); }
 
