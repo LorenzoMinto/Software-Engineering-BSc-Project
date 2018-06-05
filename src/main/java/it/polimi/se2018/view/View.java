@@ -588,11 +588,11 @@ public abstract class View implements Observer {
     }
 
     void sendMessage(Message m){
-        System.out.println("Sending message "+m);
         try {
             this.client.sendMessage(m);
         } catch (RemoteException e) {
             errorMessage("Error sending message: ".concat(m.toString()));
+            //TODO: check if this must be removed in production
         } catch (NullPointerException ex){
             errorMessage(MUST_CONNECT);
         }
