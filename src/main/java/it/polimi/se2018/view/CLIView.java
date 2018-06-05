@@ -160,89 +160,105 @@ public class CLIView extends View{
         System.out.println(text);
     }
 
+
+
     @Override
     void handleLeaveWaitingRoomMove() {
-        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.LEAVE,Message.fastMap("nickname",this.playerID)));
+        super.handleLeaveWaitingRoomMove();
         waitForMove();
     }
 
     @Override
     void handleBackGameMove() {
-        sendMessage(new VCMessage(VCMessage.types.BACK_GAMING,null,this.playerID));
+        super.handleBackGameMove();
         waitForMove();
     }
 
     @Override
     void handleEndTurnMove() {
-        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+        super.handleEndTurnMove();
         waitForMove();
     }
 
     @Override
     void handleDraftDiceFromDraftPoolMove() {
-
+        super.handleDraftDiceFromDraftPoolMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
-
+        super.handlePlaceDiceOnWindowPatternMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleUseToolCardMove() {
-
+        super.handleUseToolCardMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleIncrementDraftedDiceMove() {
-
+        super.handleIncrementDraftedDiceMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleDecrementDraftedDiceMove() {
-
+        super.handleDecrementDraftedDiceMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleChangeDraftedDiceValueMove() {
-
+        super.handleChangeDraftedDiceValueMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleChooseDiceFromTrackMove() {
-
+        super.handleChooseDiceFromTrackMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleMoveDiceMove() {
-
+        super.handleMoveDiceMove();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleJoinGameMove() {
+        super.handleJoinGameMove();
+
         print("Insert your nickname");
         String nickname = SCANNER.nextLine();
-        this.playerID = nickname;
+        
+        setPlayer(nickname);
         sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
     }
 
     @Override
-    void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
+    void handleGameEndedEvent(Message m) {
+        super.handleGameEndedEvent(m);
         //TODO: print rankings
     }
 
     @Override
-    void handleGiveWindowPatternsEvent(List<WindowPattern> patterns) {
+    void handleGiveWindowPatternsEvent(Message m) {
+        super.handleGiveWindowPatternsEvent(m);
+
         //Print windowpattern
         int index = 1;
-        for(WindowPattern windowPattern : patterns){
+        for(WindowPattern windowPattern : drawnWindowPatterns){
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
         waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
-            if(i <= patterns.size() && i >= 0){
-                WindowPattern chosenWindowPattern = patterns.get(Integer.parseInt(s));
+            if(i <= drawnWindowPatterns.size() && i >= 0){
+                WindowPattern chosenWindowPattern = drawnWindowPatterns.get(Integer.parseInt(s));
                 sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
@@ -254,12 +270,14 @@ public class CLIView extends View{
 
     @Override
     void handleAddedEvent() {
-        waitForMove();
+        super.handleAddedEvent();
+        waitForMove(); //TODO: check
     }
 
     @Override
     void handleRemovedEvent() {
-        waitForMove();
+        super.handleRemovedEvent();
+        waitForMove(); //TODO: check
     }
 
     @Override
