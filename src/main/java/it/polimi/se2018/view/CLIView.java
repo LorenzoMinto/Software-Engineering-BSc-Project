@@ -166,19 +166,6 @@ public class CLIView extends View{
     }
 
     private void cleanConsole(){
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
-        print(System.lineSeparator());
         //TODO: implement this method
     }
 
@@ -231,6 +218,7 @@ public class CLIView extends View{
         print("Insert the row number of the window pattern");
         waitForConsoleInput(rowString -> {
             int row = Integer.parseInt(rowString) - 1;
+            print("Insert the col number of the window pattern");
             waitForConsoleInput(colString -> {
                 int col = Integer.parseInt(colString) - 1;
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
@@ -327,7 +315,39 @@ public class CLIView extends View{
     @Override
     void handleMoveDiceMove() {
         super.handleMoveDiceMove();
-        waitForMove(); //TODO: check
+        print("Insert the row number of the window pattern (origin)");
+        waitForConsoleInput(rowString -> {
+            int row = Integer.parseInt(rowString) - 1;
+            print("Insert the row number of the window pattern (origin)");
+            waitForConsoleInput(colString -> {
+                int col = Integer.parseInt(colString) - 1;
+                if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
+
+                    print("Insert the row number of the window pattern (destination)");
+                    waitForConsoleInput(rowDestString -> {
+                        int rowDest = Integer.parseInt(rowDestString) - 1;
+                        print("Insert the row number of the window pattern (destination)");
+                        waitForConsoleInput(colDestString -> {
+                            int colDest = Integer.parseInt(colDestString) - 1;
+                            if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
+                                HashMap<String,Object> params = new HashMap<>();
+                                params.put("rowFrom",row);
+                                params.put("colFrom",col);
+                                params.put("rowTo",rowDest);
+                                params.put("colTo",colDest);
+                                sendMessage(new VCMessage(VCMessage.types.MOVE_DICE,params));
+                            } else {
+                                print(INPUT_NOT_VALID);
+                            }
+                            waitForMove();
+                        });
+                    });
+
+                } else {
+                    print(INPUT_NOT_VALID);
+                }
+            });
+        });
     }
 
     @Override
@@ -344,6 +364,7 @@ public class CLIView extends View{
     @Override
     void handleGameEndedEvent(Message m) {
         super.handleGameEndedEvent(m);
+        print("Rankings: xxx");
         //TODO: print rankings
     }
 
@@ -352,6 +373,7 @@ public class CLIView extends View{
         super.handleGiveWindowPatternsEvent(m);
 
         //Print windowpattern
+        print("Choose a window pattern from the followings:");
         int index = 1;
         for(WindowPattern windowPattern : drawnWindowPatterns){
             print(Integer.toString(index)+". "+windowPattern);
@@ -360,7 +382,7 @@ public class CLIView extends View{
         waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
-                WindowPattern chosenWindowPattern = drawnWindowPatterns.get(Integer.parseInt(s));
+                WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
@@ -384,6 +406,7 @@ public class CLIView extends View{
 
     @Override
     void showMessage(String message) {
+        cleanConsole();
         print(message);
         waitForMove();
     }
