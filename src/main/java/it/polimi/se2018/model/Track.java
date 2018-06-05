@@ -74,18 +74,21 @@ public class Track implements Serializable, Iterable<TrackSlot> {
      *
      * @param dice the dice to be put.
      * @param slotNumber the TrackSlot number on which to put the dice.
-     * @return whether or not the specified dice could be put on the specified TrackSlot.
      */
-    public boolean putDice(Dice dice, int slotNumber){
+    public void putDice(Dice dice, int slotNumber){
         if(dice == null){ throw new IllegalArgumentException("Can't add nul dice to the track");}
         if (slotNumber >= slots.size()) {
             throw new ValueOutOfBoundsException("The selected track slot does not exist.");
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.addDice(dice);
-        return true;
     }
 
+    /**
+     * Returns the size of the Track, that is how many TrackSlot it contains
+     * @see TrackSlot
+     * @return how many TrackSlot it contains
+     */
     public int size(){
         return slots.size();
     }

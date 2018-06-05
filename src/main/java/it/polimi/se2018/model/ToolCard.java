@@ -126,7 +126,7 @@ public class ToolCard implements Serializable{
         if (this.tokensUsed==this.baseNeededTokens) { this.neededTokens *= this.tokensUsageMultiplier; }
     }
 
-    public String getToolCardID() { return toolCardID; }
+    private String getToolCardID() { return toolCardID; }
 
     /**
      * Returns the title of the tool card.
@@ -232,6 +232,10 @@ public class ToolCard implements Serializable{
         return Objects.hash(toolCardID);
     }
 
+    /**
+     * Returns string representation of the ToolCard.
+     * @return string representation of the ToolCard
+     */
     @Override
     public String toString() {
         return "["+getTitle()+"](Needed: "+getNeededTokens()+"| Used: "+ getUsedTokens()+") "+getDescription()+"";

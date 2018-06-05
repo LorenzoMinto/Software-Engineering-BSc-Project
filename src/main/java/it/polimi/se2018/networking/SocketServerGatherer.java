@@ -7,35 +7,70 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * Gatherer of new socket connections.
+ * A thread is started for each new socket connection to read the input coming from it.
  *
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
 public class SocketServerGatherer extends Thread{
 
+    /**
+     * String sent as content of fail() when something in accepting a new connection goes wrong.
+     */
+    private static final String ACCEPTING_CONNECTION_EXCEPTION = "Exception thrown accepting socket connections";
+
+    /**
+     * String sent as content of fail() when something in reading from stream input goes wrong.
+     */
+    private static final String READING_STREAM_EXCEPTION = "Exception thrown reading socket input stream";
+
+    /**
+     * The server that is connected to this gatherer.
+     */
     private final ReceiverInterface server;
-    private boolean acceptConns = true;
+
+    /**
+     * Boolean value that is used to, eventually, stop the gathering loop.
+     */
+    private boolean acceptConnections = true;
+
+    /**
+     * Port number on which the socket connection is opened
+     */
     private int portNumber;
 
+    /**
+     * Constructor for this class
+     * @param portNumber port number on which the socket connection is opened
+     * @param server the server that is connected to this gatherer
+     */
     SocketServerGatherer(Integer portNumber, ReceiverInterface server) {
-
         this.server = server;
         this.portNumber = portNumber;
     }
 
+    /**
+     * Gathering loop
+     */
     @Override
     public void run() {
         try(ServerSocket socket = new ServerSocket(portNumber)){
 
-            while(this.acceptConns){
+            while(this.acceptConnections){
                 acceptConnection(socket);
             }
 
         } catch (Exception e){
-            ((Server)this.server).fail("Exception thrown accepting socket connections");
+            ((Server)this.server).fail(ACCEPTING_CONNECTION_EXCEPTION);
         }
     }
 
+    /**
+     * Method called for accepting a new connection. Waits for a new one and then starts an input reading thread.
+     * @param socket the socket to monitor for new connections requests
+     * @throws IOException if something in the acceptance process goes wrong due to IO problems
+     */
     private void acceptConnection(ServerSocket socket) throws IOException{
         Socket clientSocket = socket.accept();
 
@@ -59,15 +94,18 @@ public class SocketServerGatherer extends Thread{
                     message = (Message) in.readObject();
                     server.receiveMessage(message, new SocketServer(outputStream));
                 } catch( Exception e ){
-                    e.printStackTrace();
-                    ((Server)server).fail("Exception thrown reading socket input stream");
+                    ((Server)server).fail(READING_STREAM_EXCEPTION);
                     c = false;
                 }
             }
         }).start();
     }
 
+    /**
+     * Stop the gathering loop
+     */
     public void stopAcceptingConnections(){
-        this.acceptConns = false;
+        //TODO: verificare se questo metodo è stato effettivamente utilizzato, e nel caso rimuoverlo
+        this.acceptConnections = false;
     }
 }

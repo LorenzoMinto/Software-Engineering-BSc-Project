@@ -19,6 +19,14 @@ public class WindowPattern extends Observable implements Serializable{
      * Serial Version UID
      */
     private static final long serialVersionUID = 2377367135661621968L;
+
+    /**
+     * In string representation of window pattern it is written the difficulty of it.
+     * This constant contains the text written before the actual number.
+     */
+    private static final String DIFFICULTY_STRING = "Difficulty: ";
+    public static final String DICE_IN_ILLEGAL_POSITION_ERROR = "Can't move the dice from or to an illegal position.";
+
     /**
      * Window Pattern ID
      */
@@ -158,7 +166,7 @@ public class WindowPattern extends Observable implements Serializable{
      * @return the Dice that is placed on the cell corresponding to the given row and column numbers.
      */
     public Dice getDiceOnCell(int row, int col) {
-        if (!isLegalPosition(row, col)){
+        if (isPositionIllegal(row, col)){
             throw new ValueOutOfBoundsException("ERROR: Can't get dice from an illegal position.");}
 
         Dice dice = null;
@@ -183,8 +191,8 @@ public class WindowPattern extends Observable implements Serializable{
         if(dice==null) throw new IllegalArgumentException("Asked to put a null dice on cell [I am window pattern]");
 
         //Checks if location row,col is correct
-        if(!isLegalPosition(row, col)){
-            throw new ValueOutOfBoundsException("ERROR: Can't put dice on an illegal position.");
+        if(isPositionIllegal(row, col)){
+            throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);
         }
 
         //Checks if no dice is present on the specified cell
@@ -211,8 +219,8 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public boolean moveDiceFromCellToCell(int fromRow, int fromCol, int toRow, int toCol) {
         //check if positions are legal
-        if (!isLegalPosition(fromRow, fromCol) || !isLegalPosition(toRow, toCol)) {
-            throw new ValueOutOfBoundsException("ERROR: Can't move the dice from or to an illegal position.");}
+        if (isPositionIllegal(fromRow, fromCol) || isPositionIllegal(toRow, toCol)) {
+            throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);}
 
         if (pattern[fromRow][fromCol].hasDice() && !pattern[toRow][toCol].hasDice()) {
             Dice removedDice = pattern[fromRow][fromCol].removeDice();
@@ -243,10 +251,10 @@ public class WindowPattern extends Observable implements Serializable{
      *
      * @param row row number to check
      * @param col column number to check
-     * @return
+     * @return true if the position is illegal (out of bounds)
      */
-    private boolean isLegalPosition(int row, int col) {
-        return ((row>=0 && row<getNumberOfRows()) && (col>=0 && col<getNumberOfColumns()));
+    private boolean isPositionIllegal(int row, int col) {
+        return (row<0 || row>=getNumberOfRows() || col<0 || col>=getNumberOfColumns());
     }
 
     /**
@@ -281,7 +289,7 @@ public class WindowPattern extends Observable implements Serializable{
     public String toString() {
         String s = "{"+this.title +"}";
         s = s.concat(System.lineSeparator());
-        s = s.concat("Difficulty: " + difficulty);
+        s = s.concat(DIFFICULTY_STRING + difficulty);
         s = s.concat(System.lineSeparator());
 
         for(Cell[] cellsRow : this.pattern){

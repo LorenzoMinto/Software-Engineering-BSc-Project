@@ -16,7 +16,10 @@ import java.util.Map;
  */
 public class Turn extends Observable implements Serializable {
 
-    //TODO: @fede set SerialVersionUID
+    /**
+     * Serial Version UID
+     */
+    private static final long serialVersionUID = -8829876577425331362L;
 
     /**
      * Constructor for a new Turn.
@@ -208,11 +211,17 @@ public class Turn extends Observable implements Serializable {
         this.usedToolCard = toolCard;
     }
 
+    /**
+     * Reset trackChosenDice and slotOfTrackChosenDice variables to default values
+     */
     public void resetTrackChosenDice() {
         this.trackChosenDice = null;
         this.slotOfTrackChosenDice = -1;
     }
 
+    /**
+     * Reset draftedDice variable to default value
+     */
     public void resetDraftedDice() {
         this.draftedDice = null;
     }

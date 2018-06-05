@@ -65,10 +65,18 @@ public class TrackSlot implements Serializable {
         return new ArrayList<>(dices);
     }
 
+    /**
+     * Returns a new TrackSlot instance with the same properties and data of the current one.
+     * @return a new TrackSlot instance with the same properties and data of the current one
+     */
     public TrackSlot copy(){
         return new TrackSlot( new ArrayList<>(this.dices) );
     }
 
+    /**
+     * Returns the string representation of the Track Slot.
+     * @return the string representation of the Track Slot
+     */
     @Override
     public String toString() {
         return this.dices.toString();
