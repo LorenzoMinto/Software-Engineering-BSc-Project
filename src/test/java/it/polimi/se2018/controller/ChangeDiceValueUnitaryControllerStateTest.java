@@ -9,9 +9,9 @@ import org.junit.Test;
 import java.util.*;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class ChangeDiceValueControllerStateTest {
+public class ChangeDiceValueUnitaryControllerStateTest {
     private Controller controller;
 
     @Before
@@ -59,27 +59,51 @@ public class ChangeDiceValueControllerStateTest {
         m = controller.controllerState.draftDiceFromDraftPool(dice);
     }
 
-
     @Test
-    public void testChangeDiceValue() {
-        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
-        int value = 5;
-        Dice dice = new Dice(DiceColor.BLUE, 3);
-        currentTurn.setDraftedDice(dice);
-        controller.controllerState.chooseDiceValue(value);
-
-        assertEquals(value, currentTurn.getDraftedDice().getValue());
-    }
-
-    @Test
-    public void testChangeDiceValueWhenValueNotAllowed() {
+    public void testIncrementDice() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         int value = 3;
         Dice dice = new Dice(DiceColor.BLUE, value);
         currentTurn.setDraftedDice(dice);
-        Message m = controller.controllerState.chooseDiceValue(7);
+        controller.controllerState.incrementDice();
+
+        assertEquals(value+1, currentTurn.getDraftedDice().getValue());
+    }
+
+    @Test
+    public void testIncrementDiceWhenDiceValueIsSix() {
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
+        int value = 6;
+        Dice dice = new Dice(DiceColor.BLUE, value);
+        currentTurn.setDraftedDice(dice);
+        Message m = controller.controllerState.incrementDice();
 
         assertEquals(value, currentTurn.getDraftedDice().getValue());
         assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    @Test
+    public void testDecrementDice() {
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
+        int value = 3;
+        Dice dice = new Dice(DiceColor.BLUE, value);
+        currentTurn.setDraftedDice(dice);
+        controller.controllerState.decrementDice();
+
+        assertEquals(value-1, currentTurn.getDraftedDice().getValue());
+
+    }
+
+    @Test
+    public void testDecrementDiceWhenDiceValueIsOne() {
+        Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
+        int value = 1;
+        Dice dice = new Dice(DiceColor.BLUE, value);
+        currentTurn.setDraftedDice(dice);
+        Message m = controller.controllerState.decrementDice();
+
+        assertEquals(value, currentTurn.getDraftedDice().getValue());
+        assertEquals(ERROR_MESSAGE, m.getType());
+
     }
 }

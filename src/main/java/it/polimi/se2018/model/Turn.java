@@ -1,14 +1,22 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
+import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
+import it.polimi.se2018.utils.message.MVMessage;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class representing a round's Turn.
  *
  * @author Federico Haag
  */
-public class Turn {
+public class Turn extends Observable implements Serializable {
+
+    //TODO: @fede set SerialVersionUID
 
     /**
      * Constructor for a new Turn.
@@ -134,13 +142,19 @@ public class Turn {
 
     /**
      * Sets the slotOfTrackChosenDice to the given value.
-     * The callers has the responsability to check if the value is legal or not
+     * The callers has the responsibility to check if the value is legal or not
      *
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
         if(value < 0) {throw new ValueOutOfBoundsException("ERROR: Can't set the slot of chosen dice to a negative value.");}
         this.slotOfTrackChosenDice = value;
+
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("slotOfTrackChosenDice", this.slotOfTrackChosenDice);
+
+        notify(new MVMessage(MVMessage.types.SLOT_OF_TRACK_CHOSEN_DICE, messageAttributes));
     }
 
     /**
@@ -151,6 +165,12 @@ public class Turn {
     public void setDraftedDice(Dice dice){
         if(dice == null){throw new IllegalArgumentException("Can't set the drafted dice with a null dice.");}
         this.draftedDice = dice;
+
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("draftedDice", this.draftedDice);
+
+        notify(new MVMessage(MVMessage.types.DRAFTED_DICE, messageAttributes));
     }
 
     /**
@@ -161,6 +181,12 @@ public class Turn {
     public void setTrackChosenDice(Dice dice) {
         if(dice == null){throw new IllegalArgumentException("Can't set the track chosen dice with a null dice.");}
         this.trackChosenDice = dice;
+
+        Map<String, Object> messageAttributes = new HashMap<>();
+
+        messageAttributes.put("trackChosenDice", this.trackChosenDice);
+
+        notify(new MVMessage(MVMessage.types.TRACK_CHOSEN_DICE, messageAttributes));
     }
 
     /**

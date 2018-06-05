@@ -25,31 +25,6 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage incrementDice() {
-        Game game = controller.game;
-        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-        if (currentTurn.getDraftedDice().incrementValue()) {
-            controller.setControllerState(controller.stateManager.getNextState(this));
-        } else {
-            return new CVMessage(ERROR_MESSAGE, "Cannot increment drafted dice's value.");
-        }
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
-    }
-
-    @Override
-    public CVMessage decrementDice() {
-        Game game = controller.game;
-        Turn currentTurn = game.getCurrentRound().getCurrentTurn();
-
-        if (currentTurn.getDraftedDice().decrementValue()) {
-            controller.setControllerState(controller.stateManager.getNextState(this));
-        } else {
-            return new CVMessage(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
-        }
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
-    }
-
-    @Override
     public CVMessage chooseDiceValue(int value) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();

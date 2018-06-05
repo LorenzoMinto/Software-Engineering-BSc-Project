@@ -53,7 +53,7 @@ public class ObjectiveCardFactory {
 
         String title = "Shades of " + color.toString()+ " - Private";
         String description = "Sum of values on " + color.toString() + " dice";
-        String imageURL = privateObjectiveCardsPath+color+"Private.jpg";
+        String imageURL = privateObjectiveCardsPath+color.toString().toUpperCase()+"Private.jpg";
 
         return new PrivateObjectiveCard(title, description, imageURL, color);
 
