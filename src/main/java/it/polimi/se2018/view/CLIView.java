@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.utils.Move;
@@ -203,37 +205,87 @@ public class CLIView extends View{
     @Override
     void handleDraftDiceFromDraftPoolMove() {
         super.handleDraftDiceFromDraftPoolMove();
-        waitForMove(); //TODO: check
+
+        print("These are dices of draftpool:");
+        int index = 1;
+        for(Dice dice : draftPoolDices){
+            print(Integer.toString(index)+". "+dice);
+            index++;
+        }
+        print("Insert the index of the dice you want to draft:");
+        waitForConsoleInput(diceIndex -> {
+            int diceIndexInt = Integer.parseInt(diceIndex) - 1;
+            if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
+                sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt))));
+            } else {
+                print(INPUT_NOT_VALID);
+            }
+
+            waitForMove();
+        });
     }
 
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
         super.handlePlaceDiceOnWindowPatternMove();
-        waitForMove(); //TODO: check
+        print("Insert the row number of the window pattern");
+        waitForConsoleInput(rowString -> {
+            int row = Integer.parseInt(rowString) - 1;
+            waitForConsoleInput(colString -> {
+                int col = Integer.parseInt(colString) - 1;
+                if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put("row",row);
+                    params.put("col",col);
+                    sendMessage(new VCMessage(VCMessage.types.PLACE_DICE,params));
+                } else {
+                    print(INPUT_NOT_VALID);
+                }
+                waitForMove();
+            });
+        });
     }
 
     @Override
     void handleUseToolCardMove() {
         super.handleUseToolCardMove();
-        waitForMove(); //TODO: check
+        int index = 1;
+        for(ToolCard toolCard : drawnToolCards){
+            print(Integer.toString(index)+". "+toolCard);
+            index++;
+        }
+        waitForConsoleInput(toolcardIndexString -> {
+            int toolcardIndex = Integer.parseInt(toolcardIndexString);
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(toolcardIndex))));
+            waitForMove();
+        });
     }
 
     @Override
     void handleIncrementDraftedDiceMove() {
         super.handleIncrementDraftedDiceMove();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleDecrementDraftedDiceMove() {
         super.handleDecrementDraftedDiceMove();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleChangeDraftedDiceValueMove() {
         super.handleChangeDraftedDiceValueMove();
-        waitForMove(); //TODO: check
+        print("Insert the value you want to assign to the drafted dice");
+        waitForConsoleInput(diceValueString->{
+            int diceValue = Integer.parseInt(diceValueString);
+            if(diceValue<1 || diceValue>6){
+                print(INPUT_NOT_VALID);
+            } else {
+                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",diceValue)));
+            }
+            waitForMove();
+        });
     }
 
     @Override
@@ -291,13 +343,13 @@ public class CLIView extends View{
     @Override
     void handleAddedEvent() {
         super.handleAddedEvent();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
     void handleRemovedEvent() {
         super.handleRemovedEvent();
-        waitForMove(); //TODO: check
+        waitForMove();
     }
 
     @Override
