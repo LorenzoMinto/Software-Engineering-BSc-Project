@@ -111,40 +111,40 @@ public class CLIView extends View{
         ConsoleMove consoleMove = null;
         switch (move) {
             case END_TURN:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case USE_TOOLCARD:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case INCREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case DECREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case CHOOSE_DICE_FROM_TRACK:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case MOVE_DICE:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case JOIN_GAME:
-                consoleMove = new ConsoleMove(Move.JOIN_GAME,this::handleAskForNicknameMove);
+                consoleMove = new ConsoleMove(move,this::handleAskForNicknameMove);
                 break;
             case BACK_GAME:
-                consoleMove = new ConsoleMove("placeholder",null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,null); //TODO: implement here
                 break;
             case LEAVE:
-                consoleMove = new ConsoleMove(Move.LEAVE,this::handleLeaveWaitingRoomMove);
+                consoleMove = new ConsoleMove(move,this::handleLeaveWaitingRoomMove);
                 break;
         }
         return consoleMove;
@@ -276,11 +276,6 @@ public class CLIView extends View{
 
     @Override
     void notifyGameVariablesChanged() {
-
-    }
-
-    @Override
-    void notifyGameVariablesChanged(boolean forceClean) {
 
     }
 
