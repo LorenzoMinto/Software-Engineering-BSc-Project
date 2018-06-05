@@ -458,19 +458,10 @@ public class CLIView extends View{
         super.handleRankingsEvent(m);
     }
 
-    @Override
-    void handleAssignedWindowPatternEvent(Message m){
-        super.handleAssignedWindowPatternEvent(m);
 
-        Object o;
-        try {
-            o = m.getParam("windowpattern");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        WindowPattern windowPattern = (WindowPattern) o;
-        this.windowPattern = windowPattern;
+    @Override
+    void handleUpdatedWindowPatternEvent(Message m){
+        super.handleUpdatedWindowPatternEvent(m);
     }
 
     @Override
