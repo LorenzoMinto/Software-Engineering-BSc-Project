@@ -329,6 +329,8 @@ public class SagradaSceneController extends View implements Initializable {
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
         drawnPublicObjectiveCards.forEach(card
                 -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+        System.out.println(privateObjectiveCard.toString());
+        System.out.println(privateObjectiveCard.getImageURL());
         cards.add(new Image((new File(privateObjectiveCard.getImageURL())).toURI().toString()));
 
         updateCardCarousel();
