@@ -368,7 +368,7 @@ public abstract class View implements Observer {
     }
 
     void handleYourTurnEvent() {
-        showMessage("Tocca a te! E' il tuo turno!");
+        showMessage("It's your turn!");
     }
 
     void handleBadFormattedEvent() {
@@ -383,7 +383,7 @@ public abstract class View implements Observer {
         showMessage("Impossibile unirsi alla partita perché il nickname indicato è già presente.");
     }
 
-    void hadleDeniedPlayingEvent() {
+    void handleDeniedPlayingEvent() {
         showMessage("Impossibile unirsi alla partita perchè si sta già svolgendo");
     }
 
@@ -556,7 +556,7 @@ public abstract class View implements Observer {
                 handleDeniedNicknameEvent();
                 break;
             case DENIED_PLAYING:
-                hadleDeniedPlayingEvent();
+                handleDeniedPlayingEvent();
                 break;
             case JOIN: //can't happen. is a message sent from the user
                 break;

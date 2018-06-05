@@ -305,14 +305,6 @@ public class Controller extends Observable {
                             }
                             returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
                             break;
-                        case CHOOSE_WINDOW_PATTERN:
-                            //TODO: implement here
-                            returnMessage = null;
-                            break;
-                        case BACK_GAMING:
-                            //TODO: implement here
-                            returnMessage = null;
-                            break;
                         case END_TURN:
                             //TODO: implement here
                             returnMessage = null;
