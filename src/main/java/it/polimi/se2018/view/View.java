@@ -56,47 +56,44 @@ public abstract class View implements Observer {
         }
     }
 
+    //MOVES
+
     abstract void handleLeaveWaitingRoomMove();
 
-    abstract Message handleEndTurnMove();
+    abstract void handleBackGameMove();
 
-    abstract Message handleDraftDiceFromDraftPoolMove();
+    abstract void handleEndTurnMove();
 
-    abstract Message handlePlaceDiceOnWindowPatternMove();
+    abstract void handleDraftDiceFromDraftPoolMove();
 
-    abstract Message handleUseToolCardMove();
+    abstract void handlePlaceDiceOnWindowPatternMove();
 
-    abstract Message handleIncrementDraftedDiceMove();
+    abstract void handleUseToolCardMove();
 
-    abstract Message handleDecrementDraftedDiceMove();
+    abstract void handleIncrementDraftedDiceMove();
 
-    abstract Message handleChangeDraftedDiceValueMove();
+    abstract void handleDecrementDraftedDiceMove();
 
-    abstract Message handleChooseDiceFromTrackMove();
+    abstract void handleChangeDraftedDiceValueMove();
 
-    abstract Message handleMoveDiceMove();
+    abstract void handleChooseDiceFromTrackMove();
 
-    abstract Message handleJoinGameMove();
+    abstract void handleMoveDiceMove();
 
+    abstract void handleJoinGameMove();
 
+    //EVENTS
 
     abstract void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings);
 
     abstract void handleGiveWindowPatternsEvent(List<WindowPattern> patterns);
 
-    private void receiveMessage(Message m) {
+    abstract void handleAddedEvent();
 
-        if(state==ViewState.INACTIVE){
-            if(m.getType()==CVMessage.types.BACK_TO_GAME){
-                changeStateTo(ViewState.ACTIVE);
-                showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
-            }
-        } else {
-            handleMessage(m);
-        }
-    }
+    abstract void handleRemovedEvent();
 
-    private void handleMessage(Message m){
+
+    private void receiveMessage(Message m){
 
         if(state==ViewState.INACTIVE){
 
@@ -165,6 +162,7 @@ public abstract class View implements Observer {
                 showMessage("Il giocatore ".concat(pID).concat(" è diventato inattivo. I suoi turni saranno saltati."));
                 break;
             case BACK_TO_GAME:
+                showMessage("You are back to game, now.");
                 break;
             case INACTIVE:
                 changeStateTo(ViewState.INACTIVE);
@@ -298,10 +296,6 @@ public abstract class View implements Observer {
                 throw new BadBehaviourRuntimeException();
         }
     }
-
-    abstract void handleAddedEvent();
-
-    abstract void handleRemovedEvent();
 
     abstract void showMessage(String message);
 
