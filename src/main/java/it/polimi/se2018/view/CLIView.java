@@ -44,14 +44,11 @@ public class CLIView extends View{
     public CLIView() {
         super();
 
-        //Connection to server
-        connect();
-
         //Launch of CLI
         launchConsoleReader();
 
-        //CLI starts proposing moves (join game)
-        waitForMove();
+        //Connection to server
+        connect();
     }
 
     private void connect(){
@@ -64,6 +61,8 @@ public class CLIView extends View{
                     int portNumber = Integer.parseInt(portNumberString);
                     ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
                     connectToRemoteServer(connectionType,serverName,portNumber);
+
+                    waitForMove();
                 });
             });
         });
@@ -93,6 +92,10 @@ public class CLIView extends View{
             mapConsoleMoves.put(Integer.toString(index), convertMoveToConsoleMove(move));
             index++;
         }
+
+        cleanConsole();
+
+        print("Which move would you like to perform?");
 
         //Print console moves
         for (Map.Entry<String, ConsoleMove> entry : mapConsoleMoves.entrySet()) {
@@ -160,7 +163,24 @@ public class CLIView extends View{
         System.out.println(text);
     }
 
+    private void cleanConsole(){
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        print(System.lineSeparator());
+        //TODO: implement this method
+    }
 
+    //TODO: inserisci metodi Event
 
     @Override
     void handleLeaveWaitingRoomMove() {
@@ -234,7 +254,7 @@ public class CLIView extends View{
 
         print("Insert your nickname");
         String nickname = SCANNER.nextLine();
-        
+
         setPlayer(nickname);
         sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
     }
