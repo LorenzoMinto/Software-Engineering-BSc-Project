@@ -6,6 +6,6 @@
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
-    <controllerStateRule prevState="DraftControllerState" nextState="ChangeDiceValueControllerState" />
-    <controllerStateRule prevState="ChangeDiceValueControllerState" nextState="EndControllerState" />
+    <controllerStateRule prevState="DraftControllerState" nextState="ChangeDiceValueUnitaryControllerState" />
+    <controllerStateRule prevState="ChangeDiceValueUnitaryControllerState" nextState="EndControllerState" />
 </toolcard>
