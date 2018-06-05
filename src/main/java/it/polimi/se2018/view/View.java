@@ -57,6 +57,8 @@ public abstract class View implements Observer {
 
     abstract void handleLeaveWaitingRoomMove();
 
+    abstract void handleBackGameMove();
+
     abstract Message handleEndTurnMove();
 
     abstract Message handleDraftDiceFromDraftPoolMove();
@@ -168,6 +170,7 @@ public abstract class View implements Observer {
                 showMessage("Il giocatore ".concat(pID).concat(" è diventato inattivo. I suoi turni saranno saltati."));
                 break;
             case BACK_TO_GAME:
+                showMessage("You are back to game, now.");
                 break;
             case INACTIVE:
                 changeStateTo(ViewState.INACTIVE);

@@ -17,11 +17,6 @@ public class CLIView extends View{
 
     private Scanner scanner = new Scanner(System.in);
 
-    private enum InputType{
-        MOVE,
-        DATA
-    }
-
     private class ConsoleMove {
         private Move move;
         private Runnable action;
@@ -40,11 +35,9 @@ public class CLIView extends View{
         }
     }
 
-    private InputType inputType;
-
     private LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
 
-    private Consumer<String> consumer;
+    private Consumer<String> currentInputConsumer;
 
     public static void main(String[] args) {
         new CLIView();
@@ -54,6 +47,16 @@ public class CLIView extends View{
         super();
 
         //Connection to server
+        connect();
+
+        //Launch of CLI
+        launchConsoleReader();
+
+        //CLI starts proposing moves (join game)
+        waitForMove();
+    }
+
+    private void connect(){
         print("Insert 1. for RMI, 2. for socket");
         String connectionTypeString = scanner.nextLine();
         print("Insert name server");
@@ -62,10 +65,6 @@ public class CLIView extends View{
         int portNumber = Integer.parseInt(scanner.nextLine());
         ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
         connectToRemoteServer(connectionType,serverName,portNumber);
-
-        //Launch of CLI
-        launchConsoleReader();
-        waitForMove();
     }
 
     private void launchConsoleReader(){
@@ -73,75 +72,76 @@ public class CLIView extends View{
             String text;
             do{
                 text = scanner.nextLine();
-                switch (inputType) {
-                    case MOVE:
-                        if(mapConsoleMoves.containsKey(text)){
-                            mapConsoleMoves.get(text).run();
-                        } else {
-                            print(INPUT_NOT_VALID);
-                        }
-                        break;
-
-                    case DATA:
-                        if(consumer!=null){
-                            consumer.accept(text);
-                        } else {
-                            print(INPUT_NOT_VALID);
-                        }
-                        break;
-
-                    default:
-                        print(INPUT_NOT_VALID);
-                        break;
+                
+                if(currentInputConsumer !=null){
+                    currentInputConsumer.accept(text);
+                } else {
+                    print(INPUT_NOT_VALID);
                 }
             } while(!text.equals(EXIT_FROM_READING_LOOP));
         }).start();
     }
-
-    private void updateMoves(){
+    
+    private void waitForMove(){
+        
+        //Update integer-move map with permissions
         this.mapConsoleMoves = new LinkedHashMap<>();
         int index = 1;
         for(Move move : this.getPermissions()){
             this.mapConsoleMoves.put(Integer.toString(index), convertMoveToConsoleMove(move));
             index++;
         }
+
+        //Print console moves
+        for (Map.Entry<String, ConsoleMove> entry : mapConsoleMoves.entrySet()) {
+            print(entry.getKey()+". "+entry.getValue().getDescription());
+        }
+
+        //Reads from console
+        waitForConsoleInput(s -> {
+            if(mapConsoleMoves.containsKey(s)){
+                mapConsoleMoves.get(s).run();
+            } else {
+                print(INPUT_NOT_VALID);
+            }
+        });
     }
 
     private ConsoleMove convertMoveToConsoleMove(Move move){
         ConsoleMove consoleMove = null;
         switch (move) {
             case END_TURN:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleEndTurnMove);
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleDraftDiceFromDraftPoolMove);
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handlePlaceDiceOnWindowPatternMove);
                 break;
             case USE_TOOLCARD:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleUseToolCardMove);
                 break;
             case INCREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleIncrementDraftedDiceMove);
                 break;
             case DECREMENT_DRAFTED_DICE:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleDecrementDraftedDiceMove);
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleChangeDraftedDiceValueMove);
                 break;
             case CHOOSE_DICE_FROM_TRACK:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleChooseDiceFromTrackMove);
                 break;
             case MOVE_DICE:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleMoveDiceMove);
                 break;
             case JOIN_GAME:
                 consoleMove = new ConsoleMove(move,this::handleAskForNicknameMove);
                 break;
             case BACK_GAME:
-                consoleMove = new ConsoleMove(move,null); //TODO: implement here
+                consoleMove = new ConsoleMove(move,this::handleBackGameMove);
                 break;
             case LEAVE:
                 consoleMove = new ConsoleMove(move,this::handleLeaveWaitingRoomMove);
@@ -150,21 +150,12 @@ public class CLIView extends View{
         return consoleMove;
     }
 
-    private void waitForMove(){
-        updateMoves();
-        printConsoleMoves();
-        this.inputType = InputType.MOVE;
+    private void waitForConsoleInput(Consumer<String> consumer){
+        this.currentInputConsumer = consumer;
     }
 
-    private void waitForData(Consumer<String> consumer){
-        this.consumer = consumer;
-        this.inputType = InputType.DATA;
-    }
-
-    private void printConsoleMoves(){
-        for (Map.Entry<String, ConsoleMove> entry : mapConsoleMoves.entrySet()) {
-            print(entry.getKey()+". "+entry.getValue().getDescription());
-        }
+    private void print(String text){
+        System.out.println(text);
     }
 
     @Override
@@ -173,8 +164,10 @@ public class CLIView extends View{
         waitForMove();
     }
 
-    private void print(String text){
-        System.out.println(text);
+    @Override
+    void handleBackGameMove() {
+        sendMessage(new VCMessage(VCMessage.types.BACK_GAMING,null,this.playerID));
+        waitForMove();
     }
 
     @Override
@@ -240,7 +233,7 @@ public class CLIView extends View{
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
-        waitForData(s -> {
+        waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
             if(i <= patterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = patterns.get(Integer.parseInt(s));
@@ -249,7 +242,7 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             }
 
-            waitForMove(); //remember that if the consumer is the last operation to be formed, insert waitForMove().
+            waitForMove(); //remember that if the currentInputConsumer is the last operation to be formed, insert waitForMove().
         });
     }
 
