@@ -227,10 +227,6 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
-    @Override
-    void handleBackGameMove() {
-
-    }
 
     @Override
     void handleDraftDiceFromDraftPoolMove() {
@@ -269,11 +265,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleMoveDiceMove() {
-
-    }
-
-    @Override
-    void handleJoinGameMove() {
 
     }
 
