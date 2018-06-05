@@ -171,8 +171,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    protected void updatePermissions(Message m) {
-        super.updatePermissions(m);
+    void notifyPermissionsChanged() {
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
@@ -224,53 +223,58 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    Message handleEndTurnMove() {
-        return null;
+    void handleBackGameMove() {
+
     }
 
     @Override
-    Message handleDraftDiceFromDraftPoolMove() {
-        return null;
+    void handleEndTurnMove() {
+
     }
 
     @Override
-    Message handlePlaceDiceOnWindowPatternMove() {
-        return null;
+    void handleDraftDiceFromDraftPoolMove() {
+
     }
 
     @Override
-    Message handleUseToolCardMove() {
-        return null;
+    void handlePlaceDiceOnWindowPatternMove() {
+
     }
 
     @Override
-    Message handleIncrementDraftedDiceMove() {
-        return null;
+    void handleUseToolCardMove() {
+
     }
 
     @Override
-    Message handleDecrementDraftedDiceMove() {
-        return null;
+    void handleIncrementDraftedDiceMove() {
+
     }
 
     @Override
-    Message handleChangeDraftedDiceValueMove() {
-        return null;
+    void handleDecrementDraftedDiceMove() {
+
     }
 
     @Override
-    Message handleChooseDiceFromTrackMove() {
-        return null;
+    void handleChangeDraftedDiceValueMove() {
+
     }
 
     @Override
-    Message handleMoveDiceMove() {
-        return null;
+    void handleChooseDiceFromTrackMove() {
+
     }
 
     @Override
-    Message handleJoinGameMove() {
-        return null;
+    void handleMoveDiceMove() {
+
+    }
+
+    @Override
+    void handleJoinGameMove() {
+
     }
 
     @Override
@@ -372,11 +376,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyGameStarted() {
-
-    }
-
-    @Override
-    void notifyPermissionsChanged() {
 
     }
 

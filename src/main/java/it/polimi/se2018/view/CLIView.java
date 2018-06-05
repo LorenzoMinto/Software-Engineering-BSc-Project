@@ -15,7 +15,7 @@ public class CLIView extends View{
     private static final String INPUT_NOT_VALID = "Input not valid";
     private static final String EXIT_FROM_READING_LOOP = "exit";
 
-    private Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
 
     private class ConsoleMove {
         private Move move;
@@ -34,8 +34,6 @@ public class CLIView extends View{
             this.action.run();
         }
     }
-
-    private LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
 
     private Consumer<String> currentInputConsumer;
 
@@ -58,20 +56,24 @@ public class CLIView extends View{
 
     private void connect(){
         print("Insert 1. for RMI, 2. for socket");
-        String connectionTypeString = scanner.nextLine();
-        print("Insert name server");
-        String serverName = scanner.nextLine();
-        print("Insert port number");
-        int portNumber = Integer.parseInt(scanner.nextLine());
-        ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
-        connectToRemoteServer(connectionType,serverName,portNumber);
+        waitForConsoleInput(connectionTypeString -> {
+            print("Insert name server");
+            waitForConsoleInput(serverName -> {
+                print("Insert port number");
+                waitForConsoleInput(portNumberString -> {
+                    int portNumber = Integer.parseInt(portNumberString);
+                    ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
+                    connectToRemoteServer(connectionType,serverName,portNumber);
+                });
+            });
+        });
     }
 
     private void launchConsoleReader(){
         new Thread(()->{
             String text;
             do{
-                text = scanner.nextLine();
+                text = SCANNER.nextLine();
                 
                 if(currentInputConsumer !=null){
                     currentInputConsumer.accept(text);
@@ -83,12 +85,12 @@ public class CLIView extends View{
     }
     
     private void waitForMove(){
-        
-        //Update integer-move map with permissions
-        this.mapConsoleMoves = new LinkedHashMap<>();
+
+        //Create a LinkedHashMap to map string choices from console to moves
+        LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
         int index = 1;
         for(Move move : this.getPermissions()){
-            this.mapConsoleMoves.put(Integer.toString(index), convertMoveToConsoleMove(move));
+            mapConsoleMoves.put(Integer.toString(index), convertMoveToConsoleMove(move));
             index++;
         }
 
@@ -138,7 +140,7 @@ public class CLIView extends View{
                 consoleMove = new ConsoleMove(move,this::handleMoveDiceMove);
                 break;
             case JOIN_GAME:
-                consoleMove = new ConsoleMove(move,this::handleAskForNicknameMove);
+                consoleMove = new ConsoleMove(move,this::handleJoinGameMove);
                 break;
             case BACK_GAME:
                 consoleMove = new ConsoleMove(move,this::handleBackGameMove);
@@ -171,58 +173,62 @@ public class CLIView extends View{
     }
 
     @Override
-    Message handleEndTurnMove() {
-        return null;
+    void handleEndTurnMove() {
+        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+        waitForMove();
     }
 
     @Override
-    Message handleDraftDiceFromDraftPoolMove() {
-        return null;
+    void handleDraftDiceFromDraftPoolMove() {
+
     }
 
     @Override
-    Message handlePlaceDiceOnWindowPatternMove() {
-        return null;
+    void handlePlaceDiceOnWindowPatternMove() {
+
     }
 
     @Override
-    Message handleUseToolCardMove() {
-        return null;
+    void handleUseToolCardMove() {
+
     }
 
     @Override
-    Message handleIncrementDraftedDiceMove() {
-        return null;
+    void handleIncrementDraftedDiceMove() {
+
     }
 
     @Override
-    Message handleDecrementDraftedDiceMove() {
-        return null;
+    void handleDecrementDraftedDiceMove() {
+
     }
 
     @Override
-    Message handleChangeDraftedDiceValueMove() {
-        return null;
+    void handleChangeDraftedDiceValueMove() {
+
     }
 
     @Override
-    Message handleChooseDiceFromTrackMove() {
-        return null;
+    void handleChooseDiceFromTrackMove() {
+
     }
 
     @Override
-    Message handleMoveDiceMove() {
-        return null;
+    void handleMoveDiceMove() {
+
     }
 
     @Override
-    Message handleJoinGameMove() {
-        return null;
+    void handleJoinGameMove() {
+        print("Insert your nickname");
+        String nickname = SCANNER.nextLine();
+        this.playerID = nickname;
+        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
     }
 
     @Override
     void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings) {
-
+        //TODO: print rankings
     }
 
     @Override
@@ -264,28 +270,22 @@ public class CLIView extends View{
 
     @Override
     void errorMessage(String message) {
-
+        print("ERROR: "+message);
+        waitForMove();
     }
 
     @Override
     void notifyGameVariablesChanged() {
-
+        //do nothing
     }
 
     @Override
     void notifyGameStarted() {
-
+        print("The game is started!");
     }
 
     @Override
     void notifyPermissionsChanged() {
-
-    }
-
-    private void handleAskForNicknameMove() {
-        print("Insert your nickname");
-        String nickname = scanner.nextLine();
-        this.playerID = nickname;
-        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+        //do nothing
     }
 }

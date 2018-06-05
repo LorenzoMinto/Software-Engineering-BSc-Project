@@ -55,49 +55,44 @@ public abstract class View implements Observer {
         }
     }
 
+    //MOVES
+
     abstract void handleLeaveWaitingRoomMove();
 
     abstract void handleBackGameMove();
 
-    abstract Message handleEndTurnMove();
+    abstract void handleEndTurnMove();
 
-    abstract Message handleDraftDiceFromDraftPoolMove();
+    abstract void handleDraftDiceFromDraftPoolMove();
 
-    abstract Message handlePlaceDiceOnWindowPatternMove();
+    abstract void handlePlaceDiceOnWindowPatternMove();
 
-    abstract Message handleUseToolCardMove();
+    abstract void handleUseToolCardMove();
 
-    abstract Message handleIncrementDraftedDiceMove();
+    abstract void handleIncrementDraftedDiceMove();
 
-    abstract Message handleDecrementDraftedDiceMove();
+    abstract void handleDecrementDraftedDiceMove();
 
-    abstract Message handleChangeDraftedDiceValueMove();
+    abstract void handleChangeDraftedDiceValueMove();
 
-    abstract Message handleChooseDiceFromTrackMove();
+    abstract void handleChooseDiceFromTrackMove();
 
-    abstract Message handleMoveDiceMove();
+    abstract void handleMoveDiceMove();
 
-    abstract Message handleJoinGameMove();
+    abstract void handleJoinGameMove();
 
-
+    //EVENTS
 
     abstract void handleGameEndedEvent(LinkedHashMap<String, Integer> rankings);
 
     abstract void handleGiveWindowPatternsEvent(List<WindowPattern> patterns);
 
-    private void receiveMessage(Message m) {
+    abstract void handleAddedEvent();
 
-        if(state==ViewState.INACTIVE){
-            if(m.getType()==CVMessage.types.BACK_TO_GAME){
-                changeStateTo(ViewState.ACTIVE);
-                showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
-            }
-        } else {
-            handleMessage(m);
-        }
-    }
+    abstract void handleRemovedEvent();
 
-    private void handleMessage(Message m){
+
+    private void receiveMessage(Message m){
 
         if(state==ViewState.INACTIVE){
 
@@ -129,11 +124,7 @@ public abstract class View implements Observer {
 
     }
 
-    /**
-    Should be overridable and extensible, CLI and View have different implementations of this, NAVIGATE INFOS should NOT
-    be added at this level, its pertaining only to the CLI part.
-    **/
-    protected void updatePermissions(Message m){
+    private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
             setPermissions(p);
@@ -304,10 +295,6 @@ public abstract class View implements Observer {
                 throw new BadBehaviourRuntimeException();
         }
     }
-
-    abstract void handleAddedEvent();
-
-    abstract void handleRemovedEvent();
 
     abstract void showMessage(String message);
 

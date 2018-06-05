@@ -303,6 +303,18 @@ public class Controller extends Observable {
                             }
                             returnMessage = controllerState.chooseDiceValue(value2);
                             break;
+                        case CHOOSE_WINDOW_PATTERN:
+                            //TODO: implement here
+                            returnMessage = null;
+                            break;
+                        case BACK_GAMING:
+                            //TODO: implement here
+                            returnMessage = null;
+                            break;
+                        case END_TURN:
+                            //TODO: implement here
+                            returnMessage = null;
+                            break;
                         default:
                             returnMessage = errorMessage("UnrecognizedMove");
                             break;
