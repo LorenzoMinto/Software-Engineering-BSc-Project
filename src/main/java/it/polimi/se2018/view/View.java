@@ -37,6 +37,7 @@ public abstract class View implements Observer {
     String playingPlayerID;
     Dice draftedDice;
     WindowPattern windowPattern;
+    List<WindowPattern> windowPatterns;
     PrivateObjectiveCard privateObjectiveCard;
 
     private enum ViewState{
@@ -127,11 +128,7 @@ public abstract class View implements Observer {
 
     }
 
-    /**
-    Should be overridable and extensible, CLI and View have different implementations of this, NAVIGATE INFOS should NOT
-    be added at this level, its pertaining only to the CLI part.
-    **/
-    protected void updatePermissions(Message m){
+    private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
         if(p!=null && !p.isEmpty()){
             setPermissions(p);
@@ -388,6 +385,14 @@ public abstract class View implements Observer {
         List<PublicObjectiveCard> mDrawnPublicObjectiveCards = (List<PublicObjectiveCard>) o;
 
         try {
+            o = m.getParam("windowPatterns");
+        } catch (NoSuchParamInMessageException e) {
+            return false;
+        }
+
+        List<WindowPattern> mWindowPatterns = (List<WindowPattern>) o;
+
+        try {
             o = m.getParam("players");
         } catch (NoSuchParamInMessageException e) {
             return false;
@@ -426,6 +431,7 @@ public abstract class View implements Observer {
         setPlayers(mPlayers);
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
+        setWindowPatterns(mWindowPatterns);
 
         notifyGameVariablesChanged();
 
@@ -576,6 +582,10 @@ public abstract class View implements Observer {
 
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
+    }
+
+    public void setWindowPatterns(List<WindowPattern> windowPatterns) {
+        this.windowPatterns = windowPatterns;
     }
 
     //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern

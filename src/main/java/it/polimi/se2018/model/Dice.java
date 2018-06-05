@@ -145,7 +145,7 @@ public class Dice implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + ":" + this.color.toOneLetter();
+        return this.color.toOneLetter()+this.value;
     }
 
     /**
