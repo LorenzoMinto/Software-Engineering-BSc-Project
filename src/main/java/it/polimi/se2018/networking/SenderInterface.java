@@ -10,5 +10,5 @@ import java.rmi.RemoteException;
  */
 public interface SenderInterface {
 
-    void sendMessage(Message message) throws RemoteException;
+    void sendMessage(Message message) throws NetworkException;
 }

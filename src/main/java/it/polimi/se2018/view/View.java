@@ -4,6 +4,7 @@ import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.networking.NetworkException;
 import it.polimi.se2018.networking.SenderInterface;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
@@ -653,7 +654,7 @@ public abstract class View implements Observer {
     void sendMessage(Message m){
         try {
             this.client.sendMessage(m);
-        } catch (RemoteException e) {
+        } catch (NetworkException e) {
             errorMessage("Error sending message: ".concat(m.toString()));
             //TODO: check if this must be removed in production
         } catch (NullPointerException ex){

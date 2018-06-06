@@ -180,7 +180,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     private void setupNetworking() {
         try {
             LOGGER.info("Starting RMI...");
-            this.proxyServer = new RMIServerGateway(this.serverName,this.portNumberRMI,this);
+            this.proxyServer = (ReceiverInterface) new RMIServerGateway(this.serverName,this.portNumberRMI,this);
 
         } catch (RemoteException e) {
             LOGGER.severe("Failed RMI setup");
@@ -229,7 +229,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkException {
 
         Message returnMessage = null;
 
@@ -249,7 +249,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
         
         //Send answer message back to the sender
-        sender.receiveMessage(returnMessage, this.proxyServer);
+        try {
+            sender.receiveMessage(returnMessage, this.proxyServer);
+        } catch (RemoteException e) {
+            throw new NetworkException();
+        }
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
     }
 
@@ -392,7 +396,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void sendMessage(Message m) throws RemoteException {
+    public void sendMessage(Message m) throws NetworkException {
         boolean somethingFailed = false;
         List<ReceiverInterface> g;
 
@@ -427,7 +431,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             if(!correctlySent){ somethingFailed=true; }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
-        if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
+        if(somethingFailed) throw new NetworkException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
     /**
@@ -459,7 +463,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         try {
             sendMessage(m);
             succeeded = true;
-        } catch (RemoteException e) {
+        } catch (NetworkException e) {
             LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
             succeeded = false;
         }

@@ -24,6 +24,7 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
         try{
             this.recipient = (ReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
+            e.printStackTrace();
             throw new RemoteException("Failed looking for RMI name");
         }
 
@@ -36,8 +37,12 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
         this.client = client;
     }
 
-    public void sendMessage(Message message) throws RemoteException{
-        this.recipient.receiveMessage(message,this.proxySender);
+    public void sendMessage(Message message) throws NetworkException{
+        try {
+            this.recipient.receiveMessage(message,this.proxySender);
+        } catch (RemoteException e) {
+            throw new NetworkException();
+        }
     }
 
     public void receiveMessage(Message message, ReceiverInterface sender){
@@ -45,7 +50,7 @@ public class RMIClientGateway implements SenderInterface, ReceiverInterface, Rem
         new Thread(()->{
             try {
                 this.client.receiveMessage(message,sender);
-            } catch (RemoteException e) {
+            } catch (NetworkException | RemoteException e) {
                 //can't happen because client is not remote
             }
         }).start();

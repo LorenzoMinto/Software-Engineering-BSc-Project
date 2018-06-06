@@ -29,7 +29,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException {
+    public void sendMessage(Message message) throws NetworkException {
 
         while(!running){
             try {
@@ -43,13 +43,17 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
             this.out.reset();
             this.out.writeObject(message);
         } catch (IOException e) {
-            throw new RemoteException("Failed sending message from SocketClientGateway due to IOException");
+            throw new NetworkException("Failed sending message from SocketClientGateway due to IOException");
         }
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
-        client.receiveMessage(message,sender);
+    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkException {
+        try {
+            client.receiveMessage(message,sender);
+        } catch (RemoteException e) {
+            throw new NetworkException();
+        }
         //Client doesn't answer to server's messages so it is unnecessary sender
     }
 
