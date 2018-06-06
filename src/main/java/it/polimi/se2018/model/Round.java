@@ -14,6 +14,26 @@ import java.util.*;
 public class Round {
 
     /**
+     * String passed as message of IllegalArgumentException when is asked to create a round giving a null draftpool
+     */
+    private static final String NULL_DRAFT_POOL = "Asked to create a round giving null draftPool";
+    /**
+     * String passed as message of EmptyListException when is asked to create a round with no players
+     */
+    private static final String NO_PLAYERS = "Asked to create a round with no players";
+    /**
+     * String passed as message of ValueOutOfBoundsException when is asked to create a round with negative roundNumber
+     */
+    private static final String NEGATIVE_ROUND_NUMBER = "Asked to create a round with negative roundNumber";
+    /**
+     * String passed as message of ValueOutOfBoundsException when is asked to create a round with negative numberOfTurns
+     */
+    private static final String NEGATIVE_NUMBER_OF_TURNS = "Asked to create a round with negative numberOfTurns";
+    /**
+     * String passed as message of IllegalArgumentException when is asked to remove the next turn of a null player
+     */
+    private static final String REMOVING_TURN_OF_NULL_PLAYER = "Can't remove the next turn of a null player";
+    /**
      * The round progressive number.
      */
     private int number;
@@ -41,22 +61,21 @@ public class Round {
      * @param draftPool instance of the round's draftpool
      */
     public Round(int roundNumber, int numberOfTurns, List<Player> players, DraftPool draftPool) {
-        if(draftPool==null){ throw new IllegalArgumentException("Asked to create a round giving null draftPool"); }
+        if(draftPool==null){ throw new IllegalArgumentException(NULL_DRAFT_POOL); }
         if(players.isEmpty()){
-            throw new EmptyListException("Asked to create a round with no players"); }
+            throw new EmptyListException(NO_PLAYERS); }
 
         if(roundNumber<0){
-            throw new ValueOutOfBoundsException("Asked to create a round with negative roundNumber"); }
+            throw new ValueOutOfBoundsException(NEGATIVE_ROUND_NUMBER); }
         if(numberOfTurns<0){
-            throw new ValueOutOfBoundsException("Asked to create a round with negative numberOfTurns"); }
+            throw new ValueOutOfBoundsException(NEGATIVE_NUMBER_OF_TURNS); }
 
         this.number = roundNumber;
 
         this.turns = new ArrayList<>();
         for(int i=0; i < numberOfTurns; i++){
-            int turnNumber = i;
-            Player player = getPlayerForTurn(players,turnNumber, numberOfTurns);
-            turns.add( new Turn(turnNumber,player) );
+            Player player = getPlayerForTurn(players,i, numberOfTurns);
+            turns.add( new Turn(i,player) );
         }
 
         this.currentTurnIndex = -1;
@@ -126,7 +145,7 @@ public class Round {
      * on the given round and turn (from the given list of players).
      * @param players list of players playing the game
      * @param turnNumber sequential number of the turn (starting from 0)
-     * @param numberOfTurns
+     * @param numberOfTurns number of turns of the new round
      * @return the Player who should be playing according to the game rules in the specified round/turn
      * @author Jacopo Pio Gargano
      * @author Federico Haag
@@ -153,7 +172,7 @@ public class Round {
      * @author Jacopo Pio Gargano
      */
     public boolean removeNextTurnOfPlayer(Player player) {
-        if(player == null){throw new IllegalArgumentException("Can't remove the next turn of a null player");}
+        if(player == null){throw new IllegalArgumentException(REMOVING_TURN_OF_NULL_PLAYER);}
         for (int i = currentTurnIndex + 1; i < turns.size(); i++) {
             Turn currentTurn = turns.get(i);
             Player currentPlayer = currentTurn.getPlayer();

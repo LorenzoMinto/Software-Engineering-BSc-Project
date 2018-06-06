@@ -23,18 +23,55 @@ import java.util.List;
  * @author Jacopo Pio Gargano
  */
 public class Game extends Observable implements Observer{
-    //TODO: completa i commenti di queste costanti
+    /**
+     * String passed as message of ValueOutOfBoundsException when is asked to create a game with a negative number of rounds
+     */
     private static final String GAME_WITH_NEGATIVE_NUMBER_OF_ROUNDS = "Can't create a game with negative number of rounds";
+    /**
+     * String passed as message of ValueOutOfBoundsException when is asked to create a game with a negative number of players
+     */
     private static final String GAME_WITH_NEGATIVE_NUMBER_OF_PLAYERS = "Can't create a game with negative number of players";
-    private static final String ASKED_TO_ASSIGN_CARDS_IN_BAD_STATE = "Can't assign cards more than once to the game. Controller should not ask for it. Bad unmanageable behaviour.";
+    /**
+     * String passed as message of IllegalStateException when is asked to assign cards after they were already assigned
+     */
+    private static final String ASKED_TO_ASSIGN_CARDS_IN_BAD_STATE = "Can't assign cards more than once to the game.";
+    /**
+     * String passed as message of IllegalArgumentException when is asked to set rankings giving as a reference a null object
+     */
     private static final String NULL_RANKINGS = "Can't set rankings to null";
-    private static final String ASKED_TO_SET_RANKINGS_IN_BAD_STATE = "Can't set rankings if game is not ended. Controller should not ask for it. Bad unmanageable behaviour.";
+    /**
+     * String passed as message of IllegalStateException when is asked to set rankings but the state is not the correct one
+     */
+    private static final String ASKED_TO_SET_RANKINGS_IN_BAD_STATE = "Can't set rankings if game is not ended.";
+    /**
+     * String passed as message of BadBehaviourException when is asked to add a player but max number of players is reached
+     */
     private static final String ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED = "Can't add a player if max number of players is reached";
-    private static final String ASKED_TO_ADD_PLAYER_IN_BAD_STATE = "Can't add player if game is not waiting for players. Controller should not ask for it. Bad unmanageable behaviour.";
+    /**
+     * String passed as message of IllegalStateException when is asked to add a player but the state is not the correct one
+     */
+    private static final String ASKED_TO_ADD_PLAYER_IN_BAD_STATE = "Can't add player if game is not waiting for players.";
+    /**
+     * String passed as message of BadBehaviourException when is asked to perform an action that requires
+     * the game to be started but it is not.
+     */
     private static final String GAME_NOT_RUNNING = "Game is not running yet";
+    /**
+     * String passed as message of BadBehaviourException when is asked to use a toolcard that is not in the drawn set
+     */
     private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolcard that is not in the drawn set";
+    /**
+     * String passed as message of EmptyListException when is asked to perform an action that requires as parameter
+     * a list of dices but the one actually passed as argument is an empty list.
+     */
     private static final String NO_DICES = "No dices given.";
+    /**
+     * String passed as message of IllegalStateException when is asked to start the game but the state is not the correct one
+     */
     private static final String ASKED_TO_START_GAME_IN_BAD_STATE = "Can't start game if not waiting for patterns choice.";
+    /**
+     * String passed as message of BadBehaviourException when is asked to start the game but it is impossible to create new rounds.
+     */
     private static final String NO_ROUNDS = "Can't start a game with no rounds";
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
@@ -222,7 +259,7 @@ public class Game extends Observable implements Observer{
      * @param player player to add to the game
      */
     public void addPlayer(Player player){
-        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException(ASKED_TO_ADD_PLAYER_IN_BAD_STATE);}
+        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new IllegalStateException(ASKED_TO_ADD_PLAYER_IN_BAD_STATE);}
         if(players.size() >= maxNumberOfPlayers){ throw new BadBehaviourRuntimeException(ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED); }
 
         players.add(player);
@@ -318,7 +355,7 @@ public class Game extends Observable implements Observer{
     public void startGame(List<Dice> dices, Set<Move> permissions){
         if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
         if(dices.isEmpty()){ throw new EmptyListException(NO_DICES);}
-        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException(ASKED_TO_START_GAME_IN_BAD_STATE);}
+        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new IllegalStateException(ASKED_TO_START_GAME_IN_BAD_STATE);}
 
         this.status = GameStatus.PLAYING;
 

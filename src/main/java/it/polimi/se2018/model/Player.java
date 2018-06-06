@@ -14,6 +14,18 @@ public class Player implements Serializable {
      */
     private static final long serialVersionUID = -3361603123980854887L;
     /**
+     * String passed as message of IllegalArgumentException when is asked to
+     */
+    private static final String CANNOT_DECREASE_TOKENS_OF_A_NEGATIVE_QUANTITY = "Cannot decrease tokens of a negative quantity";
+    /**
+     * String passed as message of IllegalArgumentException when is asked to
+     */
+    private static final String SET_A_NULL_WINDOWPATTERN_TO_PLAYER = "Can't set a null windowpattern to player";
+    /**
+     * String passed as message of IllegalArgumentException when is asked to
+     */
+    private static final String CREATE_PLAYER_NULL_CARD = "Asked to create a player giving null card";
+    /**
      * Favor Tokens of the player.
      */
     private int favorTokens;
@@ -39,9 +51,7 @@ public class Player implements Serializable {
      * @param card the private objective card assigned randomly to the player
      */
     public Player(String nickname, PrivateObjectiveCard card) {
-
-        //Checks for bad params
-        if(card==null){ throw new IllegalArgumentException("Asked to create a player giving null card"); }
+        if(card==null){ throw new IllegalArgumentException(CREATE_PLAYER_NULL_CARD); }
 
         this.nickname = nickname;
         this.windowPattern = null;
@@ -71,7 +81,7 @@ public class Player implements Serializable {
      * @param windowPattern the windowpattern to be assigned to this player
      */
     public void setWindowPattern(WindowPattern windowPattern) {
-        if(windowPattern==null) throw new IllegalArgumentException();
+        if(windowPattern==null) throw new IllegalArgumentException(SET_A_NULL_WINDOWPATTERN_TO_PLAYER);
 
         this.windowPattern = windowPattern;
         this.windowPattern.assignToPlayer(this);
@@ -92,7 +102,7 @@ public class Player implements Serializable {
      * @return true if the action succeeded, false if not (not enough tokens left)
      */
     public boolean decreaseTokens(int quantity) {
-        if(quantity < 0){ throw new IllegalArgumentException("Cannot decrease tokens of a negative quantity.");}
+        if(quantity < 0){ throw new IllegalArgumentException(CANNOT_DECREASE_TOKENS_OF_A_NEGATIVE_QUANTITY);}
         if(favorTokens<quantity){
             return false;
         } else {
