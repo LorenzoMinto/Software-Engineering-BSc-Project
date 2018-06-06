@@ -38,8 +38,14 @@ public class PlaceControllerState extends ControllerState {
                 && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {
+                controller.setControllerState(controller.stateManager.getNextState(this));
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             } else {
+                if (currentTurn.hasUsedToolCard()) {
+                    controller.setControllerState(controller.stateManager.getEndControllerState());
+                } else {
+                    controller.setControllerState(controller.stateManager.getToolCardState());
+                }
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             }
         } else {

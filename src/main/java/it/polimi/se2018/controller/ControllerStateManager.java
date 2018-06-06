@@ -28,6 +28,7 @@ public class ControllerStateManager {
     private PlaceControllerState placeState;
     private ToolCardControllerState toolCardState;
     private DraftControllerState draftControllerState;
+    private EndControllerState endControllerState;
     private EndToolCardEffectControllerState endToolCardEffectControllerState;
 
     /**
@@ -47,6 +48,7 @@ public class ControllerStateManager {
         this.placeState = new PlaceControllerState(this.controller);
         this.toolCardState = new ToolCardControllerState(this.controller);
         this.endToolCardEffectControllerState = new EndToolCardEffectControllerState(this.controller);
+        this.endControllerState = new EndControllerState(this.controller);
     }
 
     /**
@@ -108,4 +110,6 @@ public class ControllerStateManager {
     public ToolCardControllerState getToolCardState() { return toolCardState; }
     public DraftControllerState getDraftControllerState() { return draftControllerState; }
     public EndToolCardEffectControllerState getEndToolCardEffectControllerState() { return endToolCardEffectControllerState; }
+
+    public EndControllerState getEndControllerState() { return endControllerState; }
 }
