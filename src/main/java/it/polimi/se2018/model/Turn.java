@@ -22,14 +22,46 @@ public class Turn extends Observable implements Serializable {
     private static final long serialVersionUID = -8829876577425331362L;
 
     /**
+     * String passed as message of ValueOutOfBoundsException when it is asked to create a turn with a negative turnnumber
+     */
+    private static final String CREATE_TURN_WITH_NEGATIVE_TURN_NUMBER = "Can't create a turn with negative turnNumber";
+    /**
+     * String passed as message of IllegalArgumentException when it is asked to create a turn giving as a parameter
+     * a null player
+     */
+    private static final String NEW_TURN_WITH_NULL_PLAYER = "Can't create a turn giving null player";
+    /**
+     * String passed as message of BadBehaviourException when it is asked to get a track slot that does not exist
+     */
+    private static final String REQUESTED_TRACKSLOT_DOES_NOT_EXIST = "The requested trackslot does not exists";
+    /**
+     * String passed as message of ValueOutOfBounds when it is asked to set the slot number of the slot
+     * where it is drafted the current track drafted dice, but a negative value is passed.
+     */
+    private static final String NEGATIVE_VALUE_AS_SLOT_NUMBER = "Can't set the slot of chosen dice to a negative value.";
+    /**
+     * String passed as message of IllegalArgumentException or IllegalStateException when referenced dice is null
+     */
+    private static final String NULL_DICE = "Can't use or reference a null dice";
+    /**
+     * String passed as message of IllegalArgumentException when it is asked to set a null toolcard as the current one
+     */
+    private static final String NULL_TOOL_CARD = "Can't use or reference a null toolcard.";
+    /**
+     * String passed as message of IllegalArgumentException when it is asked to check if a given
+     * player is the current one, but it is passed as argument a null object.
+     */
+    private static final String GIVEN_A_NULL_PLAYER = "Can't check if null player is current player";
+
+    /**
      * Constructor for a new Turn.
      *
      * @param number the sequential turn number
      * @param player se player playing the new turn
      */
     public Turn(int number, Player player) {
-        if(number < 0 ){ throw new ValueOutOfBoundsException("Can't create a turn with negative turnNumber");}
-        if(player==null){ throw new IllegalArgumentException("Can't create a turn giving null player"); }
+        if(number < 0 ){ throw new ValueOutOfBoundsException(CREATE_TURN_WITH_NEGATIVE_TURN_NUMBER);}
+        if(player==null){ throw new IllegalArgumentException(NEW_TURN_WITH_NULL_PLAYER); }
 
         this.number = number;
         this.player = player;
@@ -130,7 +162,7 @@ public class Turn extends Observable implements Serializable {
      * @return the sequential number representing the {@link TrackSlot} where the {@link Turn#trackChosenDice} was drafted
      */
     public int getSlotOfTrackChosenDice() {
-        if(slotOfTrackChosenDice == -1) {throw new BadBehaviourRuntimeException("No slot set");}
+        if(slotOfTrackChosenDice == -1) {throw new BadBehaviourRuntimeException(REQUESTED_TRACKSLOT_DOES_NOT_EXIST);}
             return slotOfTrackChosenDice;
     }
 
@@ -150,7 +182,7 @@ public class Turn extends Observable implements Serializable {
      * @param value value representing the sequential number of {@link TrackSlot}
      */
     public void setSlotOfTrackChosenDice(int value) {
-        if(value < 0) {throw new ValueOutOfBoundsException("Can't set the slot of chosen dice to a negative value.");}
+        if(value < 0) {throw new ValueOutOfBoundsException(NEGATIVE_VALUE_AS_SLOT_NUMBER);}
         this.slotOfTrackChosenDice = value;
 
         Map<String, Object> messageAttributes = new HashMap<>();
@@ -166,7 +198,7 @@ public class Turn extends Observable implements Serializable {
      * @param dice Dice to be set as the draftedDice
      */
     public void setDraftedDice(Dice dice){
-        if(dice == null){throw new IllegalArgumentException("Can't set the drafted dice with a null dice.");}
+        if(dice == null){throw new IllegalArgumentException(NULL_DICE);}
         this.draftedDice = dice;
 
         Map<String, Object> messageAttributes = new HashMap<>();
@@ -182,7 +214,7 @@ public class Turn extends Observable implements Serializable {
      * @param dice Dice to be set as the trackChosenDice
      */
     public void setTrackChosenDice(Dice dice) {
-        if(dice == null){throw new IllegalArgumentException("Can't set the track chosen dice with a null dice.");}
+        if(dice == null){throw new IllegalArgumentException(NULL_DICE);}
         this.trackChosenDice = dice;
 
         Map<String, Object> messageAttributes = new HashMap<>();
@@ -196,8 +228,7 @@ public class Turn extends Observable implements Serializable {
      * Sets the draftedAndPlaced to true
      */
     public void setDraftedAndPlaced(){
-        if(this.draftedDice==null){ throw new IllegalStateException("Asked to setDraftedAndPlaced" +
-                " but draftedDice is null"); }
+        if(this.draftedDice==null){ throw new IllegalStateException(NULL_DICE); }
         this.draftedAndPlaced = true;
     }
 
@@ -207,7 +238,7 @@ public class Turn extends Observable implements Serializable {
      * @param toolCard the ToolCard to be set as usedToolCard.
      */
     public void setUsedToolCard(ToolCard toolCard){
-        if(toolCard == null){throw new IllegalArgumentException("Can't set the used toolcard with a null toolcard.");}
+        if(toolCard == null){throw new IllegalArgumentException(NULL_TOOL_CARD);}
         this.usedToolCard = toolCard;
     }
 
@@ -233,7 +264,7 @@ public class Turn extends Observable implements Serializable {
      * @return if the given player is the one playing this turn
      */
     public boolean isCurrentPlayer(String playerID){
-        if(playerID == null){throw new IllegalArgumentException("Can't check if null player is current player");}
+        if(playerID == null){throw new IllegalArgumentException(GIVEN_A_NULL_PLAYER);}
         return ( this.player.getID().equals(playerID) );
     }
 }

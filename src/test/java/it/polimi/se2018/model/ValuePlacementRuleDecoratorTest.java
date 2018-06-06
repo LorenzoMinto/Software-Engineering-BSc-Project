@@ -44,22 +44,22 @@ public class ValuePlacementRuleDecoratorTest {
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnAlreadyPlacedDice() {
         windowPattern.putDiceOnCell(threeDice, 1,1);
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 1,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 1,1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowed() {
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, threeDice, 1, 1));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, threeDice, 1, 1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedWhenNotAllowed() {
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, fourDice, 1, 1));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern, fourDice, 1, 1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
         windowPattern.putDiceOnCell(threeDice, 1,0);
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, threeDice, 1, 1));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern, threeDice, 1, 1));
     }
 }

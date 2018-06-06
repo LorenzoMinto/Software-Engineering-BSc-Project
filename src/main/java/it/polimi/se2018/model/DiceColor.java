@@ -4,8 +4,7 @@ import java.util.Random;
 
 /**
  * Enum of Dice colors. It is included also a placeholder color named "NOCOLOR"
- * to better handling when a {@link Cell} has not a specified color constraint.
- *
+ * to better handling when a {@link Cell} has not a specified color constraint. *
  * @author Federico Haag
  */
 public enum DiceColor {
@@ -17,8 +16,7 @@ public enum DiceColor {
     NOCOLOR;
 
     /**
-     * Returns a random color, except the NOCOLOR.
-     *
+     * Returns a random color, except the NOCOLOR.     *
      * @return a random color
      */
     public static DiceColor getRandomColor(){
@@ -33,8 +31,7 @@ public enum DiceColor {
     }
 
     /**
-     * Returns a string representation in one letter of the color.
-     *
+     * Returns a string representation in one letter of the color.     *
      * @return a string representation in one letter of the color
      */
     public String toOneLetter(){
@@ -50,8 +47,7 @@ public enum DiceColor {
     }
 
     /**
-     * Returns a string representation of the color.
-     *
+     * Returns a string representation of the color.     *
      * @return a string representation of the color
      */
     @Override

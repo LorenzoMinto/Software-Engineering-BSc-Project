@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-
 /**
  * Represents Private Objective Cards.
  *

@@ -22,6 +22,43 @@ public class ToolCard implements Serializable{
      * Serial Version UID
      */
     private static final long serialVersionUID = 3828562971059857480L;
+
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown before title
+     */
+    private static final String PRE_TITLE = "[";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown after title
+     */
+    private static final String POST_TITLE = "]";
+    /**
+     * Part of the toString representation of the toolcard. Contains a divider that separates each block of information
+     */
+    private static final String DIVIDER = " ";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown before needed tokens
+     */
+    private static final String PRE_NEEDED_TOKENS = "Needed: ";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown before used tokens
+     */
+    private static final String PRE_USED_TOKENS = "Used: ";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown after needed tokens
+     */
+    private static final String POST_NEEDED_TOKENS = "|";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown after used tokens
+     */
+    private static final String POST_USED_TOKENS = ")";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown before description
+     */
+    private static final String PRE_DESCRIPTION = "";
+    /**
+     * Part of the toString representation of the toolcard. Contains content shown after description
+     */
+    private static final String POST_DESCRIPTION = "";
     /**
      * The id of the toolcard
      */
@@ -100,7 +137,7 @@ public class ToolCard implements Serializable{
     }
 
     /**
-     * Empty private constructor.
+     * Empty private constructor, used for testing.
      */
     private ToolCard(){
         this.toolCardID = "placeholder";
@@ -238,6 +275,6 @@ public class ToolCard implements Serializable{
      */
     @Override
     public String toString() {
-        return "["+getTitle()+"](Needed: "+getNeededTokens()+"| Used: "+ getUsedTokens()+") "+getDescription()+"";
+        return PRE_TITLE + getTitle() + POST_TITLE + DIVIDER + PRE_NEEDED_TOKENS +getNeededTokens()+ POST_NEEDED_TOKENS + DIVIDER + PRE_USED_TOKENS + getUsedTokens()+ POST_USED_TOKENS + DIVIDER + PRE_DESCRIPTION + getDescription() + POST_DESCRIPTION;
     }
 }

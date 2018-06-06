@@ -337,11 +337,11 @@ public class Controller extends Observable {
     }
 
     /**
-     * Checks if a given {@link ToolCard} can be used by the specified {@link Player}
-     * @param toolCard the {@link ToolCard} to be checked
-     * @return if the specified {@link ToolCard} can be used or not by the specified {@link Player} (true=can use)
+     * Sets the specified {@link ToolCard} as active. This means that it's being used
+     * during the current {@link Turn}
+     * @param toolCard the {@link ToolCard} that is being used
      */
-    protected boolean canUseSpecificToolCard(ToolCard toolCard) {
+    protected boolean setActiveToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
         if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDrafted()){
@@ -349,21 +349,14 @@ public class Controller extends Observable {
         }
 
         Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
-
-        return currentPlayer.canUseToolCard(toolCard);
-    }
-
-    /**
-     * Sets the specified {@link ToolCard} as active. This means that it's being used
-     * during the current {@link Turn}
-     * @param toolCard the {@link ToolCard} that is being used
-     */
-    protected void setActiveToolCard(ToolCard toolCard) {
-
-        game.useToolCard(toolCard);
-
-        this.activeToolcard = game.getToolCard(toolCard);
-        this.placementRule = this.activeToolcard.getPlacementRule();
+        if( currentPlayer.decreaseTokens(toolCard.getNeededTokens()) ){
+            game.useToolCard(toolCard);
+            this.activeToolcard = game.getToolCard(toolCard);
+            this.placementRule = this.activeToolcard.getPlacementRule();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

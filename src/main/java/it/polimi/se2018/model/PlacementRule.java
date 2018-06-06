@@ -19,5 +19,5 @@ public interface PlacementRule {
      * @param col  the column index of the cell where the dice is to be placed.
      * @return whether or not the move is allowed.
      */
-    boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col);
+    boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col);
 }

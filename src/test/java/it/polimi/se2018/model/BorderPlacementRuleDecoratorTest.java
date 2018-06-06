@@ -44,24 +44,24 @@ public class BorderPlacementRuleDecoratorTest {
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnAlreadyPlacedDice() {
         windowPattern.putDiceOnCell(redDice, 1,1);
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 1,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 1,1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowed() {
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, redDice, 1, 0));
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, redDice, 1, 2));
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, redDice, 2, 1));
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, redDice, 0, 1));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, redDice, 1, 0));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, redDice, 1, 2));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, redDice, 2, 1));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, redDice, 0, 1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedWhenNotAllowed() {
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, blueDice, 1, 1));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern, blueDice, 1, 1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, blueDice, 1, 0));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern, blueDice, 1, 0));
     }
 }

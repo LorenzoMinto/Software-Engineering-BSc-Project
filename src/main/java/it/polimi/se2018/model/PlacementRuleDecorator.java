@@ -36,7 +36,7 @@ public abstract class PlacementRuleDecorator implements PlacementRule {
      * @param col  the column index of the cell where the dice is to be placed.
      * @return whether or not the move is allowed.
      */
-    public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col){
-        return decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+    public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col){
+        return decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 }

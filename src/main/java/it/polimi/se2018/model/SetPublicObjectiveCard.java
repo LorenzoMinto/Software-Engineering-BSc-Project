@@ -18,6 +18,14 @@ import java.util.function.Function;
 public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
+     * Part of the toString representation of the SetPublicObjectiveCard. Contains content shown before multiplier
+     */
+    private static final String PRE_MULTIPLIER = "Multiplier: ";
+    /**
+     * Part of the toString representation of the SetPublicObjectiveCard. Contains content shown after multiplier
+     */
+    private static final String POST_MULTIPLIER = "";
+    /**
      * The set of colors or values that form a set.
      */
     private HashSet<Object> items;
@@ -79,7 +87,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
         Cell[][] pattern = windowPattern.getPattern();
 
-        //number of sets that contain the same elements (colors or values) as the 'items' set
+        //Number of sets that contain the same elements (colors or values) as the 'items' set
         int numberOfCompletedSets;
 
         /* List of sets that can be formed with the dice of a WindowPattern.
@@ -180,7 +188,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public String toString(){
         String s = super.toString();
-        s = s.concat("Multiplier: " + multiplier);
+        s = s.concat(PRE_MULTIPLIER + multiplier + POST_MULTIPLIER);
         s = s.concat(System.lineSeparator());
         return s;
     }

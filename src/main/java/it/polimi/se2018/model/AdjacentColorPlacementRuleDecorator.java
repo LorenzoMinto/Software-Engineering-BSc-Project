@@ -8,7 +8,6 @@ package it.polimi.se2018.model;
  */
 public class AdjacentColorPlacementRuleDecorator extends PlacementRuleDecorator {
 
-
     /**
      * Class constructor specifying {@link PlacementRule} to be decorated.
      *
@@ -30,9 +29,9 @@ public class AdjacentColorPlacementRuleDecorator extends PlacementRuleDecorator 
      * @return whether or not the move is allowed.
      */
     @Override
-    public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
+    public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         return checkAdjacentColorConstraints(windowPattern, dice, row, col) &&
-                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+                decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
     /**
@@ -57,6 +56,4 @@ public class AdjacentColorPlacementRuleDecorator extends PlacementRuleDecorator 
                 (row != numberOfRows-1 && pattern[row+1][col].hasDice() && dice.getColor() == pattern[row+1][col].getDice().getColor()) ||
                 (col != 0 && pattern[row][col-1].hasDice() && dice.getColor() == pattern[row][col-1].getDice().getColor()));
     }
-
-
 }

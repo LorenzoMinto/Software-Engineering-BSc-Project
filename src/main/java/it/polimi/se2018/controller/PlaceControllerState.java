@@ -34,7 +34,7 @@ public class PlaceControllerState extends ControllerState {
         ControllerState next;
         EnumSet<Move> permissions;
 
-        if (controller.placementRule.checkIfMoveIsAllowed(pattern, currentTurn.getDraftedDice(), row, col)
+        if (controller.placementRule.isMoveAllowed(pattern, currentTurn.getDraftedDice(), row, col)
                 && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {

@@ -43,40 +43,40 @@ public class AdjacentColorPlacementRuleDecoratorTest {
 
     @Test
     public void testCheckIfMoveIsAllowed() {
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern, blueDice, 1, 2));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern, blueDice, 1, 2));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnAlreadyPlacedDice() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 1,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 1,1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern, blueDice, 1, 0));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern, blueDice, 1, 0));
     }
 
     @Test
     public void testCheckAdjacentColorConstraintsBelow() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 0,1));
-        assertTrue(rule.checkIfMoveIsAllowed(windowPattern, blueDice, 0,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 0,1));
+        assertTrue(rule.isMoveAllowed(windowPattern, blueDice, 0,1));
     }
 
     @Test
     public void testCheckAdjacentColorConstraintsAbove() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 2,1));
-        assertTrue(rule.checkIfMoveIsAllowed(windowPattern, blueDice, 2,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 2,1));
+        assertTrue(rule.isMoveAllowed(windowPattern, blueDice, 2,1));
     }
 
     @Test
     public void testCheckAdjacentColorConstraintsLeft() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 1,2));
-        assertTrue(rule.checkIfMoveIsAllowed(windowPattern, blueDice, 1,2));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 1,2));
+        assertTrue(rule.isMoveAllowed(windowPattern, blueDice, 1,2));
     }
 
     @Test
     public void testCheckAdjacentColorConstraintsRight() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, redDice, 1,0));
-        assertTrue(rule.checkIfMoveIsAllowed(windowPattern, blueDice, 1,0));
+        assertFalse(rule.isMoveAllowed(windowPattern, redDice, 1,0));
+        assertTrue(rule.isMoveAllowed(windowPattern, blueDice, 1,0));
     }
 }

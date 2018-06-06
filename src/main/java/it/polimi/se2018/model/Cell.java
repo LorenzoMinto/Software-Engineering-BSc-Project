@@ -15,6 +15,18 @@ public class Cell implements Serializable{
      * Serial Version UID
      */
     private static final long serialVersionUID = -3774521266275346050L;
+    /**
+     * Part of the toString representation of the cell. Contains content shown before value&color
+     */
+    private static final String BEGIN_STRING = "(";
+    /**
+     * Part of the toString representation of the cell. Contains content shown after value&color
+     */
+    private static final String END_STRING = ")";
+    /**
+     * Part of the toString representation of the cell. Contains content that divides value from color
+     */
+    private static final String DIVIDER = ":";
 
     /**
      * The value that a Dice must have to be putted in this Cell. '0' means every value is allowed.
@@ -43,7 +55,6 @@ public class Cell implements Serializable{
 
     /**
      * Constructor for Cell specifying value and color constraints.
-     *
      * @param allowedValue Dice value constraint
      * @param allowedColor Dice color constraint
      */
@@ -53,10 +64,8 @@ public class Cell implements Serializable{
         this.dice = null;
     }
 
-
     /**
      * Returns the allowed value for the dice.
-     *
      * @return the allowed value for the dice
      */
     public int getAllowedValue() {
@@ -66,7 +75,6 @@ public class Cell implements Serializable{
 
     /**
      * Returns the allowed color for the dice.
-     *
      * @return the allowed color for the dice
      */
     public DiceColor getAllowedColor() {
@@ -75,8 +83,7 @@ public class Cell implements Serializable{
 
 
     /**
-     * Returns the dice in the cell
-     *
+     * Returns the dice in the cell.
      * @return the dice in the cell
      */
     public Dice getDice() {
@@ -85,7 +92,6 @@ public class Cell implements Serializable{
 
     /**
      * Sets the given {@link Dice} to the cell.
-     *
      * @param dice the dice that must be put on the cell
      */
     public void setDice(Dice dice) {
@@ -95,7 +101,6 @@ public class Cell implements Serializable{
 
     /**
      * Returns if the cell has a Dice placed on it.
-     *
      * @return if the cell has a Dice placed on it
      */
     public boolean hasDice() {
@@ -104,7 +109,6 @@ public class Cell implements Serializable{
 
     /**
      * Removes from the Cell the Dice and returns it.
-     *
      * @return the Dice that was placed on the Cell. If no Dice was placed, null is returned.
      */
     public Dice removeDice(){
@@ -115,7 +119,6 @@ public class Cell implements Serializable{
 
     /**
      * Makes a copy of the cell.
-     *
      * @return a copy of the cell
      */
     public Cell copy(){
@@ -126,15 +129,14 @@ public class Cell implements Serializable{
 
     /**
      * Returns the String representation of the Cell.
-     *
      * @return the String representation of the Cell
      */
     @Override
     public String toString() {
         if(this.dice == null) {
-            return "(" + allowedValue + ":" + allowedColor.toOneLetter() + ")";
+            return BEGIN_STRING + allowedValue + DIVIDER + allowedColor.toOneLetter() + END_STRING;
         }else{
-            return "(" + dice + ")";
+            return BEGIN_STRING + dice + END_STRING;
         }
     }
 }

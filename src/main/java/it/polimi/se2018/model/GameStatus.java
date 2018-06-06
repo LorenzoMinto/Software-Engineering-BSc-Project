@@ -1,8 +1,7 @@
 package it.polimi.se2018.model;
 
 /**
- * Enum representing the various states the game can be in
- *
+ * Enum representing the various states the game can be in. *
  * @author Federico Haag
  */
 public enum GameStatus {

@@ -16,6 +16,14 @@ import java.util.function.Function;
 public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
+     * Part of the toString representation of the SetPublicObjectiveCard. Contains content shown before multiplier
+     */
+    private static final String PRE_MULTIPLIER = "Multiplier: ";
+    /**
+     * Part of the toString representation of the SetPublicObjectiveCard. Contains content shown after multiplier
+     */
+    private static final String POST_MULTIPLIER = "";
+    /**
      * The score multiplier that is specific for each different combination of row/column - property.
      */
     private int multiplier;
@@ -194,7 +202,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public String toString(){
         String s = super.toString();
-        s = s.concat("Multiplier: " + multiplier);
+        s = s.concat(PRE_MULTIPLIER + multiplier + POST_MULTIPLIER);
         s = s.concat(System.lineSeparator());
         return s;
     }

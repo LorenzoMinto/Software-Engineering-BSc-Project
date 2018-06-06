@@ -84,7 +84,7 @@ public class DraftPoolTest {
         dices.add(dice2);
 
         draftPool = new DraftPool(dices);
-        draftPool.reroll();
+        draftPool.reRoll();
 
 
         for (Dice dice : draftPool.getDices()){

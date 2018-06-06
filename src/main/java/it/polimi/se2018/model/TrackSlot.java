@@ -18,6 +18,15 @@ public class TrackSlot implements Serializable {
      */
     private static final long serialVersionUID = -5716313610769359452L;
     /**
+     * String passed as message of IllegalArgumentException when referenced dice is null
+     */
+    private static final String NULL_DICE = "Can't use or reference a null dice";
+    /**
+     * String passed as message of IllegalArgumentException when it asked to remove a dice from a trackslot
+     * but the given dice reference is not contained in this trackslot.
+     */
+    private static final String NO_DICE_IN_TRACKSLOT = "The given dice is not present in the track slot.";
+    /**
      * List of dices kept in the TrackSlot
      */
     private List<Dice> dices;
@@ -37,7 +46,7 @@ public class TrackSlot implements Serializable {
      * @param dice the dice to be added.
      */
     public void addDice(Dice dice) {
-        if(dice == null){ throw new IllegalArgumentException("Can't add null dice to the track slot");}
+        if(dice == null){ throw new IllegalArgumentException(NULL_DICE);}
         dices.add(dice);
     }
 
@@ -48,11 +57,11 @@ public class TrackSlot implements Serializable {
      * @throws BadDiceReferenceException if the dice does not exists
      */
     public void removeDice(Dice dice) throws BadDiceReferenceException {
-        if(dice == null){ throw new IllegalArgumentException("Can't remove a null dice from the track slot.");}
+        if(dice == null){ throw new IllegalArgumentException(NULL_DICE);}
         if (dices.contains(dice)) {
             dices.remove(dice);
         } else {
-            throw new BadDiceReferenceException("Asked to remove a dice that is not present in the track slot.");
+            throw new BadDiceReferenceException(NO_DICE_IN_TRACKSLOT);
         }
     }
 

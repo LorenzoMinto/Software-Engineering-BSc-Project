@@ -34,8 +34,7 @@ public abstract class ObjectiveCard implements Serializable {
     private String imageURL;
 
     /**
-     * Constructor for a new Objective Card of given title, description and imageURL
-     *
+     * Constructor for a new Objective Card of given title, description and imageURL.
      * @param title the title of the Objective Card
      * @param description the description of the Objective Card
      * @param imageURL the image url of the Objective Card
@@ -46,7 +45,6 @@ public abstract class ObjectiveCard implements Serializable {
         this.imageURL = imageURL;
     }
 
-
     /**
      * Constructor just for JUnit
      */
@@ -54,7 +52,6 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * Returns the title of the objective card.
-     *
      * @return the title of the objective card
      */
     public String getTitle() {
@@ -63,7 +60,6 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * Returns the description of the objective card.
-     *
      * @return the description of the objective card
      */
     public String getDescription() {
@@ -72,7 +68,6 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * Returns the image url of the objective card.
-     *
      * @return the image url of the objective card
      */
     public String getImageURL() {
@@ -81,14 +76,12 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * Returns a copy of the objective card.
-     *
      * @return a copy of the objective card
      */
     public abstract ObjectiveCard copy();
 
     /**
-     * Returns the score of a given windowpattern according to this objective card criteria
-     *
+     * Returns the score of a given windowpattern according to this objective card criteria.
      * @param windowPattern the windowpattern to be evaluated
      * @return the score of a given windowpattern according to this objective card criteria
      */
@@ -96,7 +89,6 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * Returns the string representation of the card.
-     *
      * @return the string representation of the card
      */
     public String toString(){
@@ -106,5 +98,4 @@ public abstract class ObjectiveCard implements Serializable {
         s = s.concat(System.lineSeparator());
         return s;
     }
-
 }

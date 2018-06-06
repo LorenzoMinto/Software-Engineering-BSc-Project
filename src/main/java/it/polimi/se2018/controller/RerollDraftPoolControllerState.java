@@ -20,7 +20,7 @@ public class RerollDraftPoolControllerState extends ImplicitControllerState {
      */
     @Override
     public void executeImplicitBehaviour() {
-        controller.game.getCurrentRound().getDraftPool().reroll();
+        controller.game.getCurrentRound().getDraftPool().reRoll();
         controller.setControllerState(controller.stateManager.getNextState(this));
     }
 }

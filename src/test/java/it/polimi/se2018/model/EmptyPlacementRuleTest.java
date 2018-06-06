@@ -41,12 +41,12 @@ public class EmptyPlacementRuleTest {
 
     @Test
     public void testCheckIfMoveIsAllowed() {
-        assertTrue(rule.checkIfMoveIsAllowed(windowPattern, redDice, 1, 1));
+        assertTrue(rule.isMoveAllowed(windowPattern, redDice, 1, 1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedWhenNotAllowed() {
         windowPattern.putDiceOnCell(redDice, 1,1);
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, blueDice, 1, 1));
+        assertFalse(rule.isMoveAllowed(windowPattern, blueDice, 1, 1));
     }
 }

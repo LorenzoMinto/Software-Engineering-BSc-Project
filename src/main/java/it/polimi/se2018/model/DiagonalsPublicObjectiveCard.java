@@ -15,6 +15,11 @@ import java.util.stream.IntStream;
 public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
     /**
+     *
+     */
+    private static final String NULL_WINDOW_PATTERN_SCORE = "Cannot calculate score of a null window pattern.";
+
+    /**
      * Constructor for Diagonals Public Objective Card
      *
      * @param title the title of the card
@@ -60,8 +65,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      */
     @Override
     public int calculateScore(WindowPattern windowPattern) {
-        if(windowPattern==null){ throw new IllegalArgumentException("Cannot calculate score of" +
-                " a null window pattern."); }
+        if(windowPattern==null){ throw new IllegalArgumentException(NULL_WINDOW_PATTERN_SCORE); }
 
         int score = 0;
         int numberOfRows = windowPattern.getNumberOfRows();
@@ -78,7 +82,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         return score;
     }
-
 
     /**
      *  Calculates the score of the diagonals from left to right: diagonals have origin
@@ -109,7 +112,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         return score;
     }
-
 
     /**
      * Calculates the score of the diagonals from right to left: diagonals have origin
@@ -145,7 +147,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
         return score;
     }
 
-
     /**
      * Method to count the number of adjacent dice with the same property,
      * specified in the getPropertyFunction, in a diagonal.
@@ -180,7 +181,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         return score;
     }
-
 
     /**
      * Gets the score of a pair of cells identified by the row and column of the first cell
@@ -233,7 +233,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
 
         return score;
     }
-
 
     /**
      * Returns the linear index of a dice contained in a window pattern

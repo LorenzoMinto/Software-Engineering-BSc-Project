@@ -51,59 +51,59 @@ public class NotAdjacentDicePlacementRuleDecoratorTest {
 
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnAlreadyPlacedDice() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 1,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 1,1));
     }
 
     @Test
     public void testCheckIfMoveIsAllowed() {
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern2, fourDice, 1, 1));
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern2, fourDice, 0, 0));
-        assertTrue(decoratedRule.checkIfMoveIsAllowed(windowPattern2, fourDice, 1, 2));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern2, fourDice, 1, 1));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern2, fourDice, 0, 0));
+        assertTrue(decoratedRule.isMoveAllowed(windowPattern2, fourDice, 1, 2));
     }
 
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
-        assertFalse(decoratedRule.checkIfMoveIsAllowed(windowPattern2, fourDice, 1, 0));
+        assertFalse(decoratedRule.isMoveAllowed(windowPattern2, fourDice, 1, 0));
     }
 
 
     @Test
     public void testCheckAdjacentDiceConstraintsBelow() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 0,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 0,1));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsRightBelow() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 0,0));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 0,0));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsLeftBelow() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 0,2));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 0,2));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsAbove() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 2,1));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 2,1));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsRightAbove() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 2,0));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 2,0));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsLeftAbove() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 2,2));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 2,2));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsLeft() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 1,2));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 1,2));
     }
 
     @Test
     public void testCheckAdjacentDiceConstraintsRight() {
-        assertFalse(rule.checkIfMoveIsAllowed(windowPattern, threeDice, 1,0));
+        assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 1,0));
     }
 }

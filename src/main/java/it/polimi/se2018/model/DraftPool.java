@@ -22,18 +22,20 @@ public class DraftPool extends Observable implements Serializable {
      */
     private static final long serialVersionUID = -3098979090910253586L;
     /**
+     * String passed as message of IllegalArgumentException when referenced dice is null
+     */
+    private static final String NULL_DICE = "Can't use or reference a null dice";
+    /**
      * List of dices of the draftpool
      */
     private List<Dice> dices;
 
-
     /**
      * Constructor of a DraftPool containing the given dices
-     *
      * @param dices the dices that will be contained in the new draft pool
      */
     public DraftPool(List<Dice> dices){
-        if(dices == null){ throw new IllegalArgumentException("Can't create a draftpool with null dices.");}
+        if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
         this.dices = dices;
     }
 
@@ -41,7 +43,7 @@ public class DraftPool extends Observable implements Serializable {
      * Rolls each dice in draft pool.
      * @see Dice#roll()
      */
-    public void reroll() {
+    public void reRoll() {
 
         for (Dice dice : dices) {
             dice.roll();
@@ -52,7 +54,6 @@ public class DraftPool extends Observable implements Serializable {
 
     /**
      * Returns the list of dices contained in the DraftPool
-     *
      * @return the list of dices contained in the DraftPool
      */
     public List<Dice> getDices() {
@@ -72,17 +73,13 @@ public class DraftPool extends Observable implements Serializable {
      * @return if the removal succeeded or not
      */
     public boolean draftDice(Dice dice) {
-
         if(dices.remove(dice)) {
-
             notifyGame();
             return true;
-
-        }else {
+        } else {
             return false;
         }
     }
-
 
     /**
      * Add the specified dice to the draftpool
@@ -90,7 +87,7 @@ public class DraftPool extends Observable implements Serializable {
      * @param dice the dice to be added to the DraftPool
      */
     public void putDice(Dice dice) {
-        if(dice == null) {throw new IllegalArgumentException("Can't put a null dice in draft pool.");}
+        if(dice == null) {throw new IllegalArgumentException(NULL_DICE);}
         dices.add(dice);
         notifyGame();
     }
@@ -101,10 +98,7 @@ public class DraftPool extends Observable implements Serializable {
      * @author Jacopo Pio Gargano
      */
     private void notifyGame() {
-        //NOTIFYING
         Map<String, Object> messageAttributes = new HashMap<>();
-
-        //draftpool was necessarily updated
         messageAttributes.put("draftPool", this);
 
         notify(new MVMessage(MVMessage.types.DRAFTPOOL, messageAttributes));

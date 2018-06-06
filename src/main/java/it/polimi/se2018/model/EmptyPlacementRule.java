@@ -18,7 +18,7 @@ public class EmptyPlacementRule implements PlacementRule {
      * @return whether or not the move is allowed.
      */
     @Override
-    public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
+    public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         return !windowPattern.getPattern()[row][col].hasDice();
     }
 }

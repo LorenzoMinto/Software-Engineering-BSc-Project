@@ -8,7 +8,6 @@ import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.message.MVMessage;
 import it.polimi.se2018.utils.message.Message;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -24,7 +23,23 @@ import java.util.List;
  * @author Jacopo Pio Gargano
  */
 public class Game extends Observable implements Observer{
-
+    //TODO: completa i commenti di queste costanti
+    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_ROUNDS = "Can't create a game with negative number of rounds";
+    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_PLAYERS = "Can't create a game with negative number of players";
+    private static final String ASKED_TO_ASSIGN_CARDS_IN_BAD_STATE = "Can't assign cards more than once to the game. Controller should not ask for it. Bad unmanageable behaviour.";
+    private static final String NULL_RANKINGS = "Can't set rankings to null";
+    private static final String ASKED_TO_SET_RANKINGS_IN_BAD_STATE = "Can't set rankings if game is not ended. Controller should not ask for it. Bad unmanageable behaviour.";
+    private static final String ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED = "Can't add a player if max number of players is reached";
+    private static final String ASKED_TO_ADD_PLAYER_IN_BAD_STATE = "Can't add player if game is not waiting for players. Controller should not ask for it. Bad unmanageable behaviour.";
+    private static final String GAME_NOT_RUNNING = "Game is not running yet";
+    private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolcard that is not in the drawn set";
+    private static final String NO_DICES = "No dices given.";
+    private static final String ASKED_TO_START_GAME_IN_BAD_STATE = "Can't start game if not waiting for patterns choice.";
+    private static final String NO_ROUNDS = "Can't start a game with no rounds";
+    /**
+     * String passed as message of IllegalArgumentException when referenced dice is null
+     */
+    private static final String NULL_DICE = "Can't use or reference a null dice";
     /**
      * The number of rounds the game is composed of
      */
@@ -85,10 +100,9 @@ public class Game extends Observable implements Observer{
      * @param maxNumberOfPlayers the maximum number of players that the game can have
      */
     public Game(int numberOfRounds, int maxNumberOfPlayers) {
-        if(numberOfRounds < 0){
-            throw new ValueOutOfBoundsException("Can't create a game with negative number of rounds"); }
-        if(maxNumberOfPlayers <0 ){
-            throw new ValueOutOfBoundsException("Can't create a game with negative number of players"); }
+        if(numberOfRounds < 0){ throw new ValueOutOfBoundsException(GAME_WITH_NEGATIVE_NUMBER_OF_ROUNDS); }
+        if(maxNumberOfPlayers < 0 ){ throw new ValueOutOfBoundsException(GAME_WITH_NEGATIVE_NUMBER_OF_PLAYERS); }
+
         this.currentRound = null;
         this.track = new Track();
         this.players = new HashSet<>();
@@ -162,7 +176,7 @@ public class Game extends Observable implements Observer{
      */
     public void setCards(List<ToolCard> drawnToolCards, List<PublicObjectiveCard> drawnPublicObjectiveCards){
         if( this.status != GameStatus.WAITING_FOR_CARDS ){
-            throw new BadBehaviourRuntimeException("Can't assign cards more than once to the game. Controller should not ask for it. Bad unhandleable behaviour.");
+            throw new IllegalStateException(ASKED_TO_ASSIGN_CARDS_IN_BAD_STATE);
         }
 
         this.drawnToolCards = drawnToolCards;
@@ -186,8 +200,8 @@ public class Game extends Observable implements Observer{
      * @param rankings list of ordered players: first is winner
      */
     public void setRankings(Map<Player, Integer> rankings) {
-        if(this.status != GameStatus.ENDED){ throw  new BadBehaviourRuntimeException("Can't set rankings if game is not ended. Controller should not ask for it. Bad unhandleable behaviour.");}
-        if(rankings == null){ throw new IllegalArgumentException("Can't set rankings to null");}
+        if(this.status != GameStatus.ENDED){ throw  new IllegalStateException(ASKED_TO_SET_RANKINGS_IN_BAD_STATE);}
+        if(rankings == null){ throw new IllegalArgumentException(NULL_RANKINGS);}
 
         this.rankings = rankings;
 
@@ -208,8 +222,8 @@ public class Game extends Observable implements Observer{
      * @param player player to add to the game
      */
     public void addPlayer(Player player){
-        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException("Can't add player if game is not waiting for players. Controller should not ask for it. Bad unhandleable behaviour.");}
-        if(players.size() >= maxNumberOfPlayers){ throw new BadBehaviourRuntimeException("Controller should not ask for it"); }
+        if(this.status != GameStatus.WAITING_FOR_PLAYERS){ throw new BadBehaviourRuntimeException(ASKED_TO_ADD_PLAYER_IN_BAD_STATE);}
+        if(players.size() >= maxNumberOfPlayers){ throw new BadBehaviourRuntimeException(ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED); }
 
         players.add(player);
     }
@@ -239,7 +253,7 @@ public class Game extends Observable implements Observer{
      * @return if the given player is the current playing one
      */
     public boolean isCurrentPlayer(String playerID) {
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't determine if current player if game is not running");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException(GAME_NOT_RUNNING);}
         return getCurrentRound().getCurrentTurn().isCurrentPlayer(playerID);
     }
 
@@ -249,10 +263,10 @@ public class Game extends Observable implements Observer{
      * @param toolCard toolCard used in the current Turn
      */
     public void useToolCard(ToolCard toolCard){
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't use a toolcard if game is not running");}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException(GAME_NOT_RUNNING);}
 
         if( !this.drawnToolCards.contains(toolCard) ) {
-            throw new BadBehaviourRuntimeException("Asked to use a toolcard that is not in the drawn set");
+            throw new BadBehaviourRuntimeException(TOOLCARD_NOT_IN_DRAWN_SET);
         }
         this.drawnToolCards.get( this.drawnToolCards.indexOf(toolCard) ).use();
         this.getCurrentRound().getCurrentTurn().setUsedToolCard(toolCard);
@@ -283,7 +297,7 @@ public class Game extends Observable implements Observer{
         for (ToolCard card: drawnToolCards) {
             if (card.equals(toolCardCopy)) { return card;}
         }
-        throw new BadBehaviourRuntimeException("Asked to use a toolcard but it is not in the drawn set");
+        throw new BadBehaviourRuntimeException(TOOLCARD_NOT_IN_DRAWN_SET);
     }
 
     /**
@@ -302,9 +316,9 @@ public class Game extends Observable implements Observer{
      * @param dices list of dices to be used for the first round
      */
     public void startGame(List<Dice> dices, Set<Move> permissions){
-        if(dices == null){ throw new IllegalArgumentException("Can't start game with null dices.");}
-        if(dices.isEmpty()){ throw new EmptyListException("Can't start game with no dices.");}
-        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException("Can't start game if not waiting for patterns choice.");}
+        if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
+        if(dices.isEmpty()){ throw new EmptyListException(NO_DICES);}
+        if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new BadBehaviourRuntimeException(ASKED_TO_START_GAME_IN_BAD_STATE);}
 
         this.status = GameStatus.PLAYING;
 
@@ -332,7 +346,7 @@ public class Game extends Observable implements Observer{
             nextRound(dices,permissions);
         } catch (NoMoreRoundsAvailableException e) {
             //Should never happen
-            throw new BadBehaviourRuntimeException("Can't start a game with no rounds");
+            throw new BadBehaviourRuntimeException(NO_ROUNDS);
         }
     }
 
@@ -344,9 +358,9 @@ public class Game extends Observable implements Observer{
      * that could have been played in this game were actually already played
      */
     public void nextRound(List<Dice> dices, Set<Move> permissions) throws NoMoreRoundsAvailableException{
-        if(dices == null){ throw new IllegalArgumentException("Can't proceed to next round with null dices.");}
-        if(dices.isEmpty()){ throw new EmptyListException("Can't proceed to next round with no dices.");}
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next round if game is not already running"); }
+        if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
+        if(dices.isEmpty()){ throw new EmptyListException(NO_DICES);}
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException(GAME_NOT_RUNNING); }
 
         int nextRoundNumber;
         if( this.currentRound == null ){
@@ -395,7 +409,7 @@ public class Game extends Observable implements Observer{
      * @author Jacopo Pio Gargano
      */
     public void nextTurn(Set<Move> permissions) throws NoMoreTurnsAvailableException {
-        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException("Can't proceed to next turn if game is not already running"); }
+        if(this.status != GameStatus.PLAYING){ throw new BadBehaviourRuntimeException(GAME_NOT_RUNNING); }
         try {
             getCurrentRound().nextTurn();
 

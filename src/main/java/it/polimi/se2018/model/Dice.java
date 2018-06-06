@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.IntFunction;
 
 /**
  * Class that represents a Dice with 6 sides (value from 1 to 6)
@@ -17,6 +18,32 @@ public class Dice implements Serializable {
      * Serial Version UID
      */
     private static final long serialVersionUID = -5969531893571901155L;
+    /**
+     * String passed as message of IllegalArgumentException when it is asked to create a dice with no specified color
+     */
+    private static final String DICE_WITH_NO_COLOR = "Cannot create a Dice with no color.";
+    /**
+     * String passed as message of OutOfBoundsException when it is asked to create a dice with value not in the given range
+     */
+    private static final String DICE_WITH_VALUE_NOT_IN_RANGE = "Cannot create a dice with value not in range.";
+    /**
+     * Value given to a dice if no value is specified in constructor
+     */
+    private static final int DEFAULT_VALUE = 1;
+    /**
+     * Min value of the dice
+     */
+    private static final int MIN_VALUE = 1;
+    /**
+     * Max value of the dice
+     */
+    private static final int MAX_VALUE = 6;
+    /**
+     * In a standard dice the sum of the opposites sides is always 7
+     * In a standard Dice this means for example: 6 becomes 1, 4 becomes 3, 1 becomes 6
+     */
+    private static final IntFunction<Integer> rollDiceFunction = v -> 7 - v;
+
     /**
      * The value of the Dice
      */
@@ -33,7 +60,7 @@ public class Dice implements Serializable {
      * @param color the color of the new Dice
      */
     public Dice(DiceColor color) {
-        this(color,1);
+        this(color, DEFAULT_VALUE);
         this.roll();
     }
 
@@ -44,8 +71,8 @@ public class Dice implements Serializable {
      * @param value the value of the new Dice
      */
     public Dice(DiceColor color, int value) {
-        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("Cannot create a Dice with no color."); }
-        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("Cannot create a dice with value not in range [1,6]."); }
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException(DICE_WITH_NO_COLOR); }
+        if(value < MIN_VALUE || value > MAX_VALUE){ throw new ValueOutOfBoundsException(DICE_WITH_VALUE_NOT_IN_RANGE); }
 
         this.color = color;
         this.value = value;
@@ -57,7 +84,7 @@ public class Dice implements Serializable {
      * @param value the value to be setted to the Dice
      */
     public void setValue(int value) {
-        if(value <= 0 || value > 6){ throw new ValueOutOfBoundsException("Cannot create a dice with value not in range [1,6]."); }
+        if(value < MIN_VALUE || value > MAX_VALUE){ throw new ValueOutOfBoundsException(DICE_WITH_VALUE_NOT_IN_RANGE); }
         this.value = value;
     }
 
@@ -87,18 +114,15 @@ public class Dice implements Serializable {
     public void roll() {
 
         Random r = new Random();
-        this.value = r.nextInt(5)+1;
+        this.value = r.nextInt(MAX_VALUE-1)+1;
     }
 
 
     /**
-     * Roll over the Dice.
-     * In a standard Dice this means for example: 6 becomes 1, 4 becomes 3, 1 becomes 6
+     * Roll over the Dice according the built-in function rollDiceFunction
      */
     public void rollOver() {
-
-        //In a standard dice the sum of the opposites sides is always 7
-        this.value = 7 - this.value;
+        this.value = rollDiceFunction.apply(this.value);
     }
 
     /**
@@ -107,7 +131,7 @@ public class Dice implements Serializable {
      * @return if the increment was possible (can't increment a Dice that has the maximum value)
      */
     public boolean incrementValue(){
-        if( this.value < 6 ){
+        if( this.value < MAX_VALUE ){
             this.value += 1;
             return true;
         }
@@ -120,7 +144,7 @@ public class Dice implements Serializable {
      * @return if the decrement was possible (can't decrement a Dice that has the minimum value)
      */
     public boolean decrementValue(){
-        if( this.value > 1 ){
+        if( this.value > MIN_VALUE ){
             this.value -= 1;
             return true;
         }

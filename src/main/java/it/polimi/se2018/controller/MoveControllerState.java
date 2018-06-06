@@ -31,7 +31,7 @@ public class MoveControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
-        if (controller.placementRule.checkIfMoveIsAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
+        if (controller.placementRule.isMoveAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             controller.movesCounter += 1;
             if (controller.movesCounter <= 2) {

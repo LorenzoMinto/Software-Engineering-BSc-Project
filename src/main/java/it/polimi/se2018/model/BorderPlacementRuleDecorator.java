@@ -27,9 +27,9 @@ public class BorderPlacementRuleDecorator extends PlacementRuleDecorator {
      * @return whether or not the move is allowed.
      */
     @Override
-    public boolean checkIfMoveIsAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
+    public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         return checkBorderConstraints(windowPattern, row, col) &&
-                decoratedPlacementRule.checkIfMoveIsAllowed(windowPattern, dice, row, col);
+                decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
     /**
@@ -49,6 +49,4 @@ public class BorderPlacementRuleDecorator extends PlacementRuleDecorator {
                 col==0 ||
                 col==windowPattern.getNumberOfColumns()-1;
     }
-
-
 }

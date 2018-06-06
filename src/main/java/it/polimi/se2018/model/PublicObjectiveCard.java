@@ -3,20 +3,19 @@ package it.polimi.se2018.model;
 import java.util.function.Function;
 
 /**
- * Represents Public Objective Cards as an abstract class that extends ObjectiveCard
- *
- * Each Public Objective card has a property function to get a certain property of the dice in the windowpattern
- *
+ * Represents Public Objective Cards as an abstract class that extends ObjectiveCard. *
+ * Each Public Objective card has a property function to get a certain property of the dice in the windowpattern. *
  * @author Jacopo Pio Gargano
  */
 public abstract class PublicObjectiveCard extends ObjectiveCard{
 
     /**
-     * Function of Dice used to get a certain property of it
+     * Function of Dice used to get a certain property of it.
      */
     private transient Function<Dice,Object> propertyFunction;
 
     /**
+     * Constructor for PublicObjectiveCard.
      * @param title the title of the card
      * @param description the description of the card
      * @param imageURL the image url of the card
@@ -33,8 +32,7 @@ public abstract class PublicObjectiveCard extends ObjectiveCard{
     protected PublicObjectiveCard() {}
 
     /**
-     * Gets the property function of the public objective card
-     *
+     * Gets the property function of the public objective card.
      * @return the property function of the public objective card
      */
     protected Function<Dice, Object> getPropertyFunction() {

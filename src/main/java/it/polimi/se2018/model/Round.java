@@ -35,7 +35,6 @@ public class Round {
 
     /**
      * Constructor of a new Round.
-     *
      * @param roundNumber progressive number of the round
      * @param numberOfTurns how many turns has the new round
      * @param players list of players playing in the new round
@@ -66,8 +65,7 @@ public class Round {
 
     /**
      * Returns the progressive number of this round.
-     *
-     * @return the progressive number of this round.
+     * @return the progressive number of this round
      */
     public int getNumber() {
         return number;
@@ -75,7 +73,6 @@ public class Round {
 
     /**
      * Returns the current turn (based on {@link Round#currentTurnIndex}.
-     *
      * @return the current turn (based on {@link Round#currentTurnIndex}
      */
     public Turn getCurrentTurn() {
@@ -84,7 +81,6 @@ public class Round {
 
     /**
      * Returns the round's draftpool.
-     *
      * @return the round's draftpool
      */
     public DraftPool getDraftPool() {
@@ -92,8 +88,7 @@ public class Round {
     }
 
     /**
-     * Method that gets the list of players who played the last round in order from last to first without repetitions
-     *
+     * Method that gets the list of players who played the last round in order from last to first without repetitions.
      * @return the list of players who played the last round in order
      * @see it.polimi.se2018.controller.Scorer#getRankings(List, List)
      * @author Jacopo Pio Gargano
@@ -113,7 +108,6 @@ public class Round {
 
     /**
      * Proceed the game going to the next turn (if available).
-     *
      * @throws NoMoreTurnsAvailableException if the method is called but all the turns
      * that could have been played in this round were actually already played
      */
@@ -129,8 +123,7 @@ public class Round {
 
     /**
      * Returns the player that according to game rules should play
-     * on the given round and turn (from the given list of players)
-     *
+     * on the given round and turn (from the given list of players).
      * @param players list of players playing the game
      * @param turnNumber sequential number of the turn (starting from 0)
      * @param numberOfTurns
@@ -154,8 +147,7 @@ public class Round {
     }
 
     /**
-     * Removes the next turn of the specified player
-     *
+     * Removes the next turn of the specified player.
      * @param player the player whose turn needs to be removed
      * @return true if the operation was successful, otherwise false
      * @author Jacopo Pio Gargano
@@ -173,5 +165,4 @@ public class Round {
         }
         return false;
     }
-
 }
