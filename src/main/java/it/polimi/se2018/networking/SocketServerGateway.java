@@ -41,11 +41,7 @@ public class SocketServerGateway implements ReceiverInterface {
      * @param sender the sender of the message (server)
      * @throws RemoteException if something during the physical sending of the message goes wrong
      */
-    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkException {
-        try {
-            receiver.receiveMessage(message,sender);
-        } catch (RemoteException e) {
-            throw new NetworkException();
-        }
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
+        receiver.receiveMessage(message,sender);
     }
 }

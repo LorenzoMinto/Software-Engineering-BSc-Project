@@ -45,7 +45,6 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
             try {
                 server = new RMIClientGateway(this.serverName, this.port, this);
             } catch (RemoteException e) {
-                e.printStackTrace();
                 fail("Failed connecting to RMI server.");
             }
 
@@ -91,12 +90,12 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
         notify(message);
     }
 
     @Override
-    public void sendMessage(Message message) throws NetworkException {
+    public void sendMessage(Message message) throws RemoteException {
         boolean somethingFailed = false;
         for(SenderInterface o : gateways){
             int attempts = 0;
@@ -121,7 +120,7 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
             if(!correctlySent){ somethingFailed=true; }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
-        if(somethingFailed) throw new NetworkException("At least on message could not be sent from Client to Server. Message was: "+message);
+        if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
     private void addGateway(SenderInterface gateway) {

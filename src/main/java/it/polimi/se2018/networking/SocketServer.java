@@ -13,20 +13,20 @@ public class SocketServer implements ReceiverInterface {
 
     private ObjectOutputStream stream;
 
-    SocketServer(ObjectOutputStream stream) {
+    SocketServer(ObjectOutputStream stream) throws IOException {
         this.stream = stream;
     }
 
-    private void receiveMessage(Message message) throws NetworkException {
+    private void receiveMessage(Message message) throws RemoteException {
         try {
             this.stream.writeObject(message);
         } catch (IOException e) {
-            throw new NetworkException("IOException thrown writing in socket stream during receiveMessage method call");
+            throw new RemoteException("IOException thrown writing in socket stream during receiveMessage method call");
         }
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
         receiveMessage(message);
         //Just for compatibility reasons. Sender is not needed (and could be null): something related to RMI
     }

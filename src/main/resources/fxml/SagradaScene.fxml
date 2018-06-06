@@ -180,12 +180,12 @@
                   <Button mnemonicParsing="false" text="Exit" />
                </children></VBox>
             <FlowPane fx:id="dynamicChoicesPane" alignment="CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2" />
-            <FlowPane fx:id="draftPoolPane" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+            <FlowPane fx:id="draftPoolPane" alignment="TOP_CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding></FlowPane>
             
          </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
       </GridPane>
       <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
