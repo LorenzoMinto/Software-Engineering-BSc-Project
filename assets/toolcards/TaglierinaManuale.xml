@@ -6,6 +6,7 @@
     Devi rispettare tutte le restrizioni di piazzamento.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <moveCounter quantifier="upto" count="2"/>
     <controllerStateRule prevState="StartControllerState" nextState="ChooseFromTrackControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="ChooseFromTrackControllerState" />
     <controllerStateRule prevState="ChooseFromTrackControllerState" nextState="EnforceTrackChosenColorSimilarityControllerState" />

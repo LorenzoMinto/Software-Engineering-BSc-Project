@@ -5,6 +5,7 @@
     <description>Move exactly two dice, obeying all placement restrictions.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
+    <moveCounter quantifier="=" count="2"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="MoveControllerState" nextState="MoveControllerState" />

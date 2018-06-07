@@ -4,10 +4,7 @@ import it.polimi.se2018.controller.ControllerState;
 import it.polimi.se2018.controller.DraftControllerState;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 
 /**
@@ -100,6 +97,11 @@ public class ToolCard implements Serializable{
     private String imageURL;
 
     /**
+     * The number of possible dice moves
+     */
+    private Set<Integer> possibleMovesCountSet;
+
+    /**
      * The tool card's state transition table. Represents the tool card's effect (when active).
      */
     private transient HashMap<String,String> controllerStateRules;
@@ -131,6 +133,7 @@ public class ToolCard implements Serializable{
         this.tokensUsageMultiplier = Integer.parseInt( p.getProperty("tokensUsageMultiplier") );
         //the URL of the tool card image.
         this.imageURL = p.getProperty("imageURL");
+        this.possibleMovesCountSet = (HashSet<Integer>) p.get("possibleMovesCountSet");
 
         this.controllerStateRules = (HashMap<String,String>)controllerStateRules;
         this.placementRule = placementRule;
@@ -172,6 +175,15 @@ public class ToolCard implements Serializable{
      */
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * Returns the title of the tool card.
+     *
+     * @return the title of the tool card.
+     */
+    public Set<Integer> getPossibleMovesCountSet() {
+        return possibleMovesCountSet;
     }
 
     /**

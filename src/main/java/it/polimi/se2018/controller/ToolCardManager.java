@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.XMLFileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
@@ -115,6 +116,23 @@ public class ToolCardManager {
             params.put("description", document.getElementsByTagName("description").item(0).getTextContent());
             params.put("neededTokens", document.getElementsByTagName("neededTokens").item(0).getTextContent());
             params.put("tokensUsageMultiplier", document.getElementsByTagName("tokensUsageMultiplier").item(0).getTextContent());
+
+            //Move counter PARSING
+            Node moveCounter = document.getElementsByTagName("moveCounter").item(0);
+            Set<Integer> possibleMovesCountSet = new HashSet<Integer>();
+            if (moveCounter != null ) {
+                NamedNodeMap attributes = moveCounter.getAttributes();
+                String quantifier = attributes.getNamedItem("quantifier").getNodeValue();
+                String maximumQuantity = attributes.getNamedItem("count").getNodeValue();
+                if (quantifier.equals("upto")) {
+                    for (int i=0; i<= Integer.parseInt(maximumQuantity); i++) {
+                        possibleMovesCountSet.add(i);
+                    }
+                } else {
+                    possibleMovesCountSet.add(Integer.parseInt(maximumQuantity));
+                }
+            }
+            params.put("possibleMovesCountSet", possibleMovesCountSet);
 
             //Placement Rules PARSING
             PlacementRule placementRule;
