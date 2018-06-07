@@ -7,7 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,4 +58,16 @@ public class WindowPatternPlayerView extends Pane {
     public void setThisAsUser() {
         this.userIcon.setVisible(true);
     }
+
+    public void setThisAsCurrentPlayer(boolean t) {
+        if (t) {
+            this.setBorder(new Border(new BorderStroke(Color.RED,
+                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));
+        } else {
+            this.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                    BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        }
+    }
+
+    public String getNickname() { return nickname; }
 }

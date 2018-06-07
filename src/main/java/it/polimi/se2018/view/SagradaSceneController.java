@@ -350,15 +350,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     }
 
-    @Override
-    void notifyGameVariablesChanged() {
-        updateWindowPatterns();
-        updateCards();
-        updateTrack();
-        updateDraftPool();
-        updatePlayers();
-    }
-
     private void updateCards() {
         if(drawnToolCards.isEmpty() || drawnPublicObjectiveCards.isEmpty() || getPrivateObjectiveCard() == null){
             throw new BadBehaviourRuntimeException("Cards shouldn't be empty");}
@@ -376,6 +367,9 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateDraftPool() {
+        if (!dicesButtons.isEmpty()) {
+            dicesButtons.removeAll(dicesButtons);
+        }
         System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
             Button dice = new Button();
@@ -488,6 +482,25 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             }
         }).start();
+    }
+
+    @Override
+    void notifyNewTurn(){
+        super.notifyNewTurn();
+        for (WindowPatternPlayerView wpView: wpViews) {
+            wpView.setThisAsCurrentPlayer(playingPlayerID.equals(wpView.getNickname()));
+        }
+    }
+
+
+    @Override
+    void notifyGameVariablesChanged() {
+        super.notifyGameVariablesChanged();
+        updateWindowPatterns();
+        updateCards();
+        updateTrack();
+        updateDraftPool();
+        updatePlayers();
     }
 
     protected void printOnConsole(String s) {

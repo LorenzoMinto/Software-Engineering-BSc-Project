@@ -187,6 +187,6 @@
 
          </children>
       </GridPane>
-      <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
