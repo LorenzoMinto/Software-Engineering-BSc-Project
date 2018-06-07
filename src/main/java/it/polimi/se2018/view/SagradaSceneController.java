@@ -7,8 +7,8 @@ import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.VCMessage;
-import it.polimi.se2018.utils.message.WaitingRoomMessage;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
@@ -30,8 +31,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+import static it.polimi.se2018.model.DiceColor.RED;
+
 public class SagradaSceneController extends View implements Initializable {
-    private Client client;
     private Scene loginScene;
 
     private List<Image> cards = new ArrayList<>();
@@ -40,15 +42,20 @@ public class SagradaSceneController extends View implements Initializable {
     private int cardCarouselCurrentIndex;
 
     @FXML private HBox blackPane;
+    @FXML private AnchorPane backgroundPane;
 
     @FXML private TextArea playerTerminal;
     @FXML private FlowPane dynamicChoicesPane;
-    @FXML private FlowPane draftPoolPane;
 
     //WINDOW PATTERNS DISPLAY
     private List<WindowPatternPlayerView> wpViews;
 
     @FXML private HBox windowPatternsBox;
+
+    //DRAFTPOOL DISPLAY
+    @FXML private FlowPane draftPoolPane;
+    private Button selectedDiceButton = null;
+    private List<Button> dicesButtons = new ArrayList<>();
 
 
     //CARDS CAROUSEL COMPONENTS
@@ -119,7 +126,9 @@ public class SagradaSceneController extends View implements Initializable {
         //setting a nice background
         Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
         cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
+        //backgroundPane.setBackground(new Background(new BackgroundFill(new ImagePattern(velvetBackground), CornerRadii.EMPTY, Insets.EMPTY)));
     }
+
 
     public void setLoginScene(Scene loginScene) {
         this.loginScene = loginScene;
@@ -191,12 +200,12 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void checkID(Move move){
-        //TODO: Button action handling here -> will correspond to the start of a move.
         switch (move) {
             case END_TURN:
                 handleEndTurnMove();
                 break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
+                handleDraftDiceFromDraftPoolMove();
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
                 break;
@@ -230,7 +239,18 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleDraftDiceFromDraftPoolMove() {
+        super.handleDraftDiceFromDraftPoolMove();
+        if (selectedDiceButton != null) {
+            Dice draftedDice = getDiceForDiceButton(selectedDiceButton);
+            showMessage("Drafted dice: " + draftedDice.toString());
+            sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
+        } else {
+            errorMessage("You have not selected a dice from the draft pool yet!");
+        }
+    }
 
+    private Dice getDiceForDiceButton(Button btn) {
+        return draftPoolDices.get(dicesButtons.indexOf(btn));
     }
 
     @Override
@@ -356,19 +376,38 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateDraftPool() {
+        System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
             Button dice = new Button();
+            dice.setId(d.toString());
             dice.setPrefWidth(80);
             dice.setPrefHeight(80);
 
             Image diceImage = new Image((new File("src/main/resources/images/Dices/"+d.toString()+".jpg")).toURI().toString());
             dice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
 
+            dice.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    selectedDiceButton = dice;
+                    for (Button d: dicesButtons) {
+                        if (d == selectedDiceButton) {
+                            d.setBorder(new Border(new BorderStroke(Color.BLACK,
+                                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));
+                        } else {
+                            d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                                    BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                        }
+                    }
+                }
+            });
+
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     draftPoolPane.getChildren().add(dice);
                 }
             });
+
+            dicesButtons.add(dice);
         }
     }
 
@@ -419,7 +458,7 @@ public class SagradaSceneController extends View implements Initializable {
                         @Override public void run() {
                             dynamicChoicesPane.getChildren().clear();
                             for (Move m : permissions) {
-                                Button button = new Button(m.toString());
+                                Button button = new Button(m.getTextualREP());
                                 button.setId(m.toString());
                                 button.setOnAction(event -> checkID(m));
                                 dynamicChoicesPane.getChildren().add(button);
@@ -429,10 +468,6 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             }
         }).start();
-    }
-
-    public void setClient(Client c) {
-        this.client = c;
     }
 
     protected void printOnConsole(String s) {

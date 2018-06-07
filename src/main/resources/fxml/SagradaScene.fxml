@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
+<AnchorPane fx:id="backgroundPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
    <children>
       <GridPane alignment="CENTER" prefHeight="385.0" prefWidth="589.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -38,7 +38,7 @@
         </rowConstraints>
          <children>
             <HBox fx:id="windowPatternsBox" alignment="CENTER" prefHeight="178.0" prefWidth="542.0" spacing="10.0" GridPane.columnSpan="6" GridPane.rowSpan="2" />
-            <Pane prefHeight="139.0" prefWidth="96.0" style="-fx-background-color: blue;" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
+            <Pane prefHeight="139.0" prefWidth="96.0" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
                <children>
                   <Label layoutX="19.0" layoutY="14.0" text="History" />
                </children>
@@ -184,7 +184,7 @@
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding></FlowPane>
-            
+
          </children>
       </GridPane>
       <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
