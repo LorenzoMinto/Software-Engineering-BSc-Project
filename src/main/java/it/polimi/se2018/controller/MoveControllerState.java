@@ -4,7 +4,10 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -34,9 +37,12 @@ public class MoveControllerState extends ControllerState {
         if (controller.placementRule.isMoveAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
             controller.movesCounter += 1;
-            if (controller.movesCounter <= 2) {
-                controller.setControllerState(controller.stateManager.getNextState(this));
 
+            List<Integer> possibleMovesCount = new ArrayList<>();
+            possibleMovesCount.addAll(controller.getActiveToolCard().getPossibleMovesCountSet());
+            //if the moves counter is less than the maximum number of moves ask for another move
+            if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size())) {
+                controller.setControllerState(controller.stateManager.getNextState(this));
                 return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
@@ -48,7 +54,18 @@ public class MoveControllerState extends ControllerState {
     }
 
     @Override
+    public CVMessage endToolCardEffect() {
+        if (controller.getActiveToolCard().getPossibleMovesCountSet().contains(controller.movesCounter)) {
+            this.controller.resetActiveToolCard();
+            controller.setControllerState(controller.stateManager.getDraftControllerState());
+            return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "ToolCard effected ended.");
+        } else {
+            return new CVMessage(ERROR_MESSAGE,"Can't end the ToolCard effect now.");
+        }
+    }
+
+    @Override
     public EnumSet<Move> getStatePermissions() {
-        return EnumSet.of(Move.MOVE_DICE);
+        return EnumSet.of(Move.MOVE_DICE, Move.END_EFFECT);
     }
 }

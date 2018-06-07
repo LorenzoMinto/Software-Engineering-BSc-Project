@@ -309,6 +309,9 @@ public class Controller extends Observable {
                         case END_TURN:
                             returnMessage = controllerState.endCurrentTurn();
                             break;
+                        case END_EFFECT:
+                            returnMessage = controllerState.endToolCardEffect();
+                            break;
                         default:
                             returnMessage = errorMessage("UnrecognizedMove");
                             break;

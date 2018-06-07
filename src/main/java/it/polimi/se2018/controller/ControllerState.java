@@ -131,10 +131,15 @@ public abstract class ControllerState {
      * @return a message containing the result of the mov
      */
     public CVMessage endCurrentTurn() {
-        System.out.println("End current turn called on" + this.getClass().getSimpleName());
         controller.advanceGame();
         return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
     }
+
+    /**
+     * Ends the current toolCard effect.
+     * @return a message containing the result of the mov
+     */
+    public CVMessage endToolCardEffect() { return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.

@@ -13,6 +13,7 @@ public enum Move {
     CHANGE_DRAFTED_DICE_VALUE ("Change drafted dice value"),
     CHOOSE_DICE_FROM_TRACK ("Choose dice from track"),
     MOVE_DICE ("Move dice"),
+    END_EFFECT ("End ToolCard Effect"),
     JOIN_GAME ("Join game"),
     BACK_GAME ("Back to game"),
     LEAVE ("Leave waiting room");

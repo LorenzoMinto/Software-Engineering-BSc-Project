@@ -43,6 +43,7 @@ public class VCMessage extends ControllerBoundMessage {
         USE_TOOLCARD,
         CHOOSE_WINDOW_PATTERN,
         BACK_GAMING,
-        END_TURN
+        END_TURN,
+        END_EFFECT
     }
 }
