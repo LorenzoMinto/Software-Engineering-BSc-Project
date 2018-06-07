@@ -438,7 +438,7 @@ public class SagradaSceneController extends View implements Initializable {
         } else { //so WPVs are not created each time they are updated
             for (WindowPattern wp: windowPatterns) {
                 WindowPatternPlayerView wpv = getWPViewById(wp.getTitle());
-                wpv.setWindowPattern(wp);
+                wpv.updateWindowPattern(wp);
                 //TODO: update player's favour tokens here
             }
         }
