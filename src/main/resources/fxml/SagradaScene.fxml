@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="backgroundPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
+<AnchorPane fx:id="backgroundPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
    <children>
       <GridPane alignment="CENTER" prefHeight="385.0" prefWidth="589.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -174,10 +174,10 @@
                   <TextArea fx:id="playerTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" text="Welcome to Sagrada." wrapText="true" />
                </content>
             </ScrollPane>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" text="Track" />
-                  <Button mnemonicParsing="false" text="Exit" />
+                  <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" text="Track" />
+                  <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: indianred;" text="Exit" />
                </children></VBox>
             <FlowPane fx:id="dynamicChoicesPane" alignment="CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2" />
             <FlowPane fx:id="draftPoolPane" alignment="TOP_CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">

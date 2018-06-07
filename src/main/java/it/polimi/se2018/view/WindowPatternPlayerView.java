@@ -23,6 +23,7 @@ public class WindowPatternPlayerView extends Pane {
     @FXML private Label favourTokensLabel;
     @FXML private ImageView wpImage;
     @FXML private Label titleLabel;
+    @FXML private ImageView userIcon;
 
     public WindowPatternPlayerView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WindowPatternPlayerView.fxml"));
@@ -53,4 +54,7 @@ public class WindowPatternPlayerView extends Pane {
     }
 
 
+    public void setThisAsUser() {
+        this.userIcon.setVisible(true);
+    }
 }

@@ -108,7 +108,6 @@ public class ViewGUI extends Application {
             //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
             @Override
             public void handle(ActionEvent e) {
-                sagradaSceneController.setClient(client);
                 sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
                         serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
                 sagradaSceneController.setPlayer(userTextField.getText());

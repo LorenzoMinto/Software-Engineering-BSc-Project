@@ -124,8 +124,8 @@ public class SagradaSceneController extends View implements Initializable {
 
 
         //setting a nice background
-        Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
-        cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
+        //Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
+        //cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
         //backgroundPane.setBackground(new Background(new BackgroundFill(new ImagePattern(velvetBackground), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
@@ -420,25 +420,46 @@ public class SagradaSceneController extends View implements Initializable {
         wpViews = new ArrayList<>();
         int i = 0;
 
-        for (WindowPattern wp: windowPatterns) {
-            //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
-             String nickname = players.get(i);
-            WindowPatternPlayerView wpView = new WindowPatternPlayerView();
-            wpView.setFavourTokens(wp.getDifficulty());
-            wpView.setNickname(nickname);
-            wpView.setWindowPattern(wp);
-            wpViews.add(wpView);
-            i += 1;
-
-
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    windowPatternsBox.getChildren().add(wpView);
+        if (wpViews.isEmpty()) {
+            for (WindowPattern wp: windowPatterns) {
+                //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
+                String nickname = players.get(i);
+                WindowPatternPlayerView wpView = new WindowPatternPlayerView();
+                wpView.setFavourTokens(wp.getDifficulty());
+                wpView.setNickname(nickname);
+                wpView.setWindowPattern(wp);
+                if (nickname.equals(getPlayerID())) {
+                    wpView.setThisAsUser();
                 }
-            });
-        }
+                wpView.setId(wp.getTitle());
+                wpViews.add(wpView);
+                i += 1;
 
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
+                        windowPatternsBox.getChildren().add(wpView);
+                    }
+                });
+            }
+        } else { //so WPVs are not created each time they are updated
+            for (WindowPattern wp: windowPatterns) {
+                WindowPatternPlayerView wpv = getWPViewById(wp.getTitle());
+                wpv.setWindowPattern(wp);
+                //TODO: update player's favour tokens here
+            }
+        }
     }
+
+    private WindowPatternPlayerView getWPViewById(String title) {
+        for (WindowPatternPlayerView wpv : wpViews) {
+            if (wpv.getId().equals(title)) {
+                return wpv;
+            }
+        }
+        //TODO: throw exception if this happens
+        return new WindowPatternPlayerView();
+    }
+
 
     @Override
     void notifyGameStarted() {
@@ -453,7 +474,6 @@ public class SagradaSceneController extends View implements Initializable {
                     //add message? No move available at the moment
                 } else {
                     Set<Move> permissions = getPermissions();
-                    //TODO: each move should have a literal representation, not hardcoded here
                     Platform.runLater(new Runnable() {
                         @Override public void run() {
                             dynamicChoicesPane.getChildren().clear();
