@@ -8,12 +8,16 @@ import java.util.Random;
  * @author Federico Haag
  */
 public enum DiceColor {
-    RED,
-    YELLOW,
-    GREEN,
-    BLUE,
-    PURPLE,
-    NOCOLOR;
+    RED ("R"),
+    YELLOW ("Y"),
+    GREEN ("G"),
+    BLUE ("B"),
+    PURPLE ("P"),
+    NOCOLOR ("_");
+
+    private final String oneLetterRepresentation;
+
+    DiceColor(String s){ this.oneLetterRepresentation = s; }
 
     /**
      * Returns a random color, except the NOCOLOR.     *
@@ -35,15 +39,7 @@ public enum DiceColor {
      * @return a string representation in one letter of the color
      */
     public String toOneLetter(){
-        switch(this) {
-            case NOCOLOR: return "_";
-            case RED: return "R";
-            case YELLOW: return "Y";
-            case GREEN: return "G";
-            case BLUE: return "B";
-            case PURPLE: return "P";
-            default: throw new IllegalArgumentException();
-        }
+        return this.oneLetterRepresentation;
     }
 
     /**
