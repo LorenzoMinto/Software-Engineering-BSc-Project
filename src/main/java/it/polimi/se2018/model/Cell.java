@@ -26,7 +26,15 @@ public class Cell implements Serializable{
     /**
      * Part of the toString representation of the cell. Contains content that divides value from color
      */
-    private static final String DIVIDER = ":";
+    private static final String DIVIDER = "::";
+    /**
+     * Part of the toString representation of the cell. Contains content shown before the dice string rep
+     */
+    private static final String BEFORE_DICE = " ";
+    /**
+     * Part of the toString representation of the cell. Contains content shown after the dice string rep
+     */
+    private static final String AFTER_DICE = " ";
 
     /**
      * The value that a Dice must have to be putted in this Cell. '0' means every value is allowed.
@@ -134,9 +142,9 @@ public class Cell implements Serializable{
     @Override
     public String toString() {
         if(this.dice == null) {
-            return BEGIN_STRING + allowedValue + DIVIDER + allowedColor.toOneLetter() + END_STRING;
+            return BEGIN_STRING + allowedColor.toOneLetter() + DIVIDER + allowedValue + END_STRING;
         }else{
-            return BEGIN_STRING + dice + END_STRING;
+            return BEGIN_STRING + BEFORE_DICE + dice + AFTER_DICE + END_STRING;
         }
     }
 
