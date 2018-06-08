@@ -4,6 +4,7 @@ import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
+import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.message.VCMessage;
 import javafx.application.Platform;
@@ -396,17 +397,19 @@ public class SagradaSceneController extends View implements Initializable {
                 for (HBox hBox: trackHBoxes) {
                     int i = 0;
 
-                    for (Dice dice: track.getDicesFromSlotNumber(i)) {
-                        Button trackSlotDice = new Button();
+                    try {
+                        for (Dice dice : track.getDicesFromSlotNumber(i)) {
+                            Button trackSlotDice = new Button();
 
-                        Image diceImage = new Image((new File("src/main/resources/images/Dices/"+dice+".jpg")).toURI().toString());
-                        trackSlotDice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                            Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice + ".jpg")).toURI().toString());
+                            trackSlotDice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
 
-                        trackSlotDice.setPrefHeight(50);
-                        trackSlotDice.setPrefWidth(50);
+                            trackSlotDice.setPrefHeight(50);
+                            trackSlotDice.setPrefWidth(50);
 
-                        hBox.getChildren().add(trackSlotDice);
-                    }
+                            hBox.getChildren().add(trackSlotDice);
+                        }
+                    }catch (ValueOutOfBoundsException e){}
 
                     i++;
                 }
