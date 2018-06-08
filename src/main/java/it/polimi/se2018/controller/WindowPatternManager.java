@@ -42,25 +42,6 @@ public class WindowPatternManager {
     }
 
     /**
-     * Returns if there are available window patterns
-     *
-     * @return if there are available window patterns
-     */
-    public boolean hasAvailablePatterns(){
-        return !(availablePatterns.isEmpty());
-    }
-
-    /**
-     * Returns a list of available window patterns
-     *
-     * @return list of available window patterns
-     */
-    public List<String> getAvailablePatternsNames() {
-
-        return new ArrayList<>(availablePatterns);
-    }
-
-    /**
      * Returns a list of the requested quantity of Window Patterns
      *
      * @param numberOfPairs the number of pairs of window patterns that must be created

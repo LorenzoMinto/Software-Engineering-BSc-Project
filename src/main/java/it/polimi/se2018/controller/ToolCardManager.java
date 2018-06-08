@@ -119,7 +119,7 @@ public class ToolCardManager {
 
             //Move counter PARSING
             Node moveCounter = document.getElementsByTagName("moveCounter").item(0);
-            Set<Integer> possibleMovesCountSet = new HashSet<Integer>();
+            Set<Integer> possibleMovesCountSet = new HashSet<>();
             if (moveCounter != null ) {
                 NamedNodeMap attributes = moveCounter.getAttributes();
                 String quantifier = attributes.getNamedItem("quantifier").getNodeValue();

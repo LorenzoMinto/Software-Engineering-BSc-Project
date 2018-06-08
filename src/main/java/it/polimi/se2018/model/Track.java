@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -114,6 +115,9 @@ public class Track implements Serializable, Iterable<TrackSlot> {
 
             @Override
             public TrackSlot next() {
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
                 return slots.get(currentIndex++).copy();
             }
 

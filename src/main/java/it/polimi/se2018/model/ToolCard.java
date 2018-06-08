@@ -133,6 +133,7 @@ public class ToolCard implements Serializable{
         this.tokensUsageMultiplier = Integer.parseInt( p.getProperty("tokensUsageMultiplier") );
         //the URL of the tool card image.
         this.imageURL = p.getProperty("imageURL");
+        //TODO: check this bad assignment
         this.possibleMovesCountSet = (HashSet<Integer>) p.get("possibleMovesCountSet");
 
         this.controllerStateRules = (HashMap<String,String>)controllerStateRules;

@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.CVMessage;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
@@ -37,7 +38,7 @@ public class ToolCardControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.USE_TOOLCARD);
     }
 }
