@@ -96,6 +96,8 @@ public abstract class View implements Observer {
         sendMessage(new VCMessage(VCMessage.types.DECREMENT_DICE));
     }
 
+    void handleEndEffectMove(){ sendMessage(new VCMessage(VCMessage.types.END_EFFECT)); }
+
     void handleChangeDraftedDiceValueMove(){
         //TODO: implement
     }
@@ -464,6 +466,7 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         Dice mDraftedDice = (Dice) o;
         setDraftedDice(mDraftedDice);
+        showMessage("You have drafted "+mDraftedDice);
     }
 
     // NOTIFY METHODS

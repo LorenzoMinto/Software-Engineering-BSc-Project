@@ -161,6 +161,9 @@ public class CLIView extends View{
             case MOVE_DICE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleMoveDiceMove);
                 break;
+            case END_EFFECT:
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleEndEffectMove);
+                break;
             case JOIN_GAME:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleJoinGameMove);
                 break;
@@ -234,6 +237,11 @@ public class CLIView extends View{
 
 
 
+    @Override
+    void handleEndEffectMove(){
+        super.handleEndEffectMove();
+        waitForMove();
+    }
 
     @Override
     void handleLeaveWaitingRoomMove() {
