@@ -225,7 +225,7 @@ public class GameTest {
         try{
             game.setCards(toolCards,publicObjectiveCards);
             fail();
-        }catch (BadBehaviourRuntimeException e){}
+        }catch (IllegalStateException e){}
     }
 
     /**
@@ -286,7 +286,7 @@ public class GameTest {
         try{
             game.setStatusAsWaitingForPatternsChoice();
             fail();
-        }catch (BadBehaviourRuntimeException e){}
+        }catch (IllegalStateException e){}
     }
 
     /**
@@ -297,7 +297,7 @@ public class GameTest {
         try {
             game.addPlayer(player);
             fail();
-        }catch (BadBehaviourRuntimeException e){}
+        }catch (IllegalStateException e){}
     }
 
     /**
@@ -361,7 +361,7 @@ public class GameTest {
         try {
             game.setRankings(rankings);
             fail();
-        }catch (BadBehaviourRuntimeException e) {}
+        }catch (IllegalStateException e) {}
     }
 
     /**
@@ -594,7 +594,7 @@ public class GameTest {
         try {
             game.startGame(dices, permissions);
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
             fail();
         } catch (BadBehaviourRuntimeException e){}
