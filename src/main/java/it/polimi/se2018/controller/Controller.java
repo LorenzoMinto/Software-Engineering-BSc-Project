@@ -468,7 +468,7 @@ public class Controller extends Observable {
 
         //Checks if due to players inactivity game can continuing or not
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
-            endGame(inactivePlayers);
+            endGame();
             return;
         }
 
@@ -576,47 +576,31 @@ public class Controller extends Observable {
      * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
     private void endGame(){
-        endGame(new HashSet<>());
-    }
-
-    private void endGame(HashSet<String> inactivePlayers){
-        Map<String, Integer> rankings = getRankingsAndScores(inactivePlayers);
+        Map<String, Integer> rankings = getRankingsAndScores();
 
         notify(new CVMessage(CVMessage.types.GAME_ENDED, Message.fastMap("rankings",rankings)));
 
         registerRankingsOnUsersProfiles(rankings);
-
-        //TODO: notify view of winners and scores
     }
 
     /**
      * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
-    private Map<String,Integer> getRankingsAndScores(HashSet<String> inactivePlayers) {
+    private Map<String,Integer> getRankingsAndScores() {
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
 
-        //The evaluation is made only on players who completed the game (inactive players are excluded)
-        List<Player> playersToEvaluate = new ArrayList<>();
-        for(Player p : playersOfLastRound){
-            if(!inactivePlayers.contains(p.getID())){
-                playersToEvaluate.add(p);
-            }
-        }
-        Map<Player,Integer> activePlayersRankingsAndScores = Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
+        List<Player> playersToEvaluate = new ArrayList<>(playersOfLastRound);
+        Map<Player,Integer> rankingsAndScores = Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
 
         //Convert from Player,Integer to String,Integer as required by method signature
-        LinkedHashMap<String,Integer> allPlayersRankingsAndScores = new LinkedHashMap<>();
-        for (Map.Entry<Player, Integer> entry : activePlayersRankingsAndScores.entrySet()){
-            allPlayersRankingsAndScores.put(entry.getKey().getID(),entry.getValue());
-        }
-        //The returned map must contain a score for all players, so inactive players are added
-        for(String inactivePlayerID : inactivePlayers){
-            allPlayersRankingsAndScores.put(inactivePlayerID,0);
+        LinkedHashMap<String,Integer> rankingsAndScoresByPlayerID = new LinkedHashMap<>();
+        for (Map.Entry<Player, Integer> entry : rankingsAndScores.entrySet()){
+            rankingsAndScoresByPlayerID.put(entry.getKey().getID(),entry.getValue());
         }
 
-        return allPlayersRankingsAndScores;
+        return rankingsAndScoresByPlayerID;
     }
 
     /**
