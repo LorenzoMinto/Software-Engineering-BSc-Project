@@ -44,6 +44,10 @@ public class RowsColumnsPublicObjectiveCardTest {
 
             windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
+            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            player.setWindowPattern(windowPattern);
+            windowPattern.setOwner(player);
+
             windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
             windowPattern.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
