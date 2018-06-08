@@ -41,14 +41,14 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage useToolCard(ToolCard toolcard) {
+    public CVMessage useToolCard(ToolCard toolCard) {
 
-        if ( controller.setActiveToolCard(toolcard) ) {
+        if ( controller.setActiveToolCard(toolCard) ) {
 
             controller.setControllerState(controller.stateManager.getNextState(this));
             return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {
-            return new CVMessage(ERROR_MESSAGE,"Can't use this toolcard.");
+            return new CVMessage(ERROR_MESSAGE,"Can't use this toolCard.");
         }
     }
 

@@ -31,17 +31,20 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+import static it.polimi.se2018.model.DiceColor.*;
+
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
     private List<Image> cards = new ArrayList<>();
+    //TODO: remove the following 3 lines
     private static final int numberOfToolCards = 3;
     private static final int numberOfPublicObjectiveCards = 3;
+    private static int playerTokens = 5;
     private int cardCarouselCurrentIndex;
 
     @FXML private AnchorPane blackAnchorPane;
-
-    @FXML private AnchorPane backgroundPane;
+    @FXML private HBox blackPane;
 
     @FXML private TextArea playerTerminal;
     @FXML private FlowPane dynamicChoicesPane;
@@ -96,7 +99,28 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox trackHBox2;
     @FXML private HBox trackHBox1;
 
-    @FXML private HBox blackHBox;
+
+    //TOOLCARDS COMPONENTS
+    private List<Node> toolCardsVisibleComponents = new ArrayList<>();
+
+    @FXML private GridPane toolCardsGridPane;
+
+    @FXML private Button toolCards1Button;
+    @FXML private Button toolCards2Button;
+    @FXML private Button toolCards3Button;
+
+    @FXML private HBox toolCardsPlayerHBox;
+
+    @FXML private Button toolCards1FavorTokensButton;
+    @FXML private Button toolCards2FavorTokensButton;
+    @FXML private Button toolCards3FavorTokensButton;
+
+    @FXML private Button toolCardsPlayerFavorTokensButton;
+
+
+    //IMAGES
+    String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
+
 
 
 // DO NOT DELETE THIS COMMENT
@@ -107,6 +131,20 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        Image cardsCarouselDefaultCardImage = new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString());
+
+        Image favorTokensImage = new Image((new File(favorTokensImagePath)).toURI().toString());
+        Image cardsCarouselPreviousImage = new Image((new File("src/main/resources/images/Previous.jpg")).toURI().toString());
+        Image cardsCarouselNextImage = new Image((new File("src/main/resources/images/Next.jpg")).toURI().toString());
+
+        setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCardImage, cardsCarouselCardHBox);
+
+        setImageWithHeightAndWidth(cardsCarouselFavorTokensImageView, favorTokensImage, cardsCarouselFavorTokensStackPane);
+
+        setImageWithHeightAndWidth(cardsCarouselPreviousImageView, cardsCarouselPreviousImage, cardsCarouselPreviousHBox);
+
+        setImageWithHeightAndWidth(cardsCarouselNextImageView, cardsCarouselNextImage, cardsCarouselNextHBox);
 
         cardsCarouselVisibleComponents.add(cardsCarouselCardImageView);
         cardsCarouselVisibleComponents.add(cardsCarouselFavorTokensImageView);
@@ -122,6 +160,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselVisibleComponents.forEach(component->component.setVisible(false));
         cardsCarouselCardImageView.setVisible(true);
 
+
         trackHBoxes.add(trackHBox1);
         trackHBoxes.add(trackHBox2);
         trackHBoxes.add(trackHBox3);
@@ -133,36 +172,60 @@ public class SagradaSceneController extends View implements Initializable {
         trackHBoxes.add(trackHBox9);
         trackHBoxes.add(trackHBox10);
 
-        blackAnchorPane.setOpacity(0);
-        blackAnchorPane.setDisable(true);
+        setDisableTrackView(true);
+
+
+        toolCards1FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
+        toolCards1FavorTokensButton.setPrefWidth(70);
+        toolCards1FavorTokensButton.setPrefHeight(70);
+
+        toolCards2FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
+        toolCards2FavorTokensButton.setPrefWidth(70);
+        toolCards2FavorTokensButton.setPrefHeight(70);
+
+        toolCards3FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
+        toolCards3FavorTokensButton.setPrefWidth(70);
+        toolCards3FavorTokensButton.setPrefHeight(70);
+
+        toolCardsPlayerFavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
+        toolCardsPlayerFavorTokensButton.setPrefWidth(85);
+        toolCardsPlayerFavorTokensButton.setPrefHeight(85);
+
+        toolCardsVisibleComponents.add(toolCardsGridPane);
+        toolCardsVisibleComponents.add(toolCards1Button);
+        toolCardsVisibleComponents.add(toolCards2Button);
+        toolCardsVisibleComponents.add(toolCards3Button);
+        toolCardsVisibleComponents.add(toolCards1FavorTokensButton);
+        toolCardsVisibleComponents.add(toolCards2FavorTokensButton);
+        toolCardsVisibleComponents.add(toolCards3FavorTokensButton);
+        toolCardsVisibleComponents.add(toolCardsPlayerHBox);
+
+        toolCardsVisibleComponents.forEach(component -> component.setVisible(false));
+        toolCardsVisibleComponents.forEach(component -> component.setDisable(true));
 
         disableBlackAnchorPane();
         disableBlackHBox();
 
-        setDisableTrackView(true);
 
-        Image cardsCarouselDefaultCard = (new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString()));
 
-        setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCard, cardsCarouselCardHBox);
 
-        //setting favor tokens image and next and previous buttons
-        setImageWithHeightAndWidth(cardsCarouselFavorTokensImageView,
-                new Image((new File("src/main/resources/images/FavorToken.jpg")).toURI().toString()),
-                cardsCarouselFavorTokensStackPane);
 
-        setImageWithHeightAndWidth(cardsCarouselPreviousImageView,
-                new Image((new File("src/main/resources/images/Previous.jpg")).toURI().toString()),
-                cardsCarouselPreviousHBox);
 
-        setImageWithHeightAndWidth(cardsCarouselNextImageView,
-                new Image((new File("src/main/resources/images/Next.jpg")).toURI().toString()),
-                cardsCarouselNextHBox);
 
 
         //setting a nice background
         //Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
         //cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
         //backgroundPane.setBackground(new Background(new BackgroundFill(new ImagePattern(velvetBackground), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    private Background getBackgroundFromImage(Image image) {
+        return new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY));
+    }
+
+    private Border getBorderWithColor(Color color) {
+        return new Border(new BorderStroke(color,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5)));
     }
 
     private void setDisableTrackView(boolean disable) {
@@ -219,7 +282,7 @@ public class SagradaSceneController extends View implements Initializable {
                 cardsCarouselCardHBox);
 
         if(cardCarouselCurrentIndex<numberOfToolCards) {
-            cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getUsedTokens()));
+            cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getNeededTokens()));
         }else{
             cardsCarouselFavorTokensValue.setText("");
         }
@@ -232,17 +295,17 @@ public class SagradaSceneController extends View implements Initializable {
         imageView.fitHeightProperty().bind(pane.heightProperty());
     }
 
-    public void handleCardCarouselToolCardsButtonPressed() {
+    public void onCardCarouselToolCardsButtonPressed() {
         cardCarouselCurrentIndex = 0;
         updateCardCarousel();
     }
 
-    public void handleCardCarouselPublicsButtonPressed(){
+    public void onCardCarouselPublicsButtonPressed(){
         cardCarouselCurrentIndex = numberOfToolCards;
         updateCardCarousel();
     }
 
-    public void handleCardCarouselPrivateButtonPressed(){
+    public void onCardCarouselPrivateButtonPressed(){
         cardCarouselCurrentIndex = numberOfToolCards + numberOfPublicObjectiveCards;
         updateCardCarousel();
     }
@@ -268,6 +331,7 @@ public class SagradaSceneController extends View implements Initializable {
             case PLACE_DICE_ON_WINDOWPATTERN:
                 break;
             case USE_TOOLCARD:
+                handleUseToolCardMove();
                 break;
             case INCREMENT_DRAFTED_DICE:
                 break;
@@ -318,8 +382,70 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleUseToolCardMove() {
+        enableBlackAnchorPane();
+        blackAnchorPane.setOpacity(0.93);
+        disableBlackHBox();
+        toolCardsVisibleComponents.forEach(component -> component.setVisible(true));
+        toolCardsVisibleComponents.forEach(component -> component.setOpacity(1));
+        toolCardsVisibleComponents.forEach(component -> component.setDisable(false));
 
+        //Retrieving toolCards images
+        Image toolCard1 = new Image((new File(drawnToolCards.get(0).getImageURL())).toURI().toString());
+        toolCards1Button.setBackground(getBackgroundFromImage(toolCard1));
+        Image toolCard2 = new Image((new File(drawnToolCards.get(1).getImageURL())).toURI().toString());
+        toolCards2Button.setBackground(getBackgroundFromImage(toolCard2));
+        Image toolCard3 = new Image((new File(drawnToolCards.get(2).getImageURL())).toURI().toString());
+        toolCards3Button.setBackground(getBackgroundFromImage(toolCard3));
+
+        toolCards1FavorTokensButton.setText(String.valueOf(drawnToolCards.get(0).getNeededTokens()));
+        toolCards2FavorTokensButton.setText(String.valueOf(drawnToolCards.get(1).getNeededTokens()));
+        toolCards3FavorTokensButton.setText(String.valueOf(drawnToolCards.get(2).getNeededTokens()));
+
+        //TODO: set player.getFavorTokens();
+        toolCardsPlayerFavorTokensButton.setText(String.valueOf(playerTokens));
     }
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards1ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
+            cardCarouselCurrentIndex = 0;
+            cardsCarouselCardHBox.setBorder(getBorderWithColor(Color.RED));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
+            toolCardsVisibleComponents.forEach(component -> component.setVisible(false));
+            toolCardsVisibleComponents.forEach(component -> component.setDisable(true));
+            disableBlackAnchorPane();
+        }
+    }
+
+
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards2ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
+            cardCarouselCurrentIndex = 1;
+            updateCardCarousel();
+            cardsCarouselCardHBox.setBorder(getBorderWithColor(Color.RED));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
+            toolCardsVisibleComponents.forEach(component -> component.setVisible(false));
+            toolCardsVisibleComponents.forEach(component -> component.setDisable(true));
+            disableBlackAnchorPane();
+        }
+    }
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards3ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
+            cardCarouselCurrentIndex = 2;
+            cardsCarouselCardHBox.setBorder(getBorderWithColor(Color.RED));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
+            toolCardsVisibleComponents.forEach(component -> component.setVisible(false));
+            toolCardsVisibleComponents.forEach(component -> component.setDisable(true));
+            disableBlackAnchorPane();
+        }
+    }
+
+
+
 
     @Override
     void handleIncrementDraftedDiceMove() {
@@ -375,7 +501,7 @@ public class SagradaSceneController extends View implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                windowPatternPanes.forEach(pane -> blackHBox.getChildren().add(pane));
+                windowPatternPanes.forEach(pane -> blackPane.getChildren().add(pane));
             }
         });
     }
@@ -383,12 +509,21 @@ public class SagradaSceneController extends View implements Initializable {
     public void handleTrackButtonPressedEvent(){
 
         Image trackImage = new Image((new File("src/main/resources/images/track.jpg").toURI().toString()));
-        trackImageButton.setBackground(new Background(new BackgroundFill(new ImagePattern(trackImage), CornerRadii.EMPTY, Insets.EMPTY)));
+        trackImageButton.setBackground(getBackgroundFromImage(trackImage));
         trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
 
         enableBlackAnchorPane();
+        disableBlackHBox();
 
         setDisableTrackView(false);
+
+        //LIST TO TRY HOW IT IS RENDERED
+        List<Dice> dices = new ArrayList<>();
+        dices.add(new Dice(RED));
+        dices.add(new Dice((BLUE)));
+        dices.add(new Dice((GREEN)));
+        dices.add(new Dice((YELLOW)));
+        dices.add(new Dice((PURPLE)));
 
 
         Platform.runLater(new Runnable() {
@@ -397,12 +532,14 @@ public class SagradaSceneController extends View implements Initializable {
                 for (HBox hBox: trackHBoxes) {
                     int i = 0;
 
+                    hBox.getChildren().clear();
                     try {
-                        for (Dice dice : track.getDicesFromSlotNumber(i)) {
+                        for(Dice dice: dices){
+//                        for (Dice dice : track.getDicesFromSlotNumber(i)) {
                             Button trackSlotDice = new Button();
 
                             Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice + ".jpg")).toURI().toString());
-                            trackSlotDice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                            trackSlotDice.setBackground(getBackgroundFromImage(diceImage));
 
                             trackSlotDice.setPrefHeight(50);
                             trackSlotDice.setPrefWidth(50);
@@ -418,6 +555,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     public void handleTrackImageButtonPressedEvent(){
+        System.out.println("ciao");
         disableBlackAnchorPane();
     }
 
@@ -439,17 +577,16 @@ public class SagradaSceneController extends View implements Initializable {
     private void disableBlackAnchorPane() {
         blackAnchorPane.setOpacity(0);
         blackAnchorPane.setDisable(true);
-        enableBlackHBox();
     }
 
     private void enableBlackHBox() {
-        blackHBox.setOpacity(0.8);
-        blackHBox.setDisable(false);
+        blackPane.setOpacity(0.8);
+        blackPane.setDisable(false);
     }
 
     private void disableBlackHBox() {
-        blackHBox.setOpacity(0);
-        blackHBox.setDisable(true);
+        blackPane.setOpacity(0);
+        blackPane.setDisable(true);
     }
 
 
@@ -491,15 +628,14 @@ public class SagradaSceneController extends View implements Initializable {
             dice.setPrefHeight(80);
 
             Image diceImage = new Image((new File("src/main/resources/images/Dices/"+d.toString()+".jpg")).toURI().toString());
-            dice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+            dice.setBackground(getBackgroundFromImage(diceImage));
 
             dice.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     selectedDiceButton = dice;
                     for (Button d: dicesButtons) {
                         if (d == selectedDiceButton) {
-                            d.setBorder(new Border(new BorderStroke(Color.BLACK,
-                                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));
+                            d.setBorder(getBorderWithColor(Color.BLACK));
                         } else {
                             d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
                                     BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));

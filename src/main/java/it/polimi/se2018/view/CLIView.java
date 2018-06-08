@@ -319,9 +319,9 @@ public class CLIView extends View{
             print(Integer.toString(index)+". "+toolCard);
             index++;
         }
-        waitForConsoleInput(toolcardIndexString -> {
-            int toolcardIndex = Integer.parseInt(toolcardIndexString);
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(toolcardIndex))));
+        waitForConsoleInput(toolCardIndexString -> {
+            int toolCardIndex = Integer.parseInt(toolCardIndexString);
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolCard",drawnToolCards.get(toolCardIndex))));
             waitForMove();
         });
     }

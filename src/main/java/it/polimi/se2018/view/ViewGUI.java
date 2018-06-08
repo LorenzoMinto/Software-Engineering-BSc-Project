@@ -24,7 +24,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 
 public class ViewGUI extends Application {
 

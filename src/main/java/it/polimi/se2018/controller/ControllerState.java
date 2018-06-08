@@ -22,7 +22,7 @@ public abstract class ControllerState {
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
      */
-    static final String MIDDLE_OF_EFFECT = "Can't do that. You're currently in the middle of a toolcard effect.";
+    static final String MIDDLE_OF_EFFECT = "Can't do that. You're currently in the middle of a toolCard effect.";
 
     /**
      * String to be printed if a method that requires drafting is called before any dice was drafted.
@@ -42,7 +42,7 @@ public abstract class ControllerState {
     /**
      * String to be printed if the only action possible is a ToolCard activation.
      */
-    static final String TOOLCARD_ONLY = "Can't do that. You can only use a toolcard that doesn't require drafting.";
+    static final String TOOLCARD_ONLY = "Can't do that. You can only use a toolCard that doesn't require drafting.";
 
     /**
      * String to be printed if the only action possible is to end the Turn.
@@ -79,10 +79,10 @@ public abstract class ControllerState {
     /**
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
      * passed toolCard is set as activeToolCard in the Controller.
-     * @param toolcard the toolcard to be activated.
+     * @param toolCard the toolCard to be activated.
      * @return a message containing the result of the mov
      */
-    public CVMessage useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public CVMessage useToolCard(ToolCard toolCard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.
