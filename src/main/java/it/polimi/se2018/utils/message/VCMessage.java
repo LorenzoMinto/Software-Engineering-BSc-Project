@@ -41,7 +41,7 @@ public class VCMessage extends ControllerBoundMessage {
         MOVE_DICE,
         PLACE_DICE,
         USE_TOOLCARD,
-        CHOOSE_WINDOW_PATTERN,
+        CHOSEN_WINDOW_PATTERN,
         BACK_GAMING,
         END_TURN,
         END_EFFECT

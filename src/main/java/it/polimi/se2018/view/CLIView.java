@@ -455,7 +455,7 @@ public class CLIView extends View{
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
+                sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -600,7 +600,7 @@ public class CLIView extends View{
     @Override
     void notifyNewTurn(){
         super.notifyNewTurn();
-        //do nothing else
+        waitForMove();
     }
 
     @Override

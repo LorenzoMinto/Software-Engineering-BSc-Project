@@ -363,7 +363,7 @@ public class SagradaSceneController extends View implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     setWindowPattern(pattern);
-                    sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",pattern)));
+                    sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowpattern",pattern)));
                     hasChosenWindowPattern();
                     printOnConsole(pattern.getTitle() +" chosen.");
                 }

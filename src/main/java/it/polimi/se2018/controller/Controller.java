@@ -127,6 +127,49 @@ public class Controller extends Observable {
 
     private HashSet<String> inactivePlayers = new HashSet<>();
 
+    private class WindowPatternChoicesWatcher extends Thread{
+        private final Object lock = new Object();
+        private final Runnable toDoWhenAllWindowPatternAreChosen;
+
+        WindowPatternChoicesWatcher(Runnable r){
+            this.toDoWhenAllWindowPatternAreChosen = r;
+        }
+
+        @Override
+        public void run(){
+            checkLoop();
+        }
+
+        public void notifyChosenWindowPattern(){
+            synchronized (lock){
+                lock.notifyAll();
+            }
+        }
+
+        private void checkLoop(){
+            boolean allPlayersHaveWindowPattern;
+            do{
+                synchronized (lock){
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                allPlayersHaveWindowPattern = true;
+                for(Player p : game.getPlayers()){
+                    if(p.getWindowPattern()==null){
+                        allPlayersHaveWindowPattern = false;
+                        break;
+                    }
+                }
+            } while (!allPlayersHaveWindowPattern);
+
+            toDoWhenAllWindowPatternAreChosen.run();
+        }
+    }
+
+    private final WindowPatternChoicesWatcher windowPatternChoicesWatcher;
     /**
      * Just for testing
      * @param game the game instance to be controlled
@@ -173,6 +216,11 @@ public class Controller extends Observable {
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
 
         this.game.setCards(toolCards,publicObjectiveCards);
+
+        this.windowPatternChoicesWatcher = new WindowPatternChoicesWatcher(()->{
+            waitingForPatternsChoice.cancel();
+            startGame();
+        });
     }
 
     /**
@@ -212,15 +260,16 @@ public class Controller extends Observable {
 
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
-                if(type==VCMessage.types.CHOOSE_WINDOW_PATTERN){
+                if(type==VCMessage.types.CHOSEN_WINDOW_PATTERN){
                     String playerID = message.getSendingPlayerID();
-                    WindowPattern wp = null;
+                    WindowPattern wp;
                     try {
                         wp = (WindowPattern) message.getParam("windowPattern");
                     } catch (NoSuchParamInMessageException e) {
                         return errorMessage("Bad Formatted");
                     }
                     returnMessage = assignWindowPatternToPlayer(wp,playerID);
+                    windowPatternChoicesWatcher.notifyChosenWindowPattern();
                     break;
                 } else {
                     returnMessage = new CVMessage(ERROR_MESSAGE);
@@ -403,22 +452,7 @@ public class Controller extends Observable {
         game.setStatusAsWaitingForPatternsChoice();
 
         //Start a "listener" that trigger startGame() when all players have chosen a windowPattern
-        new Thread(()->{
-            boolean allPlayersHaveWindowPattern;
-            do{
-                allPlayersHaveWindowPattern = true;
-                for(Player p : game.getPlayers()){
-                    if(p.getWindowPattern()==null){
-                        allPlayersHaveWindowPattern = false;
-                        break;
-                    }
-                }
-            } while (!allPlayersHaveWindowPattern);
-
-            this.waitingForPatternsChoice.cancel();
-            startGame();
-
-        }).start();
+        windowPatternChoicesWatcher.start();
 
         //Start the timer for patterns choice
         this.waitingForPatternsChoice = new TimerTask() {
@@ -433,7 +467,7 @@ public class Controller extends Observable {
                     }
                 }
 
-                //Game will start as soon as the wp listener previous declared will detect these changes
+                windowPatternChoicesWatcher.notifyChosenWindowPattern();
             }
         };
         TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));
