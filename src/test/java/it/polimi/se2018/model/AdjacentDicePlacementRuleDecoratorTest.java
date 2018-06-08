@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.ObjectiveCardManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,8 +39,13 @@ public class AdjacentDicePlacementRuleDecoratorTest {
         PlacementRule emptyRule = new EmptyPlacementRule();
         rule = new AdjacentDicePlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
+        ObjectiveCardManager objectiveCardManager = new ObjectiveCardManager();
+        Player dummy = new Player("Sonny", objectiveCardManager.getPrivateObjectiveCard());
 
-        windowPattern = new WindowPattern("", "", "",0, pattern);
+        windowPattern = new WindowPattern("","", "",0, pattern);
+        dummy.setWindowPattern(windowPattern);
+        windowPattern.assignToPlayer(dummy);
+
         threeDice = new Dice(DiceColor.BLUE, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);
         windowPattern.putDiceOnCell(threeDice, 1,1);

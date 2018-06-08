@@ -40,9 +40,10 @@ public class ChangeDiceValueControllerStateTest {
 
         for (Player p : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("windowPattern", wp);
+            params.put("windowpattern", wp);
             controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
         }
+
 
         Properties prop = new Properties();
         prop.put("title", "title");
@@ -51,7 +52,7 @@ public class ChangeDiceValueControllerStateTest {
         prop.put("tokensUsageMultiplier", "2");
         prop.put("imageURL", "imageURL");
 
-        prop.put("id", "PinzaSgrossatrice");
+        prop.put("id", "DiluentePerPastaSalda");
         ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
         Message m = controller.controllerState.useToolCard(toolCard);
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);

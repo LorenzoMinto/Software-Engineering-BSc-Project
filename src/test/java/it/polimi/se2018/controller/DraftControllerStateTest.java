@@ -41,7 +41,7 @@ public class DraftControllerStateTest {
 
         for (Player p : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("windowPattern", wp);
+            params.put("windowpattern", wp);
             controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
         }
 

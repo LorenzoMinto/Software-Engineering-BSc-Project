@@ -437,6 +437,11 @@ public class Controller extends Observable {
         EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
         game.startGame(getDicesForNewRound(),permissions);
 
+        this.placementRule = new BorderPlacementRuleDecorator(
+                new ColorPlacementRuleDecorator(
+                        new ValuePlacementRuleDecorator(
+                                new EmptyPlacementRule())));
+
         startPlayerMoveTimer();
     }
 

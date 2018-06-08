@@ -56,7 +56,7 @@ public class ControllerStateManagerTest {
 
         for (Player p : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("windowPattern", wp);
+            params.put("windowpattern", wp);
             controller.handleMove(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN, params, p.getID()));
         }
 
@@ -69,7 +69,7 @@ public class ControllerStateManagerTest {
         ControllerState nextState = stateManager.getNextState(startState);
         assertEquals("DraftControllerState", nextState.getClass().getSimpleName());
         nextState = stateManager.getNextState(nextState);
-        assertEquals("ChangeDiceValueControllerState", nextState.getClass().getSimpleName());
+        assertEquals("ChangeDiceValueUnitaryControllerState", nextState.getClass().getSimpleName());
         nextState = stateManager.getNextState(nextState);
         assertEquals("EndControllerState", nextState.getClass().getSimpleName());
     }

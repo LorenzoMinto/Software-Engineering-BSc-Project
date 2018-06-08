@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.ObjectiveCardManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,8 +36,13 @@ public class ColorPlacementRuleDecoratorTest {
         PlacementRule emptyRule = new EmptyPlacementRule();
         rule = new ColorPlacementRuleDecorator(emptyRule);
         decoratedRule = new ColorPlacementRuleDecorator(new AdjacentColorPlacementRuleDecorator(emptyRule));
+        ObjectiveCardManager objectiveCardManager = new ObjectiveCardManager();
+        Player dummy = new Player("Sonny", objectiveCardManager.getPrivateObjectiveCard());
 
-        windowPattern = new WindowPattern("", "", "",0, pattern);
+        windowPattern = new WindowPattern("","", "",0, pattern);
+        dummy.setWindowPattern(windowPattern);
+        windowPattern.assignToPlayer(dummy);
+
         redDice = new Dice(DiceColor.RED);
         blueDice = new Dice(DiceColor.BLUE);
     }
