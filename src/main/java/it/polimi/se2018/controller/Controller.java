@@ -221,7 +221,6 @@ public class Controller extends Observable {
                         return errorMessage("Bad Formatted");
                     }
                     returnMessage = assignWindowPatternToPlayer(wp,playerID);
-                    checkIfAllPlayersHaveChosenWindowPattern(); //may call startGame()
                     break;
                 } else {
                     returnMessage = new CVMessage(ERROR_MESSAGE);
@@ -403,11 +402,29 @@ public class Controller extends Observable {
 
         game.setStatusAsWaitingForPatternsChoice();
 
+        //Start a "listener" that trigger startGame() when all players have chosen a windowpattern
+        new Thread(()->{
+            boolean allPlayersHaveWindowPattern;
+            do{
+                allPlayersHaveWindowPattern = true;
+                for(Player p : game.getPlayers()){
+                    if(p.getWindowPattern()==null){
+                        allPlayersHaveWindowPattern = false;
+                        break;
+                    }
+                }
+            } while (!allPlayersHaveWindowPattern);
+
+            this.waitingForPatternsChoice.cancel();
+            startGame();
+
+        }).start();
+
         //Start the timer for patterns choice
         this.waitingForPatternsChoice = new TimerTask() {
             @Override
             public void run() {
-                logger.info("waitingForPatternsChoice timer has expired. Calling startGame()...");
+                logger.info("waitingForPatternsChoice timer has expired. Setting windowpatterns automatically...");
 
                 //Assign the first of the given windowpattern to players that did not choose
                 for(Player p : game.getPlayers()){
@@ -416,25 +433,15 @@ public class Controller extends Observable {
                     }
                 }
 
-                startGame();
+                //Game will start as soon as the wp listener previous declared will detect these changes
             }
         };
         TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));
     }
 
-    private void checkIfAllPlayersHaveChosenWindowPattern(){
-
-        for(Player p : game.getPlayers()){
-            if(p.getWindowPattern()==null){ return; }
-        }
-
-        //Next lines are executed only if all window patterns are setted
-        this.waitingForPatternsChoice.cancel();
-        startGame();
-    }
-
     private void startGame(){
         EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
+
         game.startGame(getDicesForNewRound(),permissions);
 
         this.placementRule = new BorderPlacementRuleDecorator(
@@ -473,7 +480,8 @@ public class Controller extends Observable {
 
         //Checks if due to players inactivity game can continuing or not
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
-            endGame(inactivePlayers);
+            game.forceEndGameDueToInactivity();
+            manageRankings();
             return;
         }
 
@@ -494,7 +502,7 @@ public class Controller extends Observable {
      * Let the game advance in the turns sequence.
      * If in the current {@link Round} have been played all the possible {@link Turn}s
      * it is created a new {@link Round}. If the current {@link Round} is the last one,
-     * the game is ended calling {@link Controller#endGame()}.
+     * the game is ended calling {@link Controller#manageRankings()}.
      */
     protected void advanceGame() {
 
@@ -522,7 +530,7 @@ public class Controller extends Observable {
                 game.nextRound( getDicesForNewRound(), permissions );
             } catch (NoMoreRoundsAvailableException e1) {
 
-                endGame();
+                manageRankings();
                 return;
             }
 
@@ -580,66 +588,24 @@ public class Controller extends Observable {
     /**
      * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
-    private void endGame(){
-        endGame(new HashSet<>());
-    }
+    private void manageRankings(){
+        Map<Player, Integer> rankings = getRankingsAndScores();
+        game.setRankings(rankings);
 
-    private void endGame(HashSet<String> inactivePlayers){
-        Map<String, Integer> rankings = getRankingsAndScores(inactivePlayers);
-
-        notify(new CVMessage(CVMessage.types.GAME_ENDED, Message.fastMap("rankings",rankings)));
-
-        registerRankingsOnUsersProfiles(rankings);
-
-        //TODO: notify view of winners and scores
+        //TODO: verificare utilità di questo messaggio (considerare che che game.setRankings() manda msg con rankings)
+        notify(new CVMessage(CVMessage.types.GAME_ENDED, null, null,EnumSet.noneOf(Move.class)));
     }
 
     /**
      * Gets the rankings and scores of the current {@link Game}.
      * @return rankings and scores of the current {@link Game}
      */
-    private Map<String,Integer> getRankingsAndScores(HashSet<String> inactivePlayers) {
+    private Map<Player,Integer> getRankingsAndScores() {
         List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
 
-        //The evaluation is made only on players who completed the game (inactive players are excluded)
-        List<Player> playersToEvaluate = new ArrayList<>();
-        for(Player p : playersOfLastRound){
-            if(!inactivePlayers.contains(p.getID())){
-                playersToEvaluate.add(p);
-            }
-        }
-        Map<Player,Integer> activePlayersRankingsAndScores = Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
-
-        //Convert from Player,Integer to String,Integer as required by method signature
-        LinkedHashMap<String,Integer> allPlayersRankingsAndScores = new LinkedHashMap<>();
-        for (Map.Entry<Player, Integer> entry : activePlayersRankingsAndScores.entrySet()){
-            allPlayersRankingsAndScores.put(entry.getKey().getID(),entry.getValue());
-        }
-        //The returned map must contain a score for all players, so inactive players are added
-        for(String inactivePlayerID : inactivePlayers){
-            allPlayersRankingsAndScores.put(inactivePlayerID,0);
-        }
-
-        return allPlayersRankingsAndScores;
-    }
-
-    /**
-     * Update scores and rankings of players profiles
-     * in order to increase statistics of wins and played games.
-     */
-    private void registerRankingsOnUsersProfiles(Map<String, Integer> rankings){
-        /*
-        TODO: implementare
-        for(Player player : game.getPlayers()){
-
-            Player winner = Scorer.getInstance().getWinner(rankings);
-
-            if(winner.equals(player)){
-                user.increaseGamesWon();
-            }
-        }
-        */
+        List<Player> playersToEvaluate = new ArrayList<>(playersOfLastRound);
+        return Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
     }
 
     /**

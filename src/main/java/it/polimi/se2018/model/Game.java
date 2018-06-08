@@ -74,6 +74,10 @@ public class Game extends Observable implements Observer{
      */
     private static final String NO_ROUNDS = "Can't start a game with no rounds";
     /**
+     * String passed as message of BadBehaviourException when is asked to create a new round but it is impossible to create new turns.
+     */
+    private static final String NO_TURNS = "Can't start a round with no turns";
+    /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
     private static final String NULL_DICE = "Can't use or reference a null dice";
@@ -242,14 +246,14 @@ public class Game extends Observable implements Observer{
 
         this.rankings = rankings;
 
-        //NOTIFYING
         List<String> rankingsAsList = Arrays.asList(rankings.keySet().stream().map(Player::getID).toArray(String[]::new));
 
+        //TODO: registrare punteggi ai player. decidere se recuperare players by id oppure by reference
+        //TODO: nel caso di by reference verificare che la reference che arriva sia quella effettiva
+
         Map <String, Object> messageAttributes = new HashMap<>();
-
         messageAttributes.put("rankings", rankings);
-        messageAttributes.put("winner", rankingsAsList.get(0));
-
+        messageAttributes.put("winnerPlayerID", rankingsAsList.get(0));
         notify(new MVMessage(MVMessage.types.RANKINGS, messageAttributes));
     }
 
@@ -344,7 +348,19 @@ public class Game extends Observable implements Observer{
         if(status==GameStatus.WAITING_FOR_PLAYERS){
             this.status = GameStatus.WAITING_FOR_PATTERNS_CHOICE;
         } else {
-            throw new BadBehaviourRuntimeException();
+            throw new IllegalStateException();
+        }
+    }
+
+    /**
+     * Sets the game status to ended. It is called by controller when active players
+     * are less than minimum number of players
+     */
+    public void forceEndGameDueToInactivity(){
+        if(status==GameStatus.PLAYING){
+            this.status = GameStatus.ENDED;
+        } else {
+            throw new IllegalStateException();
         }
     }
 
@@ -372,8 +388,8 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("draftPoolDices", dices);
 
         for (Player player: players) {
-            messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard());
-            messageAttributes.put("yourWindowPattern", player.getWindowPattern());
+            messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard()); //put overrides previous values
+            messageAttributes.put("yourWindowPattern", player.getWindowPattern()); //put overrides previous values
             Message message = new MVMessage(MVMessage.types.SETUP, messageAttributes, player.getID());
 
             notify(message);
@@ -382,7 +398,7 @@ public class Game extends Observable implements Observer{
         try {
             nextRound(dices,permissions);
         } catch (NoMoreRoundsAvailableException e) {
-            //Should never happen
+            //May never happen
             throw new BadBehaviourRuntimeException(NO_ROUNDS);
         }
     }
@@ -406,7 +422,7 @@ public class Game extends Observable implements Observer{
             nextRoundNumber = this.currentRound.getNumber() + 1;
         }
 
-        //get the remaining dices in draftpool and put them in the track
+        //Get the remaining dices in draftpool and put them in the track
         if(currentRound != null && currentRound.getNumber() != 0) {
             this.track.processDices(currentRound.getDraftPool().getDices());
         }
@@ -424,7 +440,6 @@ public class Game extends Observable implements Observer{
 
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
-
         messageAttributes.put("number", nextRoundNumber);
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
@@ -434,7 +449,8 @@ public class Game extends Observable implements Observer{
         try {
             nextTurn(permissions);
         } catch (NoMoreTurnsAvailableException e) {
-            //can't happen
+            //May never happen
+            throw new BadBehaviourRuntimeException(NO_TURNS);
         }
     }
 
@@ -450,16 +466,16 @@ public class Game extends Observable implements Observer{
         try {
             getCurrentRound().nextTurn();
 
-            String nextPlayer = getCurrentRound().getCurrentTurn().getPlayer().getID();
+            String nextPlayerID = getCurrentRound().getCurrentTurn().getPlayer().getID();
 
             getCurrentRound().getCurrentTurn().register(this);
 
             //NOTIFYING
             Map <String, Object> messageAttributes = new HashMap<>();
-            messageAttributes.put("whoIsPlaying", nextPlayer);
+            messageAttributes.put("whoIsPlaying", nextPlayerID);
             notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
 
-            notify(new MVMessage(MVMessage.types.YOUR_TURN, null, nextPlayer, permissions));
+            notify(new MVMessage(MVMessage.types.YOUR_TURN, null, nextPlayerID, permissions));
 
         } catch (NoMoreTurnsAvailableException e) {
             throw new NoMoreTurnsAvailableException();

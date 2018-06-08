@@ -94,7 +94,7 @@ public class WindowPattern extends Observable implements Serializable{
         this.isEmpty = true;
     }
 
-    public void assignToPlayer(Player player){
+    public void setOwner(Player player){
         if(player.getWindowPattern().equals(this)){
             this.owner = player;
         }

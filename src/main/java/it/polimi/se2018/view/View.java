@@ -96,6 +96,8 @@ public abstract class View implements Observer {
         sendMessage(new VCMessage(VCMessage.types.DECREMENT_DICE));
     }
 
+    void handleEndEffectMove(){ sendMessage(new VCMessage(VCMessage.types.END_EFFECT)); }
+
     void handleChangeDraftedDiceValueMove(){
         //TODO: implement
     }
@@ -115,15 +117,7 @@ public abstract class View implements Observer {
     //EVENTS
 
     void handleGameEndedEvent(Message m){
-        Object o;
-        try {
-            o = m.getParam("rankings");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        LinkedHashMap<String, Integer> receivedRankings = (LinkedHashMap<String, Integer>) o;
-        this.rankings = receivedRankings;
+        showMessage("The game is ended.");
     }
 
     void handleGiveWindowPatternsEvent(Message m){
@@ -158,7 +152,7 @@ public abstract class View implements Observer {
         String ack = (String) o;
 
         if(!ack.equals("")){
-            showMessage(ack);
+            showMessage("ACK: "+ack);
         }
     }
 
@@ -176,6 +170,7 @@ public abstract class View implements Observer {
     }
 
     void handleBackToGameEvent(){
+        changeStateTo(ViewState.ACTIVE);
         showMessage("You are back to game, now.");
     }
 
@@ -346,14 +341,30 @@ public abstract class View implements Observer {
     void handleRankingsEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("winner");
+            o = m.getParam("winnerPlayerID");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
         @SuppressWarnings("unchecked")
-        String winner = (String) o;
-        //TODO: aggiungere anche gestione della classifica (getParam(rankings))
-        showMessage("Il vincitore è "+winner);
+        String winnerID = (String) o;
+
+        try {
+            o = m.getParam("rankings");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        LinkedHashMap<String, Integer> receivedRankings = (LinkedHashMap<String, Integer>) o;
+
+        this.rankings = receivedRankings;
+
+        if(winnerID.equals(this.playerID)){
+            showMessage("You are the winner! Congratulations!");
+        } else {
+            showMessage("The winner is "+winnerID+"!");
+        }
+
+        notifyGameVariablesChanged();
     }
 
     void handleUpdatedWindowPatternEvent(Message m) {
@@ -464,6 +475,7 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         Dice mDraftedDice = (Dice) o;
         setDraftedDice(mDraftedDice);
+        showMessage("You have drafted "+mDraftedDice);
     }
 
     // NOTIFY METHODS
@@ -496,11 +508,17 @@ public abstract class View implements Observer {
 
         if(state==ViewState.INACTIVE){
 
-            //Gestisce le mosse consentite durante lo stato INACTIVE
             if(m.getType()==CVMessage.types.BACK_TO_GAME){
-                changeStateTo(ViewState.ACTIVE);
-                showMessage("Hai effettuato correttamente il ricollegamento al gioco. Al prossimo tuo turno potrai giocare.");
+                handleBackToGameEvent();
+
+            } else if(m.getType()==MVMessage.types.RANKINGS){
+                handleRankingsEvent(m);
+
+            } else if(m.getType()==CVMessage.types.GAME_ENDED){
+                handleGameEndedEvent(m);
             }
+
+            //no other messages are handled if state is INACTIVE
 
         } else {
 
@@ -544,6 +562,7 @@ public abstract class View implements Observer {
                 handleInactivePlayerEvent(m);
                 break;
             case BACK_TO_GAME:
+                //May not happen
                 handleBackToGameEvent();
                 break;
             case INACTIVE:

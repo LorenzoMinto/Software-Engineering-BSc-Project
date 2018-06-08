@@ -161,6 +161,9 @@ public class CLIView extends View{
             case MOVE_DICE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleMoveDiceMove);
                 break;
+            case END_EFFECT:
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleEndEffectMove);
+                break;
             case JOIN_GAME:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleJoinGameMove);
                 break;
@@ -234,6 +237,11 @@ public class CLIView extends View{
 
 
 
+    @Override
+    void handleEndEffectMove(){
+        super.handleEndEffectMove();
+        waitForMove();
+    }
 
     @Override
     void handleLeaveWaitingRoomMove() {
@@ -406,6 +414,7 @@ public class CLIView extends View{
 
                 } else {
                     print(INPUT_NOT_VALID);
+                    waitForMove();
                 }
             });
         });
@@ -428,8 +437,6 @@ public class CLIView extends View{
     @Override
     void handleGameEndedEvent(Message m) {
         super.handleGameEndedEvent(m);
-        print("Rankings: xxx");
-        //TODO: print rankings
     }
 
     @Override
@@ -569,6 +576,7 @@ public class CLIView extends View{
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        waitForMove();
     }
 
     @Override
@@ -579,7 +587,7 @@ public class CLIView extends View{
 
     @Override
     void errorMessage(String message) {
-        print(""+message);
+        print("ERROR: "+message);
         waitForMove();
     }
 

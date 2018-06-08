@@ -90,8 +90,8 @@ public class CellTest {
     @Test
     public void testToString() {
         cell.setDice(dice);
-        assertEquals("(4:G)",cell.toString());
+        assertEquals("( G4 )",cell.toString());
         cell.removeDice();
-        assertEquals("(3:P)",cell.toString());
+        assertEquals("(P::4)",cell.toString());
     }
 }
