@@ -58,17 +58,12 @@ public class ScorerTest {
 
 
     //players' private objective cards
-    private static final PrivateObjectiveCard card1 = new PrivateObjectiveCard(
-            null, null, null, RED);
-    private static final PrivateObjectiveCard card2 = new PrivateObjectiveCard(
-            null, null, null, GREEN);
-    private static final PrivateObjectiveCard card3 = new PrivateObjectiveCard(
-            null, null, null, PURPLE);
-    private static final PrivateObjectiveCard card4 = new PrivateObjectiveCard(
-            null, null, null, YELLOW);
+    private static final PrivateObjectiveCard card1 = new PrivateObjectiveCard("","","",RED);
+    private static final PrivateObjectiveCard card2 = new PrivateObjectiveCard("","","",GREEN);
+    private static final PrivateObjectiveCard card3 = new PrivateObjectiveCard("","","",PURPLE);
+    private static final PrivateObjectiveCard card4 = new PrivateObjectiveCard("","","",YELLOW);
 
     private static List<PublicObjectiveCard> publicObjectiveCards;
-
 
     /**
      * Getting the singleton instance of scorer
@@ -79,10 +74,38 @@ public class ScorerTest {
     }
 
     /**
+     * Giving private objective cards to players and setting the public objective cards for the tests
+     */
+    @BeforeClass
+    public static void initializePlayersAndCards(){
+//        p1 = new Player("p1", card1);
+//        p2 = new Player("p2", card2);
+//        p3 = new Player("p3", card3);
+//        p4 = new Player("p4", card4);
+
+        PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+                null, null, null, Dice::getColor, 6, true);
+        PublicObjectiveCard columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
+                null, null, null, Dice::getValue, 4, false);
+        DiagonalsPublicObjectiveCard diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(
+                null, null, null, Dice::getColor);
+
+        publicObjectiveCards = new ArrayList<>();
+        publicObjectiveCards.add(columnsValuePublicObjectiveCard);
+        publicObjectiveCards.add(rowsColorPublicObjectiveCard);
+        publicObjectiveCards.add(diagonalsPublicObjectiveCard);
+    }
+
+    /**
      * Creates a new Window Pattern Manager and creates the specific patterns of the players for the test
      */
     @BeforeClass
     public static void buildWindowPatterns(){
+
+        p1 = new Player("p1", card1);
+        p2 = new Player("p2", card2);
+        p3 = new Player("p3", card3);
+        p4 = new Player("p4", card4);
 
         try {
             WindowPatternManager windowPatternManager = new WindowPatternManager();
@@ -91,6 +114,10 @@ public class ScorerTest {
 
 
             wp1 = genericWP.copy();
+
+
+            p1.setWindowPattern(wp1);
+            wp1.setOwner(p1);
 
             wp1.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp1.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -116,6 +143,9 @@ public class ScorerTest {
 
             wp2 = genericWP.copy();
 
+            p2.setWindowPattern(wp2);
+            wp2.setOwner(p2);
+
             wp2.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp2.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
             wp2.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
@@ -139,6 +169,9 @@ public class ScorerTest {
 
 
             wp3 = genericWP.copy();
+
+            p3.setWindowPattern(wp3);
+            wp3.setOwner(p3);
 
             wp3.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp3.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -164,6 +197,9 @@ public class ScorerTest {
 
             wp4 = genericWP.copy();
 
+            p4.setWindowPattern(wp4);
+            wp4.setOwner(p4);
+
             wp4.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp4.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
             wp4.putDiceOnCell(new Dice(GREEN, 3), 0, 2);
@@ -188,6 +224,9 @@ public class ScorerTest {
 
             wpSameScore1 = genericWP.copy();
 
+            p1.setWindowPattern(wpSameScore1);
+            wpSameScore1.setOwner(p1);
+
             wpSameScore1.putDiceOnCell(new Dice(RED,5),0,0);
             wpSameScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
             wpSameScore1.putDiceOnCell(new Dice(YELLOW,1),0,2);
@@ -200,6 +239,9 @@ public class ScorerTest {
 
 
             wpSameScore2 = genericWP.copy();
+
+            p2.setWindowPattern(wpSameScore2);
+            wpSameScore2.setOwner(p2);
 
             wpSameScore2.putDiceOnCell(new Dice(RED,5),0,0);
             wpSameScore2.putDiceOnCell(new Dice(BLUE,1),0,1);
@@ -216,6 +258,9 @@ public class ScorerTest {
 
 
             wpSameScore3 = genericWP.copy();
+
+            p3.setWindowPattern(wpSameScore3);
+            wpSameScore3.setOwner(p3);
 
             wpSameScore3.putDiceOnCell(new Dice(PURPLE,1),0,0);
             wpSameScore3.putDiceOnCell(new Dice(RED,5),0,1);
@@ -234,6 +279,9 @@ public class ScorerTest {
 
             wpSameScore4 = genericWP.copy();
 
+            p4.setWindowPattern(wpSameScore4);
+            wpSameScore4.setOwner(p4);
+
             wpSameScore4.putDiceOnCell(new Dice(RED, 4),0,0);
             wpSameScore4.putDiceOnCell(new Dice(YELLOW, 3),0,4);
 
@@ -251,6 +299,9 @@ public class ScorerTest {
 
             wpSamePrivateScore1 = genericWP.copy();
 
+            p1.setWindowPattern(wpSamePrivateScore1);
+            wpSamePrivateScore1.setOwner(p1);
+
             wpSamePrivateScore1.putDiceOnCell(new Dice(RED,5),0,0);
             wpSamePrivateScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
             wpSamePrivateScore1.putDiceOnCell(new Dice(YELLOW,1),0,2);
@@ -266,6 +317,9 @@ public class ScorerTest {
 
 
             wpSamePrivateScore2 = genericWP.copy();
+
+            p2.setWindowPattern(wpSamePrivateScore2);
+            wpSamePrivateScore2.setOwner(p2);
 
             wpSamePrivateScore2.putDiceOnCell(new Dice(BLUE,1),0,0);
             wpSamePrivateScore2.putDiceOnCell(new Dice(RED,5),0,1);
@@ -285,6 +339,9 @@ public class ScorerTest {
 
             wpSamePrivateScore3 = genericWP.copy();
 
+            p3.setWindowPattern(wpSamePrivateScore3);
+            wpSamePrivateScore3.setOwner(p3);
+
             wpSamePrivateScore3.putDiceOnCell(new Dice(PURPLE,5),0,0);
             wpSamePrivateScore3.putDiceOnCell(new Dice(RED,5),0,1);
             wpSamePrivateScore3.putDiceOnCell(new Dice(PURPLE,6),0,2);
@@ -302,6 +359,9 @@ public class ScorerTest {
 
             wpSamePrivateScore4 = genericWP.copy();
 
+            p4.setWindowPattern(wpSamePrivateScore4);
+            wpSamePrivateScore4.setOwner(p4);
+
             wpSamePrivateScore4.putDiceOnCell(new Dice(YELLOW, 5),0,4);
 
             wpSamePrivateScore4.putDiceOnCell(new Dice(RED, 5),1,1);
@@ -318,6 +378,9 @@ public class ScorerTest {
 
             wpSame1 = genericWP.copy();
 
+            p1.setWindowPattern(wpSame1);
+            wpSame1.setOwner(p1);
+
             wpSame1.putDiceOnCell(new Dice(RED, 5), 0,0);
             wpSame1.putDiceOnCell(new Dice(BLUE, 1), 0,1);
             wpSame1.putDiceOnCell(new Dice(YELLOW, 1), 0,2);
@@ -333,6 +396,9 @@ public class ScorerTest {
 
 
             wpSame2 = genericWP.copy();
+
+            p2.setWindowPattern(wpSame2);
+            wpSame2.setOwner(p2);
 
             wpSame2.putDiceOnCell(new Dice(BLUE, 1), 0,0);
             wpSame2.putDiceOnCell(new Dice(RED, 5), 0,1);
@@ -351,6 +417,9 @@ public class ScorerTest {
 
             wpSame3 = genericWP.copy();
 
+            p3.setWindowPattern(wpSame3);
+            wpSame3.setOwner(p3);
+
             wpSame3.putDiceOnCell(new Dice(YELLOW, 2), 0,0);
             wpSame3.putDiceOnCell(new Dice(PURPLE, 1), 0,1);
             wpSame3.putDiceOnCell(new Dice(RED, 2), 0,2);
@@ -367,6 +436,9 @@ public class ScorerTest {
 
 
             wpSame4 = genericWP.copy();
+
+            p4.setWindowPattern(wpSame4);
+            wpSame4.setOwner(p4);
 
             wpSame4.putDiceOnCell(new Dice(RED, 4), 0,0);
             wpSame4.putDiceOnCell(new Dice(RED, 1), 0,2);
@@ -386,29 +458,6 @@ public class ScorerTest {
             e.printStackTrace();
             fail();
         }
-    }
-
-    /**
-     * Giving private objective cards to players and setting the public objective cards for the tests
-     */
-    @BeforeClass
-    public static void initializePlayersAndCards(){
-        p1 = new Player("p1", card1);
-        p2 = new Player("p2", card2);
-        p3 = new Player("p3", card3);
-        p4 = new Player("p4", card4);
-
-        PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
-                null, null, null, Dice::getColor, 6, true);
-        PublicObjectiveCard columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
-                null, null, null, Dice::getValue, 4, false);
-        DiagonalsPublicObjectiveCard diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(
-                null, null, null, Dice::getColor);
-
-        publicObjectiveCards = new ArrayList<>();
-        publicObjectiveCards.add(columnsValuePublicObjectiveCard);
-        publicObjectiveCards.add(rowsColorPublicObjectiveCard);
-        publicObjectiveCards.add(diagonalsPublicObjectiveCard);
     }
 
     /**
@@ -705,6 +754,9 @@ public class ScorerTest {
         p2.setWindowPattern(wp2);
         p3.setWindowPattern(wp3);
         p4.setWindowPattern(wp4);
+
+//      n
+
     }
 
     /**
@@ -715,6 +767,11 @@ public class ScorerTest {
         p2.setWindowPattern(wpSameScore2);
         p3.setWindowPattern(wpSameScore3);
         p4.setWindowPattern(wpSameScore4);
+
+//        wpSameScore1.setOwner(p1);
+//        wpSameScore2.setOwner(p2);
+//        wpSameScore3.setOwner(p3);
+//        wpSameScore4.setOwner(p4);
     }
 
     /**
@@ -725,6 +782,11 @@ public class ScorerTest {
         p2.setWindowPattern(wpSamePrivateScore2);
         p3.setWindowPattern(wpSamePrivateScore3);
         p4.setWindowPattern(wpSamePrivateScore4);
+
+//        wpSamePrivateScore1.setOwner(p1);
+//        wpSamePrivateScore2.setOwner(p2);
+//        wpSamePrivateScore3.setOwner(p3);
+//        wpSamePrivateScore4.setOwner(p4);
     }
 
     /**
@@ -735,6 +797,11 @@ public class ScorerTest {
         p2.setWindowPattern(wpSame2);
         p3.setWindowPattern(wpSame3);
         p4.setWindowPattern(wpSame4);
+//
+//        wpSame1.setOwner(p1);
+//        wpSame2.setOwner(p2);
+//        wpSame3.setOwner(p3);
+//        wpSame4.setOwner(p4);
     }
 
     /**
