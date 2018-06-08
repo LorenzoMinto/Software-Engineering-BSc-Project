@@ -22,6 +22,7 @@ public class WindowPatternTest {
 
     private static Cell[][] pattern;
     private static Dice dice;
+    private static Player player;
 
 
     /**
@@ -29,6 +30,10 @@ public class WindowPatternTest {
      */
     @BeforeClass
     public static void initializePatternAndDice(){
+
+        player = new Player("", PrivateObjectiveCard.createTestInstance());
+
+
         pattern = new Cell[rows][cols];
         for(int i=0; i<rows; i++){
             for(int j=0; j<cols; j++){
@@ -45,6 +50,8 @@ public class WindowPatternTest {
     @Before
     public void initializeWindowPattern(){
         windowPattern = new WindowPattern("id","title", "",1, pattern);
+        player.setWindowPattern(windowPattern);
+        windowPattern.setOwner(player);
     }
 
 

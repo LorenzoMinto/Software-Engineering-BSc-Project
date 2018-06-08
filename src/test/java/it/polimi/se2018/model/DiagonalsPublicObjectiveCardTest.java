@@ -44,6 +44,10 @@ public class DiagonalsPublicObjectiveCardTest {
 
             diagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
+            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            player.setWindowPattern(diagonalsWP);
+            diagonalsWP.setOwner(player);
+
             diagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             diagonalsWP.putDiceOnCell(new Dice(RED), 0, 1);
             diagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -66,6 +70,9 @@ public class DiagonalsPublicObjectiveCardTest {
 
             rightDiagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
+            player.setWindowPattern(rightDiagonalsWP);
+            rightDiagonalsWP.setOwner(player);
+
             rightDiagonalsWP.putDiceOnCell(new Dice(BLUE), 0, 0);
             rightDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
             rightDiagonalsWP.putDiceOnCell(new Dice(YELLOW), 0, 3);
@@ -84,6 +91,9 @@ public class DiagonalsPublicObjectiveCardTest {
 
 
             leftDiagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
+
+            player.setWindowPattern(leftDiagonalsWP);
+            leftDiagonalsWP.setOwner(player);
 
             leftDiagonalsWP.putDiceOnCell(new Dice(RED), 0, 0);
             leftDiagonalsWP.putDiceOnCell(new Dice(GREEN), 0, 2);
@@ -104,6 +114,9 @@ public class DiagonalsPublicObjectiveCardTest {
 
 
             twoDiceWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
+
+            player.setWindowPattern(twoDiceWP);
+            twoDiceWP.setOwner(player);
 
             twoDiceWP.putDiceOnCell(new Dice(RED), 0, 0);
 
