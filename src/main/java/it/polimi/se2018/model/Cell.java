@@ -139,4 +139,18 @@ public class Cell implements Serializable{
             return BEGIN_STRING + dice + END_STRING;
         }
     }
+
+    public String getCellConstraintsToString() {
+        String constraint;
+        if (allowedColor == DiceColor.NOCOLOR) { //value constraint
+            if (allowedValue == 0) {
+                constraint = "X";
+            } else {
+                constraint = String.valueOf(allowedValue);
+            }
+        } else { //color constraint
+            constraint = allowedColor.toOneLetter();
+        }
+        return constraint;
+    }
 }

@@ -51,8 +51,6 @@ public class WindowPatternPlayerView extends Pane {
 
     public void setWindowPattern(WindowPattern wp) {
         this.windowPattern = wp;
-        Image wpjpg = new Image((new File(windowPattern.getImageURL()).toURI().toString()));
-        wpGrid.setBackground(new Background(new BackgroundFill(new ImagePattern(wpjpg), CornerRadii.EMPTY, Insets.EMPTY)));
         titleLabel.setText(windowPattern.getTitle());
 
         gridDiceButtons = new Pane[wp.getNumberOfRows()][wp.getNumberOfColumns()];
@@ -61,6 +59,8 @@ public class WindowPatternPlayerView extends Pane {
             for (int j=0; j<wp.getNumberOfColumns(); j++) {
                 Pane dice = new Pane();
                 wpGrid.add(dice, j, i);
+                Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
+                dice.setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 dice.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override public void handle(MouseEvent e) {
                         int x = 0;
@@ -95,6 +95,9 @@ public class WindowPatternPlayerView extends Pane {
                 if (dice!=null) {
                     Image diceImage = new Image((new File("src/main/resources/images/Dices/"+dice.toString()+".jpg")).toURI().toString());
                     gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
+                    gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
             }
         }
