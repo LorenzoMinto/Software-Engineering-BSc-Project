@@ -414,6 +414,7 @@ public class CLIView extends View{
 
                 } else {
                     print(INPUT_NOT_VALID);
+                    waitForMove();
                 }
             });
         });
@@ -436,8 +437,6 @@ public class CLIView extends View{
     @Override
     void handleGameEndedEvent(Message m) {
         super.handleGameEndedEvent(m);
-        print("Rankings: xxx");
-        //TODO: print rankings
     }
 
     @Override
@@ -577,6 +576,7 @@ public class CLIView extends View{
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        waitForMove();
     }
 
     @Override
@@ -587,7 +587,7 @@ public class CLIView extends View{
 
     @Override
     void errorMessage(String message) {
-        print(""+message);
+        print("ERROR: "+message);
         waitForMove();
     }
 
