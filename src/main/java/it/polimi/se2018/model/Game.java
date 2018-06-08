@@ -273,8 +273,8 @@ public class Game extends Observable implements Observer{
     /**
      * Try to assign the given window pattern to the given player
      * @param windowPattern the window pattern to assign to the player
-     * @param playerID the player id of the player that choose the given windowpattern
-     * @return true if windowpattern was succesfully assigned to the given player. false if not.
+     * @param playerID the player id of the player that choose the given windowPattern
+     * @return true if windowPattern was succesfully assigned to the given player. false if not.
      */
     public boolean assignWindowPatternToPlayer(WindowPattern windowPattern, String playerID){
         for(Player p: players){

@@ -20,7 +20,7 @@ public class Player implements Serializable {
     /**
      * String passed as message of IllegalArgumentException when is asked to
      */
-    private static final String SET_A_NULL_WINDOWPATTERN_TO_PLAYER = "Can't set a null windowpattern to player";
+    private static final String SET_A_NULL_WINDOWPATTERN_TO_PLAYER = "Can't set a null windowPattern to player";
     /**
      * String passed as message of IllegalArgumentException when is asked to
      */
@@ -77,8 +77,8 @@ public class Player implements Serializable {
 
 
     /**
-     * Assign to the player the given windowpattern. Can be assigned only one time at all.
-     * @param windowPattern the windowpattern to be assigned to this player
+     * Assign to the player the given windowPattern. Can be assigned only one time at all.
+     * @param windowPattern the windowPattern to be assigned to this player
      */
     public void setWindowPattern(WindowPattern windowPattern) {
         if(windowPattern==null) throw new IllegalArgumentException(SET_A_NULL_WINDOWPATTERN_TO_PLAYER);
@@ -112,8 +112,8 @@ public class Player implements Serializable {
     }
 
     /**
-     * Returns the windowpattern of the player.
-     * @return the windowpattern of the player
+     * Returns the windowPattern of the player.
+     * @return the windowPattern of the player
      */
     public WindowPattern getWindowPattern() {
         return windowPattern;

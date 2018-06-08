@@ -26,7 +26,7 @@ public class WindowPattern extends Observable implements Serializable{
      */
     private static final String DICE_IN_ILLEGAL_POSITION_ERROR = "Can't move the dice from or to an illegal position.";
     /**
-     * String passed as message of IllegalArgumentException when it is asked to create a windowpattern giving
+     * String passed as message of IllegalArgumentException when it is asked to create a windowPattern giving
      * a null pattern
      */
     private static final String NULL_PATTERN = "Can't create a window pattern with null pattern.";
@@ -35,11 +35,11 @@ public class WindowPattern extends Observable implements Serializable{
      */
     private static final String NULL_DICE_ON_CELL = "Asked to put a null dice on cell";
     /**
-     * Part of the toString representation of the windowpattern. Contains content shown before difficulty
+     * Part of the toString representation of the windowPattern. Contains content shown before difficulty
      */
     private static final String PRE_DIFFICULTY = "Difficulty: ";
     /**
-     * Part of the toString representation of the windowpattern. Contains content shown before difficulty
+     * Part of the toString representation of the windowPattern. Contains content shown before difficulty
      */
     private static final String POST_DIFFICULTY = "";
 

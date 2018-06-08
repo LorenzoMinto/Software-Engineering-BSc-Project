@@ -81,7 +81,7 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
      * The number of different properties of a row must be equal to the number of columns of the pattern if every
      * property is different, since there is one property for each dice and one dice for each cell (row, column)
      *
-     * @param windowPattern the windowpattern to calculate the score of
+     * @param windowPattern the windowPattern to calculate the score of
      * @return the score of a given window pattern based on the RowsColumnsPublicObjectiveCard's score criteria
      */
     @Override

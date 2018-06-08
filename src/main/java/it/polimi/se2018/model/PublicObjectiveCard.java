@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 /**
  * Represents Public Objective Cards as an abstract class that extends ObjectiveCard. *
- * Each Public Objective card has a property function to get a certain property of the dice in the windowpattern. *
+ * Each Public Objective card has a property function to get a certain property of the dice in the windowPattern. *
  * @author Jacopo Pio Gargano
  */
 public abstract class PublicObjectiveCard extends ObjectiveCard{

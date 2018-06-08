@@ -216,7 +216,7 @@ public class Controller extends Observable {
                     String playerID = message.getSendingPlayerID();
                     WindowPattern wp = null;
                     try {
-                        wp = (WindowPattern) message.getParam("windowpattern");
+                        wp = (WindowPattern) message.getParam("windowPattern");
                     } catch (NoSuchParamInMessageException e) {
                         return errorMessage("Bad Formatted");
                     }
@@ -402,7 +402,7 @@ public class Controller extends Observable {
 
         game.setStatusAsWaitingForPatternsChoice();
 
-        //Start a "listener" that trigger startGame() when all players have chosen a windowpattern
+        //Start a "listener" that trigger startGame() when all players have chosen a windowPattern
         new Thread(()->{
             boolean allPlayersHaveWindowPattern;
             do{
@@ -424,9 +424,9 @@ public class Controller extends Observable {
         this.waitingForPatternsChoice = new TimerTask() {
             @Override
             public void run() {
-                logger.info("waitingForPatternsChoice timer has expired. Setting windowpatterns automatically...");
+                logger.info("waitingForPatternsChoice timer has expired. Setting windowPatterns automatically...");
 
-                //Assign the first of the given windowpattern to players that did not choose
+                //Assign the first of the given windowPattern to players that did not choose
                 for(Player p : game.getPlayers()){
                     if(p.getWindowPattern()==null){
                         p.setWindowPattern(assignedWindowPatterns.get(p.getID()).get(0));

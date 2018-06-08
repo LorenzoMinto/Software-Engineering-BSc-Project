@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Represents the DraftPool: the place of the game where the drafted dices are left
- * waiting for being placed somewhere (windowpattern or - at the end of the round - track)
+ * waiting for being placed somewhere (windowPattern or - at the end of the round - track)
  *
  * @author Federico Haag
  */
