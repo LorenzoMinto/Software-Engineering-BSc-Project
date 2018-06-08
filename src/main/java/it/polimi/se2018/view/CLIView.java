@@ -195,7 +195,7 @@ public class CLIView extends View{
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
             int index = 0;
             for(WindowPattern windowPattern : windowPatterns){
-                print("Window pattern of "+players.get(index)); //assumes that windowpatterns and players are in the same order
+                print("Window pattern of "+players.get(index)); //assumes that windowPatterns and players are in the same order
                 print(windowPattern.toString());
                 index++;
             }
@@ -443,7 +443,7 @@ public class CLIView extends View{
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
 
-        //Print windowpattern
+        //Print windowPattern
         print("Choose a window pattern from the followings:");
         int index = 1;
         for(WindowPattern windowPattern : drawnWindowPatterns){
@@ -455,7 +455,7 @@ public class CLIView extends View{
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowpattern",chosenWindowPattern)));
+                sendMessage(new VCMessage(VCMessage.types.CHOOSE_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
             }

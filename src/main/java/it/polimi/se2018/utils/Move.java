@@ -6,7 +6,7 @@ package it.polimi.se2018.utils;
 public enum Move {
     END_TURN ("End turn"),
     DRAFT_DICE_FROM_DRAFTPOOL ("Draft dice from draft pool"),
-    PLACE_DICE_ON_WINDOWPATTERN ("Place dice on windowpattern"),
+    PLACE_DICE_ON_WINDOWPATTERN ("Place dice on windowPattern"),
     USE_TOOLCARD ("Use toolcard"),
     INCREMENT_DRAFTED_DICE ("Increment drafted dice"),
     DECREMENT_DRAFTED_DICE ("Decrement drafted dice"),

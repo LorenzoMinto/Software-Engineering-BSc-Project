@@ -64,7 +64,7 @@ public class PrivateObjectiveCard extends ObjectiveCard {
      * (scoring depends only on card's color). The score is achieved by scoring each cell
      * on the window pattern.
      *
-     * @param windowPattern the windowpattern to evaluate
+     * @param windowPattern the windowPattern to evaluate
      * @return the score of a given window pattern according the private objective card
      */
     @Override

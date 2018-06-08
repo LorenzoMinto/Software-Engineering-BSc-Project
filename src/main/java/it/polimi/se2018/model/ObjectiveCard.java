@@ -81,9 +81,9 @@ public abstract class ObjectiveCard implements Serializable {
     public abstract ObjectiveCard copy();
 
     /**
-     * Returns the score of a given windowpattern according to this objective card criteria.
-     * @param windowPattern the windowpattern to be evaluated
-     * @return the score of a given windowpattern according to this objective card criteria
+     * Returns the score of a given windowPattern according to this objective card criteria.
+     * @param windowPattern the windowPattern to be evaluated
+     * @return the score of a given windowPattern according to this objective card criteria
      */
     public abstract int calculateScore(WindowPattern windowPattern);
 

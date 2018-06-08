@@ -92,7 +92,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      *  The algorithm covers the whole matrix starting from the bottom left corner going
      *  vertically upward and finally horizontally to the right.
      *
-     * @param windowPattern the windowpattern to be evaluated
+     * @param windowPattern the windowPattern to be evaluated
      * @param listOfNotConsideredDice list of dice of the linear indexes of the dice that are not or not yet considered
      *                               as part of the score
      * @return the score of all the left to right diagonals
@@ -122,7 +122,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      * The algorithm covers the whole matrix starting from the bottom right corner going
      * vertically upward and finally horizontally to the left.
      *
-     * @param windowPattern the windowpattern to be evaluated
+     * @param windowPattern the windowPattern to be evaluated
      * @param listOfNotConsideredDice list of dice of the linear indexes of the dice that are not or not yet considered
      *                               as part of the score
      * @return the score of all the right to left diagonals
@@ -151,7 +151,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
      * Method to count the number of adjacent dice with the same property,
      * specified in the getPropertyFunction, in a diagonal.
      *
-     * @param windowPattern the windowpattern to be evaluated
+     * @param windowPattern the windowPattern to be evaluated
      * @param listOfNotConsideredDice list of dice of the linear indexes of the dice that are not or not yet considered
      *                               as part of the score
      * @param initialRow row index of the first cell of the diagonal to be checked
@@ -185,7 +185,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * Gets the score of a pair of cells identified by the row and column of the first cell
      *
-     * @param windowPattern the windowpattern to be evaluated
+     * @param windowPattern the windowPattern to be evaluated
      * @param listOfNotConsideredDice list of dice of the linear indexes of the dice that are not or not yet considered
      *                               as part of the score
      * @param move integer indicating the kind of diagonal the cell pair belongs to:

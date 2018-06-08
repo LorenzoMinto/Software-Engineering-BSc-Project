@@ -18,7 +18,7 @@ import java.util.*;
 public class WindowPatternManager {
 
     /**
-     * The file system path to find windowpatterns .xml files
+     * The file system path to find windowPatterns .xml files
      */
     private static final String PATH = "assets/patterns/";
 
@@ -69,7 +69,7 @@ public class WindowPatternManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public Set<WindowPattern> getPairsOfPatterns(int numberOfPairs) {
-        if(numberOfPairs < 0){ throw new IllegalArgumentException("Can't get a negative number of couples of windowpatterns");}
+        if(numberOfPairs < 0){ throw new IllegalArgumentException("Can't get a negative number of couples of windowPatterns");}
 
         Set<WindowPattern> couplesOfPatterns = new HashSet<>();
 

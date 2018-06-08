@@ -130,7 +130,7 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<WindowPattern> patterns = (List<WindowPattern>) o;
         this.drawnWindowPatterns = patterns;
-        showMessage("Ricevuti windowpattern da scegliere");
+        showMessage("Ricevuti windowPattern da scegliere");
     }
 
     void handleAddedEvent(){
@@ -370,7 +370,7 @@ public abstract class View implements Observer {
     void handleUpdatedWindowPatternEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("windowpattern");
+            o = m.getParam("windowPattern");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
@@ -775,5 +775,5 @@ public abstract class View implements Observer {
         this.windowPatterns = windowPatterns;
     }
 
-    //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowpattern
+    //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowPattern
 }

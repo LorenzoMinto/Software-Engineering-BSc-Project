@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that manages the access to xml files (toolcards and windowpatterns).
+ * Class that manages the access to xml files (toolcards and windowPatterns).
  *
  * @author Federico Haag
  */
