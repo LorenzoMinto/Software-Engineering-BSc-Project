@@ -14,8 +14,7 @@ public class PlayerTest {
 
     @Before
     public void setUp() throws Exception {
-        ObjectiveCardManager ocm = new ObjectiveCardManager();
-        p = new Player("nickname",ocm.getPrivateObjectiveCard());
+        p = new Player("nickname", PrivateObjectiveCard.createTestInstance());
     }
 
     @Test

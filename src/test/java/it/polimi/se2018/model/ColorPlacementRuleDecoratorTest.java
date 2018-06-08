@@ -41,7 +41,7 @@ public class ColorPlacementRuleDecoratorTest {
 
         windowPattern = new WindowPattern("","", "",0, pattern);
         dummy.setWindowPattern(windowPattern);
-        windowPattern.assignToPlayer(dummy);
+        windowPattern.setOwner(dummy);
 
         redDice = new Dice(DiceColor.RED);
         blueDice = new Dice(DiceColor.BLUE);

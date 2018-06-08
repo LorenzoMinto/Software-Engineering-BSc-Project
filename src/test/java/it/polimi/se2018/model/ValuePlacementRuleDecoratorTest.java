@@ -41,7 +41,7 @@ public class ValuePlacementRuleDecoratorTest {
 
         windowPattern = new WindowPattern("","", "",0, pattern);
         dummy.setWindowPattern(windowPattern);
-        windowPattern.assignToPlayer(dummy);
+        windowPattern.setOwner(dummy);
 
         threeDice = new Dice(DiceColor.RED, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);

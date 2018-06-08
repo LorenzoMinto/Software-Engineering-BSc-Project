@@ -49,6 +49,10 @@ public class PrivateObjectiveCardTest {
 
             windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
+            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            player.setWindowPattern(windowPattern);
+            windowPattern.setOwner(player);
+
             windowPattern.putDiceOnCell(new Dice(RED, 1), 0, 0);
             windowPattern.putDiceOnCell(new Dice(YELLOW, 1), 0, 1);
             windowPattern.putDiceOnCell(new Dice(PURPLE, 3), 0, 2);
@@ -67,6 +71,9 @@ public class PrivateObjectiveCardTest {
 
 
             oneDiceWindowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
+
+            player.setWindowPattern(oneDiceWindowPattern);
+            oneDiceWindowPattern.setOwner(player);
 
             oneDiceWindowPattern.putDiceOnCell(uniqueDiceOnWindowPattern,1,1);
 

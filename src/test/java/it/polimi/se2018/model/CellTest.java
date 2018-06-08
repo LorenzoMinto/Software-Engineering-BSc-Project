@@ -23,7 +23,7 @@ public class CellTest {
      */
     @Before
     public void initializeCell(){
-        cell = new Cell(3, PURPLE);
+        cell = new Cell(3, NOCOLOR);
     }
 
     /**
@@ -39,7 +39,7 @@ public class CellTest {
      */
     @Test
     public void testGetAllowedColor() {
-        assertEquals(PURPLE, cell.getAllowedColor());
+        assertEquals(NOCOLOR, cell.getAllowedColor());
     }
 
     /**
@@ -92,6 +92,6 @@ public class CellTest {
         cell.setDice(dice);
         assertEquals("( G4 )",cell.toString());
         cell.removeDice();
-        assertEquals("(P::4)",cell.toString());
+        assertEquals("(_::3)",cell.toString());
     }
 }

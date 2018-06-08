@@ -594,10 +594,7 @@ public class GameTest {
         try {
             game.startGame(dices, permissions);
             fail();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            fail();
-        } catch (BadBehaviourRuntimeException e){}
+        } catch (IllegalStateException e) {}
     }
 
     /**

@@ -250,7 +250,7 @@ public class WindowPatternTest {
 
         String windowPatternToString = windowPattern.toString();
         String br = System.lineSeparator();
-        String expectedString = "{title}"+br+"Difficulty: 5"+br+"(0:_)(0:_)"+br+"(0:_)(0:_)"+br;
+        String expectedString = "{title}"+br+"Difficulty: 5"+br+"(_::0)(_::0)"+br+"(_::0)(_::0)"+br;
 
         assertEquals(expectedString, windowPatternToString);
 
