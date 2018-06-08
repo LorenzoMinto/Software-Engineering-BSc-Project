@@ -149,7 +149,8 @@
                         <Insets bottom="5.0" />
                      </GridPane.margin>
                   </GridPane>
-                  <HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                   <HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                   <!--<HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">-->
                      <children>
                         <Pane>
                            <children>
@@ -176,7 +177,7 @@
             </ScrollPane>
             <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" text="Track" />
+                  <Button fx:id="trackButton" mnemonicParsing="false" onAction="#handleTrackButtonPressedEvent" prefHeight="20.0" prefWidth="80.0" text="Track" />
                   <Button mnemonicParsing="false" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: indianred;" text="Exit" />
                </children></VBox>
             <FlowPane fx:id="dynamicChoicesPane" alignment="CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2" />
@@ -187,6 +188,124 @@
 
          </children>
       </GridPane>
-      <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="blackAnchorPane" opacity="0.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <GridPane fx:id="trackGridPane" alignment="CENTER_LEFT" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="80.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" percentHeight="8.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" percentHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints percentHeight="4.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+               <children>
+                  <HBox fx:id="trackHBox" alignment="CENTER" opacity="0.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="12" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="trackImageButton" mnemonicParsing="false" onAction="#handleTrackImageButtonPressedEvent" prefHeight="420.0" prefWidth="175.0" text="Button" />
+                     </children>
+                  </HBox>
+                   <HBox fx:id="trackHBox10" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox9" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox8" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox7" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox6" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox5" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                  <HBox fx:id="trackHBox4" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                   <HBox fx:id="trackHBox3" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                   <HBox fx:id="trackHBox2" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+                       <opaqueInsets>
+                           <Insets />
+                       </opaqueInsets>
+                       <padding>
+                           <Insets bottom="10.0" top="10.0" />
+                       </padding>
+                   </HBox>
+                  <HBox fx:id="trackHBox1" layoutX="130.0" layoutY="324.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </GridPane>
+            <HBox fx:id="blackHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <opaqueInsets>
+                  <Insets left="5.0" right="5.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

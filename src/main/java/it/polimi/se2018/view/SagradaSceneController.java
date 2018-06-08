@@ -2,7 +2,6 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.WindowPattern;
-import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.message.Message;
@@ -31,8 +30,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-import static it.polimi.se2018.model.DiceColor.RED;
-
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
@@ -41,7 +38,8 @@ public class SagradaSceneController extends View implements Initializable {
     private static final int numberOfPublicObjectiveCards = 3;
     private int cardCarouselCurrentIndex;
 
-    @FXML private HBox blackPane;
+    @FXML private AnchorPane blackAnchorPane;
+
     @FXML private AnchorPane backgroundPane;
 
     @FXML private TextArea playerTerminal;
@@ -79,6 +77,26 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button cardsCarouselPublicsButton;
     @FXML private Button cardsCarouselPrivateButton;
 
+    //TRACK COMPONENTS
+
+    @FXML private HBox trackHBox;
+    @FXML private GridPane trackGridPane;
+    @FXML private Button trackImageButton;
+
+    private List<HBox> trackHBoxes = new ArrayList<>();
+    @FXML private HBox trackHBox10;
+    @FXML private HBox trackHBox9;
+    @FXML private HBox trackHBox8;
+    @FXML private HBox trackHBox7;
+    @FXML private HBox trackHBox6;
+    @FXML private HBox trackHBox5;
+    @FXML private HBox trackHBox4;
+    @FXML private HBox trackHBox3;
+    @FXML private HBox trackHBox2;
+    @FXML private HBox trackHBox1;
+
+    @FXML private HBox blackHBox;
+
 
 // DO NOT DELETE THIS COMMENT
 //
@@ -103,7 +121,24 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselVisibleComponents.forEach(component->component.setVisible(false));
         cardsCarouselCardImageView.setVisible(true);
 
-        disableBlackPane();
+        trackHBoxes.add(trackHBox1);
+        trackHBoxes.add(trackHBox2);
+        trackHBoxes.add(trackHBox3);
+        trackHBoxes.add(trackHBox4);
+        trackHBoxes.add(trackHBox5);
+        trackHBoxes.add(trackHBox6);
+        trackHBoxes.add(trackHBox7);
+        trackHBoxes.add(trackHBox8);
+        trackHBoxes.add(trackHBox9);
+        trackHBoxes.add(trackHBox10);
+
+        blackAnchorPane.setOpacity(0);
+        blackAnchorPane.setDisable(true);
+
+        disableBlackAnchorPane();
+        disableBlackHBox();
+
+        setDisableTrackView(true);
 
         Image cardsCarouselDefaultCard = (new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString()));
 
@@ -127,6 +162,28 @@ public class SagradaSceneController extends View implements Initializable {
         //Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
         //cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
         //backgroundPane.setBackground(new Background(new BackgroundFill(new ImagePattern(velvetBackground), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    private void setDisableTrackView(boolean disable) {
+        long opacity = 1;
+        if (disable) {
+            opacity = 0;
+        }
+
+        for (HBox hbox: trackHBoxes) {
+            hbox.setOpacity(opacity);
+        }
+
+        trackGridPane.setOpacity(opacity);
+        trackHBox.setOpacity(opacity);
+        trackImageButton.setOpacity(opacity);
+
+
+        trackHBoxes.forEach(hBox -> hBox.setDisable(disable));
+
+        trackGridPane.setDisable(disable);
+        trackHBox.setDisable(disable);
+        trackImageButton.setDisable(disable);
     }
 
 
@@ -291,13 +348,12 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
-        enableBlackPane();
+        enableBlackAnchorPane();
+        enableBlackHBox();
 
         List<ImageView> windowPatternPanes = new ArrayList<>();
 
         for (WindowPattern pattern: drawnWindowPatterns) {
-//            Pane pane = new Pane();
-//            pane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
             Image patternImage = new Image((new File(pattern.getImageURL())).toURI().toString());
             ImageView patternImageView = new ImageView(patternImage);
             patternImageView.setOpacity(1);
@@ -312,33 +368,87 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             });
 
-//            pane.getChildren().add(patternImageView);
             windowPatternPanes.add(patternImageView);
         }
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                blackPane.getChildren().clear();
-                windowPatternPanes.forEach(pane -> blackPane.getChildren().add(pane));
+                windowPatternPanes.forEach(pane -> blackHBox.getChildren().add(pane));
             }
         });
     }
 
+    public void handleTrackButtonPressedEvent(){
+
+        Image trackImage = new Image((new File("src/main/resources/images/track.jpg").toURI().toString()));
+        trackImageButton.setBackground(new Background(new BackgroundFill(new ImagePattern(trackImage), CornerRadii.EMPTY, Insets.EMPTY)));
+        trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
+
+        enableBlackAnchorPane();
+
+        setDisableTrackView(false);
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (HBox hBox: trackHBoxes) {
+                    int i = 0;
+
+                    for (Dice dice: track.getDicesFromSlotNumber(i)) {
+                        Button trackSlotDice = new Button();
+
+                        Image diceImage = new Image((new File("src/main/resources/images/Dices/"+dice+".jpg")).toURI().toString());
+                        trackSlotDice.setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
+                        trackSlotDice.setPrefHeight(50);
+                        trackSlotDice.setPrefWidth(50);
+
+                        hBox.getChildren().add(trackSlotDice);
+                    }
+
+                    i++;
+                }
+            }
+        });
+    }
+
+    public void handleTrackImageButtonPressedEvent(){
+        disableBlackAnchorPane();
+    }
+
+
     private void hasChosenWindowPattern() {
-        disableBlackPane();
+        disableBlackAnchorPane();
+        disableBlackHBox();
+        setDisableTrackView(true);
         cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
     }
 
-    private void enableBlackPane() {
-        blackPane.setOpacity(0.8);
-        blackPane.setDisable(false);
+    private void enableBlackAnchorPane() {
+        blackAnchorPane.setOpacity(0.8);
+        blackAnchorPane.setDisable(false);
+        disableBlackHBox();
     }
 
-    private void disableBlackPane() {
-        blackPane.setOpacity(0);
-        blackPane.setDisable(true);
+
+    private void disableBlackAnchorPane() {
+        blackAnchorPane.setOpacity(0);
+        blackAnchorPane.setDisable(true);
+        enableBlackHBox();
     }
+
+    private void enableBlackHBox() {
+        blackHBox.setOpacity(0.8);
+        blackHBox.setDisable(false);
+    }
+
+    private void disableBlackHBox() {
+        blackHBox.setOpacity(0);
+        blackHBox.setDisable(true);
+    }
+
 
     @Override
     void showMessage(String message) {
