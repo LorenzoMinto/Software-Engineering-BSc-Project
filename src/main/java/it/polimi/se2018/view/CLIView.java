@@ -89,7 +89,6 @@ public class CLIView extends View{
     }
 
     private void waitForMove(){
-
         //Create a LinkedHashMap to map string choices from console to moves
         LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
         int index = 1;
@@ -107,8 +106,6 @@ public class CLIView extends View{
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show window patterns of other players",this::printOthersWindowPatterns));
         }
-
-        cleanConsole();
 
         if(this.draftedDice!=null){
             print("Remember you have drafted a dice ("+this.draftedDice+") that is waiting to be placed.");
@@ -186,7 +183,15 @@ public class CLIView extends View{
     }
 
     private void cleanConsole(){
-        //TODO: implement this method
+        print("");
+        print("");
+        print("");
+        print("");
+        print("");
+        print("");
+        print("");
+        print("");
+        //TODO: implement better this method
     }
 
 

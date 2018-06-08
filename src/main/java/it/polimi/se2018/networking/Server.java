@@ -249,7 +249,10 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         }
         
         //Send answer message back to the sender
-        sender.receiveMessage(returnMessage, this.proxyServer);
+        if(returnMessage!=null){
+            sender.receiveMessage(returnMessage, this.proxyServer);
+        }
+
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
     }
 

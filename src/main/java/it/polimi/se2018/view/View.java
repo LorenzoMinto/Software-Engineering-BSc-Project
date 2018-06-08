@@ -544,7 +544,7 @@ public abstract class View implements Observer {
 
     private void updatePermissions(Message m){
         EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
-        if(p!=null && !p.isEmpty()){
+        if(!p.isEmpty()){
             setPermissions(p);
         }//else keep same permissions
     }

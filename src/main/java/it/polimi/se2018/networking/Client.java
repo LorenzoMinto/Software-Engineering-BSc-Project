@@ -4,9 +4,6 @@ import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.message.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.message.WaitingRoomMessage;
-import it.polimi.se2018.view.CLIView;
-import it.polimi.se2018.view.View;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -30,12 +27,15 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
 
     private final ConnectionType type;
 
+    private final boolean debug;
+
     public Client(ConnectionType type, String serverName, int port, Observer view, boolean debug) {
-        this.logger = createLogger(debug);
+        this.logger = createLogger();
         this.type = type;
         this.register(view);
         this.serverName = serverName;
         this.port = port;
+        this.debug = debug;
         setup();
     }
 
@@ -56,18 +56,15 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
 
         addGateway(server);
 
-        info("Started a Sagrada Client and connected to Sagrada Server as guest.");
+        log("Started a Sagrada Client and connected to Sagrada Server as guest.");
     }
 
-    private Logger createLogger(boolean debug){
-
-        Level level = debug ? Level.FINE : Level.INFO;
-
+    private Logger createLogger(){
         Logger newLogger = Logger.getLogger(Client.class.getName());
         newLogger.setUseParentHandlers(false);
-        newLogger.setLevel(level);
+        newLogger.setLevel(Level.INFO);
         ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(level);
+        handler.setLevel(Level.INFO);
         handler.setFormatter(new SimpleFormatter(){
             private static final String FORMAT = "[CLIENT] %1$s %n";
 
@@ -81,12 +78,10 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
         return newLogger;
     }
 
-    private void info(String msg){
-        logger.info(msg);
-    }
-
-    private void fine(String msg){
-        logger.fine(msg);
+    private void log(String msg){
+        if(this.debug){
+            logger.info(msg);
+        }
     }
 
     @Override
@@ -103,18 +98,18 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
             while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent){
                 attempts++;
-                fine("Attempt #"+attempts+": Sending message: "+message);
+                log("Attempt #"+attempts+": Sending message: "+message);
 
                 try{
                     o.sendMessage(message);
                 } catch(Exception e){
                     e.printStackTrace();
-                    fine("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
+                    log("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
                     continue;
                 }
                 correctlySent = true;
 
-                fine("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
+                log("Attempt #"+attempts+": Successfully sent message to: "+o+". The message was: "+message);
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
             if(!correctlySent){ somethingFailed=true; }

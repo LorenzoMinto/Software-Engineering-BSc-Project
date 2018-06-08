@@ -127,49 +127,6 @@ public class Controller extends Observable {
 
     private HashSet<String> inactivePlayers = new HashSet<>();
 
-    private class WindowPatternChoicesWatcher extends Thread{
-        private final Object lock = new Object();
-        private final Runnable toDoWhenAllWindowPatternAreChosen;
-
-        WindowPatternChoicesWatcher(Runnable r){
-            this.toDoWhenAllWindowPatternAreChosen = r;
-        }
-
-        @Override
-        public void run(){
-            checkLoop();
-        }
-
-        public void notifyChosenWindowPattern(){
-            synchronized (lock){
-                lock.notifyAll();
-            }
-        }
-
-        private void checkLoop(){
-            boolean allPlayersHaveWindowPattern;
-            do{
-                synchronized (lock){
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-                allPlayersHaveWindowPattern = true;
-                for(Player p : game.getPlayers()){
-                    if(p.getWindowPattern()==null){
-                        allPlayersHaveWindowPattern = false;
-                        break;
-                    }
-                }
-            } while (!allPlayersHaveWindowPattern);
-
-            toDoWhenAllWindowPatternAreChosen.run();
-        }
-    }
-
-    private final WindowPatternChoicesWatcher windowPatternChoicesWatcher;
     /**
      * Just for testing
      * @param game the game instance to be controlled
@@ -216,11 +173,6 @@ public class Controller extends Observable {
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
 
         this.game.setCards(toolCards,publicObjectiveCards);
-
-        this.windowPatternChoicesWatcher = new WindowPatternChoicesWatcher(()->{
-            waitingForPatternsChoice.cancel();
-            startGame();
-        });
     }
 
     /**
@@ -231,17 +183,6 @@ public class Controller extends Observable {
     protected void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
-    }
-
-    private CVMessage assignWindowPatternToPlayer(WindowPattern wp, String playerID){
-
-        boolean assigned = game.assignWindowPatternToPlayer(wp, playerID);
-
-        if( assigned ){
-            return new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
-        } else {
-            return new CVMessage(CVMessage.types.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
-        }
     }
 
     private CVMessage errorMessage(){
@@ -268,9 +209,21 @@ public class Controller extends Observable {
                     } catch (NoSuchParamInMessageException e) {
                         return errorMessage("Bad Formatted");
                     }
-                    returnMessage = assignWindowPatternToPlayer(wp,playerID);
-                    windowPatternChoicesWatcher.notifyChosenWindowPattern();
-                    break;
+
+                    if( game.assignWindowPatternToPlayer(wp,playerID) ){
+
+                        if( checkIfAllPlayersChooseWP() ){
+                            waitingForPatternsChoice.cancel();
+                            startGame();
+                            return null;
+
+                        } else {
+                            return new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                        }
+
+                    } else {
+                        return new CVMessage(CVMessage.types.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
+                    }
                 } else {
                     returnMessage = new CVMessage(ERROR_MESSAGE);
                 }
@@ -387,6 +340,17 @@ public class Controller extends Observable {
         return returnMessage;
     }
 
+    private boolean checkIfAllPlayersChooseWP() {
+        boolean allPlayersHaveWindowPattern = true;
+        for(Player p : game.getPlayers()){
+            if(p.getWindowPattern()==null){
+                allPlayersHaveWindowPattern = false;
+                break;
+            }
+        }
+        return allPlayersHaveWindowPattern;
+    }
+
     /**
      * Sets the specified {@link ToolCard} as active. This means that it's being used
      * during the current {@link Turn}
@@ -451,9 +415,6 @@ public class Controller extends Observable {
 
         game.setStatusAsWaitingForPatternsChoice();
 
-        //Start a "listener" that trigger startGame() when all players have chosen a windowPattern
-        windowPatternChoicesWatcher.start();
-
         //Start the timer for patterns choice
         this.waitingForPatternsChoice = new TimerTask() {
             @Override
@@ -467,7 +428,7 @@ public class Controller extends Observable {
                     }
                 }
 
-                windowPatternChoicesWatcher.notifyChosenWindowPattern();
+                if( checkIfAllPlayersChooseWP() ){ startGame(); }
             }
         };
         TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));

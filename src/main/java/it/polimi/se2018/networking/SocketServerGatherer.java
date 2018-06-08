@@ -81,8 +81,10 @@ public class SocketServerGatherer extends Thread{
         new Thread(() -> {
 
             ObjectInputStream in;
+            SocketServer socketServer;
             try {
                 in = new ObjectInputStream(clientSocket.getInputStream());
+                socketServer = new SocketServer(outputStream);
             } catch (IOException e) {
                 return;
             }
@@ -92,7 +94,7 @@ public class SocketServerGatherer extends Thread{
                 Message message;
                 try {
                     message = (Message) in.readObject();
-                    server.receiveMessage(message, new SocketServer(outputStream));
+                    server.receiveMessage(message, socketServer);
                 } catch( Exception e ){
                     ((Server)server).fail(READING_STREAM_EXCEPTION);
                     c = false;
