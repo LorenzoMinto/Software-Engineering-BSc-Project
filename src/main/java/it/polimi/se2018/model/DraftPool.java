@@ -100,8 +100,14 @@ public class DraftPool extends Observable implements Serializable {
      */
     private void notifyGame() {
         Map<String, Object> messageAttributes = new HashMap<>();
-        messageAttributes.put("draftPool", this);
+        messageAttributes.put("draftPool", this.copy());
 
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_DRAFTPOOL, messageAttributes));
     }
+
+    private DraftPool copy() {
+        return new DraftPool(this.getDices());
+    }
+
+
 }

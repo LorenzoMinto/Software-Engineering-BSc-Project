@@ -250,6 +250,8 @@ public class Game extends Observable implements Observer{
         //TODO: registrare punteggi ai player. decidere se recuperare players by id oppure by reference
         //TODO: nel caso di by reference verificare che la reference che arriva sia quella effettiva
 
+        //TODO: COPY RANKINGS
+
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("rankings", rankings);
         messageAttributes.put("winnerPlayerID", rankingsAsList.get(0));
@@ -439,10 +441,12 @@ public class Game extends Observable implements Observer{
         draftPool.register(this);
         this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound, getPlayers(), draftPool);
 
+        //TODO: copy dices
+
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("number", nextRoundNumber);
-        messageAttributes.put("track", track);
+        messageAttributes.put("track", track.copy());
         messageAttributes.put("draftPoolDices", dices);
 
         notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));

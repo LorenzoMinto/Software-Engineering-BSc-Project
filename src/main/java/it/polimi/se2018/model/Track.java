@@ -129,4 +129,12 @@ public class Track implements Serializable, Iterable<TrackSlot> {
     }
 
 
+    /** Creates a copy of the track
+     * @return a copy of the track
+     */
+    public Track copy() {
+        Track trackCopy = new Track();
+        this.slots.forEach(slot->trackCopy.processDices(slot.getDices()));
+        return trackCopy;
+    }
 }
