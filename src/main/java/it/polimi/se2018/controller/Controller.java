@@ -323,9 +323,10 @@ public class Controller extends Observable {
                     returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
                 }
 
-
+                System.out.println("About to set permissions to message...");
                 if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
-
+                    System.out.println("Setting permissions to ACK message");
+                    System.out.println("FROM STATE: "+controllerState.getClass().getSimpleName() + " permissions: " + controllerState.getStatePermissions());
                     returnMessage.setPermissions( controllerState.getStatePermissions() );
 
                     //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages

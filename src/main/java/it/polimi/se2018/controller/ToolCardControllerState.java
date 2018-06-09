@@ -40,6 +40,6 @@ public class ToolCardControllerState extends ControllerState {
 
     @Override
     public Set<Move> getStatePermissions() {
-        return EnumSet.of(Move.USE_TOOLCARD);
+        return EnumSet.of(Move.USE_TOOLCARD, Move.END_TURN);
     }
 }
