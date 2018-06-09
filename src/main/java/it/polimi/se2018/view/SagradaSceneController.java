@@ -49,6 +49,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     //WINDOW PATTERNS DISPLAY
     private List<WindowPatternPlayerView> wpViews;
+    private WindowPatternPlayerView userWindowPatternView;
 
     @FXML private HBox windowPatternsBox;
 
@@ -395,6 +396,7 @@ public class SagradaSceneController extends View implements Initializable {
                 handleDraftDiceFromDraftPoolMove();
                 break;
             case PLACE_DICE_ON_WINDOWPATTERN:
+                handlePlaceDiceOnWindowPatternMove();
                 break;
             case USE_TOOLCARD:
                 handleUseToolCardMove();
@@ -443,7 +445,15 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
+        super.handlePlaceDiceOnWindowPatternMove();
+        int x = userWindowPatternView.getxSelected();
+        int y = userWindowPatternView.getySelected();
 
+        showMessage("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("row",x);
+        params.put("col",y);
+        sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
     }
 
     @Override
@@ -483,7 +493,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards1ButtonPressed(){
         if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
             cardCarouselCurrentIndex = 0;
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
 
             //TODO: verify if fixed
             notifyGameVariablesChanged();
@@ -500,10 +510,7 @@ public class SagradaSceneController extends View implements Initializable {
         if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
             cardCarouselCurrentIndex = 1;
 
-            //TODO: verify if fixed
-            notifyGameVariablesChanged();
-
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -514,10 +521,7 @@ public class SagradaSceneController extends View implements Initializable {
         if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
             cardCarouselCurrentIndex = 2;
 
-            //TODO: verify if fixed
-            notifyGameVariablesChanged();
-
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -549,6 +553,20 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleMoveDiceMove() {
 
+    }
+
+    @Override
+    void handleUpdatedWindowPatternEvent(Message m) {
+        super.handleUpdatedWindowPatternEvent(m);
+        System.out.println("Updating window patterns.");
+        updateWindowPatterns();
+    }
+
+    @Override
+    void handleChangedDraftPoolEvent(Message m) {
+        super.handleChangedDraftPoolEvent(m);
+        System.out.println("Updating draft pool.");
+        updateDraftPool();
     }
 
     @Override
@@ -697,8 +715,10 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void errorMessage(String message) {
+    void errorMessage(String message) { printOnConsole("ERROR: "+message);}
 
+    private void setupCards() {
+        //TODO: JACK
     }
 
     private void updateCards() {
@@ -719,7 +739,12 @@ public class SagradaSceneController extends View implements Initializable {
 
     private void updateDraftPool() {
         if (!dicesButtons.isEmpty()) {
-            dicesButtons.removeAll(dicesButtons);
+            dicesButtons.clear();
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    draftPoolPane.getChildren().clear();
+                }
+            });
         }
         System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
@@ -758,39 +783,37 @@ public class SagradaSceneController extends View implements Initializable {
     private void updatePlayers() {
     }
 
-    private void updateWindowPatterns() {
-        //SETTING UP WINDOWPATTERNS
-
+    private void setupWindowPatterns() {
         wpViews = new ArrayList<>();
         int i = 0;
+        for (WindowPattern wp: windowPatterns) {
+            //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
+            String nickname = players.get(i);
+            WindowPatternPlayerView wpView = new WindowPatternPlayerView();
+            wpView.setFavourTokens(wp.getDifficulty());
+            wpView.setNickname(nickname);
+            wpView.setWindowPattern(wp);
+            if (nickname.equals(getPlayerID())) {
+                wpView.setThisAsUser();
+                userWindowPatternView = wpView;
+            }
+            wpView.setId(wp.getTitle());
+            wpViews.add(wpView);
+            i += 1;
 
-        if (wpViews.isEmpty()) {
-            for (WindowPattern wp: windowPatterns) {
-                //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
-                String nickname = players.get(i);
-                WindowPatternPlayerView wpView = new WindowPatternPlayerView();
-                wpView.setFavourTokens(wp.getDifficulty());
-                wpView.setNickname(nickname);
-                wpView.setWindowPattern(wp);
-                if (nickname.equals(getPlayerID())) {
-                    wpView.setThisAsUser();
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    windowPatternsBox.getChildren().add(wpView);
                 }
-                wpView.setId(wp.getTitle());
-                wpViews.add(wpView);
-                i += 1;
+            });
+        }
+    }
 
-                Platform.runLater(new Runnable() {
-                    @Override public void run() {
-                        windowPatternsBox.getChildren().add(wpView);
-                    }
-                });
-            }
-        } else { //so WPVs are not created each time they are updated
-            for (WindowPattern wp: windowPatterns) {
-                WindowPatternPlayerView wpv = getWPViewById(wp.getTitle());
-                wpv.updateWindowPattern(wp);
-                //TODO: update player's favour tokens here
-            }
+    private void updateWindowPatterns() {
+        for (WindowPattern wp: windowPatterns) {
+            WindowPatternPlayerView wpv = getWPViewById(wp.getTitle());
+            wpv.updateWindowPattern(wp);
+            //TODO: update player's favour tokens here
         }
     }
 
@@ -804,14 +827,9 @@ public class SagradaSceneController extends View implements Initializable {
         return new WindowPatternPlayerView();
     }
 
-
-    @Override
-    void notifyGameStarted() {
-        printOnConsole("The game has started!");
-    }
-
     @Override
     void notifyPermissionsChanged() {
+        System.out.println("Notified of permissions changed.");
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
@@ -842,6 +860,14 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
+    @Override
+    void notifyGameStarted() {
+        super.notifyGameStarted();
+        printOnConsole("The game has started.");
+        updateDraftPool();
+        setupWindowPatterns();
+        setupCards();
+    }
 
     @Override
     void notifyGameVariablesChanged() {

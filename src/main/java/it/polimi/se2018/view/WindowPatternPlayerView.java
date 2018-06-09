@@ -76,9 +76,8 @@ public class WindowPatternPlayerView extends Pane {
                         xSelected = x;
                         ySelected = y;
 
-                        //NOTE: this is a test
-                        Image diceImage = new Image((new File("src/main/resources/images/Dices/"+(new Dice(DiceColor.RED)).toString()+".jpg")).toURI().toString());
-                        gridDiceButtons[x][y].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                        gridDiceButtons[x][y].setBorder(new Border(new BorderStroke(Color.BLACK,
+                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
                     }
                 });
 
@@ -99,6 +98,8 @@ public class WindowPatternPlayerView extends Pane {
                     Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
                     gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
+                gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                        BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
         }
     }
