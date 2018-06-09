@@ -3,11 +3,7 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.VCMessage;
+import it.polimi.se2018.utils.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -435,7 +431,7 @@ public class SagradaSceneController extends View implements Initializable {
         if (selectedDiceButton != null) {
             Dice draftedDice = getDiceForDiceButton(selectedDiceButton);
             showMessage("Drafted dice: " + draftedDice.toString());
-            sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
+            sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
         } else {
             errorMessage("You have not selected a dice from the draft pool yet!");
         }
@@ -487,7 +483,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards1ButtonPressed(){
         if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
             cardCarouselCurrentIndex = 0;
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
 
             //TODO: verify if fixed
             notifyGameVariablesChanged();
@@ -507,7 +503,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -521,7 +517,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -591,7 +587,7 @@ public class SagradaSceneController extends View implements Initializable {
                     public void handle(ActionEvent event) {
                         WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
                         setWindowPattern(windowPattern);
-                        sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern)));
+                        sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern)));
                         hasChosenWindowPattern();
                         printOnConsole(windowPattern.getTitle() +" chosen.");
                         disable(windowPatternsVisibleComponents);
