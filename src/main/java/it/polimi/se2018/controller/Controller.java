@@ -262,7 +262,7 @@ public class Controller extends Observable {
                         case USE_TOOLCARD:
                             ToolCard toolCard;
                             try {
-                                toolCard = (ToolCard) message.getParam("toolcard");
+                                toolCard = (ToolCard) message.getParam("toolCard");
                             } catch (NoSuchParamInMessageException e) {
                                 return errorMessage();
                             }

@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 /**
  * The class {@code BadFormattedToolCardFileException} is a form of {@link Exception}
- * that is used to notify that an .xml file representing a toolcard is bad formatted
+ * that is used to notify that an .xml file representing a toolCard is bad formatted
  * and due to this can't be correctly processed.
  *
  * This usually happens in the {@link ToolCardManager} during the creation

@@ -23,7 +23,7 @@ public class WindowPatternManager {
     private static final String PATH = "assets/patterns/";
 
     /**
-     * List of all the toolcards that can be distributed in the current game
+     * List of all the toolCards that can be distributed in the current game
      */
     private List<String> availablePatterns;
 
@@ -83,7 +83,7 @@ public class WindowPatternManager {
     }
 
     /**
-     * Loads from file the specified toolcard loading all its properties in a new {@link WindowPattern} class.
+     * Loads from file the specified toolCard loading all its properties in a new {@link WindowPattern} class.
      *
      * @param patternID the ID String representing the window pattern to be loaded
      * @return the requested {@link ToolCard}

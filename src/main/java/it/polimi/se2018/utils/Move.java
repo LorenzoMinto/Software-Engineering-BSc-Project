@@ -7,7 +7,7 @@ public enum Move {
     END_TURN ("End turn"),
     DRAFT_DICE_FROM_DRAFTPOOL ("Draft dice from draft pool"),
     PLACE_DICE_ON_WINDOWPATTERN ("Place dice on windowPattern"),
-    USE_TOOLCARD ("Use toolcard"),
+    USE_TOOLCARD ("Use toolCard"),
     INCREMENT_DRAFTED_DICE ("Increment drafted dice"),
     DECREMENT_DRAFTED_DICE ("Decrement drafted dice"),
     CHANGE_DRAFTED_DICE_VALUE ("Change drafted dice value"),

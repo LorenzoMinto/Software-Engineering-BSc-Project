@@ -56,7 +56,7 @@ public class ControllerStateManager {
      * that the connected controller should take
      *
      * @param prevState the previous controller state
-     * @return the next controller state based on the active toolcard
+     * @return the next controller state based on the active toolCard
      */
     public ControllerState getNextState(ControllerState prevState){
         ControllerState nextState;

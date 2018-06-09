@@ -41,14 +41,14 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public Message useToolCard(ToolCard toolcard) {
+    public Message useToolCard(ToolCard toolCard) {
 
-        if ( controller.setActiveToolCard(toolcard) ) {
+        if ( controller.setActiveToolCard(toolCard) ) {
 
             controller.setControllerState(controller.stateManager.getNextState(this));
             return new Message(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {
-            return new Message(ERROR_MESSAGE,"Can't use this toolcard.");
+            return new Message(ERROR_MESSAGE,"Can't use this toolCard.");
         }
     }
 

@@ -21,43 +21,43 @@ public class ToolCard implements Serializable{
     private static final long serialVersionUID = 3828562971059857480L;
 
     /**
-     * Part of the toString representation of the toolcard. Contains content shown before title
+     * Part of the toString representation of the toolCard. Contains content shown before title
      */
     private static final String PRE_TITLE = "[";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown after title
+     * Part of the toString representation of the toolCard. Contains content shown after title
      */
     private static final String POST_TITLE = "]";
     /**
-     * Part of the toString representation of the toolcard. Contains a divider that separates each block of information
+     * Part of the toString representation of the toolCard. Contains a divider that separates each block of information
      */
     private static final String DIVIDER = " ";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown before needed tokens
+     * Part of the toString representation of the toolCard. Contains content shown before needed tokens
      */
     private static final String PRE_NEEDED_TOKENS = "Needed: ";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown before used tokens
+     * Part of the toString representation of the toolCard. Contains content shown before used tokens
      */
     private static final String PRE_USED_TOKENS = "Used: ";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown after needed tokens
+     * Part of the toString representation of the toolCard. Contains content shown after needed tokens
      */
     private static final String POST_NEEDED_TOKENS = "|";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown after used tokens
+     * Part of the toString representation of the toolCard. Contains content shown after used tokens
      */
     private static final String POST_USED_TOKENS = ")";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown before description
+     * Part of the toString representation of the toolCard. Contains content shown before description
      */
     private static final String PRE_DESCRIPTION = "";
     /**
-     * Part of the toString representation of the toolcard. Contains content shown after description
+     * Part of the toString representation of the toolCard. Contains content shown after description
      */
     private static final String POST_DESCRIPTION = "";
     /**
-     * The id of the toolcard
+     * The id of the toolCard
      */
     private final String toolCardID;
 
@@ -119,7 +119,7 @@ public class ToolCard implements Serializable{
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      */
     public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule) {
-        //the id of toolcard
+        //the id of toolCard
         this.toolCardID = p.getProperty("id");
         //the title of the tool card.
         this.title = p.getProperty("title");

@@ -41,9 +41,9 @@ public class Turn extends Observable implements Serializable {
      */
     private static final String NULL_DICE = "Can't use or reference a null dice";
     /**
-     * String passed as message of IllegalArgumentException when it is asked to set a null toolcard as the current one
+     * String passed as message of IllegalArgumentException when it is asked to set a null toolCard as the current one
      */
-    private static final String NULL_TOOL_CARD = "Can't use or reference a null toolcard.";
+    private static final String NULL_TOOL_CARD = "Can't use or reference a null toolCard.";
     /**
      * String passed as message of IllegalArgumentException when it is asked to check if a given
      * player is the current one, but it is passed as argument a null object.
@@ -99,7 +99,7 @@ public class Turn extends Observable implements Serializable {
     private int slotOfTrackChosenDice;
 
     /**
-     * Reference to the toolcard used in the turn (if no toolcards used, this is null)
+     * Reference to the toolCard used in the turn (if no toolCards used, this is null)
      */
     private ToolCard usedToolCard;
 

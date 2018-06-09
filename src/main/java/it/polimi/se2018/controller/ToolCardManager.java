@@ -20,12 +20,12 @@ import java.util.*;
 public class ToolCardManager {
 
     /**
-     * The file system path to find toolcards .xml files
+     * The file system path to find toolCards .xml files
      */
-    private static final String PATH = "assets/toolcards/";
+    private static final String PATH = "assets/toolCards/";
 
     /**
-     * List of all the toolcards that can be distributed in the current game
+     * List of all the toolCards that can be distributed in the current game
      */
     private List<String> availableToolCards;
 
@@ -35,12 +35,12 @@ public class ToolCardManager {
     private PlacementRule defaultPlacementRule;
 
     /**
-     * Constructor of the class. Checks if there are toolcards than can be loaded
+     * Constructor of the class. Checks if there are toolCards than can be loaded
      * from file system and if yes loads them.
      *
-     * @param defaultPlacementRule the default placement rule to apply to toolcards that in the xml file
+     * @param defaultPlacementRule the default placement rule to apply to toolCards that in the xml file
      *                             does not include specifications about what should be placement rule
-     * @throws NoToolCardsFoundInFileSystemException if no toolcards .xml files can be loaded
+     * @throws NoToolCardsFoundInFileSystemException if no toolCards .xml files can be loaded
      */
     public ToolCardManager(PlacementRule defaultPlacementRule){
         this.defaultPlacementRule = defaultPlacementRule;
@@ -53,17 +53,17 @@ public class ToolCardManager {
     }
 
     /**
-     * Returns the requested quantity of toolcards, if there are enough available.
-     * It should not happen that the method is called if no toolcards are available;
+     * Returns the requested quantity of toolCards, if there are enough available.
+     * It should not happen that the method is called if no toolCards are available;
      * due to this reason a RuntimeException is thrown in that case.
      *
-     * @param quantity the amount of toolcards requested
-     * @return the requested quantity of toolcards, if there are enough available
-     * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
+     * @param quantity the amount of toolCards requested
+     * @return the requested quantity of toolCards, if there are enough available
+     * @throws BadFormattedToolCardFileException if during the loading of a toolCard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public List<ToolCard> getRandomToolCards(int quantity){
-        if(quantity < 0){ throw new IllegalArgumentException("Can't get a negative number of random toolcards");}
+        if(quantity < 0){ throw new IllegalArgumentException("Can't get a negative number of random toolCards");}
 
         List<ToolCard> toolCards = new ArrayList<>();
 
@@ -73,11 +73,11 @@ public class ToolCardManager {
 
             for(int i=0; i<quantity; i++){
 
-                //Choose randomly one of the available toolcards
+                //Choose randomly one of the available toolCards
                 int randomIndex = r.nextInt(availableToolCards.size());
                 String randomToolCardID = availableToolCards.get(randomIndex);
 
-                //Remove the selected toolcard from the available ones to avoid double choice
+                //Remove the selected toolCard from the available ones to avoid double choice
                 availableToolCards.remove(randomToolCardID);
 
                 //Load the randomly selected pattern
@@ -87,18 +87,18 @@ public class ToolCardManager {
                 toolCards.add(randomToolCard);
             }
         } else {
-            throw new BadBehaviourRuntimeException("Can't create the requested number of toolcards. Controller should not ask for so much cards. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException("Can't create the requested number of toolCards. Controller should not ask for so much cards. This error is not handlable at all");
         }
 
         return toolCards;
     }
 
     /**
-     * Loads from file the specified toolcard loading all its properties in a new {@link ToolCard} class.
+     * Loads from file the specified toolCard loading all its properties in a new {@link ToolCard} class.
      *
      * @param toolCardID the ID String representing the toolCard to be loaded
      * @return the requested {@link ToolCard}
-     * @throws BadFormattedToolCardFileException if during the loading of a toolcard it comes out that
+     * @throws BadFormattedToolCardFileException if during the loading of a toolCard it comes out that
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     private ToolCard loadToolCardFromFileSystem(String toolCardID){
@@ -110,7 +110,7 @@ public class ToolCardManager {
 
             Document document = XMLFileFinder.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
-            //Parse from xml the properties of the toolcard
+            //Parse from xml the properties of the toolCard
             params.put("title", document.getElementsByTagName("title").item(0).getTextContent());
             params.put("imageURL", document.getElementsByTagName("imageURL").item(0).getTextContent());
             params.put("description", document.getElementsByTagName("description").item(0).getTextContent());

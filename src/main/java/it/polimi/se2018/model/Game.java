@@ -56,9 +56,9 @@ public class Game extends Observable implements Observer{
      */
     private static final String GAME_NOT_RUNNING = "Game is not running yet";
     /**
-     * String passed as message of BadBehaviourException when is asked to use a toolcard that is not in the drawn set
+     * String passed as message of BadBehaviourException when is asked to use a toolCard that is not in the drawn set
      */
-    private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolcard that is not in the drawn set";
+    private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolCard that is not in the drawn set";
     /**
      * String passed as message of EmptyListException when is asked to perform an action that requires as parameter
      * a list of dices but the one actually passed as argument is an empty list.
@@ -209,7 +209,7 @@ public class Game extends Observable implements Observer{
     }
 
     /**
-     * Assigns to the game the selected toolcards and publicobjectivecards (given randomly by the controller)
+     * Assigns to the game the selected toolCards and publicobjectivecards (given randomly by the controller)
      *
      * @param drawnToolCards list of ToolCards that are assigned
      * @param drawnPublicObjectiveCards list of PublicObjectiveCards that are assigne
@@ -314,9 +314,9 @@ public class Game extends Observable implements Observer{
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
 
-        messageAttributes.put("toolcard", toolCard);
-        //updates the toolcards as their tokens were updated
-        messageAttributes.put("toolcards", drawnToolCards);
+        messageAttributes.put("toolCard", toolCard);
+        //updates the toolCards as their tokens were updated
+        messageAttributes.put("toolCards", drawnToolCards);
         //updates the player as their tokens were updated
         messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
 

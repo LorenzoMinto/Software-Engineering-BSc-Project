@@ -146,8 +146,8 @@ public class SagradaSceneController extends View implements Initializable {
 
 // DO NOT DELETE THIS COMMENT
 //
-// File file = new File("src/main/resources/images/toolcard1.png");
-// Image toolcard = new Image(file.toURI().toString());
+// File file = new File("src/main/resources/images/toolCard1.png");
+// Image toolCard = new Image(file.toURI().toString());
 
 
     @Override
@@ -485,7 +485,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards1ButtonPressed(){
         if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
             cardCarouselCurrentIndex = 0;
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
 
             //TODO: verify if fixed
             notifyGameVariablesChanged();
@@ -505,7 +505,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -519,7 +519,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -644,7 +644,7 @@ public class SagradaSceneController extends View implements Initializable {
                             trackSlotDice.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    //TODO: add button pressed handling for toolcard (choose dice color from track)
+                                    //TODO: add button pressed handling for toolCard (choose dice color from track)
                                 }
                             });
 
