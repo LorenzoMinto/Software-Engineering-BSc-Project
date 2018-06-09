@@ -95,7 +95,7 @@ public class Cell implements Serializable{
      * @return the dice in the cell
      */
     public Dice getDice() {
-        return this.dice.copy();
+        return this.dice;
     }
 
     /**

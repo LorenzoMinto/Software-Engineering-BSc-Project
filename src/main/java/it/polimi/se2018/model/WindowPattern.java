@@ -292,7 +292,7 @@ public class WindowPattern extends Observable implements Serializable{
     private void notifyGame() {
         Map<String, Object> messageAttributes = new HashMap<>();
 
-        messageAttributes.put("windowPattern", this);
+        messageAttributes.put("windowPattern", this.copy());
         messageAttributes.put("currentPlayer", owner.getID());
 
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_WINDOWPATTERN, messageAttributes));
