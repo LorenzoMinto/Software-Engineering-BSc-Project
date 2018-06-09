@@ -146,8 +146,8 @@ public class SagradaSceneController extends View implements Initializable {
 
 // DO NOT DELETE THIS COMMENT
 //
-// File file = new File("src/main/resources/images/toolCard1.png");
-// Image toolCard = new Image(file.toURI().toString());
+// File file = new File("src/main/resources/images/toolcard1.png");
+// Image toolcard = new Image(file.toURI().toString());
 
 
     @Override
@@ -344,16 +344,18 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateCardCarousel() {
-        setImageWithHeightAndWidth(
-                cardsCarouselCardImageView,
-                cards.get(cardCarouselCurrentIndex),
-                cardsCarouselCardHBox);
+        Platform.runLater(() -> {
+            setImageWithHeightAndWidth(
+                    cardsCarouselCardImageView,
+                    cards.get(cardCarouselCurrentIndex),
+                    cardsCarouselCardHBox);
 
-        if(cardCarouselCurrentIndex<numberOfToolCards) {
-            cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getNeededTokens()));
-        }else{
-            cardsCarouselFavorTokensValue.setText("");
-        }
+            if(cardCarouselCurrentIndex<numberOfToolCards) {
+                cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getNeededTokens()));
+            }else{
+                cardsCarouselFavorTokensValue.setText("");
+            }
+        });
     }
 
     private void setImageWithHeightAndWidth(ImageView imageView, Image image, Pane pane) {
@@ -485,7 +487,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards1ButtonPressed(){
         if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
             cardCarouselCurrentIndex = 0;
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(0))));
 
             //TODO: verify if fixed
             notifyGameVariablesChanged();
@@ -505,7 +507,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(1))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -519,7 +521,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: verify if fixed
             notifyGameVariablesChanged();
 
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
+            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD, Message.fastMap("toolcard", drawnToolCards.get(2))));
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         }
@@ -592,6 +594,7 @@ public class SagradaSceneController extends View implements Initializable {
                         sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern)));
                         hasChosenWindowPattern();
                         printOnConsole(windowPattern.getTitle() +" chosen.");
+                        disable(windowPatternsVisibleComponents);
                     }
                 });
             }
@@ -621,39 +624,37 @@ public class SagradaSceneController extends View implements Initializable {
         dices.add(new Dice((PURPLE)));
 
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for (HBox hBox: trackHBoxes) {
-                    int i = 0;
+        Platform.runLater(() -> {
+            for (HBox hBox: trackHBoxes) {
+                int i = 0;
 
-                    hBox.getChildren().clear();
-                    try {
+                hBox.getChildren().clear();
+                try {
 
-                        for(Dice dice: dices){
+                    //TODO: change this, it's just for testing purposes
+                    for(Dice dice: dices){
 //                        for (Dice dice : track.getDicesFromSlotNumber(i)) {
-                            Button trackSlotDice = new Button();
-                            trackDiceButtons.add(trackSlotDice);
+                        Button trackSlotDice = new Button();
+                        trackDiceButtons.add(trackSlotDice);
 
-                            Image diceImage = getImageFromPath("src/main/resources/images/Dices/" + dice + ".jpg");
-                            trackSlotDice.setBackground(getBackgroundFromImage(diceImage));
+                        Image diceImage = getImageFromPath("src/main/resources/images/Dices/" + dice + ".jpg");
+                        trackSlotDice.setBackground(getBackgroundFromImage(diceImage));
 
-                            trackSlotDice.setPrefHeight(50);
-                            trackSlotDice.setPrefWidth(50);
+                        trackSlotDice.setPrefHeight(50);
+                        trackSlotDice.setPrefWidth(50);
 
-                            trackSlotDice.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    //TODO: add button pressed handling for toolCard (choose dice color from track)
-                                }
-                            });
+                        trackSlotDice.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                //TODO: add button pressed handling for toolcard (choose dice color from track)
+                            }
+                        });
 
-                            hBox.getChildren().add(trackSlotDice);
-                        }
-                    }catch (ValueOutOfBoundsException e){}
+                        hBox.getChildren().add(trackSlotDice);
+                    }
+                }catch (ValueOutOfBoundsException e){}
 
-                    i++;
-                }
+                i++;
             }
         });
     }

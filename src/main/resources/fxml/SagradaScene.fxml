@@ -397,6 +397,9 @@
                            <padding>
                               <Insets top="5.0" />
                            </padding>
+                           <font>
+                              <Font size="30.0" />
+                           </font>
                         </Button>
                      </children>
                   </VBox>
@@ -414,6 +417,9 @@
                            <padding>
                               <Insets top="5.0" />
                            </padding>
+                           <font>
+                              <Font size="30.0" />
+                           </font>
                         </Button>
                      </children>
                      <HBox.margin>
@@ -434,6 +440,9 @@
                            <padding>
                               <Insets top="5.0" />
                            </padding>
+                           <font>
+                              <Font size="30.0" />
+                           </font>
                         </Button>
                      </children>
                      <HBox.margin>
@@ -454,6 +463,9 @@
                            <padding>
                               <Insets top="5.0" />
                            </padding>
+                           <font>
+                              <Font size="30.0" />
+                           </font>
                         </Button>
                      </children>
                      <HBox.margin>
