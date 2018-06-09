@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
@@ -26,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -120,8 +122,26 @@ public class SagradaSceneController extends View implements Initializable {
 
     @FXML private Button toolCardsPlayerFavorTokensButton;
 
+
+    //WINDOWPATTERNS
+    private List<Node> windowPatternsVisibleComponents = new ArrayList<>();
+    @FXML private HBox windowPatternsHBox;
+
+    private Button selectedWindowPattern = null;
+    private List<Button> windowPatternsImages = new ArrayList<>();
+    @FXML private Button windowPatterns1Image;
+    @FXML private Button windowPatterns2Image;
+    @FXML private Button windowPatterns3Image;
+    @FXML private Button windowPatterns4Image;
+
+    @FXML private Button windowPatterns1FavorTokens;
+    @FXML private Button windowPatterns2FavorTokens;
+    @FXML private Button windowPatterns3FavorTokens;
+    @FXML private Button windowPatterns4FavorTokens;
+
     //IMAGES
-    String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
+    private String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
+    private String trackPath = "src/main/resources/images/track.jpg";
 
 
 // DO NOT DELETE THIS COMMENT
@@ -133,11 +153,11 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        Image cardsCarouselDefaultCardImage = new Image((new File("src/main/resources/images/CardsBack.jpg")).toURI().toString());
+        Image cardsCarouselDefaultCardImage = getImageFromPath("src/main/resources/images/CardsBack.jpg");
 
-        Image favorTokensImage = new Image((new File(favorTokensImagePath)).toURI().toString());
-        Image cardsCarouselPreviousImage = new Image((new File("src/main/resources/images/Previous.jpg")).toURI().toString());
-        Image cardsCarouselNextImage = new Image((new File("src/main/resources/images/Next.jpg")).toURI().toString());
+        Image favorTokensImage = getImageFromPath(favorTokensImagePath);
+        Image cardsCarouselPreviousImage = getImageFromPath("src/main/resources/images/Previous.jpg");
+        Image cardsCarouselNextImage = getImageFromPath("src/main/resources/images/Next.jpg");
 
         setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCardImage, cardsCarouselCardHBox);
 
@@ -218,6 +238,30 @@ public class SagradaSceneController extends View implements Initializable {
 
         disable(toolCardsVisibleComponents);
 
+
+        windowPatternsImages.add(windowPatterns1Image);
+        windowPatternsImages.add(windowPatterns2Image);
+        windowPatternsImages.add(windowPatterns3Image);
+        windowPatternsImages.add(windowPatterns4Image);
+
+        windowPatterns1FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
+        windowPatterns2FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
+        windowPatterns3FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
+        windowPatterns4FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
+
+        windowPatternsVisibleComponents.add(windowPatternsHBox);
+        windowPatternsVisibleComponents.add(windowPatterns1Image);
+        windowPatternsVisibleComponents.add(windowPatterns2Image);
+        windowPatternsVisibleComponents.add(windowPatterns3Image);
+        windowPatternsVisibleComponents.add(windowPatterns4Image);
+        windowPatternsVisibleComponents.add(windowPatterns1FavorTokens);
+        windowPatternsVisibleComponents.add(windowPatterns2FavorTokens);
+        windowPatternsVisibleComponents.add(windowPatterns3FavorTokens);
+        windowPatternsVisibleComponents.add(windowPatterns4FavorTokens);
+
+        disable(windowPatternsVisibleComponents);
+
+
         disableBlackAnchorPane();
         disableBlackHBox();
 
@@ -246,6 +290,10 @@ public class SagradaSceneController extends View implements Initializable {
     private Border getBorderWithColor(Color color) {
         return new Border(new BorderStroke(color,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5)));
+    }
+
+    private Image getImageFromPath(String path) {
+        return new Image((new File(path).toURI().toString()));
     }
 
 //    private void setDisableTrackView(boolean disable) {
@@ -407,17 +455,21 @@ public class SagradaSceneController extends View implements Initializable {
         disableBlackHBox();
         enable(toolCardsVisibleComponents);
 
-        //Retrieving toolCards images
-        Image toolCard1 = new Image((new File(drawnToolCards.get(0).getImageURL())).toURI().toString());
-        toolCards1Button.setBackground(getBackgroundFromImage(toolCard1));
-        Image toolCard2 = new Image((new File(drawnToolCards.get(1).getImageURL())).toURI().toString());
-        toolCards2Button.setBackground(getBackgroundFromImage(toolCard2));
-        Image toolCard3 = new Image((new File(drawnToolCards.get(2).getImageURL())).toURI().toString());
-        toolCards3Button.setBackground(getBackgroundFromImage(toolCard3));
+        //Retrieving ToolCards images
+        ToolCard toolCard = drawnToolCards.get(0);
+        Image toolCardImage = getImageFromPath(toolCard.getImageURL());
+        toolCards1Button.setBackground(getBackgroundFromImage(toolCardImage));
+        toolCards1FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
 
-        toolCards1FavorTokensButton.setText(String.valueOf(drawnToolCards.get(0).getNeededTokens()));
-        toolCards2FavorTokensButton.setText(String.valueOf(drawnToolCards.get(1).getNeededTokens()));
-        toolCards3FavorTokensButton.setText(String.valueOf(drawnToolCards.get(2).getNeededTokens()));
+        toolCard = drawnToolCards.get(1);
+        toolCardImage = getImageFromPath(toolCard.getImageURL());
+        toolCards2Button.setBackground(getBackgroundFromImage(toolCardImage));
+        toolCards2FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
+
+        toolCard = drawnToolCards.get(2);
+        toolCardImage = getImageFromPath(toolCard.getImageURL());
+        toolCards3Button.setBackground(getBackgroundFromImage(toolCardImage));
+        toolCards3FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
 
         //TODO: set player.getFavorTokens();
         toolCardsPlayerFavorTokensButton.setText(String.valueOf(playerTokens));
@@ -505,39 +557,53 @@ public class SagradaSceneController extends View implements Initializable {
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
         enableBlackAnchorPane();
-        enableBlackHBox();
 
-         List<ImageView> windowPatternPanes = new ArrayList<>();
 
-        for (WindowPattern pattern: drawnWindowPatterns) {
-            Image patternImage = new Image((new File(pattern.getImageURL())).toURI().toString());
-            ImageView patternImageView = new ImageView(patternImage);
-            patternImageView.setOpacity(1);
+        enable(windowPatternsVisibleComponents);
 
-            patternImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    setWindowPattern(pattern);
-                    sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",pattern)));
-                    hasChosenWindowPattern();
-                    printOnConsole(pattern.getTitle() +" chosen.");
-                }
-            });
 
-            windowPatternPanes.add(patternImageView);
-        }
+        Platform.runLater(() -> {
+            WindowPattern windowPattern = drawnWindowPatterns.get(0);
+            Image windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns1Image.setBackground(getBackgroundFromImage(windowPatternImage));
+            windowPatterns1FavorTokens.setText(String.valueOf(windowPattern.getDifficulty()));
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                windowPatternPanes.forEach(pane -> blackPane.getChildren().add(pane));
+            windowPattern = drawnWindowPatterns.get(1);
+            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns2Image.setBackground(getBackgroundFromImage(windowPatternImage));
+            windowPatterns2FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(1).getDifficulty()));
+
+            windowPattern = drawnWindowPatterns.get(2);
+            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns3Image.setBackground(getBackgroundFromImage(windowPatternImage));
+            windowPatterns3FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(2).getDifficulty()));
+
+            windowPattern = drawnWindowPatterns.get(3);
+            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns4Image.setBackground(getBackgroundFromImage(windowPatternImage));
+            windowPatterns4FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(3).getDifficulty()));
+
+            for (Button wp: windowPatternsImages) {
+                wp.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
+                        setWindowPattern(windowPattern);
+                        sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern)));
+                        hasChosenWindowPattern();
+                        printOnConsole(windowPattern.getTitle() +" chosen.");
+                    }
+                });
             }
         });
     }
 
+
+
     public void handleTrackButtonPressedEvent(){
 
-        Image trackImage = new Image((new File("src/main/resources/images/track.jpg").toURI().toString()));
+
+        Image trackImage = getImageFromPath(trackPath);
         trackImageButton.setBackground(getBackgroundFromImage(trackImage));
         trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
 
@@ -569,7 +635,7 @@ public class SagradaSceneController extends View implements Initializable {
                             Button trackSlotDice = new Button();
                             trackDiceButtons.add(trackSlotDice);
 
-                            Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice + ".jpg")).toURI().toString());
+                            Image diceImage = getImageFromPath("src/main/resources/images/Dices/" + dice + ".jpg");
                             trackSlotDice.setBackground(getBackgroundFromImage(diceImage));
 
                             trackSlotDice.setPrefHeight(50);
@@ -643,10 +709,10 @@ public class SagradaSceneController extends View implements Initializable {
             throw new BadBehaviourRuntimeException("Cards shouldn't be empty");}
         //getting the cards images
         drawnToolCards.forEach(card
-                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
+                -> cards.add(getImageFromPath(card.getImageURL())));
         drawnPublicObjectiveCards.forEach(card
-                -> cards.add(new Image((new File(card.getImageURL())).toURI().toString())));
-        cards.add(new Image((new File(privateObjectiveCard.getImageURL())).toURI().toString()));
+                -> cards.add(getImageFromPath(card.getImageURL())));
+        cards.add(getImageFromPath(privateObjectiveCard.getImageURL()));
 
         updateCardCarousel();
     }
@@ -665,7 +731,7 @@ public class SagradaSceneController extends View implements Initializable {
             dice.setPrefWidth(80);
             dice.setPrefHeight(80);
 
-            Image diceImage = new Image((new File("src/main/resources/images/Dices/"+d.toString()+".jpg")).toURI().toString());
+            Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+d.toString()+".jpg");
             dice.setBackground(getBackgroundFromImage(diceImage));
 
             dice.setOnAction(new EventHandler<ActionEvent>() {
