@@ -49,9 +49,9 @@ public class Message implements Serializable{
      */
     public Message(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         this.type = type;
-        setParams(params);
-        setPlayerID(playerID);
-        setPermissions(permissions);
+        this.params = (HashMap<String,Object>) params;
+        this.playerID = playerID;
+        this.permissions = (EnumSet<Move>) permissions;
     }
 
     /**
