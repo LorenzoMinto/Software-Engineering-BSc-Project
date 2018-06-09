@@ -139,7 +139,7 @@ public abstract class View implements Observer {
         showMessage("Sei stato correttamente rimosso dal gioco");
     }
 
-    void handleCVAcknowledgmentEvent(Message m){
+    void handleAcknowledgmentEvent(Message m){
         Object o;
         try {
             o = m.getParam("message");
@@ -181,7 +181,7 @@ public abstract class View implements Observer {
         showMessage("Sei stato scollegato dal gioco per inattività. I tuoi turni saranno saltati.");
     }
 
-    void handleCVErrorEvent(Message m){
+    void handleErrorEvent(Message m){
         Object o;
         try {
             o = m.getParam("message");
@@ -413,7 +413,7 @@ public abstract class View implements Observer {
     }
 
     void handleBadFormattedEvent() {
-        //TODO: check if this method is never called
+        showMessage("Un errore inatteso ha reso impossibile effettuare la mossa. Riprova.");
     }
 
     void handleDeniedLimitEvent() {
@@ -532,10 +532,10 @@ public abstract class View implements Observer {
 
         switch (type) {
             case ERROR_MESSAGE:
-                handleCVErrorEvent(m);
+                handleErrorEvent(m);
                 break;
             case ACKNOWLEDGMENT_MESSAGE:
-                handleCVAcknowledgmentEvent(m);
+                handleAcknowledgmentEvent(m);
                 break;
             case A_PLAYER_BECOME_INACTIVE:
                 handleInactivePlayerEvent(m);
