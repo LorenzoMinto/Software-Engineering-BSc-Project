@@ -65,17 +65,17 @@
                         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="cardsCarouselToolCardsButton" mnemonicParsing="false" onAction="#handleCardCarouselToolCardsButtonPressed" text="Toolcards" textAlignment="CENTER">
+                        <Button fx:id="cardsCarouselToolCardsButton" mnemonicParsing="false" onAction="#onCardCarouselToolCardsButtonPressed" text="Toolcards" textAlignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cardsCarouselPublicsButton" mnemonicParsing="false" onAction="#handleCardCarouselPublicsButtonPressed" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
+                        <Button fx:id="cardsCarouselPublicsButton" mnemonicParsing="false" onAction="#onCardCarouselPublicsButtonPressed" text="Public" textAlignment="CENTER" GridPane.columnIndex="1">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="cardsCarouselPrivateButton" mnemonicParsing="false" onAction="#handleCardCarouselPrivateButtonPressed" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
+                        <Button fx:id="cardsCarouselPrivateButton" mnemonicParsing="false" onAction="#onCardCarouselPrivateButtonPressed" text="Private" textAlignment="CENTER" GridPane.columnIndex="2">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -132,7 +132,7 @@
                               </HBox>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>
-                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" text="0" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -152,7 +152,7 @@
                    <HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                    <!--<HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">-->
                      <children>
-                        <Pane>
+                        <Pane fx:id="cardsCarouselCardPane">
                            <children>
                               <ImageView fx:id="cardsCarouselCardImageView" fitHeight="112.0" fitWidth="192.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                                  <viewport>
@@ -297,13 +297,170 @@
                   </HBox>
                </children>
             </GridPane>
-            <HBox fx:id="blackHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <opaqueInsets>
-                  <Insets left="5.0" right="5.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets left="5.0" right="5.0" />
-               </padding>
+            <GridPane fx:id="toolCardsGridPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="20.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <AnchorPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </GridPane.margin>
+                     <children>
+                        <Button fx:id="toolCards1Button" mnemonicParsing="false" onAction="#onToolCards1ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="toolCards2Button" mnemonicParsing="false" onAction="#onToolCards2ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </GridPane.margin>
+                  </AnchorPane>
+                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="toolCards3Button" mnemonicParsing="false" onAction="#onToolCards3ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </GridPane.margin>
+                  </AnchorPane>
+                  <Button fx:id="toolCards1FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="toolCards2FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="toolCards3FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Button>
+                  <HBox fx:id="toolCardsPlayerHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </GridPane.margin>
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="You have" textAlignment="CENTER" textFill="#eb1b1b">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Button fx:id="toolCardsPlayerFavorTokensButton" mnemonicParsing="false" textAlignment="CENTER">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </GridPane>
+            <!--<HBox fx:id="blackHBox" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" />-->
+            <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <HBox fx:id="windowPatternsHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                     <children>
+                        <Button fx:id="windowPatterns1Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <opaqueInsets>
+                              <Insets bottom="20.0" />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="windowPatterns1FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="windowPatterns2Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <opaqueInsets>
+                              <Insets bottom="20.0" />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="windowPatterns2FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="windowPatterns3Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <opaqueInsets>
+                              <Insets bottom="20.0" />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="windowPatterns3FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="windowPatterns4Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                           <opaqueInsets>
+                              <Insets bottom="20.0" />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="windowPatterns4FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
             </HBox>
          </children>
       </AnchorPane>

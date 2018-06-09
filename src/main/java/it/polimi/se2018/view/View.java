@@ -431,20 +431,20 @@ public abstract class View implements Observer {
     void handleUsedToolCardEvent(Message m){
         Object o;
         try {
-            o = m.getParam("toolcard");
+            o = m.getParam("toolCard");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
         @SuppressWarnings("unchecked")
-        ToolCard toolcard = (ToolCard) o;
+        ToolCard toolCard = (ToolCard) o;
 
         try {
-            o = m.getParam("toolcards");
+            o = m.getParam("toolCards");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
         @SuppressWarnings("unchecked")
-        List<ToolCard> toolcards = (List<ToolCard>) o;
+        List<ToolCard> toolCards = (List<ToolCard>) o;
 
         try {
             o = m.getParam("player");
@@ -454,9 +454,9 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         String p = (String) o;
 
-        setDrawnToolCards(toolcards);
+        setDrawnToolCards(toolCards);
 
-        showMessage("Il giocatore "+p+" usa la toolcard "+toolcard.getTitle());
+        showMessage("Il giocatore "+p+" usa la toolCard "+toolCard.getTitle());
     }
 
     void handleSlotOfTrackChosenDice(Message m) {
