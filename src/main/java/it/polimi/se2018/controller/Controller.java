@@ -357,6 +357,7 @@ public class Controller extends Observable {
      * Sets the specified {@link ToolCard} as active. This means that it's being used
      * during the current {@link Turn}
      * @param toolCard the {@link ToolCard} that is being used
+     * @return true if the operation was successful
      */
     protected boolean setActiveToolCard(ToolCard toolCard) {
 

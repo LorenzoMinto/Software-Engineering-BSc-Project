@@ -79,7 +79,7 @@ public class Turn extends Observable implements Serializable {
     private Player player;
 
     /**
-     * Boolean value stating if during the turn there was a draft&place move (true=happened)
+     * Boolean value stating if during the turn there was a draftAndplace move (true=happened)
      */
     private boolean draftedAndPlaced;
 

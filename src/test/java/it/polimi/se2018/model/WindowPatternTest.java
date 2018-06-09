@@ -188,10 +188,10 @@ public class WindowPatternTest {
     }
 
     /**
-     * Tests the legality of a position (cell) implicitly testing {@link WindowPattern#isLegalPosition(int, int)}
+     * Tests the legality of a position (cell) implicitly testing {@link WindowPattern#isIllegalPosition(int, int)}
      */
     @Test
-    public void testIsLegalPosition(){
+    public void testIsPositionIllegal(){
         try{
             windowPattern.getDiceOnCell( -1, 3);
             fail();

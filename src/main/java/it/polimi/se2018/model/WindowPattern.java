@@ -81,6 +81,7 @@ public class WindowPattern extends Observable implements Serializable{
      *
      * @param id the id of the pattern
      * @param title the title of the pattern
+     * @param imageURL the imageURL of the pattern
      * @param difficulty the difficulty of the pattern
      * @param pattern the pattern structured as array of cells with already set constraints
      */
@@ -183,7 +184,7 @@ public class WindowPattern extends Observable implements Serializable{
      * @return the Dice that is placed on the cell corresponding to the given row and column numbers.
      */
     public Dice getDiceOnCell(int row, int col) {
-        if (isPositionIllegal(row, col)){
+        if (isIllegalPosition(row, col)){
             throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);}
 
         Dice dice = null;
@@ -208,7 +209,7 @@ public class WindowPattern extends Observable implements Serializable{
         if(dice==null) throw new IllegalArgumentException(NULL_DICE_ON_CELL);
 
         //Checks if location row,col is correct
-        if(isPositionIllegal(row, col)){
+        if(isIllegalPosition(row, col)){
             throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);
         }
 
@@ -236,7 +237,7 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public boolean moveDiceFromCellToCell(int fromRow, int fromCol, int toRow, int toCol) {
         //check if positions are legal
-        if (isPositionIllegal(fromRow, fromCol) || isPositionIllegal(toRow, toCol)) {
+        if (isIllegalPosition(fromRow, fromCol) || isIllegalPosition(toRow, toCol)) {
             throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);}
 
         if (pattern[fromRow][fromCol].hasDice() && !pattern[toRow][toCol].hasDice()) {
@@ -270,7 +271,7 @@ public class WindowPattern extends Observable implements Serializable{
      * @param col column number to check
      * @return true if the position is illegal (out of bounds)
      */
-    private boolean isPositionIllegal(int row, int col) {
+    private boolean isIllegalPosition(int row, int col) {
         return (row<0 || row>=getNumberOfRows() || col<0 || col>=getNumberOfColumns());
     }
 

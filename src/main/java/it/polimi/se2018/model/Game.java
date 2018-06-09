@@ -366,6 +366,7 @@ public class Game extends Observable implements Observer{
     /**
      * Starts the game and creates the first round with the given dices
      * @param dices list of dices to be used for the first round
+     * @param permissions the set of permissions at the beginning of the game
      */
     public void startGame(List<Dice> dices, Set<Move> permissions){
         if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
@@ -406,6 +407,7 @@ public class Game extends Observable implements Observer{
      * Proceed the game going to the next round (if available).
      *
      * @param dices the dices that are drafted from the dicebag for the new round
+     * @param permissions the set of permissions for the next round
      * @throws NoMoreRoundsAvailableException if the method is called but all the rounds
      * that could have been played in this game were actually already played
      */
@@ -457,6 +459,7 @@ public class Game extends Observable implements Observer{
      * Advances the game to the following turn
      * Notifies the observers (View) with the list of the players that will play the following turns
      *
+     * @param permissions the set of permissions for the next turn
      * @throws NoMoreTurnsAvailableException if no more turns are available in this round
      * @author Jacopo Pio Gargano
      */
