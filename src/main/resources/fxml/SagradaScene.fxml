@@ -132,7 +132,7 @@
                               </HBox>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>
-                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" text="0" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                    <Label fx:id="cardsCarouselFavorTokensValue" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="64.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -152,7 +152,7 @@
                    <HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                    <!--<HBox fx:id="cardsCarouselCardHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">-->
                      <children>
-                        <Pane>
+                        <Pane fx:id="cardsCarouselCardPane">
                            <children>
                               <ImageView fx:id="cardsCarouselCardImageView" fitHeight="112.0" fitWidth="192.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                                  <viewport>
