@@ -22,7 +22,7 @@ public class ToolCardManager {
     /**
      * The file system path to find toolCards .xml files
      */
-    private static final String PATH = "assets/toolCards/";
+    private static final String PATH = "assets/toolcards/";
 
     /**
      * List of all the toolCards that can be distributed in the current game

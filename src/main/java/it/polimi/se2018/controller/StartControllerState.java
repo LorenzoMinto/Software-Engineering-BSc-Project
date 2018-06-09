@@ -43,8 +43,8 @@ public class StartControllerState extends ControllerState {
     @Override
     public Message useToolCard(ToolCard toolCard) {
 
-        if ( controller.setActiveToolCard(toolCard) ) {
-
+        ToolCard gameToolcard = controller.game.getToolCard(toolCard);
+        if (controller.setActiveToolCard(gameToolcard)) {
             controller.setControllerState(controller.stateManager.getNextState(this));
             return new Message(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
         } else {

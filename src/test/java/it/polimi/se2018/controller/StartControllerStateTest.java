@@ -114,7 +114,9 @@ public class StartControllerStateTest {
         ToolCard toolCard = new ToolCard(prop, controllerStateRules, new EmptyPlacementRule());
 
         controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColor.BLUE));
-        controller.controllerState.useToolCard(toolCard);
+        try {
+            controller.controllerState.useToolCard(toolCard);
+        } catch (BadBehaviourRuntimeException e) {}
 
         assertNull(controller.getActiveToolCard());
         assertFalse(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
