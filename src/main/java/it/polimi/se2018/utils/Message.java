@@ -105,7 +105,7 @@ public class Message implements Serializable{
      * @return the permissions sent within the message
      */
     public Set<Move> getPermissions() {
-        return this.permissions.clone();
+        return EnumSet.copyOf(this.permissions);
     }
 
     /**
