@@ -437,12 +437,6 @@ public class CLIView extends View{
 
 
     //EVENTS
-
-    @Override
-    void handleGameEndedEvent(Message m) {
-        super.handleGameEndedEvent(m);
-    }
-
     @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
@@ -480,28 +474,16 @@ public class CLIView extends View{
     }
 
     @Override
-    void handleCVAcknowledgmentEvent(Message m){
-        super.handleCVAcknowledgmentEvent(m);
-    }
-
-    @Override
-    void handleInactivePlayerEvent(Message m){
-        super.handleInactivePlayerEvent(m);
-    }
-
-    @Override
     void handleBackToGameEvent(){
         super.handleBackToGameEvent();
+        waitForMove();
     }
 
     @Override
     void handleInactiveEvent(){
         super.handleInactiveEvent();
-    }
-
-    @Override
-    void handleCVErrorEvent(Message m){
-        super.handleCVErrorEvent(m);
+        waitForMove();
+        //TODO: check if this waitForMove() is necessary or not
     }
 
     @Override
@@ -511,29 +493,22 @@ public class CLIView extends View{
     }
 
     @Override
-    void handleNewRoundEvent(Message m){
-        super.handleNewRoundEvent(m);
-    }
-
-    @Override
-    void handleNewTurnEvent(Message m){
-        super.handleNewTurnEvent(m);
-    }
-
-    @Override
     void handleRankingsEvent(Message m){
         super.handleRankingsEvent(m);
+        //TODO: print rankings (winner is printed by super())
     }
 
 
     @Override
     void handleUpdatedWindowPatternEvent(Message m){
         super.handleUpdatedWindowPatternEvent(m);
+        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m){
         super.handleChangedDraftPoolEvent(m);
+        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
@@ -545,36 +520,43 @@ public class CLIView extends View{
     @Override
     void handleBadFormattedEvent(){
         super.handleBadFormattedEvent();
+        waitForMove();
     }
 
     @Override
     void handleDeniedLimitEvent(){
         super.handleDeniedLimitEvent();
+        waitForMove();
     }
 
     @Override
     void handleDeniedNicknameEvent(){
         super.handleDeniedNicknameEvent();
+        waitForMove();
     }
 
     @Override
     void handleDeniedPlayingEvent(){
         super.handleDeniedPlayingEvent();
+        waitForMove();
     }
 
     @Override
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
+        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleSlotOfTrackChosenDice(Message m){
         super.handleSlotOfTrackChosenDice(m);
+        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleTrackChosenDiceEvent(Message m){
         super.handleTrackChosenDiceEvent(m);
+        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
@@ -602,32 +584,8 @@ public class CLIView extends View{
     }
 
     @Override
-    void notifyNewRound(){
-        super.notifyNewRound();
-        //do nothing else
-    }
-
-    @Override
     void notifyNewTurn(){
         super.notifyNewTurn();
         waitForMove();
-    }
-
-    @Override
-    void notifyGameVariablesChanged() {
-        super.notifyGameVariablesChanged();
-        //do nothing else
-    }
-
-    @Override
-    void notifyGameStarted() {
-        super.notifyGameStarted();
-        //do nothing else
-    }
-
-    @Override
-    void notifyPermissionsChanged() {
-        super.notifyPermissionsChanged();
-        //do nothing else
     }
 }
