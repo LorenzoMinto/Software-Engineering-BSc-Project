@@ -1,7 +1,9 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.utils.message.VCMessage;
+
+import it.polimi.se2018.utils.ControllerBoundMessageType;
+import it.polimi.se2018.utils.Message;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,7 +59,7 @@ public class ControllerStateManagerTest {
         for (Player p : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
             params.put("windowPattern", wp);
-            controller.handleMove(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN, params, p.getID()));
+            controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
         controller.setActiveToolCard(toolCard);

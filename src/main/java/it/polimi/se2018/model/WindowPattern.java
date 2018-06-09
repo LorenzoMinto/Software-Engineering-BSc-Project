@@ -2,7 +2,8 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.MVMessage;
+import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.ViewBoundMessageType;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -293,7 +294,7 @@ public class WindowPattern extends Observable implements Serializable{
         messageAttributes.put("windowPattern", this);
         messageAttributes.put("currentPlayer", owner.getID());
 
-        notify(new MVMessage(MVMessage.types.WINDOWPATTERN, messageAttributes));
+        notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_WINDOWPATTERN, messageAttributes));
     }
 
     /**

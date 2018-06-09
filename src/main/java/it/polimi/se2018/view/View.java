@@ -5,14 +5,12 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.networking.SenderInterface;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Move;
+import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.message.*;
+import it.polimi.se2018.utils.Message;
 
 import java.rmi.RemoteException;
 import java.util.*;
-import java.util.logging.*;
 
 public abstract class View implements Observer {
 
@@ -61,19 +59,19 @@ public abstract class View implements Observer {
     //MOVES
 
     void handleLeaveWaitingRoomMove(){
-        sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.LEAVE,Message.fastMap("nickname",this.playerID)));
+        sendMessage(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
     }
 
     void handleBackGameMove(){
-        sendMessage(new VCMessage(VCMessage.types.BACK_GAMING,null,this.playerID));
+        sendMessage(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
     }
 
     void handleEndTurnMove(){
-        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+        sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
     }
 
     void handleWindowPatternSelection(WindowPattern wp){
-        sendMessage(new VCMessage(VCMessage.types.END_TURN,null,this.playerID));
+        sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
     }
 
     void handleDraftDiceFromDraftPoolMove(){
@@ -89,14 +87,14 @@ public abstract class View implements Observer {
     }
 
     void handleIncrementDraftedDiceMove(){
-        sendMessage(new VCMessage(VCMessage.types.INCREMENT_DICE));
+        sendMessage(new Message(ControllerBoundMessageType.INCREMENT_DICE));
     }
 
     void handleDecrementDraftedDiceMove(){
-        sendMessage(new VCMessage(VCMessage.types.DECREMENT_DICE));
+        sendMessage(new Message(ControllerBoundMessageType.DECREMENT_DICE));
     }
 
-    void handleEndEffectMove(){ sendMessage(new VCMessage(VCMessage.types.END_EFFECT)); }
+    void handleEndEffectMove(){ sendMessage(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT)); }
 
     void handleChangeDraftedDiceValueMove(){
         //TODO: implement
@@ -149,10 +147,14 @@ public abstract class View implements Observer {
             return;
         }
         @SuppressWarnings("unchecked")
-        String ack = (String) o;
+        String text = (String) o;
 
-        if(!ack.equals("")){
-            showMessage("ACK: "+ack);
+        ack(text);
+    }
+
+    void ack(String text){
+        if(!text.equals("")){
+            showMessage(text);
         }
     }
 
@@ -504,84 +506,49 @@ public abstract class View implements Observer {
 
     // MESSAGES HANDLING
 
-    private void receiveMessage(Message m){
+    private void parseMessageOnInactiveState(Message m){
 
-        if(state==ViewState.INACTIVE){
+        ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
-            if(m.getType()==CVMessage.types.BACK_TO_GAME){
+        switch (type) {
+            case BACK_TO_GAME:
                 handleBackToGameEvent();
-
-            } else if(m.getType()==MVMessage.types.RANKINGS){
-                handleRankingsEvent(m);
-
-            } else if(m.getType()==CVMessage.types.GAME_ENDED){
+                break;
+            case GAME_ENDED:
                 handleGameEndedEvent(m);
-            }
-
-            //no other messages are handled if state is INACTIVE
-
-        } else {
-
-            updatePermissions(m);
-
-            if(m instanceof CVMessage){
-                handleCVMessages(m);
-
-            } else if(m instanceof MVMessage){
-                handleMVMessages(m);
-
-            } else if(m instanceof WaitingRoomMessage){
-                handleWLMessages(m);
-
-            } else {
-                //should never enter here
-                throw new BadBehaviourRuntimeException();
-            }
-
+                break;
+            case RANKINGS:
+                handleRankingsEvent(m);
+                break;
+            default:
+                //No other messages are evaluated in this state
+                break;
         }
-
     }
 
-    private void updatePermissions(Message m){
-        EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
-        if(!p.isEmpty()){
-            setPermissions(p);
-        }//else keep same permissions
-    }
+    private void parseMessageOnActiveState(Message m){
 
-    private void handleCVMessages(Message m){
+        ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
-        switch ((CVMessage.types) m.getType()) {
+        switch (type) {
             case ERROR_MESSAGE:
                 handleCVErrorEvent(m);
                 break;
             case ACKNOWLEDGMENT_MESSAGE:
                 handleCVAcknowledgmentEvent(m);
                 break;
-            case INACTIVE_PLAYER:
+            case A_PLAYER_BECOME_INACTIVE:
                 handleInactivePlayerEvent(m);
                 break;
-            case BACK_TO_GAME:
-                //May not happen
-                handleBackToGameEvent();
-                break;
-            case INACTIVE:
+            case YOU_ARE_INACTIVE:
                 handleInactiveEvent();
                 break;
-            case GIVE_WINDOW_PATTERNS:
+            case DISTRIBUTION_OF_WINDOW_PATTERNS:
                 handleGiveWindowPatternsEvent(m);
                 break;
             case GAME_ENDED:
                 handleGameEndedEvent(m);
                 break;
-            default:
-                //if cases are updated with CVMessage.types, should never enter here
-                throw new BadBehaviourRuntimeException();
-        }
-    }
-
-    private void handleMVMessages(Message m){
-        switch ((MVMessage.types) m.getType()) {
             case SETUP:
                 handleSetupEvent(m);
                 break;
@@ -597,10 +564,10 @@ public abstract class View implements Observer {
             case RANKINGS:
                 handleRankingsEvent(m);
                 break;
-            case WINDOWPATTERN:
+            case SOMETHING_CHANGED_IN_WINDOWPATTERN:
                 handleUpdatedWindowPatternEvent(m);
                 break;
-            case DRAFTPOOL:
+            case SOMETHING_CHANGED_IN_DRAFTPOOL:
                 handleChangedDraftPoolEvent(m);
                 break;
             case DRAFTED_DICE:
@@ -612,43 +579,47 @@ public abstract class View implements Observer {
             case SLOT_OF_TRACK_CHOSEN_DICE:
                 handleSlotOfTrackChosenDice(m);
                 break;
-            case YOUR_TURN: //needed just for setting permissions
+            case IT_IS_YOUR_TURN: //needed just for setting permissions
                 handleYourTurnEvent();
                 break;
-            default:
-                //if cases are updated with MVMessage.types, should never enter here
-                throw new BadBehaviourRuntimeException();
-        }
-    }
-
-
-    private void handleWLMessages(Message m){
-        switch ((WaitingRoomMessage.types) m.getType()) {
-            case BAD_FORMATTED: //just for debug
+            case BAD_FORMATTED:
                 handleBadFormattedEvent();
                 break;
-            case DENIED_LIMIT:
-                handleDeniedLimitEvent();
-                break;
-            case DENIED_NICKNAME:
-                handleDeniedNicknameEvent();
-                break;
-            case DENIED_PLAYING:
+            case JOIN_WR_DENIED_PLAYING:
                 handleDeniedPlayingEvent();
                 break;
-            case JOIN: //can't happen. is a message sent from the user
+            case JOIN_WR_DENIED_NICKNAME:
+                handleDeniedNicknameEvent();
                 break;
-            case ADDED:
+            case JOIN_WR_DENIED_LIMIT:
+                handleDeniedLimitEvent();
+                break;
+            case ADDED_TO_WR:
                 handleAddedEvent();
                 break;
-            case LEAVE: //can't happen. is a message sent from the user
-                break;
-            case REMOVED:
+            case REMOVED_FROM_WR:
                 handleRemovedEvent();
                 break;
             default:
-                //if cases are updated with WaitingRoomMessage.types, should never enter here
-                throw new BadBehaviourRuntimeException();
+                //No other messages are evaluated in this state
+                break;
+        }
+
+        if(type!=ViewBoundMessageType.ERROR_MESSAGE){
+            //UPDATE PERMISSIONS
+            EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
+            if(!p.isEmpty()){
+                setPermissions(p);
+            }//else keep same permissions
+        }
+    }
+
+    private void receiveMessage(Message m){
+
+        if( state==ViewState.INACTIVE ){
+            parseMessageOnInactiveState(m);
+        } else {
+            parseMessageOnActiveState(m);
         }
     }
 
@@ -679,25 +650,6 @@ public abstract class View implements Observer {
             errorMessage(MUST_CONNECT);
         }
     }
-
-    /*private Logger createLogger(){
-        Logger newLogger = Logger.getLogger(View.class.getName());
-        newLogger.setUseParentHandlers(false);
-        newLogger.setLevel(Level.FINE);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.FINE);
-        handler.setFormatter(new SimpleFormatter(){
-            private static final String FORMAT = "[VIEW] %1$s %n";
-
-            @Override
-            public synchronized String format(LogRecord lr) {
-                return String.format(FORMAT,lr.getMessage());
-            }
-
-        });
-        newLogger.addHandler(handler);
-        return newLogger;
-    }*/
 
     @Override
     public boolean update(Message m) {

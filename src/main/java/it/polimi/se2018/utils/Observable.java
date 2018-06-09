@@ -1,7 +1,5 @@
 package it.polimi.se2018.utils;
 
-import it.polimi.se2018.utils.message.Message;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking;
 
-import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.Message;
 
 import java.io.*;
 import java.rmi.RemoteException;

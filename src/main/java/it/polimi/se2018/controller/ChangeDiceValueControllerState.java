@@ -2,10 +2,10 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  *  @author Lorenzo Minto
@@ -25,15 +25,15 @@ public class ChangeDiceValueControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage chooseDiceValue(int value) {
+    public Message chooseDiceValue(int value) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         try {
             currentTurn.getDraftedDice().setValue(value);
         } catch (ValueOutOfBoundsException e) {
-            return new CVMessage(ERROR_MESSAGE, "Illegal value for dice.");
+            return new Message(ERROR_MESSAGE, "Illegal value for dice.");
         }
         controller.setControllerState(controller.stateManager.getNextState(this));
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
     }
 }

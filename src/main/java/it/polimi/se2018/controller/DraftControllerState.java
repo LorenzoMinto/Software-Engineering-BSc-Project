@@ -2,12 +2,12 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  *
@@ -28,7 +28,7 @@ public class DraftControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage draftDiceFromDraftPool(Dice dice) {
+    public Message draftDiceFromDraftPool(Dice dice) {
         Game game = controller.game;
         Round currentRound = game.getCurrentRound();
 
@@ -42,12 +42,12 @@ public class DraftControllerState extends ControllerState {
             controller.setControllerState(controller.stateManager.getPlaceState());
         }
 
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
     }
 
     @Override
-    public CVMessage placeDice(int row, int col) {
-        return new CVMessage(ERROR_MESSAGE, NO_DICE_DRAFTED);
+    public Message placeDice(int row, int col) {
+        return new Message(ERROR_MESSAGE, NO_DICE_DRAFTED);
     }
 
     @Override

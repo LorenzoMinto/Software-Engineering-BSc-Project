@@ -2,12 +2,12 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  *  @author Lorenzo Minto
@@ -26,7 +26,7 @@ public class PlaceControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage placeDice(int row, int col) {
+    public Message placeDice(int row, int col) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
@@ -39,17 +39,17 @@ public class PlaceControllerState extends ControllerState {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
+                return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             } else {
                 if (currentTurn.hasUsedToolCard()) {
                     controller.setControllerState(controller.stateManager.getEndControllerState());
                 } else {
                     controller.setControllerState(controller.stateManager.getToolCardState());
                 }
-                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
+                return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             }
         } else {
-            return new CVMessage(ERROR_MESSAGE,"Move is illegal. There's another dice in that position.");
+            return new Message(ERROR_MESSAGE,"Move is illegal. There's another dice in that position.");
         }
     }
 

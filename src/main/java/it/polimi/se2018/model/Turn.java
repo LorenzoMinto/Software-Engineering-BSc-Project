@@ -1,9 +1,6 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.MVMessage;
+import it.polimi.se2018.utils.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -189,7 +186,7 @@ public class Turn extends Observable implements Serializable {
 
         messageAttributes.put("slotOfTrackChosenDice", this.slotOfTrackChosenDice);
 
-        notify(new MVMessage(MVMessage.types.SLOT_OF_TRACK_CHOSEN_DICE, messageAttributes));
+        notify(new Message(ViewBoundMessageType.SLOT_OF_TRACK_CHOSEN_DICE, messageAttributes));
     }
 
     /**
@@ -205,7 +202,7 @@ public class Turn extends Observable implements Serializable {
 
         messageAttributes.put("draftedDice", this.draftedDice);
 
-        notify(new MVMessage(MVMessage.types.DRAFTED_DICE, messageAttributes));
+        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, messageAttributes));
     }
 
     /**
@@ -221,7 +218,7 @@ public class Turn extends Observable implements Serializable {
 
         messageAttributes.put("trackChosenDice", this.trackChosenDice);
 
-        notify(new MVMessage(MVMessage.types.TRACK_CHOSEN_DICE, messageAttributes));
+        notify(new Message(ViewBoundMessageType.TRACK_CHOSEN_DICE, messageAttributes));
     }
 
     /**

@@ -2,8 +2,8 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.WaitingRoomMessage;
+import it.polimi.se2018.utils.ControllerBoundMessageType;
+import it.polimi.se2018.utils.Message;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +24,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 
 public class ViewGUI extends Application {
 
@@ -111,7 +110,7 @@ public class ViewGUI extends Application {
                 sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
                         serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
                 sagradaSceneController.setPlayer(userTextField.getText());
-                sagradaSceneController.sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",userTextField.getText())));
+                sagradaSceneController.sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",userTextField.getText())));
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
             }

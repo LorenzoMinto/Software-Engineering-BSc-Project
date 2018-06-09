@@ -2,10 +2,10 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.Turn;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 public class ChangeDiceValueUnitaryControllerState extends ControllerState {
 
@@ -20,27 +20,27 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage incrementDice() {
+    public Message incrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.getDraftedDice().incrementValue()) {
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new CVMessage(ERROR_MESSAGE, "Cannot increment drafted dice's value.");
+            return new Message(ERROR_MESSAGE, "Cannot increment drafted dice's value.");
         }
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
     }
 
     @Override
-    public CVMessage decrementDice() {
+    public Message decrementDice() {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
 
         if (currentTurn.getDraftedDice().decrementValue()) {
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new CVMessage(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
+            return new Message(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
         }
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
     }
 }

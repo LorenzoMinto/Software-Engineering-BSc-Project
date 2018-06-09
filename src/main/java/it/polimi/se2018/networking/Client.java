@@ -1,7 +1,7 @@
 package it.polimi.se2018.networking;
 
 import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
 

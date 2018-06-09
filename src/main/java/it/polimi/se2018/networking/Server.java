@@ -4,7 +4,7 @@ import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.message.*;
+import it.polimi.se2018.utils.Message;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -231,23 +231,17 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
 
-        Message returnMessage = null;
+        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
-        if(message instanceof WaitingRoomMessage){
-
-            returnMessage = handleWaitingRoomMessage((WaitingRoomMessage)message,sender);
-
-        } else if(message instanceof VCMessage) {
-
-            //Add the Player reference to the message in order to let controller manage the move correctly
-            message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
-            //Send message to controller
-            returnMessage = controller.handleMove((VCMessage) message);
+        Message returnMessage;
+        if(type==ControllerBoundMessageType.JOIN_WR || type==ControllerBoundMessageType.LEAVE_WR){
+            returnMessage = handleWaitingRoomMessage(message,sender);
 
         } else {
-            return;
+            message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
+            returnMessage = controller.handleMove(message);
         }
-        
+
         //Send answer message back to the sender
         if(returnMessage!=null){
             sender.receiveMessage(returnMessage, this.proxyServer);
@@ -259,28 +253,31 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     /**
      * Reads the type of message and calls needed methods depending on that.
      * @param message the message received
-     * @param client the sender of the message
+     * @param sender the sender of the message
      * @return a message containing if the operation went good or not
      */
-    private Message handleWaitingRoomMessage(WaitingRoomMessage message, ReceiverInterface client){
+    private Message handleWaitingRoomMessage(Message message, ReceiverInterface sender){
         if(serverState != ServerState.WAITING_ROOM){
-            return new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_PLAYING,"GAME_IS_PLAYING");
+            return new Message(ViewBoundMessageType.JOIN_WR_DENIED_PLAYING,"GAME_IS_PLAYING");
         }
 
         String nickname;
         try {
             nickname = (String) message.getParam("nickname");
         } catch (NoSuchParamInMessageException e) {
-            return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+            return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }
 
-        switch (message.getType()){
-            case JOIN:
-                return addInWaitingRoom(nickname,client);
-            case LEAVE:
-                return removeFromWaitingRoom(nickname,client);
-            default:
-                return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
+
+        if(type==ControllerBoundMessageType.JOIN_WR){
+            return addInWaitingRoom(nickname,sender);
+
+        } else if(type==ControllerBoundMessageType.LEAVE_WR){
+            return removeFromWaitingRoom(nickname,sender);
+
+        } else {
+            return null;
         }
     }
 
@@ -296,13 +293,13 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
-                message = new WaitingRoomMessage(WaitingRoomMessage.types.ADDED,null,null,EnumSet.of(Move.LEAVE));
+                message = new Message(ViewBoundMessageType.ADDED_TO_WR,null,null,EnumSet.of(Move.LEAVE));
             } else {
-                message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_NICKNAME);
+                message = new Message(ViewBoundMessageType.JOIN_WR_DENIED_NICKNAME);
             }
         } else {
             //Should never happen because server status should change to FORWARDING_TO_CONTROLLER
-            message = new WaitingRoomMessage(WaitingRoomMessage.types.DENIED_LIMIT);
+            message = new Message(ViewBoundMessageType.JOIN_WR_DENIED_LIMIT);
         }
 
         checkForLaunchingGame();
@@ -325,9 +322,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
                 cancelTimerForLaunchingGame();
             }
 
-            return new WaitingRoomMessage(WaitingRoomMessage.types.REMOVED,null,null,EnumSet.of(Move.JOIN_GAME));
+            return new Message(ViewBoundMessageType.REMOVED_FROM_WR,null,null,EnumSet.of(Move.JOIN_GAME));
         } else {
-            return new WaitingRoomMessage(WaitingRoomMessage.types.BAD_FORMATTED);
+            return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }
     }
 
@@ -395,17 +392,15 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void sendMessage(Message m) throws RemoteException {
+    public void sendMessage(Message message) throws RemoteException {
         boolean somethingFailed = false;
         List<ReceiverInterface> g;
 
-        ViewBoundMessage message = (ViewBoundMessage) m;
-
-        if(message.isBroadcast()){
+        if(message.getPlayerID()==null){ //Means that message is broadcast
             g = gateways;
         } else {
             g = new ArrayList<>();
-            g.add(playerIDToGatewayMap.get(message.getReceivingPlayerID()));
+            g.add(playerIDToGatewayMap.get(message.getPlayerID()));
         }
 
         for(ReceiverInterface o : g){

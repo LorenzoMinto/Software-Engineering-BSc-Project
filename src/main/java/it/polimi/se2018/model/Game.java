@@ -5,8 +5,7 @@ import it.polimi.se2018.controller.NoMoreTurnsAvailableException;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.utils.message.MVMessage;
-import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.Message;
 
 import java.util.*;
 import java.util.List;
@@ -254,7 +253,7 @@ public class Game extends Observable implements Observer{
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("rankings", rankings);
         messageAttributes.put("winnerPlayerID", rankingsAsList.get(0));
-        notify(new MVMessage(MVMessage.types.RANKINGS, messageAttributes));
+        notify(new Message(ViewBoundMessageType.RANKINGS, messageAttributes));
     }
 
     /**
@@ -321,7 +320,7 @@ public class Game extends Observable implements Observer{
         //updates the player as their tokens were updated
         messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
 
-        notify(new MVMessage(MVMessage.types.USED_TOOLCARD, messageAttributes));
+        notify(new Message(ViewBoundMessageType.USED_TOOLCARD, messageAttributes));
 
     }
 
@@ -390,7 +389,7 @@ public class Game extends Observable implements Observer{
         for (Player player: players) {
             messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard()); //put overrides previous values
             messageAttributes.put("yourWindowPattern", player.getWindowPattern()); //put overrides previous values
-            Message message = new MVMessage(MVMessage.types.SETUP, messageAttributes, player.getID());
+            Message message = new Message(ViewBoundMessageType.SETUP, messageAttributes, player.getID());
 
             notify(message);
         }
@@ -444,7 +443,7 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("track", track);
         messageAttributes.put("draftPoolDices", dices);
 
-        notify(new MVMessage(MVMessage.types.NEW_ROUND, messageAttributes));
+        notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));
 
         try {
             nextTurn(permissions);
@@ -473,9 +472,9 @@ public class Game extends Observable implements Observer{
             //NOTIFYING
             Map <String, Object> messageAttributes = new HashMap<>();
             messageAttributes.put("whoIsPlaying", nextPlayerID);
-            notify(new MVMessage(MVMessage.types.NEW_TURN, messageAttributes));
+            notify(new Message(ViewBoundMessageType.NEW_TURN, messageAttributes));
 
-            notify(new MVMessage(MVMessage.types.YOUR_TURN, null, nextPlayerID, permissions));
+            notify(new Message(ViewBoundMessageType.IT_IS_YOUR_TURN, null, nextPlayerID, permissions));
 
         } catch (NoMoreTurnsAvailableException e) {
             throw new NoMoreTurnsAvailableException();

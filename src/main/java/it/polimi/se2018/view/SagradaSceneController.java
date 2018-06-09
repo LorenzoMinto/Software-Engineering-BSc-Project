@@ -2,11 +2,7 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.WindowPattern;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.VCMessage;
+import it.polimi.se2018.utils.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,7 +47,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     @FXML private HBox windowPatternsBox;
 
-    //DRAFTPOOL DISPLAY
+    //SOMETHING_CHANGED_IN_DRAFTPOOL DISPLAY
     @FXML private FlowPane draftPoolPane;
     private Button selectedDiceButton = null;
     private List<Button> dicesButtons = new ArrayList<>();
@@ -301,7 +297,7 @@ public class SagradaSceneController extends View implements Initializable {
         if (selectedDiceButton != null) {
             Dice draftedDice = getDiceForDiceButton(selectedDiceButton);
             showMessage("Drafted dice: " + draftedDice.toString());
-            sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
+            sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
         } else {
             errorMessage("You have not selected a dice from the draft pool yet!");
         }
@@ -363,7 +359,7 @@ public class SagradaSceneController extends View implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     setWindowPattern(pattern);
-                    sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",pattern)));
+                    sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",pattern)));
                     hasChosenWindowPattern();
                     printOnConsole(pattern.getTitle() +" chosen.");
                 }

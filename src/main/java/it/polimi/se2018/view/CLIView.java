@@ -5,10 +5,9 @@ import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.VCMessage;
-import it.polimi.se2018.utils.message.WaitingRoomMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -280,7 +279,7 @@ public class CLIView extends View{
         waitForConsoleInput(diceIndex -> {
             int diceIndexInt = Integer.parseInt(diceIndex) - 1;
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
-                sendMessage(new VCMessage(VCMessage.types.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt))));
+                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt))));
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -302,7 +301,7 @@ public class CLIView extends View{
                     HashMap<String,Object> params = new HashMap<>();
                     params.put("row",row);
                     params.put("col",col);
-                    sendMessage(new VCMessage(VCMessage.types.PLACE_DICE,params));
+                    sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
                 } else {
                     print(INPUT_NOT_VALID);
                 }
@@ -321,7 +320,7 @@ public class CLIView extends View{
         }
         waitForConsoleInput(toolcardIndexString -> {
             int toolcardIndex = Integer.parseInt(toolcardIndexString);
-            sendMessage(new VCMessage(VCMessage.types.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(toolcardIndex))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap("toolcard",drawnToolCards.get(toolcardIndex))));
             waitForMove();
         });
     }
@@ -347,7 +346,7 @@ public class CLIView extends View{
             if(diceValue<1 || diceValue>6){
                 print(INPUT_NOT_VALID);
             } else {
-                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_VALUE,Message.fastMap("value",diceValue)));
+                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value",diceValue)));
             }
             waitForMove();
         });
@@ -379,7 +378,7 @@ public class CLIView extends View{
                 params.put("slotNumber",trackSlotNumber);
                 params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(choosenDiceIndex));
 
-                sendMessage(new VCMessage(VCMessage.types.CHOOSE_DICE_FROM_TRACK,params));
+                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
                 waitForMove();
             });
         });
@@ -409,7 +408,7 @@ public class CLIView extends View{
                                 params.put("colFrom",col);
                                 params.put("rowTo",rowDest);
                                 params.put("colTo",colDest);
-                                sendMessage(new VCMessage(VCMessage.types.MOVE_DICE,params));
+                                sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
                             } else {
                                 print(INPUT_NOT_VALID);
                             }
@@ -432,7 +431,7 @@ public class CLIView extends View{
         print("Insert your nickname");
         waitForConsoleInput(nickname->{
             setPlayer(nickname);
-            sendMessage(new WaitingRoomMessage(WaitingRoomMessage.types.JOIN,Message.fastMap("nickname",nickname)));
+            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",nickname)));
         });
     }
 
@@ -460,7 +459,7 @@ public class CLIView extends View{
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new VCMessage(VCMessage.types.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
+                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -593,6 +592,12 @@ public class CLIView extends View{
     @Override
     void errorMessage(String message) {
         print("ERROR: "+message);
+        waitForMove();
+    }
+
+    @Override
+    void ack(String text){
+        showMessage(text);
         waitForMove();
     }
 

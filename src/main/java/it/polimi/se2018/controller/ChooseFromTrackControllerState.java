@@ -3,14 +3,13 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.message.CVMessage;
 import it.polimi.se2018.utils.BadDiceReferenceException;
-import it.polimi.se2018.utils.message.Message;
+import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  *  @author Lorenzo Minto
@@ -29,21 +28,21 @@ public class ChooseFromTrackControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage chooseDiceFromTrack(Dice dice, int slotNumber) {
+    public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
 
         try {
             controller.game.getTrack().takeDice(dice, slotNumber);
         } catch (BadDiceReferenceException e) {
-            return new CVMessage(ERROR_MESSAGE,"Dice not in selected TrackSlot.");
+            return new Message(ERROR_MESSAGE,"Dice not in selected TrackSlot.");
         } catch (ValueOutOfBoundsException e) {
-            return new CVMessage(ERROR_MESSAGE,"Selected TrackSlot does not exist.");
+            return new Message(ERROR_MESSAGE,"Selected TrackSlot does not exist.");
         }
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
         controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
         controller.setControllerState(controller.stateManager.getNextState(this));
 
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE, Message.fastMap("message","Dice from Track chosen."));
+        return new Message(ACKNOWLEDGMENT_MESSAGE, Message.fastMap("message","Dice from Track chosen."));
     }
 
     @Override

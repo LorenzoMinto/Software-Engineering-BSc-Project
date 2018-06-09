@@ -3,13 +3,13 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
 import java.util.Set;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  * Abstract class that represents a generic state of the {@link Controller}.
@@ -66,7 +66,7 @@ public abstract class ControllerState {
      * @param dice the dice to be drafted.
      * @return a message containing the result of the mov
      */
-    public CVMessage draftDiceFromDraftPool(Dice dice){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message draftDiceFromDraftPool(Dice dice){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Places the drafted dice of the current turn on the specified cell (row and column).
@@ -74,7 +74,7 @@ public abstract class ControllerState {
      * @param col the column index of the cell where the dice is to be placed.
      * @return a message containing the result of the mov
      */
-    public CVMessage placeDice(int row, int col){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message placeDice(int row, int col){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Activates, if allowed, the effect of the passed tool card by initiating the relative state succession. The
@@ -82,7 +82,7 @@ public abstract class ControllerState {
      * @param toolcard the toolcard to be activated.
      * @return a message containing the result of the mov
      */
-    public CVMessage useToolCard(ToolCard toolcard){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message useToolCard(ToolCard toolcard){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Removes the specified dice from the specified track slot and sets it as trackChosenDice on the current turn.
@@ -90,7 +90,7 @@ public abstract class ControllerState {
      * @param slotNumber the number of the TrackSlot where the dice is.
      * @return a message containing the result of the mov
      */
-    public CVMessage chooseDiceFromTrack(Dice dice, int slotNumber){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message chooseDiceFromTrack(Dice dice, int slotNumber){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Moves, if legal, the dice found at the cell designated by (rowFrom, colFrom) to the cell designated by (rowTo,
@@ -101,7 +101,7 @@ public abstract class ControllerState {
      * @param colTo the column index of the cell TO which the dice is to be moved.
      * @return a message containing the result of the mov
      */
-    public CVMessage moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
@@ -109,7 +109,7 @@ public abstract class ControllerState {
      *
      * @return a message containing the result of the mov     *
      */
-    public CVMessage incrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message incrementDice(){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
 
     /**
@@ -117,29 +117,29 @@ public abstract class ControllerState {
      *
      * @return a message containing the result of the mov
      */
-    public CVMessage decrementDice(){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message decrementDice(){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Sets the value of the drafted dice found in the current turn to the specified value.
      * @param value the chosen value for the drafted dice.
      * @return a message containing the result of the mov
      */
-    public CVMessage chooseDiceValue(int value){ return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message chooseDiceValue(int value){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Ends the current turn.
      * @return a message containing the result of the mov
      */
-    public CVMessage endCurrentTurn() {
+    public Message endCurrentTurn() {
         controller.advanceGame();
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
     }
 
     /**
      * Ends the current toolCard effect.
      * @return a message containing the result of the mov
      */
-    public CVMessage endToolCardEffect() { return new CVMessage(ERROR_MESSAGE, defaultMessage); }
+    public Message endToolCardEffect() { return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.

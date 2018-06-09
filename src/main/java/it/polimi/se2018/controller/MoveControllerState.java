@@ -2,15 +2,14 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
  *  @author Lorenzo Minto
@@ -29,7 +28,7 @@ public class MoveControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage moveDice(int rowFrom, int colFrom, int rowTo, int colTo) {
+    public Message moveDice(int rowFrom, int colFrom, int rowTo, int colTo) {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
@@ -43,24 +42,24 @@ public class MoveControllerState extends ControllerState {
             //if the moves counter is less than the maximum number of moves ask for another move
             if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size())) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
+                return new Message(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
-                return new CVMessage(ACKNOWLEDGMENT_MESSAGE,"Move made.");
+                return new Message(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
         } else {
-            return new CVMessage(ERROR_MESSAGE,"Can't make this move.");
+            return new Message(ERROR_MESSAGE,"Can't make this move.");
         }
     }
 
     @Override
-    public CVMessage endToolCardEffect() {
+    public Message endToolCardEffect() {
         if (controller.getActiveToolCard().getPossibleMovesCountSet().contains(controller.movesCounter)) {
             this.controller.resetActiveToolCard();
             controller.setControllerState(controller.stateManager.getDraftControllerState());
-            return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "ToolCard effected ended.");
+            return new Message(ACKNOWLEDGMENT_MESSAGE, "ToolCard effected ended.");
         } else {
-            return new CVMessage(ERROR_MESSAGE,"Can't end the ToolCard effect now.");
+            return new Message(ERROR_MESSAGE,"Can't end the ToolCard effect now.");
         }
     }
 

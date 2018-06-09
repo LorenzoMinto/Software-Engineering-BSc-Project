@@ -1,11 +1,11 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.utils.Move;
-import it.polimi.se2018.utils.message.CVMessage;
+import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
 
-import static it.polimi.se2018.utils.message.CVMessage.types.ACKNOWLEDGMENT_MESSAGE;
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 
 /**
  * @author Lorenzo Minto
@@ -23,10 +23,10 @@ public class EndControllerState extends ControllerState {
     }
 
     @Override
-    public CVMessage endCurrentTurn() {
+    public Message endCurrentTurn() {
         controller.advanceGame();
         //TODO: What to return here?!
-        return new CVMessage(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
     }
 
     @Override

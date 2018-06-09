@@ -81,7 +81,6 @@ public class ControllerStateManager {
      * @param controllerStateID the ID String representing a specific {@link ControllerState}.
      *                          It is usually the name of the class.
      * @return the {@link ControllerState} represented by the given ID
-     * @throws ClassNotFoundException if the given ID does not correspond to a subclass of {@link ControllerState}.
      * @author Federico Haag
      */
     private ControllerState createStateByID(String controllerStateID){

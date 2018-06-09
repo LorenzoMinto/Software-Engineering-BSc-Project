@@ -1,8 +1,5 @@
 package it.polimi.se2018.utils;
 
-
-import it.polimi.se2018.utils.message.Message;
-
 /**
  * A class can implement the {@link Observer} interface when it
  * wants to be informed of changes in observable objects.

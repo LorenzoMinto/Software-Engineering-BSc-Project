@@ -1,6 +1,4 @@
-package it.polimi.se2018.utils.message;
-
-import it.polimi.se2018.utils.Move;
+package it.polimi.se2018.utils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -10,7 +8,7 @@ import java.util.*;
  *
  * @author Federico Haag
  */
-public abstract class Message implements Serializable{
+public class Message implements Serializable{
 
     /**
      * Serial Version UID
@@ -51,9 +49,9 @@ public abstract class Message implements Serializable{
      */
     public Message(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         this.type = type;
-        this.params = (HashMap<String,Object>)params;
-        this.playerID = playerID;
-        this.permissions = (EnumSet<Move>)permissions;
+        setParams(params);
+        setPlayerID(playerID);
+        setPermissions(permissions);
     }
 
     /**
@@ -74,7 +72,7 @@ public abstract class Message implements Serializable{
      * @param params the parameters of the message
      */
     public Message(Enum type, Map<String, Object> params) {
-        this(type,params,null);
+        this(type,params,null,null);
     }
 
     /**
@@ -82,7 +80,15 @@ public abstract class Message implements Serializable{
      * @param type the type of the message
      */
     public Message(Enum type){
-        this(type,null);
+        this(type,null,null,null);
+    }
+
+    /**
+     * Constructor of a Message with type and message param.  If controllerbound, it is broadcast.
+     * @param type the type of the message
+     */
+    public Message(Enum type, String m){
+        this(type,fastMap("message",m),null,null);
     }
 
     /**
@@ -98,7 +104,7 @@ public abstract class Message implements Serializable{
      * @return the permissions sent within the message
      */
     public Set<Move> getPermissions() {
-        return (permissions==null)?EnumSet.noneOf(Move.class):permissions.clone();
+        return this.permissions.clone();
     }
 
     /**
@@ -108,7 +114,7 @@ public abstract class Message implements Serializable{
      * @throws NoSuchParamInMessageException if the requested param is not in the params map
      */
     public Object getParam(String key) throws NoSuchParamInMessageException {
-        if(!params.containsKey(key)){
+        if(!this.params.containsKey(key)){
             throw new NoSuchParamInMessageException();
         }
         return this.params.get(key);
@@ -119,7 +125,7 @@ public abstract class Message implements Serializable{
      *
      * @return the recipient player if the message is specific (not in broadcast)
      */
-    String getPlayerID(){
+    public String getPlayerID(){
         return playerID;
     }
 
@@ -128,9 +134,9 @@ public abstract class Message implements Serializable{
      * @param playerID the player ID of the sender (controller bound) or receiver (view bound) player
      */
     public void setPlayerID(String playerID){
-        if(this.playerID==null){
-            this.playerID = playerID;
-        }
+        if(this.playerID!=null){ return; }
+
+        this.playerID = playerID;
     }
 
     /**
@@ -138,8 +144,12 @@ public abstract class Message implements Serializable{
      * @param permissions set of allowed moves
      */
     public void setPermissions(Set<Move> permissions){
-        if(this.permissions==null){
-            this.permissions = (EnumSet<Move>) permissions;
+        if(this.permissions!=null){ return; }
+
+        if(permissions==null){
+            this.permissions = EnumSet.noneOf(Move.class);
+        } else {
+            this.permissions = (EnumSet<Move>)permissions;
         }
     }
 
@@ -147,10 +157,10 @@ public abstract class Message implements Serializable{
      * Sets the parameters of the message. Ensure that params is immutable.
      * @param params hashmap containing parameters of the message
      */
-    void setParams(HashMap<String, Object> params) {
-        if(this.params==null){
-            this.params = params;
-        }
+    void setParams(Map<String, Object> params) {
+        if(this.params!=null){ return; }
+
+        this.params = (HashMap<String,Object>) params;
     }
 
     /**

@@ -1,7 +1,8 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.message.MVMessage;
+import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.ViewBoundMessageType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -101,6 +102,6 @@ public class DraftPool extends Observable implements Serializable {
         Map<String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("draftPool", this);
 
-        notify(new MVMessage(MVMessage.types.DRAFTPOOL, messageAttributes));
+        notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_DRAFTPOOL, messageAttributes));
     }
 }

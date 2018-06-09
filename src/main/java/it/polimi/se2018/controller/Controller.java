@@ -4,16 +4,14 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.message.CVMessage;
-import it.polimi.se2018.utils.message.Message;
-import it.polimi.se2018.utils.message.NoSuchParamInMessageException;
-import it.polimi.se2018.utils.message.VCMessage;
+import it.polimi.se2018.utils.ControllerBoundMessageType;
+import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.NoSuchParamInMessageException;
+import it.polimi.se2018.utils.ViewBoundMessageType;
 import it.polimi.se2018.view.View;
 
 import java.util.*;
 import java.util.logging.Logger;
-
-import static it.polimi.se2018.utils.message.CVMessage.types.ERROR_MESSAGE;
 
 /**
  * Class that represent the Controller according the MVC paradigm.
@@ -185,24 +183,24 @@ public class Controller extends Observable {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
-    private CVMessage errorMessage(){
-        return errorMessage("BadFormatted");
+    private Message errorMessage(){
+        return new Message(ViewBoundMessageType.BAD_FORMATTED);
     }
 
-    private CVMessage errorMessage(String m){
-        return new CVMessage(CVMessage.types.ERROR_MESSAGE,m);
+    private Message errorMessage(String m){
+        return new Message(ViewBoundMessageType.ERROR_MESSAGE,m);
     }
 
-    public CVMessage handleMove(VCMessage message) {
+    public Message handleMove(Message message) {
         System.out.println("Handling move...");
 
-        VCMessage.types type = (VCMessage.types) message.getType();
-        CVMessage returnMessage;
+        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
+        Message returnMessage;
 
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
-                if(type==VCMessage.types.CHOSEN_WINDOW_PATTERN){
-                    String playerID = message.getSendingPlayerID();
+                if(type == ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN){
+                    String playerID = message.getPlayerID(); //In thi case, playerID is the sending player ID
                     WindowPattern wp;
                     try {
                         wp = (WindowPattern) message.getParam("windowPattern");
@@ -218,24 +216,28 @@ public class Controller extends Observable {
                             return null;
 
                         } else {
-                            return new CVMessage(CVMessage.types.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                            return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
                         }
 
                     } else {
-                        return new CVMessage(CVMessage.types.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
+                        return new Message(ViewBoundMessageType.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
                     }
                 } else {
-                    returnMessage = new CVMessage(ERROR_MESSAGE);
+                    returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE,"IllegalState");
                 }
                 break;
 
             case PLAYING:
-                if(type==VCMessage.types.BACK_GAMING){
-                    inactivePlayers.remove(message.getSendingPlayerID()); //this cause that the next turn of this player will not be skipped and player will be notified
-                    returnMessage = new CVMessage(CVMessage.types.BACK_TO_GAME);
-                    logger.info("Received BACK_GAMING message from: "+message.getSendingPlayerID());
+                String sendingPlayerID = message.getPlayerID(); //In thi case, playerID is the sending player ID
+                if(type==ControllerBoundMessageType.BACK_GAMING){
+                    //this cause that the next turn of this player will not be skipped and player will be notified
+                    inactivePlayers.remove(sendingPlayerID);
 
-                } else if (game.isCurrentPlayer(message.getSendingPlayerID())) {
+                    returnMessage = new Message(ViewBoundMessageType.BACK_TO_GAME);
+
+                    logger.info(()->"Received BACK_GAMING message from: "+sendingPlayerID);
+
+                } else if (game.isCurrentPlayer(sendingPlayerID)) {
                     switch (type) {
                         case DRAFT_DICE_FROM_DRAFTPOOL:
                             Dice dice;
@@ -310,7 +312,7 @@ public class Controller extends Observable {
                         case END_TURN:
                             returnMessage = controllerState.endCurrentTurn();
                             break;
-                        case END_EFFECT:
+                        case END_TOOLCARD_EFFECT:
                             returnMessage = controllerState.endToolCardEffect();
                             break;
                         default:
@@ -318,11 +320,11 @@ public class Controller extends Observable {
                             break;
                     }
                 } else {
-                    returnMessage = new CVMessage(ERROR_MESSAGE, "Not your turn!");
+                    returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
                 }
 
 
-                if(returnMessage.getType()==CVMessage.types.ACKNOWLEDGMENT_MESSAGE){
+                if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
 
                     returnMessage.setPermissions( controllerState.getStatePermissions() );
 
@@ -333,7 +335,7 @@ public class Controller extends Observable {
 
                 break;
             default:
-                returnMessage = new CVMessage(ERROR_MESSAGE);
+                returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE);
                 break;
         }
 
@@ -410,7 +412,7 @@ public class Controller extends Observable {
 
             HashMap<String,Object> params = new HashMap<>();
             params.put("patterns",new ArrayList<>(patterns));
-            notify(new CVMessage(CVMessage.types.GIVE_WINDOW_PATTERNS,params,player.getID()));
+            notify(new Message(ViewBoundMessageType.DISTRIBUTION_OF_WINDOW_PATTERNS,params,player.getID()));
         }
 
         game.setStatusAsWaitingForPatternsChoice();
@@ -469,8 +471,8 @@ public class Controller extends Observable {
 
         //If statement prevents sending every turn the notification for all inactive players
         if( inactivePlayers.add(currentPlayerID) ){
-            notify(new CVMessage(CVMessage.types.INACTIVE_PLAYER,Message.fastMap("player",currentPlayerID))); //notify everyone that the player is now inactive
-            notify(new CVMessage(CVMessage.types.INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
+            notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap("player",currentPlayerID))); //notify everyone that the player is now inactive
+            notify(new Message(ViewBoundMessageType.YOU_ARE_INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
         }
 
         //Checks if due to players inactivity game can continuing or not
@@ -588,7 +590,7 @@ public class Controller extends Observable {
         game.setRankings(rankings);
 
         //TODO: verificare utilità di questo messaggio (considerare che che game.setRankings() manda msg con rankings)
-        notify(new CVMessage(CVMessage.types.GAME_ENDED, null, null,EnumSet.noneOf(Move.class)));
+        notify(new Message(ViewBoundMessageType.GAME_ENDED, null, null,EnumSet.noneOf(Move.class)));
     }
 
     /**
