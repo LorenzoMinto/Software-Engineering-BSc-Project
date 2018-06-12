@@ -31,6 +31,7 @@ public class DiceTest {
 
     /**
      * Tests the creation of a generic dice
+     * @see Dice#Dice(DiceColor, int)
      */
     @Test
     public void testConstructor(){
@@ -39,6 +40,7 @@ public class DiceTest {
 
     /**
      * Tests the impossibility of creating a dice with no color
+     * @see Dice#Dice(DiceColor)
      */
     @Test
     public void testConstructorWithNoColor(){
@@ -50,6 +52,7 @@ public class DiceTest {
 
     /**
      * Tests the impossibility of creating a dice with value out of bounds [1,6]
+     * @see Dice#Dice(DiceColor, int)
      */
     @Test
     public void testConstructorWithValueOutOfBounds(){
@@ -66,6 +69,7 @@ public class DiceTest {
 
     /**
      * Tests setting the value of a dice
+     * @see Dice#getValue()
      */
     @Test
     public void testSetAndGetValue() {
@@ -77,6 +81,7 @@ public class DiceTest {
 
     /**
      * Tests setting the value of a dice to a value out of bounds [1,6]
+     * @see Dice#setValue(int)
      */
     @Test
     public void testSetIllegalValue(){
@@ -106,6 +111,7 @@ public class DiceTest {
 
     /**
      * Tests the increment of the value of a dice
+     * @see Dice#getValue()
      */
     @Test
     public void testIncrementValue() {
@@ -117,6 +123,7 @@ public class DiceTest {
 
     /**
      * Tests the increment of the value of a dice when the value is already the maximum value in bounds [1,6]
+     * @see Dice#incrementValue()
      */
     @Test
     public void testIncrementValueFromMaxValue() {
@@ -127,6 +134,7 @@ public class DiceTest {
 
     /**
      * Tests the decrement of the value of a dice
+     * @see Dice#decrementValue()
      */
     @Test
     public void testDecrementValue() {
@@ -138,6 +146,7 @@ public class DiceTest {
 
     /**
      * Tests the decrement of the value of a dice when the value is already the minimum value in bounds [1,6]
+     * @see Dice#decrementValue()
      */
     @Test
     public void testDecrementValueFromMin() {
@@ -173,7 +182,6 @@ public class DiceTest {
      */
     @Test
     public void testEqualsWhenNotEqual() {
-
         Dice dice1 = new Dice(RED, 4);
 
         assertFalse(dice.equals(dice1));
@@ -184,7 +192,7 @@ public class DiceTest {
      * @see Dice#equals(Object)
      */
     @Test
-    public void testEqualsWhenGivenSameObject() {
+    public void testEqualsSameObject() {
         assertTrue(dice.equals(dice));
     }
 
@@ -193,7 +201,7 @@ public class DiceTest {
      * @see Dice#equals(Object)
      */
     @Test
-    public void testEqualsWhenGivenAnotherTypeOfObject() {
+    public void testEqualsObjectOfDifferentType() {
         assertFalse(dice.equals("this"));
     }
 

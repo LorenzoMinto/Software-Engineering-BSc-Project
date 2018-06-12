@@ -49,7 +49,8 @@ public class TurnTest {
 
 
     /**
-     * Tests the constructor with allowed parameters
+     * Tests the class constructor
+     * @see Turn#Turn(int, Player)
      */
     @Test
     public void testConstructor(){
@@ -59,6 +60,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of creating a Turn with a negative number
+     * @see Turn#Turn(int, Player)
      */
     @Test
     public void testConstructorWithNegativeTurnNumber(){
@@ -70,6 +72,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of creating a Turn with a null {@link Player}
+     * @see Turn#Turn(int, Player)
      */
     @Test
     public void testConstructorWithNullPlayer(){
@@ -81,6 +84,7 @@ public class TurnTest {
 
     /**
      * Tests setting the drafted {@link Dice} of a turn
+     * @see Turn#setDraftedDice(Dice)
      */
     @Test
     public void testHasActuallyDrafted(){
@@ -90,6 +94,8 @@ public class TurnTest {
 
     /**
      * Tests that a turn with no drafted {@link Dice} has not drafted yet
+     * @see Turn#getDraftedDice()
+     * @see Turn#hasDrafted()
      */
     @Test
     public void testHasNotDrafted(){
@@ -99,6 +105,8 @@ public class TurnTest {
 
     /**
      * Tests setting the draftedAndPlaced property of {@link Turn} after drafting
+     * @see Turn#setDraftedDice(Dice)
+     * @see Turn#setDraftedAndPlaced()
      */
     @Test
     public void testHasDraftedAndPlaced(){
@@ -109,6 +117,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of setting the draftedAndPlaced property of {@link Turn} if has not drafted
+     * @see Turn#setDraftedAndPlaced()
      */
     @Test
     public void testHasDraftedAndPlacedWithoutDrafting(){
@@ -121,6 +130,8 @@ public class TurnTest {
 
     /**
      * Tests that a {@link ToolCard} was used in the {@link Turn} after the usedToolCard property of {@link Turn} was set
+     * @see Turn#setUsedToolCard(ToolCard)
+     * @see Turn#hasUsedToolCard()
      */
     @Test
     public void testHasActuallyUsedToolCard(){
@@ -130,6 +141,7 @@ public class TurnTest {
 
     /**
      * Tests that a {@link Turn} has not used a {@link ToolCard} if no usedToolCard of {@link Turn} was set
+     * @see Turn#hasUsedToolCard()
      */
     @Test
     public void testHasNotUsedToolCard(){
@@ -138,6 +150,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of setting the usedToolCard of {@link Turn} to null
+     * @see Turn#setUsedToolCard(ToolCard)
      */
     @Test
     public void testSetNullUsedToolCard(){
@@ -149,6 +162,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of retrieving the number of {@link TrackSlot} of the {@link Dice} chosen on the {@link Track} if it was not set
+     * @see Turn#getSlotOfTrackChosenDice()
      */
     @Test
     public void getNotSetSlotOfTrackChosenDice(){
@@ -160,6 +174,7 @@ public class TurnTest {
 
     /**
      * Tests setting and retrieving the number of {@link TrackSlot} of the {@link Dice} chosen on the {@link Track}
+     * @see Turn#getSlotOfTrackChosenDice()
      */
     @Test
     public void testSetSlotOfTrackChosenDice(){
@@ -169,6 +184,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of setting the number of {@link TrackSlot} of the {@link Dice} chosen on the {@link Track} to a negative number
+     * @see Turn#setSlotOfTrackChosenDice(int)
      */
     @Test
     public void testSetSlotOfTrackChosenDiceWithNegativeValue(){
@@ -180,6 +196,7 @@ public class TurnTest {
 
     /**
      * Tests setting the drafted dice
+     * @see Turn#setDraftedDice(Dice)
      */
     @Test
     public void testSetDraftedDice(){
@@ -189,6 +206,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of setting the drafted {@link Dice} to a null dice
+     * @see Turn#setDraftedDice(Dice)
      */
     @Test
     public void testSetNullDraftedDice(){
@@ -200,6 +218,8 @@ public class TurnTest {
 
     /**
      * Tests setting the {@link Dice} chosen on the {@link Track}
+     * @see Turn#setTrackChosenDice(Dice)
+     * @see Turn#getTrackChosenDice()
      */
     @Test
     public void testSetTrackChosenDice(){
@@ -209,6 +229,7 @@ public class TurnTest {
 
     /**
      * Tests the impossibility of setting the {@link Dice} chosen on the {@link Track} to a null dice
+     * @see Turn#setTrackChosenDice(Dice)
      */
     @Test
     public void testSetNullTrackChosenDice(){

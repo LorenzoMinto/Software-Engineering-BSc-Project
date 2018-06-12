@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
@@ -78,7 +79,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link RowsColumnsPublicObjectiveCard} used in the tests
-     * Implicitly tests the constructor
+     * @see RowsColumnsPublicObjectiveCard#RowsColumnsPublicObjectiveCard(String, String, String, Function, int, boolean)
      */
     @BeforeClass
     public static void initializeCards(){
@@ -97,6 +98,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests that the test instance of {@link RowsColumnsPublicObjectiveCard} is not null
+     * @see RowsColumnsPublicObjectiveCard#createTestInstance()
      */
     @Test
     public void testCreateTestInstance(){
@@ -105,6 +107,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the impossibility of calculating the score of a null window pattern
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -116,6 +119,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of an empty window pattern. Score must be 0
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -125,6 +129,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern with a RowsColor {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreRowsColor() {
@@ -134,6 +139,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern with a ColumnsColor {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreColumnsColor() {
@@ -143,6 +149,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern with a RowsValue {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreRowsValue() {
@@ -152,6 +159,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern with a ColumnsValue {@link RowsColumnsPublicObjectiveCard}
+     * @see RowsColumnsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreColumnsValue() {

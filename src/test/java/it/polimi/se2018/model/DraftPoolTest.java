@@ -18,7 +18,8 @@ public class DraftPoolTest {
     private static DraftPool draftPool;
 
     /**
-     * Initializes draft pool
+     * Initializes a draft pool
+
      */
     @Before
     public void initializeDraftPool() {
@@ -27,6 +28,7 @@ public class DraftPoolTest {
 
     /**
      * Tests the constructor of {@link DraftPool}
+     * @see DraftPool#DraftPool(List)
      */
     @Test
     public void testConstructor(){
@@ -40,6 +42,7 @@ public class DraftPoolTest {
 
     /**
      * Tests the impossibility of creating a {@link DraftPool} with a null list of dice
+     * @see DraftPool#DraftPool(List)
      */
     @Test
     public void testConstructorWithNullDices(){
@@ -51,6 +54,7 @@ public class DraftPoolTest {
 
     /**
      * Tests putting a dice in the die bag and retrieving it
+     * @see DraftPool#getDices()
      */
     @Test
     public void testPutAndGetDice(){
@@ -62,6 +66,7 @@ public class DraftPoolTest {
 
     /**
      * Tests the impossibility of putting a null dice in the draft pool
+     * @see DraftPool#putDice(Dice)
      */
     @Test
     public void testPutNullDice(){
@@ -73,6 +78,7 @@ public class DraftPoolTest {
 
     /**
      * Tests rerolling the dices in the draft pool
+     * @see DraftPool#reRoll()
      */
     @Test
     public void testReroll() {
@@ -99,6 +105,7 @@ public class DraftPoolTest {
 
     /**
      * Tests drafting a dice from the draft pool. Checks that the drafted dice is removed from the draft pool
+     * @see DraftPool#draftDice(Dice)
      */
     @Test
     public void testDraftDice() {
@@ -111,6 +118,7 @@ public class DraftPoolTest {
 
     /**
      * Tests drafting from the draft pool a dice that is not in it
+     * @see DraftPool#draftDice(Dice)
      */
     @Test
     public void testDraftNotInDraftPool(){

@@ -28,6 +28,7 @@ public class CellTest {
 
     /**
      * Tests the retrieval of the allowed value
+     * @see Cell#getAllowedValue()
      */
     @Test
     public void testGetAllowedValue() {
@@ -36,6 +37,7 @@ public class CellTest {
 
     /**
      * Tests the retrieval of the allowed color
+     * @see Cell#getAllowedColor()
      */
     @Test
     public void testGetAllowedColor() {
@@ -44,6 +46,7 @@ public class CellTest {
 
     /**
      * Tests setting a dice on a cell
+     * @see Cell#hasDice()
      */
     @Test
     public void testSetDice(){
@@ -54,6 +57,7 @@ public class CellTest {
 
     /**
      * Tests setting a null dice on a cell
+     * @see Cell#setDice(Dice)
      */
     @Test
     public void testSetNullDice(){
@@ -65,6 +69,7 @@ public class CellTest {
 
     /**
      * Tests the removal of a dice from a cell with a dice
+     * @see Cell#removeDice()
      */
     @Test
     public void testRemoveDice() {
@@ -75,6 +80,7 @@ public class CellTest {
 
     /**
      * Tests the impossibility of removing a dice from a cell with no dice
+     * @see Cell#removeDice()
      */
     @Test
     public void testRemoveDiceIfCellHasNoDice(){

@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
 
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
@@ -122,7 +124,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link SetPublicObjectiveCard} used in the tests
-     * Implicitly tests the constructor
+     * @see SetPublicObjectiveCard#SetPublicObjectiveCard(String, String, String, Set, Function, int)
      */
     @BeforeClass
     public static void initializeCards(){
@@ -143,6 +145,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests that the test instance of {@link SetPublicObjectiveCard} is not null
+     * @see SetPublicObjectiveCard#createTestInstance()
      */
     @Test
     public void testCreateTestInstance(){
@@ -150,7 +153,16 @@ public class SetPublicObjectiveCardTest {
     }
 
     /**
+     * Tests the class constructor
+     */
+    @Test
+    public void testConstructor(){
+        assertNotNull(oneTwoPublicObjectiveCard);
+    }
+
+    /**
      * Tests the impossibility of calculating the score of a null window pattern
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -163,6 +175,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of an empty window pattern. Score must be 0
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -173,6 +186,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern by a OneTwo {@link SetPublicObjectiveCard}
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOneTwoSet() {
@@ -182,6 +196,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern by a ThreeFour {@link SetPublicObjectiveCard}
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreThreeFourSet() {
@@ -191,6 +206,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern by a FiveSix {@link SetPublicObjectiveCard}
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreFiveSixSet() {
@@ -200,6 +216,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern by an AllValues {@link SetPublicObjectiveCard}
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreAllValuesSet() {
@@ -209,6 +226,7 @@ public class SetPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern by an AllColors {@link SetPublicObjectiveCard}
+     * @see SetPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreAllColorsSet() {

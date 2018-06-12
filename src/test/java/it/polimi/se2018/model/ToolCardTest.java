@@ -50,7 +50,8 @@ public class ToolCardTest {
     }
 
     /**
-     * Initiales the ToolCard before each test
+     * Initializes the ToolCard before each test
+     * @see ToolCard#ToolCard()
      */
     @Before
     public void initializeToolCard(){
@@ -58,7 +59,16 @@ public class ToolCardTest {
     }
 
     /**
+     * Tests the class constructor
+     */
+    @Test
+    public void testConstructor(){
+        assertNotNull(toolCard);
+    }
+
+    /**
      * Tests the usage of the ToolCard, which has an effect on the tokens needed to use the toolCard
+     * @see ToolCard#use()
      */
     @Test
     public void testUse() {
@@ -71,6 +81,7 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval of the needed tokens to use a ToolCard
+     * @see ToolCard#getNeededTokens()
      */
     @Test
     public void testGetNeededTokens(){
@@ -79,9 +90,10 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval and the setting of the used tokens of a ToolCard
+     * @see ToolCard#getUsedTokens()
      */
     @Test
-    public void testGetTokensUsed(){
+    public void testGetUsedTokens(){
         int prevTokens = toolCard.getNeededTokens();
         toolCard.use();
         assertEquals(prevTokens, toolCard.getUsedTokens());
@@ -89,6 +101,7 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval of the {@link PlacementRule} of a ToolCard
+     * @see ToolCard#getPlacementRule()
      */
     @Test
     public void testGetPlacementRule(){
@@ -97,6 +110,7 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval of the title of a ToolCard
+     * @see ToolCard#getTitle()
      */
     @Test
     public void testGetTitle(){
@@ -105,6 +119,7 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval of the description of a ToolCard
+     * @see ToolCard#getDescription()
      */
     @Test
     public void testGetDescription(){
@@ -113,6 +128,7 @@ public class ToolCardTest {
 
     /**
      * Tests the retrieval of the imageURL of a ToolCard
+     * @see ToolCard#getImageURL()
      */
     @Test
     public void testGetImageURL(){
@@ -122,6 +138,7 @@ public class ToolCardTest {
 
     /**
      * Tests the {@link ToolCard} needsDrafting property
+     * @see ToolCard#needsDrafting()
      */
     @Test
     public void testNeedsDrafting(){
@@ -130,6 +147,7 @@ public class ToolCardTest {
 
     /**
      * Tests the {@link ToolCard} needsDrafting property when the ToolCard does not need drafting
+     * @see ToolCard#needsDrafting()
      */
     @Test
     public void testDoesNotNeedDrafting(){
@@ -146,6 +164,7 @@ public class ToolCardTest {
 
     /**
      * Tests that the test instance of {@link ToolCard} is not null
+     * @see ToolCard#createTestInstance()
      */
     @Test
     public void testCreateTestInstance() {

@@ -32,7 +32,6 @@ public class GameTest {
     private static ToolCard toolCard;
     private static ToolCard toolCard1;
     private static ToolCard toolCard2;
-    private static ToolCard toolCard3;
 
     private static List<PublicObjectiveCard> publicObjectiveCards;
     private static List<ToolCard> toolCards;
@@ -52,7 +51,6 @@ public class GameTest {
         publicObjectiveCards.add(new DiagonalsPublicObjectiveCard(
                 null,null, null, Dice::getColor));
 
-        toolCard = ToolCard.createTestInstance();
         WindowPatternManager windowPatternManager = new WindowPatternManager();
         List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
         windowPattern = windowPatterns.get(0);
@@ -64,6 +62,8 @@ public class GameTest {
      */
     @BeforeClass
     public static void initializeToolCards(){
+        toolCard = ToolCard.createTestInstance();
+
         Properties properties = new Properties();
 
         properties.put("id","ID1");
@@ -83,18 +83,6 @@ public class GameTest {
         properties.put("tokensUsageMultiplier", "2");
 
         toolCard2 = new ToolCard(properties, null, null );
-
-        properties.put("id","ID3");
-        properties.put("title","title3");
-        properties.put("description","description3");
-        properties.put("imageURL","imageURL3");
-        properties.put("neededTokens", "1");
-        properties.put("tokensUsageMultiplier", "2");
-
-        toolCard2 = new ToolCard(properties, null, null );
-
-        toolCard3 = ToolCard.createTestInstance();
-
     }
 
     /**
@@ -129,7 +117,7 @@ public class GameTest {
         for(int i=1; i <= numberOfRounds; i++){
             try {
                 game.nextRound(dices, permissions);
-                for(int j=1; j <= 2; j++){
+                for(int j=1; j <= maxNumberOfPlayers*2; j++){
                     try{
                         game.nextTurn(permissions);
                     }catch (NoMoreTurnsAvailableException e ){}
@@ -143,6 +131,7 @@ public class GameTest {
 
     /**
      * Tests the constructor of {@link Game} class with legal parameters
+     * @see Game#Game(int, int)
      */
     @Test
     public void testConstructor(){
@@ -152,6 +141,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of creating a {@link Game} with a negative number of rounds
+     * @see Game#Game(int, int)
      */
     @Test
     public void testConstructorWithNegativeNumberOfRounds(){
@@ -163,6 +153,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of creating a {@link Game} with a negative number of players
+     * @see Game#Game(int, int)
      */
     @Test
     public void testConstructorWithNegativeMaxNumberOfPlayers(){
@@ -174,6 +165,7 @@ public class GameTest {
 
     /**
      * Tests the retrieval of the current round after starting the game
+     * @see Game#getCurrentRound()
      */
     @Test
     public void testGetCurrentRound(){
@@ -187,6 +179,7 @@ public class GameTest {
 
     /**
      * Tests the retrieval of the PublicObjectiveCards
+     * @see Game#getDrawnPublicObjectiveCards()
      */
     @Test
     public void testGetDrawnPublicObjectiveCards(){
@@ -196,6 +189,7 @@ public class GameTest {
 
     /**
      * Tests that the {@link Track} in the game is not null
+     * @see Game#getTrack()
      */
     @Test
     public void testTrackNotNull(){
@@ -204,6 +198,7 @@ public class GameTest {
 
     /**
      * Tests setting the game ToolCards and PublicObjectiveCards
+     * @see Game#setCards(List, List)
      */
     @Test
     public void testSetCards(){
@@ -217,6 +212,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of setting the cards of a game twice
+     * @see Game#setCards(List, List)
      */
     @Test
     public void testSetCardsTwice(){
@@ -230,6 +226,7 @@ public class GameTest {
 
     /**
      * Tests the current {@link Player} of the game
+     * @see Game#isCurrentPlayer(String)
      */
     @Test
     public void testIsCurrentPlayer(){
@@ -244,6 +241,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of checking the current player if the game has not started
+     * @see Game#isCurrentPlayer(String)
      */
     @Test
     public void testIsCurrentPlayerWhenIllegalStatus(){
@@ -255,7 +253,9 @@ public class GameTest {
     }
 
     /**
-     * Tests setting the game status to waiting for patterns choice
+     * Tests setting the game status to waiting for patterns choice and assigning window patterns to players
+     * @see Game#setStatusAsWaitingForPatternsChoice()
+     * @see Game#assignWindowPatternToPlayer(WindowPattern, String)
      */
     @Test
     public void testSetStatusAsWaitingForPatternsChoice(){
@@ -279,6 +279,7 @@ public class GameTest {
 
     /**
      * Tests setting the game status to waiting for patterns choice when game is not waiting for players
+     * @see Game#setStatusAsWaitingForPatternsChoice()
      */
     @Test
     public void testSetStatusAsWaitingForPatternsChoiceWhenIllegalStatus(){
@@ -291,6 +292,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of adding a player when the game is not waiting for players
+     * @see Game#addPlayer(Player)
      */
     @Test
     public void testAddPlayerWhenIllegalStatus(){
@@ -302,6 +304,7 @@ public class GameTest {
 
     /**
      * Tests adding a player when the game is waiting for players
+     * @see Game#addPlayer(Player)
      */
     @Test
     public void testAddPlayer(){
@@ -319,6 +322,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of adding the same player twice
+     * @see Game#addPlayer(Player)
      */
     @Test
     public void testAddSamePlayerTwice(){
@@ -331,13 +335,12 @@ public class GameTest {
         List<Player> expectedPlayersOfGame = new ArrayList<>();
         expectedPlayersOfGame.add(player);
 
-        List<Player> players = game1.getPlayers();
-
-        assertEquals(expectedPlayersOfGame, players);
+        assertEquals(expectedPlayersOfGame, game1.getPlayers());
     }
 
     /**
      * Tests the impossibility of adding more players than allowed
+     * @see Game#addPlayer(Player)
      */
     @Test
     public void testAddMorePlayersThanAllowed(){
@@ -354,6 +357,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of setting the game rankings when the game has not ended
+     * @see Game#setRankings(Map)
      */
     @Test
     public void testSetRankingsWhenIllegalStatus(){
@@ -366,6 +370,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of setting the game rankings to null
+     * @see Game#setRankings(Map)
      */
     @Test
     public void testSetRankingsToNull(){
@@ -384,6 +389,7 @@ public class GameTest {
 
     /**
      * Tests setting the game rankings when the game has ended
+     * @see Game#setRankings(Map)
      */
     @Test
     public void testSetRankings(){
@@ -400,6 +406,7 @@ public class GameTest {
 
     /**
      * Tests the usage of a {@link ToolCard} when the game has started
+     * @see Game#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCard(){
@@ -420,30 +427,10 @@ public class GameTest {
 
     /**
      * Tests the impossibility of using a {@link ToolCard} that is not part of the ToolCards of the game
+     * @see Game#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCardNotInDrawnSet(){
-        Properties properties1 = new Properties();
-
-        properties1.put("id","ID1");
-        properties1.put("title","title1");
-        properties1.put("description","description1");
-        properties1.put("imageURL","imageURL1");
-        properties1.put("neededTokens", "1");
-        properties1.put("tokensUsageMultiplier", "2");
-
-        ToolCard toolCard1 = new ToolCard(properties1, null, null );
-
-        Properties properties2 = new Properties();
-        properties2.put("id","ID2");
-        properties2.put("title","title2");
-        properties2.put("description","description2");
-        properties2.put("imageURL","imageURL2");
-        properties2.put("neededTokens", "1");
-        properties2.put("tokensUsageMultiplier", "2");
-
-        ToolCard toolCard2 = new ToolCard(properties2, null, null );
-
         toolCards.clear();
         toolCards.add(toolCard1);
 
@@ -466,6 +453,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of using a {@link ToolCard} when the game has not started
+     * @see Game#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCardWhenIllegalStatus(){
@@ -477,6 +465,7 @@ public class GameTest {
 
     /**
      * Tests the retrieval of a {@link ToolCard}
+     * @see Game#getToolCard(ToolCard)
      */
     @Test
     public void testGetToolCard(){
@@ -487,6 +476,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of retrieving a null {@link ToolCard}
+     * @see Game#getToolCard(ToolCard)
      */
     @Test
     public void testGetNullToolCard(){
@@ -498,6 +488,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of getting a {@link ToolCard} that is not in the drawn set
+     * @see Game#getToolCard(ToolCard)
      */
     @Test
     public void testGetToolCardNotInDrawnToolCards(){
@@ -509,13 +500,14 @@ public class GameTest {
         game.setCards(toolCards, publicObjectiveCards);
 
         try {
-            game.getToolCard(toolCard3);
+            game.getToolCard(toolCard);
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }
 
     /**
      * Tests the normal start of a game
+     * @see Game#startGame(List, Set)
      */
     @Test
     public void testStartGame(){
@@ -535,6 +527,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of starting a game with no {@link Round}
+     * @see Game#startGame(List, Set)
      */
     @Test
     public void testStartGameWithNoRounds(){
@@ -554,6 +547,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of starting a game with null dices
+     * @see Game#startGame(List, Set)
      */
     @Test
     public void testStartGameWithNullDices(){
@@ -571,6 +565,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of starting a game with a list of no dices
+     * @see Game#startGame(List, Set)
      */
     @Test
     public void testStartGameWithEmptyDices(){
@@ -588,6 +583,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of starting a game when not waiting for patterns choice
+     * @see Game#startGame(List, Set)
      */
     @Test
     public void testStartGameWhenIllegalStatus(){
@@ -599,6 +595,7 @@ public class GameTest {
 
     /**
      * Tests the progress of a game by proceeding to the next {@link Round}
+     * @see Game#nextRound(List, Set)
      */
     @Test
     public void testNextRound(){
@@ -620,6 +617,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of proceeding to the next {@link Round} with null dices
+     * @see Game#nextRound(List, Set)
      */
     @Test
     public void testNextRoundWithNullDices(){
@@ -641,6 +639,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of proceeding to the next {@link Round} with a list of no dices
+     * @see Game#nextRound(List, Set)
      */
     @Test
     public void testNextRoundWithEmptyDices(){
@@ -661,6 +660,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of proceeding to the next {@link Round} if the game has not started
+     * @see Game#nextRound(List, Set)
      */
     @Test
     public void testNextRoundWhenIllegalStatus(){
@@ -674,6 +674,7 @@ public class GameTest {
 
     /**
      * Tests the progress of a game by proceeding to the next {@link Turn}
+     * @see Game#nextTurn(Set)
      */
     @Test
     public void testNextTurn(){
@@ -695,6 +696,7 @@ public class GameTest {
 
     /**
      * Tests the impossibility of proceeding to the next {@link Turn} if the game has not started
+     * @see Game#nextTurn(Set)
      */
     @Test
     public void testNextTurnWhenIllegalStatus(){

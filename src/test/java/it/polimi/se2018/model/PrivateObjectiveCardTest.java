@@ -88,7 +88,6 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Creates the the instances of {@link PrivateObjectiveCard} used in the tests
-     * Implicitly tests the constructor
      */
     @BeforeClass
     public static void initializeCards(){
@@ -107,6 +106,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests that the test instance of {@link PrivateObjectiveCard} is not null
+     * @see PrivateObjectiveCard#createTestInstance()
      */
     @Test
     public void testCreateTestInstance(){
@@ -114,7 +114,16 @@ public class PrivateObjectiveCardTest {
     }
 
     /**
+     * Tests the class constructor
+     */
+    @Test
+    public void testConstructor(){
+        assertNotNull(redPrivateObjectiveCard);
+    }
+
+    /**
      * Tests the impossibility of calculating the score of a null window pattern
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -126,6 +135,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of an empty window pattern. Score must be 0
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -135,6 +145,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a window pattern with one dice
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfOneDice(){
@@ -144,6 +155,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern by a Red {@link PrivateObjectiveCard}
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreRed() {
@@ -153,6 +165,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern by a Yellow {@link PrivateObjectiveCard}
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreYellow() {
@@ -162,6 +175,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern by a Green {@link PrivateObjectiveCard}
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreGreen() {
@@ -171,6 +185,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern by a Purple {@link PrivateObjectiveCard}
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScorePurple() {
@@ -180,6 +195,7 @@ public class PrivateObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern by a Blue {@link PrivateObjectiveCard}
+     * @see PrivateObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreBlue() {

@@ -15,6 +15,7 @@ public class DiceColorTest {
 
     /**
      * Tests the retrieval of a random color. The retrieved color must not be no color
+     * @see DiceColor#getRandomColor()
      */
     @Test
     public void testGetRandomColor(){
@@ -25,6 +26,7 @@ public class DiceColorTest {
 
     /**
      * Tests the toOneLetter method. Size of the returned string must be 1 and must be uppercase
+     * @see DiceColor#toOneLetter()
      */
     @Test
     public void testToOneLetterSizeIsOne(){
@@ -39,6 +41,7 @@ public class DiceColorTest {
 
     /**
      * Tests the toString method of {@link DiceColor}
+     * @see DiceColor#toString()
      */
     @Test
     public void testToString(){
