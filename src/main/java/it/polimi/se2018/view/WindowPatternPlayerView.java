@@ -75,9 +75,7 @@ public class WindowPatternPlayerView extends Pane {
                         }
                         xSelected = x;
                         ySelected = y;
-
-                        gridDiceButtons[x][y].setBorder(new Border(new BorderStroke(Color.BLACK,
-                                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+                        visualizeSelection();
                     }
                 });
 
@@ -127,4 +125,18 @@ public class WindowPatternPlayerView extends Pane {
     public String getNickname() { return nickname; }
     public int getxSelected() { return xSelected; }
     public int getySelected() { return ySelected; }
+
+    void visualizeSelection() {
+        for (int i=0; i<gridDiceButtons.length; i++) {
+            for (int j=0; j<gridDiceButtons[0].length; j++) {
+                if (i==xSelected && j==ySelected) {
+                    gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.BLACK,
+                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+                } else {
+                    gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.BLACK,
+                            BorderStrokeStyle.NONE, CornerRadii.EMPTY, new BorderWidths(4))));
+                }
+            }
+        }
+    }
 }
