@@ -1,61 +1,178 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.WindowPatternManager;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link Player} Class
+ *
+ * @author Federico Haag
+ * @author Jacopo Pio Gargano
+ */
 public class PlayerTest {
 
-    private Player p;
+    private static Player player;
+    private static WindowPattern windowPattern;
 
+    /**
+     * Initializes the needed windowPatterns for the test
+     */
+    @BeforeClass
+    public static void initializeWindowPattern(){
+        WindowPatternManager manager = new WindowPatternManager();
+        List<WindowPattern> windowPatterns = new ArrayList<>(manager.getPairsOfPatterns(1));
+        windowPattern = windowPatterns.get(0);
+    }
+
+    /**
+     * Initializes the player before each test
+     */
     @Before
-    public void setUp() throws Exception {
-        p = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+    public void initializePlayer(){
+        player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
     }
 
+    /**
+     * Tests the constructor of the {@link Player} class
+     *@see Player#Player(String, PrivateObjectiveCard)
+     */
     @Test
-    public void getFavorTokens() {
+    public void testConstructor(){
+        assertNotNull(player);
     }
 
+    /**
+     * Tests the impossibility of creating a player with a null {@link PrivateObjectiveCard}
+     *@see Player#Player(String, PrivateObjectiveCard)
+     */
     @Test
-    public void getNickname() {
+    public void testConstructorWithNullCard(){
+        try{
+            player = new Player("nickname", null);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the retrieval of the player's favor tokens
+     *@see Player#getFavorTokens()
+     */
+    @Test
+    public void testGetFavorTokens() {
+        assertEquals(0, player.getFavorTokens());
+    }
+
+    /**
+     * Tests the retrieval of the player's favor token after the windowPattern is assigned
+     *@see Player#decreaseTokens(int)
+     */
+    @Test
+    public void testGetFavorTokensAfterWindowPatternAssigned(){
+        int playerTokens = windowPattern. getDifficulty();
+        player.decreaseTokens(playerTokens);
+        assertEquals(0, player.getFavorTokens());
+    }
+
+    /**
+     * Tests the retrieval of a player's ID
+     *@see Player#getID()
+     */
+    @Test
+    public void testGetID() {
+        assertEquals("nickname", player.getID());
+    }
+
+    /**
+     * Tests setting a player's windowPatter
+     *@see Player#setWindowPattern(WindowPattern)
+     */
     @Test
     public void setWindowPattern() {
-
+        player.setWindowPattern(windowPattern);
+        assertEquals(windowPattern, player.getWindowPattern());
     }
 
+    /**
+     * Tests the impossibility of setting a player's {@link WindowPattern} to null
+     *@see Player#setWindowPattern(WindowPattern)
+     */
     @Test
-    public void getPrivateObjectiveCard() {
+    public void setNullWindowPattern() {
+        try {
+            player.setWindowPattern(null);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Tests the retrieval of a player's {@link PrivateObjectiveCard}
+     *@see Player#getPrivateObjectiveCard()
+     */
     @Test
-    public void decreaseTokens() {
+    public void testGetPrivateObjectiveCard() {
+        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard("", "", "", DiceColor.RED);
+        player = new Player("nickname", privateObjectiveCard);
+        assertEquals(privateObjectiveCard, player.getPrivateObjectiveCard());
     }
 
+    /**
+     * Tests decreasing a player's tokens
+     * @see Player#decreaseTokens(int)
+     */
     @Test
-    public void getWindowPattern() {
+    public void testDecreaseTokens() {
+        assertFalse(player.decreaseTokens(2));
+
+        player.setWindowPattern(windowPattern);
+
+        int playerTokens = windowPattern. getDifficulty();
+        player.decreaseTokens(playerTokens);
+        assertEquals(0, player.getFavorTokens());
     }
 
+    /**
+     * Tests the impossibility of decreasing a player's tokens of a negative quantity
+     * @see Player#decreaseTokens(int)
+     */
     @Test
-    public void canUseToolCard() {
+    public void testDecreaseTokensOfNegativeQuantity() {
+        assertFalse(player.decreaseTokens(-3));
     }
 
-    /*@Test
-    public void getUser() {
-        assertTrue(user.equals(p.getUser()));
-    }*/
+    /**
+     * Tests the retrieval of a player's {@link WindowPattern}
+     *@see Player#getWindowPattern()
+     */
+    @Test
+    public void testGetWindowPattern() {
+        assertNull(player.getWindowPattern());
 
+        player.setWindowPattern(windowPattern);
+        assertEquals(windowPattern, player.getWindowPattern());
+    }
+
+    /**
+     * Tests the player's equals method
+     * @see Player#equals(Object)
+     */
     @Test
     public void testEquals() {
+        assertTrue(player.equals(new Player("nickname", PrivateObjectiveCard.createTestInstance())));
     }
 
+    /**
+     * Tests the player's hashCode method
+     * @see Player#hashCode()
+     */
     @Test
     public void testHashCode() {
+        assertNotNull(player.hashCode());
     }
 }
