@@ -117,7 +117,6 @@ public class ScorerTest {
 
 
             p1.setWindowPattern(wp1);
-            wp1.setOwner(p1);
 
             wp1.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp1.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -144,7 +143,6 @@ public class ScorerTest {
             wp2 = genericWP.copy();
 
             p2.setWindowPattern(wp2);
-            wp2.setOwner(p2);
 
             wp2.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp2.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -171,7 +169,6 @@ public class ScorerTest {
             wp3 = genericWP.copy();
 
             p3.setWindowPattern(wp3);
-            wp3.setOwner(p3);
 
             wp3.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp3.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -198,7 +195,6 @@ public class ScorerTest {
             wp4 = genericWP.copy();
 
             p4.setWindowPattern(wp4);
-            wp4.setOwner(p4);
 
             wp4.putDiceOnCell(new Dice(BLUE, 1), 0, 0);
             wp4.putDiceOnCell(new Dice(YELLOW, 2), 0, 1);
@@ -225,7 +221,6 @@ public class ScorerTest {
             wpSameScore1 = genericWP.copy();
 
             p1.setWindowPattern(wpSameScore1);
-            wpSameScore1.setOwner(p1);
 
             wpSameScore1.putDiceOnCell(new Dice(RED,5),0,0);
             wpSameScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
@@ -241,7 +236,6 @@ public class ScorerTest {
             wpSameScore2 = genericWP.copy();
 
             p2.setWindowPattern(wpSameScore2);
-            wpSameScore2.setOwner(p2);
 
             wpSameScore2.putDiceOnCell(new Dice(RED,5),0,0);
             wpSameScore2.putDiceOnCell(new Dice(BLUE,1),0,1);
@@ -260,7 +254,6 @@ public class ScorerTest {
             wpSameScore3 = genericWP.copy();
 
             p3.setWindowPattern(wpSameScore3);
-            wpSameScore3.setOwner(p3);
 
             wpSameScore3.putDiceOnCell(new Dice(PURPLE,1),0,0);
             wpSameScore3.putDiceOnCell(new Dice(RED,5),0,1);
@@ -280,7 +273,6 @@ public class ScorerTest {
             wpSameScore4 = genericWP.copy();
 
             p4.setWindowPattern(wpSameScore4);
-            wpSameScore4.setOwner(p4);
 
             wpSameScore4.putDiceOnCell(new Dice(RED, 4),0,0);
             wpSameScore4.putDiceOnCell(new Dice(YELLOW, 3),0,4);
@@ -300,7 +292,6 @@ public class ScorerTest {
             wpSamePrivateScore1 = genericWP.copy();
 
             p1.setWindowPattern(wpSamePrivateScore1);
-            wpSamePrivateScore1.setOwner(p1);
 
             wpSamePrivateScore1.putDiceOnCell(new Dice(RED,5),0,0);
             wpSamePrivateScore1.putDiceOnCell(new Dice(BLUE,1),0,1);
@@ -319,7 +310,6 @@ public class ScorerTest {
             wpSamePrivateScore2 = genericWP.copy();
 
             p2.setWindowPattern(wpSamePrivateScore2);
-            wpSamePrivateScore2.setOwner(p2);
 
             wpSamePrivateScore2.putDiceOnCell(new Dice(BLUE,1),0,0);
             wpSamePrivateScore2.putDiceOnCell(new Dice(RED,5),0,1);
@@ -340,7 +330,6 @@ public class ScorerTest {
             wpSamePrivateScore3 = genericWP.copy();
 
             p3.setWindowPattern(wpSamePrivateScore3);
-            wpSamePrivateScore3.setOwner(p3);
 
             wpSamePrivateScore3.putDiceOnCell(new Dice(PURPLE,5),0,0);
             wpSamePrivateScore3.putDiceOnCell(new Dice(RED,5),0,1);
@@ -360,7 +349,6 @@ public class ScorerTest {
             wpSamePrivateScore4 = genericWP.copy();
 
             p4.setWindowPattern(wpSamePrivateScore4);
-            wpSamePrivateScore4.setOwner(p4);
 
             wpSamePrivateScore4.putDiceOnCell(new Dice(YELLOW, 5),0,4);
 
@@ -379,7 +367,6 @@ public class ScorerTest {
             wpSame1 = genericWP.copy();
 
             p1.setWindowPattern(wpSame1);
-            wpSame1.setOwner(p1);
 
             wpSame1.putDiceOnCell(new Dice(RED, 5), 0,0);
             wpSame1.putDiceOnCell(new Dice(BLUE, 1), 0,1);
@@ -398,7 +385,6 @@ public class ScorerTest {
             wpSame2 = genericWP.copy();
 
             p2.setWindowPattern(wpSame2);
-            wpSame2.setOwner(p2);
 
             wpSame2.putDiceOnCell(new Dice(BLUE, 1), 0,0);
             wpSame2.putDiceOnCell(new Dice(RED, 5), 0,1);
@@ -418,7 +404,6 @@ public class ScorerTest {
             wpSame3 = genericWP.copy();
 
             p3.setWindowPattern(wpSame3);
-            wpSame3.setOwner(p3);
 
             wpSame3.putDiceOnCell(new Dice(YELLOW, 2), 0,0);
             wpSame3.putDiceOnCell(new Dice(PURPLE, 1), 0,1);
@@ -438,7 +423,6 @@ public class ScorerTest {
             wpSame4 = genericWP.copy();
 
             p4.setWindowPattern(wpSame4);
-            wpSame4.setOwner(p4);
 
             wpSame4.putDiceOnCell(new Dice(RED, 4), 0,0);
             wpSame4.putDiceOnCell(new Dice(RED, 1), 0,2);
@@ -473,7 +457,7 @@ public class ScorerTest {
 
     /**
      * Tests that the two instances of the singleton are the same instance
-     * * @see Scorer#getInstance()
+     * @see Scorer#getInstance()
      */
     @Test
     public void testSingletonInstance(){
@@ -484,6 +468,7 @@ public class ScorerTest {
 
     /**
      * Tests that if a game has only one player, then that player is the winner
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testSinglePlayerIsWinner(){
@@ -500,6 +485,7 @@ public class ScorerTest {
     /**
      * Tests the rankings of a game with four players, all with different scores
      * @see ScorerTest#initializeDefaultGame()
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetRankings(){
@@ -518,6 +504,7 @@ public class ScorerTest {
 
     /**
      * Tests the throwing of a NullPointerException if playersOfLastRound parameter is null
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetRankingsOfNullPlayersOfLastRound(){
@@ -529,6 +516,7 @@ public class ScorerTest {
 
     /**
      * Tests the throwing of an EmptyListException if playersOfLastRound parameter is empty
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetRankingsOfEmptyPlayersOfLastRound(){
@@ -540,6 +528,7 @@ public class ScorerTest {
 
     /**
      * Tests the throwing of a NullPointerException if publicObjectiveCards parameter is null
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetRankingsOfNullPublicObjectiveCards(){
@@ -553,6 +542,7 @@ public class ScorerTest {
 
     /**
      * Tests the throwing of an EmptyListException if publicObjectiveCards parameter is empty
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetRankingsOfEmptyPublicObjectiveCards(){
@@ -569,6 +559,7 @@ public class ScorerTest {
      * Tests the winner of a game with four players, all with different scores
      * Rankings are manually created
      * Rankings should be ordered by descending score
+     * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinner(){
@@ -588,6 +579,8 @@ public class ScorerTest {
      * Rankings are computed by the scorer
      * Rankings should be ordered by descending score
      * @see ScorerTest#initializeDefaultGame()
+     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinnerFromRankings(){
@@ -601,25 +594,27 @@ public class ScorerTest {
     }
 
     /**
-     * Tests the throwing of a NullPointerException if rankings parameter is null
+     * Teststhe impossibility of getting the winner of a game if the parameter rankings is null
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testGetWinnerOfNullRankings(){
         try {
-            Player winner = scorer.getWinner(null);
+            scorer.getWinner(null);
             fail();
         }catch (NullPointerException e){}
     }
 
     /**
      * Tests the throwing of an EmptyListException if rankings parameter is empty
+     * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinnerOfEmptyRankings(){
         Map<Player, Integer> rankings = new LinkedHashMap<>();
 
         try {
-            Player winner = scorer.getWinner(rankings);
+            scorer.getWinner(rankings);
             fail();
         }catch (EmptyListException e){}
     }
@@ -630,6 +625,8 @@ public class ScorerTest {
      * Rankings are computed by the scorer
      * Rankings should be ordered by descending score
      * @see ScorerTest#initializeDefaultGame()
+     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinnerScore(){
@@ -649,6 +646,7 @@ public class ScorerTest {
      * All players have different PrivateObjectiveCard score
      * Rankings should be ordered by descending PrivateObjectiveCard score
      * @see ScorerTest#assignSameScoreWindowPatterns()
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testSameScoreRankings(){
@@ -684,6 +682,7 @@ public class ScorerTest {
      * All players have a different number of tokens
      * Rankings should be ordered by descending number of tokens
      * @see ScorerTest#assignSamePrivateScoreWindowPatterns() ()
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testSamePrivateObjectiveCardScoreRankings(){
@@ -722,6 +721,7 @@ public class ScorerTest {
      * All players have the same number of tokens
      * The rankings should be the same as the ordered list of players of last round (reverse turn order)
      * @see ScorerTest#assignSameScoreAndSamePrivateScoreWindowPatterns()
+     * @see Scorer#getRankings(List, List)
      */
     @Test
     public void testSameFavorTokensRankings(){
@@ -767,11 +767,6 @@ public class ScorerTest {
         p2.setWindowPattern(wpSameScore2);
         p3.setWindowPattern(wpSameScore3);
         p4.setWindowPattern(wpSameScore4);
-
-//        wpSameScore1.setOwner(p1);
-//        wpSameScore2.setOwner(p2);
-//        wpSameScore3.setOwner(p3);
-//        wpSameScore4.setOwner(p4);
     }
 
     /**
@@ -782,11 +777,6 @@ public class ScorerTest {
         p2.setWindowPattern(wpSamePrivateScore2);
         p3.setWindowPattern(wpSamePrivateScore3);
         p4.setWindowPattern(wpSamePrivateScore4);
-
-//        wpSamePrivateScore1.setOwner(p1);
-//        wpSamePrivateScore2.setOwner(p2);
-//        wpSamePrivateScore3.setOwner(p3);
-//        wpSamePrivateScore4.setOwner(p4);
     }
 
     /**
@@ -797,11 +787,6 @@ public class ScorerTest {
         p2.setWindowPattern(wpSame2);
         p3.setWindowPattern(wpSame3);
         p4.setWindowPattern(wpSame4);
-//
-//        wpSame1.setOwner(p1);
-//        wpSame2.setOwner(p2);
-//        wpSame3.setOwner(p3);
-//        wpSame4.setOwner(p4);
     }
 
     /**

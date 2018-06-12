@@ -143,7 +143,10 @@ public class PlayerTest {
      */
     @Test
     public void testDecreaseTokensOfNegativeQuantity() {
-        assertFalse(player.decreaseTokens(-3));
+        try{
+            player.decreaseTokens(-3);
+            fail();
+        }catch (IllegalArgumentException e){}
     }
 
     /**

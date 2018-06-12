@@ -16,28 +16,27 @@ import static org.junit.Assert.*;
 
 public class ChooseFromTrackControllerStateTest {
     private Controller controller;
-    private Properties prop;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         Game game = new Game(4,4);
-        Properties gprop = new Properties();
-        gprop.setProperty("numberOfRounds","10");
-        gprop.setProperty("numberOfDicesPerColor","18");
-        gprop.setProperty("numberOfToolCards","12");
-        gprop.setProperty("numberOfPublicObjectiveCards","2");
-        gprop.setProperty("maxNumberOfPlayers","4");
-        gprop.setProperty("minNumberOfPlayers","2");
-        gprop.setProperty("timeoutLaunchingGame","1000");
-        gprop.setProperty("timeoutChoosingPatterns","1000");
-        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
-        gprop.setProperty("timeoutPlayerMove","1000");
-        controller = new Controller(game, gprop);
+        Properties gameProperties = new Properties();
+        gameProperties.setProperty("numberOfRounds","10");
+        gameProperties.setProperty("numberOfDicesPerColor","18");
+        gameProperties.setProperty("numberOfToolCards","12");
+        gameProperties.setProperty("numberOfPublicObjectiveCards","2");
+        gameProperties.setProperty("maxNumberOfPlayers","4");
+        gameProperties.setProperty("minNumberOfPlayers","2");
+        gameProperties.setProperty("timeoutLaunchingGame","1000");
+        gameProperties.setProperty("timeoutChoosingPatterns","1000");
+        gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
+        gameProperties.setProperty("timeoutPlayerMove","1000");
+        controller = new Controller(game, gameProperties);
 
-        Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
+        Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager manager = new WindowPatternManager();
+        WindowPattern wp = manager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -47,7 +46,7 @@ public class ChooseFromTrackControllerStateTest {
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
-        prop = new Properties();
+        Properties prop = new Properties();
         prop.put("id", "TaglierinaCircolare");
         prop.put("title", "title");
         prop.put("description", "desc");
@@ -59,10 +58,10 @@ public class ChooseFromTrackControllerStateTest {
         ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
         toolCard = game.getToolCard(toolCard);
 
-        Message m = controller.controllerState.useToolCard(toolCard);
+        controller.controllerState.useToolCard(toolCard);
 
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
-        m = controller.controllerState.draftDiceFromDraftPool(dice);
+        controller.controllerState.draftDiceFromDraftPool(dice);
     }
 
     @Test

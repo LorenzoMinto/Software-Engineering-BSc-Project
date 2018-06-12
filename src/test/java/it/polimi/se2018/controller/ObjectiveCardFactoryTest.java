@@ -35,7 +35,7 @@ public class ObjectiveCardFactoryTest {
 
 
     /**
-     *
+     * Retrieves the singleton instance of the {@link ObjectiveCardFactory}
      */
     @BeforeClass
     public static void getSingleton(){
@@ -66,6 +66,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Red private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreateRedPrivateObjectiveCard(){
@@ -76,6 +77,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Yellow private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreateYellowPrivateObjectiveCard(){
@@ -86,6 +88,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Green private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreateGreenPrivateObjectiveCard(){
@@ -96,6 +99,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Blue private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreateBluePrivateObjectiveCard(){
@@ -106,6 +110,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Purple private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreatePurplePrivateObjectiveCard(){
@@ -116,6 +121,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the impossibility of creating a no color private objective card
+     * @see ObjectiveCardFactory#createPrivateObjectiveCard(DiceColor)
      */
     @Test
     public void testCreateNoColorPrivateObjectiveCard(){
@@ -129,6 +135,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a RowsColor PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateRowsColorPublicObjectiveCard(){
@@ -138,6 +145,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a ColumnsColor PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateColumnsColorPublicObjectiveCard(){
@@ -147,6 +155,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a RowsValue PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateRowsValuePublicObjectiveCard(){
@@ -156,6 +165,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a ColumnsValue PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateColumnsValuePublicObjectiveCard(){
@@ -165,6 +175,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a OneTwoSet PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateOneTwoSetPublicObjectiveCard(){
@@ -174,6 +185,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a ThreeFourSet PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateThreeFourSetPublicObjectiveCard(){
@@ -183,6 +195,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a FiveSixSet PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateFiveSixSetPublicObjectiveCard(){
@@ -192,6 +205,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a AllValuesSet PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateAllValuesSetPublicObjectiveCard(){
@@ -201,6 +215,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a Diagonals PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateDiagonalsPublicObjectiveCard(){
@@ -210,6 +225,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the creation of a AllColorsSet PublicObjectiveCard
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateAllColorsSetPublicObjectiveCard(){
@@ -219,6 +235,7 @@ public class ObjectiveCardFactoryTest {
 
     /**
      * Tests the impossibility of creating a PublicObjectiveCard whose index does not exist yet
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testCreateWrongIndexPublicObjectiveCard(){
@@ -231,6 +248,7 @@ public class ObjectiveCardFactoryTest {
     /**
      * Tests that all PublicObjectiveCards titles are different
      * By testing this, it is assumed that all PublicObjectiveCards are different
+     * @see ObjectiveCardFactory#createPublicObjectiveCardCardByIndex(int)
      */
     @Test
     public void testAllPublicObjectiveCardsTitlesAreDifferent(){

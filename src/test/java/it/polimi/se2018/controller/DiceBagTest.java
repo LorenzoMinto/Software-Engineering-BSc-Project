@@ -23,6 +23,7 @@ public class DiceBagTest {
 
     /**
      * Initializes the dice bag
+     * @see DiceBag#DiceBag(int)
      */
     @BeforeClass
     public static void initializeDiceBag(){
@@ -31,6 +32,7 @@ public class DiceBagTest {
 
     /**
      * Tests the constructor with allowed and not allowed parameters
+     * @see DiceBag#DiceBag(int)
      */
     @Test
     public void testConstructor(){
@@ -43,6 +45,7 @@ public class DiceBagTest {
 
     /**
      * Tests the retrieval of the dice
+     * @see DiceBag#getDices(int)
      */
     @Test
     public void testGetDices(){
@@ -55,6 +58,7 @@ public class DiceBagTest {
 
     /**
      * Tests the impossibility of retrieving a negative number of dice
+     * @see DiceBag#getDices(int)
      */
     @Test
     public void testGetNegativeQuantityOfDices(){
@@ -67,7 +71,8 @@ public class DiceBagTest {
     }
 
     /**
-     * Tests the impossibility of retrieving more dice
+     * Tests the impossibility of retrieving more dices than available
+     * @see DiceBag#getDices(int)
      */
     @Test
     public void testGetMoreDicesThanAvailable(){
@@ -79,6 +84,7 @@ public class DiceBagTest {
 
     /**
      * Tests dice bag creates all different color dices if there is only 1 dice per color
+     * @see DiceBag#getDices(int)
      */
     @Test
     public void testHasAllDifferentColorDices() {
@@ -99,7 +105,8 @@ public class DiceBagTest {
     }
 
     /**
-     * Tests adding a dice to the dice bag
+     *Tests adding a dice to the dice bag
+     * @see DiceBag#addDice(Dice)
      */
     @Test
     public void testAddDice() {
@@ -111,6 +118,7 @@ public class DiceBagTest {
 
     /**
      * Tests adding a null dice to the dice bag
+     * @see DiceBag#addDice(Dice)
      */
     @Test
     public void testAddNullDice(){

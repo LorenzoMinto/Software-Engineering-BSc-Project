@@ -25,7 +25,7 @@ public class ObjectiveCardManagerTest {
 
     private static final int numberOfPublicObjectiveCards = 10;
 
-    //length -1 because no color must not be considered
+    //length -1 because NOCOLOR must not be considered
     private static final int numberOfPrivateObjectiveCards = DiceColor.values().length -1;
 
 
@@ -50,6 +50,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests the retrieval of one {@link PrivateObjectiveCard} asserting the retrieved card is not null
+     * @see ObjectiveCardManager#getPrivateObjectiveCard()
      */
     @Test
     public void testGetOnePrivateObjectiveCard(){
@@ -60,6 +61,7 @@ public class ObjectiveCardManagerTest {
     /**
      * Tests the retrieval of all {@link PrivateObjectiveCard} asserting all the retrieved cards are not null
      * Fails if all PrivateObjectiveCards were already created
+     * @see ObjectiveCardManager#getPrivateObjectiveCard()
      */
     @Test
     public void testGetAllPrivateObjectiveCards(){
@@ -75,6 +77,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests the impossibility of getting more PrivateObjectiveCards than existing
+     * @see ObjectiveCardManager#getPrivateObjectiveCard()
      */
     @Test
     public void testGetMorePrivateObjectiveCardsThanExisting(){
@@ -93,6 +96,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests that there are no PrivateObjectiveCards retrieved with no color
+     * @see ObjectiveCardManager#getPrivateObjectiveCard()
      */
     @Test
     public void testPrivateObjectiveCardColorIsNotNoColor(){
@@ -109,6 +113,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests the retrieval of one {@link PublicObjectiveCard} asserting the retrieved card is not null
+     * @see ObjectiveCardManager#getPublicObjectiveCards(int)
      */
     @Test
     public void testGetOnePublicObjectiveCard(){
@@ -118,6 +123,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests the retrieval of three {@link PublicObjectiveCard} asserting the retrieved cards are not null
+     * @see ObjectiveCardManager#getPublicObjectiveCards(int)
      */
     @Test
     public void testGetThreePublicObjectiveCards(){
@@ -137,6 +143,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests that all {@link PublicObjectiveCard} retrieved are different by comparing their titles
+     * @see ObjectiveCardManager#getPublicObjectiveCards(int)
      */
     @Test
     public void testAllPublicObjectiveCardsRetrievedAreDifferent(){
@@ -158,6 +165,7 @@ public class ObjectiveCardManagerTest {
 
     /**
      * Tests the impossibility of getting more PublicObjectiveCards than existing or a negative quantity
+     * @see ObjectiveCardManager#getPublicObjectiveCards(int)
      */
     @Test
     public void testGetMorePublicObjectiveCardsThanExisting(){
