@@ -3,11 +3,13 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.controller.BadFormattedPatternFileException;
 import it.polimi.se2018.controller.NoPatternsFoundInFileSystemException;
 import it.polimi.se2018.controller.WindowPatternManager;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
@@ -26,8 +28,8 @@ public class DiagonalsPublicObjectiveCardTest {
     private static WindowPattern twoDiceWP;
     private static WindowPattern emptyWP;
 
-    private static PublicObjectiveCard diagonalsPublicObjectiveCard;
-    private static PublicObjectiveCard colorDiagonalsPublicObjectiveCard;
+    private PublicObjectiveCard diagonalsPublicObjectiveCard;
+    private PublicObjectiveCard colorDiagonalsPublicObjectiveCard;
 
     private static final int diagonalsScore = 13;
     private static final int rightDiagonalsScore = 9;
@@ -35,7 +37,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
 
     /**
-     * Creates a new Window Pattern Manager and creates the specific patterns of the players for the tests
+     * Creates a new Window Pattern Manager and creates the specific windowPatterns of the players for the tests
      */
     @BeforeClass
     public static void buildWindowPatterns(){
@@ -132,10 +134,10 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Creates the two instances of {@link DiagonalsPublicObjectiveCard} used in the tests
-     * Implicitly tests the constructor
+     * @see DiagonalsPublicObjectiveCard#DiagonalsPublicObjectiveCard(String, String, String, Function)
      */
-    @BeforeClass
-    public static void initializeCards(){
+    @Before
+    public void initializeCards(){
         diagonalsPublicObjectiveCard = DiagonalsPublicObjectiveCard.createTestInstance();
 
         colorDiagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(null,null,null,
@@ -144,14 +146,24 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Tests that the test instance of {@link DiagonalsPublicObjectiveCard} is not null
+     * @see DiagonalsPublicObjectiveCard#createTestInstance()
      */
     @Test
     public void testCreateTestInstance(){
-        assertNotNull(diagonalsPublicObjectiveCard = DiagonalsPublicObjectiveCard.createTestInstance());
+        assertNotNull(DiagonalsPublicObjectiveCard.createTestInstance());
+    }
+
+    /**
+     * Tests the class constructor
+     */
+    @Test
+    public void testConstructor(){
+        assertNotNull(colorDiagonalsPublicObjectiveCard);
     }
 
     /**
      * Tests the impossibility of calculating the score of a null window pattern
+     * @see DiagonalsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfNullWindowPattern(){
@@ -163,6 +175,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of an empty window pattern. Score must be 0
+     * @see DiagonalsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreOfEmptyWindowPattern(){
@@ -172,6 +185,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
     /**
      * Tests the scoring of a generic window pattern
+     * @see DiagonalsPublicObjectiveCard#calculateScore(WindowPattern)
      */
     @Test
     public void testCalculateScoreDiagonals(){

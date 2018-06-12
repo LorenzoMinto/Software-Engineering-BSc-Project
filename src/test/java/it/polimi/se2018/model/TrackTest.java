@@ -95,6 +95,8 @@ public class TrackTest {
 
     /**
      * Tests taking a dice from a {@link TrackSlot}, which implies removing the {@link Dice} from the {@link TrackSlot}
+     * @see Track#takeDice(Dice, int)
+     * @see Track#getDicesFromSlotNumber(int)
      */
     @Test
     public void testTakeDice()  {
@@ -109,6 +111,7 @@ public class TrackTest {
 
     /**
      * Tests the impossibility of taking a {@link Dice} from a {@link TrackSlot} that does not contain it
+     * @see Track#takeDice(Dice, int)
      */
     @Test
     public void testTakeDiceNotInTrackSlot(){
@@ -126,6 +129,7 @@ public class TrackTest {
 
     /**
      * Tests the impossibility of taking a {@link Dice} from a non existing {@link TrackSlot}
+     * @see Track#takeDice(Dice, int)
      */
     @Test
     public void testTakeDiceFromNonExistingTrackSlot() {
@@ -140,16 +144,18 @@ public class TrackTest {
 
     /**
      * Tests putting a {@link Dice} in a {@link TrackSlot}
+     * @see Track#putDice(Dice, int)
      */
     @Test
     public void testPutDice() {
-        Dice dice6 = new Dice(DiceColor.RED, 6);
-        track.putDice(dice6, 0);
-        assertTrue(track.getDicesFromSlotNumber(0).contains(dice6));
+        Dice dice = new Dice(DiceColor.RED, 6);
+        track.putDice(dice, 0);
+        assertTrue(track.getDicesFromSlotNumber(0).contains(dice));
     }
 
     /**
      * Tests putting a null {@link Dice} in a {@link TrackSlot}
+     * @see Track#putDice(Dice, int)
      */
     @Test
     public void testPutNullDice() {
@@ -161,6 +167,7 @@ public class TrackTest {
 
     /**
      * Tests the impossibility of putting a {@link Dice} in a non existing {@link TrackSlot}
+     * @see Track#putDice(Dice, int)
      */
     @Test
     public void testPutDiceInNonExistingTrackSlot() {

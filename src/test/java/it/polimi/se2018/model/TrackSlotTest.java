@@ -43,6 +43,7 @@ public class TrackSlotTest {
 
     /**
      * Tests adding a {@link Dice} to the {@link TrackSlot}
+     * @see TrackSlot#addDice(Dice)
      */
     @Test
     public void testAddDice() {
@@ -56,6 +57,7 @@ public class TrackSlotTest {
 
     /**
      * Tests the impossibility of adding a null {@link Dice} to the {@link TrackSlot}
+     * @see TrackSlot#addDice(Dice)
      */
     @Test
     public void testAddNullDice() {
@@ -69,6 +71,7 @@ public class TrackSlotTest {
 
     /**
      * Tests the removal of a {@link Dice} from a {@link TrackSlot}
+     * @see TrackSlot#removeDice(Dice)
      */
     @Test
     public void testRemoveDice() {
@@ -86,6 +89,7 @@ public class TrackSlotTest {
 
     /**
      * Tests the impossibility of removing a null {@link Dice} from a {@link TrackSlot}
+     * @see TrackSlot#removeDice(Dice)
      */
     @Test
     public void testRemoveNullDice() {
@@ -101,7 +105,8 @@ public class TrackSlotTest {
     }
 
     /**
-     * Tests the impossibility of removing a {@link Dice} that is not in the {@link TrackSlot} from it
+     * Tests the impossibility of removing from a {@link TrackSlot} a {@link Dice} that is not in it
+     * @see TrackSlot#removeDice(Dice)
      */
     @Test
     public void testRemoveDiceNotInTrackSlot() {
@@ -116,11 +121,23 @@ public class TrackSlotTest {
 
     /**
      * Tests the retrieval of the dices from the {@link TrackSlot}
+     * @see TrackSlot#getDices()
      */
     @Test
     public void testGetDices() {
         TrackSlot slot = new TrackSlot(dices);
 
         assertEquals(dices, slot.getDices());
+    }
+
+    /**
+     * Tests the retrieval of dices from a {@link TrackSlot} with no dice
+     * @see TrackSlot#getDices()
+     */
+    @Test
+    public void testGetDicesOfEmptyTrackSlot() {
+        TrackSlot slot = new TrackSlot(new ArrayList<>());
+
+        assertTrue(slot.getDices().isEmpty());
     }
 }

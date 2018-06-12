@@ -57,6 +57,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the constructor with allowed parameters
+     * @see WindowPattern#WindowPattern(String, String, String, int, Cell[][])
      */
     @Test
     public void testConstructor(){
@@ -66,6 +67,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of creating a window pattern with a null pattern
+     * @see WindowPattern#WindowPattern(String, String, String, int, Cell[][])
      */
     @Test
     public void testConstructorNullPattern(){
@@ -77,6 +79,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the retrieval of the title of a window pattern
+     * @see WindowPattern#getTitle()
      */
     @Test
     public void testGetTitle(){
@@ -86,6 +89,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the retrieval of the id of a window pattern
+     * @see WindowPattern#getID()
      */
     @Test
     public void testGetID(){
@@ -94,7 +98,28 @@ public class WindowPatternTest {
     }
 
     /**
+     * Tests the retrieval of the id of a window pattern
+     * @see WindowPattern#getID()
+     */
+    @Test
+    public void testGetImageURL(){
+        windowPattern = new WindowPattern("id","title", "src/testPath.jpg",1, pattern);
+        assertEquals("src/testPath.jpg", windowPattern.getImageURL());
+    }
+
+    /**
+     * Tests the retrieval of the id of a window pattern
+     * @see WindowPattern#getID()
+     */
+    @Test
+    public void testGetDifficulty(){
+        windowPattern = new WindowPattern("id","title", "",1, pattern);
+        assertEquals(1, windowPattern.getDifficulty());
+    }
+
+    /**
      * Tests the impossibility of retrieving a dice from an illegal position
+     * @see WindowPattern#getDiceOnCell(int, int)
      */
     @Test
     public void testGetDiceOnIllegalCell(){
@@ -111,6 +136,7 @@ public class WindowPatternTest {
 
     /**
      * Tests putting a dice on a cell of the window pattern
+     * @see WindowPattern#putDiceOnCell(Dice, int, int)
      */
     @Test
     public void testPutDiceOnCell(){
@@ -120,6 +146,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of putting a null dice on a cell
+     * @see WindowPattern#putDiceOnCell(Dice, int, int)
      */
     @Test
     public void testPutNullDiceOnCell(){
@@ -131,6 +158,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of putting a dice on an illegal cell
+     * @see WindowPattern#putDiceOnCell(Dice, int, int)
      */
     @Test
     public void testPutDiceOnIllegalCell(){
@@ -141,6 +169,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of putting a dice on a cell that already has a dice
+     * @see WindowPattern#putDiceOnCell(Dice, int, int)
      */
     @Test
     public void testPutDiceOnCellWithDice(){
@@ -150,6 +179,7 @@ public class WindowPatternTest {
 
     /**
      * Tests moving a dice from a cell to another cell
+     * @see WindowPattern#moveDiceFromCellToCell(int, int, int, int)
      */
     @Test
     public void testMoveDiceFromCellToCell(){
@@ -162,6 +192,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of moving a dice from a cell without a dice to a cell without a dice
+     * @see WindowPattern#moveDiceFromCellToCell(int, int, int, int)
      */
     @Test
     public void testMoveDiceFromCellWithoutDiceToCellWithOutDice(){
@@ -170,6 +201,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of moving a dice from a cell without a dice to a cell with a dice
+     * @see WindowPattern#moveDiceFromCellToCell(int, int, int, int)
      */
     @Test
     public void testMoveDiceFromCellWithoutDiceToCellWithDice(){
@@ -179,6 +211,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the impossibility of moving a dice from a cell to another cell without a dice
+     * @see WindowPattern#moveDiceFromCellToCell(int, int, int, int)
      */
     @Test
     public void testMoveDiceFromCellToCellWithDice(){
@@ -189,6 +222,7 @@ public class WindowPatternTest {
 
     /**
      * Tests the legality of a position (cell) implicitly testing {@link WindowPattern#isIllegalPosition(int, int)}
+     * @see WindowPattern#isIllegalPosition(int, int)
      */
     @Test
     public void testIsPositionIllegal(){
@@ -227,6 +261,7 @@ public class WindowPatternTest {
 
     /**
      * Tests that an empty window pattern is actually empty
+     * @see WindowPattern#isEmpty()
      */
     @Test
     public void testIsEmpty(){

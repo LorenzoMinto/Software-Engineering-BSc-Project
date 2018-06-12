@@ -22,13 +22,11 @@ import java.util.List;
 
 public class RoundTest {
 
-
     private Round round;
 
     private static DraftPool draftPool;
-    private static PrivateObjectiveCard privateObjectiveCard;
 
-    private static List<Player> players;
+    private static List<Player> players = new ArrayList<>();
     private static Player p1;
     private static Player p2;
     private static Player p3;
@@ -39,16 +37,14 @@ public class RoundTest {
      */
     @BeforeClass
     public static void setUp(){
-        privateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
+        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, RED);
 
         p1 = new Player( "p1", privateObjectiveCard);
         p2 = new Player( "p2", privateObjectiveCard);
         p3 = new Player( "p3", privateObjectiveCard);
         p4 = new Player( "p4", privateObjectiveCard);
 
-        players = new ArrayList<>();
         draftPool = new DraftPool(new ArrayList<>());
-
     }
 
 
@@ -73,6 +69,7 @@ public class RoundTest {
 
     /**
      * Tests the constructor with allowed parameters
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructor(){
@@ -82,6 +79,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of creating a round with a negative number
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructorWithNegativeRoundNumber(){
@@ -93,6 +91,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of creating a round with a negative number of turns
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructorWithNegativeNumberOfTurns(){
@@ -104,6 +103,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of creating a round with a null list of players
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructorWithNullListOfPlayers(){
@@ -115,6 +115,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of creating a round with a list of no players
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructorWithEmptyListOfPlayers(){
@@ -126,6 +127,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of creating a round with a null {@link DraftPool}
+     * @see Round#Round(int, int, List, DraftPool)
      */
     @Test
     public void testConstructorWithNullDraftPool(){
@@ -137,6 +139,7 @@ public class RoundTest {
 
     /**
      * Tests the retrieval of the current {@link Turn}
+     * @see Round#getCurrentTurn()
      */
     @Test
     public void testGetCurrentTurn(){
@@ -219,6 +222,9 @@ public class RoundTest {
 
     /**
      * Tests that the first turn of a round has 0 as index
+     * @see Round#nextTurn()
+     * @see Round#getCurrentTurn()
+     * @see Turn#getNumber()
      */
     @Test
     public void testFirstTurnOfRoundHasZeroIndex(){
@@ -236,6 +242,7 @@ public class RoundTest {
 
     /**
      * Tests proceeding to the next turn of a round from the first turn of the round
+     * @see Round#nextTurn()
      */
     @Test
     public void testNextTurnFromFirstTurnOfRound(){
@@ -256,6 +263,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of proceeding to the next turn when no more turns are available
+     * @see Round#nextTurn()
      */
     @Test
     public void testNextTurnWhenNoMoreTurnsAvailable(){
@@ -280,6 +288,7 @@ public class RoundTest {
 
     /**
      * Tests the retrieval of the round number
+     * @see Round#getNumber()
      */
     @Test
     public void testGetNumber(){
@@ -290,6 +299,7 @@ public class RoundTest {
 
     /**
      * Tests the retrieval of the {@link DraftPool}
+     * @see Round#getDraftPool()
      */
     @Test
     public void testGetDraftPool(){
@@ -301,6 +311,7 @@ public class RoundTest {
 
     /**
      * Tests the removal of the next turn of a player
+     * @see Round#removeNextTurnOfPlayer(Player)
      */
     @Test
     public void testRemoveNextTurnOfPlayer(){
@@ -332,6 +343,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of removing the next turn of the current player twice
+     * @see Round#removeNextTurnOfPlayer(Player)
      */
     @Test
     public void testRemoveNextTurnOfCurrentPlayerTwice(){
@@ -353,6 +365,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of removing the next turn of a player three times
+     * @see Round#removeNextTurnOfPlayer(Player)
      */
     @Test
     public void testRemoveNextTurnOfPlayerThreeTimes(){
@@ -368,6 +381,7 @@ public class RoundTest {
 
     /**
      * Tests the impossibility of removing the next turn of a null player
+     * @see Round#removeNextTurnOfPlayer(Player)
      */
     @Test
     public void testRemoveNextTurnOfNullPlayer(){
