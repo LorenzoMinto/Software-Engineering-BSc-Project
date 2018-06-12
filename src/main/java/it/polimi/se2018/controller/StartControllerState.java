@@ -54,6 +54,6 @@ public class StartControllerState extends ControllerState {
 
     @Override
     public EnumSet<Move> getStatePermissions() {
-        return EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
+        return EnumSet.noneOf(Move.class);
     }
 }

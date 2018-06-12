@@ -249,6 +249,7 @@ public class Controller extends Observable {
                             returnMessage = controllerState.draftDiceFromDraftPool(dice);
                             break;
                         case PLACE_DICE:
+                            System.out.println("Handling placing...");
                             int row;
                             int col;
                             try {
@@ -327,7 +328,7 @@ public class Controller extends Observable {
                 if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
                     System.out.println("Setting permissions to ACK message");
                     System.out.println("FROM STATE: "+controllerState.getClass().getSimpleName() + " permissions: " + controllerState.getStatePermissions());
-                    returnMessage.setPermissions( controllerState.getStatePermissions() );
+                    returnMessage.setPermissions(controllerState.getStatePermissions());
 
                     //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
                     logger.info(()->"Resetted PlayerMoveTimer due to move:"+type);
@@ -439,7 +440,7 @@ public class Controller extends Observable {
     }
 
     private void startGame(){
-        EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
+        EnumSet<Move> permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
 
         game.startGame(getDicesForNewRound(),permissions);
 
@@ -511,16 +512,8 @@ public class Controller extends Observable {
 
         setControllerState(stateManager.getStartState());
 
-        //if player's window pattern is empty
-        if(getCurrentPlayer().getWindowPattern().isEmpty()){
-            this.placementRule = new BorderPlacementRuleDecorator(
-                    new ColorPlacementRuleDecorator(
-                            new ValuePlacementRuleDecorator(
-                                    new EmptyPlacementRule())));
-        }
-
         //Proceed with turns / rounds
-        EnumSet<Move> permissions = stateManager.getStartState().getStatePermissions();
+        EnumSet<Move> permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
         try {
             game.nextTurn(permissions);
         } catch (NoMoreTurnsAvailableException e) {
@@ -538,6 +531,14 @@ public class Controller extends Observable {
             } catch (NoMoreTurnsAvailableException e1) {
                 throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
             }
+        }
+
+        //if player's window pattern is empty
+        if(getCurrentPlayer().getWindowPattern().isEmpty()){
+            this.placementRule = new BorderPlacementRuleDecorator(
+                    new ColorPlacementRuleDecorator(
+                            new ValuePlacementRuleDecorator(
+                                    new EmptyPlacementRule())));
         }
 
         resetPlayerMoveTimer();

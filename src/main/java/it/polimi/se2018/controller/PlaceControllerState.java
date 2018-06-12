@@ -34,6 +34,8 @@ public class PlaceControllerState extends ControllerState {
         ControllerState next;
         EnumSet<Move> permissions;
 
+        System.out.println("Going to try to place dice " + currentTurn.getDraftedDice() + " at " + row + " " + col + " on WP:" + currentTurn.getPlayer().getWindowPattern().toString() + "with PR: " + controller.placementRule.getClass().getSimpleName());
+
         if (controller.placementRule.isMoveAllowed(pattern, currentTurn.getDraftedDice(), row, col)
                 && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
             currentTurn.resetDraftedDice();
@@ -49,7 +51,7 @@ public class PlaceControllerState extends ControllerState {
                 return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             }
         } else {
-            return new Message(ERROR_MESSAGE,"Move is illegal. There's another dice in that position.");
+            return new Message(ERROR_MESSAGE,"Move is illegal.");
         }
     }
 

@@ -74,7 +74,9 @@ public class DraftPool extends Observable implements Serializable {
      * @return if the removal succeeded or not
      */
     public boolean draftDice(Dice dice) {
+        System.out.println("Draft dice called on DraftPool: " + dices);
         if(dices.remove(dice)) {
+            System.out.println("Dice removed, new dice: "+ dices);
             notifyGame();
             return true;
         } else {
@@ -100,7 +102,7 @@ public class DraftPool extends Observable implements Serializable {
      */
     private void notifyGame() {
         Map<String, Object> messageAttributes = new HashMap<>();
-        messageAttributes.put("draftPool", this.copy());
+        messageAttributes.put("draftPoolDices", this.getDices());
 
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_DRAFTPOOL, messageAttributes));
     }
