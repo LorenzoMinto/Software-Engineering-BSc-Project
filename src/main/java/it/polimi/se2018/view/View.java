@@ -484,7 +484,8 @@ public abstract class View implements Observer {
 
     void notifyNewTurn(){
         if(!playingPlayerID.equals(playerID)){
-            showMessage("Now it's "+playingPlayerID+"'s turn");
+            showMessage("Now it's " + playingPlayerID + "'s turn");
+            setPermissions(EnumSet.noneOf(Move.class));
         }
     }
 

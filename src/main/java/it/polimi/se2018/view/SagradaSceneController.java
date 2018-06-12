@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.utils.*;
@@ -55,6 +56,8 @@ public class SagradaSceneController extends View implements Initializable {
 
     //DRAFTPOOL DISPLAY
     @FXML private FlowPane draftPoolPane;
+    @FXML private HBox currentDraftedPane;
+
     private Button selectedDiceButton = null;
     private List<Button> dicesButtons = new ArrayList<>();
 
@@ -565,8 +568,24 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleChangedDraftPoolEvent(Message m) {
         super.handleChangedDraftPoolEvent(m);
-        System.out.println("Updating draft pool.");
+        System.out.println("Updating draft pool to " + draftPoolDices.toString());
         updateDraftPool();
+    }
+
+    @Override
+    void handleDraftedDiceEvent(Message m) {
+        super.handleDraftedDiceEvent(m);
+        Button dice = new Button();
+        dice.setPrefWidth(100);
+        dice.setPrefHeight(100);
+        Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+draftedDice.toString()+".jpg");
+        dice.setBackground(getBackgroundFromImage(diceImage));
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                currentDraftedPane.getChildren().clear();
+                currentDraftedPane.getChildren().add(dice);
+            }
+        });
     }
 
     @Override
@@ -815,6 +834,13 @@ public class SagradaSceneController extends View implements Initializable {
             wpv.updateWindowPattern(wp);
             //TODO: update player's favour tokens here
         }
+
+        //clears currently drafted dice. This is always called after someone's placing.
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                currentDraftedPane.getChildren().clear();
+            }
+        });
     }
 
     private WindowPatternPlayerView getWPViewById(String title) {
@@ -833,7 +859,12 @@ public class SagradaSceneController extends View implements Initializable {
         new Thread(new Runnable() {
             @Override public void run() {
                 if (getPermissions().isEmpty()) {
-                    //add message? No move available at the moment
+                    //TODO: add label here to remind user is not his turn
+                    Platform.runLater(new Runnable() {
+                        @Override public void run() {
+                            dynamicChoicesPane.getChildren().clear();
+                        }
+                    });
                 } else {
                     Set<Move> permissions = getPermissions();
                     Platform.runLater(new Runnable() {
