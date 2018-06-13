@@ -26,7 +26,6 @@ public class EndControllerState extends ControllerState {
     @Override
     public Message endCurrentTurn() {
         controller.advanceGame();
-        //TODO: What to return here?!
         return new Message(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
     }
 

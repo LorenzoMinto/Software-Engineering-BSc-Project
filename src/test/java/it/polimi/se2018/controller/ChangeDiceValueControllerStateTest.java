@@ -57,15 +57,15 @@ public class ChangeDiceValueControllerStateTest {
         }
 
 
-        Properties prop = new Properties();
-        prop.put("id", "FluxRemover");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.put("id", "FluxRemover");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
         controller.controllerState.useToolCard(toolCard);
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
 

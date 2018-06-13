@@ -178,12 +178,12 @@ public class ToolCardTest {
     @Test
     public void testNextStateID(){
         Game game = new Game(2,3);
-        Properties prop = new Properties();
-        prop.setProperty("numberOfDicesPerColor","18");
-        prop.setProperty("numberOfToolCards","3");
-        prop.setProperty("numberOfPublicObjectiveCards","2");
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.setProperty("numberOfDicesPerColor","18");
+        toolCardProperties.setProperty("numberOfToolCards","3");
+        toolCardProperties.setProperty("numberOfPublicObjectiveCards","2");
 
-        Controller controller = new Controller(game, prop);
+        Controller controller = new Controller(game, toolCardProperties);
 
         assertEquals("DraftControllerState", toolCard.nextStateID(new StartControllerState(controller)));
         assertEquals("ChangeDiceValueControllerState", toolCard.nextStateID(new DraftControllerState(controller)));

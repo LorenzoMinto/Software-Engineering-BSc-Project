@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class StartControllerStateTest {
     private Controller controller;
-    private Properties properties;
+    private Properties toolCardProperties;
     private WindowPattern wp;
 
     /**
@@ -56,13 +56,13 @@ public class StartControllerStateTest {
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
-        properties = new Properties();
-        properties.put("id", "id");
-        properties.put("title", "title");
-        properties.put("description", "desc");
-        properties.put("neededTokens", "1");
-        properties.put("tokensUsageMultiplier", "2");
-        properties.put("imageURL", "imageURL");
+        toolCardProperties = new Properties();
+        toolCardProperties.put("id", "id");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
 
     }
 
@@ -138,7 +138,7 @@ public class StartControllerStateTest {
      */
     @Test
     public void testUseToolCardWhenNotInDrawnSet() {
-        ToolCard toolCard = new ToolCard(properties, new HashMap<>(), new EmptyPlacementRule());
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), new EmptyPlacementRule());
 
         try {
             controller.controllerState.useToolCard(toolCard);
@@ -173,8 +173,8 @@ public class StartControllerStateTest {
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        WindowPatternManager wpmanager = new WindowPatternManager();
-        wp = wpmanager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager WPManager = new WindowPatternManager();
+        wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -186,15 +186,15 @@ public class StartControllerStateTest {
 
         controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColor.BLUE));
 
-        Properties prop = new Properties();
-        prop.put("id", "FluxRemover");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.put("id", "FluxRemover");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
 
         Message m = controller.controllerState.useToolCard(toolCard);
 
@@ -221,7 +221,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of placing a dice in this state
-     * @see StartControllerState#placeDice(int, int)
+     * @see ControllerState#placeDice(int, int)
      */
     @Test
     public void testPlaceDice(){
@@ -231,7 +231,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice from track in this state
-     * @see StartControllerState#chooseDiceFromTrack(Dice, int)
+     * @see ControllerState#chooseDiceFromTrack(Dice, int)
      */
     @Test
     public void testChooseDiceFromTrack(){
@@ -241,7 +241,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of moving a dice in this state
-     * @see StartControllerState#moveDice(int, int, int, int)
+     * @see ControllerState#moveDice(int, int, int, int)
      */
     @Test
     public void testMoveDice(){
@@ -251,7 +251,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of incrementing a dice value in this state
-     * @see StartControllerState#incrementDice()
+     * @see ControllerState#incrementDice()
      */
     @Test
     public void testIncrementDice(){
@@ -261,7 +261,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of decrementing a dice value in this state
-     * @see StartControllerState#decrementDice()
+     * @see ControllerState#decrementDice()
      */
     @Test
     public void testDecrementDice(){
@@ -271,7 +271,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice value in this state
-     * @see StartControllerState#chooseDiceValue(int)
+     * @see ControllerState#chooseDiceValue(int)
      */
     @Test
     public void testChooseDiceValue(){
@@ -281,7 +281,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of ending a toolCard effect in this state
-     * @see StartControllerState#endToolCardEffect()
+     * @see ControllerState#endToolCardEffect()
      */
     @Test
     public void testEndToolCardEffect(){

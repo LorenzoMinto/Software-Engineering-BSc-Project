@@ -72,15 +72,15 @@ public class MoveControllerStateTest {
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
-        Properties prop = new Properties();
-        prop.put("id", "EglomiseBrush");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.put("id", "EglomiseBrush");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
         controller.controllerState.useToolCard(toolCard);
     }
 

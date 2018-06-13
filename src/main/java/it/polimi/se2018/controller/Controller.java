@@ -183,14 +183,27 @@ public class Controller extends Observable {
         this.controllerState.executeImplicitBehaviour(); //WARNING: could change controllerState implicitly
     }
 
+    /**
+     * @return a Message of type ViewBound of BAD_FORMATTED type
+     */
     private Message errorMessage(){
         return new Message(ViewBoundMessageType.BAD_FORMATTED);
     }
 
+    /**
+     * @param m the error message
+     * @return * @return a Message of type ViewBound of ERROR_MESSAGE type
+     */
     private Message errorMessage(String m){
         return new Message(ViewBoundMessageType.ERROR_MESSAGE,m);
     }
 
+    /**
+     * For each different move, it executes the relative operations
+     *
+     * @param message the Message with the parameters to be analyzed and processed
+     * @return an ACKNOWLEDGMENT_MESSAGE or an error message
+     */
     public Message handleMove(Message message) {
         System.out.println("Handling move...");
 
@@ -200,7 +213,7 @@ public class Controller extends Observable {
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
                 if(type == ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN){
-                    String playerID = message.getPlayerID(); //In thi case, playerID is the sending player ID
+                    String playerID = message.getPlayerID(); //In this case, playerID is the sending player ID
                     WindowPattern wp;
                     try {
                         wp = (WindowPattern) message.getParam("windowPattern");
@@ -210,7 +223,7 @@ public class Controller extends Observable {
 
                     if( game.assignWindowPatternToPlayer(wp,playerID) ){
 
-                        if( checkIfAllPlayersChooseWP() ){
+                        if( checkIfAllPlayersChoseWP() ){
                             waitingForPatternsChoice.cancel();
                             startGame();
                             return null;
@@ -228,7 +241,7 @@ public class Controller extends Observable {
                 break;
 
             case PLAYING:
-                String sendingPlayerID = message.getPlayerID(); //In thi case, playerID is the sending player ID
+                String sendingPlayerID = message.getPlayerID(); //In this case, playerID is the sending player ID
                 if(type==ControllerBoundMessageType.BACK_GAMING){
                     //this cause that the next turn of this player will not be skipped and player will be notified
                     inactivePlayers.remove(sendingPlayerID);
@@ -344,7 +357,12 @@ public class Controller extends Observable {
         return returnMessage;
     }
 
-    private boolean checkIfAllPlayersChooseWP() {
+    /**
+     * Checks if all players chose a {@link WindowPattern}
+     *
+     * @return true if all players chose a {@link WindowPattern}
+     */
+    private boolean checkIfAllPlayersChoseWP() {
         boolean allPlayersHaveWindowPattern = true;
         for(Player p : game.getPlayers()){
             if(p.getWindowPattern()==null){
@@ -401,6 +419,11 @@ public class Controller extends Observable {
         return activeToolcard;
     }
 
+    /**
+     * Launches the {@link Game}
+     *
+     * @param nicknames the set of nicknames of the {@link Game}
+     */
     public void launchGame(Set<String> nicknames){
 
         Player player;
@@ -433,12 +456,15 @@ public class Controller extends Observable {
                     }
                 }
 
-                if( checkIfAllPlayersChooseWP() ){ startGame(); }
+                if( checkIfAllPlayersChoseWP() ){ startGame(); }
             }
         };
         TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));
     }
 
+    /**
+     * Start the {@link Game} by setting the initial permissions, the placement rule and starts the player move timer
+     */
     private void startGame(){
         EnumSet<Move> permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
 
@@ -452,11 +478,18 @@ public class Controller extends Observable {
         startPlayerMoveTimer();
     }
 
+    /**
+     * Resets the player move timer
+     * @see Controller#startPlayerMoveTimer()
+     */
     private void resetPlayerMoveTimer(){
         this.waitingForPlayerMove.cancel();
         startPlayerMoveTimer();
     }
 
+    /**
+     * Starts the player move timer
+     */
     private void startPlayerMoveTimer(){
         this.waitingForPlayerMove = new TimerTask() {
             @Override
@@ -468,6 +501,10 @@ public class Controller extends Observable {
         TIMER.schedule(waitingForPlayerMove,(long)(getConfigProperty("timeoutPlayerMove")*1000));
     }
 
+    /**
+     * Advances the game to the next turn, if available, due to player inactivity
+     * @see Controller#advanceGame()
+     */
     private void advanceGameDueToPlayerInactivity() {
 
         String currentPlayerID = getCurrentPlayer().getID();
@@ -581,6 +618,11 @@ public class Controller extends Observable {
 
     }
 
+    /**
+     * Gets the dices for a new {@link Round}
+     *
+     * @return the dices for a new {@link Round}
+     */
     private List<Dice> getDicesForNewRound(){
         return diceBag.getDices( game.getPlayers().size()*2 + 1 );
     }

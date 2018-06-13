@@ -47,16 +47,16 @@ public class ControllerStateManagerTest {
 
         stateManager = controller.stateManager;
 
-        Properties prop = new Properties();
-        prop.put("id", "GrozingPliers");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.put("id", "GrozingPliers");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
         HashMap<String, String> controllerStateRules = new HashMap<>();
 
-        ToolCard toolCard = new ToolCard(prop, controllerStateRules, new EmptyPlacementRule());
+        ToolCard toolCard = new ToolCard(toolCardProperties, controllerStateRules, new EmptyPlacementRule());
 
         controller.launchGame(nicknames);
 
