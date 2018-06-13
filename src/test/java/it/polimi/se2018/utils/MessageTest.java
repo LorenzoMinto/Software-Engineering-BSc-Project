@@ -109,6 +109,16 @@ public class MessageTest {
         }
     }
 
+    @Test
+    public void testFastMap(){
+        message = new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("id",playerID));
+        try {
+            assertEquals(playerID, message.getParam("id") );
+        } catch (NoSuchParamInMessageException e) {
+            fail();
+        }
+    }
+
 
 
 }

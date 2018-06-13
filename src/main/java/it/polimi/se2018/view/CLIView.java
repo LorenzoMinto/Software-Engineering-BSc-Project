@@ -372,11 +372,11 @@ public class CLIView extends View{
                 index++;
             }
             waitForConsoleInput(choosenDiceIndexString->{
-                int choosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
+                int chosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
 
                 HashMap<String,Object> params = new HashMap<>();
                 params.put("slotNumber",trackSlotNumber);
-                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(choosenDiceIndex));
+                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex));
 
                 sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
                 waitForMove();

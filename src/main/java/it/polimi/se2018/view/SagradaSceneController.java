@@ -36,11 +36,9 @@ public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
     private List<Image> cards = new ArrayList<>();
-    //TODO: remove the following 3 lines
-    private static final int numberOfToolCards = 3;
-    private static final int numberOfPublicObjectiveCards = 3;
+    //TODO: remove this line: private static int playerTokens = 5;
     private static int playerTokens = 5;
-    private int cardCarouselCurrentIndex;
+    private int cardCarouselCurrentIndex = 0;
 
     @FXML private AnchorPane blackAnchorPane;
     @FXML private HBox blackPane;
@@ -350,7 +348,7 @@ public class SagradaSceneController extends View implements Initializable {
                     cards.get(cardCarouselCurrentIndex),
                     cardsCarouselCardHBox);
 
-            if(cardCarouselCurrentIndex<numberOfToolCards) {
+            if(cardCarouselCurrentIndex<drawnToolCards.size()) {
                 cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getNeededTokens()));
             }else{
                 cardsCarouselFavorTokensValue.setText("");
@@ -371,12 +369,12 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     public void onCardCarouselPublicsButtonPressed(){
-        cardCarouselCurrentIndex = numberOfToolCards;
+        cardCarouselCurrentIndex = drawnToolCards.size();
         updateCardCarousel();
     }
 
     public void onCardCarouselPrivateButtonPressed(){
-        cardCarouselCurrentIndex = numberOfToolCards + numberOfPublicObjectiveCards;
+        cardCarouselCurrentIndex = drawnToolCards.size() + drawnPublicObjectiveCards.size();
         updateCardCarousel();
     }
 
@@ -580,11 +578,9 @@ public class SagradaSceneController extends View implements Initializable {
         dice.setPrefHeight(100);
         Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+draftedDice.toString()+".jpg");
         dice.setBackground(getBackgroundFromImage(diceImage));
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                currentDraftedPane.getChildren().clear();
-                currentDraftedPane.getChildren().add(dice);
-            }
+        Platform.runLater(() -> {
+            currentDraftedPane.getChildren().clear();
+            currentDraftedPane.getChildren().add(dice);
         });
     }
 
@@ -648,25 +644,22 @@ public class SagradaSceneController extends View implements Initializable {
 
         enable(trackVisibleComponents);
 
-        //LIST TO TRY HOW IT IS RENDERED
-        List<Dice> dices = new ArrayList<>();
-        dices.add(new Dice(RED));
-        dices.add(new Dice((BLUE)));
-        dices.add(new Dice((GREEN)));
-        dices.add(new Dice((YELLOW)));
-        dices.add(new Dice((PURPLE)));
+//        //LIST TO TRY HOW IT IS RENDERED
+//        List<Dice> dices = new ArrayList<>();
+//        dices.add(new Dice(RED));
+//        dices.add(new Dice((BLUE)));
+//        dices.add(new Dice((GREEN)));
+//        dices.add(new Dice((YELLOW)));
+//        dices.add(new Dice((PURPLE)));
 
 
         Platform.runLater(() -> {
             for (HBox hBox: trackHBoxes) {
-                int i = 0;
 
                 hBox.getChildren().clear();
                 try {
-
-                    //TODO: change this, it's just for testing purposes
-                    for(Dice dice: dices){
-//                        for (Dice dice : track.getDicesFromSlotNumber(i)) {
+//                    for(Dice dice: dices){
+                    for (Dice dice : track.getDicesFromSlotNumber(trackHBoxes.indexOf(hBox))) {
                         Button trackSlotDice = new Button();
                         trackDiceButtons.add(trackSlotDice);
 
@@ -676,18 +669,22 @@ public class SagradaSceneController extends View implements Initializable {
                         trackSlotDice.setPrefHeight(50);
                         trackSlotDice.setPrefWidth(50);
 
-                        trackSlotDice.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                //TODO: add button pressed handling for toolcard (choose dice color from track)
+                        trackSlotDice.setOnAction(event -> {
+                            for (Button button: trackDiceButtons) {
+                                if(button.equals(trackSlotDice)){
+
+                                    HashMap<String,Object> params = new HashMap<>();
+                                    params.put("slotNumber", trackHBoxes.indexOf(hBox));
+                                    params.put("dice",dice);
+
+                                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                                }
                             }
                         });
 
                         hBox.getChildren().add(trackSlotDice);
                     }
                 }catch (ValueOutOfBoundsException e){}
-
-                i++;
             }
         });
     }
@@ -702,7 +699,6 @@ public class SagradaSceneController extends View implements Initializable {
         disableBlackAnchorPane();
         disableBlackHBox();
         disable(trackVisibleComponents);
-        cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
     }
 
     private void enableBlackAnchorPane() {
@@ -737,7 +733,9 @@ public class SagradaSceneController extends View implements Initializable {
     void errorMessage(String message) { printOnConsole("ERROR: "+message);}
 
     private void setupCards() {
-        //TODO: JACK
+        updateCards();
+        cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
+        updateCardCarousel();
     }
 
     private void updateCards() {
@@ -759,11 +757,7 @@ public class SagradaSceneController extends View implements Initializable {
     private void updateDraftPool() {
         if (!dicesButtons.isEmpty()) {
             dicesButtons.clear();
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    draftPoolPane.getChildren().clear();
-                }
-            });
+            Platform.runLater(() -> draftPoolPane.getChildren().clear());
         }
         System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
@@ -789,11 +783,7 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             });
 
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    draftPoolPane.getChildren().add(dice);
-                }
-            });
+            Platform.runLater(() -> draftPoolPane.getChildren().add(dice));
 
             dicesButtons.add(dice);
         }
@@ -820,11 +810,7 @@ public class SagradaSceneController extends View implements Initializable {
             wpViews.add(wpView);
             i += 1;
 
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    windowPatternsBox.getChildren().add(wpView);
-                }
-            });
+            Platform.runLater(() -> windowPatternsBox.getChildren().add(wpView));
         }
     }
 
@@ -836,11 +822,7 @@ public class SagradaSceneController extends View implements Initializable {
         }
 
         //clears currently drafted dice. This is always called after someone's placing.
-        Platform.runLater(new Runnable() {
-            @Override public void run() {
-                currentDraftedPane.getChildren().clear();
-            }
-        });
+        Platform.runLater(() -> currentDraftedPane.getChildren().clear());
     }
 
     private WindowPatternPlayerView getWPViewById(String title) {
@@ -904,7 +886,6 @@ public class SagradaSceneController extends View implements Initializable {
     void notifyGameVariablesChanged() {
         super.notifyGameVariablesChanged();
         updateWindowPatterns();
-        updateCards();
         updateTrack();
         updateDraftPool();
         updatePlayers();
