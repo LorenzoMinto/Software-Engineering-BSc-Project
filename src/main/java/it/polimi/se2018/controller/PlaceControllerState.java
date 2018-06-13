@@ -21,6 +21,7 @@ public class PlaceControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public PlaceControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
         this.controller = controller;
         this.defaultMessage = PLACE_DICE;
     }
