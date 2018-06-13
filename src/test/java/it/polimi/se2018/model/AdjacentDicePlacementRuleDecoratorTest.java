@@ -73,7 +73,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is allowed to place a dice next to a different value one
+     * Tests that it is allowed to place a dice next to another one
      */
     @Test
     public void testCheckIfMoveIsAllowed() {

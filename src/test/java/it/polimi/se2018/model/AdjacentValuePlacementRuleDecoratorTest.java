@@ -53,7 +53,7 @@ public class AdjacentValuePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is allowed to move a dice next to a different value one
+     * Tests that it is allowed to place a dice next to a different value one
      */
     @Before
     public void initializeWindowPattern(){
@@ -65,7 +65,7 @@ public class AdjacentValuePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to move a dice on a cell with a dice on it
+     * Tests that it is not allowed to place a dice on a cell with a dice on it
      */
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnCellWithAlreadyPlacedDice() {
@@ -73,7 +73,7 @@ public class AdjacentValuePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is allowed to move a dice next to a different value one
+     * Tests that it is allowed to place a dice next to a different value one
      */
     @Test
     public void testCheckIfMoveIsAllowed() {

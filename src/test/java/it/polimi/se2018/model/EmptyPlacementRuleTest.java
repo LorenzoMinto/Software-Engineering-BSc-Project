@@ -57,7 +57,7 @@ public class EmptyPlacementRuleTest {
     }
 
     /**
-     * Tests that it is allowed to move a dice on a cell with no dice
+     * Tests that it is allowed to place a dice on a cell with no dice
      * @see EmptyPlacementRule#isMoveAllowed(WindowPattern, Dice, int, int)
      */
     @Test

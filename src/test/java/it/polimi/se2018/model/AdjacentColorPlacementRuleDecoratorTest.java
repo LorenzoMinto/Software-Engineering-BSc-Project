@@ -65,7 +65,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is allowed to move a dice next to a different color one
+     * Tests that it is allowed to place a dice next to a different color one
      */
     @Test
     public void testCheckIfMoveIsAllowed() {
@@ -73,7 +73,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to move a dice on a cell with a dice on it
+     * Tests that it is not allowed to place a dice on a cell with a dice on it
      */
     @Test
     public void testCheckIfMoveIsAllowedWhenMoveIsOnCellWithAlreadyPlacedDice() {
