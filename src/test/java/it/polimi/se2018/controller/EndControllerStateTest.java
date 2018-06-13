@@ -3,8 +3,6 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
-
-import it.polimi.se2018.utils.NoSuchParamInMessageException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,28 +13,19 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
 /**
- * Test for {@link MoveControllerState} class
+ * Test for {@link EndControllerState} class
  *
- * @author Lorenzo Minto
  * @author Jacopo Pio Gargano
  */
-public class MoveControllerStateTest {
+public class EndControllerStateTest {
     private Controller controller;
 
-    private Dice redDice;
-    private static final int r0 = 0;
-    private static final int c0 = 0;
-    private static final int r1 = 1;
-    private static final int c1 = 1;
-    private static final int r2 = 2;
-    private static final int c2 = 2;
-
     /**
-     * Advances the Game in order to set the ControllerState to MoveControllerState
+     * Advances the Game in order to set the ControllerState to EndControllerState
      */
     @Before
-    public void setUpGameAndControllerToMoveControllerState(){
-        Game game = new Game(4,4);
+    public void setUpGameAndControllerToEndControllerState(){
+        Game game = new Game(10,4);
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
         gameProperties.setProperty("numberOfDicesPerColor","18");
@@ -53,16 +42,8 @@ public class MoveControllerStateTest {
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        Cell[][] pattern = new Cell[3][3];
-        for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                pattern[i][j] = new Cell();
-            }
-        }
-        redDice = new Dice(DiceColor.RED);
-        pattern[r0][c0].setDice(redDice);
-        pattern[r2][c2].setDice(redDice);
-        WindowPattern wp = new WindowPattern("id", "title","", 5, pattern);
+        WindowPatternManager WPManager = new WindowPatternManager();
+        WindowPattern wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -72,79 +53,24 @@ public class MoveControllerStateTest {
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
-        Properties prop = new Properties();
-        prop.put("id", "EglomiseBrush");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
-
-        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
-        controller.controllerState.useToolCard(toolCard);
+        controller.controllerState = controller.stateManager.getEndControllerState();
     }
 
     /**
-     * Tests the impossibility of creating a {@link MoveControllerState} when controller is null
-     * @see MoveControllerState#MoveControllerState(Controller)
+     * Tests the impossibility of creating a {@link EndControllerState} when controller is null
+     * @see EndControllerState#EndControllerState(Controller)
      */
     @Test
     public void testConstructorWithNullController() {
         try {
-            new MoveControllerState(null);
+            new EndControllerState(null);
             fail();
         } catch (IllegalArgumentException e) { }
     }
 
     /**
-     * Tests moving a dice from an initial cell to another cell
-     * @see MoveControllerState#moveDice(int, int, int, int)
-     */
-    @Test
-    public void testMoveDice() {
-        Message m = controller.controllerState.moveDice(r0,c0,r1,c1);
-
-        Player player = controller.game.getCurrentRound().getCurrentTurn().getPlayer();
-        WindowPattern wp = player.getWindowPattern();
-
-        assertNull(wp.getDiceOnCell(r0,c0));
-        assertEquals(redDice, wp.getDiceOnCell(r1,c1));
-        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
-    }
-
-    /**
-     * Tests the impossibility of moving a dice from an initial cell with no dice to another cell
-     * @see MoveControllerState#moveDice(int, int, int, int)
-     */
-    @Test
-    public void testMoveDiceWhenNoDiceInPosition() {
-        Message m = controller.controllerState.moveDice(r1,c1,r0,c0);
-        assertEquals(ERROR_MESSAGE, m.getType());
-        try {
-            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
-        } catch (NoSuchParamInMessageException e) {
-            fail();
-        }
-    }
-
-    /**
-     * Tests the impossibility of moving a dice from an initial cell to another cell with a dice already on it
-     * @see MoveControllerState#moveDice(int, int, int, int)
-     */
-    @Test
-    public void testMoveDiceToCellWithDice() {
-        Message m = controller.controllerState.moveDice(r1,c1,r2,c2);
-        assertEquals(ERROR_MESSAGE, m.getType());
-        try {
-            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
-        } catch (NoSuchParamInMessageException e) {
-            fail();
-        }
-    }
-
-    /**
      * Tests ending the current turn in this state
-     * @see MoveControllerState#endCurrentTurn()
+     * @see EndControllerState#endCurrentTurn()
      */
     @Test
     public void testEndCurrentTurn(){
@@ -192,7 +118,17 @@ public class MoveControllerStateTest {
         Message m = controller.controllerState.chooseDiceFromTrack(new Dice(DiceColor.RED), 1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
-    
+
+    /**
+     * Tests the impossibility of moving a dice in this state
+     * @see ControllerState#moveDice(int, int, int, int)
+     */
+    @Test
+    public void testMoveDice(){
+        Message m = controller.controllerState.moveDice(0,0,1,1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
     /**
      * Tests the impossibility of incrementing a dice value in this state
      * @see ControllerState#incrementDice()
@@ -222,8 +158,7 @@ public class MoveControllerStateTest {
         Message m = controller.controllerState.chooseDiceValue(1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
-
-
+    
     /**
      * Tests the impossibility of ending a toolCard effect in this state
      * @see ControllerState#endToolCardEffect()
@@ -233,4 +168,5 @@ public class MoveControllerStateTest {
         Message m = controller.controllerState.endToolCardEffect();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
+
 }

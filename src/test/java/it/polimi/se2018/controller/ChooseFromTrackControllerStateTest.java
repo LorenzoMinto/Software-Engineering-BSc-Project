@@ -173,7 +173,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of drafting a dice from the draftPool in this state
-     * @see ChooseFromTrackControllerState#draftDiceFromDraftPool(Dice)
+     * @see ControllerState#draftDiceFromDraftPool(Dice)
      */
     @Test
     public void testDraftDiceFromDraftPool(){
@@ -183,7 +183,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of placing a dice in this state
-     * @see ChooseFromTrackControllerState#placeDice(int, int)
+     * @see ControllerState#placeDice(int, int)
      */
     @Test
     public void testPlaceDice(){
@@ -193,7 +193,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of using a toolCard in this state
-     * @see ChooseFromTrackControllerState#useToolCard(ToolCard)
+     * @see ControllerState#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCard(){
@@ -203,7 +203,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of moving a dice in this state
-     * @see ChooseFromTrackControllerState#moveDice(int, int, int, int)
+     * @see ControllerState#moveDice(int, int, int, int)
      */
     @Test
     public void testMoveDice(){
@@ -213,7 +213,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of incrementing a dice value in this state
-     * @see ChooseFromTrackControllerState#incrementDice()
+     * @see ControllerState#incrementDice()
      */
     @Test
     public void testIncrementDice(){
@@ -223,7 +223,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of decrementing a dice value in this state
-     * @see ChooseFromTrackControllerState#decrementDice()
+     * @see ControllerState#decrementDice()
      */
     @Test
     public void testDecrementDice(){
@@ -233,7 +233,7 @@ public class ChooseFromTrackControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice value in this state
-     * @see ChooseFromTrackControllerState#chooseDiceValue(int)
+     * @see ControllerState#chooseDiceValue(int)
      */
     @Test
     public void testChooseDiceValue(){
@@ -243,7 +243,7 @@ public class ChooseFromTrackControllerStateTest {
     
     /**
      * Tests the impossibility of ending a toolCard effect in this state
-     * @see ChooseFromTrackControllerState#endToolCardEffect()
+     * @see ControllerState#endToolCardEffect()
      */
     @Test
     public void testEndToolCardEffect(){

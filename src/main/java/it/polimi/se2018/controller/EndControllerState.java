@@ -18,6 +18,7 @@ public class EndControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public EndControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
         this.controller = controller;
         this.defaultMessage = END_TURN_ONLY;
     }
@@ -30,7 +31,6 @@ public class EndControllerState extends ControllerState {
     }
 
     @Override
-
     public EnumSet<Move> getStatePermissions() {
         return EnumSet.of(Move.END_TURN);
     }

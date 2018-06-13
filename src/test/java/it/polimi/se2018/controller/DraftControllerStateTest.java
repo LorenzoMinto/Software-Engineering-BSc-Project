@@ -121,7 +121,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of placing a dice in this state
-     * @see DraftControllerState#placeDice(int, int)
+     * @see ControllerState#placeDice(int, int)
      */
     @Test
     public void testPlaceDice(){
@@ -131,7 +131,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of using a toolCard in this state
-     * @see DraftControllerState#useToolCard(ToolCard)
+     * @see ControllerState#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCard(){
@@ -141,7 +141,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice from track in this state
-     * @see DraftControllerState#chooseDiceFromTrack(Dice, int)
+     * @see ControllerState#chooseDiceFromTrack(Dice, int)
      */
     @Test
     public void testChooseDiceFromTrack(){
@@ -151,7 +151,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of moving a dice in this state
-     * @see DraftControllerState#moveDice(int, int, int, int)
+     * @see ControllerState#moveDice(int, int, int, int)
      */
     @Test
     public void testMoveDice(){
@@ -161,7 +161,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of incrementing a dice value in this state
-     * @see DraftControllerState#incrementDice()
+     * @see ControllerState#incrementDice()
      */
     @Test
     public void testIncrementDice(){
@@ -171,7 +171,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of decrementing a dice value in this state
-     * @see DraftControllerState#decrementDice()
+     * @see ControllerState#decrementDice()
      */
     @Test
     public void testDecrementDice(){
@@ -181,7 +181,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice value in this state
-     * @see DraftControllerState#chooseDiceValue(int)
+     * @see ControllerState#chooseDiceValue(int)
      */
     @Test
     public void testChooseDiceValue(){
@@ -191,7 +191,7 @@ public class DraftControllerStateTest {
 
     /**
      * Tests the impossibility of ending a toolCard effect in this state
-     * @see DraftControllerState#endToolCardEffect()
+     * @see ControllerState#endToolCardEffect()
      */
     @Test
     public void testEndToolCardEffect(){

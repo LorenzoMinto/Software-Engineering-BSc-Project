@@ -176,7 +176,7 @@ public class Controller extends Observable {
     /**
      * Set as current state the one passed as method's argument
      *
-     * @param controllerState state that must be setted to the controller
+     * @param controllerState state that must be set to the controller
      */
     protected void setControllerState(ControllerState controllerState) {
         this.controllerState = controllerState;

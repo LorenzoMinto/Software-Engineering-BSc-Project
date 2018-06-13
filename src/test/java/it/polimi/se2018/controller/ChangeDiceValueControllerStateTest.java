@@ -134,7 +134,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of drafting a dice from the draftPool in this state
-     * @see ChangeDiceValueControllerState#draftDiceFromDraftPool(Dice)
+     * @see ControllerState#draftDiceFromDraftPool(Dice)
      */
     @Test
     public void testDraftDiceFromDraftPool(){
@@ -144,7 +144,7 @@ public class ChangeDiceValueControllerStateTest {
     
     /**
      * Tests the impossibility of placing a dice in this state
-     * @see ChangeDiceValueControllerState#placeDice(int, int)
+     * @see ControllerState#placeDice(int, int)
      */
     @Test
     public void testPlaceDice(){
@@ -154,7 +154,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of using a toolCard in this state
-     * @see ChangeDiceValueControllerState#useToolCard(ToolCard) 
+     * @see ControllerState#useToolCard(ToolCard)
      */
     @Test
     public void testUseToolCard(){
@@ -164,7 +164,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice from track in this state
-     * @see ChangeDiceValueControllerState#chooseDiceFromTrack(Dice, int)
+     * @see ControllerState#chooseDiceFromTrack(Dice, int)
      */
     @Test
     public void testChooseDiceFromTrack(){
@@ -174,7 +174,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of moving a dice in this state
-     * @see ChangeDiceValueControllerState#moveDice(int, int, int, int)
+     * @see ControllerState#moveDice(int, int, int, int)
      */
     @Test
     public void testMoveDice(){
@@ -184,7 +184,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of incrementing a dice value in this state
-     * @see ChangeDiceValueControllerState#incrementDice()
+     * @see ControllerState#incrementDice()
      */
     @Test
     public void testIncrementDice(){
@@ -194,7 +194,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of decrementing a dice value in this state
-     * @see ChangeDiceValueControllerState#decrementDice()
+     * @see ControllerState#decrementDice()
      */
     @Test
     public void testDecrementDice(){
@@ -204,7 +204,7 @@ public class ChangeDiceValueControllerStateTest {
 
     /**
      * Tests the impossibility of ending a toolCard effect in this state
-     * @see ChangeDiceValueControllerState#endToolCardEffect()
+     * @see ControllerState#endToolCardEffect()
      */
     @Test
     public void testEndToolCardEffect(){
