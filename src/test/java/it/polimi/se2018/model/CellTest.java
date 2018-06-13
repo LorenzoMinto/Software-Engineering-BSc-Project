@@ -100,4 +100,20 @@ public class CellTest {
         cell.removeDice();
         assertEquals("(_::3)",cell.toString());
     }
+
+    /**
+     * Tests the getCellConstraintsToString method of {@link Cell}, used for retrieving the image of the constraint
+     * @see Cell#getCellConstraintsToString()
+     */
+    @Test
+    public void testGetCellConstraintsToString(){
+        cell = new Cell(3, NOCOLOR);
+        assertEquals("3", cell.getCellConstraintsToString());
+
+        cell = new Cell(0, NOCOLOR);
+        assertEquals("X", cell.getCellConstraintsToString());
+
+        cell = new Cell(0, RED);
+        assertEquals("R", cell.getCellConstraintsToString());
+    }
 }
