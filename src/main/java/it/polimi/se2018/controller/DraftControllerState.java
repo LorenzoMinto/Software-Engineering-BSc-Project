@@ -23,6 +23,7 @@ public class DraftControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public DraftControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
         this.controller = controller;
         this.defaultMessage = ONLY_DRAFT_AND_PLACE;
     }
@@ -34,6 +35,8 @@ public class DraftControllerState extends ControllerState {
 
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
+        } else{
+            return new Message(ERROR_MESSAGE, "Can't draft a dice that is not in the Draft Pool");
         }
 
         if (controller.getActiveToolCard() != null) {

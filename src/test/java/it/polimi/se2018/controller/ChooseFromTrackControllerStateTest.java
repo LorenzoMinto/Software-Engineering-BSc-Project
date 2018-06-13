@@ -102,9 +102,15 @@ public class ChooseFromTrackControllerStateTest {
         dices.add(dice2);
 
         int slotNumber = 0;
-
         controller.game.getTrack().processDices(dices);
-        Message m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
+
+        Message m;
+
+        if(controller.game.getCurrentRound().getCurrentTurn().getDraftedDice().equals(dice1)) {
+            m = controller.controllerState.chooseDiceFromTrack(dice2, slotNumber);
+        }else {
+            m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
+        }
 
         assertNull(currentTurn.getTrackChosenDice());
         assertFalse(controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(dice1));

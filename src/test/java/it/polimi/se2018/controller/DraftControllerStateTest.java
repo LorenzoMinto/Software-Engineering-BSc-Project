@@ -4,39 +4,49 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
 
+import it.polimi.se2018.utils.NoSuchParamInMessageException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link DraftControllerState} class
+ *
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
+ */
 public class DraftControllerStateTest {
     private Controller controller;
-    private Properties prop;
 
+    /**
+     * Advances the Game in order to set the ControllerState to DraftControllerState
+     */
     @Before
-    public void setUp() throws Exception {
+    public void setUpGameAndControllerToDraftControllerState(){
         Game game = new Game(4,4);
-        Properties gprop = new Properties();
-        gprop.setProperty("numberOfRounds","10");
-        gprop.setProperty("numberOfDicesPerColor","18");
-        gprop.setProperty("numberOfToolCards","3");
-        gprop.setProperty("numberOfPublicObjectiveCards","2");
-        gprop.setProperty("maxNumberOfPlayers","4");
-        gprop.setProperty("minNumberOfPlayers","2");
-        gprop.setProperty("timeoutLaunchingGame","1000");
-        gprop.setProperty("timeoutChoosingPatterns","1000");
-        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
-        gprop.setProperty("timeoutPlayerMove","1000");
+        Properties gameProperties = new Properties();
+        gameProperties.setProperty("numberOfRounds","10");
+        gameProperties.setProperty("numberOfDicesPerColor","18");
+        gameProperties.setProperty("numberOfToolCards","3");
+        gameProperties.setProperty("numberOfPublicObjectiveCards","2");
+        gameProperties.setProperty("maxNumberOfPlayers","4");
+        gameProperties.setProperty("minNumberOfPlayers","2");
+        gameProperties.setProperty("timeoutLaunchingGame","1000");
+        gameProperties.setProperty("timeoutChoosingPatterns","1000");
+        gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
+        gameProperties.setProperty("timeoutPlayerMove","1000");
 
-        controller = new Controller(game, gprop);
+        controller = new Controller(game, gameProperties);
 
-        Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
+        Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager WPManager = new WindowPatternManager();
+        WindowPattern wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -46,30 +56,43 @@ public class DraftControllerStateTest {
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
-        prop = new Properties();
-        prop.put("id", "id");
-        prop.put("title", "title");
-        prop.put("description", "desc");
-        prop.put("neededTokens", "1");
-        prop.put("tokensUsageMultiplier", "2");
-        prop.put("imageURL", "imageURL");
-
         controller.controllerState = controller.stateManager.getDraftControllerState();
     }
 
+    /**
+     * Tests the impossibility of creating a {@link DraftControllerState} when controller is null
+     * @see DraftControllerState#DraftControllerState(Controller)
+     */
+    @Test
+    public void testConstructorWithNullController() {
+        try {
+            new DraftControllerState(null);
+            fail();
+        } catch (IllegalArgumentException e) { }
+    }
+
+    /**
+     * Tests drafting a dice from the {@link DraftPool}
+     * @see DraftControllerState#draftDiceFromDraftPool(Dice)
+     */
     @Test
     public void testDraftDiceFromDraftPool() {
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
-        controller.controllerState.draftDiceFromDraftPool(dice);
+        Message m = controller.controllerState.draftDiceFromDraftPool(dice);
 
         Round currentRound = controller.game.getCurrentRound();
         Turn currentTurn = currentRound.getCurrentTurn();
         assertEquals(dice, currentTurn.getDraftedDice());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
+    /**
+     * Tests drafting a dice that is not in the {@link DraftPool} from it
+     * @see DraftControllerState#draftDiceFromDraftPool(Dice)
+     */
     @Test
     public void testDraftDiceFromDraftPoolWhenDiceNotInDraftPool() {
-        Dice dice = new Dice(DiceColor.BLUE);
+        Dice dice = new Dice(DiceColor.RED);
         while (controller.game.getCurrentRound().getDraftPool().getDices().contains(dice)) {
             dice = new Dice(DiceColor.getRandomColor());
         }
@@ -77,11 +100,102 @@ public class DraftControllerStateTest {
 
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         assertNull(currentTurn.getDraftedDice());
+        assertEquals(ERROR_MESSAGE, m.getType());
+        try {
+            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
+        } catch (NoSuchParamInMessageException e) {
+            fail();
+        }
     }
 
+    /**
+     * Tests ending the current turn in this state
+     * @see DraftControllerState#endCurrentTurn()
+     */
     @Test
-    public void testPlaceDice() {
+    public void testEndCurrentTurn(){
+        Message m = controller.controllerState.endCurrentTurn();
+        assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of placing a dice in this state
+     * @see DraftControllerState#placeDice(int, int)
+     */
+    @Test
+    public void testPlaceDice(){
         Message m = controller.controllerState.placeDice(0,0);
-        assertEquals(ERROR_MESSAGE,m.getType());
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of using a toolCard in this state
+     * @see DraftControllerState#useToolCard(ToolCard)
+     */
+    @Test
+    public void testUseToolCard(){
+        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of choosing a dice from track in this state
+     * @see DraftControllerState#chooseDiceFromTrack(Dice, int)
+     */
+    @Test
+    public void testChooseDiceFromTrack(){
+        Message m = controller.controllerState.chooseDiceFromTrack(new Dice(DiceColor.RED), 1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of moving a dice in this state
+     * @see DraftControllerState#moveDice(int, int, int, int)
+     */
+    @Test
+    public void testMoveDice(){
+        Message m = controller.controllerState.moveDice(0,0,1,1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of incrementing a dice value in this state
+     * @see DraftControllerState#incrementDice()
+     */
+    @Test
+    public void testIncrementDice(){
+        Message m = controller.controllerState.incrementDice();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of decrementing a dice value in this state
+     * @see DraftControllerState#decrementDice()
+     */
+    @Test
+    public void testDecrementDice(){
+        Message m = controller.controllerState.decrementDice();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of choosing a dice value in this state
+     * @see DraftControllerState#chooseDiceValue(int)
+     */
+    @Test
+    public void testChooseDiceValue(){
+        Message m = controller.controllerState.chooseDiceValue(1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of ending a toolCard effect in this state
+     * @see DraftControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testEndToolCardEffect(){
+        Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ERROR_MESSAGE, m.getType());
     }
 }
