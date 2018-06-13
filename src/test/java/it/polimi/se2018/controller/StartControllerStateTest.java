@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
  * Test for {@link StartControllerState} class
  *
  * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
  */
 public class StartControllerStateTest {
     private Controller controller;
@@ -22,7 +24,7 @@ public class StartControllerStateTest {
     private WindowPattern wp;
 
     /**
-     * Sets the ControllerState to StartState in order to test it by advancing the game
+     * Advances the Game in order to set the ControllerState to StartControllerState
      */
     @Before
     public void setUpGameAndControllerToStartState(){
@@ -43,8 +45,8 @@ public class StartControllerStateTest {
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        WindowPatternManager wpmanager = new WindowPatternManager();
-        wp = wpmanager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager WPManager = new WindowPatternManager();
+        wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -84,10 +86,11 @@ public class StartControllerStateTest {
     public void testDraftDiceFromDraftPool() {
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
 
-        controller.controllerState.draftDiceFromDraftPool(dice);
+        Message m = controller.controllerState.draftDiceFromDraftPool(dice);
 
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         assertEquals(dice, currentTurn.getDraftedDice());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
     /**
@@ -101,10 +104,16 @@ public class StartControllerStateTest {
             dice = new Dice(DiceColor.getRandomColor());
         }
 
-        controller.controllerState.draftDiceFromDraftPool(dice);
+        Message m = controller.controllerState.draftDiceFromDraftPool(dice);
 
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         assertNull(currentTurn.getDraftedDice());
+        assertEquals(ERROR_MESSAGE, m.getType());
+        try {
+            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
+        } catch (NoSuchParamInMessageException e) {
+            fail();
+        }
     }
 
     /**
@@ -115,11 +124,12 @@ public class StartControllerStateTest {
     public void testUseToolCard() {
         ToolCard toolCard = controller.game.getDrawnToolCards().get(0);
 
-        controller.controllerState.useToolCard(toolCard);
+        Message m = controller.controllerState.useToolCard(toolCard);
 
         assertEquals(toolCard, controller.getActiveToolCard());
         assertEquals(controller.placementRule, toolCard.getPlacementRule());
         assertTrue(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
     /**
@@ -176,14 +186,15 @@ public class StartControllerStateTest {
 
         controller.game.getCurrentRound().getCurrentTurn().setDraftedDice(new Dice(DiceColor.BLUE));
 
-        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+        Properties prop = new Properties();
+        prop.put("id", "FluxRemover");
+        prop.put("title", "title");
+        prop.put("description", "desc");
+        prop.put("neededTokens", "1");
+        prop.put("tokensUsageMultiplier", "2");
+        prop.put("imageURL", "imageURL");
 
-        ToolCard toolCard = null;
-
-        //this will eventually end, see ToolCardManager getRandomToolCards() method
-        while(toolCard == null || !toolCard.getTitle().equals("Flux Remover")){
-            toolCard = manager.getRandomToolCards(1).get(0);
-        }
+        ToolCard toolCard = new ToolCard(prop, new HashMap<>(), null);
 
         Message m = controller.controllerState.useToolCard(toolCard);
 
@@ -199,15 +210,18 @@ public class StartControllerStateTest {
 
     /**
      * Tests ending the current turn in this state
+     * @see StartControllerState#endCurrentTurn()
      */
     @Test
     public void testEndCurrentTurn(){
-        controller.controllerState.endCurrentTurn();
+        Message m = controller.controllerState.endCurrentTurn();
         assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
     /**
      * Tests the impossibility of placing a dice in this state
+     * @see StartControllerState#placeDice(int, int)
      */
     @Test
     public void testPlaceDice(){
@@ -217,6 +231,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice from track in this state
+     * @see StartControllerState#chooseDiceFromTrack(Dice, int)
      */
     @Test
     public void testChooseDiceFromTrack(){
@@ -226,6 +241,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of moving a dice in this state
+     * @see StartControllerState#moveDice(int, int, int, int)
      */
     @Test
     public void testMoveDice(){
@@ -235,6 +251,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of incrementing a dice value in this state
+     * @see StartControllerState#incrementDice()
      */
     @Test
     public void testIncrementDice(){
@@ -244,6 +261,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of decrementing a dice value in this state
+     * @see StartControllerState#decrementDice()
      */
     @Test
     public void testDecrementDice(){
@@ -253,6 +271,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of choosing a dice value in this state
+     * @see StartControllerState#chooseDiceValue(int)
      */
     @Test
     public void testChooseDiceValue(){
@@ -262,6 +281,7 @@ public class StartControllerStateTest {
 
     /**
      * Tests the impossibility of ending a toolCard effect in this state
+     * @see StartControllerState#endToolCardEffect()
      */
     @Test
     public void testEndToolCardEffect(){
