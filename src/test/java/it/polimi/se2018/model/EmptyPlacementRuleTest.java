@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link EmptyPlacementRule} class
- *
+ * @see EmptyPlacementRule#isMoveAllowed(WindowPattern, Dice, int, int)
  * @author Lorenzo Minto
  */
 public class EmptyPlacementRuleTest {

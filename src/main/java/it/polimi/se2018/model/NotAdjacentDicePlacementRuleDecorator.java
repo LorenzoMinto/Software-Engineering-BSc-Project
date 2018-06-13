@@ -1,9 +1,8 @@
 package it.polimi.se2018.model;
 
 /**
- * {@link PlacementRule} decorator to enforce the following rule: a dice must be adjacent to a previously
- * placed die, orthogonally or diagonally. If invert is set to true on construction then enforces the following:
- * a dice must NOT be adjacent to any previously placed dice.
+ * {@link PlacementRule} decorator to enforce the following rule: a dice must NOT be adjacent to a previously
+ * placed die, orthogonally or diagonally.
  *
  * @author Lorenzo Minto
  */

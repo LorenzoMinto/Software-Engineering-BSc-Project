@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 /**
  * Test for {@link AdjacentColorPlacementRuleDecorator} class
- *
+ * @see AdjacentColorPlacementRuleDecorator#isMoveAllowed(WindowPattern, Dice, int, int)
  * @author Lorenzo Minto
  */
 public class AdjacentColorPlacementRuleDecoratorTest {
@@ -81,8 +81,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that the decorated rule checks that it is not allowed to place a dice on a certain
-     * cell because of color constraints
+     * Tests that the decorated rule checks that it is not allowed to place a dice on a certain cell
      */
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
@@ -90,8 +89,8 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to place a dice just below a dice of the same color
-     * and that it is allowed to place a dice just below a dice of a different color
+     * Tests that it is not allowed to place a dice when there is a dice of the same color below it
+     * and that it is allowed to place a dice when there is a dice of a different color below it
      */
     @Test
     public void testCheckAdjacentColorConstraintsBelow() {
@@ -100,8 +99,8 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to place a dice just above a dice of the same color
-     * and that it is allowed to place a dice just above a dice of a different color
+     * Tests that it is not allowed to place a dice when there is a dice of the same color above it
+     * and that it is allowed to place a dice when there is a dice of a different color above it
      */
     @Test
     public void testCheckAdjacentColorConstraintsAbove() {
@@ -110,8 +109,8 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to place a dice just on the left of a dice of the same color
-     * and that it is allowed to place a dice just on the left of a dice of a different color
+     * Tests that it is not allowed to place a dice when there is a dice of the same color on the left of it
+     * and that it is allowed to place a dice when there is a dice of a different color on the left of it
      */
     @Test
     public void testCheckAdjacentColorConstraintsLeft() {
@@ -120,8 +119,8 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to place a dice just on the right of a dice of the same color
-     * and that it is allowed to place a dice just on the right of a dice of a different color
+     * Tests that it is not allowed to place a dice when there is a dice of the same color on the right of it
+     * and that it is allowed to place a dice when there is a dice of a different color on the right of it
      */
     @Test
     public void testCheckAdjacentColorConstraintsRight() {
