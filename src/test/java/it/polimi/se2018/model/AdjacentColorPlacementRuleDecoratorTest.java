@@ -81,7 +81,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that the decorated rule checks that it is not allowed to place a dice on a certain cell
+     * Tests that it is not allowed to place a dice on a certain cell because of the decorated rule
      */
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {

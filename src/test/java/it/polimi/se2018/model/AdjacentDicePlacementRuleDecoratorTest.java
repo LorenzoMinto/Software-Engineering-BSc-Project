@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class AdjacentDicePlacementRuleDecoratorTest {
 
-    private static Cell[][] pattern;
-    private static Cell[][] emptyPattern;
+    private static Cell[][] patternWithDiceOnCenter;
+    private static Cell[][] patternWithDiceOnTopLeftCorner;
 
     private static PlacementRule rule;
     /**
@@ -38,15 +38,15 @@ public class AdjacentDicePlacementRuleDecoratorTest {
         rule = new AdjacentDicePlacementRuleDecorator(emptyRule);
         decoratedRule = new AdjacentDicePlacementRuleDecorator(new ValuePlacementRuleDecorator(emptyRule));
 
-        pattern = new Cell[3][3];
-        emptyPattern = new Cell[3][3];
+        patternWithDiceOnCenter = new Cell[3][3];
+        patternWithDiceOnTopLeftCorner = new Cell[3][3];
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
-                pattern[i][j] = new Cell();
-                emptyPattern[i][j] = new Cell();
+                patternWithDiceOnCenter[i][j] = new Cell();
+                patternWithDiceOnTopLeftCorner[i][j] = new Cell();
             }
         }
-        pattern[1][0] = new Cell(3, DiceColor.NOCOLOR);
+        patternWithDiceOnCenter[1][0] = new Cell(3, DiceColor.NOCOLOR);
 
         threeDice = new Dice(DiceColor.BLUE, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);
@@ -59,7 +59,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
      */
     @Before
     public void initializeWindowPattern() {
-        windowPattern = new WindowPattern("","", "",0, pattern);
+        windowPattern = new WindowPattern("","", "",0, patternWithDiceOnCenter);
         player.setWindowPattern(windowPattern);
         windowPattern.putDiceOnCell(threeDice, 1,1);
     }
@@ -81,20 +81,23 @@ public class AdjacentDicePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is not allowed to place a dice on an empty {@link WindowPattern} since it will not be adjacent to
-     * any other dice
+     * Tests that it is not allowed to place a dice on a generic {@link WindowPattern}
+     * if it is not adjacent to any other dice and viceversa
      */
     @Test
-    public void testCheckIfMoveIsAllowedOnEmptyPattern() {
-        WindowPattern wp = new WindowPattern("", "","",0, emptyPattern);
+    public void testCheckIfMoveIsAllowedOnGenericWindowPattern() {
+        WindowPattern wp = new WindowPattern("", "","",0, patternWithDiceOnTopLeftCorner);
+        player.setWindowPattern(wp);
+        wp.putDiceOnCell(threeDice,0,0);
+
         Dice dice = new Dice(DiceColor.BLUE);
-        assertFalse(rule.isMoveAllowed(wp, dice, 1,1));
+        assertTrue(rule.isMoveAllowed(wp, dice, 1,1));
         assertFalse(rule.isMoveAllowed(wp, dice, 1,2));
-        assertFalse(rule.isMoveAllowed(wp, dice, 0,0));
+        assertFalse(rule.isMoveAllowed(wp, dice, 2,2));
     }
 
     /**
-     * Tests that the decorated rule checks that it is not allowed to place a dice on a certain cell
+     * Tests that it is not allowed to place a dice on a certain cell because of the decorated rule
      */
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
@@ -110,7 +113,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
     }
 
     /**
-     * Tests that it is allowed to place a dice when there is a dice above on the left of it
+     * Tests that it is allowed to place a dice when there is a dice below on the right of it
      */
     @Test
     public void testCheckAdjacentDiceConstraintsRightBelow() {
