@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.BadDiceReferenceException;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ public class TrackSlotTest {
 
     private static List<Dice> dices;
     private static Dice dice1;
+    private TrackSlot trackSlot;
 
 
     /**
@@ -40,6 +42,11 @@ public class TrackSlotTest {
         dices.add(dice4);
         dices.add(dice5);
     }
+    
+    @Before
+    public void initializeTrackSlot(){
+        trackSlot = new TrackSlot(new ArrayList<>()); 
+    }
 
     /**
      * Tests adding a {@link Dice} to the {@link TrackSlot}
@@ -48,11 +55,10 @@ public class TrackSlotTest {
     @Test
     public void testAddDice() {
         Dice dice = new Dice(DiceColor.BLUE, 2);
-        TrackSlot slot = new TrackSlot(new ArrayList<>());
 
-        slot.addDice(dice);
+        trackSlot.addDice(dice);
 
-        assertTrue(slot.getDices().contains(dice));
+        assertTrue(trackSlot.getDices().contains(dice));
     }
 
     /**
@@ -61,10 +67,8 @@ public class TrackSlotTest {
      */
     @Test
     public void testAddNullDice() {
-        TrackSlot slot = new TrackSlot(new ArrayList<>());
-
         try{
-            slot.addDice(null);
+            trackSlot.addDice(null);
             fail();
         }catch (IllegalArgumentException e){}
     }
@@ -75,16 +79,16 @@ public class TrackSlotTest {
      */
     @Test
     public void testRemoveDice() {
-        TrackSlot slot = new TrackSlot(dices);
+        trackSlot = new TrackSlot(dices);
 
         try {
-            slot.removeDice(dice1);
+            trackSlot.removeDice(dice1);
         } catch (BadDiceReferenceException e) {
             e.printStackTrace();
             fail();
         }
 
-        assertFalse(slot.getDices().contains(dice1));
+        assertFalse(trackSlot.getDices().contains(dice1));
     }
 
     /**
@@ -93,10 +97,10 @@ public class TrackSlotTest {
      */
     @Test
     public void testRemoveNullDice() {
-        TrackSlot slot = new TrackSlot(dices);
+        trackSlot = new TrackSlot(dices);
 
         try {
-            slot.removeDice(null);
+            trackSlot.removeDice(null);
             fail();
         } catch (BadDiceReferenceException e) {
             e.printStackTrace();
@@ -110,11 +114,11 @@ public class TrackSlotTest {
      */
     @Test
     public void testRemoveDiceNotInTrackSlot() {
-        TrackSlot slot = new TrackSlot(dices);
+        trackSlot = new TrackSlot(dices);
         Dice dice = new Dice(DiceColor.BLUE, 2);
 
         try {
-            slot.removeDice(dice);
+            trackSlot.removeDice(dice);
             fail();
         } catch (BadDiceReferenceException e) {}
     }
@@ -125,9 +129,9 @@ public class TrackSlotTest {
      */
     @Test
     public void testGetDices() {
-        TrackSlot slot = new TrackSlot(dices);
+        trackSlot = new TrackSlot(dices);
 
-        assertEquals(dices, slot.getDices());
+        assertEquals(dices, trackSlot.getDices());
     }
 
     /**
@@ -136,8 +140,28 @@ public class TrackSlotTest {
      */
     @Test
     public void testGetDicesOfEmptyTrackSlot() {
-        TrackSlot slot = new TrackSlot(new ArrayList<>());
+        assertTrue(trackSlot.getDices().isEmpty());
+    }
 
-        assertTrue(slot.getDices().isEmpty());
+    /**
+     * Tests the copy method of {@link TrackSlot}, should not return a null Object
+     * @see TrackSlot#copy()
+     */
+    @Test
+    public void testCopyTrackSlot(){
+        assertNotNull(trackSlot.copy());
+    }
+
+    /**
+     * Tests the toString method of {@link TrackSlot}, should return a String representation of the TrackSlot
+     * @see TrackSlot#toString()
+     */
+    @Test
+    public void testToString(){
+        dices.clear();
+        dices.add(dice1);
+        trackSlot = new TrackSlot(dices);
+
+        assertEquals(dices.toString(), trackSlot.toString());
     }
 }
