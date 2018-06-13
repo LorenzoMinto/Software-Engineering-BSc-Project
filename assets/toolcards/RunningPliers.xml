@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
-    <title>Tenaglia a Rotelle</title>
-    <imageURL>src/main/resources/images/ToolCards/TenagliaARotelle.jpg</imageURL>
-    <description>After your first turn, immediately draft a dice. \n Skip your next turn this round.</description>
+    <title>RunningPliers</title>
+    <imageURL>src/main/resources/images/ToolCards/RunningPliers.jpg</imageURL>
+    <description>After your first turn, immediately draft a dice. \n
+        Skip your next turn this round.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />

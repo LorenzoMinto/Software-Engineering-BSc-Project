@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
-    <title>Pinza Sgrossatrice</title>
-    <imageURL>src/main/resources/images/ToolCards/PinzaSgrossatrice.jpg</imageURL>
+    <title>Grozing Pliers</title>
+    <imageURL>src/main/resources/images/ToolCards/GrozingPliers.jpg</imageURL>
     <description>After drafting, increase or decrease the value of the drafted die by 1.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>

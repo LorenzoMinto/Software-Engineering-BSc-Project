@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
-    <title>Pennello Per Eglomise</title>
-    <imageURL>src/main/resources/images/ToolCards/PennelloPerEglomise.jpg</imageURL>
+    <title>Eglomise Brush</title>
+    <imageURL>src/main/resources/images/ToolCards/EglomiseBrush.jpg</imageURL>
     <description>Move any one die in your window, ignoring the color restrictions./n
         You must obey all other placement restrictions</description>
     <neededTokens>1</neededTokens>

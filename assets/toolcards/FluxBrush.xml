@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
-    <title>Pennello Per Pasta Salda</title>
-    <imageURL>src/main/resources/images/ToolCards/PennelloPerPastaSalda.jpg</imageURL>
+    <title>Flux Brush</title>
+    <imageURL>src/main/resources/images/ToolCards/FluxBrush.jpg</imageURL>
     <description>After drafting, re-roll the drafted dice. \n
     If it cannot be placed, return it to the Draft Pool.</description>
     <neededTokens>1</neededTokens>
