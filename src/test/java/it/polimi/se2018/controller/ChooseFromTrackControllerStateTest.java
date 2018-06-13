@@ -5,20 +5,30 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
 
+import it.polimi.se2018.utils.NoSuchParamInMessageException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
-
+/**
+ * Test for {@link ChooseFromTrackControllerState} class
+ *
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
+ */
 public class ChooseFromTrackControllerStateTest {
     private Controller controller;
 
+    /**
+     * Advances the Game in order to set the ControllerState to ChooseFromTrackControllerState
+     */
     @Before
-    public void setUp(){
+    public void setUpGameAndControllerToChooseFromTrackControllerState(){
         Game game = new Game(4,4);
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
@@ -35,8 +45,8 @@ public class ChooseFromTrackControllerStateTest {
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
-        WindowPatternManager manager = new WindowPatternManager();
-        WindowPattern wp = manager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager WPManager = new WindowPatternManager();
+        WindowPattern wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
         controller.launchGame(nicknames);
 
@@ -47,7 +57,7 @@ public class ChooseFromTrackControllerStateTest {
         }
 
         Properties prop = new Properties();
-        prop.put("id", "TaglierinaCircolare");
+        prop.put("id", "LensCutter");
         prop.put("title", "title");
         prop.put("description", "desc");
         prop.put("neededTokens", "1");
@@ -64,6 +74,22 @@ public class ChooseFromTrackControllerStateTest {
         controller.controllerState.draftDiceFromDraftPool(dice);
     }
 
+    /**
+     * Tests the impossibility of creating a {@link ChooseFromTrackControllerState} when controller is null
+     * @see ChooseFromTrackControllerState#ChooseFromTrackControllerState(Controller)
+     */
+    @Test
+    public void testConstructorWithNullController() {
+        try {
+            new ChooseFromTrackControllerState(null);
+            fail();
+        } catch (IllegalArgumentException e) { }
+    }
+
+    /**
+     * Tests choosing a dice from the {@link Track}
+     * @see ChooseFromTrackControllerState#chooseDiceFromTrack(Dice, int)
+     */
     @Test
     public void testChooseDiceFromTrack() {
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
@@ -84,16 +110,30 @@ public class ChooseFromTrackControllerStateTest {
         assertFalse(controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(dice1));
         assertTrue(controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(draftedDice));
         assertEquals(dice1, currentTurn.getDraftedDice());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
+    /**
+     * Tests the impossibility of choosing a dice from the {@link Track} when the selected {@link TrackSlot} does not exist
+     * @see ChooseFromTrackControllerState#chooseDiceFromTrack(Dice, int)
+     */
     @Test
     public void testChooseDiceFromTrackWhenTrackSlotDoesNotExist() {
         int slotNumber = 0;
         Dice dice1 = new Dice(DiceColor.BLUE, 2);
         Message m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
         assertEquals(ERROR_MESSAGE, m.getType());
+        try {
+            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
+        } catch (NoSuchParamInMessageException e) {
+            fail();
+        }
     }
 
+    /**
+     * Tests the impossibility of choosing a dice from the {@link Track} when the selected dice is not in the selected {@link TrackSlot}
+     * @see ChooseFromTrackControllerState#chooseDiceFromTrack(Dice, int)
+     */
     @Test
     public void testChooseDiceFromTrackWhenDiceNotInTrackSlot() {
         List<Dice> dices = new ArrayList<>();
@@ -107,5 +147,102 @@ public class ChooseFromTrackControllerStateTest {
 
         Message m = controller.controllerState.chooseDiceFromTrack(dice2, slotNumber);
         assertEquals(ERROR_MESSAGE, m.getType());
+        try {
+            assertNotEquals(controller.controllerState.defaultMessage, m.getParam("message"));
+        } catch (NoSuchParamInMessageException e) {
+            fail();
+        }
     }
+
+    /**
+     * Tests ending the current turn in this state
+     * @see ChooseFromTrackControllerState#endCurrentTurn()
+     */
+    @Test
+    public void testEndCurrentTurn(){
+        Message m = controller.controllerState.endCurrentTurn();
+        assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of drafting a dice from the draftPool in this state
+     * @see ChooseFromTrackControllerState#draftDiceFromDraftPool(Dice)
+     */
+    @Test
+    public void testDraftDiceFromDraftPool(){
+        Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of placing a dice in this state
+     * @see ChooseFromTrackControllerState#placeDice(int, int)
+     */
+    @Test
+    public void testPlaceDice(){
+        Message m = controller.controllerState.placeDice(0,0);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of using a toolCard in this state
+     * @see ChooseFromTrackControllerState#useToolCard(ToolCard)
+     */
+    @Test
+    public void testUseToolCard(){
+        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of moving a dice in this state
+     * @see ChooseFromTrackControllerState#moveDice(int, int, int, int)
+     */
+    @Test
+    public void testMoveDice(){
+        Message m = controller.controllerState.moveDice(0,0,1,1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of incrementing a dice value in this state
+     * @see ChooseFromTrackControllerState#incrementDice()
+     */
+    @Test
+    public void testIncrementDice(){
+        Message m = controller.controllerState.incrementDice();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of decrementing a dice value in this state
+     * @see ChooseFromTrackControllerState#decrementDice()
+     */
+    @Test
+    public void testDecrementDice(){
+        Message m = controller.controllerState.decrementDice();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of choosing a dice value in this state
+     * @see ChooseFromTrackControllerState#chooseDiceValue(int)
+     */
+    @Test
+    public void testChooseDiceValue(){
+        Message m = controller.controllerState.chooseDiceValue(1);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+    
+    /**
+     * Tests the impossibility of ending a toolCard effect in this state
+     * @see ChooseFromTrackControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testEndToolCardEffect(){
+        Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+    
 }
