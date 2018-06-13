@@ -22,6 +22,7 @@ public class ToolCardControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public ToolCardControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
         this.controller = controller;
         this.defaultMessage = TOOLCARD_ONLY;
     }
