@@ -99,16 +99,43 @@ public class ControllerStateManager {
         }
     }
 
-    //Getters for controller states
+    /**
+     * Gets the {@link StartControllerState}
+     * @return the {@link StartControllerState}
+     */
     public StartControllerState getStartState() {
         return startState;
     }
+
+    /**
+     * Gets the {@link PlaceControllerState}
+     * @return the {@link PlaceControllerState}
+     */
     public PlaceControllerState getPlaceState() {
         return placeState;
     }
+
+    /**
+     * Gets the {@link ToolCardControllerState}
+     * @return the {@link ToolCardControllerState}
+     */
     public ToolCardControllerState getToolCardState() { return toolCardState; }
+
+    /**
+     * Gets the {@link DraftControllerState}
+     * @return the {@link DraftControllerState}
+     */
     public DraftControllerState getDraftControllerState() { return draftControllerState; }
+
+    /**
+     * Gets the {@link EndToolCardEffectControllerState}
+     * @return the {@link EndToolCardEffectControllerState}
+     */
     public EndToolCardEffectControllerState getEndToolCardEffectControllerState() { return endToolCardEffectControllerState; }
 
+    /**
+     * Gets the {@link EndControllerState}
+     * @return the {@link EndControllerState}
+     */
     public EndControllerState getEndControllerState() { return endControllerState; }
 }

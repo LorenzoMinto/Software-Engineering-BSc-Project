@@ -11,36 +11,44 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link ControllerStateManager} class
+ *
+ * @author Lorenzo Minto
+ * @author Jacopo Pio Gargano
+ */
 public class ControllerStateManagerTest {
 
     private Controller controller;
     private ControllerStateManager stateManager;
 
 
+    /**
+     * Advances the Game in order to test the ControllerStateManager
+     */
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         Game game = new Game(4,4);
-        Properties gprop = new Properties();
-        gprop.setProperty("numberOfRounds","10");
-        gprop.setProperty("numberOfDicesPerColor","18");
-        gprop.setProperty("numberOfToolCards","12");
-        gprop.setProperty("numberOfPublicObjectiveCards","2");
-        gprop.setProperty("maxNumberOfPlayers","4");
-        gprop.setProperty("minNumberOfPlayers","2");
-        gprop.setProperty("timeoutLaunchingGame","1000");
-        gprop.setProperty("timeoutChoosingPatterns","1000");
-        gprop.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
-        gprop.setProperty("timeoutPlayerMove","1000");
+        Properties gameProperties = new Properties();
+        gameProperties.setProperty("numberOfRounds","10");
+        gameProperties.setProperty("numberOfDicesPerColor","18");
+        gameProperties.setProperty("numberOfToolCards","12");
+        gameProperties.setProperty("numberOfPublicObjectiveCards","2");
+        gameProperties.setProperty("maxNumberOfPlayers","4");
+        gameProperties.setProperty("minNumberOfPlayers","2");
+        gameProperties.setProperty("timeoutLaunchingGame","1000");
+        gameProperties.setProperty("timeoutChoosingPatterns","1000");
+        gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
+        gameProperties.setProperty("timeoutPlayerMove","1000");
 
-        controller = new Controller(game, gprop);
+        controller = new Controller(game, gameProperties);
 
-        Set<String> nicknames = new HashSet<>(Arrays.asList("johnnifer", "rubens"));
+        Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
 
         stateManager = controller.stateManager;
 
-        //this will automatically associate with Pinza Sgrossatrice tool card and its state table
         Properties prop = new Properties();
-        prop.put("id", "PinzaSgrossatrice");
+        prop.put("id", "GrozingPliers");
         prop.put("title", "title");
         prop.put("description", "desc");
         prop.put("neededTokens", "1");
@@ -52,8 +60,8 @@ public class ControllerStateManagerTest {
 
         controller.launchGame(nicknames);
 
-        WindowPatternManager wpmanager = new WindowPatternManager();
-        WindowPattern wp = wpmanager.getPairsOfPatterns(1).iterator().next();
+        WindowPatternManager WPManager = new WindowPatternManager();
+        WindowPattern wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
 
         for (Player p : controller.game.getPlayers()) {
@@ -65,6 +73,10 @@ public class ControllerStateManagerTest {
         controller.setActiveToolCard(toolCard);
     }
 
+    /**
+     * Tests the retrieval of the next state of the {@link Controller}
+     * @see ControllerStateManager#getNextState(ControllerState)
+     */
     @Test
     public void testGetNextState() {
         StartControllerState startState = new StartControllerState(controller);
@@ -76,6 +88,9 @@ public class ControllerStateManagerTest {
         assertEquals("EndControllerState", nextState.getClass().getSimpleName());
     }
 
+    /**
+     * Tests the retrieval of the next state of the {@link Controller} which is already in the state table
+     */
     @Test
     public void testGetNextStateWhichIsAlreadyInStateTable() {
         StartControllerState startState = new StartControllerState(controller);
@@ -85,28 +100,57 @@ public class ControllerStateManagerTest {
         assertEquals(nextState, nextState2);
     }
 
+    /**
+     * Tests the retrieval of the {@link ToolCardControllerState}
+     * @see ControllerStateManager#getToolCardState()
+     */
     @Test
     public void testGetToolCardState() {
         assertNotNull(controller.stateManager.getToolCardState());
     }
 
+    /**
+     * Tests the retrieval of the {@link DraftControllerState}
+     * @see ControllerStateManager#getDraftControllerState()
+     */
     @Test
     public void testGetDraftControllerState() {
         assertNotNull(controller.stateManager.getDraftControllerState());
     }
 
+    /**
+     * Tests the retrieval of the {@link EndToolCardEffectControllerState}
+     * @see ControllerStateManager#getEndControllerState()
+     */
     @Test
     public void testGetEndToolCardEffectControllerState() {
         assertNotNull(controller.stateManager.getEndToolCardEffectControllerState());
     }
 
+    /**
+     * Tests the retrieval of the {@link StartControllerState}
+     * @see ControllerStateManager#getStartState()
+     */
     @Test
     public void testGetStartControllerState() {
         assertNotNull(controller.stateManager.getStartState());
     }
 
+    /**
+     * Tests the retrieval of the {@link PlaceControllerState}
+     * @see ControllerStateManager#getPlaceState()
+     */
     @Test
     public void testGetPlaceControllerState() {
         assertNotNull(controller.stateManager.getPlaceState());
+    }
+
+    /**
+     * Tests the retrieval of the {@link EndControllerState}
+     * @see ControllerStateManager#getEndControllerState() ()
+     */
+    @Test
+    public void testGetEndControllerState() {
+        assertNotNull(controller.stateManager.getEndControllerState());
     }
 }
