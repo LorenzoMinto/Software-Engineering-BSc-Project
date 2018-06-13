@@ -43,7 +43,7 @@ public class GameTest {
      * Initializes variables for the tests
      */
     @BeforeClass
-    public static void setUp(){
+    public static void initializeVariables(){
         PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, DiceColor.RED);
         player = new Player( "player", privateObjectiveCard);
 
@@ -54,7 +54,7 @@ public class GameTest {
         WindowPatternManager windowPatternManager = new WindowPatternManager();
         List<WindowPattern> windowPatterns = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1));
         windowPattern = windowPatterns.get(0);
-        permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD);
+        permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
     }
 
     /**

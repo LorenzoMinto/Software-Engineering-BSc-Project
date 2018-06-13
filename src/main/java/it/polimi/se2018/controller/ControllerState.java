@@ -148,6 +148,10 @@ public abstract class ControllerState {
         //do nothing by default
     }
 
+    /**
+     * Gets the permission for the state
+     * @return the permissions for the state
+     */
     public Set<Move> getStatePermissions() {
         //do nothing by default
         return EnumSet.of(Move.END_TURN);
