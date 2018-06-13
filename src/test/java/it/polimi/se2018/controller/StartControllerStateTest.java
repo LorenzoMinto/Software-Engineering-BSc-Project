@@ -27,7 +27,7 @@ public class StartControllerStateTest {
      * Advances the Game in order to set the ControllerState to StartControllerState
      */
     @Before
-    public void setUpGameAndControllerToStartState(){
+    public void setUpGameAndControllerToStartControllerState(){
         Game game = new Game(10,4);
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");

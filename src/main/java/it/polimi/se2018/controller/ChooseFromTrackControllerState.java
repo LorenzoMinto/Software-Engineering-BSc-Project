@@ -23,6 +23,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public ChooseFromTrackControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
         this.controller = controller;
         this.defaultMessage = MIDDLE_OF_EFFECT;
     }

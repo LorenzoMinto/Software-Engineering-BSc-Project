@@ -27,7 +27,7 @@ public class ChangeDiceValueControllerStateTest {
      * Advances the Game in order to set the ControllerState to ChangeDiceValueControllerState
      */
     @Before
-    public void setUpGameAndControllerToChangeDiceValueState(){
+    public void setUpGameAndControllerToChangeDiceValueControllerState(){
         Game game = new Game(4,4);
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
