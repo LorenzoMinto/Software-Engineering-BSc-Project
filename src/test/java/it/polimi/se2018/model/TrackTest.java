@@ -27,7 +27,7 @@ public class TrackTest {
      * Initializes variables for the tests before each test
      */
     @Before
-    public void setUp(){
+    public void initializeVariables(){
         dices = new ArrayList<>();
 
         dice1 = new Dice(BLUE, 5);
@@ -47,7 +47,7 @@ public class TrackTest {
     }
 
     /**
-     * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#setUp()}
+     * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#initializeVariables()}
      * @see Track#processDices(List)
      */
     @Test
@@ -174,5 +174,29 @@ public class TrackTest {
         try {
             track.putDice(dice1, 1);
         } catch (ValueOutOfBoundsException e) {}
+    }
+
+
+    /**
+     * Tests the initial size of the Track
+     * @see Track#size()
+     */
+    @Test
+    public void testGetTrackInitialSize(){
+        track = new Track();
+        assertEquals(0, track.size());
+    }
+
+    /**
+     * Tests the growth of the track size for each list of dices processed
+     * @see Track#size()
+     */
+    @Test
+    public void testGetTrackSize(){
+        track = new Track();
+        for(int i=0; i < 5; i++){
+            track.processDices(dices);
+        }
+        assertEquals(5, track.size());
     }
 }

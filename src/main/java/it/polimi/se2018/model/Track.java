@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
  *
  * @author Lorenzo Minto
  */
-public class Track implements Serializable, Iterable<TrackSlot> {
+public class Track implements Serializable{
     /**
      * Serial Version UID
      */
@@ -102,31 +102,6 @@ public class Track implements Serializable, Iterable<TrackSlot> {
         return slots.size();
     }
 
-    @Override
-    public Iterator<TrackSlot> iterator() {
-        return new Iterator<TrackSlot>() {
-
-            private int currentIndex = 0;
-
-            @Override
-            public boolean hasNext() {
-                return currentIndex < slots.size();
-            }
-
-            @Override
-            public TrackSlot next() {
-                if(!hasNext()){
-                    throw new NoSuchElementException();
-                }
-                return slots.get(currentIndex++).copy();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
 
 
     /** Creates a copy of the track
