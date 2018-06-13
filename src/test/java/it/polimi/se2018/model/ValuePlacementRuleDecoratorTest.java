@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.controller.ObjectiveCardManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -8,20 +7,36 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Test for {@link ColorPlacementRuleDecorator} class
+ * @see ColorPlacementRuleDecorator#isMoveAllowed(WindowPattern, Dice, int, int)
+ * @author Lorenzo Minto
+ */
 public class ValuePlacementRuleDecoratorTest {
 
     private static Cell[][] pattern;
 
-    private PlacementRule rule;
-    private PlacementRule decoratedRule;
+    private static PlacementRule rule;
+    /**
+     * Used to test the composite behavior. This rule is arbitrary among all the rules
+     */
+    private static PlacementRule decoratedRule;
+    private static Player player;
 
     private WindowPattern windowPattern;
 
-    private Dice threeDice;
-    private Dice fourDice;
+    private static Dice threeDice;
+    private static Dice fourDice;
 
+    /**
+     * Initializes the variables needed in the tests
+     */
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void initializeVariables(){
+        PlacementRule emptyRule = new EmptyPlacementRule();
+        rule = new ValuePlacementRuleDecorator(emptyRule);
+        decoratedRule = new ValuePlacementRuleDecorator(new AdjacentValuePlacementRuleDecorator(emptyRule));
+        
         pattern = new Cell[3][3];
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
@@ -29,40 +44,50 @@ public class ValuePlacementRuleDecoratorTest {
             }
         }
         pattern[1][1] = new Cell(3, DiceColor.RED);
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        PlacementRule emptyRule = new EmptyPlacementRule();
-        rule = new ValuePlacementRuleDecorator(emptyRule);
-        decoratedRule = new ValuePlacementRuleDecorator(new AdjacentValuePlacementRuleDecorator(emptyRule));
-        ObjectiveCardManager objectiveCardManager = new ObjectiveCardManager();
-        Player dummy = new Player("Sonny", objectiveCardManager.getPrivateObjectiveCard());
-
-        windowPattern = new WindowPattern("","", "",0, pattern);
-        dummy.setWindowPattern(windowPattern);
-        windowPattern.setOwner(dummy);
-
+        
         threeDice = new Dice(DiceColor.RED, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);
+        
+        player = new Player("Sonny", PrivateObjectiveCard.createTestInstance());
     }
 
+    /**
+     * Initializes the player's windowPattern for the tests before each test
+     */
+    @Before
+    public void initializeWindowPattern(){
+        windowPattern = new WindowPattern("","", "",0, pattern);
+        player.setWindowPattern(windowPattern);
+    }
+   
+    /**
+     * Tests that it is not allowed to place a dice on a cell with a dice on it
+     */
     @Test
-    public void testCheckIfMoveIsAllowedWhenMoveIsOnAlreadyPlacedDice() {
+    public void testCheckIfMoveIsAllowedWhenMoveIsOnCellWithAlreadyPlacedDice() {
         windowPattern.putDiceOnCell(threeDice, 1,1);
         assertFalse(rule.isMoveAllowed(windowPattern, threeDice, 1,1));
     }
 
+    /**
+     * Tests that it is allowed to place a dice on a cell with an allowed value that is the same as the value of the dice
+     */
     @Test
     public void testCheckIfMoveIsAllowed() {
         assertTrue(decoratedRule.isMoveAllowed(windowPattern, threeDice, 1, 1));
     }
 
+    /**
+     * Tests that it is not allowed to place a dice on a cell with an allowed value different from the value of the dice
+     */
     @Test
-    public void testCheckIfMoveIsAllowedWhenNotAllowed() {
+    public void testCheckIfMoveIsAllowedWhenNotRespectingValueConstraints() {
         assertFalse(decoratedRule.isMoveAllowed(windowPattern, fourDice, 1, 1));
     }
-
+    
+    /**
+     * Tests that the decorated rule checks that it is not allowed to place a dice on a certain cell
+     */
     @Test
     public void testCheckIfMoveIsAllowedIfDecoratedNotAllowed() {
         windowPattern.putDiceOnCell(threeDice, 1,0);
