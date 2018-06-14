@@ -120,7 +120,9 @@ public class Controller extends Observable {
 
     private HashMap<String,List<WindowPattern>> assignedWindowPatterns = new HashMap<>();
 
-    //TODO: commentare
+    /**
+     *  Counter used to count the number of dice moves done by the current player
+     */
     int movesCounter = 0;
 
     private HashSet<String> inactivePlayers = new HashSet<>();
