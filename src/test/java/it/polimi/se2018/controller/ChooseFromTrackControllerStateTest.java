@@ -65,7 +65,7 @@ public class ChooseFromTrackControllerStateTest {
         toolCardProperties.put("imageURL", "imageURL");
 
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         toolCard = game.getToolCard(toolCard);
 
         controller.controllerState.useToolCard(toolCard);

@@ -55,7 +55,7 @@ public class ToolCardTest {
      */
     @Before
     public void initializeToolCard(){
-        toolCard = new ToolCard(properties, controllerStateRules, rule);
+        toolCard = new ToolCard(properties, controllerStateRules, rule, null);
     }
 
     /**
@@ -156,7 +156,7 @@ public class ToolCardTest {
         controllerStateRules.put("StartControllerState", "ChangeDiceValueControllerState");
         controllerStateRules.put("ChangeDiceValueControllerState","EndControllerState");
 
-        toolCard = new ToolCard(properties, controllerStateRules, rule);
+        toolCard = new ToolCard(properties, controllerStateRules, rule, null);
 
         assertFalse(toolCard.needsDrafting());
     }
@@ -196,7 +196,7 @@ public class ToolCardTest {
      */
     @Test
     public void testEquals() {
-        ToolCard toolCard2 = new ToolCard(properties, controllerStateRules, rule);
+        ToolCard toolCard2 = new ToolCard(properties, controllerStateRules, rule, null);
 
         assertTrue(toolCard.equals(toolCard2));
     }
@@ -217,7 +217,7 @@ public class ToolCardTest {
         properties2.put("neededTokens", "1");
         properties2.put("tokensUsageMultiplier", "2");
 
-        ToolCard toolCard3 = new ToolCard(properties2, controllerStateRules, rule);
+        ToolCard toolCard3 = new ToolCard(properties2, controllerStateRules, rule, null);
 
         assertFalse(toolCard3.equals(toolCard));
     }

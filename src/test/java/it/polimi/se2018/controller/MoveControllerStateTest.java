@@ -80,7 +80,7 @@ public class MoveControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         controller.controllerState.useToolCard(toolCard);
     }
 

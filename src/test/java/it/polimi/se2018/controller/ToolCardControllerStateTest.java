@@ -66,7 +66,7 @@ public class ToolCardControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
     }
 
     /**
@@ -157,7 +157,7 @@ public class ToolCardControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
 
         Message m = controller.controllerState.useToolCard(toolCard);
 

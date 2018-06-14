@@ -118,7 +118,7 @@ public class ToolCard implements Serializable{
      * @param controllerStateRules the state table that governs state transitions when the tool card is active.
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      */
-    public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule) {
+    public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule, HashSet<Integer> possibleMovesCountSet) {
         //the id of toolCard
         this.toolCardID = p.getProperty("id");
         //the title of the tool card.
@@ -133,8 +133,7 @@ public class ToolCard implements Serializable{
         this.tokensUsageMultiplier = Integer.parseInt( p.getProperty("tokensUsageMultiplier") );
         //the URL of the tool card image.
         this.imageURL = p.getProperty("imageURL");
-        //TODO: check this bad assignment
-        this.possibleMovesCountSet = (HashSet<Integer>) p.get("possibleMovesCountSet");
+        this.possibleMovesCountSet = possibleMovesCountSet;
 
         this.controllerStateRules = (HashMap<String,String>)controllerStateRules;
         this.placementRule = placementRule;

@@ -58,7 +58,7 @@ public class ControllerTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
     }
 
     @Test

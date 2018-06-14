@@ -73,7 +73,7 @@ public class GameTest {
         properties.put("neededTokens", "1");
         properties.put("tokensUsageMultiplier", "2");
 
-        toolCard1 = new ToolCard(properties, null, null );
+        toolCard1 = new ToolCard(properties, null, null, null);
 
         properties.put("id","ID2");
         properties.put("title","title2");
@@ -82,7 +82,7 @@ public class GameTest {
         properties.put("neededTokens", "1");
         properties.put("tokensUsageMultiplier", "2");
 
-        toolCard2 = new ToolCard(properties, null, null );
+        toolCard2 = new ToolCard(properties, null, null, null);
     }
 
     /**

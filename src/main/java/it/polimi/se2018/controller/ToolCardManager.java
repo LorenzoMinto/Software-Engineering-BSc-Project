@@ -119,7 +119,7 @@ public class ToolCardManager {
 
             //Move counter PARSING
             Node moveCounter = document.getElementsByTagName("moveCounter").item(0);
-            Set<Integer> possibleMovesCountSet = new HashSet<>();
+            HashSet<Integer> possibleMovesCountSet = new HashSet<>();
             if (moveCounter != null ) {
                 NamedNodeMap attributes = moveCounter.getAttributes();
                 String quantifier = attributes.getNamedItem("quantifier").getNodeValue();
@@ -132,7 +132,6 @@ public class ToolCardManager {
                     possibleMovesCountSet.add(Integer.parseInt(maximumQuantity));
                 }
             }
-            params.put("possibleMovesCountSet", possibleMovesCountSet);
 
             //Placement Rules PARSING
             PlacementRule placementRule;
@@ -178,7 +177,7 @@ public class ToolCardManager {
                 controllerStateRules.put(prevState,nextState);
             }
 
-            return new ToolCard(params,controllerStateRules,placementRule);
+            return new ToolCard(params,controllerStateRules,placementRule, possibleMovesCountSet);
 
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();

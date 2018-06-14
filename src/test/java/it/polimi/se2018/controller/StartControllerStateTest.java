@@ -138,7 +138,7 @@ public class StartControllerStateTest {
      */
     @Test
     public void testUseToolCardWhenNotInDrawnSet() {
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), new EmptyPlacementRule());
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), new EmptyPlacementRule(), null);
 
         try {
             controller.controllerState.useToolCard(toolCard);
@@ -194,7 +194,7 @@ public class StartControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
 
         Message m = controller.controllerState.useToolCard(toolCard);
 

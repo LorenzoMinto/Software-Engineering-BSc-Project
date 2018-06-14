@@ -66,7 +66,7 @@ public class ChangeDiceValueUnitaryControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null);
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         controller.controllerState.useToolCard(toolCard);
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
 

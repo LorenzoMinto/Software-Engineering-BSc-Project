@@ -56,7 +56,7 @@ public class ControllerStateManagerTest {
         toolCardProperties.put("imageURL", "imageURL");
         HashMap<String, String> controllerStateRules = new HashMap<>();
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, controllerStateRules, new EmptyPlacementRule());
+        ToolCard toolCard = new ToolCard(toolCardProperties, controllerStateRules, new EmptyPlacementRule(), null);
 
         controller.launchGame(nicknames);
 
