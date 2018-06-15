@@ -9,6 +9,7 @@ import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.ViewBoundMessageType;
 import it.polimi.se2018.view.View;
+import javafx.scene.layout.Pane;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -210,7 +211,7 @@ public class Controller extends Observable {
         System.out.println("Handling move...");
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
-        Message returnMessage;
+        Message returnMessage = null;
 
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
@@ -392,7 +393,11 @@ public class Controller extends Observable {
         if( currentPlayer.decreaseTokens(toolCard.getNeededTokens()) ){
             game.useToolCard(toolCard);
             this.activeToolcard = game.getToolCard(toolCard);
-            this.placementRule = this.activeToolcard.getPlacementRule();
+            if (currentPlayer.getWindowPattern().isEmpty()) {
+                this.placementRule = new BorderPlacementRuleDecorator(this.activeToolcard.getPlacementRule());
+            } else {
+                this.placementRule = this.activeToolcard.getPlacementRule();
+            }
             return true;
         } else {
             return false;

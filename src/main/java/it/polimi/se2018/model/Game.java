@@ -94,7 +94,7 @@ public class Game extends Observable implements Observer{
      * The number of turns that has each round. Round with
      * different number of turns are not allowed.
      */
-    private final int numberOfTurnsPerRound;
+    private int numberOfTurnsPerRound;
 
     /**
      * Reference to the instance of the current {@link Round}
@@ -151,7 +151,6 @@ public class Game extends Observable implements Observer{
 
         this.numberOfRounds = numberOfRounds;
         this.maxNumberOfPlayers = maxNumberOfPlayers;
-        this.numberOfTurnsPerRound = maxNumberOfPlayers * 2;
     }
 
     /**
@@ -376,6 +375,7 @@ public class Game extends Observable implements Observer{
         if(this.status != GameStatus.WAITING_FOR_PATTERNS_CHOICE){ throw new IllegalStateException(ASKED_TO_START_GAME_IN_BAD_STATE);}
 
         this.status = GameStatus.PLAYING;
+        this.numberOfTurnsPerRound = players.size() * 2;
 
         //Send to all players all the needed data about game
         Map <String, Object> messageAttributes = new HashMap<>();
