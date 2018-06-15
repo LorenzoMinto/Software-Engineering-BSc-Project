@@ -197,7 +197,8 @@ public class Turn extends Observable implements Serializable {
     public void setDraftedDice(Dice dice){
         if(dice == null){throw new IllegalArgumentException(NULL_DICE);}
         this.draftedDice = dice;
-
+        setDraftedAndPlaced();
+        
         Map<String, Object> messageAttributes = new HashMap<>();
 
         messageAttributes.put("draftedDice", this.draftedDice);
