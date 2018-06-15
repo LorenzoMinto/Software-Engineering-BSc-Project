@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,8 +31,12 @@ public class WindowPatternPlayerView extends Pane {
     @FXML private ImageView userIcon;
 
     private Pane[][] gridDiceButtons;
-    private int xSelected;
-    private int ySelected;
+    private int xSelected = -1;
+    private int ySelected = -1;
+
+    private boolean canMoveSelect = false;
+    private int xDestSelected = -1;
+    private int yDestSelected = -1;
 
     public WindowPatternPlayerView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WindowPatternPlayerView.fxml"));
@@ -73,8 +78,24 @@ public class WindowPatternPlayerView extends Pane {
                                 }
                             }
                         }
-                        xSelected = x;
-                        ySelected = y;
+                        if (canMoveSelect) {
+                            //this handles the double selection
+                            if (xSelected != -1 && ySelected != -1 && xDestSelected != -1 && yDestSelected != -1) {
+                                xSelected = x;
+                                ySelected = y;
+                                xDestSelected = -1;
+                                yDestSelected = -1;
+                            } else if (xSelected != -1 && ySelected != -1) {
+                                xDestSelected = x;
+                                yDestSelected = y;
+                            } else {
+                                xSelected = x;
+                                ySelected = y;
+                            }
+                        } else {
+                            xSelected = x;
+                            ySelected = y;
+                        }
                         visualizeSelection();
                     }
                 });
@@ -85,21 +106,23 @@ public class WindowPatternPlayerView extends Pane {
     }
 
     public void updateWindowPattern(WindowPattern wp) {
-        Cell[][] pattern = wp.getPattern();
-        for (int i=0; i<wp.getNumberOfRows(); i++) {
-            for (int j=0; j<wp.getNumberOfColumns(); j++) {
-                Dice dice = pattern[i][j].getDice();
-                if (dice!=null) {
-                    Image diceImage = new Image((new File("src/main/resources/images/Dices/"+dice.toString()+".jpg")).toURI().toString());
-                    gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
-                } else {
-                    Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
-                    gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
+        Platform.runLater(() -> {
+            Cell[][] pattern = wp.getPattern();
+            for (int i = 0; i < wp.getNumberOfRows(); i++) {
+                for (int j = 0; j < wp.getNumberOfColumns(); j++) {
+                    Dice dice = pattern[i][j].getDice();
+                    if (dice != null) {
+                        Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice.toString() + ".jpg")).toURI().toString());
+                        gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        Image cellBack = new Image((new File("src/main/resources/images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg")).toURI().toString());
+                        gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                    gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                            BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 }
-                gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
-                        BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
-        }
+        });
     }
 
     public void setFavourTokens(int ft) {
@@ -123,13 +146,27 @@ public class WindowPatternPlayerView extends Pane {
     }
 
     public String getNickname() { return nickname; }
+
     public int getxSelected() { return xSelected; }
     public int getySelected() { return ySelected; }
+    public int getxDestSelected() { return xDestSelected; }
+    public int getyDestSelected() { return yDestSelected; }
+
+    public void cleanSelection() {
+        this.xSelected = -1;
+        this.ySelected = -1;
+        this.yDestSelected = -1;
+        this.xDestSelected = -1;
+        visualizeSelection();
+    }
 
     void visualizeSelection() {
         for (int i=0; i<gridDiceButtons.length; i++) {
             for (int j=0; j<gridDiceButtons[0].length; j++) {
                 if (i==xSelected && j==ySelected) {
+                    gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.BLACK,
+                            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+                } else if (i==xDestSelected && j==yDestSelected) {
                     gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.BLACK,
                             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
                 } else {
@@ -139,4 +176,6 @@ public class WindowPatternPlayerView extends Pane {
             }
         }
     }
+
+    public void enableMoveSelection(boolean canMoveSelect) { this.canMoveSelect = canMoveSelect; }
 }

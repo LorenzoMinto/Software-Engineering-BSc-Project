@@ -393,6 +393,9 @@ public class SagradaSceneController extends View implements Initializable {
             case END_TURN:
                 handleEndTurnMove();
                 break;
+            case END_EFFECT:
+                handleEndEffectMove();
+                break;
             case DRAFT_DICE_FROM_DRAFTPOOL:
                 handleDraftDiceFromDraftPoolMove();
                 break;
@@ -403,14 +406,17 @@ public class SagradaSceneController extends View implements Initializable {
                 handleUseToolCardMove();
                 break;
             case INCREMENT_DRAFTED_DICE:
+                handleIncrementDraftedDiceMove();
                 break;
             case DECREMENT_DRAFTED_DICE:
+                handleDecrementDraftedDiceMove();
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
                 break;
             case CHOOSE_DICE_FROM_TRACK:
                 break;
             case MOVE_DICE:
+                handleMoveDiceMove();
                 break;
             case BACK_GAME:
                 handleBackGameMove();
@@ -424,6 +430,83 @@ public class SagradaSceneController extends View implements Initializable {
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    void handleUseToolCardMove() {
+
+        Platform.runLater(() -> {
+            enableBlackAnchorPane();
+            blackAnchorPane.setOpacity(0.93);
+            disableBlackHBox();
+            enable(toolCardsVisibleComponents);
+
+            //Retrieving ToolCards images
+            ToolCard toolCard = drawnToolCards.get(0);
+            Image toolCardImage = getImageFromPath(toolCard.getImageURL());
+            toolCards1Button.setBackground(getBackgroundFromImage(toolCardImage));
+            toolCards1FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
+
+            toolCard = drawnToolCards.get(1);
+            toolCardImage = getImageFromPath(toolCard.getImageURL());
+            toolCards2Button.setBackground(getBackgroundFromImage(toolCardImage));
+            toolCards2FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
+
+            toolCard = drawnToolCards.get(2);
+            toolCardImage = getImageFromPath(toolCard.getImageURL());
+            toolCards3Button.setBackground(getBackgroundFromImage(toolCardImage));
+            toolCards3FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
+
+            //TODO: set player.getFavorTokens();
+            toolCardsPlayerFavorTokensButton.setText(String.valueOf(playerTokens));
+        });
+    }
+
+    private void enable(List<Node> visibleComponents) {
+        visibleComponents.forEach(component -> component.setVisible(true));
+        visibleComponents.forEach(component -> component.setOpacity(1));
+        visibleComponents.forEach(component -> component.setDisable(false));
+    }
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards1ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
+            cardCarouselCurrentIndex = 0;
+
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
+            Platform.runLater(() -> {
+                disable(toolCardsVisibleComponents);
+                disableBlackAnchorPane();
+            });
+        }
+    }
+
+
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards2ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
+            cardCarouselCurrentIndex = 1;
+
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
+            Platform.runLater(() -> {
+                disable(toolCardsVisibleComponents);
+                disableBlackAnchorPane();
+            });
+        }
+    }
+
+    //TODO: player.getFavorTokens();
+    public void onToolCards3ButtonPressed(){
+        if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
+            cardCarouselCurrentIndex = 2;
+
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
+            Platform.runLater(() -> {
+                disable(toolCardsVisibleComponents);
+                disableBlackAnchorPane();
+            });
         }
     }
 
@@ -441,7 +524,13 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private Dice getDiceForDiceButton(Button btn) {
-        return draftPoolDices.get(dicesButtons.indexOf(btn));
+        String id = btn.getId();
+        for (Dice dice: draftPoolDices) {
+            if (dice.toString().equals(id)) {
+                return dice;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -450,95 +539,18 @@ public class SagradaSceneController extends View implements Initializable {
         int x = userWindowPatternView.getxSelected();
         int y = userWindowPatternView.getySelected();
 
-        showMessage("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
-        HashMap<String,Object> params = new HashMap<>();
-        params.put("row",x);
-        params.put("col",y);
-        sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
-    }
-
-    @Override
-    void handleUseToolCardMove() {
-        enableBlackAnchorPane();
-        blackAnchorPane.setOpacity(0.93);
-        disableBlackHBox();
-        enable(toolCardsVisibleComponents);
-
-        //Retrieving ToolCards images
-        ToolCard toolCard = drawnToolCards.get(0);
-        Image toolCardImage = getImageFromPath(toolCard.getImageURL());
-        toolCards1Button.setBackground(getBackgroundFromImage(toolCardImage));
-        toolCards1FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-
-        toolCard = drawnToolCards.get(1);
-        toolCardImage = getImageFromPath(toolCard.getImageURL());
-        toolCards2Button.setBackground(getBackgroundFromImage(toolCardImage));
-        toolCards2FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-
-        toolCard = drawnToolCards.get(2);
-        toolCardImage = getImageFromPath(toolCard.getImageURL());
-        toolCards3Button.setBackground(getBackgroundFromImage(toolCardImage));
-        toolCards3FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-
-        //TODO: set player.getFavorTokens();
-        toolCardsPlayerFavorTokensButton.setText(String.valueOf(playerTokens));
-    }
-
-    private void enable(List<Node> visibleComponents) {
-        visibleComponents.forEach(component -> component.setVisible(true));
-        visibleComponents.forEach(component -> component.setOpacity(1));
-        visibleComponents.forEach(component -> component.setDisable(false));
-    }
-
-    //TODO: player.getFavorTokens();
-    public void onToolCards1ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
-            cardCarouselCurrentIndex = 0;
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
-
-            //TODO: verify if fixed
-            notifyGameVariablesChanged();
-
-            disable(toolCardsVisibleComponents);
-            disableBlackAnchorPane();
+        if (x != -1  && y != -1) {
+            showMessage("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put("row",x);
+            params.put("col",y);
+            sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+        } else {
+            errorMessage("No cell was selected!");
         }
-    }
-
-
-
-    //TODO: player.getFavorTokens();
-    public void onToolCards2ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
-            cardCarouselCurrentIndex = 1;
-
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
-            disable(toolCardsVisibleComponents);
-            disableBlackAnchorPane();
-        }
-    }
-
-    //TODO: player.getFavorTokens();
-    public void onToolCards3ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
-            cardCarouselCurrentIndex = 2;
-
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
-            disable(toolCardsVisibleComponents);
-            disableBlackAnchorPane();
-        }
-    }
-
-
-
-
-    @Override
-    void handleIncrementDraftedDiceMove() {
-
-    }
-
-    @Override
-    void handleDecrementDraftedDiceMove() {
-
+        Platform.runLater(() -> {
+            userWindowPatternView.cleanSelection();
+        });
     }
 
     @Override
@@ -553,7 +565,26 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleMoveDiceMove() {
+        super.handleMoveDiceMove();
+        HashMap<String,Object> params = new HashMap<>();
+        int row = userWindowPatternView.getxSelected();
+        int col = userWindowPatternView.getySelected();
+        int rowDest = userWindowPatternView.getxDestSelected();
+        int colDest = userWindowPatternView.getyDestSelected();
 
+        if (row != -1  && col != -1  && rowDest != -1 && colDest != -1) {
+            params.put("rowFrom",row);
+            params.put("colFrom",col);
+            params.put("rowTo",rowDest);
+            params.put("colTo",colDest);
+            sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+            userWindowPatternView.enableMoveSelection(false);
+        } else {
+            errorMessage("Select TO and FROM cell to make the move.");
+        }
+        Platform.runLater(() -> {
+            userWindowPatternView.cleanSelection();
+        });
     }
 
     @Override
@@ -838,39 +869,47 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void notifyPermissionsChanged() {
         System.out.println("Notified of permissions changed.");
-        new Thread(new Runnable() {
-            @Override public void run() {
-                if (getPermissions().isEmpty()) {
-                    //TODO: add label here to remind user is not his turn
-                    Platform.runLater(new Runnable() {
-                        @Override public void run() {
-                            dynamicChoicesPane.getChildren().clear();
-                        }
-                    });
-                } else {
-                    Set<Move> permissions = getPermissions();
-                    Platform.runLater(new Runnable() {
-                        @Override public void run() {
-                            dynamicChoicesPane.getChildren().clear();
-                            for (Move m : permissions) {
-                                Button button = new Button(m.getTextualREP());
-                                button.setId(m.toString());
-                                button.setOnAction(event -> checkID(m));
-                                dynamicChoicesPane.getChildren().add(button);
-                            }
-                        }
-                    });
-                }
+        if (getPermissions().isEmpty()) {
+            //TODO: add label here to remind user is not his turn
+            Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
+        } else {
+            Set<Move> permissions = getPermissions();
+            Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
+            for (Move m: permissions) {
+                Button button = new Button(m.getTextualREP());
+                button.setId(m.toString());
+                button.setOnAction(event -> checkID(m));
+                Platform.runLater(() -> dynamicChoicesPane.getChildren().add(button));
             }
-        }).start();
+        }
+        Platform.runLater(() -> {
+            if (getPermissions().contains(Move.MOVE_DICE)) {
+                userWindowPatternView.enableMoveSelection(true);
+                System.out.println("Move selection enabled.");
+            }
+        });
+    }
+
+    private void highlightCurrentPlayer() {
+        Platform.runLater(() -> {
+            for (WindowPatternPlayerView wpView: wpViews) {
+                wpView.setThisAsCurrentPlayer(playingPlayerID.equals(wpView.getNickname()));
+            }
+        });
     }
 
     @Override
     void notifyNewTurn(){
         super.notifyNewTurn();
-        for (WindowPatternPlayerView wpView: wpViews) {
-            wpView.setThisAsCurrentPlayer(playingPlayerID.equals(wpView.getNickname()));
-        }
+        highlightCurrentPlayer();
+    }
+
+    @Override
+    void notifyNewRound(){
+        super.notifyNewRound();
+        highlightCurrentPlayer();
+        updateDraftPool();
+        updateWindowPatterns();
     }
 
     @Override
@@ -881,6 +920,7 @@ public class SagradaSceneController extends View implements Initializable {
         setupWindowPatterns();
         setupCards();
     }
+
 
     @Override
     void notifyGameVariablesChanged() {
@@ -893,7 +933,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     protected void printOnConsole(String s) {
         String ss = "\n"+s;
-        playerTerminal.appendText(ss);
+        Platform.runLater(() -> playerTerminal.appendText(ss));
     }
 
 }
