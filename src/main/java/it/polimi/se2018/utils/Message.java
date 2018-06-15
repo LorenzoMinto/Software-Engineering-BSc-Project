@@ -105,6 +105,9 @@ public class Message implements Serializable{
      * @return the permissions sent within the message
      */
     public Set<Move> getPermissions() {
+        if (this.permissions == null) {
+            return EnumSet.noneOf(Move.class);
+        }
         return EnumSet.copyOf(this.permissions);
     }
 
