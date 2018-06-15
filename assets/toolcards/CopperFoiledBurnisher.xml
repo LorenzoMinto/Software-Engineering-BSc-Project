@@ -11,5 +11,5 @@
     <placementRule decoratorName="ColorPlacementRuleDecorator"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />
-    <controllerStateRule prevState="MoveControllerState" nextState="MoveControllerState" />
+    <controllerStateRule prevState="MoveControllerState" nextState="EndToolCardEffectControllerState" />
 </toolcard>

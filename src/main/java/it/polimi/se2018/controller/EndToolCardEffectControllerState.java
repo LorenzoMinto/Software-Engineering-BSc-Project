@@ -22,6 +22,10 @@ public class EndToolCardEffectControllerState extends ImplicitControllerState {
     public void executeImplicitBehaviour() {
 
         this.controller.resetActiveToolCard();
-        controller.setControllerState(controller.stateManager.getDraftControllerState());
+        if (controller.game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
+            controller.setControllerState(controller.stateManager.getEndControllerState());
+        } else {
+            controller.setControllerState(controller.stateManager.getDraftControllerState());
+        }
     }
 }

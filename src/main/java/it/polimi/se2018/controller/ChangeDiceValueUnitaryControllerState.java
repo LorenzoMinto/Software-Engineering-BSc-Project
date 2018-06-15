@@ -3,6 +3,9 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.Turn;
 import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.Move;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
@@ -43,5 +46,10 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
             return new Message(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
         }
         return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.INCREMENT_DRAFTED_DICE, Move.DECREMENT_DRAFTED_DICE, Move.END_TURN);
     }
 }

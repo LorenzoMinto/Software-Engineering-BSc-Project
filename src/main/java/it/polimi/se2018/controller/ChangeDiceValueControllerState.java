@@ -1,8 +1,11 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import it.polimi.se2018.utils.Message;
+
+import java.util.EnumSet;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
@@ -36,5 +39,10 @@ public class ChangeDiceValueControllerState extends ControllerState {
         }
         controller.setControllerState(controller.stateManager.getNextState(this));
         return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
+    }
+
+    @Override
+    public EnumSet<Move> getStatePermissions() {
+        return EnumSet.of(Move.CHANGE_DRAFTED_DICE_VALUE, Move.END_TURN);
     }
 }
