@@ -225,15 +225,6 @@ public class Game extends Observable implements Observer{
     }
 
     /**
-     * Gets the final rankings
-     *
-     * @return list of ordered players, first is the winner, null if not yet set
-     */
-    public Map<Player, Integer> getRankings() {
-        return rankings;
-    }
-
-    /**
      * Sets the final rankings.
      *
      * @param rankings list of ordered players: first is winner
@@ -243,18 +234,7 @@ public class Game extends Observable implements Observer{
         if(rankings == null){ throw new IllegalArgumentException(NULL_RANKINGS);}
 
         this.rankings = rankings;
-
-        List<String> rankingsAsList = Arrays.asList(rankings.keySet().stream().map(Player::getID).toArray(String[]::new));
-
-        //TODO: registrare punteggi ai player. decidere se recuperare players by id oppure by reference
-        //TODO: nel caso di by reference verificare che la reference che arriva sia quella effettiva
-
         //TODO: COPY RANKINGS
-
-        Map <String, Object> messageAttributes = new HashMap<>();
-        messageAttributes.put("rankings", rankings);
-        messageAttributes.put("winnerPlayerID", rankingsAsList.get(0));
-        notify(new Message(ViewBoundMessageType.RANKINGS, messageAttributes));
     }
 
     /**

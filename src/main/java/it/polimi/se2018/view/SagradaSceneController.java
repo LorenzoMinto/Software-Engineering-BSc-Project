@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
@@ -636,9 +637,9 @@ public class SagradaSceneController extends View implements Initializable {
         RankingsSceneController rankingsController = fxmlLoader.getController();
         //TODO: replace placeholder
         List<String> placeholder = new ArrayList<>();
-        placeholder.add("Johnnyfer");
-        placeholder.add("Rubens");
-        placeholder.add("Sonny");
+        for (RankingRecord ranking: rankings) {
+            placeholder.add(ranking.getPlayerID());
+        }
 
         Platform.runLater(() -> {
             rankingsController.setLocalRanking(placeholder);

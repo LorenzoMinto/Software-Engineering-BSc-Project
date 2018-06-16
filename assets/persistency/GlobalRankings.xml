@@ -1,0 +1,14 @@
+<globalRanking>
+    <ranking id="Johnnyfer">
+        <gamesWon>5</gamesWon>
+        <gamesLost>7</gamesLost>
+        <timePlayed>345649</timePlayed>
+        <cumulativePoints>134000</cumulativePoints>
+    </ranking>
+    <ranking id="Rubens">
+        <gamesWon>8</gamesWon>
+        <gamesLost>12</gamesLost>
+        <timePlayed>29001</timePlayed>
+        <cumulativePoints>1500000</cumulativePoints>
+    </ranking>
+</globalRanking>

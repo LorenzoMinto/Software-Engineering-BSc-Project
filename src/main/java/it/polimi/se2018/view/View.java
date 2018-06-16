@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.ObjectiveCardManager;
+import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
@@ -37,7 +38,7 @@ public abstract class View implements Observer {
     PrivateObjectiveCard privateObjectiveCard; //TODO: check if needed
 
 
-    LinkedHashMap<String, Integer> rankings;
+    List<RankingRecord> rankings;
     List<WindowPattern> drawnWindowPatterns;
 
     private enum ViewState{
@@ -354,7 +355,7 @@ public abstract class View implements Observer {
             return;
         }
         @SuppressWarnings("unchecked")
-        LinkedHashMap<String, Integer> receivedRankings = (LinkedHashMap<String, Integer>) o;
+        List<RankingRecord> receivedRankings = (List<RankingRecord>) o;
 
         this.rankings = receivedRankings;
 

@@ -9,7 +9,6 @@ import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.NoSuchParamInMessageException;
 import it.polimi.se2018.utils.ViewBoundMessageType;
 import it.polimi.se2018.view.View;
-import javafx.scene.layout.Pane;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -128,6 +127,9 @@ public class Controller extends Observable {
 
     private HashSet<String> inactivePlayers = new HashSet<>();
 
+
+    private Persistency persistency;
+
     /**
      * Just for testing
      * @param game the game instance to be controlled
@@ -174,6 +176,9 @@ public class Controller extends Observable {
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
 
         this.game.setCards(toolCards,publicObjectiveCards);
+
+        this.persistency = Persistency.getInstance();
+        this.persistency.loadRankings();
     }
 
     /**
@@ -639,7 +644,40 @@ public class Controller extends Observable {
      */
     private void manageRankings(){
         Map<Player, Integer> rankings = getRankingsAndScores();
+        //NOTE: is the following needed anymore?
         game.setRankings(rankings);
+
+        List<RankingRecord> localRanking = new ArrayList<>();
+
+        int index = 0;
+        for (Map.Entry<Player, Integer> entry : rankings.entrySet())
+        {
+            //TODO: put a game long timer or else keep timePlayed hardcoded and symbolic
+            Player player =  entry.getKey();
+            int score = entry.getValue();
+            //the first entry has won
+            persistency.updateRankingForPlayerID(player.getID(), score, index == 0, 5000);
+
+            //gets player's updated playing record to account for past games
+            RankingRecord ranking = persistency.getRankingForPlayerID(player.getID());
+
+            //this games' points are added separately to the player for the local ranking
+            ranking.setPoints(score);
+
+            localRanking.add(ranking);
+            index++;
+        }
+
+        List<RankingRecord> globalRankings = persistency.getGlobalRankings();
+
+        Map <String, Object> messageAttributes = new HashMap<>();
+        messageAttributes.put("rankings", localRanking);
+        messageAttributes.put("globalRankings", globalRankings);
+        messageAttributes.put("winnerPlayerID", localRanking.get(0).getPlayerID());
+        notify(new Message(ViewBoundMessageType.RANKINGS, messageAttributes, null, EnumSet.noneOf(Move.class)));
+
+        //this is called to save the new updated rankings to memory
+        persistency.persist();
 
         //TODO: verificare utilità di questo messaggio (considerare che che game.setRankings() manda msg con rankings)
         notify(new Message(ViewBoundMessageType.GAME_ENDED, null, null,EnumSet.noneOf(Move.class)));

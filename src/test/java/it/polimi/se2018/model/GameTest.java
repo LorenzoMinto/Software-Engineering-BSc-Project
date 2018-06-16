@@ -387,22 +387,6 @@ public class GameTest {
         }catch (IllegalArgumentException e){}
     }
 
-    /**
-     * Tests setting the game rankings when the game has ended
-     * @see Game#setRankings(Map)
-     */
-    @Test
-    public void testSetRankings(){
-        game.setCards(toolCards, publicObjectiveCards);
-        game.addPlayer(player);
-        game.setStatusAsWaitingForPatternsChoice();
-        game.assignWindowPatternToPlayer(windowPattern, player.getID());
-        runAllRounds();
-
-        game.setRankings(rankings);
-        assertEquals(rankings, game.getRankings());
-    }
-
 
     /**
      * Tests the usage of a {@link ToolCard} when the game has started

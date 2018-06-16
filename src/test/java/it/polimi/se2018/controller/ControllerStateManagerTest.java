@@ -85,6 +85,8 @@ public class ControllerStateManagerTest {
         nextState = stateManager.getNextState(nextState);
         assertEquals("ChangeDiceValueUnitaryControllerState", nextState.getClass().getSimpleName());
         nextState = stateManager.getNextState(nextState);
+        assertEquals("PlaceControllerState", nextState.getClass().getSimpleName());
+        nextState = stateManager.getNextState(nextState);
         assertEquals("EndControllerState", nextState.getClass().getSimpleName());
     }
 
