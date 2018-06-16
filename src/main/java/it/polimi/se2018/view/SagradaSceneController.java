@@ -1,7 +1,6 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Dice;
-import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.utils.*;
@@ -9,23 +8,24 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -612,6 +612,37 @@ public class SagradaSceneController extends View implements Initializable {
         Platform.runLater(() -> {
             currentDraftedPane.getChildren().clear();
             currentDraftedPane.getChildren().add(dice);
+        });
+    }
+
+    @Override
+    void handleRankingsEvent(Message m) {
+        super.handleRankingsEvent(m);
+        //get current scene's stage
+        Stage thisStage = (Stage) playerTerminal.getScene().getWindow();
+
+        URL fxmlUrl = getClass().getClassLoader().getResource("fxml/RankingsScene.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+
+        Parent root = new Pane();
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {}
+        Scene rankingsScene = new Scene(root, thisStage.getWidth(), thisStage.getHeight());
+        Platform.runLater(() -> {
+            thisStage.setScene(rankingsScene);
+        });
+
+        RankingsSceneController rankingsController = fxmlLoader.getController();
+        //TODO: replace placeholder
+        List<String> placeholder = new ArrayList<>();
+        placeholder.add("Johnnyfer");
+        placeholder.add("Rubens");
+        placeholder.add("Sonny");
+
+        Platform.runLater(() -> {
+            rankingsController.setLocalRanking(placeholder);
+            rankingsController.setWinner(true);
         });
     }
 

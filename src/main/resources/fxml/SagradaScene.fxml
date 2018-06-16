@@ -321,7 +321,7 @@
                <children>
                   <AnchorPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
                      <children>
                         <Button fx:id="toolCards1Button" mnemonicParsing="false" onAction="#onToolCards1ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -332,7 +332,7 @@
                         <Button fx:id="toolCards2Button" mnemonicParsing="false" onAction="#onToolCards2ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                      <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
                   </AnchorPane>
                   <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
@@ -340,7 +340,7 @@
                         <Button fx:id="toolCards3Button" mnemonicParsing="false" onAction="#onToolCards3ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                      <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
                   </AnchorPane>
                   <Button fx:id="toolCards1FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">

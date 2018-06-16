@@ -363,8 +363,6 @@ public abstract class View implements Observer {
         } else {
             showMessage("The winner is "+winnerID+"!");
         }
-
-        notifyGameVariablesChanged();
     }
 
     void handleUpdatedWindowPatternEvent(Message m) {
