@@ -574,12 +574,6 @@ public class Controller extends Observable {
                 manageRankings();
                 return;
             }
-
-            try {
-                game.nextTurn(permissions);
-            } catch (NoMoreTurnsAvailableException e1) {
-                throw new BadBehaviourRuntimeException("Asked next turn. No turns availables. Created a new round. Still no turns availables.");
-            }
         }
 
         //if player's window pattern is empty
