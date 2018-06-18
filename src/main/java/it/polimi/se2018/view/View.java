@@ -680,6 +680,7 @@ public abstract class View implements Observer {
             errorMessage("Error sending message: ".concat(m.toString()));
             //TODO: check if this must be removed in production
         } catch (NullPointerException ex){
+            ex.printStackTrace();
             errorMessage(MUST_CONNECT);
         }
     }

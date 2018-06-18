@@ -15,9 +15,9 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
 
-    private ReceiverInterface recipient;
+    private RMIReceiverInterface recipient;
     private Client client;
-    private ReceiverInterface proxySender;
+    private RMIReceiverInterface proxySender;
 
 
     RMIClientGateway(String path, int port, Client client) throws NetworkingException {
@@ -38,6 +38,7 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
         this.client = client;
     }
 
+    @Override
     public void sendMessage(Message message) throws NetworkingException{
         try {
             this.recipient.receiveMessage(message,this.proxySender);
@@ -46,7 +47,8 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
         }
     }
 
-    public void receiveMessage(Message message, ReceiverInterface sender){
+    @Override
+    public void receiveMessage(Message message, RMIReceiverInterface sender){
         //IL THREAD VIENE CREATO PER DISACCOPPIARE LA CHIAMATA REMOTA DA QUELLA EFFETTIVA
         new Thread(()->{
             this.client.notify(message);

@@ -250,7 +250,7 @@ public class Server implements Observer, SenderInterface{
                     sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
                 }
 
-            } catch (RemoteException | NetworkingException e){
+            } catch (NetworkingException e){
                 LOGGER.severe("Error answering to message "+message);
             }
         }
@@ -422,9 +422,8 @@ public class Server implements Observer, SenderInterface{
                 } catch (NetworkingException e) {
                     LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
-                } catch (RemoteException e){
-                    //TODO: rimuovi
                 }
+
                 correctlySent = true;
 
                 if (LOGGER.isLoggable(Level.INFO)) {

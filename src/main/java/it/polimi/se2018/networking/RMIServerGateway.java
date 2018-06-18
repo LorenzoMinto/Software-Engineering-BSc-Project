@@ -4,10 +4,10 @@ import it.polimi.se2018.utils.Message;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 
 /**
  *
@@ -16,6 +16,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiverInterface {
 
     private transient Server server;
+
+    private HashMap<RMIReceiverInterface,RMIClientAsAServer> map = new HashMap<>();
 
     RMIServerGateway(String name, int port, Server server) throws RemoteException, MalformedURLException {
         this.server = server;
@@ -26,8 +28,13 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException{
-        server.parseInBoundMessage(message,sender);
+    public void receiveMessage(Message message, RMIReceiverInterface sender){
+
+        if(!map.containsKey(sender)){
+            map.put(sender,new RMIClientAsAServer(this,sender));
+        }
+
+        server.parseInBoundMessage(message,map.get(sender));
     }
 
     //TODO: intellij consiglia di fare ovveride del metodo equals. Capire perchè.
