@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking.socket;
 
-import it.polimi.se2018.networking.ClientProxy;
+import it.polimi.se2018.networking.ClientProxyInterface;
 import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
@@ -12,7 +12,7 @@ import it.polimi.se2018.utils.Message;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public class SocketServerGateway implements SocketReceiverInterface {
+public final class SocketServerGateway implements SocketReceiverInterface {
 
     /**
      * Remote client that receives messages
@@ -41,8 +41,8 @@ public class SocketServerGateway implements SocketReceiverInterface {
      * @param message the message to be sent
      * @param sender the sender of the message (server)
      */
-    public void receiveMessage(Message message, ClientProxy sender) throws NetworkingException {
-        server.parseInBoundMessage(message,sender);
+    public void receiveMessage(Message message, ClientProxyInterface sender) throws NetworkingException {
+        server.handleInBoundMessage(message,sender);
     }
 
     @Override

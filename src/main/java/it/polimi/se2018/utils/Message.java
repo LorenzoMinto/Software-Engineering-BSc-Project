@@ -8,7 +8,7 @@ import java.util.*;
  *
  * @author Federico Haag
  */
-public class Message implements Serializable{
+public final class Message implements Serializable{
 
     /**
      * Serial Version UID

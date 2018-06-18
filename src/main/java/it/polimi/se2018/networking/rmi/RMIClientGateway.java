@@ -15,25 +15,40 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author Federico Haag
  */
-public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
+public final class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
 
+    /**
+     * The recipient of messages sent through this gateway
+     */
     private RMIReceiverInterface recipient;
+
+    /**
+     * The client connected to this gateway
+     */
     private Client client;
-    private RMIReceiverInterface proxySender;
 
+    /**
+     * Reference to this instance exported
+     */
+    private RMIReceiverInterface sender;
 
+    /**
+     * Gateway constructor.
+     * @param path path to the server
+     * @param port port of the server to connect to
+     * @param client client connected to this gateway
+     * @throws NetworkingException if something fails connecting to the remote server
+     */
     public RMIClientGateway(String path, int port, Client client) throws NetworkingException {
         try{
             this.recipient = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
-            e.printStackTrace();
             throw new NetworkingException("Failed looking for RMI name");
         }
 
         try{
-            this.proxySender = (RMIReceiverInterface) UnicastRemoteObject.exportObject(this, port);
+            this.sender = (RMIReceiverInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
-            e.printStackTrace();
             throw new NetworkingException("Failed exporting RMI object");
         }
 
@@ -43,7 +58,7 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
     @Override
     public void sendMessage(Message message) throws NetworkingException{
         try {
-            this.recipient.receiveMessage(message,this.proxySender);
+            this.recipient.receiveMessage(message,this.sender);
         } catch (RemoteException e) {
             throw new NetworkingException();
         }

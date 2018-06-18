@@ -6,13 +6,21 @@ import it.polimi.se2018.utils.Message;
 import java.io.*;
 
 /**
+ * Proxy of a socket client.
  *
  * @author Federico Haag
  */
-public class SocketClientProxy implements ClientProxy {
+public final class SocketClientProxy implements ClientProxyInterface {
 
+    /**
+     * Stream were to write to send a message to the former client
+     */
     private ObjectOutputStream stream;
 
+    /**
+     * Constructor of the proxy
+     * @param stream the stream were to write to send a message to the former client
+     */
     SocketClientProxy(ObjectOutputStream stream) {
         this.stream = stream;
     }

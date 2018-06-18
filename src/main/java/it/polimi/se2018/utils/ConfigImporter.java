@@ -10,7 +10,7 @@ import java.util.Properties;
  *
  * @author Federico Haag
  */
-public class ConfigImporter {
+public final class ConfigImporter {
 
     /**
      * HashMap containing the properties read from the config file

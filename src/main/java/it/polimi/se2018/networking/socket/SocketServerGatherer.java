@@ -13,7 +13,7 @@ import java.net.Socket;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public class SocketServerGatherer extends Thread{
+public final class SocketServerGatherer extends Thread{
 
     /**
      * String sent as content of fail() when something in accepting a new connection goes wrong.

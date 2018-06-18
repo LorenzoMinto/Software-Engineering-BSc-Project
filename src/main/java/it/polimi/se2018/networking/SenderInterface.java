@@ -8,5 +8,10 @@ import it.polimi.se2018.utils.Message;
  */
 public interface SenderInterface {
 
+    /**
+     * Send the given message. Who received the message depend on implementation of the method.
+     * @param message message to send
+     * @throws NetworkingException if something went wrong sending the message
+     */
     void sendMessage(Message message) throws NetworkingException;
 }

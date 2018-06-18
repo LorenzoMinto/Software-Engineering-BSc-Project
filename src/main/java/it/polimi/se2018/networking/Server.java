@@ -55,33 +55,45 @@ public class Server implements Observer, SenderInterface{
      */
     private final int maxNumberOfAttempts;
 
+    /**
+     * Name of the server
+     */
     private final String serverName;
 
+    /**
+     * Port number for RMI
+     */
     private final int portNumberRMI;
 
+    /**
+     * Port number for Socket
+     */
     private final int portNumberSOCKET;
 
+    /**
+     * File name of the config file
+     */
     private final String configFileName;
 
     /**
      * List of players waiting for playing. Implemented as a map to store coupling of player id and respective client
      */
-    private HashMap<String,ClientProxy> waitingList = new HashMap<>();
+    private HashMap<String,ClientProxyInterface> waitingList = new HashMap<>();
 
     /**
      * List of gateways for communicating with clients
      */
-    private final List<ClientProxy> gateways = new ArrayList<>();
+    private final List<ClientProxyInterface> gateways = new ArrayList<>();
 
     /**
      * Map each player id to respective gateway
      */
-    private HashMap<String,ClientProxy> playerIDToGatewayMap = new HashMap<>();
+    private HashMap<String,ClientProxyInterface> playerIDToGatewayMap = new HashMap<>();
 
     /**
      * Map each gateway to respective player id
      */
-    private HashMap<ClientProxy, String> gatewayToPlayerIDMap = new HashMap<>();
+    private HashMap<ClientProxyInterface, String> gatewayToPlayerIDMap = new HashMap<>();
 
     /**
      * Enum representing the possibile server states
@@ -224,7 +236,12 @@ public class Server implements Observer, SenderInterface{
         return new Controller(game,properties,LOGGER);
     }
 
-    public void parseInBoundMessage(Message message, ClientProxy sender) {
+    /**
+     * Handles inbound messages
+     * @param message the received message
+     * @param sender the sender of the message
+     */
+    public void handleInBoundMessage(Message message, ClientProxyInterface sender) {
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
@@ -266,7 +283,7 @@ public class Server implements Observer, SenderInterface{
      * @param sender the sender of the message
      * @return a message containing if the operation went good or not
      */
-    private Message handleWaitingRoomMessage(Message message, ClientProxy sender){
+    private Message handleWaitingRoomMessage(Message message, ClientProxyInterface sender){
         if(serverState != ServerState.WAITING_ROOM){
             return new Message(ViewBoundMessageType.JOIN_WR_DENIED_PLAYING,"GAME_IS_PLAYING");
         }
@@ -297,7 +314,7 @@ public class Server implements Observer, SenderInterface{
      * @param client the client to add from the waiting room
      * @return a message containing if the operation went good or not
      */
-    private Message addInWaitingRoom(String nickname, ClientProxy client){
+    private Message addInWaitingRoom(String nickname, ClientProxyInterface client){
         Message message;
 
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
@@ -323,7 +340,7 @@ public class Server implements Observer, SenderInterface{
      * @param client the client to remove from the waiting room
      * @return a message containing if the operation went good or not
      */
-    private Message removeFromWaitingRoom(String nickname, ClientProxy client){
+    private Message removeFromWaitingRoom(String nickname, ClientProxyInterface client){
         if( waitingList.get(nickname) == client ){
             //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
@@ -394,7 +411,7 @@ public class Server implements Observer, SenderInterface{
         gateways.addAll(waitingList.values());
         //Map players id with gateway and vice versa
         playerIDToGatewayMap.putAll(waitingList);
-        for(Map.Entry<String, ClientProxy> entry : playerIDToGatewayMap.entrySet()){
+        for(Map.Entry<String, ClientProxyInterface> entry : playerIDToGatewayMap.entrySet()){
             gatewayToPlayerIDMap.put(entry.getValue(), entry.getKey());
         }
         //Send players to controller and let it actually starting the game
@@ -404,7 +421,7 @@ public class Server implements Observer, SenderInterface{
     @Override
     public void sendMessage(Message message) throws NetworkingException {
         boolean somethingFailed = false;
-        List<ClientProxy> g;
+        List<ClientProxyInterface> g;
 
         if(message.getPlayerID()==null){ //Means that message is broadcast
             g = gateways;
@@ -413,7 +430,7 @@ public class Server implements Observer, SenderInterface{
             g.add(playerIDToGatewayMap.get(message.getPlayerID()));
         }
 
-        for(ClientProxy o : g){
+        for(ClientProxyInterface o : g){
             int attempts = 0;
             boolean correctlySent = false;
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
