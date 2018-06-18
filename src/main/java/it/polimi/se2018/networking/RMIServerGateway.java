@@ -2,6 +2,7 @@ package it.polimi.se2018.networking;
 
 import it.polimi.se2018.utils.Message;
 
+import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -16,22 +17,12 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
 
     private transient Server server;
 
-    RMIServerGateway(String name, int port, Server server) throws RemoteException, NetworkingException {
+    RMIServerGateway(String name, int port, Server server) throws RemoteException, MalformedURLException {
         this.server = server;
 
-        try {
-            LocateRegistry.createRegistry(port);
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            throw new NetworkingException("Failed creating RMI registry");
-        }
+        LocateRegistry.createRegistry(port);
 
-        try {
-            Naming.rebind(name, this);
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            throw new NetworkingException("Failed creating binding rmi name");
-        }
+        Naming.rebind(name, this);
     }
 
     @Override

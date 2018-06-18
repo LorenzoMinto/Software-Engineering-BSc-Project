@@ -30,6 +30,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     @Override
     public void sendMessage(Message message) throws NetworkingException {
 
+        //Waits that socket is open and connection correctly established
         while(!running){
             try {
                 Thread.sleep(500);

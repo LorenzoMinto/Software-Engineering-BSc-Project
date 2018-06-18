@@ -6,6 +6,7 @@ import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.Message;
 
+import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Level;
@@ -59,11 +60,6 @@ public class Server implements Observer, SenderInterface{
     private final int portNumberSOCKET;
 
     private final String configFileName;
-
-    /**
-     * Server representation for RMI
-     */
-    private ReceiverInterface proxyServer;
 
     /**
      * List of players waiting for playing. Implemented as a map to store coupling of player id and respective client
@@ -170,8 +166,6 @@ public class Server implements Observer, SenderInterface{
         //Creates controller and game
         this.controller = createController();
         this.controller.register(this);
-
-        listenForCommandsFromConsole();
     }
 
     /**
@@ -180,13 +174,10 @@ public class Server implements Observer, SenderInterface{
     private void setupNetworking() {
         try {
             LOGGER.info("Starting RMI...");
-            this.proxyServer = new RMIServerGateway(this.serverName,this.portNumberRMI,this);
+            new RMIServerGateway(this.serverName,this.portNumberRMI,this);
 
-        } catch (RemoteException e) {
+        } catch (RemoteException | MalformedURLException e) {
             LOGGER.severe("Failed RMI setup");
-            return;
-        } catch (NetworkingException e){
-            LOGGER.severe("Failed RMI setup due to networking exception");
             return;
         }
 
@@ -249,7 +240,7 @@ public class Server implements Observer, SenderInterface{
 
             try{
 
-                sender.receiveMessage(returnMessage, this.proxyServer);
+                sender.receiveMessage(returnMessage, null);
 
                 //Notify all players
                 if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
@@ -427,7 +418,7 @@ public class Server implements Observer, SenderInterface{
             while(attempts< maxNumberOfAttempts && !correctlySent) {
                 attempts++;
                 try {
-                    o.receiveMessage(message, this.proxyServer);
+                    o.receiveMessage(message, null);
                 } catch (NetworkingException e) {
                     LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
@@ -445,29 +436,6 @@ public class Server implements Observer, SenderInterface{
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
         if(somethingFailed) throw new NetworkingException("At least on message could not be sent from Client to Server. Message was: "+message);
-    }
-
-    /**
-     * Metodo per inviare messaggi ai client dalla console del server
-     */
-    private void listenForCommandsFromConsole(){
-        LOGGER.info("Start listening for messages...");
-
-        /*
-        Scanner scanner = new Scanner(System.in);
-        while(true){
-            System.out.print("Inserisci messaggio: ");
-            String text = scanner.nextLine();
-
-            try {
-                sendMessage(...);
-            } catch (RemoteException e) {
-                LOGGER.severe("Exception while sending a message from the Server console");
-            }
-
-            if(text.equals("exit")){ break; }
-        }
-        */
     }
 
     @Override
