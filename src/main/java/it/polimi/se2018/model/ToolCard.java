@@ -119,7 +119,7 @@ public class ToolCard implements Serializable{
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
      * @param possibleMovesCountSet the number of possible dice moves
      */
-    public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule, HashSet<Integer> possibleMovesCountSet) {
+    public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule, Set<Integer> possibleMovesCountSet) {
         //the id of toolCard
         this.toolCardID = p.getProperty("id");
         //the title of the tool card.
@@ -291,20 +291,28 @@ public class ToolCard implements Serializable{
         return PRE_TITLE + getTitle() + POST_TITLE + DIVIDER + PRE_NEEDED_TOKENS +getNeededTokens()+ POST_NEEDED_TOKENS + DIVIDER + PRE_USED_TOKENS + getUsedTokens()+ POST_USED_TOKENS + DIVIDER + PRE_DESCRIPTION + getDescription() + POST_DESCRIPTION;
     }
 
+    void setTokensUsed(int tokensUsed) {
+        this.tokensUsed = tokensUsed;
+    }
+
+    void setBaseNeededTokens(int baseNeededTokens) {
+        this.baseNeededTokens = baseNeededTokens;
+    }
+
     public ToolCard copy(){
-
-        //TODO: questa copia non è completamente corretta. bisogna copiare esattamente neededTokens,baseNeededTokens,tokensUsed
-
         Properties p = new Properties();
         p.put("id",this.toolCardID);
         p.put("title",this.title);
         p.put("description",this.description);
-        p.put("neededTokens",this.neededTokens);
-        p.put("tokensUsageMultiplier",this.tokensUsageMultiplier);
+        p.put("neededTokens",String.valueOf(this.neededTokens));
+        p.put("tokensUsageMultiplier",String.valueOf(this.tokensUsageMultiplier));
         p.put("imageURL",this.imageURL);
 
-        ToolCard copy = new ToolCard(p,new HashMap<String,String>(this.controllerStateRules),this.placementRule.copy(),new HashSet<Integer>(this.possibleMovesCountSet));
+        ToolCard copy = new ToolCard(p,new HashMap<>(this.controllerStateRules),this.placementRule,new HashSet<>(this.possibleMovesCountSet));
 
-        return this; //TODO: sostituire con return copy appena hai risolto il todo precedente
+        copy.setBaseNeededTokens(this.baseNeededTokens);
+        copy.setTokensUsed(this.tokensUsed);
+
+        return copy;
     }
 }
