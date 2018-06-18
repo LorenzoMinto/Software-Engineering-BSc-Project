@@ -48,8 +48,13 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException {
-        client.receiveMessage(message,sender);
+    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
+        try {
+            client.receiveMessage(message,sender);
+        } catch (RemoteException e) {
+            throw new NetworkingException();
+            //TODO: rimuovi
+        }
         //Client doesn't answer to server's messages so it is unnecessary sender
     }
 

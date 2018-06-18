@@ -26,8 +26,13 @@ public class SocketServer implements ReceiverInterface {
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException {
-        receiveMessage(message);
+    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
+        try {
+            receiveMessage(message);
+        } catch (RemoteException e) {
+            throw new NetworkingException();
+            //TODO: rimuovere
+        }
         //Just for compatibility reasons. Sender is not needed (and could be null): something related to RMI
         //TODO: questa cosa non va bene
     }
