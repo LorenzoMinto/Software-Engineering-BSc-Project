@@ -292,14 +292,19 @@ public class ToolCard implements Serializable{
     }
 
     public ToolCard copy(){
+
+        //TODO: questa copia non è completamente corretta. bisogna copiare esattamente neededTokens,baseNeededTokens,tokensUsed
+
         Properties p = new Properties();
         p.put("id",this.toolCardID);
         p.put("title",this.title);
         p.put("description",this.description);
-        p.put("neededTokens",this.neededTokens); //TODO: questa copia non è completamente corretta. bisogna copiare esattamente neededTokens,baseNeededTokens,tokensUsed
+        p.put("neededTokens",this.neededTokens);
         p.put("tokensUsageMultiplier",this.tokensUsageMultiplier);
         p.put("imageURL",this.imageURL);
 
-        return new ToolCard(p,new HashMap<String,String>(this.controllerStateRules),this.placementRule.copy(),new HashSet<Integer>(this.possibleMovesCountSet));
+        ToolCard copy = new ToolCard(p,new HashMap<String,String>(this.controllerStateRules),this.placementRule.copy(),new HashSet<Integer>(this.possibleMovesCountSet));
+
+        return this; //TODO: sostituire con return copy appena hai risolto il todo precedente
     }
 }

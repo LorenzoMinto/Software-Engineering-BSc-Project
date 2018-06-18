@@ -43,6 +43,6 @@ public abstract class PlacementRuleDecorator implements PlacementRule {
     @Override
     public PlacementRule copy() {
         //TODO: implement here
-        return null;
+        return this;
     }
 }

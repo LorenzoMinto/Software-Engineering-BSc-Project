@@ -39,6 +39,6 @@ public class ColorRestrictionPlacementRuleDecorator extends PlacementRuleDecorat
     @Override
     public PlacementRule copy() {
         //TODO: implement here
-        return null;
+        return this;
     }
 }

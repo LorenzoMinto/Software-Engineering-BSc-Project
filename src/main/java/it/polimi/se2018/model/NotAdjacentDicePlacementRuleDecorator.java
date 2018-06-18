@@ -37,7 +37,7 @@ public class NotAdjacentDicePlacementRuleDecorator extends PlacementRuleDecorato
     @Override
     public PlacementRule copy() {
         //TODO: implement here
-        return null;
+        return this;
     }
 
     /**

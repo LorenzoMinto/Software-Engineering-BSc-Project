@@ -35,7 +35,7 @@ public class ValuePlacementRuleDecorator extends PlacementRuleDecorator {
     @Override
     public PlacementRule copy() {
         //TODO: implement here
-        return null;
+        return this;
     }
 
     /**
