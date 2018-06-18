@@ -12,6 +12,16 @@ import java.util.HashMap;
 public class ControllerStateManager {
 
     /**
+     * String used as message of BadBehaviourException thrown when the state that is asked to be created
+     * is not subclass of ControllerState
+     */
+    private static final String STATE_NOT_SUBCLASS_OF_CONTROLLER_STATE = "Asked to create state that seems to not being subclass of ControllerState: state is ";
+
+    /**
+     * String used as message of BadBehaviourException thrown when something during creation of state goes wrong
+     */
+    private static final String ERROR_DURING_CREATION_OF_CONTROLLER_STATE_BY_ID = "Something during the creation of a controller state by id failed. This is the asked ID: ";
+    /**
      * Controller to which is added the state
      */
     private Controller controller;
@@ -90,13 +100,13 @@ public class ControllerStateManager {
             //Checks that the class it is created is a subclass of ControllerState
             Class<?> cs = Class.forName(ControllerState.class.getPackage().getName() + "." + controllerStateID);
             if( ! ControllerState.class.isAssignableFrom(cs) ){
-                throw new BadBehaviourRuntimeException("Asked to create state: "+controllerStateID+" that seems to not being subclass of ControllerState");
+                throw new BadBehaviourRuntimeException(STATE_NOT_SUBCLASS_OF_CONTROLLER_STATE + controllerStateID);
             }
 
             return (ControllerState) cs.getConstructor(Controller.class).newInstance(controller);
 
         } catch( Exception e ){
-            throw new BadBehaviourRuntimeException("Something during the creation of a controller state by id failed. This is the asked ID: "+controllerStateID);
+            throw new BadBehaviourRuntimeException(ERROR_DURING_CREATION_OF_CONTROLLER_STATE_BY_ID +controllerStateID);
         }
     }
 

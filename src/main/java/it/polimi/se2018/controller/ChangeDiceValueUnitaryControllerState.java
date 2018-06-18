@@ -18,13 +18,32 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class ChangeDiceValueUnitaryControllerState extends ControllerState {
 
     /**
+     * String passed as content of error message in incrementDice()
+     */
+    private static final String CANNOT_INCREMENT_DRAFTED_DICE_VALUE = "Cannot increment drafted dice's value.";
+
+    /**
+     * String passed as content of acknowledge message in incrementDice()
+     */
+    private static final String DICE_INCREMENTED = "Dice incremented.";
+
+    /**
+     * String passed as content of acknowledge message in decrementDice()
+     */
+    private static final String DICE_DECREMENTED = "Dice decremented.";
+
+    /**
+     * String passed as content of error message in decrementDice()
+     */
+    private static final String CANNOT_DECREMENT_DRAFTED_DICE_VALUE = "Cannot decrement drafted dice's value.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public ChangeDiceValueUnitaryControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
@@ -35,9 +54,9 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
         if (currentTurn.getDraftedDice().incrementValue()) {
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new Message(ERROR_MESSAGE, "Cannot increment drafted dice's value.");
+            return new Message(ERROR_MESSAGE, CANNOT_INCREMENT_DRAFTED_DICE_VALUE);
         }
-        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice incremented.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_INCREMENTED);
     }
 
     @Override
@@ -48,9 +67,9 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
         if (currentTurn.getDraftedDice().decrementValue()) {
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
-            return new Message(ERROR_MESSAGE, "Cannot decrement drafted dice's value.");
+            return new Message(ERROR_MESSAGE, CANNOT_DECREMENT_DRAFTED_DICE_VALUE);
         }
-        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice decremented.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_DECREMENTED);
     }
 
     @Override

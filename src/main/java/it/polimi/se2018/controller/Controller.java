@@ -683,7 +683,7 @@ public class Controller extends Observable {
      */
     private void manageRankings(){
         Map<Player, Integer> rankings = getRankingsAndScores();
-        //TODO: check this: is the following needed anymore?
+        //TOFO: is the following needed anymore?
         game.setRankings(rankings);
 
         List<RankingRecord> localRanking = new ArrayList<>();

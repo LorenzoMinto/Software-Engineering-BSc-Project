@@ -20,13 +20,27 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class ChooseFromTrackControllerState extends ControllerState {
 
     /**
+     * String used as content of error message in chooseDiceFromTrack()
+     */
+    private static final String DICE_NOT_IN_SELECTED_TRACK_SLOT = "Dice not in selected TrackSlot.";
+
+    /**
+     * String used as content of error message in chooseDiceFromTrack()
+     */
+    private static final String SELECTED_TRACK_SLOT_DOES_NOT_EXIST = "Selected TrackSlot does not exist.";
+
+    /**
+     * String used as content of acknowledge message in chooseDiceFromTrack()
+     */
+    private static final String DICE_FROM_TRACK_CHOSEN = "Dice from Track chosen.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public ChooseFromTrackControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
@@ -36,16 +50,16 @@ public class ChooseFromTrackControllerState extends ControllerState {
         try {
             controller.game.getTrack().takeDice(dice, slotNumber);
         } catch (BadDiceReferenceException e) {
-            return new Message(ERROR_MESSAGE,"Dice not in selected TrackSlot.");
+            return new Message(ERROR_MESSAGE, DICE_NOT_IN_SELECTED_TRACK_SLOT);
         } catch (ValueOutOfBoundsException e) {
-            return new Message(ERROR_MESSAGE,"Selected TrackSlot does not exist.");
+            return new Message(ERROR_MESSAGE, SELECTED_TRACK_SLOT_DOES_NOT_EXIST);
         }
 
         controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
         controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
         controller.setControllerState(controller.stateManager.getNextState(this));
 
-        return new Message(ACKNOWLEDGMENT_MESSAGE, Message.fastMap("message","Dice from Track chosen."));
+        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_FROM_TRACK_CHOSEN);
     }
 
     @Override

@@ -17,6 +17,19 @@ import java.util.*;
  */
 public class DiceBag {
 
+    /**
+     * String used as message of IllegalArgumentException in creation of DiceBag
+     */
+    private static final String NEGATIVE_NUMBER_OF_DICES = "Can't get a negative number of dices.";
+
+    /**
+     * String used as message of IllegalArgumentException in getDices()
+     */
+    private static final String ASKED_TOO_MUCH_DICES = "Asked DiceBag to get more dices than availables: ";
+
+    /**
+     * Maps the quantity of available dices of each color
+     */
     private Map<DiceColor,Integer> availableDices;
 
     /**
@@ -27,7 +40,7 @@ public class DiceBag {
      * @see DiceColor
      */
     public DiceBag(int numberOfDicesPerColor) {
-        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException("Can't create a dicebag with a negative number of dices per color");}
+        if(numberOfDicesPerColor <0){ throw new IllegalArgumentException(NEGATIVE_NUMBER_OF_DICES);}
 
         this.availableDices = new EnumMap<>(DiceColor.class);
         for(int i = 0; i< DiceColor.values().length-1; i++){
@@ -45,10 +58,10 @@ public class DiceBag {
     public List<Dice> getDices(int quantity) {
         List<Dice> drawnDices = new ArrayList<>();
 
-        if(quantity <0){ throw new IllegalArgumentException("Can't get a negative number of dices.");}
+        if(quantity <0){ throw new IllegalArgumentException(NEGATIVE_NUMBER_OF_DICES);}
 
-        if( quantity > this.numberOfAvailableDices() ){
-            throw new BadBehaviourRuntimeException("Asked DiceBag to get "+quantity+" dices but only "+numberOfAvailableDices()+" dices are available");
+        if( quantity > this.getNumberOfAvailableDices() ){
+            throw new BadBehaviourRuntimeException(ASKED_TOO_MUCH_DICES +quantity + "/" + getNumberOfAvailableDices());
         } else {
             for(int i=0; i<quantity; i++){
 
@@ -84,7 +97,7 @@ public class DiceBag {
      *
      * @return the number of available dices
      */
-    private int numberOfAvailableDices(){
+    private int getNumberOfAvailableDices(){
         int sum = 0;
         for(Integer value : availableDices.values()){
             sum += value;

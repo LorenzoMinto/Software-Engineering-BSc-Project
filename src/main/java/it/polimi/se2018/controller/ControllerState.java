@@ -20,6 +20,11 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public abstract class ControllerState {
 
     /**
+     * String passed as message of IllegalArgumentException when it is asked to create the state but controller is null.
+     */
+    static final String NO_CONTROLLER = "Can't create a State Controller without a Controller";
+
+    /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
      */
     static final String MIDDLE_OF_EFFECT = "Can't do that. You're currently in the middle of a toolCard effect.";
@@ -58,6 +63,11 @@ public abstract class ControllerState {
      * Reference to the {@link Controller} to which this state belongs.
      */
     protected Controller controller;
+
+    public ControllerState(Controller controller) {
+        if (controller==null) { throw new IllegalArgumentException(NO_CONTROLLER);}
+        this.controller = controller;
+    }
 
     /**
      * Drafts a specified dice from the current draft pool and sets it as the drafted dice on the current turn.
@@ -146,5 +156,12 @@ public abstract class ControllerState {
     public Set<Move> getStatePermissions() {
         //do nothing by default
         return EnumSet.of(Move.END_TURN);
+    }
+
+    /**
+     * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
+     */
+    public void executeImplicitBehaviour(){
+        //do nothing
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.se2018.utils.Message;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
@@ -21,13 +22,32 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class MoveControllerState extends ControllerState {
 
     /**
+     * String used as content of acknowledgment message in moveDice()
+     */
+    private static final String MOVE_MADE = "Move made.";
+
+    /**
+     * String used as content of error message in moveDice()
+     */
+    private static final String CANT_MAKE_THIS_MOVE = "Can't make this move.";
+
+    /**
+     * String used as content of acknowledgment message in endToolCardEffect()
+     */
+    private static final String TOOL_CARD_EFFECTED_ENDED = "ToolCard effected ended.";
+
+    /**
+     * String used as content of error message in endToolCardEffect()
+     */
+    private static final String CANT_END_TOOLCARD_EFFECT = "Can't end the ToolCard effect now.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public MoveControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
@@ -46,13 +66,12 @@ public class MoveControllerState extends ControllerState {
             //if the moves counter is less than the maximum number of moves ask for another move
             if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size())) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new Message(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
-                return new Message(ACKNOWLEDGMENT_MESSAGE,"Move made.");
             }
+            return new Message(ACKNOWLEDGMENT_MESSAGE, MOVE_MADE);
         } else {
-            return new Message(ERROR_MESSAGE,"Can't make this move.");
+            return new Message(ERROR_MESSAGE, CANT_MAKE_THIS_MOVE);
         }
     }
 
@@ -61,14 +80,14 @@ public class MoveControllerState extends ControllerState {
         if (controller.getActiveToolCard().getPossibleMovesCountSet().contains(controller.movesCounter)) {
             this.controller.resetActiveToolCard();
             controller.setControllerState(controller.stateManager.getDraftControllerState());
-            return new Message(ACKNOWLEDGMENT_MESSAGE, "ToolCard effected ended.");
+            return new Message(ACKNOWLEDGMENT_MESSAGE, TOOL_CARD_EFFECTED_ENDED);
         } else {
-            return new Message(ERROR_MESSAGE,"Can't end the ToolCard effect now.");
+            return new Message(ERROR_MESSAGE, CANT_END_TOOLCARD_EFFECT);
         }
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.MOVE_DICE, Move.END_EFFECT);
     }
 }

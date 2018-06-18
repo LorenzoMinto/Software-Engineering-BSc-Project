@@ -18,13 +18,22 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class DraftControllerState extends ControllerState {
 
     /**
+     * String used as content of acknowledge message in draftDiceFromDraftPool()
+     */
+    private static final String DICE_DRAFTED = "Dice drafted.";
+
+    /**
+     * String used as content of error message in draftDiceFromDraftPool()
+     */
+    private static final String DICE_NOT_IN_DRAFT_POOL = "Can't draft a dice that is not in the Draft Pool";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public DraftControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = ONLY_DRAFT_AND_PLACE;
     }
 
@@ -36,7 +45,7 @@ public class DraftControllerState extends ControllerState {
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
         } else{
-            return new Message(ERROR_MESSAGE, "Can't draft a dice that is not in the Draft Pool");
+            return new Message(ERROR_MESSAGE, DICE_NOT_IN_DRAFT_POOL);
         }
 
         if (controller.getActiveToolCard() != null) {
@@ -45,7 +54,7 @@ public class DraftControllerState extends ControllerState {
             controller.setControllerState(controller.stateManager.getPlaceState());
         }
 
-        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_DRAFTED);
     }
 
     @Override

@@ -18,6 +18,15 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
  */
 public class ChangeDiceValueControllerState extends ControllerState {
 
+    /**
+     * String passed as content of error message in chooseDiceValue()
+     */
+    private static final String ILLEGAL_VALUE_FOR_DICE = "Illegal value for dice.";
+
+    /**
+     * String passed as content of acknowledge message in chooseDiceValue()
+     */
+    private static final String DICE_VALUE_CHANGED = "Dice value changed.";
 
     /**
      * Class constructor.
@@ -25,8 +34,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
      * @param controller the controller of which this class is going to act as a state.
      */
     public ChangeDiceValueControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = MIDDLE_OF_EFFECT;
     }
 
@@ -37,10 +45,10 @@ public class ChangeDiceValueControllerState extends ControllerState {
         try {
             currentTurn.getDraftedDice().setValue(value);
         } catch (ValueOutOfBoundsException e) {
-            return new Message(ERROR_MESSAGE, "Illegal value for dice.");
+            return new Message(ERROR_MESSAGE, ILLEGAL_VALUE_FOR_DICE);
         }
         controller.setControllerState(controller.stateManager.getNextState(this));
-        return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice value changed.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_VALUE_CHANGED);
     }
 
     @Override

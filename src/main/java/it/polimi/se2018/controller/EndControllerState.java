@@ -15,20 +15,24 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE
 public class EndControllerState extends ControllerState {
 
     /**
+     * Message used as content of acknowledgment message in endCurrentTurn()
+     */
+    private static final String TURN_ENDED = "Turn ended.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public EndControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = END_TURN_ONLY;
     }
 
     @Override
     public Message endCurrentTurn() {
         controller.advanceGame();
-        return new Message(ACKNOWLEDGMENT_MESSAGE, "Turn ended.");
+        return new Message(ACKNOWLEDGMENT_MESSAGE, TURN_ENDED);
     }
 
     @Override

@@ -15,6 +15,15 @@ import java.util.*;
 public class ObjectiveCardManager {
 
     /**
+     * String used as message of ValueOutOfBoundsException thrown in getPublicObjectiveCards()
+     */
+    private static final String ASKED_QUANTITY_GREATER_THAN_MAX = "The quantity of Public Objective Cards asked is greater than the number of Public Objective Cards.";
+
+    /**
+     * String used as message of BadBehaviourRuntimeException thrown in getPrivateObjectiveCard()
+     */
+    private static final String ALL_CARDS_ALREADY_CREATED = "Cannot get more than 5 Private Objective Card as all of them were already created.";
+    /**
      * Keeps track of the already given cards' colors in order
      * to ensure that the same card can not be distributed
      * more than once
@@ -31,8 +40,7 @@ public class ObjectiveCardManager {
      * @return new instance of a {@link PrivateObjectiveCard}
      */
     public PrivateObjectiveCard getPrivateObjectiveCard(){
-        if(assignedColors.size() == DiceColor.values().length-1){ throw new BadBehaviourRuntimeException(
-                "Cannot get more than 5 Private Objective Card as all of them were already created.");}
+        if(assignedColors.size() == DiceColor.values().length-1){ throw new BadBehaviourRuntimeException(ALL_CARDS_ALREADY_CREATED);}
 
         DiceColor color;
 
@@ -54,8 +62,7 @@ public class ObjectiveCardManager {
     public List<PublicObjectiveCard> getPublicObjectiveCards(int quantity){
 
         if(quantity < 1 || quantity > NUMBER_OF_PUBLIC_OBJECTIVE_CARDS){
-            throw new ValueOutOfBoundsException("The quantity of Public Objective Cards asked is greater " +
-                    "than the number of Public Objective Cards.");
+            throw new ValueOutOfBoundsException(ASKED_QUANTITY_GREATER_THAN_MAX);
         }
 
         Random r = new Random();

@@ -21,8 +21,7 @@ abstract class ImplicitControllerState extends ControllerState {
      * @param controller the controller to which the state has to be assigned
      */
     ImplicitControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = IMPLICIT_WARNING;
     }
 

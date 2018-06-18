@@ -14,6 +14,12 @@ import java.util.*;
  * @author Jacopo Pio Gargano
  */
 public class ObjectiveCardFactory {
+    //TODO: in questa classe ci sono molte stringhe hardcodate, decidere cosa fare
+
+    /**
+     * String used as content of IllegalArgumentException thrown when requested objectivecard has not a specified color.
+     */
+    private static final String CANNOT_CREATE_A_PRIVATE_OBJECTIVE_CARD_WITH_NO_COLOR = "Cannot create a Private Objective Card with no color";
 
     /**
      * Instance of the class in order to achieve the Singleton Pattern
@@ -52,8 +58,7 @@ public class ObjectiveCardFactory {
      * @return the {@link PrivateObjectiveCard} of the specified color
      */
     protected PrivateObjectiveCard createPrivateObjectiveCard(DiceColor color) {
-        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException("Cannot create a " +
-                "Private Objective Card with no color"); }
+        if(color== DiceColor.NOCOLOR){ throw new IllegalArgumentException(CANNOT_CREATE_A_PRIVATE_OBJECTIVE_CARD_WITH_NO_COLOR); }
 
         String title = "Shades of " + color.toString()+ " - Private";
         String description = "Sum of values on " + color.toString() + " dice";
