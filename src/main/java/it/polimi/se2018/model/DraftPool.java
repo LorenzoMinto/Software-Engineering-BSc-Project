@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Represents the DraftPool: the place of the game where the drafted dices are left
@@ -102,7 +103,7 @@ public class DraftPool extends Observable implements Serializable {
      */
     private void notifyGame() {
         Map<String, Object> messageAttributes = new HashMap<>();
-        messageAttributes.put("draftPoolDices", this.getDices().stream().map(Dice::copy));
+        messageAttributes.put("draftPoolDices", this.getDices().stream().map(Dice::copy).collect(Collectors.toList()));
 
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_DRAFTPOOL, messageAttributes));
     }

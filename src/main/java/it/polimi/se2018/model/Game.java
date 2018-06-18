@@ -9,6 +9,7 @@ import it.polimi.se2018.utils.Message;
 
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Main class of the Model.
@@ -297,7 +298,7 @@ public class Game extends Observable implements Observer{
 
         messageAttributes.put("toolCard", toolCard.copy());
         //updates the toolCards as their tokens were updated
-        messageAttributes.put("toolCards", drawnToolCards.stream().map(ToolCard::copy));
+        messageAttributes.put("toolCards", drawnToolCards.stream().map(ToolCard::copy).collect(Collectors.toList()));
         //updates the player as their tokens were updated
         messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
 
@@ -362,12 +363,12 @@ public class Game extends Observable implements Observer{
         String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
         WindowPattern[] windowPatterns = players.stream().map(Player::getWindowPattern).toArray(WindowPattern[]::new);
 
-        messageAttributes.put("drawnToolCards", drawnToolCards.stream().map(ToolCard::copy));
-        messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards.stream().map(PublicObjectiveCard::copy));
+        messageAttributes.put("drawnToolCards", drawnToolCards.stream().map(ToolCard::copy).collect(Collectors.toList()));
+        messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards.stream().map(PublicObjectiveCard::copy).collect(Collectors.toList()));
         messageAttributes.put("players", Arrays.asList(playersIDs));
-        messageAttributes.put("windowPatterns", Arrays.asList(windowPatterns).stream().map(WindowPattern::copy));
+        messageAttributes.put("windowPatterns", Arrays.stream(windowPatterns).map(WindowPattern::copy).collect(Collectors.toList()));
         messageAttributes.put("track", track.copy());
-        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy));
+        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy).collect(Collectors.toList()));
 
         for (Player player: players) {
             messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard().copy()); //put overrides previous values
@@ -425,7 +426,7 @@ public class Game extends Observable implements Observer{
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("number", nextRoundNumber);
         messageAttributes.put("track", track.copy());
-        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy));
+        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy).collect(Collectors.toList()));
 
         notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));
 
