@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 
 /**
+ *  This is an implicit state that switches drafted dice with one random drafted from dicebag.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */

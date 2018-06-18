@@ -160,7 +160,4 @@ public class WindowPatternManager {
             throw new BadFormattedPatternFileException();
         }
     }
-
-
-
 }

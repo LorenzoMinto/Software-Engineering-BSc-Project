@@ -1,7 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
@@ -100,12 +99,6 @@ public class Controller extends Observable {
     private WindowPatternManager windowPatternManager;
 
     /**
-     * Contains an instance of a {@link ToolCardManager} that is the one
-     * that creates the {@link ToolCard} (s) to be assigned to the {@link Game}
-     */
-    private ToolCardManager toolCardManager;
-
-    /**
      * Configuration properties loaded from config file
      */
     private final Properties properties;
@@ -115,9 +108,19 @@ public class Controller extends Observable {
      */
     private static final Timer TIMER = new Timer();
 
+    /**
+     * Timer waiting for all players choosing theirs patterns
+     */
     private TimerTask waitingForPatternsChoice;
+
+    /**
+     * Timer waiting for the current player to perform his/her move
+     */
     private TimerTask waitingForPlayerMove;
 
+    /**
+     * Map that contains the list of windowpattern given to each player
+     */
     private HashMap<String,List<WindowPattern>> assignedWindowPatterns = new HashMap<>();
 
     /**
@@ -125,9 +128,16 @@ public class Controller extends Observable {
      */
     int movesCounter = 0;
 
+    /**
+     * Set of inactive players
+     */
     private HashSet<String> inactivePlayers = new HashSet<>();
 
 
+    /**
+     *
+     */
+    //TODO: @lorenzo completa questo javadoc
     private Persistency persistency;
 
     /**
@@ -161,7 +171,11 @@ public class Controller extends Observable {
 
         this.windowPatternManager = new WindowPatternManager();
 
-        this.toolCardManager = new ToolCardManager(this.getDefaultPlacementRule());
+        /*
+          Contains an instance of a ToolCardManager that is the one
+          that creates the ToolCard(s) to be assigned to the Game
+        */
+        ToolCardManager toolCardManager = new ToolCardManager(this.getDefaultPlacementRule());
 
         this.objectiveCardManager = new ObjectiveCardManager();
 
@@ -213,156 +227,187 @@ public class Controller extends Observable {
      * @return an ACKNOWLEDGMENT_MESSAGE or an error message
      */
     public Message handleMove(Message message) {
-        System.out.println("Handling move...");
-
-        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
-        Message returnMessage = null;
-
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
-                if(type == ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN){
-                    String playerID = message.getPlayerID(); //In this case, playerID is the sending player ID
-                    WindowPattern wp;
-                    try {
-                        wp = (WindowPattern) message.getParam("windowPattern");
-                    } catch (NoSuchParamInMessageException e) {
-                        return errorMessage("Bad Formatted");
-                    }
-
-                    if( game.assignWindowPatternToPlayer(wp,playerID) ){
-
-                        if( checkIfAllPlayersChoseWP() ){
-                            waitingForPatternsChoice.cancel();
-                            startGame();
-                            return null;
-
-                        } else {
-                            return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
-                        }
-
-                    } else {
-                        return new Message(ViewBoundMessageType.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
-                    }
-                } else {
-                    returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE,"IllegalState");
-                }
-                break;
+                return handleMoveInWaitingForPatternsChoiceStatus(message);
 
             case PLAYING:
-                String sendingPlayerID = message.getPlayerID(); //In this case, playerID is the sending player ID
-                if(type==ControllerBoundMessageType.BACK_GAMING){
-                    //this cause that the next turn of this player will not be skipped and player will be notified
-                    inactivePlayers.remove(sendingPlayerID);
+                return handleMoveInPlayingStatus(message);
 
-                    returnMessage = new Message(ViewBoundMessageType.BACK_TO_GAME);
+            default:
+                return new Message(ViewBoundMessageType.ERROR_MESSAGE);
+        }
+    }
 
-                    logger.info(()->"Received BACK_GAMING message from: "+sendingPlayerID);
+    /**
+     * For each different move, it executes the relative operations.
+     * Assumes that game status is "playing"
+     * @param message the Message with the parameters to be analyzed and processed
+     * @return an ACKNOWLEDGMENT_MESSAGE or an error message
+     */
+    private Message handleMoveInPlayingStatus(Message message){
+        String sendingPlayerID = message.getPlayerID(); //In this case, playerID is the sending player ID
+        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
+        Message returnMessage;
 
-                } else if (game.isCurrentPlayer(sendingPlayerID)) {
-                    switch (type) {
-                        case DRAFT_DICE_FROM_DRAFTPOOL:
-                            Dice dice;
-                            try {
-                                dice = (Dice) message.getParam("dice");
-                            } catch (NoSuchParamInMessageException e) {
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.draftDiceFromDraftPool(dice);
-                            break;
-                        case PLACE_DICE:
-                            System.out.println("Handling placing...");
-                            int row;
-                            int col;
-                            try {
-                                row = (int) message.getParam("row");
-                                col = (int) message.getParam("col");
-                            } catch (NoSuchParamInMessageException e) {
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.placeDice(row, col);
-                            break;
-                        case USE_TOOLCARD:
-                            ToolCard toolCard;
-                            try {
-                                toolCard = (ToolCard) message.getParam("toolCard");
-                            } catch (NoSuchParamInMessageException e) {
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.useToolCard(toolCard);
-                            break;
-                        case MOVE_DICE:
-                            int rowFrom;
-                            int colFrom;
-                            int rowTo;
-                            int colTo;
-                            try {
-                                rowFrom = (int) message.getParam("rowFrom");
-                                colFrom = (int) message.getParam("colFrom");
-                                rowTo = (int) message.getParam("rowTo");
-                                colTo = (int) message.getParam("colTo");
-                            } catch (NoSuchParamInMessageException e){
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
-                            break;
-                        case CHOOSE_DICE_VALUE:
-                            int value;
-                            try {
-                                value = (int) message.getParam("value");
-                            } catch (NoSuchParamInMessageException e) {
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.chooseDiceValue(value);
-                            break;
-                        case INCREMENT_DICE:
-                            returnMessage = controllerState.incrementDice();
-                            break;
-                        case DECREMENT_DICE:
-                            returnMessage = controllerState.decrementDice();
-                            break;
-                        case CHOOSE_DICE_FROM_TRACK:
-                            Dice trackDice;
-                            int trackSlotNumber;
-                            try {
-                                trackDice = (Dice) message.getParam("dice");
-                                trackSlotNumber = (int) message.getParam("slotNumber");
-                            } catch (NoSuchParamInMessageException e) {
-                                return errorMessage();
-                            }
-                            returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
-                            break;
-                        case END_TURN:
-                            returnMessage = controllerState.endCurrentTurn();
-                            break;
-                        case END_TOOLCARD_EFFECT:
-                            returnMessage = controllerState.endToolCardEffect();
-                            break;
-                        default:
-                            returnMessage = errorMessage("UnrecognizedMove");
-                            break;
-                    }
-                } else {
-                    returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
+        if(type==ControllerBoundMessageType.BACK_GAMING){
+            //this cause that the next turn of this player will not be skipped and player will be notified
+            inactivePlayers.remove(sendingPlayerID);
+
+            logger.info(()->"Received BACK_GAMING message from: "+sendingPlayerID);
+
+            returnMessage = new Message(ViewBoundMessageType.BACK_TO_GAME);
+
+        } else if (game.isCurrentPlayer(sendingPlayerID)) {
+            returnMessage = handleMoveForCurrentPlayer(message, type);
+
+        } else {
+            returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
+        }
+        //TODO: eliminare questi sout di debug
+        System.out.println("About to set permissions to message...");
+        if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
+            System.out.println("Setting permissions to ACK message");
+            System.out.println("FROM STATE: "+controllerState.getClass().getSimpleName() + " permissions: " + controllerState.getStatePermissions());
+            returnMessage.setPermissions(controllerState.getStatePermissions());
+
+            //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
+            logger.info(()->"Resetted PlayerMoveTimer due to move:"+type);
+            resetPlayerMoveTimer();
+        }
+        return returnMessage;
+    }
+
+    /**
+     * For each different move, it executes the relative operations.
+     * Assumes that game status is "playing" and the sender of the message is the current player
+     * @param message the Message with the parameters to be analyzed and processed
+     * @param type the type of the message
+     * @return an ACKNOWLEDGMENT_MESSAGE or an error message
+     */
+    private Message handleMoveForCurrentPlayer(Message message, ControllerBoundMessageType type){
+        Message returnMessage;
+        switch (type) {
+            case DRAFT_DICE_FROM_DRAFTPOOL:
+                Dice dice;
+                try {
+                    dice = (Dice) message.getParam("dice");
+                } catch (NoSuchParamInMessageException e) {
+                    return errorMessage();
                 }
-
-                System.out.println("About to set permissions to message...");
-                if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
-                    System.out.println("Setting permissions to ACK message");
-                    System.out.println("FROM STATE: "+controllerState.getClass().getSimpleName() + " permissions: " + controllerState.getStatePermissions());
-                    returnMessage.setPermissions(controllerState.getStatePermissions());
-
-                    //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
-                    logger.info(()->"Resetted PlayerMoveTimer due to move:"+type);
-                    resetPlayerMoveTimer();
+                returnMessage = controllerState.draftDiceFromDraftPool(dice);
+                break;
+            case PLACE_DICE:
+                //TODO: eliminare questo sout di debug
+                System.out.println("Handling placing...");
+                int row;
+                int col;
+                try {
+                    row = (int) message.getParam("row");
+                    col = (int) message.getParam("col");
+                } catch (NoSuchParamInMessageException e) {
+                    return errorMessage();
                 }
-
+                returnMessage = controllerState.placeDice(row, col);
+                break;
+            case USE_TOOLCARD:
+                ToolCard toolCard;
+                try {
+                    toolCard = (ToolCard) message.getParam("toolCard");
+                } catch (NoSuchParamInMessageException e) {
+                    return errorMessage();
+                }
+                returnMessage = controllerState.useToolCard(toolCard);
+                break;
+            case MOVE_DICE:
+                int rowFrom;
+                int colFrom;
+                int rowTo;
+                int colTo;
+                try {
+                    rowFrom = (int) message.getParam("rowFrom");
+                    colFrom = (int) message.getParam("colFrom");
+                    rowTo = (int) message.getParam("rowTo");
+                    colTo = (int) message.getParam("colTo");
+                } catch (NoSuchParamInMessageException e){
+                    return errorMessage();
+                }
+                returnMessage = controllerState.moveDice(rowFrom, colFrom, rowTo, colTo);
+                break;
+            case CHOOSE_DICE_VALUE:
+                int value;
+                try {
+                    value = (int) message.getParam("value");
+                } catch (NoSuchParamInMessageException e) {
+                    return errorMessage();
+                }
+                returnMessage = controllerState.chooseDiceValue(value);
+                break;
+            case INCREMENT_DICE:
+                returnMessage = controllerState.incrementDice();
+                break;
+            case DECREMENT_DICE:
+                returnMessage = controllerState.decrementDice();
+                break;
+            case CHOOSE_DICE_FROM_TRACK:
+                Dice trackDice;
+                int trackSlotNumber;
+                try {
+                    trackDice = (Dice) message.getParam("dice");
+                    trackSlotNumber = (int) message.getParam("slotNumber");
+                } catch (NoSuchParamInMessageException e) {
+                    return errorMessage();
+                }
+                returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
+                break;
+            case END_TURN:
+                returnMessage = controllerState.endCurrentTurn();
+                break;
+            case END_TOOLCARD_EFFECT:
+                returnMessage = controllerState.endToolCardEffect();
                 break;
             default:
-                returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE);
+                returnMessage = errorMessage("UnrecognizedMove");
                 break;
         }
-
         return returnMessage;
+    }
+
+    /**
+     * For each different move, it executes the relative operations.
+     * Assumes that game status is "WaitingForPatternsChoice"
+     * @param message the Message with the parameters to be analyzed and processed
+     * @return an ACKNOWLEDGMENT_MESSAGE or an error message
+     */
+    private Message handleMoveInWaitingForPatternsChoiceStatus(Message message) {
+        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
+
+        if(type == ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN){
+            String playerID = message.getPlayerID(); //In this case, playerID is the sending player ID
+            WindowPattern wp;
+            try {
+                wp = (WindowPattern) message.getParam("windowPattern");
+            } catch (NoSuchParamInMessageException e) {
+                return errorMessage("Bad Formatted");
+            }
+
+            if( game.assignWindowPatternToPlayer(wp,playerID) ){
+
+                if( checkIfAllPlayersChoseWP() ){
+                    waitingForPatternsChoice.cancel();
+                    startGame();
+                    return null;
+
+                } else {
+                    return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                }
+
+            } else {
+                return new Message(ViewBoundMessageType.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
+            }
+        } else {
+            return new Message(ViewBoundMessageType.ERROR_MESSAGE,"IllegalState");
+        }
     }
 
     /**
@@ -534,7 +579,7 @@ public class Controller extends Observable {
             return;
         }
 
-        //NOTE: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player
+        //TODO: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player. se no rimuovi questo todo.
 
         advanceGame();
     }
@@ -638,7 +683,7 @@ public class Controller extends Observable {
      */
     private void manageRankings(){
         Map<Player, Integer> rankings = getRankingsAndScores();
-        //NOTE: is the following needed anymore?
+        //TODO: check this: is the following needed anymore?
         game.setRankings(rankings);
 
         List<RankingRecord> localRanking = new ArrayList<>();

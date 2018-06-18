@@ -1,6 +1,8 @@
 package it.polimi.se2018.controller;
 
 /**
+ *  This is the state during which, due to a toolcard, current player can reroll all dices in draftpool.
+ *  The implicit behaviour is rolling of dices: in fact no input from user is needed.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */

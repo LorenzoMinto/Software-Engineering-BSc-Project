@@ -9,14 +9,11 @@ import it.polimi.se2018.utils.EmptyListException;
 import java.util.*;
 
 /**
- * Calculates and retrieves the rankings of a given list of players and public objective cards.
- *
- * This class is a SINGLETON.
- *
- * @author Jacopo Pio Gargano
+ * Singleton class that calculates and retrieves the rankings of a given list of players and public objective cards.
  * @see Player
  * @see PublicObjectiveCard
  * @see PrivateObjectiveCard
+ * @author Jacopo Pio Gargano
  */
 public class Scorer {
 
@@ -56,7 +53,6 @@ public class Scorer {
         return playersOfRankings.get(0);
     }
 
-
     /**
      * Calculates and returns the rankings of a given list of players
      * based on a given list of public objective cards.
@@ -88,7 +84,6 @@ public class Scorer {
         return rankings;
     }
 
-
     /**
      * Calculates and returns the scores of a given list of players and public objective cards.
      *
@@ -103,7 +98,6 @@ public class Scorer {
 
         return scores;
     }
-
 
     /**
      * Orders a given list of players by favor tokens.
@@ -141,9 +135,6 @@ public class Scorer {
         return sortRankingsBy(privateObjectiveCardsScores, rankings);
     }
 
-
-
-
     /**
      * Orders rankings by score
      *
@@ -157,7 +148,6 @@ public class Scorer {
         //passed to 'sortRankingsBy' are 'rankings'
         return sortRankingsBy(rankings, rankings);
     }
-
 
     /**
      * Orders rankings ( Map <Players, Scores(Integer) ) by descending value of the criteria Map criteria
@@ -179,7 +169,6 @@ public class Scorer {
         }
         return rankingsByCriteria;
     }
-
 
     /**
      * Gets the player with the max score from certain rankings
@@ -253,7 +242,6 @@ public class Scorer {
         return privateObjectiveCardScores;
     }
 
-
     /**
      * Calculates the score of a {@link WindowPattern} based on a given list of {@link PublicObjectiveCard}
      *
@@ -266,7 +254,6 @@ public class Scorer {
         return cards.stream().mapToInt(card->card.calculateScore(windowPattern)).sum();
     }
 
-
     /**
      * Returns the number of empty spaces in given window pattern
      *
@@ -277,6 +264,4 @@ public class Scorer {
 
         return (int) Arrays.stream(wp.getPattern()).flatMap(Arrays::stream).filter(cell -> !cell.hasDice()).count();
     }
-
-
 }

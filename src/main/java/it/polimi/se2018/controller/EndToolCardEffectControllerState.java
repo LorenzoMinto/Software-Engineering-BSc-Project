@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 /**
- *
+ * This is an implicit state that ends automatically the effect of the current used toolcard.
+ * It changes the state to the next one depending on hasDraftedAndPlaced() value.
  * @author Lorenzo Minto
  */
 public class EndToolCardEffectControllerState extends ImplicitControllerState {
@@ -20,7 +21,7 @@ public class EndToolCardEffectControllerState extends ImplicitControllerState {
      */
     @Override
     public void executeImplicitBehaviour() {
-
+        //TODO: questa operazione sarebbe più bella se fosse centralizzata in stateManager
         this.controller.resetActiveToolCard();
         if (controller.game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
             controller.setControllerState(controller.stateManager.getEndControllerState());

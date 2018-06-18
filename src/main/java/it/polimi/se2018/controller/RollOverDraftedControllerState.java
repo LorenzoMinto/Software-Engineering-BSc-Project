@@ -3,6 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 
 /**
+ *  This is the state during which, due to a toolcard, current player can roll over drafted dice.
+ *  The implicit behaviour is rolling dice: in fact no input from user is needed.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */

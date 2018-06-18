@@ -5,11 +5,13 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
+ *  This is the initial state of each turn during which current player can draft a dice or use a toolcard.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
@@ -53,7 +55,7 @@ public class StartControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.noneOf(Move.class);
     }
 }

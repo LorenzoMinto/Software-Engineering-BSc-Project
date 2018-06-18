@@ -11,6 +11,7 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
+ *  This is the state in which current player can use a toolcard.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */

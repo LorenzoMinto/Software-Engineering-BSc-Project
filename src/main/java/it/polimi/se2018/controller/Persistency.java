@@ -34,6 +34,7 @@ public class Persistency {
     }
 
     public void loadRankings() {
+        //TODO: questa variabile è appositamente in hiding della globale? se si, rinomina. se no, fixa con this.globalRankings.
         List<RankingRecord> globalRankings = new ArrayList<>();
 
         try {

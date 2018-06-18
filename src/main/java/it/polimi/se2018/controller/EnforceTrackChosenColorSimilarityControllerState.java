@@ -7,6 +7,7 @@ import it.polimi.se2018.model.Dice;
 /**
  *  @author Lorenzo Minto
  */
+//TODO: classe inutilizzata + scrivere commento di classe @lorenzo
 public class EnforceTrackChosenColorSimilarityControllerState extends ImplicitControllerState {
 
     /**

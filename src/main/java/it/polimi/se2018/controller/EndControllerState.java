@@ -4,10 +4,12 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 
 /**
+ * This is the state during which the current player can only end the turn.
  * @author Lorenzo Minto
  */
 public class EndControllerState extends ControllerState {
@@ -30,7 +32,7 @@ public class EndControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.END_TURN);
     }
 

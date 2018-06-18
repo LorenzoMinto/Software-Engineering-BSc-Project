@@ -5,17 +5,17 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
- *
+ *  This is the state during which the current player can draft a dice from draftpool.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
 public class DraftControllerState extends ControllerState {
-
 
     /**
      * Class constructor.
@@ -54,7 +54,7 @@ public class DraftControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.END_TURN);
     }
 }

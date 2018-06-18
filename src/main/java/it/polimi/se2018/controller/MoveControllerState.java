@@ -12,6 +12,9 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
+ *  This is the state during which, due to a toolcard, current player can move a dice from
+ *  a cell of the own windowpattern to another cell of the own windowpattern.
+ *
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */

@@ -2,12 +2,17 @@ package it.polimi.se2018.controller;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author Lorenzo Minto
+ */
+//TODO: fare documentazione completa per questa classe @lorenzo
 public class RankingRecord implements Serializable {
 
     /**
      * Serial Version UID
-    */
-    private static final long serialVersionUID = -3361603145980854887L;
+     */
+    private static final long serialVersionUID = 5554972831173888578L;
 
     private String playerID;
     private int points;

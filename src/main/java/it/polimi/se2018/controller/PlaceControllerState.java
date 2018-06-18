@@ -5,11 +5,13 @@ import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
+ *  This is the state in which the current player can place a dice on the own windowpattern.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
@@ -32,9 +34,7 @@ public class PlaceControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
-        ControllerState next;
-        EnumSet<Move> permissions;
-
+        //TODO: rimuovere questo sout di debug
         System.out.println("Going to try to place dice " + currentTurn.getDraftedDice() + " at " + row + " " + col + " on WP:" + currentTurn.getPlayer().getWindowPattern().toString() + "with PR: " + controller.placementRule.getClass().getSimpleName());
 
         if (controller.placementRule.isMoveAllowed(pattern, currentTurn.getDraftedDice(), row, col)
@@ -57,8 +57,7 @@ public class PlaceControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.PLACE_DICE_ON_WINDOWPATTERN);
     }
-
 }

@@ -2,6 +2,10 @@ package it.polimi.se2018.controller;
 
 
 /**
+ * This is an abstract class for all Implicit Controller States, that are states
+ * that execute automatically something (calling executeImplicitBehaviour) and
+ * then they push controller to a new state.
+ *
  * @author Federico Haag
  */
 abstract class ImplicitControllerState extends ControllerState {
@@ -21,4 +25,9 @@ abstract class ImplicitControllerState extends ControllerState {
         this.controller = controller;
         this.defaultMessage = IMPLICIT_WARNING;
     }
+
+    /**
+     * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
+     */
+    public abstract void executeImplicitBehaviour();
 }

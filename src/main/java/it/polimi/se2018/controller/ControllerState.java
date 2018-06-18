@@ -54,12 +54,10 @@ public abstract class ControllerState {
      */
     String defaultMessage = "Move not legal.";
 
-
     /**
      * Reference to the {@link Controller} to which this state belongs.
      */
     protected Controller controller;
-
 
     /**
      * Drafts a specified dice from the current draft pool and sets it as the drafted dice on the current turn.
@@ -140,13 +138,6 @@ public abstract class ControllerState {
      * @return a message containing the result of the mov
      */
     public Message endToolCardEffect() { return new Message(ERROR_MESSAGE, defaultMessage); }
-
-    /**
-     * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
-     */
-    public void executeImplicitBehaviour(){
-        //do nothing by default
-    }
 
     /**
      * Gets the permission for the state

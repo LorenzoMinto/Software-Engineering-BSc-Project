@@ -182,6 +182,5 @@ public class ToolCardManager {
         } catch (Exception e){
             throw new BadFormattedToolCardFileException();
         }
-
     }
 }

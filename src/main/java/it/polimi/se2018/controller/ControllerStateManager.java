@@ -24,6 +24,7 @@ public class ControllerStateManager {
      */
     private HashMap<String, ControllerState> stateTable;
 
+    //TODO: @lorenzo verifica se hanno ancora senso questi e se si trova dei commenti sensati
     private StartControllerState startState;
     private PlaceControllerState placeState;
     private ToolCardControllerState toolCardState;

@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Round;
 
 /**
+ * Implicit state that as implicit behaviour removes next turn of current player.
  * @author Lorenzo Minto
  */
 public class SkipNextTurnControllerState extends ImplicitControllerState {

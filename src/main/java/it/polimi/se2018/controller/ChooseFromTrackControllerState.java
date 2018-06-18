@@ -7,11 +7,13 @@ import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
+ *  This is the state during which, due to a toolcard, current player can draft a dice from the track
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
@@ -47,7 +49,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.CHOOSE_DICE_FROM_TRACK);
     }
 }

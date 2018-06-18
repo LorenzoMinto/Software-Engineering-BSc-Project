@@ -6,10 +6,15 @@ import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.Move;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
+/**
+ * This is the state during which, due to a toolcard, current player can increment or decrement a dice value
+ * @author Lorenzo Minto
+ */
 public class ChangeDiceValueUnitaryControllerState extends ControllerState {
 
     /**
@@ -49,7 +54,7 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
     }
 
     @Override
-    public EnumSet<Move> getStatePermissions() {
+    public Set<Move> getStatePermissions() {
         return EnumSet.of(Move.INCREMENT_DRAFTED_DICE, Move.DECREMENT_DRAFTED_DICE, Move.END_TURN);
     }
 }
