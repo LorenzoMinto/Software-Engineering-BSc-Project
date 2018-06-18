@@ -425,12 +425,7 @@ public class Game extends Observable implements Observer{
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("number", nextRoundNumber);
         messageAttributes.put("track", track.copy());
-
-        List<Dice> copyOfDices = new ArrayList<>();
-        for(Dice dice : dices){
-            copyOfDices.add(dice.copy());
-        }
-        messageAttributes.put("draftPoolDices", copyOfDices);
+        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy));
 
         notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));
 
