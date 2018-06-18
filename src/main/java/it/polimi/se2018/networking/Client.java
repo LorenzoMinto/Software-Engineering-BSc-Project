@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking;
 
+import it.polimi.se2018.networking.rmi.RMIClientGateway;
+import it.polimi.se2018.networking.socket.SocketClientGateway;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
@@ -116,7 +118,7 @@ public class Client extends Observable implements SenderInterface {
         gateways.add(gateway);
     }
 
-    void fail(String m){
+    public void fail(String m){
         throw new BadBehaviourRuntimeException(m);
     }
 }

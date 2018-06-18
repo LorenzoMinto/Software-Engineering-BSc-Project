@@ -1,9 +1,11 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.rmi;
 
+import it.polimi.se2018.networking.Client;
+import it.polimi.se2018.networking.NetworkingException;
+import it.polimi.se2018.networking.SenderInterface;
 import it.polimi.se2018.utils.Message;
 
 import java.rmi.Naming;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -20,7 +22,7 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
     private RMIReceiverInterface proxySender;
 
 
-    RMIClientGateway(String path, int port, Client client) throws NetworkingException {
+    public RMIClientGateway(String path, int port, Client client) throws NetworkingException {
         try{
             this.recipient = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){

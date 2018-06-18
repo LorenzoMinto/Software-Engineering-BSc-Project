@@ -1,4 +1,4 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.socket;
 
 import it.polimi.se2018.utils.Message;
 
@@ -81,10 +81,10 @@ public class SocketServerGatherer extends Thread{
         new Thread(() -> {
 
             ObjectInputStream in;
-            SocketClientAsAServer socketClientAsAServer;
+            SocketClientProxy socketClientAsAServer;
             try {
                 in = new ObjectInputStream(clientSocket.getInputStream());
-                socketClientAsAServer = new SocketClientAsAServer(outputStream);
+                socketClientAsAServer = new SocketClientProxy(outputStream);
             } catch (IOException e) {
                 return;
             }

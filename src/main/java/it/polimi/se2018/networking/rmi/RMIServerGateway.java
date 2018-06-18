@@ -1,5 +1,6 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.rmi;
 
+import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
 
 import java.net.MalformedURLException;
@@ -17,9 +18,9 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
 
     private transient Server server;
 
-    private HashMap<RMIReceiverInterface,RMIClientAsAServer> map = new HashMap<>();
+    private HashMap<RMIReceiverInterface,RMIClientProxy> map = new HashMap<>();
 
-    RMIServerGateway(String name, int port, Server server) throws RemoteException, MalformedURLException {
+    public RMIServerGateway(String name, int port, Server server) throws RemoteException, MalformedURLException {
         this.server = server;
 
         LocateRegistry.createRegistry(port);
@@ -31,7 +32,7 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
     public void receiveMessage(Message message, RMIReceiverInterface sender){
 
         if(!map.containsKey(sender)){
-            map.put(sender,new RMIClientAsAServer(this,sender));
+            map.put(sender,new RMIClientProxy(this,sender));
         }
 
         server.parseInBoundMessage(message,map.get(sender));

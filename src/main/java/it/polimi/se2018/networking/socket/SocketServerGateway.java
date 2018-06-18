@@ -1,5 +1,8 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.socket;
 
+import it.polimi.se2018.networking.ClientProxy;
+import it.polimi.se2018.networking.NetworkingException;
+import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
 
 /**
@@ -22,7 +25,7 @@ public class SocketServerGateway implements SocketReceiverInterface {
      * @param portNumber port number on which the connection must be established
      * @param server remote client that receives messages
      */
-    SocketServerGateway(Integer portNumber, Server server) {
+    public SocketServerGateway(Integer portNumber, Server server) {
         this.server = server;
 
         SocketServerGatherer socketServerGatherer = new SocketServerGatherer(portNumber,this);
@@ -38,7 +41,7 @@ public class SocketServerGateway implements SocketReceiverInterface {
      * @param message the message to be sent
      * @param sender the sender of the message (server)
      */
-    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
+    public void receiveMessage(Message message, ClientProxy sender) throws NetworkingException {
         server.parseInBoundMessage(message,sender);
     }
 

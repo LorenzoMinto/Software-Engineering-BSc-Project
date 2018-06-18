@@ -2,6 +2,8 @@ package it.polimi.se2018.networking;
 
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.model.Game;
+import it.polimi.se2018.networking.rmi.RMIServerGateway;
+import it.polimi.se2018.networking.socket.SocketServerGateway;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.Message;
@@ -64,22 +66,22 @@ public class Server implements Observer, SenderInterface{
     /**
      * List of players waiting for playing. Implemented as a map to store coupling of player id and respective client
      */
-    private HashMap<String,ReceiverInterface> waitingList = new HashMap<>();
+    private HashMap<String,ClientProxy> waitingList = new HashMap<>();
 
     /**
      * List of gateways for communicating with clients
      */
-    private final List<ReceiverInterface> gateways = new ArrayList<>();
+    private final List<ClientProxy> gateways = new ArrayList<>();
 
     /**
      * Map each player id to respective gateway
      */
-    private HashMap<String,ReceiverInterface> playerIDToGatewayMap = new HashMap<>();
+    private HashMap<String,ClientProxy> playerIDToGatewayMap = new HashMap<>();
 
     /**
      * Map each gateway to respective player id
      */
-    private HashMap<ReceiverInterface, String> gatewayToPlayerIDMap = new HashMap<>();
+    private HashMap<ClientProxy, String> gatewayToPlayerIDMap = new HashMap<>();
 
     /**
      * Enum representing the possibile server states
@@ -222,7 +224,7 @@ public class Server implements Observer, SenderInterface{
         return new Controller(game,properties,LOGGER);
     }
 
-    public void parseInBoundMessage(Message message, ReceiverInterface sender) {
+    public void parseInBoundMessage(Message message, ClientProxy sender) {
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
@@ -240,7 +242,7 @@ public class Server implements Observer, SenderInterface{
 
             try{
 
-                sender.receiveMessage(returnMessage, null);
+                sender.receiveMessage(returnMessage);
 
                 //Notify all players
                 if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
@@ -264,7 +266,7 @@ public class Server implements Observer, SenderInterface{
      * @param sender the sender of the message
      * @return a message containing if the operation went good or not
      */
-    private Message handleWaitingRoomMessage(Message message, ReceiverInterface sender){
+    private Message handleWaitingRoomMessage(Message message, ClientProxy sender){
         if(serverState != ServerState.WAITING_ROOM){
             return new Message(ViewBoundMessageType.JOIN_WR_DENIED_PLAYING,"GAME_IS_PLAYING");
         }
@@ -295,7 +297,7 @@ public class Server implements Observer, SenderInterface{
      * @param client the client to add from the waiting room
      * @return a message containing if the operation went good or not
      */
-    private Message addInWaitingRoom(String nickname, ReceiverInterface client){
+    private Message addInWaitingRoom(String nickname, ClientProxy client){
         Message message;
 
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
@@ -321,7 +323,7 @@ public class Server implements Observer, SenderInterface{
      * @param client the client to remove from the waiting room
      * @return a message containing if the operation went good or not
      */
-    private Message removeFromWaitingRoom(String nickname, ReceiverInterface client){
+    private Message removeFromWaitingRoom(String nickname, ClientProxy client){
         if( waitingList.get(nickname) == client ){
             //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
@@ -392,7 +394,7 @@ public class Server implements Observer, SenderInterface{
         gateways.addAll(waitingList.values());
         //Map players id with gateway and vice versa
         playerIDToGatewayMap.putAll(waitingList);
-        for(Map.Entry<String, ReceiverInterface> entry : playerIDToGatewayMap.entrySet()){
+        for(Map.Entry<String, ClientProxy> entry : playerIDToGatewayMap.entrySet()){
             gatewayToPlayerIDMap.put(entry.getValue(), entry.getKey());
         }
         //Send players to controller and let it actually starting the game
@@ -402,7 +404,7 @@ public class Server implements Observer, SenderInterface{
     @Override
     public void sendMessage(Message message) throws NetworkingException {
         boolean somethingFailed = false;
-        List<ReceiverInterface> g;
+        List<ClientProxy> g;
 
         if(message.getPlayerID()==null){ //Means that message is broadcast
             g = gateways;
@@ -411,14 +413,14 @@ public class Server implements Observer, SenderInterface{
             g.add(playerIDToGatewayMap.get(message.getPlayerID()));
         }
 
-        for(ReceiverInterface o : g){
+        for(ClientProxy o : g){
             int attempts = 0;
             boolean correctlySent = false;
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
             while(attempts< maxNumberOfAttempts && !correctlySent) {
                 attempts++;
                 try {
-                    o.receiveMessage(message, null);
+                    o.receiveMessage(message);
                 } catch (NetworkingException e) {
                     LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
@@ -456,7 +458,7 @@ public class Server implements Observer, SenderInterface{
      *
      * @param m the string containing the explanation of the failure
      */
-    void fail(String m){
+    public void fail(String m){
         throw new BadBehaviourRuntimeException(m);
     }
 }

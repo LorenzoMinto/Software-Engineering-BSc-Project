@@ -1,5 +1,6 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.socket;
 
+import it.polimi.se2018.networking.*;
 import it.polimi.se2018.utils.Message;
 
 import java.io.*;
@@ -8,11 +9,11 @@ import java.io.*;
  *
  * @author Federico Haag
  */
-public class SocketClientAsAServer implements ClientAsAServer {
+public class SocketClientProxy implements ClientProxy {
 
     private ObjectOutputStream stream;
 
-    SocketClientAsAServer(ObjectOutputStream stream) {
+    SocketClientProxy(ObjectOutputStream stream) {
         this.stream = stream;
     }
 

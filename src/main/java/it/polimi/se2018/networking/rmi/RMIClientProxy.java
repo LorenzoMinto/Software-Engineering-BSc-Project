@@ -1,16 +1,18 @@
-package it.polimi.se2018.networking;
+package it.polimi.se2018.networking.rmi;
 
+import it.polimi.se2018.networking.ClientProxy;
+import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.utils.Message;
 
 import java.rmi.RemoteException;
 
-public class RMIClientAsAServer implements ClientAsAServer {
+public class RMIClientProxy implements ClientProxy {
 
     private RMIReceiverInterface receiver;
 
     private RMIReceiverInterface sender;
 
-    RMIClientAsAServer(RMIReceiverInterface sender, RMIReceiverInterface receiver) {
+    RMIClientProxy(RMIReceiverInterface sender, RMIReceiverInterface receiver) {
         this.receiver = receiver;
         this.sender = sender;
     }
