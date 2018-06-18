@@ -25,6 +25,16 @@ public class ToolCardManager {
     private static final String PATH = "assets/toolcards/";
 
     /**
+     * String used as message of BadBehaviourRuntimeException in getRandomToolCards
+     */
+    private static final String CANT_CREATE_THE_REQUESTED_NUMBER_OF_TOOL_CARDS = "Can't create the requested number of toolCards.";
+
+    /**
+     * String used as message of IllegalArgumentException in getRandomToolCards
+     */
+    private static final String CANT_GET_A_NEGATIVE_NUMBER_OF_RANDOM_TOOL_CARDS = "Can't get a negative number of random toolCards";
+
+    /**
      * List of all the toolCards that can be distributed in the current game
      */
     private List<String> availableToolCards;
@@ -63,7 +73,7 @@ public class ToolCardManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public List<ToolCard> getRandomToolCards(int quantity){
-        if(quantity < 0){ throw new IllegalArgumentException("Can't get a negative number of random toolCards");}
+        if(quantity < 0){ throw new IllegalArgumentException(CANT_GET_A_NEGATIVE_NUMBER_OF_RANDOM_TOOL_CARDS);}
 
         List<ToolCard> toolCards = new ArrayList<>();
 
@@ -87,7 +97,7 @@ public class ToolCardManager {
                 toolCards.add(randomToolCard);
             }
         } else {
-            throw new BadBehaviourRuntimeException("Can't create the requested number of toolCards. Controller should not ask for so much cards. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException(CANT_CREATE_THE_REQUESTED_NUMBER_OF_TOOL_CARDS);
         }
 
         return toolCards;

@@ -726,5 +726,5 @@ public abstract class View implements Observer {
         this.windowPatterns = windowPatterns;
     }
 
-    //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledge del set del windowPattern
+    //NOTE: L'ultimo giocatore in ordine temporale che sceglie il wp causando l'inizio del gioco potrebbe vedere prima l'inizio del gioco e poi l'acknowledgment del set del windowPattern
 }

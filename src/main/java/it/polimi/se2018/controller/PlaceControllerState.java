@@ -18,13 +18,22 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class PlaceControllerState extends ControllerState {
 
     /**
+     * String used as content of acknowledgment message in placeDice()
+     */
+    private static final String DICE_PLACED = "Dice placed";
+
+    /**
+     * String used as content of error message in placeDice()
+     */
+    private static final String MOVE_IS_ILLEGAL = "Move is illegal.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public PlaceControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = PLACE_DICE;
     }
 
@@ -42,17 +51,17 @@ public class PlaceControllerState extends ControllerState {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-                return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
+
             } else {
                 if (currentTurn.hasUsedToolCard()) {
                     controller.setControllerState(controller.stateManager.getEndControllerState());
                 } else {
                     controller.setControllerState(controller.stateManager.getToolCardState());
                 }
-                return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice placed!");
             }
+            return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_PLACED);
         } else {
-            return new Message(ERROR_MESSAGE,"Move is illegal.");
+            return new Message(ERROR_MESSAGE, MOVE_IS_ILLEGAL);
         }
     }
 

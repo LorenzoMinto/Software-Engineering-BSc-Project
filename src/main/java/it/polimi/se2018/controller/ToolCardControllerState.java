@@ -18,13 +18,22 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class ToolCardControllerState extends ControllerState {
 
     /**
+     * String used as content of acknowledgment message in useToolCard()
+     */
+    private static final String TOOLCARD_ACTIVATED = "Toolcard activated.";
+
+    /**
+     * String used as content of error message in useToolCard()
+     */
+    private static final String CANT_USE_THIS_TOOL_CARD = "Can't use this toolCard.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public ToolCardControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = TOOLCARD_ONLY;
     }
 
@@ -33,10 +42,10 @@ public class ToolCardControllerState extends ControllerState {
         ToolCard gameToolcard = controller.game.getToolCard(toolCard);
         if ( controller.setActiveToolCard(gameToolcard) ) {
             controller.setControllerState(controller.stateManager.getNextState(this));
-            return new Message(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
+            return new Message(ACKNOWLEDGMENT_MESSAGE, TOOLCARD_ACTIVATED);
 
         } else {
-            return new Message(ERROR_MESSAGE,"Can't use this toolCard.");
+            return new Message(ERROR_MESSAGE, CANT_USE_THIS_TOOL_CARD);
         }
     }
 

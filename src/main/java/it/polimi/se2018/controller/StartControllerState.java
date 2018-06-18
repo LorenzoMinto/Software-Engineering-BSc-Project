@@ -18,13 +18,32 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class StartControllerState extends ControllerState {
 
     /**
+     * String used as content of acknowledgment message in draftDiceFromDraftPool()
+     */
+    private static final String DICE_DRAFTED = "Dice drafted.";
+
+    /**
+     * String used as content of error message in draftDiceFromDraftPool()
+     */
+    private static final String DICE_NOT_IN_THE_DRAFT_POOL = "Dice not in the draft pool.";
+
+    /**
+     * String used as content of acknowledgment message in useToolCard()
+     */
+    private static final String TOOLCARD_ACTIVATED = "Toolcard activated.";
+    
+    /**
+     * String used as content of error message in useToolCard()
+     */
+    private static final String CANT_USE_THIS_TOOL_CARD = "Can't use this toolCard.";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
      */
     public StartControllerState(Controller controller) {
-        if (controller==null) { throw new IllegalArgumentException("Can't create a State Controller without a Controller");}
-        this.controller = controller;
+        super(controller);
         this.defaultMessage = NO_DICE_DRAFTED;
     }
 
@@ -35,10 +54,10 @@ public class StartControllerState extends ControllerState {
         if (currentRound.getDraftPool().draftDice(dice)) {
             currentRound.getCurrentTurn().setDraftedDice(dice);
             controller.setControllerState(controller.stateManager.getPlaceState());
-            return new Message(ACKNOWLEDGMENT_MESSAGE,"Dice drafted.");
+            return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_DRAFTED);
 
         } else {
-            return new Message(ERROR_MESSAGE,"Dice not in the draft pool.");
+            return new Message(ERROR_MESSAGE, DICE_NOT_IN_THE_DRAFT_POOL);
         }
     }
 
@@ -48,9 +67,9 @@ public class StartControllerState extends ControllerState {
         ToolCard gameToolCard = controller.game.getToolCard(toolCard);
         if (controller.setActiveToolCard(gameToolCard)) {
             controller.setControllerState(controller.stateManager.getNextState(this));
-            return new Message(ACKNOWLEDGMENT_MESSAGE,"Toolcard activated.");
+            return new Message(ACKNOWLEDGMENT_MESSAGE, TOOLCARD_ACTIVATED);
         } else {
-            return new Message(ERROR_MESSAGE,"Can't use this toolCard.");
+            return new Message(ERROR_MESSAGE, CANT_USE_THIS_TOOL_CARD);
         }
     }
 

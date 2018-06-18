@@ -18,6 +18,16 @@ import java.util.*;
 public class Scorer {
 
     /**
+     * String used as message of EmptyListException in getWinner() and getRankings()
+     */
+    private static final String LIST_OF_PLAYERS_IS_EMPTY = "Can't determine winner if the list of players is empty.";
+
+    /**
+     * String used as message of EmptyListException in getRankings()
+     */
+    private static final String LIST_OF_PUBLIC_OBJECTIVE_CARDS_IS_EMPTY = "Can't determine winner if the list of public objective cards is empty.";
+
+    /**
      * Instance of the class in order to achieve the Singleton Pattern.
      */
     private static Scorer instance = null;
@@ -46,7 +56,7 @@ public class Scorer {
      * @return the first player of certain rankings
      */
     public Player getWinner(Map<Player, Integer> rankings){
-        if(rankings.isEmpty()){ throw new EmptyListException("Can't determine winner if the list of players is empty.");}
+        if(rankings.isEmpty()){ throw new EmptyListException(LIST_OF_PLAYERS_IS_EMPTY);}
 
         List<Player> playersOfRankings = new ArrayList<>( rankings.keySet() );
 
@@ -67,10 +77,8 @@ public class Scorer {
      */
      public Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
                                      List<PublicObjectiveCard> publicObjectiveCards){
-        if(playersOfLastRound.isEmpty()){ throw new EmptyListException(
-                "Can't determine winner if the list of players is empty.");}
-        if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(
-                "Can't determine winner if the list of public objective cards is empty.");}
+        if(playersOfLastRound.isEmpty()){ throw new EmptyListException(LIST_OF_PLAYERS_IS_EMPTY);}
+        if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(LIST_OF_PUBLIC_OBJECTIVE_CARDS_IS_EMPTY);}
 
         Map<Player,Integer> rankings;
 

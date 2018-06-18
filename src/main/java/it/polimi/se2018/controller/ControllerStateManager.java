@@ -12,13 +12,13 @@ import java.util.HashMap;
 public class ControllerStateManager {
 
     /**
-     * String used as message of BadBehaviourException thrown when the state that is asked to be created
+     * String used as message of BadBehaviourRuntimeException thrown when the state that is asked to be created
      * is not subclass of ControllerState
      */
     private static final String STATE_NOT_SUBCLASS_OF_CONTROLLER_STATE = "Asked to create state that seems to not being subclass of ControllerState: state is ";
 
     /**
-     * String used as message of BadBehaviourException thrown when something during creation of state goes wrong
+     * String used as message of BadBehaviourRuntimeException thrown when something during creation of state goes wrong
      */
     private static final String ERROR_DURING_CREATION_OF_CONTROLLER_STATE_BY_ID = "Something during the creation of a controller state by id failed. This is the asked ID: ";
     /**

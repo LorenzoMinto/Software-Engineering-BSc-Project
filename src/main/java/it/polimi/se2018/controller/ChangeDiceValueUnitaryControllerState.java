@@ -23,12 +23,12 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
     private static final String CANNOT_INCREMENT_DRAFTED_DICE_VALUE = "Cannot increment drafted dice's value.";
 
     /**
-     * String passed as content of acknowledge message in incrementDice()
+     * String passed as content of acknowledgment message in incrementDice()
      */
     private static final String DICE_INCREMENTED = "Dice incremented.";
 
     /**
-     * String passed as content of acknowledge message in decrementDice()
+     * String passed as content of acknowledgment message in decrementDice()
      */
     private static final String DICE_DECREMENTED = "Dice decremented.";
 

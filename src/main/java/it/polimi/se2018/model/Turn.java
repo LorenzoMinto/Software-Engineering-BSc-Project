@@ -28,7 +28,7 @@ public class Turn extends Observable implements Serializable {
      */
     private static final String NEW_TURN_WITH_NULL_PLAYER = "Can't create a turn giving null player";
     /**
-     * String passed as message of BadBehaviourException when it is asked to get a track slot that does not exist
+     * String passed as message of BadBehaviourRuntimeException when it is asked to get a track slot that does not exist
      */
     private static final String REQUESTED_TRACKSLOT_DOES_NOT_EXIST = "The requested trackslot does not exists";
     /**

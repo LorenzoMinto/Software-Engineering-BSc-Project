@@ -18,7 +18,7 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 public class DraftControllerState extends ControllerState {
 
     /**
-     * String used as content of acknowledge message in draftDiceFromDraftPool()
+     * String used as content of acknowledgment message in draftDiceFromDraftPool()
      */
     private static final String DICE_DRAFTED = "Dice drafted.";
 

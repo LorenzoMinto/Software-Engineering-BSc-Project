@@ -24,7 +24,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
     private static final String ILLEGAL_VALUE_FOR_DICE = "Illegal value for dice.";
 
     /**
-     * String passed as content of acknowledge message in chooseDiceValue()
+     * String passed as content of acknowledgment message in chooseDiceValue()
      */
     private static final String DICE_VALUE_CHANGED = "Dice value changed.";
 

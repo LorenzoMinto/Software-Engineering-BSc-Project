@@ -43,7 +43,7 @@ public class Game extends Observable implements Observer{
      */
     private static final String ASKED_TO_SET_RANKINGS_IN_BAD_STATE = "Can't set rankings if game is not ended.";
     /**
-     * String passed as message of BadBehaviourException when is asked to add a player but max number of players is reached
+     * String passed as message of BadBehaviourRuntimeException when is asked to add a player but max number of players is reached
      */
     private static final String ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED = "Can't add a player if max number of players is reached";
     /**
@@ -51,12 +51,12 @@ public class Game extends Observable implements Observer{
      */
     private static final String ASKED_TO_ADD_PLAYER_IN_BAD_STATE = "Can't add player if game is not waiting for players.";
     /**
-     * String passed as message of BadBehaviourException when is asked to perform an action that requires
+     * String passed as message of BadBehaviourRuntimeException when is asked to perform an action that requires
      * the game to be started but it is not.
      */
     private static final String GAME_NOT_RUNNING = "Game is not running yet";
     /**
-     * String passed as message of BadBehaviourException when is asked to use a toolCard that is not in the drawn set
+     * String passed as message of BadBehaviourRuntimeException when is asked to use a toolCard that is not in the drawn set
      */
     private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolCard that is not in the drawn set";
     /**
@@ -69,11 +69,11 @@ public class Game extends Observable implements Observer{
      */
     private static final String ASKED_TO_START_GAME_IN_BAD_STATE = "Can't start game if not waiting for patterns choice.";
     /**
-     * String passed as message of BadBehaviourException when is asked to start the game but it is impossible to create new rounds.
+     * String passed as message of BadBehaviourRuntimeException when is asked to start the game but it is impossible to create new rounds.
      */
     private static final String NO_ROUNDS = "Can't start a game with no rounds";
     /**
-     * String passed as message of BadBehaviourException when is asked to create a new round but it is impossible to create new turns.
+     * String passed as message of BadBehaviourRuntimeException when is asked to create a new round but it is impossible to create new turns.
      */
     private static final String NO_TURNS = "Can't start a round with no turns";
     /**

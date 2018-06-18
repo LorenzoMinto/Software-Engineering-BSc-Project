@@ -23,6 +23,16 @@ public class WindowPatternManager {
     private static final String PATH = "assets/patterns/";
 
     /**
+     * String used as message of BadBehaviourRuntimeException in getPairsOfPatterns()
+     */
+    private static final String CANT_CREATE_THE_NUMBER_OF_WINDOW_PATTERN_REQUESTED = "Cant create the number of window pattern requested.";
+
+    /**
+     * String used as message of IllegalArgumentException in getPairsOfPatterns()
+     */
+    private static final String CANT_GET_A_NEGATIVE_NUMBER_OF_COUPLES_OF_WINDOW_PATTERNS = "Can't get a negative number of couples of windowPatterns";
+
+    /**
      * List of all the toolCards that can be distributed in the current game
      */
     private List<String> availablePatterns;
@@ -50,7 +60,7 @@ public class WindowPatternManager {
      * the file is not correctly formatted. This error is not handlable in this context so it is thrown to the caller.
      */
     public Set<WindowPattern> getPairsOfPatterns(int numberOfPairs) {
-        if(numberOfPairs < 0){ throw new IllegalArgumentException("Can't get a negative number of couples of windowPatterns");}
+        if(numberOfPairs < 0){ throw new IllegalArgumentException(CANT_GET_A_NEGATIVE_NUMBER_OF_COUPLES_OF_WINDOW_PATTERNS);}
 
         Set<WindowPattern> couplesOfPatterns = new HashSet<>();
 
@@ -76,7 +86,7 @@ public class WindowPatternManager {
                 couplesOfPatterns.add(randomPartnerPattern);
             }
         } else {
-            throw new BadBehaviourRuntimeException("Cant create the number of window pattern requested. This error is not handlable at all");
+            throw new BadBehaviourRuntimeException(CANT_CREATE_THE_NUMBER_OF_WINDOW_PATTERN_REQUESTED);
         }
 
         return couplesOfPatterns;
