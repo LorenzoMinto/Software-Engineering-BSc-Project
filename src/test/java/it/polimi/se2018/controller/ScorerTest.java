@@ -63,7 +63,7 @@ public class ScorerTest {
     private static final PrivateObjectiveCard card3 = new PrivateObjectiveCard("","","",PURPLE);
     private static final PrivateObjectiveCard card4 = new PrivateObjectiveCard("","","",YELLOW);
 
-    private static List<PublicObjectiveCard> publicObjectiveCards;
+    private static Set<PublicObjectiveCard> publicObjectiveCards;
 
     /**
      * Getting the singleton instance of scorer
@@ -90,7 +90,7 @@ public class ScorerTest {
         DiagonalsPublicObjectiveCard diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(
                 null, null, null, Dice::getColor);
 
-        publicObjectiveCards = new ArrayList<>();
+        publicObjectiveCards = new HashSet<>();
         publicObjectiveCards.add(columnsValuePublicObjectiveCard);
         publicObjectiveCards.add(rowsColorPublicObjectiveCard);
         publicObjectiveCards.add(diagonalsPublicObjectiveCard);
@@ -468,16 +468,16 @@ public class ScorerTest {
 
     /**
      * Tests that if a game has only one player, then that player is the winner
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testSinglePlayerIsWinner(){
         p1.setWindowPattern(wp1);
 
-        List<Player> playersOfLastRound = new ArrayList<>();
+        Set<Player> playersOfLastRound = new HashSet<>();
         playersOfLastRound.add(p1);
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
         Player winner = scorer.getWinner(rankings);
         assertEquals(p1, winner);
     }
@@ -485,11 +485,11 @@ public class ScorerTest {
     /**
      * Tests the rankings of a game with four players, all with different scores
      * @see ScorerTest#initializeDefaultGame()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetRankings(){
-        List<Player> playersOfLastRound = initializeDefaultGame();
+        Set<Player> playersOfLastRound = initializeDefaultGame();
 
         Map<Player, Integer> expectedRankings = new LinkedHashMap<>();
         expectedRankings.put(p3,p3Score);
@@ -497,59 +497,59 @@ public class ScorerTest {
         expectedRankings.put(p2,p2Score);
         expectedRankings.put(p4,p4Score);
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
 
         assertEquals(expectedRankings, rankings);
     }
 
     /**
      * Tests the throwing of a NullPointerException if playersOfLastRound parameter is null
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetRankingsOfNullPlayersOfLastRound(){
         try {
-            scorer.getRankings(null, publicObjectiveCards);
+            scorer.getRankings(null, new HashSet<>(), publicObjectiveCards);
             fail();
         }catch (NullPointerException e){}
     }
 
     /**
      * Tests the throwing of an EmptyListException if playersOfLastRound parameter is empty
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetRankingsOfEmptyPlayersOfLastRound(){
         try {
-            scorer.getRankings(new ArrayList<>(), publicObjectiveCards);
+            scorer.getRankings(new HashSet<>(), new HashSet<>(), publicObjectiveCards);
             fail();
         }catch (EmptyListException e){}
     }
 
     /**
      * Tests the throwing of a NullPointerException if publicObjectiveCards parameter is null
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetRankingsOfNullPublicObjectiveCards(){
-        List<Player> playersOfLastRound = new ArrayList<>();
+        Set<Player> playersOfLastRound = new HashSet<>();
         playersOfLastRound.add(p1);
         try {
-            scorer.getRankings(playersOfLastRound, null);
+            scorer.getRankings(playersOfLastRound, new HashSet<>(), null);
             fail();
         }catch (NullPointerException e){}
     }
 
     /**
      * Tests the throwing of an EmptyListException if publicObjectiveCards parameter is empty
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetRankingsOfEmptyPublicObjectiveCards(){
-        List<Player> playersOfLastRound = new ArrayList<>();
+        Set<Player> playersOfLastRound = new HashSet<>();
         playersOfLastRound.add(p1);
         try {
-            scorer.getRankings(playersOfLastRound, new ArrayList<>());
+            scorer.getRankings(playersOfLastRound, new HashSet<>(), new HashSet<>());
             fail();
         }catch (EmptyListException e){}
     }
@@ -579,14 +579,14 @@ public class ScorerTest {
      * Rankings are computed by the scorer
      * Rankings should be ordered by descending score
      * @see ScorerTest#initializeDefaultGame()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinnerFromRankings(){
-        List<Player> playersOfLastRound = initializeDefaultGame();
+        Set<Player> playersOfLastRound = initializeDefaultGame();
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
         Player winner = scorer.getWinner(rankings);
         Player expectedWinner = p3;
 
@@ -595,7 +595,7 @@ public class ScorerTest {
 
     /**
      * Teststhe impossibility of getting the winner of a game if the parameter rankings is null
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testGetWinnerOfNullRankings(){
@@ -625,14 +625,14 @@ public class ScorerTest {
      * Rankings are computed by the scorer
      * Rankings should be ordered by descending score
      * @see ScorerTest#initializeDefaultGame()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      * @see Scorer#getWinner(Map)
      */
     @Test
     public void testGetWinnerScore(){
-        List<Player> playersOfLastRound = initializeDefaultGame();
+        Set<Player> playersOfLastRound = initializeDefaultGame();
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
         Player winner = scorer.getWinner(rankings);
         int winnerScore = rankings.get(winner);
 
@@ -646,17 +646,17 @@ public class ScorerTest {
      * All players have different PrivateObjectiveCard score
      * Rankings should be ordered by descending PrivateObjectiveCard score
      * @see ScorerTest#assignSameScoreWindowPatterns()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testSameScoreRankings(){
         assignSameScoreWindowPatterns();
 
-        List<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
+        Set<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
 
         p2.decreaseTokens(1);
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
         List<Player> playersByScore = new ArrayList<>(rankings.keySet());
 
         int score = rankings.get(p1);
@@ -682,13 +682,13 @@ public class ScorerTest {
      * All players have a different number of tokens
      * Rankings should be ordered by descending number of tokens
      * @see ScorerTest#assignSamePrivateScoreWindowPatterns() ()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testSamePrivateObjectiveCardScoreRankings(){
         assignSamePrivateScoreWindowPatterns();
 
-        List<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
+        Set<Player> playersOfLastRound = addDefaultPlayersToPlayersOfLastRound();
 
         //decreasing the tokens in order to make all players have the same score
         p1.decreaseTokens(1);
@@ -696,7 +696,7 @@ public class ScorerTest {
         p3.decreaseTokens(2);
         p4.decreaseTokens(0);
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
         List<Player> playersByScore = new ArrayList<>(rankings.keySet());
 
         int score = rankings.get(p1);
@@ -721,20 +721,20 @@ public class ScorerTest {
      * All players have the same number of tokens
      * The rankings should be the same as the ordered list of players of last round (reverse turn order)
      * @see ScorerTest#assignSameScoreAndSamePrivateScoreWindowPatterns()
-     * @see Scorer#getRankings(List, List)
+     * @see Scorer#getRankings(Set, Set, Set)
      */
     @Test
     public void testSameFavorTokensRankings(){
         assignSameScoreAndSamePrivateScoreWindowPatterns();
 
-        List<Player> playersOfLastRound = new ArrayList<>();
+        Set<Player> playersOfLastRound = new HashSet<>();
         playersOfLastRound.add(p2);
         playersOfLastRound.add(p4);
         playersOfLastRound.add(p3);
         playersOfLastRound.add(p1);
 
-        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, publicObjectiveCards);
-        List<Player> playersByScore = new ArrayList<>(rankings.keySet());
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, new HashSet<>(), publicObjectiveCards);
+        Set<Player> playersByScore = new LinkedHashSet<>(rankings.keySet());
 
         int score = rankings.get(p1);
 
@@ -743,6 +743,24 @@ public class ScorerTest {
         }
 
         assertEquals(playersOfLastRound, playersByScore);
+    }
+
+    @Test
+    public void testInactivePlayers(){
+        Set<Player> playersOfLastRound = initializeDefaultGame();
+        Set<String> inactivePlayersIDs = new HashSet<>();
+        inactivePlayersIDs.add(p2.getID());
+        inactivePlayersIDs.add(p1.getID());
+
+        Map<Player, Integer> expectedRankings = new LinkedHashMap<>();
+        expectedRankings.put(p3,p3Score);
+        expectedRankings.put(p4,p4Score);
+        expectedRankings.put(p1,p1Score);
+        expectedRankings.put(p2,p2Score);
+
+        Map<Player, Integer> rankings = scorer.getRankings(playersOfLastRound, inactivePlayersIDs, publicObjectiveCards);
+
+        assertEquals(expectedRankings, rankings);
     }
 
 
@@ -754,9 +772,6 @@ public class ScorerTest {
         p2.setWindowPattern(wp2);
         p3.setWindowPattern(wp3);
         p4.setWindowPattern(wp4);
-
-//      n
-
     }
 
     /**
@@ -792,9 +807,9 @@ public class ScorerTest {
     /**
      * Adds p1 to p4 players to the playersOfLastRound list
      */
-    private List<Player> addDefaultPlayersToPlayersOfLastRound() {
+    private Set<Player> addDefaultPlayersToPlayersOfLastRound() {
 
-        List<Player> playersOfLastRound = new ArrayList<>();
+        Set<Player> playersOfLastRound = new HashSet<>();
 
         playersOfLastRound.add(p1);
         playersOfLastRound.add(p2);
@@ -809,7 +824,7 @@ public class ScorerTest {
      * @see ScorerTest#assignDifferentScoreWindowPatterns()
      * @see ScorerTest#addDefaultPlayersToPlayersOfLastRound()
      */
-    private List<Player> initializeDefaultGame() {
+    private Set<Player> initializeDefaultGame() {
         assignDifferentScoreWindowPatterns();
 
         p1Score = 32 + p1.getFavorTokens();
@@ -819,4 +834,6 @@ public class ScorerTest {
 
         return addDefaultPlayersToPlayersOfLastRound();
     }
+
+
 }

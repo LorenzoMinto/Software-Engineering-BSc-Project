@@ -727,11 +727,9 @@ public class Controller extends Observable {
      * @return rankings and scores of the current {@link Game}
      */
     private Map<Player,Integer> getRankingsAndScores() {
-        List<PublicObjectiveCard> publicObjectiveCards = game.getDrawnPublicObjectiveCards();
-        List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
-
-        List<Player> playersToEvaluate = new ArrayList<>(playersOfLastRound);
-        return Scorer.getInstance().getRankings(playersToEvaluate, inactivePlayers, publicObjectiveCards);
+        Set<PublicObjectiveCard> publicObjectiveCards = new HashSet<>(game.getDrawnPublicObjectiveCards());
+        Set<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
+        return Scorer.getInstance().getRankings(playersOfLastRound, inactivePlayers, publicObjectiveCards);
     }
 
     /**

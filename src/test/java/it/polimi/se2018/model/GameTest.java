@@ -29,9 +29,9 @@ public class GameTest {
     private static final int numberOfRounds = 10;
     private static final int maxNumberOfPlayers = 1;
     private static Player player;
-    private static ToolCard toolCard;
     private static ToolCard toolCard1;
     private static ToolCard toolCard2;
+    private static ToolCard toolCard3;
 
     private static List<PublicObjectiveCard> publicObjectiveCards;
     private static List<ToolCard> toolCards;
@@ -62,8 +62,6 @@ public class GameTest {
      */
     @BeforeClass
     public static void initializeToolCards(){
-        toolCard = ToolCard.createTestInstance();
-
         Properties properties = new Properties();
 
         properties.put("id","ID1");
@@ -73,7 +71,7 @@ public class GameTest {
         properties.put("neededTokens", "1");
         properties.put("tokensUsageMultiplier", "2");
 
-        toolCard1 = new ToolCard(properties, null, null, null);
+        toolCard1 = new ToolCard(properties, new HashMap<>(), null, new HashSet<>());
 
         properties.put("id","ID2");
         properties.put("title","title2");
@@ -82,7 +80,16 @@ public class GameTest {
         properties.put("neededTokens", "1");
         properties.put("tokensUsageMultiplier", "2");
 
-        toolCard2 = new ToolCard(properties, null, null, null);
+        toolCard2 = new ToolCard(properties, new HashMap<>(), null, new HashSet<>());
+
+        properties.put("id","ID3");
+        properties.put("title","title3");
+        properties.put("description","description3");
+        properties.put("imageURL","imageURL3");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard3 = new ToolCard(properties, new HashMap<>(), null, new HashSet<>());
     }
 
     /**
@@ -91,7 +98,7 @@ public class GameTest {
     @Before
     public void initializeLists(){
         toolCards = new ArrayList<>();
-        toolCards.add(toolCard);
+        toolCards.add(toolCard1);
 
         dices = new ArrayList<>();
         dices.add(new Dice(DiceColor.RED));
@@ -405,7 +412,7 @@ public class GameTest {
             fail();
         }
 
-        game.useToolCard(toolCard);
+        game.useToolCard(toolCard1);
         assertTrue(game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
     }
 
@@ -416,7 +423,7 @@ public class GameTest {
     @Test
     public void testUseToolCardNotInDrawnSet(){
         toolCards.clear();
-        toolCards.add(toolCard1);
+        toolCards.add(toolCard2);
 
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
@@ -430,7 +437,7 @@ public class GameTest {
         }
 
         try {
-            game.useToolCard(toolCard2);
+            game.useToolCard(toolCard1);
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }
@@ -454,8 +461,8 @@ public class GameTest {
     @Test
     public void testGetToolCard(){
         game.setCards(toolCards, publicObjectiveCards);
-        ToolCard gameToolCard = game.getToolCard(toolCard);
-        assertEquals(toolCard, gameToolCard);
+        ToolCard gameToolCard = game.getToolCard(toolCard1);
+        assertEquals(toolCard1, gameToolCard);
     }
 
     /**
@@ -478,13 +485,13 @@ public class GameTest {
     public void testGetToolCardNotInDrawnToolCards(){
 
         toolCards.clear();
-        toolCards.add(toolCard1);
         toolCards.add(toolCard2);
+        toolCards.add(toolCard3);
 
         game.setCards(toolCards, publicObjectiveCards);
 
         try {
-            game.getToolCard(toolCard);
+            game.getToolCard(toolCard1);
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }

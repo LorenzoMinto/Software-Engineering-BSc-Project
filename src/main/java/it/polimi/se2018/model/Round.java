@@ -109,10 +109,10 @@ public class Round {
     /**
      * Method that gets the list of players who played the last round in order from last to first without repetitions.
      * @return the list of players who played the last round in order
-     * @see it.polimi.se2018.controller.Scorer#getRankings(List, List)
+     * @see it.polimi.se2018.controller.Scorer#getRankings(Set, Set, Set)
      * @author Jacopo Pio Gargano
      */
-    public List<Player> getPlayersByReverseTurnOrder(){
+    public Set<Player> getPlayersByReverseTurnOrder(){
 
         Set<Player> players = new LinkedHashSet<>();
         Turn turn;
@@ -122,7 +122,7 @@ public class Round {
             players.add(turn.getPlayer());
         }
 
-        return new ArrayList<>(players);
+        return players;
     }
 
     /**

@@ -68,6 +68,7 @@ public class Scorer {
      * based on a given list of public objective cards.
      *
      * @param playersOfLastRound sorted list of players of last round
+     * @param inactivePlayersIDs list of inactivePlayersID
      * @param publicObjectiveCards public objective cards of the game, players will be scored according to these
      * @return rankings as a Map of Player and Integer(score)
      * @see Scorer#getScores(List, List)
@@ -75,20 +76,39 @@ public class Scorer {
      * @see Scorer#sortRankingsByPrivateObjectiveCardScore(Map)
      * @see Scorer#sortRankingsByScore(Map)
      */
-     public Map<Player, Integer> getRankings(List<Player> playersOfLastRound, Set<String> inactivePlayersIDs, List<PublicObjectiveCard> publicObjectiveCards){
+     public Map<Player, Integer> getRankings(Set<Player> playersOfLastRound, Set<String> inactivePlayersIDs, Set<PublicObjectiveCard> publicObjectiveCards){
         if(playersOfLastRound.isEmpty()){ throw new EmptyListException(LIST_OF_PLAYERS_IS_EMPTY);}
         if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(LIST_OF_PUBLIC_OBJECTIVE_CARDS_IS_EMPTY);}
 
         Map<Player,Integer> rankings;
 
         //calculate score for each player
-        rankings = getScores(playersOfLastRound, publicObjectiveCards);
+        rankings = getScores(new ArrayList<>(playersOfLastRound), new ArrayList<>(publicObjectiveCards));
 
         rankings = sortRankingsByFavorTokens(rankings);
         rankings = sortRankingsByPrivateObjectiveCardScore(rankings);
         rankings = sortRankingsByScore(rankings);
+        rankings = sortRankingsByStatus(rankings, new ArrayList<>(inactivePlayersIDs));
 
         return rankings;
+    }
+
+    private Map<Player, Integer> sortRankingsByStatus(Map<Player, Integer> rankings, List<String> inactivePlayersIDs) {
+        Map<Player, Integer> rankingsByStatus = new LinkedHashMap<>(rankings);
+        List<Player> players = new ArrayList<>(rankings.keySet());
+
+        while(!inactivePlayersIDs.isEmpty()) {
+            String inactivePlayerID = inactivePlayersIDs.get(0);
+            for (Player player: players) {
+                if (player.getID().equals(inactivePlayerID)){
+                    Integer playerScore = rankingsByStatus.remove(player);
+                    rankingsByStatus.put(player, playerScore);
+                    inactivePlayersIDs.remove(player.getID());
+                }
+            }
+        }
+
+        return rankingsByStatus;
     }
 
     /**

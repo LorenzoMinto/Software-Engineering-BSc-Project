@@ -58,7 +58,7 @@ public class ControllerTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, new HashSet<>());
     }
 
     @Test
@@ -66,6 +66,8 @@ public class ControllerTest {
         controller.setControllerState(controller.stateManager.getToolCardState());
         Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
         assertEquals(ERROR_MESSAGE, m.getType());
+        //TODO: lorenzo ci sono alcune toolcards (Grinding stone, lens cutter, flux remover, cork backed..) hanno dei null
+        System.out.println(controller.game.getDrawnToolCards());
         m = controller.controllerState.useToolCard(controller.game.getDrawnToolCards().get(0));
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }

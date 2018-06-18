@@ -77,7 +77,6 @@ public class ControllerStateManager {
         if (stateTable.containsKey(nextControllerStateID)) {
             nextState = stateTable.get(nextControllerStateID);
         } else {
-
             nextState = createStateByID(nextControllerStateID);
 
             stateTable.put(nextControllerStateID, nextState);

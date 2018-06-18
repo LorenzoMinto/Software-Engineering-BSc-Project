@@ -11,8 +11,7 @@ import org.junit.Test;
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Test for {@link Round} class
@@ -160,14 +159,14 @@ public class RoundTest {
      */
     @Test
     public void testGetPlayersOfLastRoundByReverseTurnOrder(){
-        List<Player> expectedPlayers = new ArrayList<>();
+        Set<Player> expectedPlayers = new LinkedHashSet<>();
         expectedPlayers.add(p2);
         expectedPlayers.add(p3);
         expectedPlayers.add(p4);
         expectedPlayers.add(p1);
 
         round = new Round(9,players.size()*2, players, draftPool);
-        List<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
+        Set<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
 
         assertEquals(expectedPlayers, playersByReverseTurnOrder);
     }
@@ -178,14 +177,14 @@ public class RoundTest {
      */
     @Test
     public void testGetPlayersOfLastRoundByReverseTurnOrderWhenOnePlayer(){
-        List<Player> expectedPlayers = new ArrayList<>();
+        Set<Player> expectedPlayers = new LinkedHashSet<>();
         expectedPlayers.add(p2);
 
         players = new ArrayList<>();
         players.add(p2);
 
         round = new Round(9,players.size()*2, players, draftPool);
-        List<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
+        Set<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
 
         assertEquals(expectedPlayers, playersByReverseTurnOrder);
     }
@@ -199,8 +198,8 @@ public class RoundTest {
         Player expectedPlayer = p1;
 
         round = new Round(0,players.size()*2, players, draftPool);
-        List<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
-        Player firstPlayer = playersByReverseTurnOrder.get(0);
+        Set<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
+        Player firstPlayer = new ArrayList<>(playersByReverseTurnOrder).get(0);
 
         assertEquals(expectedPlayer, firstPlayer);
     }
@@ -214,8 +213,8 @@ public class RoundTest {
         Player expectedPlayer = p2;
 
         round = new Round(9,players.size()*2, players, draftPool);
-        List<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
-        Player lastPlayer = playersByReverseTurnOrder.get(0);
+        Set<Player> playersByReverseTurnOrder = round.getPlayersByReverseTurnOrder();
+        Player lastPlayer = new ArrayList<>(playersByReverseTurnOrder).get(0);
 
         assertEquals(expectedPlayer, lastPlayer);
     }

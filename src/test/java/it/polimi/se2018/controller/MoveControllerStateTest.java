@@ -107,6 +107,7 @@ public class MoveControllerStateTest {
         Player player = controller.game.getCurrentRound().getCurrentTurn().getPlayer();
         WindowPattern wp = player.getWindowPattern();
 
+        //TODO: lorenzo
         assertNull(wp.getDiceOnCell(r0,c0));
         assertEquals(redDice, wp.getDiceOnCell(r1,c1));
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
