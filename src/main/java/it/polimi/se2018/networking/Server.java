@@ -245,6 +245,14 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         //Send answer message back to the sender
         if(returnMessage!=null){
             sender.receiveMessage(returnMessage, this.proxyServer);
+
+            //Notify all players
+            if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
+                sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,returnMessage.getPlayerID()));
+
+            } else if(returnMessage.getType()==ViewBoundMessageType.REMOVED_FROM_WR){
+                sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
+            }
         }
 
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
@@ -293,7 +301,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
-                message = new Message(ViewBoundMessageType.ADDED_TO_WR,null,null,EnumSet.of(Move.LEAVE));
+                message = new Message(ViewBoundMessageType.ADDED_TO_WR,null,nickname,EnumSet.of(Move.LEAVE));
             } else {
                 message = new Message(ViewBoundMessageType.JOIN_WR_DENIED_NICKNAME);
             }
@@ -322,7 +330,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
                 cancelTimerForLaunchingGame();
             }
 
-            return new Message(ViewBoundMessageType.REMOVED_FROM_WR,null,null,EnumSet.of(Move.JOIN_GAME));
+            return new Message(ViewBoundMessageType.REMOVED_FROM_WR,null,nickname,EnumSet.of(Move.JOIN_GAME));
         } else {
             return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }

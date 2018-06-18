@@ -475,6 +475,36 @@ public abstract class View implements Observer {
         showMessage("You have drafted "+mDraftedDice);
     }
 
+    void handlePlayerAddedToWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("player");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)){
+            showMessage(nickname+" joins the waiting room");
+        }
+    }
+
+    void handlePlayerRemovedFromWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("player");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)) {
+            showMessage(nickname + " leaves the waiting room");
+        }
+    }
+
     // NOTIFY METHODS
 
     void notifyNewRound(){
@@ -596,6 +626,12 @@ public abstract class View implements Observer {
                 break;
             case REMOVED_FROM_WR:
                 handleRemovedEvent();
+                break;
+            case PLAYER_ADDED_TO_WR:
+                handlePlayerAddedToWREvent(m);
+                break;
+            case PLAYER_REMOVED_FROM_WR:
+                handlePlayerRemovedFromWREvent(m);
                 break;
             default:
                 //No other messages are evaluated in this state
