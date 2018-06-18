@@ -14,13 +14,13 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
 
     private ObjectOutputStream out;
 
-    private ReceiverInterface client;
+    private Client client;
     private String hostName;
     private int portNumber;
 
     private volatile boolean running = false;
 
-    SocketClientGateway(String hostName, int portNumber, ReceiverInterface client) {
+    SocketClientGateway(String hostName, int portNumber, Client client) {
         this.client = client;
         this.hostName = hostName;
         this.portNumber = portNumber;
@@ -29,7 +29,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException, NetworkingException {
+    public void sendMessage(Message message) throws NetworkingException {
 
         while(!running){
             try {
@@ -49,12 +49,8 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
 
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
-        try {
-            client.receiveMessage(message,sender);
-        } catch (RemoteException e) {
-            throw new NetworkingException();
-            //TODO: rimuovi
-        }
+
+        client.notify(message);
         //Client doesn't answer to server's messages so it is unnecessary sender
     }
 

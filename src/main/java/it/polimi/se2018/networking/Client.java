@@ -13,7 +13,7 @@ import java.util.logging.*;
  *
  * @author Federico Haag
  */
-public class Client extends Observable implements SenderInterface, ReceiverInterface {
+public class Client extends Observable implements SenderInterface {
 
     private final Logger logger;
 
@@ -82,11 +82,6 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
         if(this.debug){
             logger.info(msg);
         }
-    }
-
-    @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
-        notify(message);
     }
 
     @Override

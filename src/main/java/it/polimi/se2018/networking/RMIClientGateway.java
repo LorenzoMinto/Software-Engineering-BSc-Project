@@ -16,11 +16,11 @@ import java.rmi.server.UnicastRemoteObject;
 public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
 
     private ReceiverInterface recipient;
-    private ReceiverInterface client;
+    private Client client;
     private ReceiverInterface proxySender;
 
 
-    RMIClientGateway(String path, int port, ReceiverInterface client) throws NetworkingException {
+    RMIClientGateway(String path, int port, Client client) throws NetworkingException {
         try{
             this.recipient = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
@@ -38,18 +38,18 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
         this.client = client;
     }
 
-    public void sendMessage(Message message) throws RemoteException, NetworkingException{
-        this.recipient.receiveMessage(message,this.proxySender);
+    public void sendMessage(Message message) throws NetworkingException{
+        try {
+            this.recipient.receiveMessage(message,this.proxySender);
+        } catch (RemoteException e) {
+            throw new NetworkingException();
+        }
     }
 
     public void receiveMessage(Message message, ReceiverInterface sender){
         //IL THREAD VIENE CREATO PER DISACCOPPIARE LA CHIAMATA REMOTA DA QUELLA EFFETTIVA
         new Thread(()->{
-            try {
-                this.client.receiveMessage(message,sender);
-            } catch (NetworkingException | RemoteException e) {
-                //can't happen because client is not remote
-            }
+            this.client.notify(message);
         }).start();
     }
 }

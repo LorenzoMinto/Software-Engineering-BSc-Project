@@ -62,7 +62,7 @@ public class Observable {
      *
      * @param message message received from the calling application
      */ 
-    protected void notify(Message message){
+    public void notify(Message message){
         synchronized (observers) {
             for(Observer observer : observers){
                 observer.update(message);

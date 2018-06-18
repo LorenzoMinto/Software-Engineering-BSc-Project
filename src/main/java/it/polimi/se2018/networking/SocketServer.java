@@ -17,7 +17,7 @@ public class SocketServer implements ReceiverInterface {
         this.stream = stream;
     }
 
-    private void receiveMessage(Message message) throws RemoteException, NetworkingException {
+    private void receiveMessage(Message message) throws NetworkingException {
         try {
             this.stream.writeObject(message);
         } catch (IOException e) {
@@ -27,12 +27,8 @@ public class SocketServer implements ReceiverInterface {
 
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
-        try {
-            receiveMessage(message);
-        } catch (RemoteException e) {
-            throw new NetworkingException();
-            //TODO: rimuovere
-        }
+        receiveMessage(message);
+
         //Just for compatibility reasons. Sender is not needed (and could be null): something related to RMI
         //TODO: questa cosa non va bene
     }
