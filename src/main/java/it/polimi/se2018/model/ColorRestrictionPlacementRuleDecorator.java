@@ -35,4 +35,10 @@ public class ColorRestrictionPlacementRuleDecorator extends PlacementRuleDecorat
         return dice.getColor() == this.color &&
                 decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
+
+    @Override
+    public PlacementRule copy() {
+        //TODO: implement here
+        return null;
+    }
 }

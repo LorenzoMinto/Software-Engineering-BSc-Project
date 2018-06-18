@@ -39,4 +39,10 @@ public abstract class PlacementRuleDecorator implements PlacementRule {
     public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col){
         return decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
+
+    @Override
+    public PlacementRule copy() {
+        //TODO: implement here
+        return null;
+    }
 }

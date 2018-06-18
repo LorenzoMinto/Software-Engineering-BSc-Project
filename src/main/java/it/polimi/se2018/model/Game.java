@@ -295,9 +295,9 @@ public class Game extends Observable implements Observer{
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
 
-        messageAttributes.put("toolCard", toolCard);
+        messageAttributes.put("toolCard", toolCard.copy());
         //updates the toolCards as their tokens were updated
-        messageAttributes.put("toolCards", drawnToolCards);
+        messageAttributes.put("toolCards", drawnToolCards.stream().map(ToolCard::copy));
         //updates the player as their tokens were updated
         messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
 
@@ -362,16 +362,16 @@ public class Game extends Observable implements Observer{
         String[] playersIDs = players.stream().map(Player::getID).toArray(String[]::new);
         WindowPattern[] windowPatterns = players.stream().map(Player::getWindowPattern).toArray(WindowPattern[]::new);
 
-        messageAttributes.put("drawnToolCards", drawnToolCards);
-        messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards);
+        messageAttributes.put("drawnToolCards", drawnToolCards.stream().map(ToolCard::copy));
+        messageAttributes.put("drawnPublicObjectiveCards", drawnPublicObjectiveCards.stream().map(PublicObjectiveCard::copy));
         messageAttributes.put("players", Arrays.asList(playersIDs));
-        messageAttributes.put("windowPatterns", Arrays.asList(windowPatterns));
-        messageAttributes.put("track", track);
-        messageAttributes.put("draftPoolDices", dices);
+        messageAttributes.put("windowPatterns", Arrays.asList(windowPatterns).stream().map(WindowPattern::copy));
+        messageAttributes.put("track", track.copy());
+        messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy));
 
         for (Player player: players) {
-            messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard()); //put overrides previous values
-            messageAttributes.put("yourWindowPattern", player.getWindowPattern()); //put overrides previous values
+            messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard().copy()); //put overrides previous values
+            messageAttributes.put("yourWindowPattern", player.getWindowPattern().copy()); //put overrides previous values
             Message message = new Message(ViewBoundMessageType.SETUP, messageAttributes, player.getID());
 
             notify(message);
@@ -421,13 +421,16 @@ public class Game extends Observable implements Observer{
         draftPool.register(this);
         this.currentRound = new Round(nextRoundNumber, numberOfTurnsPerRound, getPlayers(), draftPool);
 
-        //TODO: copy dices
-
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("number", nextRoundNumber);
         messageAttributes.put("track", track.copy());
-        messageAttributes.put("draftPoolDices", dices);
+
+        List<Dice> copyOfDices = new ArrayList<>();
+        for(Dice dice : dices){
+            copyOfDices.add(dice.copy());
+        }
+        messageAttributes.put("draftPoolDices", copyOfDices);
 
         notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));
 

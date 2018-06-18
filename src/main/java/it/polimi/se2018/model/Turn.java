@@ -196,14 +196,10 @@ public class Turn extends Observable implements Serializable {
      */
     public void setDraftedDice(Dice dice){
         if(dice == null){throw new IllegalArgumentException(NULL_DICE);}
-        this.draftedDice = dice;
+        this.draftedDice = dice.copy();
         setDraftedAndPlaced();
-        
-        Map<String, Object> messageAttributes = new HashMap<>();
 
-        messageAttributes.put("draftedDice", this.draftedDice);
-
-        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, messageAttributes));
+        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, Message.fastMap("draftedDice",dice)));
     }
 
     /**
@@ -213,13 +209,9 @@ public class Turn extends Observable implements Serializable {
      */
     public void setTrackChosenDice(Dice dice) {
         if(dice == null){throw new IllegalArgumentException(NULL_DICE);}
-        this.trackChosenDice = dice;
+        this.trackChosenDice = dice.copy();
 
-        Map<String, Object> messageAttributes = new HashMap<>();
-
-        messageAttributes.put("trackChosenDice", this.trackChosenDice);
-
-        notify(new Message(ViewBoundMessageType.TRACK_CHOSEN_DICE, messageAttributes));
+        notify(new Message(ViewBoundMessageType.TRACK_CHOSEN_DICE, Message.fastMap("trackChosenDice", dice)));
     }
 
     /**

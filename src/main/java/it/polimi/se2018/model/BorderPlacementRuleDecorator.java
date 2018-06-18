@@ -32,6 +32,12 @@ public class BorderPlacementRuleDecorator extends PlacementRuleDecorator {
                 decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
+    @Override
+    public PlacementRule copy() {
+        //TODO: implement here
+        return null;
+    }
+
     /**
      * Checks if the move specified by a given {@link Dice} and a position (row and col) is either on the border
      * or corner of the given {@link WindowPattern}.

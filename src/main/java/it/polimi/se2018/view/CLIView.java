@@ -279,7 +279,7 @@ public class CLIView extends View{
         waitForConsoleInput(diceIndex -> {
             int diceIndexInt = Integer.parseInt(diceIndex) - 1;
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
-                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt))));
+                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt).copy())));
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -320,7 +320,7 @@ public class CLIView extends View{
         }
         waitForConsoleInput(toolCardIndexString -> {
             int toolCardIndex = Integer.parseInt(toolCardIndexString);
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap("toolCard",drawnToolCards.get(toolCardIndex))));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap("toolCard",drawnToolCards.get(toolCardIndex).copy())));
             waitForMove();
         });
     }
@@ -376,7 +376,7 @@ public class CLIView extends View{
 
                 HashMap<String,Object> params = new HashMap<>();
                 params.put("slotNumber",trackSlotNumber);
-                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex));
+                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
 
                 sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
                 waitForMove();
@@ -453,7 +453,7 @@ public class CLIView extends View{
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern)));
+                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern.copy())));
             } else {
                 print(INPUT_NOT_VALID);
             }

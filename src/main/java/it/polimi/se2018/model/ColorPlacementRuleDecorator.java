@@ -32,6 +32,12 @@ public class ColorPlacementRuleDecorator extends PlacementRuleDecorator {
                 decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
+    @Override
+    public PlacementRule copy() {
+        //TODO: implement here
+        return null;
+    }
+
     /**
      * Checks if the move specified by a given {@link Dice} and a position (row and col) matches the color
      * restrictions of the specified cell on the given {@link WindowPattern}.

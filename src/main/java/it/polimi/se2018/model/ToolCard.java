@@ -290,4 +290,16 @@ public class ToolCard implements Serializable{
     public String toString() {
         return PRE_TITLE + getTitle() + POST_TITLE + DIVIDER + PRE_NEEDED_TOKENS +getNeededTokens()+ POST_NEEDED_TOKENS + DIVIDER + PRE_USED_TOKENS + getUsedTokens()+ POST_USED_TOKENS + DIVIDER + PRE_DESCRIPTION + getDescription() + POST_DESCRIPTION;
     }
+
+    public ToolCard copy(){
+        Properties p = new Properties();
+        p.put("id",this.toolCardID);
+        p.put("title",this.title);
+        p.put("description",this.description);
+        p.put("neededTokens",this.neededTokens); //TODO: questa copia non è completamente corretta. bisogna copiare esattamente neededTokens,baseNeededTokens,tokensUsed
+        p.put("tokensUsageMultiplier",this.tokensUsageMultiplier);
+        p.put("imageURL",this.imageURL);
+
+        return new ToolCard(p,new HashMap<String,String>(this.controllerStateRules),this.placementRule.copy(),new HashSet<Integer>(this.possibleMovesCountSet));
+    }
 }

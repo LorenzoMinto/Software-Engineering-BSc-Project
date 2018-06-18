@@ -20,4 +20,6 @@ public interface PlacementRule {
      * @return whether or not the move is allowed.
      */
     boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col);
+
+    PlacementRule copy();
 }
