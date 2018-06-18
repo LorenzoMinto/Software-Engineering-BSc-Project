@@ -1,5 +1,8 @@
 package it.polimi.se2018.utils;
 
+/**
+ * Enum of all types of view bound messages
+ */
 public enum ViewBoundMessageType {
     ERROR_MESSAGE,
     ACKNOWLEDGMENT_MESSAGE,

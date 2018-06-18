@@ -10,7 +10,7 @@ package it.polimi.se2018.utils;
 public class NoConfigParamFoundException extends Exception {
 
     /**
-     * Basic constrcutor. Do nothing else than calling super()
+     * Basic constructor. Do nothing else than calling super()
      */
     public NoConfigParamFoundException() {
         super();

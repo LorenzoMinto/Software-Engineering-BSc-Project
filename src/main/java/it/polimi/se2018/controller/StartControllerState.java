@@ -31,7 +31,7 @@ public class StartControllerState extends ControllerState {
      * String used as content of acknowledgment message in useToolCard()
      */
     private static final String TOOLCARD_ACTIVATED = "Toolcard activated.";
-    
+
     /**
      * String used as content of error message in useToolCard()
      */

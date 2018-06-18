@@ -11,8 +11,12 @@ package it.polimi.se2018.utils;
  */
 public class ValueOutOfBoundsException extends IllegalArgumentException {
 
+    /**
+     * Message constructor. Do nothing else than calling super()
+     */
     public ValueOutOfBoundsException(String message){
         super(message);
+        //do nothing else
     }
 
 }
