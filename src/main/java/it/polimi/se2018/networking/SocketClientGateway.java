@@ -4,7 +4,6 @@ import it.polimi.se2018.utils.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.rmi.RemoteException;
 
 /**
  *

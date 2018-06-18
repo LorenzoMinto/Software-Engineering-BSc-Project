@@ -5,7 +5,6 @@ import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
 
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.*;
 
@@ -85,7 +84,7 @@ public class Client extends Observable implements SenderInterface {
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException, NetworkingException {
+    public void sendMessage(Message message) throws NetworkingException {
         boolean somethingFailed = false;
         for(SenderInterface o : gateways){
             int attempts = 0;
@@ -97,12 +96,10 @@ public class Client extends Observable implements SenderInterface {
 
                 try{
                     o.sendMessage(message);
-                } catch(NetworkingException e){
+                } catch(NetworkingException e) {
                     e.printStackTrace();
-                    log("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
+                    log("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
-                } catch(RemoteException e){
-                    //TODO: rimuovi
                 }
                 correctlySent = true;
 

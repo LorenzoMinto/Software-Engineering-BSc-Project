@@ -681,8 +681,6 @@ public abstract class View implements Observer {
             //TODO: check if this must be removed in production
         } catch (NullPointerException ex){
             errorMessage(MUST_CONNECT);
-        } catch (RemoteException e) {
-            //TODO: rimuovi
         }
     }
 

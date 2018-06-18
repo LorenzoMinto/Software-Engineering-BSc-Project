@@ -14,10 +14,10 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiverInterface {
 
-    private transient ReceiverInterface receiver;
+    private transient Server server;
 
-    RMIServerGateway(String name, int port, ReceiverInterface receiver) throws RemoteException, NetworkingException {
-        this.receiver = receiver;
+    RMIServerGateway(String name, int port, Server server) throws RemoteException, NetworkingException {
+        this.server = server;
 
         try {
             LocateRegistry.createRegistry(port);
@@ -34,9 +34,10 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
         }
     }
 
+    @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException{
         try {
-            receiver.receiveMessage(message,sender);
+            server.receiveMessage(message,sender);
         } catch (RemoteException e) {
             throw new NetworkingException();
         }

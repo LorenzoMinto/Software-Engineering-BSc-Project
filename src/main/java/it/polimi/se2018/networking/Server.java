@@ -403,7 +403,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException, NetworkingException {
+    public void sendMessage(Message message) throws NetworkingException {
         boolean somethingFailed = false;
         List<ReceiverInterface> g;
 
@@ -472,9 +472,6 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             succeeded = true;
         } catch (NetworkingException e) {
             LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
-            succeeded = false;
-        } catch (RemoteException e) {
-            //TODO: rimuovi
             succeeded = false;
         }
         return succeeded;

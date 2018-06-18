@@ -3,7 +3,6 @@ package it.polimi.se2018.networking;
 import it.polimi.se2018.utils.Message;
 
 import java.io.*;
-import java.rmi.RemoteException;
 
 /**
  *
@@ -13,7 +12,7 @@ public class SocketServer implements ReceiverInterface {
 
     private ObjectOutputStream stream;
 
-    SocketServer(ObjectOutputStream stream) throws IOException {
+    SocketServer(ObjectOutputStream stream) {
         this.stream = stream;
     }
 
