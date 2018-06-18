@@ -117,6 +117,7 @@ public class ToolCard implements Serializable{
      * @param p contains id, title, description, imageURL, neededtokens, tokensUsageMultiplier
      * @param controllerStateRules the state table that governs state transitions when the tool card is active.
      * @param placementRule the placement rules that need to be enforced when the tool card is active.
+     * @param possibleMovesCountSet the number of possible dice moves
      */
     public ToolCard(Properties p, Map<String, String> controllerStateRules, PlacementRule placementRule, HashSet<Integer> possibleMovesCountSet) {
         //the id of toolCard

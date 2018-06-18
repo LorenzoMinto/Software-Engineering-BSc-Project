@@ -13,6 +13,7 @@ public class ValueOutOfBoundsException extends IllegalArgumentException {
 
     /**
      * Message constructor. Do nothing else than calling super()
+     * @param message the message containing details about the exception
      */
     public ValueOutOfBoundsException(String message){
         super(message);

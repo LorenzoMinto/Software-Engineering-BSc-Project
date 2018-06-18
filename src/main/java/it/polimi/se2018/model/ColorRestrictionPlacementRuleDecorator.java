@@ -13,6 +13,7 @@ public class ColorRestrictionPlacementRuleDecorator extends PlacementRuleDecorat
      * Class constructor specifying {@link PlacementRule} to be decorated.
      *
      * @param decoratedPlacementRule rule to be decorated.
+     * @param color the restriction's color
      */
     public ColorRestrictionPlacementRuleDecorator(PlacementRule decoratedPlacementRule, DiceColor color){
         super(decoratedPlacementRule);
