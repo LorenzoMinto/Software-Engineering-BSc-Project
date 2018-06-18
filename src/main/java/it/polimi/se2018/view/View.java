@@ -556,7 +556,6 @@ public abstract class View implements Observer {
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
-        System.out.println("RECEIVED: "+m.toString());
         switch (type) {
             case ERROR_MESSAGE:
                 handleErrorEvent(m);
@@ -712,8 +711,6 @@ public abstract class View implements Observer {
     }
 
     public void setPermissions(Set<Move> permissions) {
-        System.out.println("Changing permissions...");
-        System.out.println(permissions);
         this.permissions = (EnumSet<Move>)permissions;
         notifyPermissionsChanged();
     }

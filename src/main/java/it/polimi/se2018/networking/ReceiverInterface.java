@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public interface ReceiverInterface extends Remote {
+public interface ReceiverInterface {
 
     void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException;
 }

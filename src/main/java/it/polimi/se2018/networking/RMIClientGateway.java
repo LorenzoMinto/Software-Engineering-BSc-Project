@@ -13,24 +13,26 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author Federico Haag
  */
-public class RMIClientGateway implements SenderInterface, ReceiverInterface, Remote {
+public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
 
     private ReceiverInterface recipient;
     private ReceiverInterface client;
     private ReceiverInterface proxySender;
 
 
-    RMIClientGateway(String path, int port, ReceiverInterface client) throws RemoteException {
+    RMIClientGateway(String path, int port, ReceiverInterface client) throws NetworkingException {
         try{
-            this.recipient = (ReceiverInterface) Naming.lookup(path);
+            this.recipient = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
-            throw new RemoteException("Failed looking for RMI name");
+            e.printStackTrace();
+            throw new NetworkingException("Failed looking for RMI name");
         }
 
         try{
-            this.proxySender = (ReceiverInterface) UnicastRemoteObject.exportObject(this, port);
+            this.proxySender = (RMIReceiverInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
-            throw new RemoteException("Failed exporting RMI object");
+            e.printStackTrace();
+            throw new NetworkingException("Failed exporting RMI object");
         }
 
         this.client = client;

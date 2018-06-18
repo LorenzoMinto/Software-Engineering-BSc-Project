@@ -29,5 +29,6 @@ public class SocketServer implements ReceiverInterface {
     public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
         receiveMessage(message);
         //Just for compatibility reasons. Sender is not needed (and could be null): something related to RMI
+        //TODO: questa cosa non va bene
     }
 }

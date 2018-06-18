@@ -12,23 +12,25 @@ import java.rmi.server.UnicastRemoteObject;
  *
  * @author Federico Haag
  */
-public class RMIServerGateway extends UnicastRemoteObject implements ReceiverInterface, Remote {
+public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiverInterface {
 
     private transient ReceiverInterface receiver;
 
-    RMIServerGateway(String name, int port, ReceiverInterface receiver) throws RemoteException {
+    RMIServerGateway(String name, int port, ReceiverInterface receiver) throws RemoteException, NetworkingException {
         this.receiver = receiver;
 
         try {
             LocateRegistry.createRegistry(port);
         } catch(Exception ex) {
-            throw new RemoteException("Failed creating RMI registry");
+            ex.printStackTrace();
+            throw new NetworkingException("Failed creating RMI registry");
         }
 
         try {
             Naming.rebind(name, this);
         } catch(Exception ex) {
-            throw new RemoteException("Failed creating binding rmi name");
+            ex.printStackTrace();
+            throw new NetworkingException("Failed creating binding rmi name");
         }
     }
 

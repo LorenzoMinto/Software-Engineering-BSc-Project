@@ -185,6 +185,9 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         } catch (RemoteException e) {
             LOGGER.severe("Failed RMI setup");
             return;
+        } catch (NetworkingException e){
+            LOGGER.severe("Failed RMI setup due to networking exception");
+            return;
         }
 
         LOGGER.info("Starting Socket...");

@@ -44,8 +44,8 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
         if (type == ConnectionType.RMI) {
             try {
                 server = new RMIClientGateway(this.serverName, this.port, this);
-            } catch (RemoteException e) {
-                fail("Failed connecting to RMI server.");
+            } catch (NetworkingException e){
+                fail("NetworkingException catched: Failed connecting to RMI server.");
             }
 
         } else if (type == ConnectionType.SOCKET) {
