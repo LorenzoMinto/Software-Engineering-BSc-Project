@@ -36,11 +36,7 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
 
     @Override
     public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException{
-        try {
-            server.receiveMessage(message,sender);
-        } catch (RemoteException e) {
-            throw new NetworkingException();
-        }
+        server.parseInBoundMessage(message,sender);
     }
 
     //TODO: intellij consiglia di fare ovveride del metodo equals. Capire perchè.

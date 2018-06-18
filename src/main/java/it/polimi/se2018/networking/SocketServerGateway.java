@@ -2,8 +2,6 @@ package it.polimi.se2018.networking;
 
 import it.polimi.se2018.utils.Message;
 
-import java.rmi.RemoteException;
-
 /**
  * Gateway used by server to send messages.
  * From the server perspective, this class is the remote client to whom the server is sending messages.
@@ -11,23 +9,23 @@ import java.rmi.RemoteException;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public class SocketServerGateway implements ReceiverInterface {
+public class SocketServerGateway implements SocketReceiverInterface {
 
     /**
      * Remote client that receives messages
      */
-    private ReceiverInterface receiver;
+    private Server server;
 
     /**
      * Constructor for the gateway.
      *
      * @param portNumber port number on which the connection must be established
-     * @param receiver remote client that receives messages
+     * @param server remote client that receives messages
      */
-    SocketServerGateway(Integer portNumber, ReceiverInterface receiver) {
-        this.receiver = receiver;
+    SocketServerGateway(Integer portNumber, Server server) {
+        this.server = server;
 
-        SocketServerGatherer socketServerGatherer = new SocketServerGatherer(portNumber,receiver);
+        SocketServerGatherer socketServerGatherer = new SocketServerGatherer(portNumber,this);
         socketServerGatherer.start();
     }
 
@@ -41,11 +39,11 @@ public class SocketServerGateway implements ReceiverInterface {
      * @param sender the sender of the message (server)
      */
     public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
-        try {
-            receiver.receiveMessage(message,sender);
-        } catch (RemoteException e) {
-            throw new NetworkingException();
-            //TODO: rimuovere
-        }
+        server.parseInBoundMessage(message,sender);
+    }
+
+    @Override
+    public void fail(String m) {
+        this.server.fail(m);
     }
 }

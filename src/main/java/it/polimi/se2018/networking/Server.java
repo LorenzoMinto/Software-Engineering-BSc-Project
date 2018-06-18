@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Federico Haag
  */
-public class Server implements Observer, ReceiverInterface, SenderInterface{
+public class Server implements Observer, SenderInterface{
 
     /**
      * Name of the controller's config property containing the value of max number of players
@@ -231,8 +231,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         return new Controller(game,properties,LOGGER);
     }
 
-    @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException {
+    public void parseInBoundMessage(Message message, ReceiverInterface sender) {
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
@@ -247,14 +246,21 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
 
         //Send answer message back to the sender
         if(returnMessage!=null){
-            sender.receiveMessage(returnMessage, this.proxyServer);
 
-            //Notify all players
-            if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
-                sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,returnMessage.getPlayerID()));
+            try{
 
-            } else if(returnMessage.getType()==ViewBoundMessageType.REMOVED_FROM_WR){
-                sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
+                sender.receiveMessage(returnMessage, this.proxyServer);
+
+                //Notify all players
+                if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,returnMessage.getPlayerID()));
+
+                } else if(returnMessage.getType()==ViewBoundMessageType.REMOVED_FROM_WR){
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
+                }
+
+            } catch (RemoteException | NetworkingException e){
+                LOGGER.severe("Error answering to message "+message);
             }
         }
 

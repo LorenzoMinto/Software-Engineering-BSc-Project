@@ -47,10 +47,9 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws NetworkingException {
+    public void receiveMessage(Message message, ReceiverInterface sender) {
 
-        client.notify(message);
-        //Client doesn't answer to server's messages so it is unnecessary sender
+        client.notify(message); //client doesn't directly answer to server's messages so it is unnecessary sender
     }
 
     @Override
@@ -68,7 +67,7 @@ public class SocketClientGateway extends Thread implements SenderInterface, Rece
 
         } catch(Exception e){
             e.printStackTrace();
-            ((Client)this.client).fail("Exception thrown opening socket or reading from stream");
+            this.client.fail("Exception thrown opening socket or reading from stream");
         }
     }
 }

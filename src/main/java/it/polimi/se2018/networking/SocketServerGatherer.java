@@ -28,7 +28,7 @@ public class SocketServerGatherer extends Thread{
     /**
      * The server that is connected to this gatherer.
      */
-    private final ReceiverInterface server;
+    private final SocketReceiverInterface receiver;
 
     /**
      * Boolean value that is used to, eventually, stop the gathering loop.
@@ -43,10 +43,10 @@ public class SocketServerGatherer extends Thread{
     /**
      * Constructor for this class
      * @param portNumber port number on which the socket connection is opened
-     * @param server the server that is connected to this gatherer
+     * @param receiver the server that is connected to this gatherer
      */
-    SocketServerGatherer(Integer portNumber, ReceiverInterface server) {
-        this.server = server;
+    SocketServerGatherer(Integer portNumber, SocketReceiverInterface receiver) {
+        this.receiver = receiver;
         this.portNumber = portNumber;
     }
 
@@ -62,7 +62,7 @@ public class SocketServerGatherer extends Thread{
             }
 
         } catch (Exception e){
-            ((Server)this.server).fail(ACCEPTING_CONNECTION_EXCEPTION);
+            receiver.fail(ACCEPTING_CONNECTION_EXCEPTION);
         }
     }
 
@@ -94,9 +94,9 @@ public class SocketServerGatherer extends Thread{
                 Message message;
                 try {
                     message = (Message) in.readObject();
-                    server.receiveMessage(message, socketServer);
+                    receiver.receiveMessage(message, socketServer);
                 } catch( Exception e ){
-                    ((Server)server).fail(READING_STREAM_EXCEPTION);
+                    receiver.fail(READING_STREAM_EXCEPTION);
                     c = false;
                 }
             }
