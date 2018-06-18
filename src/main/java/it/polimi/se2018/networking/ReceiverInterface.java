@@ -11,5 +11,5 @@ import java.rmi.RemoteException;
  */
 public interface ReceiverInterface {
 
-    void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException;
+    void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException;
 }

@@ -90,7 +90,7 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException {
+    public void sendMessage(Message message) throws RemoteException, NetworkingException {
         boolean somethingFailed = false;
         for(SenderInterface o : gateways){
             int attempts = 0;
@@ -102,10 +102,12 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
 
                 try{
                     o.sendMessage(message);
-                } catch(Exception e){
+                } catch(NetworkingException e){
                     e.printStackTrace();
                     log("Attempt #"+attempts+": Could not send the message due to connection error to: "+o+". The message was: "+message);
                     continue;
+                } catch(RemoteException e){
+                    //TODO: rimuovi
                 }
                 correctlySent = true;
 
@@ -115,7 +117,7 @@ public class Client extends Observable implements SenderInterface, ReceiverInter
             if(!correctlySent){ somethingFailed=true; }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
-        if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
+        if(somethingFailed) throw new NetworkingException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
     private void addGateway(SenderInterface gateway) {

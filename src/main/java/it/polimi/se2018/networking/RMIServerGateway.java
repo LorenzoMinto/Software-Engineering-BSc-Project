@@ -34,7 +34,7 @@ public class RMIServerGateway extends UnicastRemoteObject implements RMIReceiver
         }
     }
 
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException{
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException{
         receiver.receiveMessage(message,sender);
     }
 

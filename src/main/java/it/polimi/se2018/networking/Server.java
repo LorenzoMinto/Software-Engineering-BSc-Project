@@ -232,7 +232,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException {
+    public void receiveMessage(Message message, ReceiverInterface sender) throws RemoteException, NetworkingException {
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
@@ -403,7 +403,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
     }
 
     @Override
-    public void sendMessage(Message message) throws RemoteException {
+    public void sendMessage(Message message) throws RemoteException, NetworkingException {
         boolean somethingFailed = false;
         List<ReceiverInterface> g;
 
@@ -422,9 +422,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
                 attempts++;
                 try {
                     o.receiveMessage(message, this.proxyServer);
-                } catch (Exception e) {
+                } catch (NetworkingException e) {
                     LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
                     continue;
+                } catch (RemoteException e){
+                    //TODO: rimuovi
                 }
                 correctlySent = true;
 
@@ -436,7 +438,7 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
             if(!correctlySent){ somethingFailed=true; }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
-        if(somethingFailed) throw new RemoteException("At least on message could not be sent from Client to Server. Message was: "+message);
+        if(somethingFailed) throw new NetworkingException("At least on message could not be sent from Client to Server. Message was: "+message);
     }
 
     /**
@@ -468,8 +470,11 @@ public class Server implements Observer, ReceiverInterface, SenderInterface{
         try {
             sendMessage(m);
             succeeded = true;
-        } catch (RemoteException e) {
+        } catch (NetworkingException e) {
             LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
+            succeeded = false;
+        } catch (RemoteException e) {
+            //TODO: rimuovi
             succeeded = false;
         }
         return succeeded;

@@ -38,7 +38,7 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
         this.client = client;
     }
 
-    public void sendMessage(Message message) throws RemoteException{
+    public void sendMessage(Message message) throws RemoteException, NetworkingException{
         this.recipient.receiveMessage(message,this.proxySender);
     }
 
@@ -47,7 +47,7 @@ public class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
         new Thread(()->{
             try {
                 this.client.receiveMessage(message,sender);
-            } catch (RemoteException e) {
+            } catch (NetworkingException | RemoteException e) {
                 //can't happen because client is not remote
             }
         }).start();

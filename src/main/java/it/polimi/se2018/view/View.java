@@ -5,6 +5,7 @@ import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.networking.SenderInterface;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
@@ -675,11 +676,13 @@ public abstract class View implements Observer {
     void sendMessage(Message m){
         try {
             this.client.sendMessage(m);
-        } catch (RemoteException e) {
+        } catch (NetworkingException e) {
             errorMessage("Error sending message: ".concat(m.toString()));
             //TODO: check if this must be removed in production
         } catch (NullPointerException ex){
             errorMessage(MUST_CONNECT);
+        } catch (RemoteException e) {
+            //TODO: rimuovi
         }
     }
 
