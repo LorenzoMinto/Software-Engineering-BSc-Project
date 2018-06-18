@@ -683,7 +683,7 @@ public class Controller extends Observable {
      */
     private void manageRankings(){
         Map<Player, Integer> rankings = getRankingsAndScores();
-        //TOFO: is the following needed anymore?
+        //TODO: is the following needed anymore?
         game.setRankings(rankings);
 
         List<RankingRecord> localRanking = new ArrayList<>();
@@ -731,7 +731,7 @@ public class Controller extends Observable {
         List<Player> playersOfLastRound = game.getCurrentRound().getPlayersByReverseTurnOrder();
 
         List<Player> playersToEvaluate = new ArrayList<>(playersOfLastRound);
-        return Scorer.getInstance().getRankings(playersToEvaluate, publicObjectiveCards);
+        return Scorer.getInstance().getRankings(playersToEvaluate, inactivePlayers, publicObjectiveCards);
     }
 
     /**

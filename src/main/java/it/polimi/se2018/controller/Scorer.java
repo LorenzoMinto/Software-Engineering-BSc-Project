@@ -75,8 +75,7 @@ public class Scorer {
      * @see Scorer#sortRankingsByPrivateObjectiveCardScore(Map)
      * @see Scorer#sortRankingsByScore(Map)
      */
-     public Map<Player, Integer> getRankings(List<Player> playersOfLastRound,
-                                     List<PublicObjectiveCard> publicObjectiveCards){
+     public Map<Player, Integer> getRankings(List<Player> playersOfLastRound, Set<String> inactivePlayersIDs, List<PublicObjectiveCard> publicObjectiveCards){
         if(playersOfLastRound.isEmpty()){ throw new EmptyListException(LIST_OF_PLAYERS_IS_EMPTY);}
         if(publicObjectiveCards.isEmpty()){ throw new EmptyListException(LIST_OF_PUBLIC_OBJECTIVE_CARDS_IS_EMPTY);}
 
