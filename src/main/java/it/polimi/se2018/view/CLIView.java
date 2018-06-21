@@ -114,6 +114,24 @@ public class CLIView extends View{
         connect();
     }
 
+
+    // CLI HANDLING
+
+    private void launchConsoleReader(){
+        new Thread(()->{
+            String text;
+            do{
+                text = SCANNER.nextLine();
+
+                if(currentInputConsumer !=null){
+                    currentInputConsumer.accept(text);
+                } else {
+                    print(INPUT_NOT_VALID);
+                }
+            } while(!text.equals(EXIT_FROM_READING_LOOP));
+        }).start();
+    }
+
     private void connect(){
         print(CHOOSE_CONNECTION_TYPE);
         waitForConsoleInput(connectionTypeString -> {
@@ -129,21 +147,6 @@ public class CLIView extends View{
                 });
             });
         });
-    }
-
-    private void launchConsoleReader(){
-        new Thread(()->{
-            String text;
-            do{
-                text = SCANNER.nextLine();
-
-                if(currentInputConsumer !=null){
-                    currentInputConsumer.accept(text);
-                } else {
-                    print(INPUT_NOT_VALID);
-                }
-            } while(!text.equals(EXIT_FROM_READING_LOOP));
-        }).start();
     }
 
     private void waitForMove(){
@@ -252,7 +255,25 @@ public class CLIView extends View{
         //TODO: implement better this method
     }
 
+    @Override
+    void showMessage(String message) {
+        cleanConsole();
+        print(message);
+    }
 
+    @Override
+    void errorMessage(String message) {
+        print(ERROR_MESSAGE +message);
+        waitForMove();
+    }
+
+    @Override
+    void ack(String text){
+        showMessage(text);
+        waitForMove();
+    }
+
+    // PRINTING METHODS
 
     private void printOthersWindowPatterns() {
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
@@ -298,7 +319,7 @@ public class CLIView extends View{
     }
 
 
-
+    // HANDLING OF MOVES
 
     @Override
     void handleEndEffectMove(){
@@ -495,7 +516,8 @@ public class CLIView extends View{
     }
 
 
-    //EVENTS
+    // HANDLING OF EVENTS
+
     @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
@@ -624,23 +646,8 @@ public class CLIView extends View{
         waitForMove();
     }
 
-    @Override
-    void showMessage(String message) {
-        cleanConsole();
-        print(message);
-    }
 
-    @Override
-    void errorMessage(String message) {
-        print(ERROR_MESSAGE +message);
-        waitForMove();
-    }
-
-    @Override
-    void ack(String text){
-        showMessage(text);
-        waitForMove();
-    }
+    // HANDLING NOTIFY
 
     @Override
     void notifyNewTurn(){
