@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.List;
 
 import static it.polimi.se2018.model.DiceColor.*;
-
+//TODO: commentare questa classe
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 

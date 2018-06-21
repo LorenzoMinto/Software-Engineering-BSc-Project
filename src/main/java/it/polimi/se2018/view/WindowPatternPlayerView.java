@@ -16,7 +16,7 @@ import javafx.scene.paint.ImagePattern;
 
 import java.io.File;
 import java.io.IOException;
-
+//TODO: commentare questa classe
 public class WindowPatternPlayerView extends Pane {
     private Player player;
 

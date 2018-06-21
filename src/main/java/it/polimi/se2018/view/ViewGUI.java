@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
-
+//TODO: commentare questa classe
 public class ViewGUI extends Application {
 
     private Client client;

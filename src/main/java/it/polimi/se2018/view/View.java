@@ -24,10 +24,10 @@ import java.util.*;
 public abstract class View implements Observer {
 
     /*  CONSTANTS FOR CONSOLE MESSAGES
-                        Following constants are not commented one by one because they are as self explaining as needed.
-                        Major information can be found looking for their usage.
-                        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
-                    */
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+    */
     //TODO: tradurre questi commenti in inglese @jacopo
     private static final String MUST_CONNECT = "You have to connect to the server";
     private static final String THE_GAME_IS_ENDED = "The game is ended";

@@ -10,7 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
 import java.util.List;
-
+//TODO: commentare questa classe
 public class RankingsSceneController {
 
     @FXML Label resultLabel;
