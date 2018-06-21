@@ -494,7 +494,7 @@ public class Controller extends Observable {
             assignedWindowPatterns.put(nickname,new ArrayList<>(patterns));
 
             HashMap<String,Object> params = new HashMap<>();
-            params.put("patterns",new ArrayList<>(patterns));
+            params.put("windowPatterns",new ArrayList<>(patterns));
             notify(new Message(ViewBoundMessageType.DISTRIBUTION_OF_WINDOW_PATTERNS,params,player.getID()));
         }
 

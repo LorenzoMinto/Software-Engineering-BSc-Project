@@ -14,10 +14,66 @@ import java.util.function.Consumer;
 
 public class CLIView extends View{
 
+    /**
+     * Scanner to read from console
+     */
+    private static final Scanner SCANNER = new Scanner(System.in);
+
+
+    // CONSTANTS FOR CONSOLE MESSAGES
+
     private static final String INPUT_NOT_VALID = "Input not valid";
     private static final String EXIT_FROM_READING_LOOP = "exit";
+    private static final String CHOOSE_CONNECTION_TYPE = "Insert 1. for RMI, 2. for socket";
+    private static final String INSERT_NAME_SERVER = "Insert name server";
+    private static final String INSERT_PORT_NUMBER = "Insert port number";
+    private static final String SHOW_MY_WINDOW_PATTERN = "Show my window pattern";
+    private static final String SHOW_MY_PRIVATE_OBJECTIVE_CARD = "Show my private objective card";
+    private static final String SHOW_PUBLIC_OBJECTIVE_CARDS = "Show public objective cards";
+    private static final String SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS = "Show window patterns of other players";
+    private static final String ASK_FOR_MOVE = "Which move would you like to perform?";
+    private static final String REMEMBER_DRAFTED_DICE = "Remember you have drafted a dice that is waiting to be placed: ";
+    private static final String WINDOW_PATTERN_OF = "Window pattern of ";
+    private static final String PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS = "Players have not already received window patterns.";
+    private static final String THERE_ARE_NO_PUBLIC_OBJECTIVE_CARDS_YET = "There are no public objective cards yet.";
+    private static final String YOU_DO_NOT_HAVE_A_PRIVATE_OBJECTIVE_CARD_YET = "You do not have a private objective card yet.";
+    private static final String YOU_DO_NOT_HAVE_A_WINDOW_PATTERN_YET = "You do not have a window pattern yet.";
+    private static final String THESE_ARE_DICES_OF_DRAFTPOOL = "These are dices of draftpool:";
+    private static final String INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_DRAFT = "Insert the index of the dice you want to draft:";
+    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN = "Insert the row number of the window pattern";
+    private static final String INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN = "Insert the col number of the window pattern";
+    private static final String INSERT_THE_VALUE_YOU_WANT_TO_ASSIGN_TO_THE_DRAFTED_DICE = "Insert the value you want to assign to the drafted dice";
+    private static final String FOLLOWING_THE_DICES_IN_THE_TRACK = "Following the dices in the track";
+    private static final String TRACK_SLOT_NUMBER = "TRACK SLOT #";
+    private static final String INSERT_THE_NUMBER_OF_SLOT_YOU_WANT_TO_DRAFT_THE_DICE_FROM = "Insert the number of slot you want to draft the dice from";
+    private static final String INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK = "Insert the index of the dice you want to pick:";
+    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN = "Insert the row number of the window pattern (origin)";
+    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1 = "Insert the row number of the window pattern (origin)";
+    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the row number of the window pattern (destination)";
+    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1 = "Insert the row number of the window pattern (destination)";
+    private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
+    private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings:";
+    private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
+    public static final String ERROR_MESSAGE = "ERROR: ";
 
-    private static final Scanner SCANNER = new Scanner(System.in);
+
+    // CONSTANTS FOR MESSAGES PARAMS
+
+    private static final String PARAM_NICKNAME = "nickname";
+    private static final String PARAM_WINDOW_PATTERN = "windowPattern";
+    private static final String PARAM_ROW_FROM = "rowFrom";
+    private static final String PARAM_COL_FROM = "colFrom";
+    private static final String PARAM_ROW_TO = "rowTo";
+    private static final String PARAM_COL_TO = "colTo";
+    private static final String PARAM_SLOT_NUMBER = "slotNumber";
+    private static final String PARAM_VALUE = "value";
+    private static final String PARAM_ROW = "row";
+    private static final String PARAM_COL = "col";
+    private static final String PARAM_TOOL_CARD = "toolCard";
+    private static final String PARAM_DICE = "dice";
+
+
+    // ...
 
     private class ConsoleMove {
         private String description;
@@ -32,10 +88,13 @@ public class CLIView extends View{
             return description;
         }
 
-        public void run(){
+        void run(){
             this.action.run();
         }
     }
+
+
+    // CLI PARAMS
 
     private Consumer<String> currentInputConsumer;
 
@@ -56,11 +115,11 @@ public class CLIView extends View{
     }
 
     private void connect(){
-        print("Insert 1. for RMI, 2. for socket");
+        print(CHOOSE_CONNECTION_TYPE);
         waitForConsoleInput(connectionTypeString -> {
-            print("Insert name server");
+            print(INSERT_NAME_SERVER);
             waitForConsoleInput(serverName -> {
-                print("Insert port number");
+                print(INSERT_PORT_NUMBER);
                 waitForConsoleInput(portNumberString -> {
                     int portNumber = Integer.parseInt(portNumberString);
                     ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
@@ -97,20 +156,20 @@ public class CLIView extends View{
         }
 
         if(gameStarted){
-            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show my window pattern",this::printWindowPattern));
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_MY_WINDOW_PATTERN,this::printWindowPattern));
             index++;
-            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show my private objective card",this::printPrivateObjectiveCard));
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_MY_PRIVATE_OBJECTIVE_CARD,this::printPrivateObjectiveCard));
             index++;
-            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show public objective cards",this::printPublicObjectiveCards));
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_PUBLIC_OBJECTIVE_CARDS,this::printPublicObjectiveCards));
             index++;
-            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove("Show window patterns of other players",this::printOthersWindowPatterns));
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS,this::printOthersWindowPatterns));
         }
 
         if(this.draftedDice!=null){
-            print("Remember you have drafted a dice ("+this.draftedDice+") that is waiting to be placed.");
+            print(REMEMBER_DRAFTED_DICE +this.draftedDice);
         }
 
-        print("Which move would you like to perform?");
+        print(ASK_FOR_MOVE);
 
         //Print console moves
         for (Map.Entry<String, ConsoleMove> entry : mapConsoleMoves.entrySet()) {
@@ -199,12 +258,12 @@ public class CLIView extends View{
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
             int index = 0;
             for(WindowPattern windowPattern : windowPatterns){
-                print("Window pattern of "+players.get(index)); //assumes that windowPatterns and players are in the same order
+                print(WINDOW_PATTERN_OF +players.get(index)); //assumes that windowPatterns and players are in the same order
                 print(windowPattern.toString());
                 index++;
             }
         } else {
-            print("Players have not already received window patterns.");
+            print(PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS);
         }
         waitForMove();
     }
@@ -215,14 +274,14 @@ public class CLIView extends View{
                 print(publicObjectiveCard.toString());
             }
         } else {
-            print("There are no public objective cards yet.");
+            print(THERE_ARE_NO_PUBLIC_OBJECTIVE_CARDS_YET);
         }
         waitForMove();
     }
 
     private void printPrivateObjectiveCard() {
         if(this.privateObjectiveCard==null){
-            print("You do not have a private objective card yet.");
+            print(YOU_DO_NOT_HAVE_A_PRIVATE_OBJECTIVE_CARD_YET);
         } else {
             print(this.privateObjectiveCard.toString());
         }
@@ -231,7 +290,7 @@ public class CLIView extends View{
 
     private void printWindowPattern() {
         if(this.windowPattern==null){
-            print("You do not have a window pattern yet.");
+            print(YOU_DO_NOT_HAVE_A_WINDOW_PATTERN_YET);
         } else {
             print(this.windowPattern.toString());
         }
@@ -269,17 +328,17 @@ public class CLIView extends View{
     void handleDraftDiceFromDraftPoolMove() {
         super.handleDraftDiceFromDraftPoolMove();
 
-        print("These are dices of draftpool:");
+        print(THESE_ARE_DICES_OF_DRAFTPOOL);
         int index = 1;
         for(Dice dice : draftPoolDices){
             print(Integer.toString(index)+". "+dice);
             index++;
         }
-        print("Insert the index of the dice you want to draft:");
+        print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_DRAFT);
         waitForConsoleInput(diceIndex -> {
             int diceIndexInt = Integer.parseInt(diceIndex) - 1;
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
-                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice",draftPoolDices.get(diceIndexInt).copy())));
+                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt).copy())));
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -291,16 +350,16 @@ public class CLIView extends View{
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
         super.handlePlaceDiceOnWindowPatternMove();
-        print("Insert the row number of the window pattern");
+        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN);
         waitForConsoleInput(rowString -> {
             int row = Integer.parseInt(rowString) - 1;
-            print("Insert the col number of the window pattern");
+            print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN);
             waitForConsoleInput(colString -> {
                 int col = Integer.parseInt(colString) - 1;
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
                     HashMap<String,Object> params = new HashMap<>();
-                    params.put("row",row);
-                    params.put("col",col);
+                    params.put(PARAM_ROW,row);
+                    params.put(PARAM_COL,col);
                     sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
                 } else {
                     print(INPUT_NOT_VALID);
@@ -320,7 +379,7 @@ public class CLIView extends View{
         }
         waitForConsoleInput(toolCardIndexString -> {
             int toolCardIndex = Integer.parseInt(toolCardIndexString);
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap("toolCard",drawnToolCards.get(toolCardIndex).copy())));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex).copy())));
             waitForMove();
         });
     }
@@ -340,13 +399,13 @@ public class CLIView extends View{
     @Override
     void handleChangeDraftedDiceValueMove() {
         super.handleChangeDraftedDiceValueMove();
-        print("Insert the value you want to assign to the drafted dice");
+        print(INSERT_THE_VALUE_YOU_WANT_TO_ASSIGN_TO_THE_DRAFTED_DICE);
         waitForConsoleInput(diceValueString->{
             int diceValue = Integer.parseInt(diceValueString);
             if(diceValue<1 || diceValue>6){
                 print(INPUT_NOT_VALID);
             } else {
-                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value",diceValue)));
+                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
             }
             waitForMove();
         });
@@ -355,17 +414,17 @@ public class CLIView extends View{
     @Override
     void handleChooseDiceFromTrackMove() {
         super.handleChooseDiceFromTrackMove();
-        print("Following the dices in the track");
+        print(FOLLOWING_THE_DICES_IN_THE_TRACK);
         for(int i=0; i<track.size(); i++){
-            print("TRACK SLOT #"+(i+1));
+            print(TRACK_SLOT_NUMBER +(i+1));
             for(Dice dice : track.getDicesFromSlotNumber(i)){
                 print(dice.toString());
             }
         }
-        print("Insert the number of slot you want to draft the dice from");
+        print(INSERT_THE_NUMBER_OF_SLOT_YOU_WANT_TO_DRAFT_THE_DICE_FROM);
         waitForConsoleInput(trackSlotNumberString->{
             int trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
-            print("Insert the index of the dice you want to pick:");
+            print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK);
             int index = 1;
             for(Dice dice : track.getDicesFromSlotNumber(trackSlotNumber)){
                 print(Integer.toString(index)+". "+dice);
@@ -375,8 +434,8 @@ public class CLIView extends View{
                 int chosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
 
                 HashMap<String,Object> params = new HashMap<>();
-                params.put("slotNumber",trackSlotNumber);
-                params.put("dice",track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
+                params.put(PARAM_SLOT_NUMBER,trackSlotNumber);
+                params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
 
                 sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
                 waitForMove();
@@ -388,26 +447,26 @@ public class CLIView extends View{
     @Override
     void handleMoveDiceMove() {
         super.handleMoveDiceMove();
-        print("Insert the row number of the window pattern (origin)");
+        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
         waitForConsoleInput(rowString -> {
             int row = Integer.parseInt(rowString) - 1;
-            print("Insert the row number of the window pattern (origin)");
+            print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1);
             waitForConsoleInput(colString -> {
                 int col = Integer.parseInt(colString) - 1;
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
 
-                    print("Insert the row number of the window pattern (destination)");
+                    print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
                     waitForConsoleInput(rowDestString -> {
                         int rowDest = Integer.parseInt(rowDestString) - 1;
-                        print("Insert the row number of the window pattern (destination)");
+                        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1);
                         waitForConsoleInput(colDestString -> {
                             int colDest = Integer.parseInt(colDestString) - 1;
                             if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
                                 HashMap<String,Object> params = new HashMap<>();
-                                params.put("rowFrom",row);
-                                params.put("colFrom",col);
-                                params.put("rowTo",rowDest);
-                                params.put("colTo",colDest);
+                                params.put(PARAM_ROW_FROM,row);
+                                params.put(PARAM_COL_FROM,col);
+                                params.put(PARAM_ROW_TO,rowDest);
+                                params.put(PARAM_COL_TO,colDest);
                                 sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
                             } else {
                                 print(INPUT_NOT_VALID);
@@ -428,10 +487,10 @@ public class CLIView extends View{
     void handleJoinGameMove() {
         super.handleJoinGameMove();
 
-        print("Insert your nickname");
+        print(INSERT_YOUR_NICKNAME);
         waitForConsoleInput(nickname->{
             setPlayer(nickname);
-            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",nickname)));
+            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
         });
     }
 
@@ -442,22 +501,22 @@ public class CLIView extends View{
         super.handleGiveWindowPatternsEvent(m);
 
         //Print windowPattern
-        print("Choose a window pattern from the followings:");
+        print(CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS);
         int index = 1;
         for(WindowPattern windowPattern : drawnWindowPatterns){
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
-        print("Insert the index of the window pattern you want to choose:");
+        print(INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE);
         waitForConsoleInput(s -> {
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",chosenWindowPattern.copy())));
+                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern.copy())));
             } else {
                 print(INPUT_NOT_VALID);
             }
-            waitForMove(); //remember that if the currentInputConsumer is the last operation to be formed, insert waitForMove().
+            waitForMove(); //NOTE: remember that if the currentInputConsumer is the last operation to be formed, insert waitForMove().
         });
     }
 
@@ -573,7 +632,7 @@ public class CLIView extends View{
 
     @Override
     void errorMessage(String message) {
-        print("ERROR: "+message);
+        print(ERROR_MESSAGE +message);
         waitForMove();
     }
 
