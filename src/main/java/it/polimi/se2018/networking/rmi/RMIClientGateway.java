@@ -67,8 +67,8 @@ public final class RMIClientGateway implements SenderInterface, RMIReceiverInter
     @Override
     public void receiveMessage(Message message, RMIReceiverInterface sender){
         //IL THREAD VIENE CREATO PER DISACCOPPIARE LA CHIAMATA REMOTA DA QUELLA EFFETTIVA
-        new Thread(()->{
-            this.client.notify(message);
-        }).start();
+        //TODO: assicurarsi che questa cosa, reduce dalla vecchia versione di networking, serva ancora.
+        //TODO: nel caso andasse tolta, eliminare dall'UML la dipendenza di RMIClientGateway rispetto a Thread
+        new Thread(()-> this.client.notify(message)).start();
     }
 }
