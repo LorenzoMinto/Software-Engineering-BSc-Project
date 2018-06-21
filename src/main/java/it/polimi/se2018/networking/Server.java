@@ -473,9 +473,9 @@ public class Server implements Observer, SenderInterface{
      * Method used by server threads that have to notify server of some kind
      * of unhandlable failure that happened during their running.
      *
-     * @param m the string containing the explanation of the failure
+     * @param reason the string containing the explanation of the failure
      */
-    public void fail(String m){
-        throw new BadBehaviourRuntimeException(m);
+    public void fail(String reason){
+        throw new BadBehaviourRuntimeException(reason);
     }
 }
