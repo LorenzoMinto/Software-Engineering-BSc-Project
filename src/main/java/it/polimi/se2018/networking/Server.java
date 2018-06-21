@@ -15,25 +15,61 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Server
  * @author Federico Haag
  */
 public class Server implements Observer, SenderInterface{
 
     /**
-     * Name of the controller's config property containing the value of max number of players
-     */
-    private static final String CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
-
-    /**
-     * Name of the controller's config property containing the number of rounds
-     */
-    private static final String CONFIG_PROPERTY_NUMBER_OF_ROUNDS = "numberOfRounds";
-
-    /**
      * Name of the default config file
      */
     private static final String DEFAULT_CONFIG_FILE_NAME = "default";
+
+
+    /*  CONSTANTS FOR CONFIG PROPERTIES NAMES
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+     */
+    private static final String CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
+    private static final String CONFIG_PROPERTY_NUMBER_OF_ROUNDS = "numberOfRounds";
+    private static final String CONFIG_PROPERTY_NICKNAME = "nickname";
+    private static final String CONFIG_PROPERTY_MIN_NUMBER_OF_PLAYERS = "minNumberOfPlayers";
+    private static final String CONFIG_PROPERTY_TIMEOUT_LAUNCHING_GAME = "timeoutLaunchingGame";
+
+
+    /*  CONSTANTS FOR LOGS
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+     */
+    private static final String EXCEPTION_SENDING_TO_CLIENTS_DURING_UPDATE = "Exception while sending a message from Server to Clients (asked by update call)";
+    private static final String ERROR_SENDING_MESSAGE = "At least on message could not be sent from Client to Server. Message was: ";
+    private static final String FIRST_PARAMETER_NAME_OF_THE_SERVER_IS_COMPULSORY = "First parameter (name of the server) is compulsory";
+    private static final String SECOND_PARAMETER_PORT_NUMBER_FOR_RMI_IS_COMPULSORY = "Second parameter (port number for RMI) is compulsory";
+    private static final String THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY = "Third parameter (port number for SOCKET) is compulsory";
+    private static final String FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Fourth parameter (max number of attempts) is compulsory";
+    private static final String STARTING_RMI = "Starting RMI...";
+    private static final String FAILED_RMI_SETUP = "Failed RMI setup";
+    private static final String STARTING_SOCKET = "Starting Socket...";
+    private static final String SAGRADA_SERVER_IS_UP = "Sagrada Server is up.";
+    private static final String CANT_LOAD_DEFAULT_CONFIG_FILE = "Can't load default config file";
+    private static final String ERROR_ANSWERING_TO_MESSAGE = "Error answering to message ";
+    private static final String RECEIVED_MESSAGE = "Received message: ";
+    private static final String ANSWERED_WITH = "Answered with: ";
+    private static final String ATTEMPT = "Attempt #";
+    private static final String COULD_NOT_SEND_THE_MESSAGE_DUE_TO_CONNECTION_ERROR_TO = "Could not send the message due to connection error to";
+    private static final String THE_MESSAGE_WAS = "The message was";
+    private static final String SUCCESSFULLY_SENT_MESSAGE_TO = "Successfully sent message to";
+
+
+    /*  CONSTANTS FOR MESSAGES CONTENT
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+     */
+    private static final String GAME_IS_PLAYING = "GAME_IS_PLAYING";
+
 
     /**
      * Timer used to call launchGame() after a specified time
@@ -125,7 +161,7 @@ public class Server implements Observer, SenderInterface{
         try{
             serverName = args[0];
         } catch (IndexOutOfBoundsException e){
-            LOGGER.info("First parameter (name of the server) is compulsory");
+            LOGGER.info(FIRST_PARAMETER_NAME_OF_THE_SERVER_IS_COMPULSORY);
             return;
         }
 
@@ -133,7 +169,7 @@ public class Server implements Observer, SenderInterface{
         try{
             portNumberRMI = Integer.parseInt(args[1]);
         } catch (IndexOutOfBoundsException e){
-            LOGGER.info("Second parameter (port number for RMI) is compulsory");
+            LOGGER.info(SECOND_PARAMETER_PORT_NUMBER_FOR_RMI_IS_COMPULSORY);
             return;
         }
 
@@ -141,7 +177,7 @@ public class Server implements Observer, SenderInterface{
         try{
             portNumberSOCKET = Integer.parseInt(args[2]);
         } catch (IndexOutOfBoundsException e){
-            LOGGER.info("Third parameter (port number for SOCKET) is compulsory");
+            LOGGER.info(THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY);
             return;
         }
 
@@ -149,7 +185,7 @@ public class Server implements Observer, SenderInterface{
         try{
             maxNumberOfAttempts = Integer.parseInt(args[3]);
         } catch (IndexOutOfBoundsException e){
-            LOGGER.info("Fourth parameter (max number of attempts) is compulsory");
+            LOGGER.info(FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY);
             return;
         }
 
@@ -187,18 +223,18 @@ public class Server implements Observer, SenderInterface{
      */
     private void setupNetworking() {
         try {
-            LOGGER.info("Starting RMI...");
+            LOGGER.info(STARTING_RMI);
             new RMIServerGateway(this.serverName,this.portNumberRMI,this);
 
         } catch (RemoteException | MalformedURLException e) {
-            LOGGER.severe("Failed RMI setup");
+            LOGGER.severe(FAILED_RMI_SETUP);
             return;
         }
 
-        LOGGER.info("Starting Socket...");
+        LOGGER.info(STARTING_SOCKET);
         new SocketServerGateway(this.portNumberSOCKET,this);
 
-        LOGGER.info("Sagrada Server is up.");
+        LOGGER.info(SAGRADA_SERVER_IS_UP);
     }
 
     /**
@@ -222,7 +258,7 @@ public class Server implements Observer, SenderInterface{
                 properties = configImporter.getProperties();
             } catch(NoConfigParamFoundException ex){
 
-                throw new BadBehaviourRuntimeException("Can't load default config file");
+                throw new BadBehaviourRuntimeException(CANT_LOAD_DEFAULT_CONFIG_FILE);
             }
         }
 
@@ -270,11 +306,11 @@ public class Server implements Observer, SenderInterface{
                 }
 
             } catch (NetworkingException e){
-                LOGGER.severe("Error answering to message "+message);
+                LOGGER.severe(ERROR_ANSWERING_TO_MESSAGE +message);
             }
         }
 
-        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info("Received message: "+message+". Answered with: "+returnMessage+"."); }
+        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + "."); }
     }
 
     /**
@@ -285,12 +321,12 @@ public class Server implements Observer, SenderInterface{
      */
     private Message handleWaitingRoomMessage(Message message, ClientProxyInterface sender){
         if(serverState != ServerState.WAITING_ROOM){
-            return new Message(ViewBoundMessageType.JOIN_WR_DENIED_PLAYING,"GAME_IS_PLAYING");
+            return new Message(ViewBoundMessageType.JOIN_WR_DENIED_PLAYING, GAME_IS_PLAYING);
         }
 
         String nickname;
         try {
-            nickname = (String) message.getParam("nickname");
+            nickname = (String) message.getParam(CONFIG_PROPERTY_NICKNAME);
         } catch (NoSuchParamInMessageException e) {
             return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }
@@ -345,7 +381,7 @@ public class Server implements Observer, SenderInterface{
             //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
 
-            if(waitingList.size() < controller.getConfigProperty("minNumberOfPlayers")){
+            if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MIN_NUMBER_OF_PLAYERS)){
                 cancelTimerForLaunchingGame();
             }
 
@@ -363,7 +399,7 @@ public class Server implements Observer, SenderInterface{
             //The game can be launched. Eventual timer is stopped. Game is launched.
             cancelTimerForLaunchingGame();
             launchGame();
-        } else if(waitingList.size() >= controller.getConfigProperty("minNumberOfPlayers")){
+        } else if(waitingList.size() >= controller.getConfigProperty(Server.CONFIG_PROPERTY_MIN_NUMBER_OF_PLAYERS)){
             //The game can be launched. If timer was not already started, it is started now.
             if(!this.isTimerForLaunchingGameActive){ startTimerForLaunchingGame(); }
         } else {
@@ -385,7 +421,7 @@ public class Server implements Observer, SenderInterface{
             public void run() {
                 launchGame();
             }
-        },(long)(controller.getConfigProperty("timeoutLaunchingGame")*1000));
+        },(long)(controller.getConfigProperty(CONFIG_PROPERTY_TIMEOUT_LAUNCHING_GAME)*1000));
     }
 
     /**
@@ -439,21 +475,21 @@ public class Server implements Observer, SenderInterface{
                 try {
                     o.receiveMessage(message);
                 } catch (NetworkingException e) {
-                    LOGGER.warning("Attempt #" + attempts + ": Could not send the message due to connection error to: " + o + ". The message was: " + message);
+                    LOGGER.warning(ATTEMPT + attempts + ": " + COULD_NOT_SEND_THE_MESSAGE_DUE_TO_CONNECTION_ERROR_TO + ": " + o + ". " + THE_MESSAGE_WAS + ": " + message);
                     continue;
                 }
 
                 correctlySent = true;
 
                 if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.info("Attempt #" + attempts + ": Successfully sent message to: " + o + ". The message was: " + message);
+                    LOGGER.info(ATTEMPT + attempts + ": " + SUCCESSFULLY_SENT_MESSAGE_TO + ": " + o + ". " + THE_MESSAGE_WAS + ": " + message);
                 }
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
             if(!correctlySent){ somethingFailed=true; }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
-        if(somethingFailed) throw new NetworkingException("At least on message could not be sent from Client to Server. Message was: "+message);
+        if(somethingFailed) throw new NetworkingException(ERROR_SENDING_MESSAGE +message);
     }
 
     @Override
@@ -463,7 +499,7 @@ public class Server implements Observer, SenderInterface{
             sendMessage(m);
             succeeded = true;
         } catch (NetworkingException e) {
-            LOGGER.severe("Exception while sending a message from Server to Clients (asked by update call)");
+            LOGGER.severe(EXCEPTION_SENDING_TO_CLIENTS_DURING_UPDATE);
             succeeded = false;
         }
         return succeeded;
@@ -473,7 +509,7 @@ public class Server implements Observer, SenderInterface{
      * Method used by server threads that have to notify server of some kind
      * of unhandlable failure that happened during their running.
      *
-     * @param reason the string containing the explanation of the failure
+     * @param reason a string containing the explanation of the failure
      */
     public void fail(String reason){
         throw new BadBehaviourRuntimeException(reason);

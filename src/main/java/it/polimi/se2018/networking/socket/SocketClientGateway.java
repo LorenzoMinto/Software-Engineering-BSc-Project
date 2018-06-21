@@ -76,14 +76,14 @@ public final class SocketClientGateway extends Thread implements SenderInterface
     }
 
     @Override
-    public void receiveMessage(Message message, ClientProxyInterface sender) {
+    public void receiveMessage(Message message, SocketClientProxy sender) {
 
         client.notify(message); //client doesn't directly answer to server's messages so it is unnecessary sender
     }
 
     @Override
-    public void fail(String m) {
-        this.client.fail(m);
+    public void fail(String reason) {
+        this.client.fail(reason);
     }
 
     @Override

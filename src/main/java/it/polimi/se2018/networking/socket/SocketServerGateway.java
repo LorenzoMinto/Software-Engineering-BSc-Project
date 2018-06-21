@@ -1,6 +1,5 @@
 package it.polimi.se2018.networking.socket;
 
-import it.polimi.se2018.networking.ClientProxyInterface;
 import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
@@ -41,12 +40,13 @@ public final class SocketServerGateway implements SocketReceiverInterface {
      * @param message the message to be sent
      * @param sender the sender of the message (server)
      */
-    public void receiveMessage(Message message, ClientProxyInterface sender) throws NetworkingException {
+    @Override
+    public void receiveMessage(Message message, SocketClientProxy sender) throws NetworkingException {
         server.handleInBoundMessage(message,sender);
     }
 
     @Override
-    public void fail(String m) {
-        this.server.fail(m);
+    public void fail(String reason) {
+        this.server.fail(reason);
     }
 }

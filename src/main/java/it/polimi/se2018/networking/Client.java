@@ -7,11 +7,10 @@ import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.Observer;
 
-import java.util.*;
 import java.util.logging.*;
 
 /**
- *
+ * Client
  * @author Federico Haag
  */
 public class Client extends Observable implements SenderInterface {
@@ -129,9 +128,9 @@ public class Client extends Observable implements SenderInterface {
 
     /**
      * Method used by client to notify that some kind of unhandlable failure that happened during their running     *
-     * @param m the string containing the explanation of the failure
+     * @param reason a string containing the explanation of the failure
      */
-    public void fail(String m){
-        throw new BadBehaviourRuntimeException(m);
+    public void fail(String reason){
+        throw new BadBehaviourRuntimeException(reason);
     }
 }
