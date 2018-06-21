@@ -13,10 +13,22 @@ import it.polimi.se2018.utils.Message;
 
 import java.util.*;
 
+/**
+ * This is the View class of the MVC paradigm.
+ * It's an abstract class because a lot of actions depends strongly on implementation.
+ * Just the basic code is inserted here. Every method is then re-implemented or extended by
+ * actual implementations (CLI and GUI).
+ * 
+ * @author Federico Haag
+ */
 public abstract class View implements Observer {
 
-    // CONSTANTS FOR MESSAGES
-
+    /*  CONSTANTS FOR CONSOLE MESSAGES
+                        Following constants are not commented one by one because they are as self explaining as needed.
+                        Major information can be found looking for their usage.
+                        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+                    */
+    //TODO: tradurre questi commenti in inglese @jacopo
     private static final String MUST_CONNECT = "You have to connect to the server";
     private static final String THE_GAME_IS_ENDED = "The game is ended";
     private static final String WINDOW_PATTERNS_RECEIVED = "Ricevuti windowPattern da scegliere";
@@ -46,8 +58,12 @@ public abstract class View implements Observer {
     private static final String ERROR_SENDING_MESSAGE = "Error sending message: ";
 
 
-    // CONSTANTS FOR MESSAGES PARAMS
-
+    /*  CONSTANTS FOR MESSAGES PARAMS
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+     */
+    //Note: this strings are strictly connected with the ones used in Controller and Model. DO NOT CHANGE!
     private static final String PARAM_PLAYER = "player";
     private static final String PARAM_MESSAGE = "message";
     private static final String PARAM_DRAWN_TOOL_CARDS = "drawnToolCards";
@@ -62,6 +78,10 @@ public abstract class View implements Observer {
     private static final String PARAM_WINNER_PLAYER_ID = "winnerPlayerID";
     private static final String PARAM_RANKINGS = "rankings";
     private static final String PARAM_CURRENT_PLAYER = "currentPlayer";
+    private static final String PARAM_WINDOW_PATTERN = "windowPattern";
+    private static final String PARAM_TOOL_CARD = "toolCard";
+    private static final String PARAM_TOOL_CARDS = "toolCards";
+    private static final String PARAM_DRAFTED_DICE = "draftedDice";
 
 
     // CONFIGURATION INFORMATION
@@ -90,122 +110,185 @@ public abstract class View implements Observer {
      */
     private String playerID;
 
-    List<ToolCard> drawnToolCards; //TODO: check if needed
+    /**
+     * Number of the current round
+     */
+    private int roundNumber;
 
-    List<PublicObjectiveCard> drawnPublicObjectiveCards; //TODO: check if needed
+    /**
+     * ToolCards that have been distributed at the beginning of the game
+     */
+    List<ToolCard> drawnToolCards;
 
-    List<String> players; //TODO: check if needed
+    /**
+     * Public Objective Cards that have been distributed at the beginning of the game
+     */
+    List<PublicObjectiveCard> drawnPublicObjectiveCards;
 
-    Track track; //TODO: check if needed
+    /**
+     * Window Patterns that were given at the beginning of the game to the view's player
+     * to choose one of them.
+     */
+    List<WindowPattern> drawnWindowPatterns;
+    
+    /**
+     * List of players
+     */
+    List<String> players; //TODO: hanno un ordine garantito? scrivi risposta in javadoc
 
-    List<Dice> draftPoolDices; //TODO: check if needed
+    /**
+     * Track
+     */
+    Track track;
 
-    int roundNumber; //TODO: check if needed
+    /**
+     * Dices currently contained in draft pool
+     */
+    List<Dice> draftPoolDices;
 
-    String playingPlayerID; //TODO: check if needed
+    /**
+     * ID of the current playing player
+     */
+    String playingPlayerID;
 
-    Dice draftedDice; //TODO: check if needed
+    /**
+     * Reference to the dice that has been drafted and it has not been placed somewhere yet
+     */
+    Dice draftedDice;
 
-    WindowPattern windowPattern; //TODO: check if needed
+    /**
+     * Window Pattern of the view's player
+     */
+    WindowPattern windowPattern;
 
-    List<WindowPattern> windowPatterns;
+    /**
+     * Window Patterns of players
+     */
+    List<WindowPattern> windowPatterns; //TODO: contiene anche il proprio? scrivi risposta in javadoc
 
-    PrivateObjectiveCard privateObjectiveCard; //TODO: check if needed
+    /**
+     * The private objective card that has been given to the player at the beginning of the game
+     */
+    PrivateObjectiveCard privateObjectiveCard;
 
+    /**
+     * Final rankings of the game
+     */
     List<RankingRecord> rankings;
 
-    List<WindowPattern> drawnWindowPatterns;
 
 
+    // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
 
-    //HANDLING OF MOVES
-
+    /**
+     * Handles the move "Leave Waiting Room"
+     */
     void handleLeaveWaitingRoomMove(){
         sendMessage(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
     }
 
+    /**
+     * Handles the move "Back to game"
+     */
     void handleBackGameMove(){
         sendMessage(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
     }
 
+    /**
+     * Handles the move "End turn"
+     */
     void handleEndTurnMove(){
         sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
     }
 
-    void handleWindowPatternSelection(WindowPattern wp){ //TODO: questo metodo non è mai usato. come mai?
+    /**
+     * @param wp
+     */
+    void handleWindowPatternSelection(WindowPattern wp){
+        //TODO: questo metodo non è mai usato. come mai?
         sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
     }
 
+    /**
+     * Handles the move "Drafted dice from Drat Pool"
+     */
     void handleDraftDiceFromDraftPoolMove(){
         //no behaviour in common between CLI and GUI
     }
 
+    /**
+     * Handles the move "Place dice on window pattern"
+     */
     void handlePlaceDiceOnWindowPatternMove(){
         //no behaviour in common between CLI and GUI
     }
 
+    /**
+     * Handles the move "Use tool card"
+     */
     void handleUseToolCardMove(){
         //no behaviour in common between CLI and GUI
     }
 
+    /**
+     * Handles the move "Increment drafted dice"
+     */
     void handleIncrementDraftedDiceMove(){
         sendMessage(new Message(ControllerBoundMessageType.INCREMENT_DICE));
     }
 
+    /**
+     * Handles the move "Decrement drafted dice"
+     */
     void handleDecrementDraftedDiceMove(){
         sendMessage(new Message(ControllerBoundMessageType.DECREMENT_DICE));
     }
 
+    /**
+     * Handles the move "End effect"
+     */
     void handleEndEffectMove(){
         sendMessage(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
     }
 
+    /**
+     * Handles the move "Change drafted dice value"
+     */
     void handleChangeDraftedDiceValueMove(){
         //TODO: implement
     }
 
+    /**
+     * Handles the move "Choose dice from track"
+     */
     void handleChooseDiceFromTrackMove(){
         //TODO: implement
     }
 
+    /**
+     * Handles the move "Move Dice"
+     */
     void handleMoveDiceMove(){
         //TODO: implement
     }
 
+    /**
+     * Handles the move "Join game"
+     */
     void handleJoinGameMove(){
         //no behaviour in common between CLI and GUI
     }
 
 
+    /*  HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
+        Some of the following methods are private because they are not extended or overridden by CLI and GUI.
+     */
 
-    //HANDLING OF EVENTS
-
-    void handleGameEndedEvent(){
-        showMessage(THE_GAME_IS_ENDED);
-    }
-
-    void handleGiveWindowPatternsEvent(Message m){
-        Object o;
-        try {
-            o = m.getParam(PARAM_WINDOW_PATTERNS);
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        List<WindowPattern> patterns = (List<WindowPattern>) o;
-        this.drawnWindowPatterns = patterns;
-        showMessage(WINDOW_PATTERNS_RECEIVED);
-    }
-
-    void handleAddedEvent(){
-        showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM);
-    }
-
-    void handleRemovedEvent(){
-        showMessage(REMOVED_FROM_GAME);
-    }
-
-    void handleAcknowledgmentEvent(Message m){
+    /**
+     * Handles an Acknowledgment
+     * @param m message containing the acknowledgment
+     */
+    private void handleAcknowledgmentEvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_MESSAGE);
@@ -218,13 +301,11 @@ public abstract class View implements Observer {
         ack(text);
     }
 
-    void ack(String text){
-        if(!text.equals("")){
-            showMessage(text);
-        }
-    }
-
-    void handleInactivePlayerEvent(Message m){
+    /**
+     * Handles the event "Inactive Player" that happens when another player becomes inactive
+     * @param m the message relative to this event
+     */
+    private void handleInactivePlayerEvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_PLAYER);
@@ -237,17 +318,18 @@ public abstract class View implements Observer {
         showMessage(pID.concat(A_PLAYER_BECAME_INACTIVE));
     }
 
-    void handleBackToGameEvent(){
-        changeStateTo(ViewState.ACTIVE);
-        showMessage(BACK_TO_GAME);
+    /**
+     * Handles the event "Game ended"
+     */
+    private void handleGameEndedEvent(){
+        showMessage(THE_GAME_IS_ENDED);
     }
 
-    void handleInactiveEvent(){
-        changeStateTo(ViewState.INACTIVE);
-        showMessage(YOU_ARE_NOW_INACTIVE);
-    }
-
-    void handleErrorEvent(Message m){
+    /**
+     * Handles Error Messages sent from server
+     * @param m the message containing information about the error
+     */
+    private void handleErrorEvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_MESSAGE);
@@ -262,6 +344,167 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Handles the event "New Round"
+     * @param m the message containing new round information
+     */
+    private void handleNewRoundEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("number");
+        } catch (NoSuchParamInMessageException e) {
+            showMessage(FAILED_SETUP_ROUND);
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        int number = (int) o;
+
+        try {
+            o = m.getParam(PARAM_TRACK);
+        } catch (NoSuchParamInMessageException e) {
+            showMessage(FAILED_SETUP_ROUND);
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        Track mTrack = (Track) o;
+
+        try {
+            o = m.getParam(PARAM_DRAFT_POOL_DICES);
+        } catch (NoSuchParamInMessageException e) {
+            showMessage(FAILED_SETUP_ROUND);
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Dice> mDraftPoolDices = (List<Dice>) o;
+
+        setRoundNumber(number);
+        setDraftPoolDices(mDraftPoolDices);
+        setTrack(mTrack);
+
+        notifyNewRound();
+    }
+
+    /**
+     * Handles the event "New Turn"
+     * @param m the message containing the new turn information
+     */
+    private void handleNewTurnEvent(Message m) {
+        Object o;
+
+        try {
+            o = m.getParam(PARAM_WHO_IS_PLAYING);
+        } catch (NoSuchParamInMessageException e) {
+            showMessage(FAILED_SETUP_TURN);
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String whoIsPlaying = (String) o;
+
+        setPlayingPlayerID(whoIsPlaying);
+
+        notifyNewTurn();
+    }
+
+    /**
+     * Handles the event "A player has been removed from the waiting room"
+     * @param m the message containing the removed player information
+     */
+    private void handlePlayerRemovedFromWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYER);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)) {
+            showMessage(nickname + LEAVES_THE_WAITING_ROOM);
+        }
+    }
+
+    /**
+     * Handles the event "A player has been added to the waiting room"
+     * @param m the message containing the added player information
+     */
+    private void handlePlayerAddedToWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYER);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)){
+            showMessage(nickname+ JOINS_THE_WAITING_ROOM);
+        }
+    }
+
+    //Following methods are extended or overridden by CLI and/or GUI
+
+    /**
+     * Handles the event "Give Window Pattern"
+     */
+    void handleGiveWindowPatternsEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_WINDOW_PATTERNS);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<WindowPattern> patterns = (List<WindowPattern>) o;
+        this.drawnWindowPatterns = patterns;
+        showMessage(WINDOW_PATTERNS_RECEIVED);
+    }
+
+    /**
+     * Handles the event "Added to the waiting room"
+     */
+    void handleAddedEvent(){
+        showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM);
+    }
+
+    /**
+     * Handles the event "Removed from the waiting room"
+     */
+    void handleRemovedEvent(){
+        showMessage(REMOVED_FROM_GAME);
+    }
+
+    /**
+     * Handles the printing of the acknowledgment message
+     * @param text the text to be printed
+     */
+    void ack(String text){
+        if(!text.equals("")){
+            showMessage(text);
+        }
+    }
+
+    /**
+     * Handles the event "Back to game"
+     */
+    void handleBackToGameEvent(){
+        changeStateTo(ViewState.ACTIVE);
+        showMessage(BACK_TO_GAME);
+    }
+
+    /**
+     * Handles the event "You are inactive"
+     */
+    void handleInactiveEvent(){
+        changeStateTo(ViewState.INACTIVE);
+        showMessage(YOU_ARE_NOW_INACTIVE);
+    }
+
+    /**
+     * Handles the event "Setup"
+     * @param m the message containing setup information
+     */
     void handleSetupEvent(Message m) {
         Object o;
         try {
@@ -351,59 +594,10 @@ public abstract class View implements Observer {
         setPermissions(EnumSet.noneOf(Move.class));
     }
 
-    void handleNewRoundEvent(Message m) {
-        Object o;
-        try {
-            o = m.getParam("number");
-        } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        int number = (int) o;
-
-        try {
-            o = m.getParam(PARAM_TRACK);
-        } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        Track mTrack = (Track) o;
-
-        try {
-            o = m.getParam(PARAM_DRAFT_POOL_DICES);
-        } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        List<Dice> mDraftPoolDices = (List<Dice>) o;
-
-        setRoundNumber(number);
-        setDraftPoolDices(mDraftPoolDices);
-        setTrack(mTrack);
-
-        notifyNewRound();
-    }
-
-    void handleNewTurnEvent(Message m) {
-        Object o;
-
-        try {
-            o = m.getParam(PARAM_WHO_IS_PLAYING);
-        } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_TURN);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        String whoIsPlaying = (String) o;
-
-        setPlayingPlayerID(whoIsPlaying);
-
-        notifyNewTurn();
-    }
-
+    /**
+     * Handles the event "Received rankings"
+     * @param m the message containing rankings.
+     */
     void handleRankingsEvent(Message m) {
         Object o;
         try {
@@ -431,10 +625,14 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Handles the event "A Window Pattern has been updated"
+     * @param m the message containing window pattern information
+     */
     void handleUpdatedWindowPatternEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("windowPattern");
+            o = m.getParam(PARAM_WINDOW_PATTERN);
         } catch (NoSuchParamInMessageException e) {
             return;
         }
@@ -456,6 +654,10 @@ public abstract class View implements Observer {
         showMessage(WINDOW_PATTERN_UPDATED);
     }
 
+    /**
+     * Handles the event "Change Draft Pool"
+     * @param m the message containing draftpool information
+     */
     void handleChangedDraftPoolEvent(Message m) {
         Object o;
         try {
@@ -468,30 +670,50 @@ public abstract class View implements Observer {
         setDraftPoolDices(mDraftPoolDices);
     }
 
+    /**
+     * Handles the event "It is now your turn"
+     */
     void handleYourTurnEvent() {
         showMessage(ITS_YOUR_TURN);
     }
 
+    /**
+     * Handles the event "Bad Formatted". It is received when some previous message
+     * sent to server was bad formatted or contained unexpected data.
+     */
     void handleBadFormattedEvent() {
         showMessage(ERROR_MOVE);
     }
 
+    /**
+     * Handles the event "Can't join waiting room because players limit has been reached"
+     */
     void handleDeniedLimitEvent() {
         showMessage(MAX_PLAYERS_ERROR);
     }
 
+    /**
+     * Handles the event "Can't join waiting room because your requested nickname is already used in this game"
+     */
     void handleDeniedNicknameEvent() {
         showMessage(NICKNAME_ALREADY_USED_ERROR);
     }
 
+    /**
+     * Handles the event "Can't join because game is already running"
+     */
     void handleDeniedPlayingEvent() {
         showMessage(ALREADY_PLAYING_ERROR);
     }
 
+    /**
+     * Handles the event "Used toolcard"
+     * @param m the message containing toolcard information
+     */
     void handleUsedToolCardEvent(Message m){
         Object o;
         try {
-            o = m.getParam("toolCard");
+            o = m.getParam(PARAM_TOOL_CARD);
         } catch (NoSuchParamInMessageException e) {
             return;
         }
@@ -499,7 +721,7 @@ public abstract class View implements Observer {
         ToolCard toolCard = (ToolCard) o;
 
         try {
-            o = m.getParam("toolCards");
+            o = m.getParam(PARAM_TOOL_CARDS);
         } catch (NoSuchParamInMessageException e) {
             return;
         }
@@ -519,18 +741,26 @@ public abstract class View implements Observer {
         showMessage(p+ USE_TOOL_CARD +toolCard.getTitle());
     }
 
+    /**
+     * @param m
+     */
+    //TODO: completa javadoc
     void handleSlotOfTrackChosenDice(Message m) {
         //TODO: implement here
     }
 
     void handleTrackChosenDiceEvent(Message m) {
-
+        //TODO: verificare che questo metodo serva a qualcosa
     }
 
+    /**
+     * Handles the event "Drafted Dice"
+     * @param m the message containing drafted dice information
+     */
     void handleDraftedDiceEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("draftedDice");
+            o = m.getParam(PARAM_DRAFTED_DICE);
         } catch (NoSuchParamInMessageException e) {
             return;
         }
@@ -540,44 +770,19 @@ public abstract class View implements Observer {
         showMessage(YOU_HAVE_DRAFTED +mDraftedDice);
     }
 
-    void handlePlayerAddedToWREvent(Message m){
-        Object o;
-        try {
-            o = m.getParam(PARAM_PLAYER);
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        String nickname = (String) o;
-
-        if(!nickname.equals(this.playerID)){
-            showMessage(nickname+ JOINS_THE_WAITING_ROOM);
-        }
-    }
-
-    void handlePlayerRemovedFromWREvent(Message m){
-        Object o;
-        try {
-            o = m.getParam(PARAM_PLAYER);
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        String nickname = (String) o;
-
-        if(!nickname.equals(this.playerID)) {
-            showMessage(nickname + LEAVES_THE_WAITING_ROOM);
-        }
-    }
-
-
 
     // NOTIFY METHODS
 
+    /**
+     * Notify classes that extends View (CLI and GUI) about the beginning of a new round
+     */
     void notifyNewRound(){
         showMessage(this.roundNumber+ ROUND_NOW_STARTS);
     }
 
+    /**
+     * Notify classes that extends View (CLI and GUI) about the beginning of a new turn
+     */
     void notifyNewTurn(){
         if(!playingPlayerID.equals(playerID)){
             showMessage(NOW_ITS_TURN_OF + playingPlayerID);
@@ -585,22 +790,34 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Notify classes that extends View (CLI and GUI) about the beginning of the game
+     */
     void notifyGameStarted(){
         showMessage(THE_GAME_IS_STARTED);
     }
 
+    /**
+     * Notify classes that extends View (CLI and GUI) that permissions has changed
+     */
     void notifyPermissionsChanged(){
         //no behaviour in common between CLI and GUI
     }
 
+    /**
+     * Notify classes that extends View (CLI and GUI) that game variables changed
+     */
     void notifyGameVariablesChanged(){
         //no behaviour in common between CLI and GUI
     }
 
 
-
     // MESSAGES HANDLING
 
+    /**
+     * Sends the given message to server
+     * @param m the message to send to server
+     */
     void sendMessage(Message m){
         try {
             this.client.sendMessage(m);
@@ -612,6 +829,10 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Receives a message from server (this method is called by client)
+     * @param m the received message
+     */
     private void receiveMessage(Message m){
 
         if( state==ViewState.INACTIVE ){
@@ -621,6 +842,10 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Parse the received message if the current view state is "INACTIVE"
+     * @param m the received message
+     */
     private void parseMessageOnInactiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
@@ -641,6 +866,10 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Parse the received message if the current view state is "ACTIVE"
+     * @param m the received message
+     */
     private void parseMessageOnActiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
@@ -736,13 +965,26 @@ public abstract class View implements Observer {
     }
 
 
-
     //UTILS
 
+    /**
+     * Display a message to the user. Abstract, so it is implemented differently by CLI and GUI.
+     * @param message the message to be displayed
+     */
     abstract void showMessage(String message);
 
+    /**
+     * Display an error message to the user. Abstract, so it is implemented differently by CLI and GUI.
+     * @param message the error message to be displayed
+     */
     abstract void errorMessage(String message);
 
+    /**
+     * Connects View to the server, creating a new Client instance.
+     * @param type the connection's type
+     * @param serverName the server's name
+     * @param port the server's port to connect to
+     */
     void connectToRemoteServer(ConnectionType type, String serverName, int port){
 
         if(client==null){ //client is effectively final
@@ -750,6 +992,10 @@ public abstract class View implements Observer {
         }
     }
 
+    /**
+     * Changes view's state to the one specified
+     * @param state the state to be setted as current one
+     */
     private void changeStateTo(ViewState state){
 
         if(state==ViewState.INACTIVE){
@@ -768,18 +1014,27 @@ public abstract class View implements Observer {
     }
 
 
-
     // GETTERS
 
+    /**
+     * Returns the view's player's id
+     * @return the view's player's id
+     */
     public String getPlayerID() {
         return playerID;
     }
 
+    /**
+     * Returns the current permissions
+     * @return the current permissions
+     */
     public Set<Move> getPermissions() {
         return permissions;
     }
 
-
+    /**
+     * @return the view's player private objective card
+     */
     public PrivateObjectiveCard getPrivateObjectiveCard() {
         //TODO: change this temporary implementation
         ObjectiveCardManager manager = new ObjectiveCardManager();
@@ -787,58 +1042,100 @@ public abstract class View implements Observer {
     }
 
 
+    /*  SETTERS
+        The following methods are not commented because they are self explaining
+     */
 
-    // SETTERS
+    //TODO: verificare perchè alcuni sono segnalati da IntelliJ come possibilmente spostabili a "private"
 
+    /**
+     * @see View#playerID
+     */
     public void setPlayer(String playerID) {
         this.playerID = playerID;
     }
 
+    /**
+     * @see View#permissions
+     */
     public void setPermissions(Set<Move> permissions) {
         this.permissions = (EnumSet<Move>)permissions;
         notifyPermissionsChanged();
     }
 
+    /**
+     * @see View#drawnToolCards
+     */
     public void setDrawnToolCards(List<ToolCard> drawnToolCards) {
         this.drawnToolCards = drawnToolCards;
     }
 
+    /**
+     * @see View#drawnPublicObjectiveCards
+     */
     public void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
         this.drawnPublicObjectiveCards = drawnPublicObjectiveCards;
     }
 
+    /**
+     * @see View#players
+     */
     public void setPlayers(List<String> players) {
         this.players = players;
     }
 
+    /**
+     * @see View#track
+     */
     public void setTrack(Track track) {
         this.track = track;
     }
 
+    /**
+     * @see View#draftPoolDices
+     */
     public void setDraftPoolDices(List<Dice> draftPoolDices) {
         this.draftPoolDices = draftPoolDices;
     }
 
+    /**
+     * @see View#roundNumber
+     */
     public void setRoundNumber(int roundNumber) {
         this.roundNumber = roundNumber;
     }
 
+    /**
+     * @see View#playingPlayerID
+     */
     public void setPlayingPlayerID(String playingPlayerID) {
         this.playingPlayerID = playingPlayerID;
     }
 
+    /**
+     * @see View#draftedDice
+     */
     public void setDraftedDice(Dice draftedDice) {
         this.draftedDice = draftedDice;
     }
 
+    /**
+     * @see View#windowPattern
+     */
     public void setWindowPattern(WindowPattern windowPattern) {
         this.windowPattern = windowPattern;
     }
 
+    /**
+     * @see View#privateObjectiveCard
+     */
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
     }
 
+    /**
+     * @see View#windowPatterns
+     */
     public void setWindowPatterns(List<WindowPattern> windowPatterns) {
         this.windowPatterns = windowPatterns;
     }

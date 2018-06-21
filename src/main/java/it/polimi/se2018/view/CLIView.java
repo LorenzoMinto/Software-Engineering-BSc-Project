@@ -13,7 +13,9 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Class for CLI implementation of View
+ * Class for CLI implementation of View.
+ *
+ * @author Federico Haag
  */
 public class CLIView extends View{
 
@@ -68,7 +70,7 @@ public class CLIView extends View{
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
      */
-
+    //Note: this strings are strictly connected with the ones used in Controller and Model. DO NOT CHANGE!
     private static final String PARAM_NICKNAME = "nickname";
     private static final String PARAM_WINDOW_PATTERN = "windowPattern";
     private static final String PARAM_ROW_FROM = "rowFrom";
