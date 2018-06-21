@@ -16,8 +16,8 @@ public interface Observer {
      * {@link Observable#notify(Message)} method to have all the object's
      * observers notified of the change.
      *
-     * @param m an argument passed to the {@link Observable#notify(Message)} method
+     * @param message an argument passed to the {@link Observable#notify(Message)} method
      * @return true if message is successfully sent
      */
-    boolean update(Message m);
+    boolean update(Message message);
 }
