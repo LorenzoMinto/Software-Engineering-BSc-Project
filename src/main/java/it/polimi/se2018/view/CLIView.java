@@ -12,6 +12,9 @@ import it.polimi.se2018.utils.Message;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Class for CLI implementation of View
+ */
 public class CLIView extends View{
 
     /**
@@ -20,8 +23,11 @@ public class CLIView extends View{
     private static final Scanner SCANNER = new Scanner(System.in);
 
 
-    // CONSTANTS FOR CONSOLE MESSAGES
-
+    /*  CONSTANTS FOR CONSOLE MESSAGES
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+    */
     private static final String INPUT_NOT_VALID = "Input not valid";
     private static final String EXIT_FROM_READING_LOOP = "exit";
     private static final String CHOOSE_CONNECTION_TYPE = "Insert 1. for RMI, 2. for socket";
@@ -57,7 +63,11 @@ public class CLIView extends View{
     public static final String ERROR_MESSAGE = "ERROR: ";
 
 
-    // CONSTANTS FOR MESSAGES PARAMS
+    /*  CONSTANTS FOR MESSAGES PARAMS
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+     */
 
     private static final String PARAM_NICKNAME = "nickname";
     private static final String PARAM_WINDOW_PATTERN = "windowPattern";
@@ -73,21 +83,46 @@ public class CLIView extends View{
     private static final String PARAM_DICE = "dice";
 
 
-    // ...
+    // AUXILIARY CLASSES
 
+    /**
+     * A Console Move is a class representing an action that player can perform trough CLI.
+     * It contains the description of the action (e.g. draft a dice).
+     * Each console move performs an action stored in the runnable "action".
+     * The class is immutable: description and action can obly be set through constructor.
+     */
     private class ConsoleMove {
+        /**
+         * Description of the move
+         */
         private String description;
+
+        /**
+         * Action to perform if the move is done
+         */
         private Runnable action;
 
+        /**
+         * Constructor for a new ConsoleMove
+         * @param description description of the move
+         * @param action action to perform if the move is done
+         */
         private ConsoleMove(String description, Runnable action) {
             this.description = description;
             this.action = action;
         }
 
+        /**
+         * Returns the description of the move.
+         * @return the description of the move
+         */
         public String getDescription() {
             return description;
         }
 
+        /**
+         * Execute the built-in action
+         */
         void run(){
             this.action.run();
         }
@@ -96,15 +131,31 @@ public class CLIView extends View{
 
     // CLI PARAMS
 
+    /**
+     * Stores the action to be performed with the next console input that will be available.
+     * It's aim is to enable CLI to change "consumer" on the fly without waiting for an actual input
+     * as would be if scanner.nextLine() was used directly.
+     */
     private Consumer<String> currentInputConsumer;
 
+    /**
+     * True if game is started. False if waiting for players.
+     */
     private boolean gameStarted = false;
 
+    /**
+     * Main method to make runnable the class.
+     * A new instance of CLIView is created.
+     * @param args default param for main. no args are processed.
+     */
     public static void main(String[] args) {
         new CLIView();
     }
 
-    public CLIView() {
+    /**
+     * Constructor of a new CLI
+     */
+    private CLIView() {
         super();
 
         //Launch of CLI
@@ -117,6 +168,19 @@ public class CLIView extends View{
 
     // CLI HANDLING
 
+    /**
+     * Set currentInputConsumer to the consumer given as argument.
+     * Actually it is a way for changing the handling of the next available input.
+     * @param consumer the new consumer to be used for input processing
+     */
+    private void waitForConsoleInput(Consumer<String> consumer){
+        this.currentInputConsumer = consumer;
+    }
+
+    /**
+     * Launches a new thread that reads for user input on system.in.
+     * When a new input is received, it is given to the currentInputConsumer.
+     */
     private void launchConsoleReader(){
         new Thread(()->{
             String text;
@@ -132,6 +196,9 @@ public class CLIView extends View{
         }).start();
     }
 
+    /**
+     * Connects client to server (asks user way of communication and data - address, port)
+     */
     private void connect(){
         print(CHOOSE_CONNECTION_TYPE);
         waitForConsoleInput(connectionTypeString -> {
@@ -149,6 +216,16 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Creates a new handler for console input creating a map that contains all the available moves
+     * and inserting it into a new instance of {@link CLIView#currentInputConsumer}.
+     * This enables to generate dinamically indexes of choices (1. xxx 2. xxx).
+     * This function actually doesn't hardcode any move option except for the standard ones:
+     *      SHOW_MY_WINDOW_PATTERN
+     *      SHOW_MY_PRIVATE_OBJECTIVE_CARD
+     *      SHOW_PUBLIC_OBJECTIVE_CARDS
+     *      SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS
+     */
     private void waitForMove(){
         //Create a LinkedHashMap to map string choices from console to moves
         LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
@@ -189,6 +266,11 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Map every Move to the respectful ConsoleMove.
+     * @param move the move to map to console move
+     * @return the move converted to respectful consolemove.
+     */
     private ConsoleMove convertMoveToConsoleMove(Move move){
         ConsoleMove consoleMove = null;
         switch (move) {
@@ -235,23 +317,22 @@ public class CLIView extends View{
         return consoleMove;
     }
 
-    private void waitForConsoleInput(Consumer<String> consumer){
-        this.currentInputConsumer = consumer;
-    }
 
+    /**
+     * Print given text on console.
+     * @param text to be printed on console.
+     */
     private void print(String text){
         System.out.println(text);
     }
 
+    /**
+     * Cleans the console screen
+     */
     private void cleanConsole(){
-        print("");
-        print("");
-        print("");
-        print("");
-        print("");
-        print("");
-        print("");
-        print("");
+        for(int i = 0; i<=15; i++){
+            print("");
+        }
         //TODO: implement better this method
     }
 
@@ -273,8 +354,12 @@ public class CLIView extends View{
         waitForMove();
     }
 
-    // PRINTING METHODS
 
+    // SPECIAL CLI PRINTING METHODS
+
+    /**
+     * Prints on console the window pattern of other players
+     */
     private void printOthersWindowPatterns() {
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
             int index = 0;
@@ -289,6 +374,9 @@ public class CLIView extends View{
         waitForMove();
     }
 
+    /**
+     * Prints on console public objective cards
+     */
     private void printPublicObjectiveCards() {
         if(this.drawnPublicObjectiveCards!=null && !this.drawnPublicObjectiveCards.isEmpty() ){
             for(PublicObjectiveCard publicObjectiveCard : drawnPublicObjectiveCards){
@@ -300,6 +388,9 @@ public class CLIView extends View{
         waitForMove();
     }
 
+    /**
+     * Prints the private objective card of the view's player
+     */
     private void printPrivateObjectiveCard() {
         if(this.privateObjectiveCard==null){
             print(YOU_DO_NOT_HAVE_A_PRIVATE_OBJECTIVE_CARD_YET);
@@ -309,6 +400,9 @@ public class CLIView extends View{
         waitForMove();
     }
 
+    /**
+     * Prints the window pattern of the view's player
+     */
     private void printWindowPattern() {
         if(this.windowPattern==null){
             print(YOU_DO_NOT_HAVE_A_WINDOW_PATTERN_YET);
@@ -319,7 +413,7 @@ public class CLIView extends View{
     }
 
 
-    // HANDLING OF MOVES
+    // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
 
     @Override
     void handleEndEffectMove(){
@@ -516,7 +610,7 @@ public class CLIView extends View{
     }
 
 
-    // HANDLING OF EVENTS
+    // HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
 
     @Override
     void handleGiveWindowPatternsEvent(Message m) {
@@ -538,7 +632,7 @@ public class CLIView extends View{
             } else {
                 print(INPUT_NOT_VALID);
             }
-            waitForMove(); //NOTE: remember that if the currentInputConsumer is the last operation to be formed, insert waitForMove().
+            waitForMove();
         });
     }
 
@@ -647,7 +741,11 @@ public class CLIView extends View{
     }
 
 
-    // HANDLING NOTIFY
+    /* HANDLING NOTIFY METHODS.
+        Notify methods are called in view (super class) to notify classes that extends it (CLI and GUI)
+        of changes that occured during the execution of some view's code that may need some special
+        treatment from them.
+     */
 
     @Override
     void notifyNewTurn(){
