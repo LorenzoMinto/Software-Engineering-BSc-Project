@@ -79,7 +79,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * Calculates the score of a given window pattern according this objective card.
      *
-     * @param windowPattern the windowPattern to be evaluated
+     * @param windowPattern the window pattern to be evaluated
      * @return the score of a given window pattern according this objective card
      */
     @Override

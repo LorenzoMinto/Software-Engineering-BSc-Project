@@ -17,7 +17,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     /**
      *
      */
-    private static final String NULL_WINDOW_PATTERN_SCORE = "Cannot calculate score of a null window pattern.";
+    private static final String NULL_WINDOW_PATTERN_SCORE = "Cannot calculate score of a null windowPattern.";
 
     /**
      * Constructor for Diagonals Public Objective Card

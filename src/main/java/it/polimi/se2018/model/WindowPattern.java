@@ -34,7 +34,7 @@ public class WindowPattern extends Observable implements Serializable{
     /**
      * String passed as message of IllegalArgumentException when it is asked to put a null dice on cell
      */
-    private static final String NULL_DICE_ON_CELL = "Asked to put a null dice on cell";
+    private static final String NULL_DICE_ON_CELL = "Asked to put a null dice on cell.";
     /**
      * Part of the toString representation of the windowPattern. Contains content shown before difficulty
      */

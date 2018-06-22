@@ -27,7 +27,7 @@ public class ChooseFromTrackControllerState extends ControllerState {
     /**
      * String used as content of error message in chooseDiceFromTrack()
      */
-    private static final String SELECTED_TRACK_SLOT_DOES_NOT_EXIST = "Selected TrackSlot does not exist.";
+    private static final String SELECTED_TRACK_SLOT_DOES_NOT_EXIST = "The selected TrackSlot does not exist.";
 
     /**
      * String used as content of acknowledgment message in chooseDiceFromTrack()

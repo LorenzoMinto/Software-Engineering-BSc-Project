@@ -26,7 +26,7 @@ public class DraftPool extends Observable implements Serializable {
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
-    private static final String NULL_DICE = "Can't use or reference a null dice";
+    private static final String NULL_DICE = "Can't use or reference a null dice.";
     /**
      * List of dices of the draftpool
      */

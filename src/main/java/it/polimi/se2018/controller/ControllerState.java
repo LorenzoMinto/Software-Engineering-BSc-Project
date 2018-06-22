@@ -22,7 +22,7 @@ public abstract class ControllerState {
     /**
      * String passed as message of IllegalArgumentException when it is asked to create the state but controller is null.
      */
-    static final String NO_CONTROLLER = "Can't create a State Controller without a Controller";
+    static final String NO_CONTROLLER = "Can't create a Controller State without a Controller.";
 
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
@@ -32,12 +32,12 @@ public abstract class ControllerState {
     /**
      * String to be printed if a method that requires drafting is called before any dice was drafted.
      */
-    static final String NO_DICE_DRAFTED = "Can't do that. You haven't drafted a die yet.";
+    static final String NO_DICE_DRAFTED = "Can't do that. You haven't drafted a dice yet.";
 
     /**
      * String to be printed if only action possible is to draft and place.
      */
-    static final String ONLY_DRAFT_AND_PLACE =  "Can't do that. You can only draft and place. ToolCard already used.";
+    static final String ONLY_DRAFT_AND_PLACE =  "Can't do that. You can only draft and place. A ToolCard was already used.";
 
     /**
      * String to be printed if there's a drafted dice that needs to be placed.

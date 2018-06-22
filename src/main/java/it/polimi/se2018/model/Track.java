@@ -24,7 +24,7 @@ public class Track implements Serializable{
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
-    private static final String NULL_DICE = "Can't use or reference a null dice";
+    private static final String NULL_DICE = "Can't use or reference a null dice.";
     /**
      * String passed as message of ValueOutOfBoundsException when referenced to a trackslot that does not exists.
      */

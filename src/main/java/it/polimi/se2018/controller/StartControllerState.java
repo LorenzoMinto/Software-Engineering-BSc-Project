@@ -25,7 +25,7 @@ public class StartControllerState extends ControllerState {
     /**
      * String used as content of error message in draftDiceFromDraftPool()
      */
-    private static final String DICE_NOT_IN_THE_DRAFT_POOL = "Dice not in the draft pool.";
+    private static final String DICE_NOT_IN_DRAFT_POOL = "Dice not in DraftPool.";
 
     /**
      * String used as content of acknowledgment message in useToolCard()
@@ -57,7 +57,7 @@ public class StartControllerState extends ControllerState {
             return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_DRAFTED);
 
         } else {
-            return new Message(ERROR_MESSAGE, DICE_NOT_IN_THE_DRAFT_POOL);
+            return new Message(ERROR_MESSAGE, DICE_NOT_IN_DRAFT_POOL);
         }
     }
 

@@ -15,7 +15,7 @@ public class ControllerStateManager {
      * String used as message of BadBehaviourRuntimeException thrown when the state that is asked to be created
      * is not subclass of ControllerState
      */
-    private static final String STATE_NOT_SUBCLASS_OF_CONTROLLER_STATE = "Asked to create state that seems to not being subclass of ControllerState: state is ";
+    private static final String STATE_NOT_SUBCLASS_OF_CONTROLLER_STATE = "Asked to create a state that does not seems a subclass of ControllerState: state is ";
 
     /**
      * String used as message of BadBehaviourRuntimeException thrown when something during creation of state goes wrong

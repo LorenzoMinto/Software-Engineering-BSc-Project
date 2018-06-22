@@ -11,7 +11,7 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 
 /**
- *  This is the state in which the current player can place a dice on the own windowpattern.
+ *  This is the state in which the current player can place a dice on the own windowPattern.
  *  @author Lorenzo Minto
  *  @author Federico Haag (refactor)
  */
@@ -20,7 +20,7 @@ public class PlaceControllerState extends ControllerState {
     /**
      * String used as content of acknowledgment message in placeDice()
      */
-    private static final String DICE_PLACED = "Dice placed";
+    private static final String DICE_PLACED = "Dice placed.";
 
     /**
      * String used as content of error message in placeDice()

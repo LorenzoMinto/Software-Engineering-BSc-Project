@@ -16,23 +16,23 @@ public class Round {
     /**
      * String passed as message of IllegalArgumentException when is asked to create a round giving a null draftpool
      */
-    private static final String NULL_DRAFT_POOL = "Asked to create a round giving null draftPool";
+    private static final String NULL_DRAFT_POOL = "Asked to create a round giving null draftPool.";
     /**
      * String passed as message of EmptyListException when is asked to create a round with no players
      */
-    private static final String NO_PLAYERS = "Asked to create a round with no players";
+    private static final String NO_PLAYERS = "Asked to create a round with no players.";
     /**
      * String passed as message of ValueOutOfBoundsException when is asked to create a round with negative roundNumber
      */
-    private static final String NEGATIVE_ROUND_NUMBER = "Asked to create a round with negative roundNumber";
+    private static final String NEGATIVE_ROUND_NUMBER = "Asked to create a round with negative roundNumber.";
     /**
      * String passed as message of ValueOutOfBoundsException when is asked to create a round with negative numberOfTurns
      */
-    private static final String NEGATIVE_NUMBER_OF_TURNS = "Asked to create a round with negative numberOfTurns";
+    private static final String NEGATIVE_NUMBER_OF_TURNS = "Asked to create a round with negative numberOfTurns.";
     /**
      * String passed as message of IllegalArgumentException when is asked to remove the next turn of a null player
      */
-    private static final String REMOVING_TURN_OF_NULL_PLAYER = "Can't remove the next turn of a null player";
+    private static final String REMOVING_TURN_OF_NULL_PLAYER = "Can't remove the next turn of a null player.";
     /**
      * The round progressive number.
      */

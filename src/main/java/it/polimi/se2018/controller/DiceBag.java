@@ -25,7 +25,7 @@ public class DiceBag {
     /**
      * String used as message of IllegalArgumentException in getDices()
      */
-    private static final String ASKED_TOO_MUCH_DICES = "Asked DiceBag to get more dices than availables: ";
+    private static final String ASKED_TOO_MUCH_DICES = "Asked DiceBag to get more dices than available: ";
 
     /**
      * Maps the quantity of available dices of each color

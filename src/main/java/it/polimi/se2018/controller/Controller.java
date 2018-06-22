@@ -119,7 +119,7 @@ public class Controller extends Observable {
     private TimerTask waitingForPlayerMove;
 
     /**
-     * Map that contains the list of windowpattern given to each player
+     * Map that contains the list of window pattern given to each player
      */
     private HashMap<String,List<WindowPattern>> assignedWindowPatterns = new HashMap<>();
 

@@ -25,7 +25,7 @@ public class DraftControllerState extends ControllerState {
     /**
      * String used as content of error message in draftDiceFromDraftPool()
      */
-    private static final String DICE_NOT_IN_DRAFT_POOL = "Can't draft a dice that is not in the Draft Pool";
+    private static final String DICE_NOT_IN_DRAFT_POOL = "Can't draft a dice that is not in the Draft Pool.";
 
     /**
      * Class constructor.

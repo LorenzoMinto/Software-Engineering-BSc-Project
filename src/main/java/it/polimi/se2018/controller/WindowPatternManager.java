@@ -30,7 +30,7 @@ public class WindowPatternManager {
     /**
      * String used as message of IllegalArgumentException in getPairsOfPatterns()
      */
-    private static final String CANT_GET_A_NEGATIVE_NUMBER_OF_COUPLES_OF_WINDOW_PATTERNS = "Can't get a negative number of couples of windowPatterns";
+    private static final String CANT_GET_A_NEGATIVE_NUMBER_OF_COUPLES_OF_WINDOW_PATTERNS = "Can't get a negative number of couples of windowPatterns.";
 
     /**
      * List of all the toolCards that can be distributed in the current game
