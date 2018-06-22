@@ -49,7 +49,7 @@ public class PrivateObjectiveCardTest {
 
             windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            Player player = new Player("", new PrivateObjectiveCard("","","",RED));
             player.setWindowPattern(windowPattern);
             windowPattern.setOwner(player);
 
@@ -92,25 +92,16 @@ public class PrivateObjectiveCardTest {
     @BeforeClass
     public static void initializeCards(){
 
-        privateObjectiveCard = PrivateObjectiveCard.createTestInstance();
+        privateObjectiveCard = new PrivateObjectiveCard("","","",RED);
 
-        redPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, RED);
-        yellowPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, YELLOW);
-        greenPrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, GREEN);
-        purplePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, PURPLE);
-        bluePrivateObjectiveCard = new PrivateObjectiveCard(null,null,null, BLUE);
+        redPrivateObjectiveCard = new PrivateObjectiveCard("","","", RED);
+        yellowPrivateObjectiveCard = new PrivateObjectiveCard("","","", YELLOW);
+        greenPrivateObjectiveCard = new PrivateObjectiveCard("","","", GREEN);
+        purplePrivateObjectiveCard = new PrivateObjectiveCard("","","", PURPLE);
+        bluePrivateObjectiveCard = new PrivateObjectiveCard("","","", BLUE);
 
         oneDicePatternPrivateObjectiveCard = new PrivateObjectiveCard
                 (null,null,null, uniqueDiceOnWindowPattern.getColor());
-    }
-
-    /**
-     * Tests that the test instance of {@link PrivateObjectiveCard} is not null
-     * @see PrivateObjectiveCard#createTestInstance()
-     */
-    @Test
-    public void testCreateTestInstance(){
-        assertNotNull(privateObjectiveCard = PrivateObjectiveCard.createTestInstance());
     }
 
     /**

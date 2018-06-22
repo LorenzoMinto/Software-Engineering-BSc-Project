@@ -52,20 +52,6 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Constructor just for JUnit.
-     */
-    private SetPublicObjectiveCard(){}
-
-    /**
-     * Returns a new empty instance of the class just for tests in JUnit.
-     *
-     * @return a new empty instance of the class
-     */
-    public static PublicObjectiveCard createTestInstance() {
-        return new SetPublicObjectiveCard();
-    }
-
-    /**
      * Returns a new SetPublicObjectiveCard instance with same properties of this one.
      *
      * @return a new SetPublicObjectiveCard instance with same properties of this one

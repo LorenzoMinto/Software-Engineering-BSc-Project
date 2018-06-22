@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -51,8 +52,8 @@ public class ToolCardTest {
 
     /**
      * Initializes the ToolCard before each test
-     * @see ToolCard#ToolCard()
-     */
+     * @see ToolCard#ToolCard(Properties, Map, PlacementRule, Set)
+     * */
     @Before
     public void initializeToolCard(){
         toolCard = new ToolCard(properties, controllerStateRules, rule, null);
@@ -159,16 +160,6 @@ public class ToolCardTest {
         toolCard = new ToolCard(properties, controllerStateRules, rule, null);
 
         assertFalse(toolCard.needsDrafting());
-    }
-
-
-    /**
-     * Tests that the test instance of {@link ToolCard} is not null
-     * @see ToolCard#createTestInstance()
-     */
-    @Test
-    public void testCreateTestInstance() {
-        assertNotNull(ToolCard.createTestInstance());
     }
 
     /**

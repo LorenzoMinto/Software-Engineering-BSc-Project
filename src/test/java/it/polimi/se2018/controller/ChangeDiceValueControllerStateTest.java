@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
  */
 public class ChangeDiceValueControllerStateTest {
     private Controller controller;
+    private ToolCard toolCard;
 
     /**
      * Advances the Game in order to set the ControllerState to ChangeDiceValueControllerState
@@ -65,7 +66,7 @@ public class ChangeDiceValueControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         controller.controllerState.useToolCard(toolCard);
         Dice dice = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
 
@@ -158,7 +159,7 @@ public class ChangeDiceValueControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
-        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 

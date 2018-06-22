@@ -46,7 +46,7 @@ public class DiagonalsPublicObjectiveCardTest {
 
             diagonalsWP = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            Player player = new Player("", new PrivateObjectiveCard("","","",RED));
             player.setWindowPattern(diagonalsWP);
             diagonalsWP.setOwner(player);
 
@@ -138,19 +138,10 @@ public class DiagonalsPublicObjectiveCardTest {
      */
     @Before
     public void initializeCards(){
-        diagonalsPublicObjectiveCard = DiagonalsPublicObjectiveCard.createTestInstance();
+        diagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(null,null,null, Dice::getColor);
 
         colorDiagonalsPublicObjectiveCard = new DiagonalsPublicObjectiveCard(null,null,null,
                 Dice::getColor);
-    }
-
-    /**
-     * Tests that the test instance of {@link DiagonalsPublicObjectiveCard} is not null
-     * @see DiagonalsPublicObjectiveCard#createTestInstance()
-     */
-    @Test
-    public void testCreateTestInstance(){
-        assertNotNull(DiagonalsPublicObjectiveCard.createTestInstance());
     }
 
     /**

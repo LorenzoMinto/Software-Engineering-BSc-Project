@@ -33,20 +33,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Private constructor for {@link DiagonalsPublicObjectiveCard#createTestInstance}.
-     */
-    private DiagonalsPublicObjectiveCard(){}
-
-    /**
-     * Returns an empty instance of PublicObjectiveCard. It's used by JUnit tests.
-     *
-     * @return an empty instance of PublicObjectiveCard
-     */
-    public static PublicObjectiveCard createTestInstance() {
-        return new DiagonalsPublicObjectiveCard();
-    }
-
-    /**
      * Returns a new DiagonalsPublicObjectiveCard instance with same properties of this one
      *
      * @return new DiagonalsPublicObjectiveCard instance with same properties of this one

@@ -49,7 +49,7 @@ public class AdjacentColorPlacementRuleDecoratorTest {
         redDice = new Dice(RED);
         blueDice = new Dice(BLUE);
 
-        player = new Player("Sonny", PrivateObjectiveCard.createTestInstance());
+        player = new Player("Sonny", new PrivateObjectiveCard("","","",RED));
     }
 
     /**

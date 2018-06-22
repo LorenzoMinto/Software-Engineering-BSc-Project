@@ -20,6 +20,8 @@ import static org.junit.Assert.*;
 public class EndControllerStateTest {
     private Controller controller;
 
+    private ToolCard toolCard;
+
     /**
      * Advances the Game in order to set the ControllerState to EndControllerState
      */
@@ -52,6 +54,17 @@ public class EndControllerStateTest {
             params.put("windowPattern", wp);
             controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
+
+        Properties properties = new Properties();
+
+        properties.put("id","ID1");
+        properties.put("title","title1");
+        properties.put("description","description1");
+        properties.put("imageURL","imageURL1");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard = new ToolCard(properties, new HashMap<>(), null, new HashSet<>());
 
         controller.controllerState = controller.stateManager.getEndControllerState();
     }
@@ -105,7 +118,7 @@ public class EndControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
-        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 

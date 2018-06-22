@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 public class MoveControllerStateTest {
     private Controller controller;
 
+    private ToolCard toolCard;
+
     private Dice redDice;
     private static final int r0 = 0;
     private static final int c0 = 0;
@@ -80,7 +82,7 @@ public class MoveControllerStateTest {
         toolCardProperties.put("tokensUsageMultiplier", "2");
         toolCardProperties.put("imageURL", "imageURL");
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         controller.controllerState.useToolCard(toolCard);
     }
 
@@ -180,7 +182,7 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
-        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 

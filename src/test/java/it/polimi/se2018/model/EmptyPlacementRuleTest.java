@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColor.RED;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -44,7 +45,7 @@ public class EmptyPlacementRuleTest {
         redDice = new Dice(DiceColor.RED);
         blueDice = new Dice(DiceColor.BLUE);
 
-        player = new Player("Sonny", PrivateObjectiveCard.createTestInstance());
+        player = new Player("Sonny", new PrivateObjectiveCard("","","",RED));
     }
 
     /**

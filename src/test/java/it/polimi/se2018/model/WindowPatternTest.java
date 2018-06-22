@@ -31,7 +31,7 @@ public class WindowPatternTest {
     @BeforeClass
     public static void initializePatternAndDice(){
 
-        player = new Player("", PrivateObjectiveCard.createTestInstance());
+        player = new Player("", new PrivateObjectiveCard("","","",RED));
 
 
         pattern = new Cell[rows][cols];

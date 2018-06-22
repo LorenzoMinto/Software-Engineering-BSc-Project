@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.model.DiceColor.RED;
 import static org.junit.Assert.*;
 
 /**
@@ -44,7 +45,7 @@ public class GameTest {
      */
     @BeforeClass
     public static void initializeVariables(){
-        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, DiceColor.RED);
+        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard("","","", DiceColor.RED);
         player = new Player( "player", privateObjectiveCard);
 
         publicObjectiveCards = new ArrayList<>();
@@ -237,7 +238,7 @@ public class GameTest {
      */
     @Test
     public void testIsCurrentPlayer(){
-        Player player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+        Player player = new Player("nickname", new PrivateObjectiveCard("","","",RED));
         game.setCards(toolCards, publicObjectiveCards);
         game.addPlayer(player);
         game.setStatusAsWaitingForPatternsChoice();
@@ -252,7 +253,7 @@ public class GameTest {
      */
     @Test
     public void testIsCurrentPlayerWhenIllegalStatus(){
-        Player player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+        Player player = new Player("nickname", new PrivateObjectiveCard("","","",RED));
         try{
             game.isCurrentPlayer(player.getID());
             fail();
@@ -449,7 +450,7 @@ public class GameTest {
     @Test
     public void testUseToolCardWhenIllegalStatus(){
         try {
-            game.useToolCard(ToolCard.createTestInstance());
+            game.useToolCard(toolCard1);
             fail();
         }catch (BadBehaviourRuntimeException e){}
     }

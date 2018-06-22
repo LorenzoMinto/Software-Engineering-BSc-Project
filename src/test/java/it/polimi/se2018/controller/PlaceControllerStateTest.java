@@ -165,7 +165,17 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
-        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        Properties toolCardProperties = new Properties();
+        toolCardProperties.put("id", "EglomiseBrush");
+        toolCardProperties.put("title", "title");
+        toolCardProperties.put("description", "desc");
+        toolCardProperties.put("neededTokens", "1");
+        toolCardProperties.put("tokensUsageMultiplier", "2");
+        toolCardProperties.put("imageURL", "imageURL");
+
+        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+
+        Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 
