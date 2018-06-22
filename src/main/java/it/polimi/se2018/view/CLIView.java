@@ -30,7 +30,7 @@ public class CLIView extends View{
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
     */
-    private static final String INPUT_NOT_VALID = "Input not valid";
+    private static final String INPUT_NOT_VALID = "Input not valid.";
     private static final String EXIT_FROM_READING_LOOP = "exit";
     private static final String CHOOSE_CONNECTION_TYPE = "Insert 1. for RMI, 2. for socket";
     private static final String INSERT_NAME_SERVER = "Insert name server";

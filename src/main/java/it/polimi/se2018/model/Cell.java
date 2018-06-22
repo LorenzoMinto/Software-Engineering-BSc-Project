@@ -37,13 +37,13 @@ public class Cell implements Serializable{
     private static final String AFTER_DICE = " ";
 
     /**
-     * The value that a Dice must have to be putted in this Cell. '0' means every value is allowed.
+     * The value that a Dice must have to be set on this Cell. '0' means every value is allowed.
      */
     private int allowedValue;
 
 
     /**
-     * The color that a Dice must have to be putted in this Cell. 'NOCOLOR' means every color is allowed.
+     * The color that a Dice must have to be set on this Cell. 'NOCOLOR' means every color is allowed.
      */
     private DiceColor allowedColor;
 

@@ -55,7 +55,7 @@ public class Client extends Observable implements SenderInterface {
             try {
                 g = new RMIClientGateway(serverName, port, this);
             } catch (NetworkingException e){
-                fail("NetworkingException catched: Failed connecting to RMI server.");
+                fail("Caught NetworkingException: Failed connecting to RMI server.");
             }
 
         } else if (type == ConnectionType.SOCKET) {
@@ -93,7 +93,7 @@ public class Client extends Observable implements SenderInterface {
     }
 
     /**
-     * Write the given messange as a log
+     * Write the given message as a log
      * @param msg the message to be logged
      */
     private void log(String msg){

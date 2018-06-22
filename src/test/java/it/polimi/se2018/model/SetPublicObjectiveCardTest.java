@@ -56,7 +56,7 @@ public class SetPublicObjectiveCardTest {
 
             windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            Player player = new Player("", new PrivateObjectiveCard("","","",RED));
             player.setWindowPattern(windowPattern);
             windowPattern.setOwner(player);
 
@@ -128,7 +128,7 @@ public class SetPublicObjectiveCardTest {
      */
     @BeforeClass
     public static void initializeCards(){
-        setPublicObjectiveCard = SetPublicObjectiveCard.createTestInstance();
+        setPublicObjectiveCard = new SetPublicObjectiveCard(null,null, null, allColorsSet, Dice::getColor, 3);
 
         oneTwoPublicObjectiveCard = new SetPublicObjectiveCard(null,null,null,
                 oneTwoSet, Dice::getValue,2);
@@ -140,16 +140,6 @@ public class SetPublicObjectiveCardTest {
                 allValuesSet, Dice::getValue,5);
         allColorsPublicObjectiveCard = new SetPublicObjectiveCard(null,null,null,
                 allColorsSet, Dice::getColor,4);
-    }
-
-
-    /**
-     * Tests that the test instance of {@link SetPublicObjectiveCard} is not null
-     * @see SetPublicObjectiveCard#createTestInstance()
-     */
-    @Test
-    public void testCreateTestInstance(){
-        assertNotNull(setPublicObjectiveCard = SetPublicObjectiveCard.createTestInstance());
     }
 
     /**

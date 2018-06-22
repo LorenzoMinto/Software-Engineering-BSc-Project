@@ -6,6 +6,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Properties;
+
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
 
@@ -31,11 +35,21 @@ public class TurnTest {
      */
     @BeforeClass
     public static void setUp() {
-        privateObjectiveCard = new PrivateObjectiveCard(null,null, null, RED);
+        privateObjectiveCard = new PrivateObjectiveCard("","","", RED);
         playerName = "player";
         player = new Player(playerName, privateObjectiveCard);
         dice = new Dice(RED);
-        toolCard = ToolCard.createTestInstance();
+
+        Properties properties = new Properties();
+
+        properties.put("id","ID1");
+        properties.put("title","title1");
+        properties.put("description","description1");
+        properties.put("imageURL","imageURL1");
+        properties.put("neededTokens", "1");
+        properties.put("tokensUsageMultiplier", "2");
+
+        toolCard = new ToolCard(properties, new HashMap<>(), null, new HashSet<>());
 
     }
 

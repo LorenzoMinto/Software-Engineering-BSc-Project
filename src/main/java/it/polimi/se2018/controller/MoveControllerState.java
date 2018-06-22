@@ -34,7 +34,7 @@ public class MoveControllerState extends ControllerState {
     /**
      * String used as content of acknowledgment message in endToolCardEffect()
      */
-    private static final String TOOL_CARD_EFFECTED_ENDED = "ToolCard effected ended.";
+    private static final String TOOL_CARD_EFFECT_ENDED = "ToolCard effect ended.";
 
     /**
      * String used as content of error message in endToolCardEffect()
@@ -80,7 +80,7 @@ public class MoveControllerState extends ControllerState {
         if (controller.getActiveToolCard().getPossibleMovesCountSet().contains(controller.movesCounter)) {
             this.controller.resetActiveToolCard();
             controller.setControllerState(controller.stateManager.getDraftControllerState());
-            return new Message(ACKNOWLEDGMENT_MESSAGE, TOOL_CARD_EFFECTED_ENDED);
+            return new Message(ACKNOWLEDGMENT_MESSAGE, TOOL_CARD_EFFECT_ENDED);
         } else {
             return new Message(ERROR_MESSAGE, CANT_END_TOOLCARD_EFFECT);
         }

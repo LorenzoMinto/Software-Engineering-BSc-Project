@@ -28,33 +28,32 @@ public abstract class View implements Observer {
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
     */
-    //TODO: tradurre questi commenti in inglese @jacopo
     private static final String MUST_CONNECT = "You have to connect to the server";
-    private static final String THE_GAME_IS_ENDED = "The game is ended";
-    private static final String WINDOW_PATTERNS_RECEIVED = "Ricevuti windowPattern da scegliere";
+    private static final String THE_GAME_IS_ENDED = "Game ended";
+    private static final String WINDOW_PATTERNS_RECEIVED = "Received window patterns to choose from";
     private static final String YOU_HAVE_JOINED_THE_WAITING_ROOM = "You have joined the waiting room";
-    private static final String REMOVED_FROM_GAME = "Sei stato correttamente rimosso dal gioco";
-    private static final String A_PLAYER_BECAME_INACTIVE = " è diventato inattivo. I suoi turni saranno saltati.";
-    private static final String BACK_TO_GAME = "You are back to game, now.";
-    private static final String YOU_ARE_NOW_INACTIVE = "Sei stato scollegato dal gioco per inattività. I tuoi turni saranno saltati.";
-    private static final String FAILED_SETUP_GAME = "Il setup iniziale del gioco è fallito. Potresti riscontrare difficoltà a giocare.";
-    private static final String FAILED_SETUP_ROUND = "Il setup del nuovo round è fallito. Potresti riscontrare difficoltà a giocare.";
-    private static final String FAILED_SETUP_TURN = "Il setup del nuovo turn è fallito. Potresti riscontrare difficoltà a giocare.";
+    private static final String REMOVED_FROM_GAME = "You were successfully disconnected from the game";
+    private static final String A_PLAYER_BECAME_INACTIVE = " has become inactive. Their turns will be skipped.";
+    private static final String BACK_TO_GAME = "You are back in the game, now.";
+    private static final String YOU_ARE_NOW_INACTIVE = "You were disconnected from the game for inactivity. Your turns will be skipped.";
+    private static final String FAILED_SETUP_GAME = "Initial game setup failed. You could face crucial issues playing.";
+    private static final String FAILED_SETUP_ROUND = "New round setup failed. You could face crucial issues playing.";
+    private static final String FAILED_SETUP_TURN = "New turn setup failed. You could face crucial issues playing.";
     private static final String YOU_ARE_THE_WINNER = "You are the winner! Congratulations!";
     private static final String THE_WINNER_IS = "The winner is ";
     private static final String WINDOW_PATTERN_UPDATED = "A Window pattern has been updated ";
     private static final String ITS_YOUR_TURN = "It's your turn!";
-    private static final String ERROR_MOVE = "Un errore inatteso ha reso impossibile effettuare la mossa. Riprova.";
-    private static final String MAX_PLAYERS_ERROR = "Impossibile unirsi alla partita perché è stato raggiunto il limite massimo di giocatori.";
-    private static final String NICKNAME_ALREADY_USED_ERROR = "Impossibile unirsi alla partita perché il nickname indicato è già presente.";
-    private static final String ALREADY_PLAYING_ERROR = "Impossibile unirsi alla partita perchè si sta già svolgendo";
-    private static final String USE_TOOL_CARD = " usa la toolCard ";
+    private static final String ERROR_MOVE = "An unexpected error wouldn't let you perform the move. Try again.";
+    private static final String MAX_PLAYERS_ERROR = "You can't join the game as there is already the maximum number of players in the game.";
+    private static final String NICKNAME_ALREADY_USED_ERROR = "You can't join the game as there already is a player with this nickname.";
+    private static final String ALREADY_PLAYING_ERROR = "You can't join the game as it is not running.";
+    private static final String USE_TOOL_CARD = " uses the toolCard ";
     private static final String YOU_HAVE_DRAFTED = "You have drafted ";
     private static final String JOINS_THE_WAITING_ROOM = " joins the waiting room";
     private static final String LEAVES_THE_WAITING_ROOM = " leaves the waiting room";
     private static final String ROUND_NOW_STARTS = "# Round now starts!";
     private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
-    private static final String THE_GAME_IS_STARTED = "The game is started!";
+    private static final String THE_GAME_IS_STARTED = "The game started!";
     private static final String ERROR_SENDING_MESSAGE = "Error sending message: ";
 
 

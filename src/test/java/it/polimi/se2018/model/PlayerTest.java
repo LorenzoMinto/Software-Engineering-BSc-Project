@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.polimi.se2018.model.DiceColor.RED;
 import static org.junit.Assert.*;
 
 /**
@@ -36,7 +37,7 @@ public class PlayerTest {
      */
     @Before
     public void initializePlayer(){
-        player = new Player("nickname", PrivateObjectiveCard.createTestInstance());
+        player = new Player("nickname", new PrivateObjectiveCard("","","",RED));
     }
 
     /**
@@ -167,7 +168,7 @@ public class PlayerTest {
      */
     @Test
     public void testEquals() {
-        assertTrue(player.equals(new Player("nickname", PrivateObjectiveCard.createTestInstance())));
+        assertTrue(player.equals(new Player("nickname", new PrivateObjectiveCard("","","",RED))));
     }
 
     /**

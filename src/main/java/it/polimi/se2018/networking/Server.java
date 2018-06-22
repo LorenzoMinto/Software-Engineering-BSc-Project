@@ -43,17 +43,17 @@ public class Server implements Observer, SenderInterface{
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
      */
-    private static final String EXCEPTION_SENDING_TO_CLIENTS_DURING_UPDATE = "Exception while sending a message from Server to Clients (asked by update call)";
+    private static final String EXCEPTION_SENDING_TO_CLIENTS_DURING_UPDATE = "Exception while sending a message from Server to Clients (asked by update call).";
     private static final String ERROR_SENDING_MESSAGE = "At least on message could not be sent from Client to Server. Message was: ";
-    private static final String FIRST_PARAMETER_NAME_OF_THE_SERVER_IS_COMPULSORY = "First parameter (name of the server) is compulsory";
-    private static final String SECOND_PARAMETER_PORT_NUMBER_FOR_RMI_IS_COMPULSORY = "Second parameter (port number for RMI) is compulsory";
-    private static final String THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY = "Third parameter (port number for SOCKET) is compulsory";
-    private static final String FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Fourth parameter (max number of attempts) is compulsory";
+    private static final String FIRST_PARAMETER_NAME_OF_THE_SERVER_IS_COMPULSORY = "First parameter (name of the server) is compulsory.";
+    private static final String SECOND_PARAMETER_PORT_NUMBER_FOR_RMI_IS_COMPULSORY = "Second parameter (port number for RMI) is compulsory.";
+    private static final String THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY = "Third parameter (port number for SOCKET) is compulsory.";
+    private static final String FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Fourth parameter (max number of attempts) is compulsory.";
     private static final String STARTING_RMI = "Starting RMI...";
     private static final String FAILED_RMI_SETUP = "Failed RMI setup";
     private static final String STARTING_SOCKET = "Starting Socket...";
     private static final String SAGRADA_SERVER_IS_UP = "Sagrada Server is up.";
-    private static final String CANT_LOAD_DEFAULT_CONFIG_FILE = "Can't load default config file";
+    private static final String CANT_LOAD_DEFAULT_CONFIG_FILE = "Can't load default config file.";
     private static final String ERROR_ANSWERING_TO_MESSAGE = "Error answering to message ";
     private static final String RECEIVED_MESSAGE = "Received message: ";
     private static final String ANSWERED_WITH = "Answered with: ";

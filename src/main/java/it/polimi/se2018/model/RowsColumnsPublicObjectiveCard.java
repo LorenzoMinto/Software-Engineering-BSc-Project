@@ -51,20 +51,6 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Private constructor for {@link DiagonalsPublicObjectiveCard#createTestInstance}.
-     */
-    private RowsColumnsPublicObjectiveCard(){}
-
-    /**
-     * Returns an empty instance of RowsColumnsPublicObjectiveCard. It's used by JUnit tests.
-     *
-     * @return an empty instance of RowsColumnsPublicObjectiveCard
-     */
-    public static PublicObjectiveCard createTestInstance(){
-        return new RowsColumnsPublicObjectiveCard();
-    }
-
-    /**
      * Returns a new RowsColumnsPublicObjectiveCard instance with same properties of this one
      *
      * @return new RowsColumnsPublicObjectiveCard instance with same properties of this one

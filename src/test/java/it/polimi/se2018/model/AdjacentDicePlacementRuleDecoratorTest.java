@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static it.polimi.se2018.model.DiceColor.RED;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -51,7 +52,7 @@ public class AdjacentDicePlacementRuleDecoratorTest {
         threeDice = new Dice(DiceColor.BLUE, 3);
         fourDice = new Dice(DiceColor.BLUE, 4);
 
-        player = new Player("Sonny", PrivateObjectiveCard.createTestInstance());
+        player = new Player("Sonny", new PrivateObjectiveCard("","","",RED));
     }
 
     /**

@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 public class ChooseFromTrackControllerStateTest {
     private Controller controller;
 
+    private ToolCard toolCard;
+
     /**
      * Advances the Game in order to set the ControllerState to ChooseFromTrackControllerState
      */
@@ -65,7 +67,7 @@ public class ChooseFromTrackControllerStateTest {
         toolCardProperties.put("imageURL", "imageURL");
 
 
-        ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
         toolCard = game.getToolCard(toolCard);
 
         controller.controllerState.useToolCard(toolCard);
@@ -197,7 +199,7 @@ public class ChooseFromTrackControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
-        Message m = controller.controllerState.useToolCard(ToolCard.createTestInstance());
+        Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 

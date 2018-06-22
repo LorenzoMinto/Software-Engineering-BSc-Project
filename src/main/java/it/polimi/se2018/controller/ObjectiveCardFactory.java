@@ -17,9 +17,9 @@ public class ObjectiveCardFactory {
     //TODO: in questa classe ci sono molte stringhe hardcodate, decidere cosa fare
 
     /**
-     * String used as content of IllegalArgumentException thrown when requested objectivecard has not a specified color.
+     * String used as content of IllegalArgumentException thrown when requested objectiveCard has not a specified color.
      */
-    private static final String CANNOT_CREATE_A_PRIVATE_OBJECTIVE_CARD_WITH_NO_COLOR = "Cannot create a Private Objective Card with no color";
+    private static final String CANNOT_CREATE_A_PRIVATE_OBJECTIVE_CARD_WITH_NO_COLOR = "Cannot create a Private Objective Card with no color.";
 
     /**
      * Instance of the class in order to achieve the Singleton Pattern
@@ -37,7 +37,7 @@ public class ObjectiveCardFactory {
     private static final String PUBLIC_OBJECTIVE_CARDS_PATH = "src/main/resources/images/PublicObjectiveCards/";
 
     /**
-     * Private Costructor in order to prevent from multiple instantiation of the class
+     * Private Constructor in order to prevent from multiple instantiation of the class
      */
     private ObjectiveCardFactory() {}
 

@@ -16,15 +16,15 @@ public class Player implements Serializable {
     /**
      * String passed as message of IllegalArgumentException when is asked to decrease tokens of a negative quantity
      */
-    private static final String CANNOT_DECREASE_TOKENS_OF_A_NEGATIVE_QUANTITY = "Cannot decrease tokens of a negative quantity";
+    private static final String CANNOT_DECREASE_TOKENS_OF_A_NEGATIVE_QUANTITY = "Cannot decrease tokens of a negative quantity.";
     /**
-     * String passed as message of IllegalArgumentException when is asked to set a null windowpattern to player
+     * String passed as message of IllegalArgumentException when is asked to set a null window pattern to player
      */
-    private static final String SET_A_NULL_WINDOWPATTERN_TO_PLAYER = "Can't set a null windowPattern to player";
+    private static final String SET_A_NULL_WINDOWPATTERN_TO_PLAYER = "Can't set a null window pattern to player.";
     /**
      * String passed as message of IllegalArgumentException when is asked to create a player giving a null card
      */
-    private static final String CREATE_PLAYER_NULL_CARD = "Asked to create a player giving null card";
+    private static final String CREATE_PLAYER_NULL_CARD = "Asked to create a player giving null card.";
     /**
      * Favor Tokens of the player.
      */

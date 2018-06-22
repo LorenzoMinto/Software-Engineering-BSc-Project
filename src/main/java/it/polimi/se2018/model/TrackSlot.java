@@ -20,7 +20,7 @@ public class TrackSlot implements Serializable {
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
-    private static final String NULL_DICE = "Can't use or reference a null dice";
+    private static final String NULL_DICE = "Can't use or reference a null dice.";
     /**
      * String passed as message of IllegalArgumentException when it asked to remove a dice from a trackslot
      * but the given dice reference is not contained in this trackslot.

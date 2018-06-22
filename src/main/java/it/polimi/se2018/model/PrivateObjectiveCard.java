@@ -28,20 +28,6 @@ public class PrivateObjectiveCard extends ObjectiveCard {
     }
 
     /**
-     * Constructor just for JUnit
-     */
-    private PrivateObjectiveCard(){}
-
-    /**
-     * Returns an empty instance of PrivateObjectiveCard. used by JUnit.
-     *
-     * @return an empty instance of PrivateObjectiveCard
-     */
-    public static PrivateObjectiveCard createTestInstance(){
-        return new PrivateObjectiveCard();
-    }
-
-    /**
      * Returns a new PrivateObjectiveCard instance with same properties of this one.
      *
      * @return a new PrivateObjectiveCard instance with same properties of this one

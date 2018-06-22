@@ -45,7 +45,7 @@ public class RowsColumnsPublicObjectiveCardTest {
 
             windowPattern = new ArrayList<>(windowPatternManager.getPairsOfPatterns(1)).get(0);
 
-            Player player = new Player("", PrivateObjectiveCard.createTestInstance());
+            Player player = new Player("", new PrivateObjectiveCard("","","",RED));
             player.setWindowPattern(windowPattern);
             windowPattern.setOwner(player);
 
@@ -84,7 +84,7 @@ public class RowsColumnsPublicObjectiveCardTest {
     @BeforeClass
     public static void initializeCards(){
 
-        rowsColumnsPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance();
+        rowsColumnsPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,null,Dice::getColor, 6, true);
 
         rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
                 null, Dice::getColor, 6, true);
@@ -94,15 +94,6 @@ public class RowsColumnsPublicObjectiveCardTest {
                 null, Dice::getValue, 5, true);
         columnsValuePublicObjectiveCard = new RowsColumnsPublicObjectiveCard(null,null,
                 null, Dice::getValue, 4, false);
-    }
-
-    /**
-     * Tests that the test instance of {@link RowsColumnsPublicObjectiveCard} is not null
-     * @see RowsColumnsPublicObjectiveCard#createTestInstance()
-     */
-    @Test
-    public void testCreateTestInstance(){
-        assertNotNull(rowsColorPublicObjectiveCard = RowsColumnsPublicObjectiveCard.createTestInstance());
     }
 
     /**

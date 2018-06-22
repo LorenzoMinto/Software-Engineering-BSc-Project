@@ -141,22 +141,6 @@ public class ToolCard implements Serializable{
     }
 
     /**
-     * Empty private constructor, used for testing.
-     */
-    private ToolCard(){
-        this.toolCardID = "placeholder";
-    }
-
-    /**
-     * Constructor for test purposes.
-     *
-     * @return an empty instance of ToolCard.
-     */
-    public static ToolCard createTestInstance(){
-        return new ToolCard();
-    }
-
-    /**
      * Updates the tokenUsed by adding the amount of tokens needed for the card's activation. Then, only if it is
      * the case, updates the amount of tokens needed for the card's activation.
      */

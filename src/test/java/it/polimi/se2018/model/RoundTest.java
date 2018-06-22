@@ -36,7 +36,7 @@ public class RoundTest {
      */
     @BeforeClass
     public static void setUp(){
-        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard(null, null, null, RED);
+        PrivateObjectiveCard privateObjectiveCard = new PrivateObjectiveCard("","","", RED);
 
         p1 = new Player( "p1", privateObjectiveCard);
         p2 = new Player( "p2", privateObjectiveCard);

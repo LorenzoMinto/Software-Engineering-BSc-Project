@@ -52,20 +52,6 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     }
 
     /**
-     * Constructor just for JUnit.
-     */
-    private SetPublicObjectiveCard(){}
-
-    /**
-     * Returns a new empty instance of the class just for tests in JUnit.
-     *
-     * @return a new empty instance of the class
-     */
-    public static PublicObjectiveCard createTestInstance() {
-        return new SetPublicObjectiveCard();
-    }
-
-    /**
      * Returns a new SetPublicObjectiveCard instance with same properties of this one.
      *
      * @return a new SetPublicObjectiveCard instance with same properties of this one
@@ -79,7 +65,7 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     /**
      * Calculates the score of a given window pattern according this objective card.
      *
-     * @param windowPattern the windowPattern to be evaluated
+     * @param windowPattern the window pattern to be evaluated
      * @return the score of a given window pattern according this objective card
      */
     @Override

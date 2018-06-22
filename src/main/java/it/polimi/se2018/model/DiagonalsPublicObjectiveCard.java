@@ -17,7 +17,7 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     /**
      *
      */
-    private static final String NULL_WINDOW_PATTERN_SCORE = "Cannot calculate score of a null window pattern.";
+    private static final String NULL_WINDOW_PATTERN_SCORE = "Cannot calculate score of a null windowPattern.";
 
     /**
      * Constructor for Diagonals Public Objective Card
@@ -30,20 +30,6 @@ public class DiagonalsPublicObjectiveCard extends PublicObjectiveCard {
     public DiagonalsPublicObjectiveCard(String title, String description, String imageURL,
                                         Function<Dice,Object> propertyFunction) {
         super(title, description, imageURL, propertyFunction);
-    }
-
-    /**
-     * Private constructor for {@link DiagonalsPublicObjectiveCard#createTestInstance}.
-     */
-    private DiagonalsPublicObjectiveCard(){}
-
-    /**
-     * Returns an empty instance of PublicObjectiveCard. It's used by JUnit tests.
-     *
-     * @return an empty instance of PublicObjectiveCard
-     */
-    public static PublicObjectiveCard createTestInstance() {
-        return new DiagonalsPublicObjectiveCard();
     }
 
     /**

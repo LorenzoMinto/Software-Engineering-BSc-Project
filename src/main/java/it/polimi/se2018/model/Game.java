@@ -26,11 +26,11 @@ public class Game extends Observable implements Observer{
     /**
      * String passed as message of ValueOutOfBoundsException when is asked to create a game with a negative number of rounds
      */
-    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_ROUNDS = "Can't create a game with negative number of rounds";
+    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_ROUNDS = "Can't create a game with negative number of rounds.";
     /**
      * String passed as message of ValueOutOfBoundsException when is asked to create a game with a negative number of players
      */
-    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_PLAYERS = "Can't create a game with negative number of players";
+    private static final String GAME_WITH_NEGATIVE_NUMBER_OF_PLAYERS = "Can't create a game with negative number of players.";
     /**
      * String passed as message of IllegalStateException when is asked to assign cards after they were already assigned
      */
@@ -38,7 +38,7 @@ public class Game extends Observable implements Observer{
     /**
      * String passed as message of IllegalArgumentException when is asked to set rankings giving as a reference a null object
      */
-    private static final String NULL_RANKINGS = "Can't set rankings to null";
+    private static final String NULL_RANKINGS = "Can't set rankings to null.";
     /**
      * String passed as message of IllegalStateException when is asked to set rankings but the state is not the correct one
      */
@@ -46,7 +46,7 @@ public class Game extends Observable implements Observer{
     /**
      * String passed as message of BadBehaviourRuntimeException when is asked to add a player but max number of players is reached
      */
-    private static final String ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED = "Can't add a player if max number of players is reached";
+    private static final String ADD_PLAYER_WHEN_MAX_NUMBER_OF_PLAYERS_REACHED = "Can't add a player if max number of players is reached.";
     /**
      * String passed as message of IllegalStateException when is asked to add a player but the state is not the correct one
      */
@@ -59,7 +59,7 @@ public class Game extends Observable implements Observer{
     /**
      * String passed as message of BadBehaviourRuntimeException when is asked to use a toolCard that is not in the drawn set
      */
-    private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolCard that is not in the drawn set";
+    private static final String TOOLCARD_NOT_IN_DRAWN_SET = "Asked to use a toolCard that is not in the drawn set.";
     /**
      * String passed as message of EmptyListException when is asked to perform an action that requires as parameter
      * a list of dices but the one actually passed as argument is an empty list.
@@ -72,15 +72,15 @@ public class Game extends Observable implements Observer{
     /**
      * String passed as message of BadBehaviourRuntimeException when is asked to start the game but it is impossible to create new rounds.
      */
-    private static final String NO_ROUNDS = "Can't start a game with no rounds";
+    private static final String NO_ROUNDS = "Can't start a game with no rounds.";
     /**
      * String passed as message of BadBehaviourRuntimeException when is asked to create a new round but it is impossible to create new turns.
      */
-    private static final String NO_TURNS = "Can't start a round with no turns";
+    private static final String NO_TURNS = "Can't start a round with no turns.";
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
-    private static final String NULL_DICE = "Can't use or reference a null dice";
+    private static final String NULL_DICE = "Can't use or reference a null dice.";
     /**
      * The number of rounds the game is composed of
      */
