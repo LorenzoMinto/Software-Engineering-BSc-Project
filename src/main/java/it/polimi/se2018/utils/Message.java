@@ -86,10 +86,10 @@ public final class Message implements Serializable{
     /**
      * Constructor of a Message with type and message param.  If controllerbound, it is broadcast.
      * @param type the type of the message
-     * @param m the message to be sent
+     * @param message the message to be sent
      */
-    public Message(Enum type, String m){
-        this(type,fastMap("message",m),null,null);
+    public Message(Enum type, String message){
+        this(type,fastMap("message",message),null,null);
     }
 
     /**

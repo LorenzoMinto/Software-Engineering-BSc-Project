@@ -25,10 +25,10 @@ public enum Move {
 
     /**
      * Constructor for this enum
-     * @param t the human readable text representation of the move
+     * @param textualRep the human readable text representation of the move
      */
-    Move(String t){
-        this.textualRepresentation = t;
+    Move(String textualRep){
+        this.textualRepresentation = textualRep;
     }
 
     /**
