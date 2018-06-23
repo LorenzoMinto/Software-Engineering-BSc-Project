@@ -2,10 +2,7 @@ package it.polimi.se2018.networking;
 
 import it.polimi.se2018.networking.rmi.RMIClientGateway;
 import it.polimi.se2018.networking.socket.SocketClientGateway;
-import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.Message;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.utils.*;
 
 import java.util.logging.*;
 
@@ -56,6 +53,11 @@ public class Client extends Observable implements SenderInterface {
      * If true, some debug messages are logged in the console
      */
     private final boolean debug;
+
+    /**
+     * True if connection is established. False if it dropped.
+     */
+    private boolean connectionStatus = true;
 
     /**
      * Constructor for Client
@@ -153,5 +155,20 @@ public class Client extends Observable implements SenderInterface {
      */
     public void fail(String reason){
         throw new BadBehaviourRuntimeException(reason);
+    }
+
+    /**
+     * Method is called by networking classes when the connection drop.
+     * @param status true if connection is restored, false if is lost.
+     */
+    public void updateConnectionStatus(boolean status){
+        if(status != this.connectionStatus){
+            this.connectionStatus = status;
+            if(status){
+                notify(new Message(ViewBoundMessageType.CONNECTION_RESTORED));
+            } else {
+                notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
+            }
+        }
     }
 }

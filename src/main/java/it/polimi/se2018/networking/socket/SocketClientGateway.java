@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Gateway used by client to send messages to server.
@@ -98,21 +99,38 @@ public final class SocketClientGateway extends Thread implements SenderInterface
 
     @Override
     public void run() {
-        try(Socket echoSocket = new Socket(this.hostName, this.portNumber)){
-            this.out = new ObjectOutputStream(echoSocket.getOutputStream());
-            this.out.flush();
+        //noinspection InfiniteLoopStatement
+        while(true){
+            try (Socket echoSocket = new Socket(this.hostName, this.portNumber)) {
+                this.out = new ObjectOutputStream(echoSocket.getOutputStream());
+                this.out.flush();
 
-            ObjectInputStream in;
-            in = new ObjectInputStream(echoSocket.getInputStream());
-            this.running = true;
+                ObjectInputStream in;
+                in = new ObjectInputStream(echoSocket.getInputStream());
+                this.running = true;
 
-            //noinspection InfiniteLoopStatement
-            while(true){
-                receiveMessage((Message) in.readObject(),null);
+                this.client.updateConnectionStatus(true);
+
+                //noinspection InfiniteLoopStatement
+                while (true) {
+                    receiveMessage((Message) in.readObject(), null);
+                }
+
+            } catch (SocketException e) {
+                this.client.updateConnectionStatus(false);
+                //will retry to fix the error re running the previous code
+
+            } catch (Exception e) {
+                this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
+                return;
             }
 
-        } catch(Exception e){
-            this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e1) {
+                this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
