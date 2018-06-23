@@ -435,7 +435,7 @@ public class Controller extends Observable {
     protected boolean setActiveToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
-        if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDrafted()){
+        if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()){
             return false;
         }
 
