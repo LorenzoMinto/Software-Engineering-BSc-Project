@@ -18,6 +18,16 @@ import java.rmi.server.UnicastRemoteObject;
 public final class RMIClientGateway implements SenderInterface, RMIReceiverInterface {
 
     /**
+     * String used as message of NetworkingException in case of failure reading for rmi name
+     */
+    private static final String FAILED_LOOKING_FOR_RMI_NAME = "Failed looking for RMI name";
+
+    /**
+     * String used as message of NetworkingException in case of failure exporting rmi object
+     */
+    private static final String FAILED_EXPORTING_RMI_OBJECT = "Failed exporting RMI object";
+
+    /**
      * The recipient of messages sent through this gateway
      */
     private RMIReceiverInterface recipient;
@@ -43,13 +53,13 @@ public final class RMIClientGateway implements SenderInterface, RMIReceiverInter
         try{
             this.recipient = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
-            throw new NetworkingException("Failed looking for RMI name");
+            throw new NetworkingException(FAILED_LOOKING_FOR_RMI_NAME);
         }
 
         try{
             this.sender = (RMIReceiverInterface) UnicastRemoteObject.exportObject(this, port);
         } catch(Exception e){
-            throw new NetworkingException("Failed exporting RMI object");
+            throw new NetworkingException(FAILED_EXPORTING_RMI_OBJECT);
         }
 
         this.client = client;

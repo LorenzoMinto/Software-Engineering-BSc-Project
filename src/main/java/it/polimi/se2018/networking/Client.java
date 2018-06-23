@@ -2,10 +2,7 @@ package it.polimi.se2018.networking;
 
 import it.polimi.se2018.networking.rmi.RMIClientGateway;
 import it.polimi.se2018.networking.socket.SocketClientGateway;
-import it.polimi.se2018.utils.Observable;
-import it.polimi.se2018.utils.Message;
-import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.utils.*;
 
 import java.util.logging.*;
 
@@ -14,6 +11,28 @@ import java.util.logging.*;
  * @author Federico Haag
  */
 public class Client extends Observable implements SenderInterface {
+
+    /*  CONSTANTS FOR LOGS' MESSAGES
+        Following constants are not commented one by one because they are as self explaining as needed.
+        Major information can be found looking for their usage.
+        Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
+    */
+    private static final String ACKNOWLEDGEMENT_MESSAGE_CONSTRUCTOR = "Started a Sagrada Client and connected to Sagrada Server as guest.";
+    private static final String ATTEMPT = "Attempt #";
+    private static final String SENDING_MESSAGE = " sending message ";
+    private static final String THE_MESSAGE_WAS = "The message was: ";
+    private static final String COULD_NOT_SEND_THE_MESSAGE_DUE_TO_CONNECTION_ERROR = " could not send the message due to connection error to: ";
+    private static final String SUCCESSFULLY_SENT_MESSAGE = " successfully sent message to: ";
+
+    /**
+     * Format of of logs
+     */
+    private static final String LOGGER_FORMAT = "[CLIENT] %1$s %n";
+
+    /**
+     * String used as message of NetworkingException in case of failure sending messages
+     */
+    private static final String AT_LEAST_A_MESSAGE_NOT_SET = "At least on message could not be sent from Client to Server. Message was: ";
 
     /**
      * Logger
@@ -34,6 +53,11 @@ public class Client extends Observable implements SenderInterface {
      * If true, some debug messages are logged in the console
      */
     private final boolean debug;
+
+    /**
+     * True if connection is established. False if it dropped.
+     */
+    private boolean connectionStatus = true;
 
     /**
      * Constructor for Client
@@ -66,7 +90,7 @@ public class Client extends Observable implements SenderInterface {
 
         this.gateway = g;
 
-        log("Started a Sagrada Client and connected to Sagrada Server as guest.");
+        log(ACKNOWLEDGEMENT_MESSAGE_CONSTRUCTOR);
     }
 
     /**
@@ -80,11 +104,10 @@ public class Client extends Observable implements SenderInterface {
         ConsoleHandler handler = new ConsoleHandler();
         handler.setLevel(Level.INFO);
         handler.setFormatter(new SimpleFormatter(){
-            private static final String FORMAT = "[CLIENT] %1$s %n";
 
             @Override
             public synchronized String format(LogRecord lr) {
-                return String.format(FORMAT,lr.getMessage());
+                return String.format(LOGGER_FORMAT,lr.getMessage());
             }
 
         });
@@ -110,20 +133,20 @@ public class Client extends Observable implements SenderInterface {
         boolean correctlySent = false;
         while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent){
             attempts++;
-            log("Attempt #"+attempts+": Sending message: "+message);
+            log(ATTEMPT + attempts + SENDING_MESSAGE +message);
 
             try{
                 gateway.sendMessage(message);
             } catch(NetworkingException e) {
-                log("Attempt #" + attempts + ": Could not send the message due to connection error to: " + gateway + ". The message was: " + message);
+                log(ATTEMPT + attempts + COULD_NOT_SEND_THE_MESSAGE_DUE_TO_CONNECTION_ERROR + gateway + ". " + THE_MESSAGE_WAS + message);
                 continue;
             }
             correctlySent = true;
 
-            log("Attempt #"+attempts+": Successfully sent message to: " + gateway + ". The message was: "+message);
+            log(ATTEMPT + attempts + SUCCESSFULLY_SENT_MESSAGE + gateway + ". " + THE_MESSAGE_WAS + message);
         }
         //Add failed gateway to a list that will be returned at the end of this method execution
-        if(!correctlySent){ throw new NetworkingException("At least on message could not be sent from Client to Server. Message was: "+message); }
+        if(!correctlySent){ throw new NetworkingException(AT_LEAST_A_MESSAGE_NOT_SET +message); }
     }
 
     /**
@@ -132,5 +155,20 @@ public class Client extends Observable implements SenderInterface {
      */
     public void fail(String reason){
         throw new BadBehaviourRuntimeException(reason);
+    }
+
+    /**
+     * Method is called by networking classes when the connection drop.
+     * @param status true if connection is restored, false if is lost.
+     */
+    public void updateConnectionStatus(boolean status){
+        if(status != this.connectionStatus){
+            this.connectionStatus = status;
+            if(status){
+                notify(new Message(ViewBoundMessageType.CONNECTION_RESTORED));
+            } else {
+                notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
+            }
+        }
     }
 }
