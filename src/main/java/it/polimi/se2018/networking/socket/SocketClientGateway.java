@@ -16,6 +16,16 @@ import java.net.Socket;
 public final class SocketClientGateway extends Thread implements SenderInterface, SocketReceiverInterface {
 
     /**
+     * String used as NetworkingException message when an IOException happens sending a message
+     */
+    private static final String FAILED_SENDING_MESSAGE = "Failed sending message from SocketClientGateway due to IOException";
+
+    /**
+     * String used as BadBehaviourRuntimeException message (called through fail()) when something throws an exception in run()
+     */
+    private static final String EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM = "Exception thrown opening socket or reading from stream";
+
+    /**
      * Output stream for sending messages to server
      */
     private ObjectOutputStream out;
@@ -71,7 +81,7 @@ public final class SocketClientGateway extends Thread implements SenderInterface
             this.out.reset();
             this.out.writeObject(message);
         } catch (IOException e) {
-            throw new NetworkingException("Failed sending message from SocketClientGateway due to IOException");
+            throw new NetworkingException(FAILED_SENDING_MESSAGE);
         }
     }
 
@@ -102,7 +112,7 @@ public final class SocketClientGateway extends Thread implements SenderInterface
             }
 
         } catch(Exception e){
-            this.client.fail("Exception thrown opening socket or reading from stream");
+            this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
         }
     }
 }
