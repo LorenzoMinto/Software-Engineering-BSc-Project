@@ -47,19 +47,15 @@ public class ChooseFromTrackControllerState extends ControllerState {
     @Override
     public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
 
-        try {
-            controller.game.getTrack().takeDice(dice, slotNumber);
-        } catch (BadDiceReferenceException e) {
-            return new Message(ERROR_MESSAGE, DICE_NOT_IN_SELECTED_TRACK_SLOT);
-        } catch (ValueOutOfBoundsException e) {
-            return new Message(ERROR_MESSAGE, SELECTED_TRACK_SLOT_DOES_NOT_EXIST);
+        if (controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(dice)) {
+            controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
+            controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
+            controller.setControllerState(controller.stateManager.getNextState(this));
+
+            return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_FROM_TRACK_CHOSEN);
+        } else {
+            return new Message(ERROR_MESSAGE, "Dice selected is not on Track!");
         }
-
-        controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
-        controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
-        controller.setControllerState(controller.stateManager.getNextState(this));
-
-        return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_FROM_TRACK_CHOSEN);
     }
 
     @Override

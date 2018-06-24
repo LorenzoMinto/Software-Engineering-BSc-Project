@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadDiceReferenceException;
 
 /**
  *  This is an implicit state that switch drafted dice with selected dice from track.
@@ -25,8 +26,14 @@ public class SwapDraftedWithTrackControllerState extends ImplicitControllerState
     public void executeImplicitBehaviour() {
         Game game = controller.game;
         Turn turn = game.getCurrentRound().getCurrentTurn();
+
+        try {
+            game.getTrack().takeDice(turn.getTrackChosenDice(), turn.getSlotOfTrackChosenDice());
+        } catch (BadDiceReferenceException e) {
+            e.printStackTrace();
+        }
         game.getTrack().putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
-        //TODO: check here. secondo me il dice non viene rimosso dal track.
+
         turn.setDraftedDice(turn.getTrackChosenDice());
         turn.resetTrackChosenDice();
         controller.setControllerState(controller.stateManager.getNextState(this));
