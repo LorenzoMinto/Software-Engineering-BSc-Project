@@ -1,13 +1,11 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.utils.BadDiceReferenceException;
-import it.polimi.se2018.utils.ValueOutOfBoundsException;
+import it.polimi.se2018.utils.*;
+import it.polimi.se2018.utils.Observable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -16,7 +14,7 @@ import java.util.NoSuchElementException;
  *
  * @author Lorenzo Minto
  */
-public class Track implements Serializable{
+public class Track extends Observable implements Serializable{
     /**
      * Serial Version UID
      */
@@ -34,6 +32,19 @@ public class Track implements Serializable{
      * List of {@link TrackSlot}, on which the leftover dices of the draft pool of every round are kept.
      */
     private ArrayList<TrackSlot> slots = new ArrayList<>();
+
+    /**
+     * Creates new TrackSlot with the list of dice passed and appends it to the list.
+     * Notifies game of the updates
+     *
+     * @param dices list of dices passed.
+     */
+    public void processDicesAndNotify(List<Dice> dices) {
+        if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
+        TrackSlot slot = new TrackSlot(dices);
+        slots.add(slot);
+        notifyGame();
+    }
 
     /**
      * Creates new TrackSlot with the list of dice passed and appends it to the list.
@@ -76,6 +87,7 @@ public class Track implements Serializable{
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.removeDice(dice); //throws BadDiceReferenceException
+        notifyGame();
     }
 
     /**
@@ -91,6 +103,7 @@ public class Track implements Serializable{
         }
         TrackSlot slot = slots.get(slotNumber);
         slot.addDice(dice);
+        notifyGame();
     }
 
     /**
@@ -111,5 +124,17 @@ public class Track implements Serializable{
         Track trackCopy = new Track();
         this.slots.forEach(slot->trackCopy.processDices(slot.getDices()));
         return trackCopy;
+    }
+
+    /**
+     * Method to notify observers (Game) with the updated track
+     *
+     * @author Jacopo Pio Gargano
+     */
+    private void notifyGame() {
+        Map<String, Object> messageAttributes = new HashMap<>();
+        messageAttributes.put("track", this.copy());
+
+        notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_TRACK, messageAttributes));
     }
 }
