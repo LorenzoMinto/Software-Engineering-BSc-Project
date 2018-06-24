@@ -64,6 +64,6 @@ public class ChooseFromTrackControllerState extends ControllerState {
 
     @Override
     public Set<Move> getStatePermissions() {
-        return EnumSet.of(Move.CHOOSE_DICE_FROM_TRACK);
+        return EnumSet.of(Move.CHOOSE_DICE_FROM_TRACK, Move.END_EFFECT);
     }
 }

@@ -1,10 +1,12 @@
 package it.polimi.se2018.networking.socket;
 
+import it.polimi.se2018.networking.ConnectionHandler;
 import it.polimi.se2018.utils.Message;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Gatherer of new socket connections.
@@ -80,24 +82,43 @@ public final class SocketServerGatherer extends Thread{
         //Starts a thread listening for messages
         new Thread(() -> {
 
-            ObjectInputStream in;
-            SocketClientProxy socketClientAsAServer;
-            try {
-                in = new ObjectInputStream(clientSocket.getInputStream());
-                socketClientAsAServer = new SocketClientProxy(outputStream);
-            } catch (IOException e) {
-                return;
-            }
+            SocketClientProxy SocketClientProxyBeforeConnectionDrop = null;
 
-            boolean c = true;
-            while(c) {
-                Message message;
+            while(true) {
+
+                ObjectInputStream in;
+                SocketClientProxy socketClientAsAServer;
                 try {
-                    message = (Message) in.readObject();
-                    receiver.receiveMessage(message, socketClientAsAServer);
-                } catch( Exception e ){
+                    in = new ObjectInputStream(clientSocket.getInputStream());
+                    socketClientAsAServer = new SocketClientProxy(outputStream);
+                } catch (IOException e) {
+                    return;
+                }
+
+                ((ConnectionHandler)receiver).restoredConnection(SocketClientProxyBeforeConnectionDrop,socketClientAsAServer);
+
+                boolean c = true;
+                while (c) {
+                    Message message;
+                    try {
+                        message = (Message) in.readObject();
+                        receiver.receiveMessage(message, socketClientAsAServer);
+                    } catch (SocketException e) {
+                        ((ConnectionHandler)receiver).lostConnection(socketClientAsAServer);
+                        SocketClientProxyBeforeConnectionDrop = socketClientAsAServer;
+                        c = false;
+                    } catch (Exception e) {
+                        receiver.fail(READING_STREAM_EXCEPTION);
+                        c = false;
+                    }
+                }
+
+                try {
+                    sleep(500);
+                } catch (InterruptedException e1) {
                     receiver.fail(READING_STREAM_EXCEPTION);
-                    c = false;
+                    Thread.currentThread().interrupt();
+                    return;
                 }
             }
         }).start();

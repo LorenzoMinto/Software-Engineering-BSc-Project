@@ -32,7 +32,7 @@ public class CLIView extends View{
     */
     private static final String INPUT_NOT_VALID = "Input not valid.";
     private static final String EXIT_FROM_READING_LOOP = "exit";
-    private static final String CHOOSE_CONNECTION_TYPE = "Insert 1. for RMI, 2. for socket";
+    private static final String CHOOSE_CONNECTION_TYPE = "Choose the type of connection technology you want to use:";
     private static final String INSERT_NAME_SERVER = "Insert name server";
     private static final String INSERT_PORT_NUMBER = "Insert port number";
     private static final String SHOW_MY_WINDOW_PATTERN = "Show my window pattern";
@@ -63,6 +63,7 @@ public class CLIView extends View{
     private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings:";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
     public static final String ERROR_MESSAGE = "ERROR: ";
+    private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -160,6 +161,8 @@ public class CLIView extends View{
     private CLIView() {
         super();
 
+        cleanConsole();
+
         //Launch of CLI
         launchConsoleReader();
 
@@ -192,7 +195,7 @@ public class CLIView extends View{
                 if(currentInputConsumer !=null){
                     currentInputConsumer.accept(text);
                 } else {
-                    print(INPUT_NOT_VALID);
+                    print(YOU_CANT_WRITE_ON_CONSOLE_NOW);
                 }
             } while(!text.equals(EXIT_FROM_READING_LOOP));
         }).start();
@@ -202,14 +205,28 @@ public class CLIView extends View{
      * Connects client to server (asks user way of communication and data - address, port)
      */
     private void connect(){
+
         print(CHOOSE_CONNECTION_TYPE);
+        int i = 1;
+        for(ConnectionType cT : ConnectionType.values()){
+            print(i+". "+cT);
+            i++;
+        }
+
         waitForConsoleInput(connectionTypeString -> {
+            int connectionTypeInt = Integer.parseInt(connectionTypeString) - 1;
+            if( connectionTypeInt >= ConnectionType.values().length){
+                connect();
+                return;
+            }
+            ConnectionType connectionType = ConnectionType.values()[connectionTypeInt];
+
             print(INSERT_NAME_SERVER);
+
             waitForConsoleInput(serverName -> {
                 print(INSERT_PORT_NUMBER);
                 waitForConsoleInput(portNumberString -> {
                     int portNumber = Integer.parseInt(portNumberString);
-                    ConnectionType connectionType = (connectionTypeString.equals("1")) ? ConnectionType.RMI : ConnectionType.SOCKET;
                     connectToRemoteServer(connectionType,serverName,portNumber);
 
                     waitForMove();
@@ -263,7 +280,9 @@ public class CLIView extends View{
             if(mapConsoleMoves.containsKey(s)){
                 mapConsoleMoves.get(s).run();
             } else {
+                cleanConsole();
                 print(INPUT_NOT_VALID);
+                waitForMove();
             }
         });
     }
@@ -615,6 +634,21 @@ public class CLIView extends View{
     // HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
 
     @Override
+    void handleConnectionLostEvent(Message m){
+        super.handleConnectionLostEvent(m);
+        this.currentInputConsumer = null;
+        removeHandlingMessage(m);
+    }
+
+    @Override
+    void handleConnectionRestoredEvent(){
+        super.handleConnectionRestoredEvent();
+        if(this.handlingMessages.isEmpty()){
+            waitForMove();
+        }
+    }
+
+    @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
 
@@ -634,31 +668,36 @@ public class CLIView extends View{
             } else {
                 print(INPUT_NOT_VALID);
             }
+            removeHandlingMessage(m);
             waitForMove();
         });
     }
 
     @Override
-    void handleAddedEvent() {
-        super.handleAddedEvent();
+    void handleAddedEvent(Message m) {
+        super.handleAddedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleRemovedEvent() {
-        super.handleRemovedEvent();
+    void handleRemovedEvent(Message m) {
+        super.handleRemovedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleBackToGameEvent(){
-        super.handleBackToGameEvent();
+    void handleBackToGameEvent(Message m){
+        super.handleBackToGameEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleInactiveEvent(){
-        super.handleInactiveEvent();
+    void handleInactiveEvent(Message m){
+        super.handleInactiveEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
         //TODO: check if this waitForMove() is necessary or not
     }
@@ -667,11 +706,13 @@ public class CLIView extends View{
     void handleSetupEvent(Message m){
         super.handleSetupEvent(m);
         this.gameStarted = true;
+        removeHandlingMessage(m);
     }
 
     @Override
     void handleRankingsEvent(Message m){
         super.handleRankingsEvent(m);
+        removeHandlingMessage(m);
         //TODO: print rankings (winner is printed by super())
     }
 
@@ -679,66 +720,77 @@ public class CLIView extends View{
     @Override
     void handleUpdatedWindowPatternEvent(Message m){
         super.handleUpdatedWindowPatternEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m){
         super.handleChangedDraftPoolEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
-    void handleYourTurnEvent(){
-        super.handleYourTurnEvent();
+    void handleYourTurnEvent(Message m){
+        super.handleYourTurnEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleBadFormattedEvent(){
-        super.handleBadFormattedEvent();
+    void handleBadFormattedEvent(Message m){
+        super.handleBadFormattedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedLimitEvent(){
-        super.handleDeniedLimitEvent();
+    void handleDeniedLimitEvent(Message m){
+        super.handleDeniedLimitEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedNicknameEvent(){
-        super.handleDeniedNicknameEvent();
+    void handleDeniedNicknameEvent(Message m){
+        super.handleDeniedNicknameEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedPlayingEvent(){
-        super.handleDeniedPlayingEvent();
+    void handleDeniedPlayingEvent(Message m){
+        super.handleDeniedPlayingEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleSlotOfTrackChosenDice(Message m){
         super.handleSlotOfTrackChosenDice(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleTrackChosenDiceEvent(Message m){
         super.handleTrackChosenDiceEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 

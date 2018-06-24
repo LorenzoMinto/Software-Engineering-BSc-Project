@@ -5,5 +5,6 @@ package it.polimi.se2018.view;
  */
 enum ViewState{
     INACTIVE,
-    ACTIVE
+    ACTIVE,
+    DISCONNECTED
 }

@@ -8,7 +8,7 @@ import it.polimi.se2018.utils.Message;
  *
  * @author Federico Haag
  */
-public interface SocketReceiverInterface {
+public interface SocketReceiverInterface{
 
     /**
      * Received a message from the specified sender.

@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking.socket;
 
+import it.polimi.se2018.networking.ClientProxyInterface;
+import it.polimi.se2018.networking.ConnectionHandler;
 import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
@@ -11,7 +13,7 @@ import it.polimi.se2018.utils.Message;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public final class SocketServerGateway implements SocketReceiverInterface {
+public final class SocketServerGateway implements SocketReceiverInterface, ConnectionHandler {
 
     /**
      * Remote client that receives messages
@@ -48,5 +50,15 @@ public final class SocketServerGateway implements SocketReceiverInterface {
     @Override
     public void fail(String reason) {
         this.server.fail(reason);
+    }
+
+    @Override
+    public void lostConnection(ClientProxyInterface sender) {
+        this.server.lostConnection(sender);
+    }
+
+    @Override
+    public void restoredConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+        this.server.restoredConnection(previous,next);
     }
 }

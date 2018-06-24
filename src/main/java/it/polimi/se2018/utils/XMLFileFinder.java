@@ -19,6 +19,16 @@ import java.util.List;
 public final class XMLFileFinder {
 
     /**
+     * String used as IllegalArgumentException message in case path provided to getFilesNames is not of a directory
+     */
+    private static final String NOT_A_DIRECTORY = "Asked to load files from path that is not a directory";
+
+    /**
+     * File extension for xml files
+     */
+    private static final String XML_FILE_TYPE = ".xml";
+
+    /**
      * Private constructor just for preventing instantiation
      */
     private XMLFileFinder(){}
@@ -40,10 +50,10 @@ public final class XMLFileFinder {
         File dir = new File(path);
 
         if( !dir.isDirectory() ){
-            throw new IllegalArgumentException("Asked to load files from path that is not a directory");
+            throw new IllegalArgumentException(NOT_A_DIRECTORY);
         }
 
-        File[] files = dir.listFiles((d, name) -> name.endsWith(".xml"));
+        File[] files = dir.listFiles((d, name) -> name.endsWith(XML_FILE_TYPE));
 
         //Exception is thrown if no files are found in the folder (could happen even due to IO error)
         if(files==null) throw new IOException();

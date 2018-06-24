@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * Server
  * @author Federico Haag
  */
-public class Server implements Observer, SenderInterface{
+public class Server implements Observer, SenderInterface, ConnectionHandler{
 
     /**
      * Name of the default config file
@@ -513,5 +513,32 @@ public class Server implements Observer, SenderInterface{
      */
     public void fail(String reason){
         throw new BadBehaviourRuntimeException(reason);
+    }
+
+    @Override
+    public void lostConnection(ClientProxyInterface sender) {
+
+        if (serverState == ServerState.WAITING_ROOM) {
+            for (Map.Entry<String, ClientProxyInterface> entry : waitingList.entrySet()) {
+                if (entry.getValue().equals(sender)) {
+                    waitingList.remove(entry.getKey());
+                }
+            }
+
+        } else if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(sender)){
+            controller.playerLostConnection(gatewayToPlayerIDMap.get(sender));
+        }
+    }
+
+    @Override
+    public void restoredConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+        if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(previous)){
+            String playerID = gatewayToPlayerIDMap.get(previous);
+            gatewayToPlayerIDMap.remove(previous);
+            gatewayToPlayerIDMap.put(next,playerID);
+            playerIDToGatewayMap.remove(playerID);
+            playerIDToGatewayMap.put(playerID,next);
+            controller.playerRestoredConnection(playerID);
+        }
     }
 }

@@ -47,6 +47,7 @@ public class ChangeDiceValueControllerState extends ControllerState {
         } catch (ValueOutOfBoundsException e) {
             return new Message(ERROR_MESSAGE, ILLEGAL_VALUE_FOR_DICE);
         }
+        currentTurn.setDraftedDice(currentTurn.getDraftedDice());
         controller.setControllerState(controller.stateManager.getNextState(this));
         return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_VALUE_CHANGED);
     }

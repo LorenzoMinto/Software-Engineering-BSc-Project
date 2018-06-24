@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -55,6 +56,7 @@ public class SagradaSceneController extends View implements Initializable {
     //DRAFTPOOL DISPLAY
     @FXML private FlowPane draftPoolPane;
     @FXML private HBox currentDraftedPane;
+    @FXML private ChoiceBox diceValuePicker;
 
     private Button selectedDiceButton = null;
     private Dice selectedTrackDice = null;
@@ -141,7 +143,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     //IMAGES
     private String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
-    private String trackPath = "src/main/resources/images/track.jpg";
+    private String trackPath = "src/main/resources/images/Track.jpg";
 
 
 // DO NOT DELETE THIS COMMENT
@@ -152,6 +154,9 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        diceValuePicker.getItems().addAll("1","2","3","4","5", "6");
+        diceValuePicker.setDisable(true);
 
         Image cardsCarouselDefaultCardImage = getImageFromPath("src/main/resources/images/CardsBack.jpg");
 
@@ -358,12 +363,12 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleAddedEvent() {
+    void handleAddedEvent(Message m) {
 
     }
 
     @Override
-    void handleRemovedEvent() {
+    void handleRemovedEvent(Message m) {
 
     }
 
@@ -391,8 +396,10 @@ public class SagradaSceneController extends View implements Initializable {
                 handleDecrementDraftedDiceMove();
                 break;
             case CHANGE_DRAFTED_DICE_VALUE:
+                handleChangeDraftedDiceValueMove();
                 break;
             case CHOOSE_DICE_FROM_TRACK:
+                handleTrackButtonPressedEvent();
                 break;
             case MOVE_DICE:
                 handleMoveDiceMove();
@@ -453,7 +460,7 @@ public class SagradaSceneController extends View implements Initializable {
         if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
             cardCarouselCurrentIndex = 0;
 
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0).copy())));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
             Platform.runLater(() -> {
                 disable(toolCardsVisibleComponents);
                 disableBlackAnchorPane();
@@ -468,7 +475,7 @@ public class SagradaSceneController extends View implements Initializable {
         if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
             cardCarouselCurrentIndex = 1;
 
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1).copy())));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
             Platform.runLater(() -> {
                 disable(toolCardsVisibleComponents);
                 disableBlackAnchorPane();
@@ -481,7 +488,7 @@ public class SagradaSceneController extends View implements Initializable {
         if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
             cardCarouselCurrentIndex = 2;
 
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2).copy())));
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
             Platform.runLater(() -> {
                 disable(toolCardsVisibleComponents);
                 disableBlackAnchorPane();
@@ -534,7 +541,13 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleChangeDraftedDiceValueMove() {
-
+        if (diceValuePicker.getValue() == null) {
+            errorMessage("You have to choose a new value for the dice.");
+        } else {
+            int newDiceValue = Integer.parseInt((String) diceValuePicker.getValue());
+            sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value", newDiceValue)));
+            diceValuePicker.setDisable(true);
+        }
     }
 
     @Override
@@ -684,7 +697,6 @@ public class SagradaSceneController extends View implements Initializable {
             }
         });
     }
-
 
 
     public void handleTrackButtonPressedEvent(){
@@ -899,6 +911,8 @@ public class SagradaSceneController extends View implements Initializable {
             if (getPermissions().contains(Move.MOVE_DICE)) {
                 userWindowPatternView.enableMoveSelection(true);
                 System.out.println("Move selection enabled.");
+            } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
+                diceValuePicker.setDisable(false);
             }
         });
     }

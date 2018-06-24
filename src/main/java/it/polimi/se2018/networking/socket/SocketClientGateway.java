@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Gateway used by client to send messages to server.
@@ -14,6 +15,16 @@ import java.net.Socket;
  * @author Federico Haag
  */
 public final class SocketClientGateway extends Thread implements SenderInterface, SocketReceiverInterface {
+
+    /**
+     * String used as NetworkingException message when an IOException happens sending a message
+     */
+    private static final String FAILED_SENDING_MESSAGE = "Failed sending message from SocketClientGateway due to IOException";
+
+    /**
+     * String used as BadBehaviourRuntimeException message (called through fail()) when something throws an exception in run()
+     */
+    private static final String EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM = "Exception thrown opening socket or reading from stream";
 
     /**
      * Output stream for sending messages to server
@@ -71,7 +82,7 @@ public final class SocketClientGateway extends Thread implements SenderInterface
             this.out.reset();
             this.out.writeObject(message);
         } catch (IOException e) {
-            throw new NetworkingException("Failed sending message from SocketClientGateway due to IOException");
+            throw new NetworkingException(FAILED_SENDING_MESSAGE);
         }
     }
 
@@ -88,21 +99,39 @@ public final class SocketClientGateway extends Thread implements SenderInterface
 
     @Override
     public void run() {
-        try(Socket echoSocket = new Socket(this.hostName, this.portNumber)){
-            this.out = new ObjectOutputStream(echoSocket.getOutputStream());
-            this.out.flush();
+        //noinspection InfiniteLoopStatement
+        while(true){
+            try (Socket echoSocket = new Socket(this.hostName, this.portNumber)) {
+                this.out = new ObjectOutputStream(echoSocket.getOutputStream());
+                this.out.flush();
 
-            ObjectInputStream in;
-            in = new ObjectInputStream(echoSocket.getInputStream());
-            this.running = true;
+                ObjectInputStream in;
+                in = new ObjectInputStream(echoSocket.getInputStream());
+                this.running = true;
 
-            //noinspection InfiniteLoopStatement
-            while(true){
-                receiveMessage((Message) in.readObject(),null);
+                this.client.updateConnectionStatus(true);
+
+                //noinspection InfiniteLoopStatement
+                while (true) {
+                    receiveMessage((Message) in.readObject(), null);
+                }
+
+            } catch (SocketException e) {
+                this.client.updateConnectionStatus(false);
+                //will retry to fix the error re running the previous code
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
+                return;
             }
 
-        } catch(Exception e){
-            this.client.fail("Exception thrown opening socket or reading from stream");
+            try {
+                sleep(1000);
+            } catch (InterruptedException e1) {
+                this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }

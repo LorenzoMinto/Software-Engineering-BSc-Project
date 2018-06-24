@@ -34,7 +34,7 @@ public abstract class View implements Observer {
     private static final String YOU_HAVE_JOINED_THE_WAITING_ROOM = "You have joined the waiting room";
     private static final String REMOVED_FROM_GAME = "You were successfully disconnected from the game";
     private static final String A_PLAYER_BECAME_INACTIVE = " has become inactive. Their turns will be skipped.";
-    private static final String BACK_TO_GAME = "You are back in the game, now.";
+    private static final String BACK_TO_GAME = "Welcome back";
     private static final String YOU_ARE_NOW_INACTIVE = "You were disconnected from the game for inactivity. Your turns will be skipped.";
     private static final String FAILED_SETUP_GAME = "Initial game setup failed. You could face crucial issues playing.";
     private static final String FAILED_SETUP_ROUND = "New round setup failed. You could face crucial issues playing.";
@@ -55,6 +55,9 @@ public abstract class View implements Observer {
     private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
     private static final String THE_GAME_IS_STARTED = "The game started!";
     private static final String ERROR_SENDING_MESSAGE = "Error sending message: ";
+    private static final String PROBLEMS_WITH_CONNECTION = "There are some problems with connection. Check if it depends on you, if not wait or restart game.";
+    private static final String CONNECTION_RESTORED = "Connection restored!";
+    private static final String THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID = "The action you just performed was not valid.";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -62,7 +65,7 @@ public abstract class View implements Observer {
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
      */
-    //Note: this strings are strictly connected with the ones used in Controller and Model. DO NOT CHANGE!
+    //Note: this strings are strictly connected with the ones used in Controller and Model. DO NOT CHANGE THEM!
     private static final String PARAM_PLAYER = "player";
     private static final String PARAM_MESSAGE = "message";
     private static final String PARAM_DRAWN_TOOL_CARDS = "drawnToolCards";
@@ -83,12 +86,21 @@ public abstract class View implements Observer {
     private static final String PARAM_DRAFTED_DICE = "draftedDice";
 
 
+    // CONSTANTS USED AS MESSAGE OF EXCEPTIONS
+    private static final String CANT_TAKE_PERMISSIONS_IF_STORED_PERMISSIONS_SET_IS_NULL = "Can't take permissions if set is null";
+
+
     // CONFIGURATION INFORMATION
 
     /**
      * Set of moves that the player can do with this view
      */
     private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
+
+    /**
+     * Permissions before connection lost
+     */
+    private EnumSet<Move> storedPermissions = null;
 
     /**
      * State of the view: becomes "inactive" when player is marked from server as "inactive"
@@ -100,7 +112,10 @@ public abstract class View implements Observer {
      */
     private SenderInterface client;
 
-
+    /**
+     * List of messages that are being handled
+     */
+    List<Message> handlingMessages = new ArrayList<>();
 
     // COPIES OF GAME INFORMATION TO GRAPHICALLY REPRESENT THEM
 
@@ -175,7 +190,10 @@ public abstract class View implements Observer {
      */
     List<RankingRecord> rankings;
 
-
+    /**
+     * True if view was in "INACTIVE" state before loosing connection
+     */
+    private boolean wasInactiveBeforeConnectionDrop = false;
 
     // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
 
@@ -320,7 +338,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Game ended"
      */
-    private void handleGameEndedEvent(){
+    private void handleGameEndedEvent(Message m){
         showMessage(THE_GAME_IS_ENDED);
     }
 
@@ -340,6 +358,8 @@ public abstract class View implements Observer {
 
         if(!err.equals("")){
             errorMessage(err);
+        } else {
+            errorMessage(THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID);
         }
     }
 
@@ -442,7 +462,30 @@ public abstract class View implements Observer {
         }
     }
 
+
     //Following methods are extended or overridden by CLI and/or GUI
+
+    /**
+     * Handles the event "Connection Lost"
+     */
+    void handleConnectionLostEvent(Message m){
+        showMessage(PROBLEMS_WITH_CONNECTION);
+        this.wasInactiveBeforeConnectionDrop = this.state == ViewState.INACTIVE;
+        changeStateTo(ViewState.DISCONNECTED);
+    }
+
+    /**
+     * Handles the event "Connection Restored"
+     */
+    void handleConnectionRestoredEvent(){
+        showMessage(CONNECTION_RESTORED);
+        changeStateTo( (this.wasInactiveBeforeConnectionDrop) ? ViewState.INACTIVE : ViewState.ACTIVE );
+
+        //Handles again messages that did not ended handling due to connection drop
+        for(Message message : this.handlingMessages){
+            handleMessage(message);
+        }
+    }
 
     /**
      * Handles the event "Give Window Pattern"
@@ -463,14 +506,14 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Added to the waiting room"
      */
-    void handleAddedEvent(){
+    void handleAddedEvent(Message m){
         showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM);
     }
 
     /**
      * Handles the event "Removed from the waiting room"
      */
-    void handleRemovedEvent(){
+    void handleRemovedEvent(Message m){
         showMessage(REMOVED_FROM_GAME);
     }
 
@@ -487,7 +530,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Back to game"
      */
-    void handleBackToGameEvent(){
+    void handleBackToGameEvent(Message m){
         changeStateTo(ViewState.ACTIVE);
         showMessage(BACK_TO_GAME);
     }
@@ -495,7 +538,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "You are inactive"
      */
-    void handleInactiveEvent(){
+    void handleInactiveEvent(Message m){
         changeStateTo(ViewState.INACTIVE);
         showMessage(YOU_ARE_NOW_INACTIVE);
     }
@@ -684,7 +727,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "It is now your turn"
      */
-    void handleYourTurnEvent() {
+    void handleYourTurnEvent(Message m) {
         showMessage(ITS_YOUR_TURN);
     }
 
@@ -692,28 +735,28 @@ public abstract class View implements Observer {
      * Handles the event "Bad Formatted". It is received when some previous message
      * sent to server was bad formatted or contained unexpected data.
      */
-    void handleBadFormattedEvent() {
+    void handleBadFormattedEvent(Message m) {
         showMessage(ERROR_MOVE);
     }
 
     /**
      * Handles the event "Can't join waiting room because players limit has been reached"
      */
-    void handleDeniedLimitEvent() {
+    void handleDeniedLimitEvent(Message m) {
         showMessage(MAX_PLAYERS_ERROR);
     }
 
     /**
      * Handles the event "Can't join waiting room because your requested nickname is already used in this game"
      */
-    void handleDeniedNicknameEvent() {
+    void handleDeniedNicknameEvent(Message m) {
         showMessage(NICKNAME_ALREADY_USED_ERROR);
     }
 
     /**
      * Handles the event "Can't join because game is already running"
      */
-    void handleDeniedPlayingEvent() {
+    void handleDeniedPlayingEvent(Message m) {
         showMessage(ALREADY_PLAYING_ERROR);
     }
 
@@ -781,7 +824,6 @@ public abstract class View implements Observer {
         showMessage(YOU_HAVE_DRAFTED +mDraftedDice);
     }
 
-
     // NOTIFY METHODS
 
     /**
@@ -846,30 +888,79 @@ public abstract class View implements Observer {
      */
     private void receiveMessage(Message m){
 
-        if( state==ViewState.INACTIVE ){
-            parseMessageOnInactiveState(m);
-        } else {
-            parseMessageOnActiveState(m);
+        addHandlingMessage(m);
+
+        handleMessage(m);
+    }
+
+    /**
+     * Handles a message and calls relative handle method
+     * @param m the message to handle
+     */
+    private void handleMessage(Message m){
+        switch (state) {
+            case INACTIVE:
+                handleMessageOnInactiveState(m);
+                break;
+            case ACTIVE:
+                handleMessageOnActiveState(m);
+                break;
+            case DISCONNECTED:
+                handleMessageOnDisconnectedState(m);
+                break;
         }
     }
 
     /**
-     * Parse the received message if the current view state is "INACTIVE"
+     * Adds the given message to the handling messages list
+     * @param message the message to be added
+     */
+    private void addHandlingMessage(Message message){
+        this.handlingMessages.add(message);
+    }
+
+    /**
+     * Remove the given message to the handling messages list
+     * @param message the message to be removed
+     */
+    void removeHandlingMessage(Message message){
+        this.handlingMessages.remove(message);
+    }
+
+    /**
+     * Handles the received message if the current view state is "DISCONNECTED"
      * @param m the received message
      */
-    private void parseMessageOnInactiveState(Message m){
+    private void handleMessageOnDisconnectedState(Message m){
+
+        ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
+
+        if (type == ViewBoundMessageType.CONNECTION_RESTORED) {
+            handleConnectionRestoredEvent();
+        }
+        //No other messages are evaluated in this state
+    }
+
+    /**
+     * Handles the received message if the current view state is "INACTIVE"
+     * @param m the received message
+     */
+    private void handleMessageOnInactiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
         switch (type) {
             case BACK_TO_GAME:
-                handleBackToGameEvent();
+                handleBackToGameEvent(m);
                 break;
             case GAME_ENDED:
-                handleGameEndedEvent();
+                handleGameEndedEvent(m);
                 break;
             case RANKINGS:
                 handleRankingsEvent(m);
+                break;
+            case CONNECTION_LOST:
+                handleConnectionLostEvent(m);
                 break;
             default:
                 //No other messages are evaluated in this state
@@ -878,12 +969,13 @@ public abstract class View implements Observer {
     }
 
     /**
-     * Parse the received message if the current view state is "ACTIVE"
+     * Handles the received message if the current view state is "ACTIVE"
      * @param m the received message
      */
-    private void parseMessageOnActiveState(Message m){
+    private void handleMessageOnActiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
+        System.out.println("RECEIVED:"+type.toString());
 
         switch (type) {
             case ERROR_MESSAGE:
@@ -896,13 +988,13 @@ public abstract class View implements Observer {
                 handleInactivePlayerEvent(m);
                 break;
             case YOU_ARE_INACTIVE:
-                handleInactiveEvent();
+                handleInactiveEvent(m);
                 break;
             case DISTRIBUTION_OF_WINDOW_PATTERNS:
                 handleGiveWindowPatternsEvent(m);
                 break;
             case GAME_ENDED:
-                handleGameEndedEvent();
+                handleGameEndedEvent(m);
                 break;
             case SETUP:
                 handleSetupEvent(m);
@@ -938,31 +1030,34 @@ public abstract class View implements Observer {
                 handleSlotOfTrackChosenDice(m);
                 break;
             case IT_IS_YOUR_TURN: //needed just for setting permissions
-                handleYourTurnEvent();
+                handleYourTurnEvent(m);
                 break;
             case BAD_FORMATTED:
-                handleBadFormattedEvent();
+                handleBadFormattedEvent(m);
                 break;
             case JOIN_WR_DENIED_PLAYING:
-                handleDeniedPlayingEvent();
+                handleDeniedPlayingEvent(m);
                 break;
             case JOIN_WR_DENIED_NICKNAME:
-                handleDeniedNicknameEvent();
+                handleDeniedNicknameEvent(m);
                 break;
             case JOIN_WR_DENIED_LIMIT:
-                handleDeniedLimitEvent();
+                handleDeniedLimitEvent(m);
                 break;
             case ADDED_TO_WR:
-                handleAddedEvent();
+                handleAddedEvent(m);
                 break;
             case REMOVED_FROM_WR:
-                handleRemovedEvent();
+                handleRemovedEvent(m);
                 break;
             case PLAYER_ADDED_TO_WR:
                 handlePlayerAddedToWREvent(m);
                 break;
             case PLAYER_REMOVED_FROM_WR:
                 handlePlayerRemovedFromWREvent(m);
+                break;
+            case CONNECTION_LOST:
+                handleConnectionLostEvent(m);
                 break;
             default:
                 //No other messages are evaluated in this state
@@ -1011,14 +1106,28 @@ public abstract class View implements Observer {
      * @param state the state to be setted as current one
      */
     private void changeStateTo(ViewState state){
+        if(state!=this.state) {
+            switch (state) {
+                case INACTIVE:
+                    setPermissions(EnumSet.of(Move.BACK_GAME));
+                    break;
 
-        if(state==ViewState.INACTIVE){
-            setPermissions(EnumSet.of(Move.BACK_GAME));
-        } else {
-            setPermissions(EnumSet.noneOf(Move.class));
+                case ACTIVE:
+                    if (this.state == ViewState.DISCONNECTED) {
+                        setPermissions( takeOldPermissions() );
+                    } else {
+                        setPermissions(EnumSet.noneOf(Move.class));
+                    }
+                    break;
+
+                case DISCONNECTED:
+                    storePermissions();
+                    setPermissions(EnumSet.noneOf(Move.class));
+                    break;
+            }
+
+            this.state = state;
         }
-
-        this.state = state;
     }
 
     @Override
@@ -1055,6 +1164,15 @@ public abstract class View implements Observer {
         return manager.getPrivateObjectiveCard();
     }
 
+    private EnumSet<Move> takeOldPermissions(){
+        if(this.storedPermissions==null){
+            throw new BadBehaviourRuntimeException(CANT_TAKE_PERMISSIONS_IF_STORED_PERMISSIONS_SET_IS_NULL);
+        } else {
+            EnumSet<Move> temp = this.storedPermissions;
+            this.storedPermissions = null;
+            return temp;
+        }
+    }
 
     /*  SETTERS
         The following methods are not commented because they are self explaining
@@ -1073,8 +1191,14 @@ public abstract class View implements Observer {
      * @see View#permissions
      */
     public void setPermissions(Set<Move> permissions) {
-        this.permissions = (EnumSet<Move>)permissions;
+        this.permissions = (EnumSet<Move>) permissions;
         notifyPermissionsChanged();
+    }
+
+    private void storePermissions(){
+        if(this.storedPermissions == null){
+            this.storedPermissions = (EnumSet<Move>) getPermissions();
+        }
     }
 
     /**

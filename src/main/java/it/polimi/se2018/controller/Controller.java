@@ -133,6 +133,10 @@ public class Controller extends Observable {
      */
     private HashSet<String> inactivePlayers = new HashSet<>();
 
+    /**
+     * Set of players that are disconnected due to connection lost and before that they were inactive
+     */
+    private HashSet<String> inactiveDisconnectedPlayers = new HashSet<>();
 
     /**
      *
@@ -435,8 +439,25 @@ public class Controller extends Observable {
     protected boolean setActiveToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
-        if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDrafted()){
+        if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()){
             return false;
+        }
+
+        //check if card has some timing constraint
+        switch (toolCard.getTitle()) {
+            case "Glazing Hammer": //second turn before drafting only
+                if (game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced() ||  //or is player's first turn in the round
+                        game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                    return false;
+                }
+                break;
+            case "Running Pliers": //first turn only
+                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                    return false;
+                }
+                break;
+            default:
+                break;
         }
 
         Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
@@ -758,4 +779,29 @@ public class Controller extends Observable {
         return Integer.parseInt( this.properties.getProperty(p) );
     }
 
+
+    /**
+     * Called by server when a player loose connection
+     * @param playerID the player id of the player who lost connection
+     */
+    public void playerLostConnection(String playerID){
+        if(this.inactivePlayers.add(playerID)){
+            this.inactiveDisconnectedPlayers.add(playerID);
+        }
+    }
+
+    /**
+     * Called by server when a player restore its connection
+     * @param playerID the player id of the player who restored its connection
+     */
+    public void playerRestoredConnection(String playerID){
+        if(this.inactivePlayers.contains(playerID)){
+            if(this.inactiveDisconnectedPlayers.contains(playerID)){
+                this.inactiveDisconnectedPlayers.remove(playerID);
+                //player is not removed from inactive ones because it was so before loosing connection
+            } else {
+                this.inactivePlayers.remove(playerID);
+            }
+        }
+    }
 }

@@ -13,6 +13,11 @@ import java.io.*;
 public final class SocketClientProxy implements ClientProxyInterface {
 
     /**
+     * String used as message of NetworkingException in receiveMessage()
+     */
+    private static final String IOEXCEPTION_THROWN = "IOException thrown writing in socket stream during receiveMessage method call";
+
+    /**
      * Stream were to write to send a message to the former client
      */
     private ObjectOutputStream stream;
@@ -30,7 +35,7 @@ public final class SocketClientProxy implements ClientProxyInterface {
         try {
             this.stream.writeObject(message);
         } catch (IOException e) {
-            throw new NetworkingException("IOException thrown writing in socket stream during receiveMessage method call");
+            throw new NetworkingException(IOEXCEPTION_THROWN);
         }
     }
 }
