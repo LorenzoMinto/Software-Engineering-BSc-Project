@@ -14,7 +14,14 @@ import java.net.SocketException;
  *
  * @author Federico Haag
  */
-public final class SocketClientGateway extends Thread implements SenderInterface, SocketReceiverInterface {
+public final class SocketClientGateway extends Thread implements ClientInterface, SocketReceiverInterface {
+
+    /**
+     * When connection drops, this class try to fix it resetting params. This operation
+     * is made in infinite loop until connection is restored.
+     * This int value is milliseconds of wait between one reset and the next one.
+     */
+    private static final int WAIT_TIME_FOR_RETRYING_CONNECTION_FIX = 1000;
 
     /**
      * String used as NetworkingException message when an IOException happens sending a message
@@ -87,6 +94,14 @@ public final class SocketClientGateway extends Thread implements SenderInterface
     }
 
     @Override
+    public void fixConnection() {
+        /*  Connection should already be in fixing mode because
+            run() loop of this thread, should have catched
+            the Socket Exception before the sending of message.
+         */
+    }
+
+    @Override
     public void receiveMessage(Message message, SocketClientProxy sender) {
 
         client.notify(message); //client doesn't directly answer to server's messages so it is unnecessary sender
@@ -109,7 +124,7 @@ public final class SocketClientGateway extends Thread implements SenderInterface
                 in = new ObjectInputStream(echoSocket.getInputStream());
                 this.running = true;
 
-                this.client.updateConnectionStatus(true);
+                this.client.setConnectionAvailable(true);
 
                 //noinspection InfiniteLoopStatement
                 while (true) {
@@ -117,17 +132,16 @@ public final class SocketClientGateway extends Thread implements SenderInterface
                 }
 
             } catch (SocketException e) {
-                this.client.updateConnectionStatus(false);
+                this.client.setConnectionAvailable(false);
                 //will retry to fix the error re running the previous code
 
             } catch (Exception e) {
-                e.printStackTrace();
                 this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
                 return;
             }
 
             try {
-                sleep(1000);
+                sleep(WAIT_TIME_FOR_RETRYING_CONNECTION_FIX);
             } catch (InterruptedException e1) {
                 this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
                 Thread.currentThread().interrupt();

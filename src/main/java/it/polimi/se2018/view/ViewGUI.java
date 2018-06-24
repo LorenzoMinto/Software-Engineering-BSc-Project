@@ -2,6 +2,7 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
 import javafx.application.Application;
@@ -107,10 +108,18 @@ public class ViewGUI extends Application {
             //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
             @Override
             public void handle(ActionEvent e) {
-                sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
-                        serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
+                try {
+                    sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
+                            serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
+                } catch (NetworkingException e1) {
+                    //TODO: implementa gestione di parametri errati (o comunque connessione fallita)
+                }
                 sagradaSceneController.setPlayer(userTextField.getText());
-                sagradaSceneController.sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",userTextField.getText())));
+                try {
+                    sagradaSceneController.sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",userTextField.getText())));
+                } catch (NetworkingException e1) {
+                    //TODO: implementa
+                }
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
             }

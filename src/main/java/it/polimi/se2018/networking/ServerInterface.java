@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking;
 
-public interface ConnectionHandler {
+public interface ServerInterface {
 
     /**
      * Method called when the connection is lost

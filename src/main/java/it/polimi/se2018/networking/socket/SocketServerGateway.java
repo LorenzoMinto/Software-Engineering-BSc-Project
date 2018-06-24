@@ -1,7 +1,7 @@
 package it.polimi.se2018.networking.socket;
 
 import it.polimi.se2018.networking.ClientProxyInterface;
-import it.polimi.se2018.networking.ConnectionHandler;
+import it.polimi.se2018.networking.ServerInterface;
 import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.networking.Server;
 import it.polimi.se2018.utils.Message;
@@ -13,7 +13,7 @@ import it.polimi.se2018.utils.Message;
  * @author Federico Haag
  * @author Jacopo Pio Gargano
  */
-public final class SocketServerGateway implements SocketReceiverInterface, ConnectionHandler {
+public final class SocketServerGateway implements SocketReceiverInterface, ServerInterface {
 
     /**
      * Remote client that receives messages

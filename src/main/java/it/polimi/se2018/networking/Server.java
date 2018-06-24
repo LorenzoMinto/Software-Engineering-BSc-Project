@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * Server
  * @author Federico Haag
  */
-public class Server implements Observer, SenderInterface, ConnectionHandler{
+public class Server implements Observer, SenderInterface, ServerInterface {
 
     /**
      * Name of the default config file
@@ -151,6 +151,16 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
     private final Controller controller;
 
     /**
+     * Gateways that are disconnected
+     */
+    private List<ClientProxyInterface> disconnectedGateways = new ArrayList<>();
+
+    /**
+     * Queue of all messages that were not sent due to connection problems
+     */
+    private HashMap<ClientProxyInterface,List<Message>> unSentMessages = new HashMap<>();
+
+    /**
      * The main class for server in order to make it runnable.
      *
      * @param args arguments passed by command line
@@ -216,6 +226,8 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
         //Creates controller and game
         this.controller = createController();
         this.controller.register(this);
+
+        new Pinging(this,ViewBoundMessageType.PING).start();
     }
 
     /**
@@ -282,12 +294,14 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
         Message returnMessage;
-        if(type==ControllerBoundMessageType.JOIN_WR || type==ControllerBoundMessageType.LEAVE_WR){
+        if(type==ControllerBoundMessageType.PING){
+            return;
+        } else if(type==ControllerBoundMessageType.JOIN_WR || type==ControllerBoundMessageType.LEAVE_WR){
             returnMessage = handleWaitingRoomMessage(message,sender);
 
         } else {
             message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
-            returnMessage = controller.handleMove(message);
+            returnMessage = controller.handleMoveMessage(message);
         }
 
         //Send answer message back to the sender
@@ -445,10 +459,11 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
         this.serverState = ServerState.FORWARDING_TO_CONTROLLER;
         //Add ReceiverInterfaces of players to gateways that will manage the bi-directional communication during game
         gateways.addAll(waitingList.values());
-        //Map players id with gateway and vice versa
+        //Map players id with gateway and vice versa, plus creates unSentMessages map
         playerIDToGatewayMap.putAll(waitingList);
         for(Map.Entry<String, ClientProxyInterface> entry : playerIDToGatewayMap.entrySet()){
             gatewayToPlayerIDMap.put(entry.getValue(), entry.getKey());
+            unSentMessages.put(entry.getValue(),new ArrayList<>());
         }
         //Send players to controller and let it actually starting the game
         controller.launchGame(waitingList.keySet());
@@ -469,6 +484,12 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
         for(ClientProxyInterface o : g){
             int attempts = 0;
             boolean correctlySent = false;
+
+            if(disconnectedGateways.contains(o)){
+                unSentMessages.get(o).add(message);
+                continue;
+            }
+
             //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
             while(attempts< maxNumberOfAttempts && !correctlySent) {
                 attempts++;
@@ -481,15 +502,55 @@ public class Server implements Observer, SenderInterface, ConnectionHandler{
 
                 correctlySent = true;
 
-                if (LOGGER.isLoggable(Level.INFO)) {
+                if (LOGGER.isLoggable(Level.INFO) && message.getType()!=ViewBoundMessageType.PING) {
                     LOGGER.info(ATTEMPT + attempts + ": " + SUCCESSFULLY_SENT_MESSAGE_TO + ": " + o + ". " + THE_MESSAGE_WAS + ": " + message);
                 }
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
-            if(!correctlySent){ somethingFailed=true; }
+            if(!correctlySent){
+                handleDisconnectedGateway(o);
+                somethingFailed=true;
+            }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
         if(somethingFailed) throw new NetworkingException(ERROR_SENDING_MESSAGE +message);
+    }
+
+    /**
+     * Handles the disconnecting of a client
+     * @param gateway the disconnected client's gateway
+     */
+    private void handleDisconnectedGateway(ClientProxyInterface gateway){
+        this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
+        this.disconnectedGateways.add(gateway);
+
+        new Thread(()->{
+            while(true){
+                boolean restored = false;
+                try {
+                    gateway.receiveMessage(new Message(ViewBoundMessageType.PING));
+                    this.disconnectedGateways.remove(gateway);
+                    restored = true;
+                } catch (NetworkingException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+
+                if(restored){
+                    for(Message message : this.unSentMessages.get(gateway)){
+                        try {
+                            sendMessage(message);
+                        } catch (NetworkingException e) {
+                            return;
+                        }
+                    }
+                    return;
+                }
+            }
+        }).start();
     }
 
     @Override

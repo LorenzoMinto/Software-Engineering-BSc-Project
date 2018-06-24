@@ -18,5 +18,6 @@ public enum ControllerBoundMessageType {
     END_TURN,
     END_TOOLCARD_EFFECT,
     JOIN_WR,
-    LEAVE_WR
+    LEAVE_WR,
+    PING
 }

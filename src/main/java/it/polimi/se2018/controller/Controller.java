@@ -229,7 +229,7 @@ public class Controller extends Observable {
      * @param message the Message with the parameters to be analyzed and processed
      * @return an ACKNOWLEDGMENT_MESSAGE or an error message
      */
-    public Message handleMove(Message message) {
+    public Message handleMoveMessage(Message message) {
         switch(game.getStatus()){
             case WAITING_FOR_PATTERNS_CHOICE:
                 return handleMoveInWaitingForPatternsChoiceStatus(message);
