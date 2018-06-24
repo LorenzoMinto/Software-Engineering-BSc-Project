@@ -5,6 +5,7 @@ import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
 import it.polimi.se2018.networking.ConnectionType;
+import it.polimi.se2018.networking.NetworkingException;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.Message;
@@ -64,6 +65,8 @@ public class CLIView extends View{
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
     public static final String ERROR_MESSAGE = "ERROR: ";
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
+    private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
+    private static final String PORT_NUMBER_MUST_BE_A_NUMBER = "Port number must be a number";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -226,8 +229,24 @@ public class CLIView extends View{
             waitForConsoleInput(serverName -> {
                 print(INSERT_PORT_NUMBER);
                 waitForConsoleInput(portNumberString -> {
-                    int portNumber = Integer.parseInt(portNumberString);
-                    connectToRemoteServer(connectionType,serverName,portNumber);
+                    int portNumber;
+                    try {
+                        portNumber = Integer.parseInt(portNumberString);
+                    } catch (NumberFormatException e){
+                        cleanConsole();
+                        print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                        connect();
+                        return;
+                    }
+
+                    try {
+                        connectToRemoteServer(connectionType,serverName,portNumber);
+                    } catch (NetworkingException e) {
+                        cleanConsole();
+                        print(FAILED_ESTABLISHING_CONNECTION);
+                        connect();
+                        return;
+                    }
 
                     waitForMove();
                 });
@@ -474,7 +493,11 @@ public class CLIView extends View{
         waitForConsoleInput(diceIndex -> {
             int diceIndexInt = Integer.parseInt(diceIndex) - 1;
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
-                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt).copy())));
+                try {
+                    sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt).copy())));
+                } catch (NetworkingException e) {
+                    print(e.getMessage());
+                }
             } else {
                 print(INPUT_NOT_VALID);
             }
@@ -496,7 +519,11 @@ public class CLIView extends View{
                     HashMap<String,Object> params = new HashMap<>();
                     params.put(PARAM_ROW,row);
                     params.put(PARAM_COL,col);
-                    sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                    try {
+                        sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                    } catch (NetworkingException e) {
+                        print(e.getMessage());
+                    }
                 } else {
                     print(INPUT_NOT_VALID);
                 }
@@ -515,7 +542,11 @@ public class CLIView extends View{
         }
         waitForConsoleInput(toolCardIndexString -> {
             int toolCardIndex = Integer.parseInt(toolCardIndexString);
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex).copy())));
+            try {
+                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex).copy())));
+            } catch (NetworkingException e) {
+                print(e.getMessage());
+            }
             waitForMove();
         });
     }
@@ -541,7 +572,11 @@ public class CLIView extends View{
             if(diceValue<1 || diceValue>6){
                 print(INPUT_NOT_VALID);
             } else {
-                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
+                try {
+                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
+                } catch (NetworkingException e) {
+                    print(e.getMessage());
+                }
             }
             waitForMove();
         });
@@ -573,7 +608,11 @@ public class CLIView extends View{
                 params.put(PARAM_SLOT_NUMBER,trackSlotNumber);
                 params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
 
-                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                try {
+                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                } catch (NetworkingException e) {
+                    print(e.getMessage());
+                }
                 waitForMove();
             });
         });
@@ -603,7 +642,11 @@ public class CLIView extends View{
                                 params.put(PARAM_COL_FROM,col);
                                 params.put(PARAM_ROW_TO,rowDest);
                                 params.put(PARAM_COL_TO,colDest);
-                                sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                                try {
+                                    sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                                } catch (NetworkingException e) {
+                                    print(e.getMessage());
+                                }
                             } else {
                                 print(INPUT_NOT_VALID);
                             }
@@ -626,7 +669,11 @@ public class CLIView extends View{
         print(INSERT_YOUR_NICKNAME);
         waitForConsoleInput(nickname->{
             setPlayer(nickname);
-            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
+            try {
+                sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
+            } catch (NetworkingException e) {
+                print(e.getMessage());
+            }
         });
     }
 
@@ -634,18 +681,18 @@ public class CLIView extends View{
     // HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
 
     @Override
+    void handleConnectionRestoredEvent(){
+        super.handleConnectionRestoredEvent();
+        if(this.handlingMessage==null){
+            waitForMove();
+        }
+    }
+
+    @Override
     void handleConnectionLostEvent(Message m){
         super.handleConnectionLostEvent(m);
         this.currentInputConsumer = null;
         removeHandlingMessage(m);
-    }
-
-    @Override
-    void handleConnectionRestoredEvent(){
-        super.handleConnectionRestoredEvent();
-        if(this.handlingMessages.isEmpty()){
-            waitForMove();
-        }
     }
 
     @Override
@@ -664,7 +711,12 @@ public class CLIView extends View{
             int i = Integer.parseInt(s) - 1;
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
-                sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern.copy())));
+                try {
+                    sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern.copy())));
+                } catch (NetworkingException e) {
+                    print(e.getMessage());
+                    return;
+                }
             } else {
                 print(INPUT_NOT_VALID);
             }

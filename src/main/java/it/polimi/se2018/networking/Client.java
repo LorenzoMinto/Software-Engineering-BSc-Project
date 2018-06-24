@@ -10,7 +10,7 @@ import java.util.logging.*;
  * Client
  * @author Federico Haag
  */
-public class Client extends Observable implements SenderInterface {
+public class Client extends Observable implements ClientInterface {
 
     /*  CONSTANTS FOR LOGS' MESSAGES
         Following constants are not commented one by one because they are as self explaining as needed.
@@ -32,7 +32,7 @@ public class Client extends Observable implements SenderInterface {
     /**
      * String used as message of NetworkingException in case of failure sending messages
      */
-    private static final String AT_LEAST_A_MESSAGE_NOT_SET = "At least on message could not be sent from Client to Server. Message was: ";
+    private static final String CONNECTION_IS_NOT_AVAILABLE = "Connection is not available at the moment";
 
     /**
      * Logger
@@ -47,7 +47,7 @@ public class Client extends Observable implements SenderInterface {
     /**
      * Gateway for sending/receiving message to/from server
      */
-    private final SenderInterface gateway;
+    private final ClientInterface gateway;
 
     /**
      * If true, some debug messages are logged in the console
@@ -57,7 +57,12 @@ public class Client extends Observable implements SenderInterface {
     /**
      * True if connection is established. False if it dropped.
      */
-    private boolean connectionStatus = true;
+    private boolean connectionAvailable = true;
+
+    /**
+     * Pinging server
+     */
+    private final Pinging pinging = new Pinging(this,ControllerBoundMessageType.PING);
 
     /**
      * Constructor for Client
@@ -68,20 +73,17 @@ public class Client extends Observable implements SenderInterface {
      * @param view view that uses this client
      * @param debug boolean value for logging or not some debug messages
      */
-    public Client(ConnectionType type, String serverName, int port, Observer view, boolean debug) {
+    public Client(ConnectionType type, String serverName, int port, Observer view, boolean debug) throws NetworkingException {
         this.logger = createLogger();
         this.debug = debug;
 
         this.register(view);
 
-        SenderInterface g = null;
+        ClientInterface g = null;
+        boolean needsPinging = false;
         if (type == ConnectionType.RMI) {
-            try {
-                g = new RMIClientGateway(serverName, port, this);
-            } catch (NetworkingException e){
-                fail("Caught NetworkingException: Failed connecting to RMI server.");
-            }
-
+            g = new RMIClientGateway(serverName, port, this);
+            needsPinging = true;
         } else if (type == ConnectionType.SOCKET) {
             g = new SocketClientGateway(serverName, port, this);
             /*SocketClientGateway is a thread. So exception that could be thrown in it
@@ -89,6 +91,8 @@ public class Client extends Observable implements SenderInterface {
         }
 
         this.gateway = g;
+
+        if(needsPinging){ this.pinging.start(); }
 
         log(ACKNOWLEDGEMENT_MESSAGE_CONSTRUCTOR);
     }
@@ -129,6 +133,10 @@ public class Client extends Observable implements SenderInterface {
     public void sendMessage(Message message) throws NetworkingException {
         //Send message. Try sometimes if it fails. When maximum number of attempts is reached, go on next gateway
 
+        if(!this.connectionAvailable){
+            throw new NetworkingException(CONNECTION_IS_NOT_AVAILABLE);
+        }
+
         int attempts = 0;
         boolean correctlySent = false;
         while(attempts< MAX_NUMBER_OF_ATTEMPTS && !correctlySent){
@@ -146,7 +154,16 @@ public class Client extends Observable implements SenderInterface {
             log(ATTEMPT + attempts + SUCCESSFULLY_SENT_MESSAGE + gateway + ". " + THE_MESSAGE_WAS + message);
         }
         //Add failed gateway to a list that will be returned at the end of this method execution
-        if(!correctlySent){ throw new NetworkingException(AT_LEAST_A_MESSAGE_NOT_SET +message); }
+        if(!correctlySent){
+            fixConnection();
+            throw new NetworkingException(CONNECTION_IS_NOT_AVAILABLE);
+        }
+    }
+
+    @Override
+    public void fixConnection() {
+        setConnectionAvailable(false);
+        gateway.fixConnection();
     }
 
     /**
@@ -161,11 +178,12 @@ public class Client extends Observable implements SenderInterface {
      * Method is called by networking classes when the connection drop.
      * @param status true if connection is restored, false if is lost.
      */
-    public void updateConnectionStatus(boolean status){
-        if(status != this.connectionStatus){
-            this.connectionStatus = status;
+    public void setConnectionAvailable(boolean status){
+        if(status != this.connectionAvailable){
+            this.connectionAvailable = status;
             if(status){
                 notify(new Message(ViewBoundMessageType.CONNECTION_RESTORED));
+                this.pinging.restartPinging(); //if no pinging was necessary, this calls just do nothing
             } else {
                 notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
             }

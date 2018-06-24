@@ -3,10 +3,7 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.networking.Client;
-import it.polimi.se2018.networking.ConnectionType;
-import it.polimi.se2018.networking.NetworkingException;
-import it.polimi.se2018.networking.SenderInterface;
+import it.polimi.se2018.networking.*;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.utils.Message;
@@ -54,10 +51,11 @@ public abstract class View implements Observer {
     private static final String ROUND_NOW_STARTS = "# Round now starts!";
     private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
     private static final String THE_GAME_IS_STARTED = "The game started!";
-    private static final String ERROR_SENDING_MESSAGE = "Error sending message: ";
+    private static final String ERROR_SENDING_MESSAGE = "Failed sending message";
     private static final String PROBLEMS_WITH_CONNECTION = "There are some problems with connection. Check if it depends on you, if not wait or restart game.";
     private static final String CONNECTION_RESTORED = "Connection restored!";
     private static final String THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID = "The action you just performed was not valid.";
+    private static final String CANT_COMMUNICATE_WITH_SERVER = "In this moment you can't communicate with server due to connection problems";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -110,12 +108,12 @@ public abstract class View implements Observer {
     /**
      * The client that handles communication of this view
      */
-    private SenderInterface client;
+    private ClientInterface client;
 
     /**
      * List of messages that are being handled
      */
-    List<Message> handlingMessages = new ArrayList<>();
+    Message handlingMessage = null;
 
     // COPIES OF GAME INFORMATION TO GRAPHICALLY REPRESENT THEM
 
@@ -201,21 +199,33 @@ public abstract class View implements Observer {
      * Handles the move "Leave Waiting Room"
      */
     void handleLeaveWaitingRoomMove(){
-        sendMessage(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
      * Handles the move "Back to game"
      */
     void handleBackGameMove(){
-        sendMessage(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
      * Handles the move "End turn"
      */
     void handleEndTurnMove(){
-        sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
@@ -223,7 +233,11 @@ public abstract class View implements Observer {
      */
     void handleWindowPatternSelection(WindowPattern wp){
         //TODO: questo metodo non è mai usato. come mai?
-        sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
@@ -251,21 +265,33 @@ public abstract class View implements Observer {
      * Handles the move "Increment drafted dice"
      */
     void handleIncrementDraftedDiceMove(){
-        sendMessage(new Message(ControllerBoundMessageType.INCREMENT_DICE));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.INCREMENT_DICE));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
      * Handles the move "Decrement drafted dice"
      */
     void handleDecrementDraftedDiceMove(){
-        sendMessage(new Message(ControllerBoundMessageType.DECREMENT_DICE));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.DECREMENT_DICE));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
      * Handles the move "End effect"
      */
     void handleEndEffectMove(){
-        sendMessage(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
@@ -481,9 +507,9 @@ public abstract class View implements Observer {
         showMessage(CONNECTION_RESTORED);
         changeStateTo( (this.wasInactiveBeforeConnectionDrop) ? ViewState.INACTIVE : ViewState.ACTIVE );
 
-        //Handles again messages that did not ended handling due to connection drop
-        for(Message message : this.handlingMessages){
-            handleMessage(message);
+        //Handles again message that did not ended handling due to connection drop
+        if(this.handlingMessage!=null){
+            handleMessage(this.handlingMessage);
         }
     }
 
@@ -859,14 +885,11 @@ public abstract class View implements Observer {
      * Sends the given message to server
      * @param m the message to send to server
      */
-    void sendMessage(Message m){
+    void sendMessage(Message m) throws NetworkingException{
         try {
             this.client.sendMessage(m);
-        } catch (NetworkingException e) {
-            errorMessage(ERROR_SENDING_MESSAGE.concat(m.toString()));
-            //TODO: check if this must be removed in production
-        } catch (NullPointerException ex){
-            errorMessage(MUST_CONNECT);
+        } catch (Exception ex){
+            throw new NetworkingException(ex.getMessage());
         }
     }
 
@@ -904,15 +927,24 @@ public abstract class View implements Observer {
      * @param message the message to be added
      */
     private void addHandlingMessage(Message message){
-        this.handlingMessages.add(message);
+        EnumSet<ViewBoundMessageType> ignoreList = EnumSet.of(
+                ViewBoundMessageType.CONNECTION_LOST,
+                ViewBoundMessageType.CONNECTION_RESTORED,
+                ViewBoundMessageType.PING
+        );
+        if(!ignoreList.contains(message.getType())){
+            this.handlingMessage = message;
+        }
     }
 
     /**
-     * Remove the given message to the handling messages list
+     * Removes the given message to the handling messages list
      * @param message the message to be removed
      */
     void removeHandlingMessage(Message message){
-        this.handlingMessages.remove(message);
+        if(this.handlingMessage.equals(message)){
+            this.handlingMessage = null;
+        }
     }
 
     /**
@@ -963,7 +995,11 @@ public abstract class View implements Observer {
     private void handleMessageOnActiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
-        System.out.println("RECEIVED:"+type.toString());
+
+        //TODO: rimuovere in fase di produzione
+        if(type!=ViewBoundMessageType.PING){
+            System.out.println("RECEIVED:"+type.toString());
+        }
 
         switch (type) {
             case ERROR_MESSAGE:
@@ -1079,10 +1115,11 @@ public abstract class View implements Observer {
      * @param serverName the server's name
      * @param port the server's port to connect to
      */
-    void connectToRemoteServer(ConnectionType type, String serverName, int port){
+    void connectToRemoteServer(ConnectionType type, String serverName, int port) throws NetworkingException {
 
         if(client==null){ //client is effectively final
             this.client = new Client(type,serverName,port,this, false);
+
         }
     }
 

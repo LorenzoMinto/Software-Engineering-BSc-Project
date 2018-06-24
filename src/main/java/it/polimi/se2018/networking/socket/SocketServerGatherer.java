@@ -1,6 +1,6 @@
 package it.polimi.se2018.networking.socket;
 
-import it.polimi.se2018.networking.ConnectionHandler;
+import it.polimi.se2018.networking.ServerInterface;
 import it.polimi.se2018.utils.Message;
 
 import java.io.*;
@@ -82,7 +82,7 @@ public final class SocketServerGatherer extends Thread{
         //Starts a thread listening for messages
         new Thread(() -> {
 
-            SocketClientProxy SocketClientProxyBeforeConnectionDrop = null;
+            SocketClientProxy socketClientProxyBeforeConnectionDrop = null;
 
             while(true) {
 
@@ -95,7 +95,7 @@ public final class SocketServerGatherer extends Thread{
                     return;
                 }
 
-                ((ConnectionHandler)receiver).restoredConnection(SocketClientProxyBeforeConnectionDrop,socketClientAsAServer);
+                ((ServerInterface)receiver).restoredConnection(socketClientProxyBeforeConnectionDrop,socketClientAsAServer);
 
                 boolean c = true;
                 while (c) {
@@ -104,8 +104,8 @@ public final class SocketServerGatherer extends Thread{
                         message = (Message) in.readObject();
                         receiver.receiveMessage(message, socketClientAsAServer);
                     } catch (SocketException e) {
-                        ((ConnectionHandler)receiver).lostConnection(socketClientAsAServer);
-                        SocketClientProxyBeforeConnectionDrop = socketClientAsAServer;
+                        ((ServerInterface)receiver).lostConnection(socketClientAsAServer);
+                        socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
                         c = false;
                     } catch (Exception e) {
                         receiver.fail(READING_STREAM_EXCEPTION);
@@ -122,13 +122,5 @@ public final class SocketServerGatherer extends Thread{
                 }
             }
         }).start();
-    }
-
-    /**
-     * Stop the gathering loop
-     */
-    public void stopAcceptingConnections(){
-        //TODO: verificare se questo metodo è stato effettivamente utilizzato, e nel caso rimuoverlo
-        this.acceptConnections = false;
     }
 }

@@ -63,7 +63,7 @@ public class PlaceControllerStateTest {
         for (Player p : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
             params.put("windowPattern", wp);
-            controller.handleMove(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
 
         dice = game.getCurrentRound().getDraftPool().getDices().get(0);
