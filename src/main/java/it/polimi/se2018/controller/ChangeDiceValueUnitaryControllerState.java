@@ -52,6 +52,7 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
         Game game = controller.game;
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         if (currentTurn.getDraftedDice().incrementValue()) {
+            currentTurn.setDraftedDice(currentTurn.getDraftedDice());
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
             return new Message(ERROR_MESSAGE, CANNOT_INCREMENT_DRAFTED_DICE_VALUE);
@@ -65,6 +66,7 @@ public class ChangeDiceValueUnitaryControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
 
         if (currentTurn.getDraftedDice().decrementValue()) {
+            currentTurn.setDraftedDice(currentTurn.getDraftedDice());
             controller.setControllerState(controller.stateManager.getNextState(this));
         } else {
             return new Message(ERROR_MESSAGE, CANNOT_DECREMENT_DRAFTED_DICE_VALUE);

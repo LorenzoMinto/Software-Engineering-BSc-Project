@@ -26,6 +26,8 @@ public class MoveControllerStateTest {
     private ToolCard toolCard;
 
     private Dice redDice;
+    private Dice blueDice;
+
     private static final int r0 = 0;
     private static final int c0 = 0;
     private static final int r1 = 1;
@@ -61,9 +63,10 @@ public class MoveControllerStateTest {
                 pattern[i][j] = new Cell();
             }
         }
-        redDice = new Dice(DiceColor.RED);
+        redDice = new Dice(DiceColor.RED,2);
+        blueDice = new Dice(DiceColor.BLUE, 3);
         pattern[r0][c0].setDice(redDice);
-        pattern[r2][c2].setDice(redDice);
+        pattern[r2][c2].setDice(blueDice);
         WindowPattern wp = new WindowPattern("id", "title","", 5, pattern);
 
         controller.launchGame(nicknames);
@@ -104,14 +107,13 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testMoveDice() {
-        Message m = controller.controllerState.moveDice(r0,c0,r1,c1);
+        Message m = controller.controllerState.moveDice(r2,c2,r0,c1);
 
         Player player = controller.game.getCurrentRound().getCurrentTurn().getPlayer();
         WindowPattern wp = player.getWindowPattern();
 
-        //TODO: lorenzo
-        assertNull(wp.getDiceOnCell(r0,c0));
-        assertEquals(redDice, wp.getDiceOnCell(r1,c1));
+        assertNull(wp.getDiceOnCell(r2,c2));
+        assertEquals(blueDice, wp.getDiceOnCell(r0,c1));
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 

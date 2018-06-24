@@ -126,9 +126,9 @@ public class StartControllerStateTest {
 
         Message m = controller.controllerState.useToolCard(toolCard);
 
+        System.out.println(m);
+
         assertEquals(toolCard, controller.getActiveToolCard());
-        //TODO: lorenzo
-        assertEquals(controller.placementRule, toolCard.getPlacementRule());
         assertTrue(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }

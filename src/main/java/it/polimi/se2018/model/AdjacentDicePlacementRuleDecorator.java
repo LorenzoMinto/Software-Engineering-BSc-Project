@@ -53,6 +53,9 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
      * @see AdjacentColorPlacementRuleDecorator for formal rule.
      */
     private boolean checkAdjacentDiceConstraints(WindowPattern windowPattern, int row, int col){
+        if (windowPattern.isEmpty()) {
+            return true;
+        }
         Cell[][] pattern = windowPattern.getPattern();
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();

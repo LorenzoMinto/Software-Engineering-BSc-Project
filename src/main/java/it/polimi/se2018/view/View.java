@@ -963,6 +963,7 @@ public abstract class View implements Observer {
     private void handleMessageOnActiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
+        System.out.println("RECEIVED:"+type.toString());
 
         switch (type) {
             case ERROR_MESSAGE:
