@@ -217,7 +217,15 @@ public class CLIView extends View{
         }
 
         waitForConsoleInput(connectionTypeString -> {
-            int connectionTypeInt = Integer.parseInt(connectionTypeString) - 1;
+            int connectionTypeInt;
+            try {
+                connectionTypeInt = Integer.parseInt(connectionTypeString) - 1;
+            } catch(NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                connect();
+                return;
+            }
             if( connectionTypeInt >= ConnectionType.values().length){
                 connect();
                 return;
@@ -491,7 +499,16 @@ public class CLIView extends View{
         }
         print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_DRAFT);
         waitForConsoleInput(diceIndex -> {
-            int diceIndexInt = Integer.parseInt(diceIndex) - 1;
+            int diceIndexInt;
+            try {
+                diceIndexInt = Integer.parseInt(diceIndex) - 1;
+            } catch(NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleDraftDiceFromDraftPoolMove();
+                return;
+            }
+
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
                 try {
                     sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt).copy())));
@@ -511,10 +528,26 @@ public class CLIView extends View{
         super.handlePlaceDiceOnWindowPatternMove();
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN);
         waitForConsoleInput(rowString -> {
-            int row = Integer.parseInt(rowString) - 1;
+            int row;
+            try {
+                row = Integer.parseInt(rowString) - 1;
+            } catch(NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handlePlaceDiceOnWindowPatternMove();
+                return;
+            }
             print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN);
             waitForConsoleInput(colString -> {
-                int col = Integer.parseInt(colString) - 1;
+                int col;
+                try{
+                    col = Integer.parseInt(colString) - 1;
+                } catch(NumberFormatException e){
+                    cleanConsole();
+                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    handlePlaceDiceOnWindowPatternMove();
+                    return;
+                }
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
                     HashMap<String,Object> params = new HashMap<>();
                     params.put(PARAM_ROW,row);
@@ -541,7 +574,15 @@ public class CLIView extends View{
             index++;
         }
         waitForConsoleInput(toolCardIndexString -> {
-            int toolCardIndex = Integer.parseInt(toolCardIndexString);
+            int toolCardIndex;
+            try {
+                toolCardIndex = Integer.parseInt(toolCardIndexString);
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleUseToolCardMove();
+                return;
+            }
             try {
                 sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex).copy())));
             } catch (NetworkingException e) {
@@ -568,7 +609,15 @@ public class CLIView extends View{
         super.handleChangeDraftedDiceValueMove();
         print(INSERT_THE_VALUE_YOU_WANT_TO_ASSIGN_TO_THE_DRAFTED_DICE);
         waitForConsoleInput(diceValueString->{
-            int diceValue = Integer.parseInt(diceValueString);
+            int diceValue;
+            try {
+                diceValue = Integer.parseInt(diceValueString);
+            } catch(NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleChangeDraftedDiceValueMove();
+                return;
+            }
             if(diceValue<1 || diceValue>6){
                 print(INPUT_NOT_VALID);
             } else {
@@ -594,7 +643,15 @@ public class CLIView extends View{
         }
         print(INSERT_THE_NUMBER_OF_SLOT_YOU_WANT_TO_DRAFT_THE_DICE_FROM);
         waitForConsoleInput(trackSlotNumberString->{
-            int trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
+            int trackSlotNumber;
+            try {
+                trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleChooseDiceFromTrackMove();
+                return;
+            }
             print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK);
             int index = 1;
             for(Dice dice : track.getDicesFromSlotNumber(trackSlotNumber)){
@@ -602,8 +659,16 @@ public class CLIView extends View{
                 index++;
             }
             waitForConsoleInput(choosenDiceIndexString->{
-                int chosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
-
+                int chosenDiceIndex;
+                try {
+                    chosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
+                } catch(NumberFormatException e){
+                    cleanConsole();
+                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    connect();
+                    handleChooseDiceFromTrackMove();
+                    return;
+                }
                 HashMap<String,Object> params = new HashMap<>();
                 params.put(PARAM_SLOT_NUMBER,trackSlotNumber);
                 params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
@@ -624,18 +689,50 @@ public class CLIView extends View{
         super.handleMoveDiceMove();
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
         waitForConsoleInput(rowString -> {
-            int row = Integer.parseInt(rowString) - 1;
+            int row;
+            try {
+                row = Integer.parseInt(rowString) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleMoveDiceMove();
+                return;
+            }
             print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1);
             waitForConsoleInput(colString -> {
-                int col = Integer.parseInt(colString) - 1;
+                int col;
+                try{
+                    col = Integer.parseInt(colString) - 1;
+                } catch (NumberFormatException e){
+                    cleanConsole();
+                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    handleMoveDiceMove();
+                    return;
+                }
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
 
                     print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
                     waitForConsoleInput(rowDestString -> {
-                        int rowDest = Integer.parseInt(rowDestString) - 1;
+                        int rowDest;
+                        try{
+                            rowDest = Integer.parseInt(rowDestString) - 1;
+                        } catch (NumberFormatException e){
+                            cleanConsole();
+                            print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                            handleMoveDiceMove();
+                            return;
+                        }
                         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1);
                         waitForConsoleInput(colDestString -> {
-                            int colDest = Integer.parseInt(colDestString) - 1;
+                            int colDest;
+                            try{
+                                colDest = Integer.parseInt(colDestString) - 1;
+                            } catch (NumberFormatException e){
+                                cleanConsole();
+                                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                                handleMoveDiceMove();
+                                return;
+                            }
                             if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
                                 HashMap<String,Object> params = new HashMap<>();
                                 params.put(PARAM_ROW_FROM,row);
@@ -708,7 +805,15 @@ public class CLIView extends View{
         }
         print(INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE);
         waitForConsoleInput(s -> {
-            int i = Integer.parseInt(s) - 1;
+            int i;
+            try{
+                i = Integer.parseInt(s) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                handleGiveWindowPatternsEvent(m);
+                return;
+            }
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 try {
