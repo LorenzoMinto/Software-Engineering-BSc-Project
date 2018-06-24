@@ -9,6 +9,6 @@
     <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
     <controllerStateRule prevState="DraftControllerState" nextState="SwitchDraftedWithBagControllerState" />
     <controllerStateRule prevState="SwitchDraftedWithBagControllerState" nextState="ChangeDiceValueControllerState" />
-    <controllerStateRule prevState="ChangeDiceValueControllerState" nextState="PlaceControllerState" />
-    <controllerStateRule prevState="PlaceControllerState" nextState="EndControllerState" />
+    <controllerStateRule prevState="ChangeDiceValueControllerState" nextState="PlaceOrReturnControllerState" />
+    <controllerStateRule prevState="PlaceOrReturnControllerState" nextState="EndControllerState" />
 </toolcard>

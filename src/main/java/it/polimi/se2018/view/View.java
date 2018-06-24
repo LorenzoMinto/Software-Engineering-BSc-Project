@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
@@ -172,9 +173,9 @@ public abstract class View implements Observer {
     WindowPattern windowPattern;
 
     /**
-     * Window Patterns of players
+     * Window Patterns of players.
      */
-    List<WindowPattern> windowPatterns; //TODO: contiene anche il proprio? scrivi risposta in javadoc
+    List<WindowPattern> windowPatterns;
 
     /**
      * The private objective card that has been given to the player at the beginning of the game
@@ -285,6 +286,13 @@ public abstract class View implements Observer {
      */
     void handleChangeDraftedDiceValueMove(){
         //TODO: implement
+    }
+
+    /**
+     * Handles the move "Return drafted dice to draft pool"
+     */
+    void handleReturnDiceFromTrackMove() {
+        sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
     }
 
     /**
@@ -845,16 +853,25 @@ public abstract class View implements Observer {
      * @param m the message containing drafted dice information
      */
     void handleDraftedDiceEvent(Message m) {
-        Object o;
-        try {
-            o = m.getParam(PARAM_DRAFTED_DICE);
-        } catch (NoSuchParamInMessageException e) {
-            return;
+        boolean reset = false;
+        try {  //drafted dice changed to null update
+            Object o = m.getParam("noDrafted");
+            setDraftedDice(null);
+            reset = true;
+        } catch (NoSuchParamInMessageException e) { }
+
+        if (!reset) {
+            Object o;
+            try {
+                o = m.getParam(PARAM_DRAFTED_DICE);
+            } catch (NoSuchParamInMessageException e) {
+                return;
+            }
+            @SuppressWarnings("unchecked")
+            Dice mDraftedDice = (Dice) o;
+            setDraftedDice(mDraftedDice);
+            showMessage(YOU_HAVE_DRAFTED +mDraftedDice);
         }
-        @SuppressWarnings("unchecked")
-        Dice mDraftedDice = (Dice) o;
-        setDraftedDice(mDraftedDice);
-        showMessage(YOU_HAVE_DRAFTED +mDraftedDice);
     }
 
     // NOTIFY METHODS

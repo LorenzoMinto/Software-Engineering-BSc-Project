@@ -60,7 +60,6 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private ChoiceBox diceValuePicker;
 
     private Button selectedDiceButton = null;
-    private Dice selectedTrackDice = null;
     private int selectedTrackSlotNumber = -1;
     private List<Button> dicesButtons = new ArrayList<>();
 
@@ -106,6 +105,7 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox trackHBox1;
 
     private List<Button> trackDiceButtons = new ArrayList<>();
+    private Button trackSelectedDiceButton = null;
 
 
     //TOOLCARDS COMPONENTS
@@ -400,14 +400,17 @@ public class SagradaSceneController extends View implements Initializable {
                 handleChangeDraftedDiceValueMove();
                 break;
             case CHOOSE_DICE_FROM_TRACK:
-                handleTrackButtonPressedEvent();
+                handleChooseDiceFromTrackMove();
+                break;
+            case RETURN_DICE_TO_DRAFTPOOL:
+                handleReturnDiceFromTrackMove();
                 break;
             case MOVE_DICE:
                 handleMoveDiceMove();
                 break;
             case BACK_GAME:
-                handleBackGameMove();
                 printOnConsole("Trying to reconnect to the the game...");
+                handleBackGameMove();
                 break;
             case LEAVE:
                 handleLeaveWaitingRoomMove();
@@ -514,7 +517,7 @@ public class SagradaSceneController extends View implements Initializable {
     void handleDraftDiceFromDraftPoolMove() {
         super.handleDraftDiceFromDraftPoolMove();
         if (selectedDiceButton != null) {
-            Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices );
+            Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices);
             showMessage("Drafted dice: " + draftedDice);
             try {
                 sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice.copy())));
@@ -579,12 +582,13 @@ public class SagradaSceneController extends View implements Initializable {
     void handleChooseDiceFromTrackMove() {
         super.handleChooseDiceFromTrackMove();
 
-        if (selectedTrackDice != null && selectedTrackSlotNumber >-1) {
-            showMessage("Selected dice: " + selectedTrackDice);
+        if (trackSelectedDiceButton != null && selectedTrackSlotNumber >-1) {
+            Dice trackChosenDice = getDiceForDiceButton(trackSelectedDiceButton, track.getDicesFromSlotNumber(selectedTrackSlotNumber));
+            showMessage("Selected dice: " + trackChosenDice);
 
             HashMap<String,Object> params = new HashMap<>();
             params.put("slotNumber", selectedTrackSlotNumber);
-            params.put("dice",selectedTrackDice);
+            params.put("dice",trackChosenDice);
 
             try {
                 sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
@@ -612,12 +616,13 @@ public class SagradaSceneController extends View implements Initializable {
             params.put("colFrom",col);
             params.put("rowTo",rowDest);
             params.put("colTo",colDest);
+
             try {
                 sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
-            userWindowPatternView.enableMoveSelection(false);
+
         } else {
             errorMessage("Select TO and FROM cell to make the move.");
         }
@@ -643,15 +648,21 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleDraftedDiceEvent(Message m) {
         super.handleDraftedDiceEvent(m);
-        Button dice = new Button();
-        dice.setPrefWidth(100);
-        dice.setPrefHeight(100);
-        Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+draftedDice.toString()+".jpg");
-        dice.setBackground(getBackgroundFromImage(diceImage));
-        Platform.runLater(() -> {
-            currentDraftedPane.getChildren().clear();
-            currentDraftedPane.getChildren().add(dice);
-        });
+        if (draftedDice != null) {
+            Button dice = new Button();
+            dice.setPrefWidth(100);
+            dice.setPrefHeight(100);
+            Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+draftedDice.toString()+".jpg");
+            dice.setBackground(getBackgroundFromImage(diceImage));
+            Platform.runLater(() -> {
+                currentDraftedPane.getChildren().clear();
+                currentDraftedPane.getChildren().add(dice);
+            });
+        } else {
+            Platform.runLater(() -> {
+                currentDraftedPane.getChildren().clear();
+            });
+        }
     }
 
     @Override
@@ -754,6 +765,7 @@ public class SagradaSceneController extends View implements Initializable {
                 try {
                     for (Dice dice : track.getDicesFromSlotNumber(trackHBoxes.indexOf(hBox))) {
                         Button trackSlotDice = new Button();
+                        trackSlotDice.setId(dice.toString());
                         trackDiceButtons.add(trackSlotDice);
 
                         Image diceImage = getImageFromPath("src/main/resources/images/Dices/" + dice + ".jpg");
@@ -763,10 +775,10 @@ public class SagradaSceneController extends View implements Initializable {
                         trackSlotDice.setPrefWidth(50);
 
                         trackSlotDice.setOnAction(event -> {
-                            selectedDiceButton = trackSlotDice;
+                            trackSelectedDiceButton = trackSlotDice;
                             selectedTrackSlotNumber = trackHBoxes.indexOf(hBox);
                             for (Button d: trackDiceButtons) {
-                                if (d == selectedDiceButton) {
+                                if (d == trackSelectedDiceButton) {
                                     d.setBorder(getBorderWithColor(Color.BLACK));
                                 } else {
                                     d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
@@ -945,6 +957,9 @@ public class SagradaSceneController extends View implements Initializable {
             }
         }
         Platform.runLater(() -> {
+            if (userWindowPatternView != null) {
+                userWindowPatternView.enableMoveSelection(false);
+            }
             if (getPermissions().contains(Move.MOVE_DICE)) {
                 userWindowPatternView.enableMoveSelection(true);
                 System.out.println("Move selection enabled.");

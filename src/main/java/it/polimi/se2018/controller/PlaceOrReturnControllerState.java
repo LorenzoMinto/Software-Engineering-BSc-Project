@@ -13,14 +13,18 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 /**
  *  This is the state in which the current player can place a dice on the own windowPattern.
  *  @author Lorenzo Minto
- *  @author Federico Haag (refactor)
  */
-public class PlaceControllerState extends ControllerState {
+public class PlaceOrReturnControllerState extends ControllerState {
 
     /**
      * String used as content of acknowledgment message in placeDice()
      */
     private static final String DICE_PLACED = "Dice placed.";
+
+    /**
+     * String used as content of acknowledgment message in placeDice()
+     */
+    private static final String DICE_RETURNED = "Dice returned to draft pool.";
 
     /**
      * String used as content of error message in placeDice()
@@ -32,7 +36,7 @@ public class PlaceControllerState extends ControllerState {
      *
      * @param controller the controller of which this class is going to act as a state.
      */
-    public PlaceControllerState(Controller controller) {
+    public PlaceOrReturnControllerState(Controller controller) {
         super(controller);
         this.defaultMessage = PLACE_DICE;
     }
@@ -63,7 +67,25 @@ public class PlaceControllerState extends ControllerState {
     }
 
     @Override
+    public Message returnDiceToDraftPool() {
+        Round currentRound = controller.game.getCurrentRound();
+        Turn currentTurn = currentRound.getCurrentTurn();
+
+        Dice draftedDice = currentTurn.getDraftedDice();
+
+        if (draftedDice != null) {
+            currentTurn.resetDraftedDice();
+
+            currentRound.getDraftPool().putDice(draftedDice);
+            controller.setControllerState(controller.stateManager.getNextState(this));
+            return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_RETURNED);
+        } else {
+            return new Message(ERROR_MESSAGE, MOVE_IS_ILLEGAL);
+        }
+    }
+
+    @Override
     public Set<Move> getStatePermissions() {
-        return EnumSet.of(Move.PLACE_DICE_ON_WINDOWPATTERN);
+        return EnumSet.of(Move.PLACE_DICE_ON_WINDOWPATTERN, Move.RETURN_DICE_TO_DRAFTPOOL);
     }
 }
