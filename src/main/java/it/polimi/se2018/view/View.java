@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.RankingRecord;
@@ -306,7 +307,11 @@ public abstract class View implements Observer {
      * Handles the move "Return drafted dice to draft pool"
      */
     void handleReturnDiceFromTrackMove() {
-        sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
+        } catch (NetworkingException e) {
+            //TODO: what
+        }
     }
 
     /**

@@ -59,12 +59,14 @@ public class MoveControllerState extends ControllerState {
 
         if (controller.placementRule.isMoveAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
                 && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
-            controller.movesCounter += 1;
 
+            controller.movesCounter += 1;
             List<Integer> possibleMovesCount = new ArrayList<>();
+
             possibleMovesCount.addAll(controller.getActiveToolCard().getPossibleMovesCountSet());
+
             //if the moves counter is less than the maximum number of moves ask for another move
-            if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size())) {
+            if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size()-1)) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             } else {
                 controller.setControllerState(controller.stateManager.getEndToolCardEffectControllerState());
