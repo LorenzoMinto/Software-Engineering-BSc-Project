@@ -121,6 +121,7 @@ public final class SocketClientGateway extends Thread implements SenderInterface
                 //will retry to fix the error re running the previous code
 
             } catch (Exception e) {
+                e.printStackTrace();
                 this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
                 return;
             }

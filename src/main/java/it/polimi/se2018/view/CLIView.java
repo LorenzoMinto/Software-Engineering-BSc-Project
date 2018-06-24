@@ -634,15 +634,18 @@ public class CLIView extends View{
     // HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
 
     @Override
-    void handleConnectionLostEvent(){
-        super.handleConnectionLostEvent();
+    void handleConnectionLostEvent(Message m){
+        super.handleConnectionLostEvent(m);
         this.currentInputConsumer = null;
+        removeHandlingMessage(m);
     }
 
     @Override
     void handleConnectionRestoredEvent(){
         super.handleConnectionRestoredEvent();
-        waitForMove();
+        if(this.handlingMessages.isEmpty()){
+            waitForMove();
+        }
     }
 
     @Override
@@ -665,31 +668,36 @@ public class CLIView extends View{
             } else {
                 print(INPUT_NOT_VALID);
             }
+            removeHandlingMessage(m);
             waitForMove();
         });
     }
 
     @Override
-    void handleAddedEvent() {
-        super.handleAddedEvent();
+    void handleAddedEvent(Message m) {
+        super.handleAddedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleRemovedEvent() {
-        super.handleRemovedEvent();
+    void handleRemovedEvent(Message m) {
+        super.handleRemovedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleBackToGameEvent(){
-        super.handleBackToGameEvent();
+    void handleBackToGameEvent(Message m){
+        super.handleBackToGameEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleInactiveEvent(){
-        super.handleInactiveEvent();
+    void handleInactiveEvent(Message m){
+        super.handleInactiveEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
         //TODO: check if this waitForMove() is necessary or not
     }
@@ -698,11 +706,13 @@ public class CLIView extends View{
     void handleSetupEvent(Message m){
         super.handleSetupEvent(m);
         this.gameStarted = true;
+        removeHandlingMessage(m);
     }
 
     @Override
     void handleRankingsEvent(Message m){
         super.handleRankingsEvent(m);
+        removeHandlingMessage(m);
         //TODO: print rankings (winner is printed by super())
     }
 
@@ -710,66 +720,77 @@ public class CLIView extends View{
     @Override
     void handleUpdatedWindowPatternEvent(Message m){
         super.handleUpdatedWindowPatternEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m){
         super.handleChangedDraftPoolEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
-    void handleYourTurnEvent(){
-        super.handleYourTurnEvent();
+    void handleYourTurnEvent(Message m){
+        super.handleYourTurnEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleBadFormattedEvent(){
-        super.handleBadFormattedEvent();
+    void handleBadFormattedEvent(Message m){
+        super.handleBadFormattedEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedLimitEvent(){
-        super.handleDeniedLimitEvent();
+    void handleDeniedLimitEvent(Message m){
+        super.handleDeniedLimitEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedNicknameEvent(){
-        super.handleDeniedNicknameEvent();
+    void handleDeniedNicknameEvent(Message m){
+        super.handleDeniedNicknameEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
-    void handleDeniedPlayingEvent(){
-        super.handleDeniedPlayingEvent();
+    void handleDeniedPlayingEvent(Message m){
+        super.handleDeniedPlayingEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 
     @Override
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleSlotOfTrackChosenDice(Message m){
         super.handleSlotOfTrackChosenDice(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleTrackChosenDiceEvent(Message m){
         super.handleTrackChosenDiceEvent(m);
+        removeHandlingMessage(m);
         //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        removeHandlingMessage(m);
         waitForMove();
     }
 

@@ -380,12 +380,12 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void handleAddedEvent() {
+    void handleAddedEvent(Message m) {
 
     }
 
     @Override
-    void handleRemovedEvent() {
+    void handleRemovedEvent(Message m) {
 
     }
 

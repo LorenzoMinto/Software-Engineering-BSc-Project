@@ -49,7 +49,7 @@ public final class Message implements Serializable{
      */
     public Message(Enum type, Map<String, Object> params, String playerID, Set<Move> permissions) {
         this.type = type;
-        this.params = (HashMap<String,Object>) params;
+        this.params = (params==null) ? new HashMap<>() : (HashMap<String,Object>) params;
         this.playerID = playerID;
         this.permissions = (EnumSet<Move>) permissions;
     }

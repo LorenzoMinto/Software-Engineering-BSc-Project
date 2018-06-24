@@ -133,6 +133,10 @@ public class Controller extends Observable {
      */
     private HashSet<String> inactivePlayers = new HashSet<>();
 
+    /**
+     * Set of players that are disconnected due to connection lost and before that they were inactive
+     */
+    private HashSet<String> inactiveDisconnectedPlayers = new HashSet<>();
 
     /**
      *
@@ -758,4 +762,29 @@ public class Controller extends Observable {
         return Integer.parseInt( this.properties.getProperty(p) );
     }
 
+
+    /**
+     * Called by server when a player loose connection
+     * @param playerID the player id of the player who lost connection
+     */
+    public void playerLostConnection(String playerID){
+        if(this.inactivePlayers.add(playerID)){
+            this.inactiveDisconnectedPlayers.add(playerID);
+        }
+    }
+
+    /**
+     * Called by server when a player restore its connection
+     * @param playerID the player id of the player who restored its connection
+     */
+    public void playerRestoredConnection(String playerID){
+        if(this.inactivePlayers.contains(playerID)){
+            if(this.inactiveDisconnectedPlayers.contains(playerID)){
+                this.inactiveDisconnectedPlayers.remove(playerID);
+                //player is not removed from inactive ones because it was so before loosing connection
+            } else {
+                this.inactivePlayers.remove(playerID);
+            }
+        }
+    }
 }
