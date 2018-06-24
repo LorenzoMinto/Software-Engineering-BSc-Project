@@ -48,7 +48,6 @@ public class PlaceControllerState extends ControllerState {
             currentTurn.resetDraftedDice();
             if (controller.getActiveToolCard() != null) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
-
             } else {
                 if (currentTurn.hasUsedToolCard()) {
                     controller.setControllerState(controller.stateManager.getEndControllerState());

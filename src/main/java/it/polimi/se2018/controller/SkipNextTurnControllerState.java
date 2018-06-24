@@ -24,7 +24,7 @@ public class SkipNextTurnControllerState extends ImplicitControllerState {
     public void executeImplicitBehaviour() {
         Round currentRound = controller.game.getCurrentRound();
         if (currentRound.removeNextTurnOfPlayer(currentRound.getCurrentTurn().getPlayer())) {
-            controller.stateManager.getNextState(this);
+            controller.setControllerState(controller.stateManager.getNextState(this));
         }
     }
 }

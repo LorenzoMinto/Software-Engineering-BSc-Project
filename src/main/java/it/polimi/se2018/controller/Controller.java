@@ -129,6 +129,11 @@ public class Controller extends Observable {
     int movesCounter = 0;
 
     /**
+     *  Flag set to true if current player can draft again.
+     */
+    boolean extraDrafting = false;
+
+    /**
      * Set of inactive players
      */
     private HashSet<String> inactivePlayers = new HashSet<>();
@@ -189,8 +194,9 @@ public class Controller extends Observable {
         this.diceBag = new DiceBag(numberOfDicesPerColor);
 
         //Produces and sets cards to the game
-        List<ToolCard> toolCards = toolCardManager.getRandomToolCards(numberOfToolCards);
         List<PublicObjectiveCard> publicObjectiveCards = objectiveCardManager.getPublicObjectiveCards(numberOfPublicObjectiveCards);
+        List<ToolCard> toolCards = toolCardManager.getRandomToolCards(numberOfToolCards);
+
 
         this.game.setCards(toolCards,publicObjectiveCards);
 
@@ -439,16 +445,14 @@ public class Controller extends Observable {
     protected boolean setActiveToolCard(ToolCard toolCard) {
 
         //If a player has already drafted a dice, then they can't use a ToolCard that needs drafting
-        if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()){
+        if(!toolCard.getTitle().equals("Running Pliers") && toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()){
             return false;
         }
 
-        System.out.println("Turn number: " + game.getCurrentRound().getCurrentTurn().getNumber());
-        System.out.println("Players: " + game.getPlayers().size());
-        System.out.println("Division result: "+ game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size());
+        System.out.println(game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size());
+        System.out.println(!game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced());
 
-
-        //check if card has some timing constraint
+        //check for card's timing constraints
         switch (toolCard.getTitle()) {
             case "Glazing Hammer": //second turn before drafting only
                 if (game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced() ||  //or is player's first turn in the round
@@ -457,7 +461,8 @@ public class Controller extends Observable {
                 }
                 break;
             case "Running Pliers": //first turn only
-                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==1
+                        || !game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
                     return false;
                 }
                 break;
