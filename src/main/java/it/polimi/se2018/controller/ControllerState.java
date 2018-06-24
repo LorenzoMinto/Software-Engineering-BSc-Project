@@ -135,6 +135,12 @@ public abstract class ControllerState {
     public Message chooseDiceValue(int value){ return new Message(ERROR_MESSAGE, defaultMessage); }
 
     /**
+     * Returns the currently drafted dice to the draftpool.
+     * @return a message containing the result of the mov
+     */
+    public Message returnDiceToDraftPool() { return new Message(ERROR_MESSAGE, defaultMessage); }
+
+    /**
      * Ends the current turn.
      * @return a message containing the result of the mov
      */

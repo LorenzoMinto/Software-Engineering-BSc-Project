@@ -245,6 +245,7 @@ public class Turn extends Observable implements Serializable {
      */
     public void resetDraftedDice() {
         this.draftedDice = null;
+        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, Message.fastMap("noDrafted",0)));
     }
 
     /**

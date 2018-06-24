@@ -139,9 +139,8 @@ public class Controller extends Observable {
     private HashSet<String> inactiveDisconnectedPlayers = new HashSet<>();
 
     /**
-     *
+     * Persistency singleton that gives access to all persisted information.
      */
-    //TODO: @lorenzo completa questo javadoc
     private Persistency persistency;
 
     /**
@@ -302,8 +301,6 @@ public class Controller extends Observable {
                 returnMessage = controllerState.draftDiceFromDraftPool(dice);
                 break;
             case PLACE_DICE:
-                //TODO: eliminare questo sout di debug
-                System.out.println("Handling placing...");
                 int row;
                 int col;
                 try {
@@ -363,6 +360,9 @@ public class Controller extends Observable {
                     return errorMessage();
                 }
                 returnMessage = controllerState.chooseDiceFromTrack(trackDice,trackSlotNumber);
+                break;
+            case RETURN_DICE_TO_DRAFTPOOL:
+                returnMessage = controllerState.returnDiceToDraftPool();
                 break;
             case END_TURN:
                 returnMessage = controllerState.endCurrentTurn();
@@ -442,6 +442,11 @@ public class Controller extends Observable {
         if(toolCard.needsDrafting() && game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()){
             return false;
         }
+
+        System.out.println("Turn number: " + game.getCurrentRound().getCurrentTurn().getNumber());
+        System.out.println("Players: " + game.getPlayers().size());
+        System.out.println("Division result: "+ game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size());
+
 
         //check if card has some timing constraint
         switch (toolCard.getTitle()) {
