@@ -669,6 +669,18 @@ public abstract class View implements Observer {
         setDraftPoolDices(mDraftPoolDices);
     }
 
+    void handleChangedTrackEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam("track");
+        } catch (NoSuchParamInMessageException e) {
+            e.printStackTrace();
+            return;
+        }
+        Track track = (Track)o;
+        setTrack(track);
+    }
+
     /**
      * Handles the event "It is now your turn"
      */
@@ -912,6 +924,9 @@ public abstract class View implements Observer {
                 break;
             case SOMETHING_CHANGED_IN_DRAFTPOOL:
                 handleChangedDraftPoolEvent(m);
+                break;
+            case SOMETHING_CHANGED_IN_TRACK:
+                handleChangedTrackEvent(m);
                 break;
             case DRAFTED_DICE:
                 handleDraftedDiceEvent(m);

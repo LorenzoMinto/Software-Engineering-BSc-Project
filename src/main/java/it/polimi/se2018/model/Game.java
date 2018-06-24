@@ -146,6 +146,7 @@ public class Game extends Observable implements Observer{
 
         this.currentRound = null;
         this.track = new Track();
+        track.register(this);
         this.players = new HashSet<>();
         this.status = GameStatus.WAITING_FOR_CARDS;
         this.rankings = null;
@@ -407,8 +408,8 @@ public class Game extends Observable implements Observer{
         }
 
         //Get the remaining dices in draftpool and put them in the track
-        if(currentRound != null && currentRound.getNumber() != 0) {
-            this.track.processDices(currentRound.getDraftPool().getDices());
+        if(currentRound != null) {
+            this.track.processDicesAndNotify(currentRound.getDraftPool().getDices());
         }
 
         if(nextRoundNumber > numberOfRounds - 1){
@@ -425,7 +426,7 @@ public class Game extends Observable implements Observer{
         //NOTIFYING
         Map <String, Object> messageAttributes = new HashMap<>();
         messageAttributes.put("number", nextRoundNumber);
-        messageAttributes.put("track", track.copy());
+        messageAttributes.put("track", this.track);
         messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy).collect(Collectors.toList()));
 
         notify(new Message(ViewBoundMessageType.NEW_ROUND, messageAttributes));

@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-import static it.polimi.se2018.model.DiceColor.*;
 //TODO: commentare questa classe
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
@@ -58,6 +57,8 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox currentDraftedPane;
 
     private Button selectedDiceButton = null;
+    private Dice selectedTrackDice = null;
+    private int selectedTrackSlotNumber = -1;
     private List<Button> dicesButtons = new ArrayList<>();
 
 
@@ -295,29 +296,6 @@ public class SagradaSceneController extends View implements Initializable {
         return new Image((new File(path).toURI().toString()));
     }
 
-//    private void setDisableTrackView(boolean disable) {
-//        long opacity = 1;
-//        if (disable) {
-//            opacity = 0;
-//        }
-//
-//        for (HBox hbox: trackHBoxes) {
-//            hbox.setOpacity(opacity);
-//        }
-//
-//        trackGridPane.setOpacity(opacity);
-//        trackHBox.setOpacity(opacity);
-//        trackImageButton.setOpacity(opacity);
-//
-//
-//        trackHBoxes.forEach(hBox -> hBox.setDisable(disable));
-//
-//        trackGridPane.setDisable(disable);
-//        trackHBox.setDisable(disable);
-//        trackImageButton.setDisable(disable);
-//    }
-
-
     public void setLoginScene(Scene loginScene) {
         this.loginScene = loginScene;
     }
@@ -516,7 +494,7 @@ public class SagradaSceneController extends View implements Initializable {
     void handleDraftDiceFromDraftPoolMove() {
         super.handleDraftDiceFromDraftPoolMove();
         if (selectedDiceButton != null) {
-            Dice draftedDice = getDiceForDiceButton(selectedDiceButton);
+            Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices );
             showMessage("Drafted dice: " + draftedDice);
             sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice.copy())));
         } else {
@@ -524,9 +502,9 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
-    private Dice getDiceForDiceButton(Button btn) {
+    private Dice getDiceForDiceButton(Button btn, List<Dice> dices) {
         String id = btn.getId();
-        for (Dice dice: draftPoolDices) {
+        for (Dice dice: dices) {
             if (dice.toString().equals(id)) {
                 return dice;
             }
@@ -561,6 +539,20 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleChooseDiceFromTrackMove() {
+        super.handleChooseDiceFromTrackMove();
+
+        if (selectedTrackDice != null && selectedTrackSlotNumber >-1) {
+            showMessage("Selected dice: " + selectedTrackDice);
+
+            HashMap<String,Object> params = new HashMap<>();
+            params.put("slotNumber", selectedTrackSlotNumber);
+            params.put("dice",selectedTrackDice);
+
+            sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+
+        } else {
+            errorMessage("You have not selected a dice from the track yet!");
+        }
 
     }
 
@@ -697,7 +689,6 @@ public class SagradaSceneController extends View implements Initializable {
 
     public void handleTrackButtonPressedEvent(){
 
-
         Image trackImage = getImageFromPath(trackPath);
         trackImageButton.setBackground(getBackgroundFromImage(trackImage));
         trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
@@ -707,21 +698,11 @@ public class SagradaSceneController extends View implements Initializable {
 
         enable(trackVisibleComponents);
 
-//        //LIST TO TRY HOW IT IS RENDERED
-//        List<Dice> dices = new ArrayList<>();
-//        dices.add(new Dice(RED));
-//        dices.add(new Dice((BLUE)));
-//        dices.add(new Dice((GREEN)));
-//        dices.add(new Dice((YELLOW)));
-//        dices.add(new Dice((PURPLE)));
-
 
         Platform.runLater(() -> {
             for (HBox hBox: trackHBoxes) {
-
                 hBox.getChildren().clear();
                 try {
-//                    for(Dice dice: dices){
                     for (Dice dice : track.getDicesFromSlotNumber(trackHBoxes.indexOf(hBox))) {
                         Button trackSlotDice = new Button();
                         trackDiceButtons.add(trackSlotDice);
@@ -733,14 +714,14 @@ public class SagradaSceneController extends View implements Initializable {
                         trackSlotDice.setPrefWidth(50);
 
                         trackSlotDice.setOnAction(event -> {
-                            for (Button button: trackDiceButtons) {
-                                if(button.equals(trackSlotDice)){
-
-                                    HashMap<String,Object> params = new HashMap<>();
-                                    params.put("slotNumber", trackHBoxes.indexOf(hBox));
-                                    params.put("dice",dice.copy());
-
-                                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                            selectedDiceButton = trackSlotDice;
+                            selectedTrackSlotNumber = trackHBoxes.indexOf(hBox);
+                            for (Button d: trackDiceButtons) {
+                                if (d == selectedDiceButton) {
+                                    d.setBorder(getBorderWithColor(Color.BLACK));
+                                } else {
+                                    d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                                            BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                                 }
                             }
                         });

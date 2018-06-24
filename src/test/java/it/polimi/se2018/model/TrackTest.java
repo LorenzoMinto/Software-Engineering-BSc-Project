@@ -48,7 +48,7 @@ public class TrackTest {
 
     /**
      * Tests processing dices to the {@link Track}. The dices were processed in {@link TrackTest#initializeVariables()}
-     * @see Track#processDices(List)
+     * @see Track#processDicesAndNotify(List)
      */
     @Test
     public void testProcessDices() {
@@ -57,7 +57,7 @@ public class TrackTest {
 
     /**
      * Tests the impossibility of processing null dices
-     * @see Track#processDices(List)
+     * @see Track#processDicesAndNotify(List)
      */
     @Test
     public void testProcessNullDices() {
