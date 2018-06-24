@@ -779,7 +779,7 @@ public class SagradaSceneController extends View implements Initializable {
                             selectedTrackSlotNumber = trackHBoxes.indexOf(hBox);
                             for (Button d: trackDiceButtons) {
                                 if (d == trackSelectedDiceButton) {
-                                    d.setBorder(getBorderWithColor(Color.BLACK));
+                                    d.setBorder(getBorderWithColor(Color.WHITE));
                                 } else {
                                     d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
                                             BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
