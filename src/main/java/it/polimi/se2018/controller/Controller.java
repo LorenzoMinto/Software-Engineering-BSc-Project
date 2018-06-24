@@ -439,6 +439,23 @@ public class Controller extends Observable {
             return false;
         }
 
+        //check if card has some timing constraint
+        switch (toolCard.getTitle()) {
+            case "Glazing Hammer": //second turn before drafting only
+                if (game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced() ||  //or is player's first turn in the round
+                        game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                    return false;
+                }
+                break;
+            case "Running Pliers": //first turn only
+                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                    return false;
+                }
+                break;
+            default:
+                break;
+        }
+
         Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
         if( currentPlayer.decreaseTokens(toolCard.getNeededTokens()) ){
             game.useToolCard(toolCard);
