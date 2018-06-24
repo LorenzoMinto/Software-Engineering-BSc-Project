@@ -25,7 +25,6 @@ public abstract class View implements Observer {
         Major information can be found looking for their usage.
         Being private, they are used only in this file. So if a change is needed, just look for usages in this file.
     */
-    private static final String MUST_CONNECT = "You have to connect to the server";
     private static final String THE_GAME_IS_ENDED = "Game ended";
     private static final String WINDOW_PATTERNS_RECEIVED = "Received window patterns to choose from";
     private static final String YOU_HAVE_JOINED_THE_WAITING_ROOM = "You have joined the waiting room";
@@ -51,12 +50,11 @@ public abstract class View implements Observer {
     private static final String ROUND_NOW_STARTS = "# Round now starts!";
     private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
     private static final String THE_GAME_IS_STARTED = "The game started!";
-    private static final String ERROR_SENDING_MESSAGE = "Failed sending message";
     private static final String PROBLEMS_WITH_CONNECTION = "There are some problems with connection. Check if it depends on you, if not wait or restart game.";
     private static final String CONNECTION_RESTORED = "Connection restored!";
     private static final String THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID = "The action you just performed was not valid.";
-    private static final String CANT_COMMUNICATE_WITH_SERVER = "In this moment you can't communicate with server due to connection problems";
-
+    private static final String DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS = " disconnected due to connection problems.";
+    private static final String RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS = " reconnected due to fixing of connection problems.";
 
     /*  CONSTANTS FOR MESSAGES PARAMS
         Following constants are not commented one by one because they are as self explaining as needed.
@@ -221,18 +219,6 @@ public abstract class View implements Observer {
      * Handles the move "End turn"
      */
     void handleEndTurnMove(){
-        try {
-            sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
-        } catch (NetworkingException e) {
-            showMessage(e.getMessage());
-        }
-    }
-
-    /**
-     * @param wp
-     */
-    void handleWindowPatternSelection(WindowPattern wp){
-        //TODO: questo metodo non è mai usato. come mai?
         try {
             sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
         } catch (NetworkingException e) {
@@ -741,13 +727,12 @@ public abstract class View implements Observer {
     void handleChangedTrackEvent(Message m) {
         Object o;
         try {
-            o = m.getParam("track");
+            o = m.getParam(PARAM_TRACK);
         } catch (NoSuchParamInMessageException e) {
-            e.printStackTrace();
             return;
         }
-        Track track = (Track)o;
-        setTrack(track);
+        Track mTrack = (Track)o;
+        setTrack(mTrack);
     }
 
     /**
@@ -784,6 +769,28 @@ public abstract class View implements Observer {
      */
     void handleDeniedPlayingEvent(Message m) {
         showMessage(ALREADY_PLAYING_ERROR);
+    }
+
+    void handleAPlayerDisconnectedEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("playerID");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        String mPlayerID = (String)o;
+        showMessage(mPlayerID + DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS);
+    }
+
+    void handleAPlayerReconnectedEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam("playerID");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        String mPlayerID = (String)o;
+        showMessage(mPlayerID + RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS);
     }
 
     /**
@@ -1094,6 +1101,12 @@ public abstract class View implements Observer {
                 break;
             case CONNECTION_LOST:
                 handleConnectionLostEvent(m);
+                break;
+            case A_PLAYER_DISCONNECTED:
+                handleAPlayerDisconnectedEvent(m);
+                break;
+            case A_PLAYER_RECONNECTED:
+                handleAPlayerReconnectedEvent(m);
                 break;
             default:
                 //No other messages are evaluated in this state

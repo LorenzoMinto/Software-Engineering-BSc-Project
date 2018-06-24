@@ -573,18 +573,16 @@ public class Controller extends Observable {
             @Override
             public void run() {
                 logger.info("waitingForPlayerMove timer has expired. Calling advanceGameDueToPlayerInactivity()...");
-                advanceGameDueToPlayerInactivity();
+                handlePlayerInactivity();
             }
         };
         TIMER.schedule(waitingForPlayerMove,(long)(getConfigProperty("timeoutPlayerMove")*1000));
     }
 
     /**
-     * Advances the game to the next turn, if available, due to player inactivity
-     * @see Controller#advanceGame()
+     * Handles the becoming inactive of a player
      */
-    private void advanceGameDueToPlayerInactivity() {
-
+    private void handlePlayerInactivity(){
         String currentPlayerID = getCurrentPlayer().getID();
 
         //If statement prevents sending every turn the notification for all inactive players
@@ -592,6 +590,15 @@ public class Controller extends Observable {
             notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap("player",currentPlayerID))); //notify everyone that the player is now inactive
             notify(new Message(ViewBoundMessageType.YOU_ARE_INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
         }
+
+        advanceGameDueToPlayerInactivity();
+    }
+
+    /**
+     * Advances the game to the next turn, if available, due to player inactivity
+     * @see Controller#advanceGame()
+     */
+    private void advanceGameDueToPlayerInactivity() {
 
         //Checks if due to players inactivity game can continuing or not
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
@@ -788,6 +795,8 @@ public class Controller extends Observable {
         if(this.inactivePlayers.add(playerID)){
             this.inactiveDisconnectedPlayers.add(playerID);
         }
+        notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap("player",playerID)));
+        advanceGameDueToPlayerInactivity();
     }
 
     /**
@@ -801,6 +810,7 @@ public class Controller extends Observable {
                 //player is not removed from inactive ones because it was so before loosing connection
             } else {
                 this.inactivePlayers.remove(playerID);
+                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap("player",playerID)));
             }
         }
     }
