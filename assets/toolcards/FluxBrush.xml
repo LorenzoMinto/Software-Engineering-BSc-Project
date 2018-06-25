@@ -8,6 +8,6 @@
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <controllerStateRule prevState="StartControllerState" nextState="DraftControllerState" />
     <controllerStateRule prevState="DraftControllerState" nextState="RerollDraftedControllerState" />
-    <controllerStateRule prevState="RerollDraftedControllerState" nextState="PlaceOrReturnControllerState" />
-    <controllerStateRule prevState="PlaceOrReturnControllerState" nextState="EndControllerState" />
+    <controllerStateRule prevState="RerollDraftedControllerState" nextState="PlaceControllerState" />
+    <controllerStateRule prevState="PlaceControllerState" nextState="EndControllerState" />
 </toolcard>
