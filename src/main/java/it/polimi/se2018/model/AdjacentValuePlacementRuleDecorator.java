@@ -33,12 +33,6 @@ public class AdjacentValuePlacementRuleDecorator extends PlacementRuleDecorator 
                 decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
-    @Override
-    public PlacementRule copy() {
-        //TODO: implement here
-        return this;
-    }
-
     /**
      * Checks if the move specified by a given {@link Dice} and a position (row and col) complies with the value
      * adjacency constraint on the given {@link WindowPattern}.

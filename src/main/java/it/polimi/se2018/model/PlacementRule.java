@@ -21,5 +21,4 @@ public interface PlacementRule {
      */
     boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col);
 
-    PlacementRule copy();
 }

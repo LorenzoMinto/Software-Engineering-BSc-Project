@@ -21,10 +21,4 @@ public class EmptyPlacementRule implements PlacementRule {
     public boolean isMoveAllowed(WindowPattern windowPattern, Dice dice, int row, int col) {
         return !windowPattern.getPattern()[row][col].hasDice();
     }
-
-    @Override
-    public PlacementRule copy() {
-        //TODO: implement here
-        return this;
-    }
 }

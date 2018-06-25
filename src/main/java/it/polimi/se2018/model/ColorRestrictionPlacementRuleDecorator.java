@@ -36,9 +36,4 @@ public class ColorRestrictionPlacementRuleDecorator extends PlacementRuleDecorat
                 decoratedPlacementRule.isMoveAllowed(windowPattern, dice, row, col);
     }
 
-    @Override
-    public PlacementRule copy() {
-        //TODO: implement here
-        return this;
-    }
 }
