@@ -43,7 +43,7 @@ public class DiceBag {
         if(numberOfDicesPerColor <0){ throw new IllegalArgumentException(NEGATIVE_NUMBER_OF_DICES);}
 
         this.availableDices = new EnumMap<>(DiceColor.class);
-        for(int i = 0; i< DiceColor.values().length-1; i++){
+        for(int i = 0; i < DiceColor.values().length-1; i++){
             this.availableDices.put(DiceColor.values()[i],numberOfDicesPerColor);
         }
     }

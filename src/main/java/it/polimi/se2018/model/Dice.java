@@ -114,7 +114,7 @@ public class Dice implements Serializable {
     public void roll() {
 
         Random r = new Random();
-        this.value = r.nextInt(MAX_VALUE-1)+1;
+        this.value = r.nextInt(MAX_VALUE)+1;
     }
 
 
