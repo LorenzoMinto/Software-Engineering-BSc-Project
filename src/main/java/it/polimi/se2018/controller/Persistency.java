@@ -34,8 +34,7 @@ public class Persistency {
     }
 
     public void loadRankings() {
-        //TODO: questa variabile è appositamente in hiding della globale? se si, rinomina. se no, fixa con this.globalRankings.
-        List<RankingRecord> globalRankings = new ArrayList<>();
+        List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
         try {
             Document document = XMLFileFinder.getFileDocument(PATH);
@@ -63,7 +62,7 @@ public class Persistency {
             e.printStackTrace();
         }
 
-        this.globalRankings = globalRankings;
+        this.globalRankings = newGlobalRankings;
     }
 
     public RankingRecord getRankingForPlayerID(String playerID) {

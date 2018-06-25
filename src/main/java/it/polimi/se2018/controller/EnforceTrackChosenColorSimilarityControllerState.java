@@ -5,9 +5,11 @@ import it.polimi.se2018.model.ColorRestrictionPlacementRuleDecorator;
 import it.polimi.se2018.model.Dice;
 
 /**
+ * This is an implicit state that enforces the constraint on any following die move that the dice to be moved be
+ * of the same color of the die chosen from the track.
  *  @author Lorenzo Minto
  */
-//TODO: classe inutilizzata + scrivere commento di classe @lorenzo
+
 public class EnforceTrackChosenColorSimilarityControllerState extends ImplicitControllerState {
 
     /**
