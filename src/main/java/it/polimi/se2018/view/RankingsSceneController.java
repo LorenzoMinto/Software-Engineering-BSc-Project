@@ -1,15 +1,23 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.RankingRecord;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 
+import java.awt.*;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
+
 //TODO: commentare questa classe
 public class RankingsSceneController {
 
@@ -17,16 +25,37 @@ public class RankingsSceneController {
     @FXML Button exitButton;
     @FXML Button newGameButton;
     @FXML ListView rankingListView;
+    @FXML Button localityButton;
+
+    private boolean showingLocal = true;
 
     public static final ObservableList localRanking =
             FXCollections.observableArrayList();
     public static final ObservableList globalRanking =
             FXCollections.observableArrayList();
 
-    public void setLocalRanking(List<String> players) {
-        localRanking.addAll(players);
+    public void setLocalRanking(List<RankingRecord> records) {
+        localRanking.addAll(records);
         rankingListView.setItems(localRanking);
-        rankingListView.setCellFactory((Callback<ListView<String>, ListCell<String>>) list -> new RankingCell());
+
+        rankingListView.setCellFactory(new Callback<ListView<RankingRecord>, ListCell<RankingRecord>>() {
+            @Override
+            public ListCell<RankingRecord> call(ListView<RankingRecord> p) {
+
+                return new ListCell<RankingRecord>() {
+                    @Override
+                    protected void updateItem(RankingRecord t, boolean bln) {
+                        super.updateItem(t, bln);
+
+                        if (t != null) {
+                            setText(t.toString());
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     public void setWinner(boolean isWinner) {
@@ -37,19 +66,20 @@ public class RankingsSceneController {
         }
     }
 
-    public void setGlobalRanking(List<String> players) {
-        globalRanking.addAll(players);
-        rankingListView.setItems(globalRanking);
+    public void setGlobalRanking(List<RankingRecord> records) {
+        globalRanking.addAll(records);
     }
 
-    static class RankingCell extends ListCell<String> {
-        @Override
-        public void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            Label nameLabel = new Label(item);
-            if (item != null) {
-                setGraphic(nameLabel);
-            }
+
+    public void handleLocalityButtonPressedEvent(){
+        if (showingLocal) {
+            showingLocal = false;
+            localityButton.setText("Show Local");
+            rankingListView.setItems(globalRanking);
+        } else {
+            showingLocal = true;
+            localityButton.setText("Show Global");
+            rankingListView.setItems(localRanking);
         }
     }
 

@@ -670,15 +670,11 @@ public class SagradaSceneController extends View implements Initializable {
         });
 
         RankingsSceneController rankingsController = fxmlLoader.getController();
-        //TODO: replace placeholder
-        List<String> placeholder = new ArrayList<>();
-        for (RankingRecord ranking: rankings) {
-            placeholder.add(ranking.getPlayerID());
-        }
 
         Platform.runLater(() -> {
-            rankingsController.setLocalRanking(placeholder);
-            rankingsController.setWinner(true);
+            rankingsController.setLocalRanking(rankings);
+            rankingsController.setGlobalRanking(globalRankings);
+            rankingsController.setWinner(getPlayerID().equals(getWinnerID()) ? true : false);
         });
     }
 

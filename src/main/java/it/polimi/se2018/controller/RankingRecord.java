@@ -55,6 +55,7 @@ public class RankingRecord implements Serializable {
     @Override
     public String toString() {
         //TODO: if necessary this toString, then creates constants @lorenzo
-        return "RankingRecord for " + playerID + " W: " + gamesWon + " L: " + gamesLost + " time: " + timePlayed;
+        return playerID + " -      PTS:" + points + "   GW: " + gamesWon + "   GL: " + gamesLost +
+                "   CPTS: " + cumulativePoints + "   TT: " + timePlayed + " m";
     }
 }

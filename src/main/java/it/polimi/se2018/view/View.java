@@ -76,6 +76,7 @@ public abstract class View implements Observer {
     private static final String PARAM_WHO_IS_PLAYING = "whoIsPlaying";
     private static final String PARAM_WINNER_PLAYER_ID = "winnerPlayerID";
     private static final String PARAM_RANKINGS = "rankings";
+    private static final String PARAM_GLOBAL_RANKINGS = "globalRankings";
     private static final String PARAM_CURRENT_PLAYER = "currentPlayer";
     private static final String PARAM_WINDOW_PATTERN = "windowPattern";
     private static final String PARAM_TOOL_CARD = "toolCard";
@@ -121,6 +122,11 @@ public abstract class View implements Observer {
      * The ID of the player of this view
      */
     private String playerID;
+
+    /**
+     * The ID of the winning player of this game
+     */
+    private String winnerID;
 
     /**
      * Number of the current round
@@ -192,6 +198,11 @@ public abstract class View implements Observer {
      * Final rankings of the game
      */
     List<RankingRecord> rankings;
+
+    /**
+     * Global rankings of the game
+     */
+    List<RankingRecord> globalRankings;
 
     /**
      * True if view was in "INACTIVE" state before loosing connection
@@ -698,13 +709,19 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<RankingRecord> receivedRankings = (List<RankingRecord>) o;
 
-        this.rankings = receivedRankings;
-
-        if(winnerID.equals(this.playerID)){
-            showMessage(YOU_ARE_THE_WINNER);
-        } else {
-            showMessage(THE_WINNER_IS +winnerID);
+        try {
+            o = m.getParam(PARAM_GLOBAL_RANKINGS);
+        } catch (NoSuchParamInMessageException e) {
+            return;
         }
+        @SuppressWarnings("unchecked")
+        List<RankingRecord> receivedGlobalRankings = (List<RankingRecord>) o;
+
+
+        this.rankings = receivedRankings;
+        this.globalRankings = receivedGlobalRankings;
+
+        this.winnerID = winnerID;
     }
 
     /**
@@ -1241,6 +1258,14 @@ public abstract class View implements Observer {
      */
     public String getPlayerID() {
         return playerID;
+    }
+
+    /**
+     * Returns the game's winner's id
+     * @return the game's winner's id
+     */
+    public String getWinnerID() {
+        return winnerID;
     }
 
     /**
