@@ -81,6 +81,7 @@ public abstract class View implements Observer {
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_TOOL_CARDS = "toolCards";
     private static final String PARAM_DRAFTED_DICE = "draftedDice";
+    private static final String PARAM_PLAYERS_FAVOUR_TOKENS = "favourTokens";
 
 
     // CONSTANTS USED AS MESSAGE OF EXCEPTIONS
@@ -143,9 +144,14 @@ public abstract class View implements Observer {
     List<WindowPattern> drawnWindowPatterns;
     
     /**
-     * List of players
+     * List of players, ordered statically.
      */
-    List<String> players; //TODO: hanno un ordine garantito? scrivi risposta in javadoc
+    List<String> players;
+
+    /**
+     * List of the players' favour tokens, order corresponds to player's list.
+     */
+    List<Integer> playersFavourTokens;
 
     /**
      * Track
@@ -645,6 +651,15 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         PrivateObjectiveCard mPrivateObjectiveCard = (PrivateObjectiveCard) o;
 
+        try {
+            o = m.getParam(PARAM_PLAYERS_FAVOUR_TOKENS);
+        } catch (NoSuchParamInMessageException e) {
+            showMessage(FAILED_SETUP_GAME);
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Integer> mPlayersFavourTokens = (List<Integer>) o;
+
         //Assignments are done only at the end of parsing of all data to prevent partial update (due to errors)
         setDrawnToolCards(mDrawnToolCards);
         setDraftPoolDices(mDraftPoolDices);
@@ -654,6 +669,7 @@ public abstract class View implements Observer {
         setPrivateObjectiveCard(mPrivateObjectiveCard);
         setWindowPatterns(mWindowPatterns);
         setWindowPattern(mWindowPattern);
+        setPlayersFavourTokens(mPlayersFavourTokens);
 
         notifyGameStarted();
 
@@ -835,7 +851,16 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         String p = (String) o;
 
+        try {
+            o = m.getParam(PARAM_PLAYERS_FAVOUR_TOKENS);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Integer> favourTokens = (List<Integer>) o;
+
         setDrawnToolCards(toolCards);
+        setPlayersFavourTokens(favourTokens);
 
         showMessage(p+ USE_TOOL_CARD +toolCard.getTitle());
     }
@@ -1219,6 +1244,14 @@ public abstract class View implements Observer {
     }
 
     /**
+     * Returns the view's player's id
+     * @return the view's player's id
+     */
+    public Integer getPlayerFavourTokens() {
+        return playersFavourTokens.get(players.indexOf(playerID));
+    }
+
+    /**
      * Returns the current permissions
      * @return the current permissions
      */
@@ -1340,6 +1373,13 @@ public abstract class View implements Observer {
      */
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
         this.privateObjectiveCard = privateObjectiveCard;
+    }
+
+    /**
+     * @see View#playersFavourTokens
+     */
+    public void setPlayersFavourTokens(List<Integer> playersFavourTokens) {
+        this.playersFavourTokens = playersFavourTokens;
     }
 
     /**

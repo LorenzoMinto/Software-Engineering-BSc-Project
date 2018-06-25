@@ -106,26 +106,25 @@ public class WindowPatternPlayerView extends Pane {
     }
 
     public void updateWindowPattern(WindowPattern wp) {
-        Platform.runLater(() -> {
-            Cell[][] pattern = wp.getPattern();
-            for (int i = 0; i < wp.getNumberOfRows(); i++) {
-                for (int j = 0; j < wp.getNumberOfColumns(); j++) {
-                    Dice dice = pattern[i][j].getDice();
-                    if (dice != null) {
-                        Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice.toString() + ".jpg")).toURI().toString());
-                        gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
-                    } else {
-                        Image cellBack = new Image((new File("src/main/resources/images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg")).toURI().toString());
-                        gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
-                    }
-                    gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
-                            BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        Cell[][] pattern = wp.getPattern();
+        for (int i = 0; i < wp.getNumberOfRows(); i++) {
+            for (int j = 0; j < wp.getNumberOfColumns(); j++) {
+                Dice dice = pattern[i][j].getDice();
+                if (dice != null) {
+                    Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice.toString() + ".jpg")).toURI().toString());
+                    gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    Image cellBack = new Image((new File("src/main/resources/images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg")).toURI().toString());
+                    gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
+                gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                        BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
-        });
+        }
     }
 
     public void setFavourTokens(int ft) {
+
         this.favourTokens = ft;
         this.favourTokensLabel.setText(String.valueOf(ft));
     }

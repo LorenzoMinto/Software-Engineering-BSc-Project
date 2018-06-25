@@ -302,6 +302,9 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("toolCards", drawnToolCards.stream().map(ToolCard::copy).collect(Collectors.toList()));
         //updates the player as their tokens were updated
         messageAttributes.put("player", currentRound.getCurrentTurn().getPlayer().getID());
+        //updates the players favour tokens
+        messageAttributes.put("favourTokens", players.stream().map(Player::getFavorTokens).collect(Collectors.toList()));
+
 
         notify(new Message(ViewBoundMessageType.USED_TOOLCARD, messageAttributes));
 
@@ -370,6 +373,7 @@ public class Game extends Observable implements Observer{
         messageAttributes.put("windowPatterns", Arrays.stream(windowPatterns).map(WindowPattern::copy).collect(Collectors.toList()));
         messageAttributes.put("track", track.copy());
         messageAttributes.put("draftPoolDices", dices.stream().map(Dice::copy).collect(Collectors.toList()));
+        messageAttributes.put("favourTokens", players.stream().map(Player::getFavorTokens).collect(Collectors.toList()));
 
         for (Player player: players) {
             messageAttributes.put("privateObjectiveCard", player.getPrivateObjectiveCard().copy()); //put overrides previous values

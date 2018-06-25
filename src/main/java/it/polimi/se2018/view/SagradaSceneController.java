@@ -38,8 +38,6 @@ public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
     private List<Image> cards = new ArrayList<>();
-    //TODO: remove this line: private static int playerTokens = 5;
-    private static int playerTokens = 5;
     private int cardCarouselCurrentIndex = 0;
 
     @FXML private AnchorPane blackAnchorPane;
@@ -448,8 +446,7 @@ public class SagradaSceneController extends View implements Initializable {
             toolCards3Button.setBackground(getBackgroundFromImage(toolCardImage));
             toolCards3FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
 
-            //TODO: set player.getFavorTokens();
-            toolCardsPlayerFavorTokensButton.setText(String.valueOf(playerTokens));
+            toolCardsPlayerFavorTokensButton.setText(String.valueOf(getPlayerFavourTokens()));
         });
     }
 
@@ -459,57 +456,49 @@ public class SagradaSceneController extends View implements Initializable {
         visibleComponents.forEach(component -> component.setDisable(false));
     }
 
-    //TODO: player.getFavorTokens();
     public void onToolCards1ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(0).getNeededTokens()){
-            cardCarouselCurrentIndex = 0;
+        cardCarouselCurrentIndex = 0;
 
-            try {
-                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
-            } catch (NetworkingException e) {
-                //TODO: implementa
-            }
-            Platform.runLater(() -> {
-                disable(toolCardsVisibleComponents);
-                disableBlackAnchorPane();
-            });
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
+        } catch (NetworkingException e) {
+            //TODO: implementa
         }
+        Platform.runLater(() -> {
+            disable(toolCardsVisibleComponents);
+            disableBlackAnchorPane();
+        });
     }
 
 
 
-    //TODO: player.getFavorTokens();
     public void onToolCards2ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(1).getNeededTokens()){
-            cardCarouselCurrentIndex = 1;
+        cardCarouselCurrentIndex = 1;
 
-            try {
-                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
-            } catch (NetworkingException e) {
-                //TODO: implementa
-            }
-            Platform.runLater(() -> {
-                disable(toolCardsVisibleComponents);
-                disableBlackAnchorPane();
-            });
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
+        } catch (NetworkingException e) {
+            //TODO: implementa
         }
+        Platform.runLater(() -> {
+            disable(toolCardsVisibleComponents);
+            disableBlackAnchorPane();
+        });
     }
 
     //TODO: player.getFavorTokens();
     public void onToolCards3ButtonPressed(){
-        if(playerTokens >= drawnToolCards.get(2).getNeededTokens()){
-            cardCarouselCurrentIndex = 2;
+        cardCarouselCurrentIndex = 2;
 
-            try {
-                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
-            } catch (NetworkingException e) {
-                //TODO: implementa
-            }
-            Platform.runLater(() -> {
-                disable(toolCardsVisibleComponents);
-                disableBlackAnchorPane();
-            });
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
+        } catch (NetworkingException e) {
+            //TODO: implementa
         }
+        Platform.runLater(() -> {
+            disable(toolCardsVisibleComponents);
+            disableBlackAnchorPane();
+        });
     }
 
 
@@ -634,14 +623,12 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleUpdatedWindowPatternEvent(Message m) {
         super.handleUpdatedWindowPatternEvent(m);
-        System.out.println("Updating window patterns.");
         updateWindowPatterns();
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m) {
         super.handleChangedDraftPoolEvent(m);
-        System.out.println("Updating draft pool to " + draftPoolDices.toString());
         updateDraftPool();
     }
 
@@ -794,6 +781,12 @@ public class SagradaSceneController extends View implements Initializable {
         });
     }
 
+    @Override
+    public void handleUsedToolCardEvent(Message m) {
+        super.handleUsedToolCardEvent(m);
+        updateWindowPatterns();
+    }
+
     public void handleTrackImageButtonPressedEvent(){
         disable(trackVisibleComponents);
         disableBlackAnchorPane();
@@ -901,10 +894,9 @@ public class SagradaSceneController extends View implements Initializable {
         wpViews = new ArrayList<>();
         int i = 0;
         for (WindowPattern wp: windowPatterns) {
-            //TODO:!!!! The informations of all players are needed at all time, here is missing favourTokens
             String nickname = players.get(i);
             WindowPatternPlayerView wpView = new WindowPatternPlayerView();
-            wpView.setFavourTokens(wp.getDifficulty());
+            wpView.setFavourTokens(playersFavourTokens.get(i));
             wpView.setNickname(nickname);
             wpView.setWindowPattern(wp);
             if (nickname.equals(getPlayerID())) {
@@ -920,10 +912,16 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateWindowPatterns() {
+        int i = 0;
         for (WindowPattern wp: windowPatterns) {
             WindowPatternPlayerView wpv = getWPViewById(wp.getTitle());
-            wpv.updateWindowPattern(wp);
-            //TODO: update player's favour tokens here
+            Integer favourTokens = playersFavourTokens.get(i);
+
+            Platform.runLater(() -> {
+                wpv.updateWindowPattern(wp);
+                wpv.setFavourTokens(favourTokens);
+            });
+            i++;
         }
 
         //clears currently drafted dice. This is always called after someone's placing.
@@ -936,13 +934,11 @@ public class SagradaSceneController extends View implements Initializable {
                 return wpv;
             }
         }
-        //TODO: throw exception if this happens
-        return new WindowPatternPlayerView();
+        return null;
     }
 
     @Override
     void notifyPermissionsChanged() {
-        System.out.println("Notified of permissions changed.");
         if (getPermissions().isEmpty()) {
             //TODO: add label here to remind user is not his turn
             Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
