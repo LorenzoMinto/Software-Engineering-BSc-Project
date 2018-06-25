@@ -52,7 +52,7 @@ public class Persistency {
                 int gamesLost = Integer.parseInt(gamesLostNodes.item(i).getTextContent());
                 int timePlayed = Integer.parseInt(timePlayedNodes.item(i).getTextContent());
                 int cumulativePoints = Integer.parseInt(cumulativePointsNodes.item(i).getTextContent());
-                globalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
+                newGlobalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
             }
         } catch (IOException e) {
             e.printStackTrace();
