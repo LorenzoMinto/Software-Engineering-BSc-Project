@@ -39,6 +39,11 @@ public class Controller extends Observable {
     private final Logger logger;
 
     /**
+     * Variable that holds the game starting time in milliseconds
+     */
+    private long startTime;
+
+    /**
      * The controlled {@link Game}
      */
     protected Game game;  //Reference to the Model
@@ -273,11 +278,7 @@ public class Controller extends Observable {
         } else {
             returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
         }
-        //TODO: eliminare questi sout di debug
-        System.out.println("About to set permissions to message...");
         if(returnMessage.getType()==ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
-            System.out.println("Setting permissions to ACK message");
-            System.out.println("FROM STATE: "+controllerState.getClass().getSimpleName() + " permissions: " + controllerState.getStatePermissions());
             returnMessage.setPermissions(controllerState.getStatePermissions());
 
             //Timer for move is reset only if the move was valid. This prevent blocking of game due to unlimited bad messages
@@ -554,6 +555,7 @@ public class Controller extends Observable {
      * Start the {@link Game} by setting the initial permissions, the placement rule and starts the player move timer
      */
     private void startGame(){
+        startTime = System.currentTimeMillis();
         EnumSet<Move> permissions = EnumSet.of(Move.DRAFT_DICE_FROM_DRAFTPOOL, Move.USE_TOOLCARD, Move.END_TURN);
 
         game.startGame(getDicesForNewRound(),permissions);
@@ -721,7 +723,6 @@ public class Controller extends Observable {
      */
     private void manageRankings(){
         Map<Player, Integer> rankings = getRankingsAndScores();
-        //TODO: is the following needed anymore?
         game.setRankings(rankings);
 
         List<RankingRecord> localRanking = new ArrayList<>();
@@ -729,11 +730,11 @@ public class Controller extends Observable {
         int index = 0;
         for (Map.Entry<Player, Integer> entry : rankings.entrySet())
         {
-            //TODO: put a game long timer or else keep timePlayed hardcoded and symbolic
+            int timePlayedInMinute = (int) (System.currentTimeMillis() - startTime)/1000/60;
             Player player =  entry.getKey();
             int score = entry.getValue();
             //the first entry has won
-            persistency.updateRankingForPlayerID(player.getID(), score, index == 0, 5000);
+            persistency.updateRankingForPlayerID(player.getID(), score, index == 0, timePlayedInMinute);
 
             //gets player's updated playing record to account for past games
             RankingRecord ranking = persistency.getRankingForPlayerID(player.getID());

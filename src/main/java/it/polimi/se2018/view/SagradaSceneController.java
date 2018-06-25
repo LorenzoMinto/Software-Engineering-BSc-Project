@@ -486,7 +486,6 @@ public class SagradaSceneController extends View implements Initializable {
         });
     }
 
-    //TODO: player.getFavorTokens();
     public void onToolCards3ButtonPressed(){
         cardCarouselCurrentIndex = 2;
 
