@@ -57,8 +57,11 @@ public class MoveControllerState extends ControllerState {
         Turn currentTurn = game.getCurrentRound().getCurrentTurn();
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
-        if (controller.placementRule.isMoveAllowed(pattern, pattern.getDiceOnCell(rowFrom, colFrom), rowTo, colTo)
-                && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
+        Dice diceOnHold = pattern.removeDiceFromCell(rowFrom, colFrom);
+        boolean isAllowed = controller.placementRule.isMoveAllowed(pattern, diceOnHold, rowTo, colTo);
+        pattern.putDiceOnCell(diceOnHold, rowFrom, colFrom);
+
+        if (isAllowed && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
 
             controller.movesCounter += 1;
             List<Integer> possibleMovesCount = new ArrayList<>();
@@ -81,7 +84,11 @@ public class MoveControllerState extends ControllerState {
     public Message endToolCardEffect() {
         if (controller.getActiveToolCard().getPossibleMovesCountSet().contains(controller.movesCounter)) {
             this.controller.resetActiveToolCard();
-            controller.setControllerState(controller.stateManager.getDraftControllerState());
+            if (controller.game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
+                controller.setControllerState(controller.stateManager.getEndControllerState());
+            } else {
+                controller.setControllerState(controller.stateManager.getDraftControllerState());
+            }
             return new Message(ACKNOWLEDGMENT_MESSAGE, TOOL_CARD_EFFECT_ENDED);
         } else {
             return new Message(ERROR_MESSAGE, CANT_END_TOOLCARD_EFFECT);

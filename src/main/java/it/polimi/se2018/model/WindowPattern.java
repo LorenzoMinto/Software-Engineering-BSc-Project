@@ -197,6 +197,28 @@ public class WindowPattern extends Observable implements Serializable{
     }
 
     /**
+     * Returns the Dice that is placed on the cell corresponding to the given row and column numbers after having removed
+     * it.
+     *
+     * @param row row number of the patter corresponding to the cell where to remove the dice.
+     * @param col column number of the patter corresponding to the cell where to remove the dice.
+     * @return the removed Dice that was placed on the cell corresponding to the given row and column numbers.
+     */
+    public Dice removeDiceFromCell(int row, int col) {
+        if (isIllegalPosition(row, col)){
+            throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);}
+
+        Dice dice = null;
+
+        if (pattern[row][col].hasDice()) {
+            dice = pattern[row][col].getDice();
+            pattern[row][col].removeDice();
+        }
+
+        return dice;
+    }
+
+    /**
      * Put a dice in the cell corresponding to the given row and column numbers.
      *
      * @param dice Dice to put in the given cell
