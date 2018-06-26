@@ -281,4 +281,13 @@ public class ToolCardControllerStateTest {
         Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
+
+    /**
+     * Testing the retrieval of the state permissions
+     * @see ToolCardControllerState#getStatePermissions()
+     */
+    @Test
+    public void testGetStatePermissions(){
+        assertNotNull(controller.controllerState.getStatePermissions());
+    }
 }

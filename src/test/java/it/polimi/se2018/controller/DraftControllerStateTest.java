@@ -220,4 +220,13 @@ public class DraftControllerStateTest {
         Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
+
+    /**
+     * Testing the retrieval of the state permissions
+     * @see DraftControllerState#getStatePermissions()
+     */
+    @Test
+    public void testGetStatePermissions(){
+        assertNotNull(controller.controllerState.getStatePermissions());
+    }
 }
