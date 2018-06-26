@@ -92,6 +92,11 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private final int maxNumberOfAttempts;
 
     /**
+     * Server IP
+     */
+    private final String serverIP;
+
+    /**
      * Name of the server
      */
     private final String serverName;
@@ -211,15 +216,23 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             configFileName = DEFAULT_CONFIG_FILE_NAME;
         }
 
-        new Server(serverName,portNumberRMI,portNumberSOCKET,maxNumberOfAttempts,configFileName);
+        String serverIP;
+        try{
+            serverIP = args[5];
+        } catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+            return;
+        }
+
+        new Server(serverIP,serverName,portNumberRMI,portNumberSOCKET,maxNumberOfAttempts,configFileName);
     }
 
     /**
      * Server constructor. Do the netwroking setup, creates controller and game
      */
-    private Server(String serverName, int portNumberRMI, int portNumberSOCKET, int maxNumberOfAttempts, String configFileName) {
+    private Server(String serverIP, String serverName, int portNumberRMI, int portNumberSOCKET, int maxNumberOfAttempts, String configFileName) {
         LOGGER.setLevel(Level.ALL);
-
+        this.serverIP = serverIP;
         this.serverName = serverName;
         this.portNumberRMI = portNumberRMI;
         this.portNumberSOCKET = portNumberSOCKET;
@@ -240,6 +253,9 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * Setup of networking starting RMI and Socket servers
      */
     private void setupNetworking() {
+
+        System.setProperty("java.rmi.server.hostname",this.serverIP);
+
         try {
             LOGGER.info(STARTING_RMI);
             new RMIServerGateway(this.serverName,this.portNumberRMI,this);
