@@ -13,10 +13,20 @@ import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
 
 
+/**
+ * Test for {@link Controller} class
+ * This class cannot be fully tested. Only simple behaviors are tested. Testing this class would mean simulating the game.
+ *
+ * Many of the methods and behaviors of {@link Controller} are tested by other tests.
+ * Since the {@link Controller} follows the State Design Pattern, part of its behavior is mainly tested in the State tests.
+ * The remaining behavior is not worth testing, as it would involve creating Messages of all types and exchanging them,
+ * which in practice is playing the game.
+ *
+ * @author Jacopo Pio Gargano
+ */
 public class ControllerTest {
 
     private static Controller controller;
-    private static ToolCard toolCard;
 
     @BeforeClass
     public static void init(){
@@ -25,7 +35,7 @@ public class ControllerTest {
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
         gameProperties.setProperty("numberOfDicesPerColor","18");
-        gameProperties.setProperty("numberOfToolCards","3");
+        gameProperties.setProperty("numberOfToolCards","12");
         gameProperties.setProperty("numberOfPublicObjectiveCards","2");
         gameProperties.setProperty("maxNumberOfPlayers","4");
         gameProperties.setProperty("minNumberOfPlayers","2");
@@ -49,61 +59,31 @@ public class ControllerTest {
             params.put("windowPattern", wp);
             controller.handleMoveMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN, params, p.getID()));
         }
-
-        Properties toolCardProperties = new Properties();
-        toolCardProperties.put("id", "LensCutter");
-        toolCardProperties.put("title", "title");
-        toolCardProperties.put("description", "desc");
-        toolCardProperties.put("neededTokens", "1");
-        toolCardProperties.put("tokensUsageMultiplier", "2");
-        toolCardProperties.put("imageURL", "imageURL");
-
-        toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, new HashSet<>());
     }
 
+    /**
+     * Tests setting a specific controller state
+     * @see Controller#setControllerState(ControllerState)
+     */
     @Test
     public void testSetControllerState() {
         controller.setControllerState(controller.stateManager.getToolCardState());
         Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
         assertEquals(ERROR_MESSAGE, m.getType());
-        //TODO: lorenzo ci sono alcune toolcards (Grinding stone, lens cutter, flux remover, cork backed..) hanno dei null
-        System.out.println(controller.game.getDrawnToolCards());
-        m = controller.controllerState.useToolCard(controller.game.getDrawnToolCards().get(0));
+
+        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+        ToolCard toolCard = null;
+        while (toolCard == null || !toolCard.getTitle().equals("Eglomise Brush")) {
+            toolCard = manager.getRandomToolCards(1).get(0);
+        }
+        m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
-    @Test
-    public void canUseSpecificToolCard() {
-    }
-
-    @Test
-    public void setActiveToolCard() {
-    }
-
-    @Test
-    public void resetActiveToolCard() {
-    }
-
-    @Test
-    public void getActiveToolCard() {
-    }
-
-    @Test
-    public void advanceGame() {
-    }
-
-    @Test
-    public void endGame() {
-    }
-
-    @Test
-    public void getRankingsAndScores() {
-    }
-
-    @Test
-    public void getDefaultPlacementRule() {
-    }
-
+    /**
+     * Tests the retrieval of the config properties
+     * @see Controller#getConfigProperty(String)
+     */
     @Test
     public void getConfigProperty() {
         assertEquals(4,controller.getConfigProperty("maxNumberOfPlayers"));
