@@ -38,18 +38,18 @@ public abstract class View implements Observer {
     private static final String FAILED_SETUP_TURN = "New turn setup failed. You could face crucial issues playing.";
     private static final String YOU_ARE_THE_WINNER = "You are the winner! Congratulations!";
     private static final String THE_WINNER_IS = "The winner is ";
-    private static final String WINDOW_PATTERN_UPDATED = "A Window pattern has been updated ";
+    private static final String WINDOW_PATTERN_UPDATED = " update window pattern";
     private static final String ITS_YOUR_TURN = "It's your turn!";
     private static final String ERROR_MOVE = "An unexpected error wouldn't let you perform the move. Try again.";
     private static final String MAX_PLAYERS_ERROR = "You can't join the game as there is already the maximum number of players in the game.";
     private static final String NICKNAME_ALREADY_USED_ERROR = "You can't join the game as there already is a player with this nickname.";
     private static final String ALREADY_PLAYING_ERROR = "You can't join the game as it is not running.";
     private static final String USE_TOOL_CARD = " uses the toolCard ";
-    private static final String YOU_HAVE_DRAFTED = "You have drafted ";
+    private static final String YOU_HAVE_DRAFTED = "Was drafted ";
     private static final String JOINS_THE_WAITING_ROOM = " joins the waiting room";
     private static final String LEAVES_THE_WAITING_ROOM = " leaves the waiting room";
     private static final String ROUND_NOW_STARTS = "# Round now starts!";
-    private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
+    private static final String NOW_ITS_TURN_OF = "Now it's the turn of ";
     private static final String THE_GAME_IS_STARTED = "The game started!";
     private static final String PROBLEMS_WITH_CONNECTION = "There are some problems with connection. Check if it depends on you, if not wait or restart game.";
     private static final String CONNECTION_RESTORED = "Connection restored!";
@@ -210,6 +210,13 @@ public abstract class View implements Observer {
     private boolean wasInactiveBeforeConnectionDrop = false;
 
     // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
+
+    /**
+     * Handles the move "Return dice to draft pool move"
+     */
+    void handleReturnDiceToDraftpoolMove(){
+        //TODO: implement
+    }
 
     /**
      * Handles the move "Leave Waiting Room"
@@ -679,7 +686,7 @@ public abstract class View implements Observer {
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
         setWindowPatterns(mWindowPatterns);
-        setWindowPattern(mWindowPattern);
+        //setWindowPattern(mWindowPattern);
         setPlayersFavourTokens(mPlayersFavourTokens);
 
         notifyGameStarted();
@@ -750,7 +757,7 @@ public abstract class View implements Observer {
         int index = players.indexOf(pID);
         windowPatterns.set(index, wp);
 
-        showMessage(WINDOW_PATTERN_UPDATED);
+        showMessage(pID+WINDOW_PATTERN_UPDATED);
     }
 
     /**
@@ -1078,9 +1085,12 @@ public abstract class View implements Observer {
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
-        //TODO: rimuovere in fase di produzione
-        if(type!=ViewBoundMessageType.PING){
-            System.out.println("RECEIVED:"+type.toString());
+        if(type!=ViewBoundMessageType.ERROR_MESSAGE){
+            //UPDATE PERMISSIONS
+            EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
+            if(!p.isEmpty()){
+                setPermissions(p);
+            }//else keep same permissions
         }
 
         switch (type) {
@@ -1174,14 +1184,6 @@ public abstract class View implements Observer {
             default:
                 //No other messages are evaluated in this state
                 break;
-        }
-
-        if(type!=ViewBoundMessageType.ERROR_MESSAGE){
-            //UPDATE PERMISSIONS
-            EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
-            if(!p.isEmpty()){
-                setPermissions(p);
-            }//else keep same permissions
         }
     }
 
@@ -1387,13 +1389,6 @@ public abstract class View implements Observer {
     }
 
     /**
-     * @see View#windowPattern
-     */
-    public void setWindowPattern(WindowPattern windowPattern) {
-        this.windowPattern = windowPattern;
-    }
-
-    /**
      * @see View#privateObjectiveCard
      */
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
@@ -1412,5 +1407,6 @@ public abstract class View implements Observer {
      */
     public void setWindowPatterns(List<WindowPattern> windowPatterns) {
         this.windowPatterns = windowPatterns;
+        this.windowPattern = windowPatterns.get(players.indexOf(this.playerID));
     }
 }

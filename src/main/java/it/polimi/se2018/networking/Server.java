@@ -313,10 +313,10 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
                 //Notify all players
                 if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
-                    sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,returnMessage.getPlayerID()));
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,Message.fastMap("player",returnMessage.getPlayerID())));
 
                 } else if(returnMessage.getType()==ViewBoundMessageType.REMOVED_FROM_WR){
-                    sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,Message.fastMap("player",returnMessage.getPlayerID())));
                 }
 
             } catch (NetworkingException e){
@@ -475,7 +475,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         List<ClientProxyInterface> g;
 
         if(message.getPlayerID()==null){ //Means that message is broadcast
-            g = gateways;
+            g = this.serverState == ServerState.WAITING_ROOM ? new ArrayList<>(waitingList.values()) : gateways;
         } else {
             g = new ArrayList<>();
             g.add(playerIDToGatewayMap.get(message.getPlayerID()));
@@ -521,8 +521,8 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * @param gateway the disconnected client's gateway
      */
     private void handleDisconnectedGateway(ClientProxyInterface gateway){
-        this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
         this.disconnectedGateways.add(gateway);
+        this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
 
         new Thread(()->{
             while(true){
@@ -587,6 +587,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             }
 
         } else if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(sender)){
+            this.disconnectedGateways.add(sender);
             controller.playerLostConnection(gatewayToPlayerIDMap.get(sender));
         }
     }
@@ -599,6 +600,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             gatewayToPlayerIDMap.put(next,playerID);
             playerIDToGatewayMap.remove(playerID);
             playerIDToGatewayMap.put(playerID,next);
+            this.disconnectedGateways.remove(previous);
             controller.playerRestoredConnection(playerID);
         }
     }

@@ -713,7 +713,6 @@ public class SagradaSceneController extends View implements Initializable {
                     @Override
                     public void handle(ActionEvent event) {
                         WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
-                        setWindowPattern(windowPattern);
                         try {
                             sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern.copy())));
                         } catch (NetworkingException e) {
