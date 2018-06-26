@@ -78,7 +78,17 @@ public class PlaceControllerState extends ControllerState {
             currentTurn.resetDraftedDice();
 
             currentRound.getDraftPool().putDice(draftedDice);
-            controller.setControllerState(controller.stateManager.getNextState(this));
+
+
+            if (controller.getActiveToolCard() != null) {
+                controller.setControllerState(controller.stateManager.getNextState(this));
+            } else {
+                if (currentTurn.hasUsedToolCard()) {
+                    controller.setControllerState(controller.stateManager.getEndControllerState());
+                } else {
+                    controller.setControllerState(controller.stateManager.getToolCardState());
+                }
+            }
             return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_RETURNED);
         } else {
             return new Message(ERROR_MESSAGE, MOVE_IS_ILLEGAL);
