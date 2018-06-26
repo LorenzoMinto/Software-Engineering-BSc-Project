@@ -933,7 +933,7 @@ public abstract class View implements Observer {
      * Notify classes that extends View (CLI and GUI) about the beginning of a new round
      */
     void notifyNewRound(){
-        showMessage(this.roundNumber+ ROUND_NOW_STARTS);
+        showMessage((this.roundNumber+1)+ ROUND_NOW_STARTS);
     }
 
     /**
@@ -987,7 +987,7 @@ public abstract class View implements Observer {
      * @param m the received message
      */
     private void receiveMessage(Message m){
-
+        if(m.getType()!=ViewBoundMessageType.PING){System.out.println(m);}
         addHandlingMessage(m);
 
         handleMessage(m);
