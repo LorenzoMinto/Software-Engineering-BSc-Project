@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
@@ -513,7 +512,7 @@ public class SagradaSceneController extends View implements Initializable {
                 //TODO: implementa
             }
         } else {
-            errorMessage("You have not selected a dice from the draft pool yet!");
+            showError("You have not selected a dice from the draft pool yet!");
         }
     }
 
@@ -544,7 +543,7 @@ public class SagradaSceneController extends View implements Initializable {
                 //TODO: implementa
             }
         } else {
-            errorMessage("No cell was selected!");
+            showError("No cell was selected!");
         }
         Platform.runLater(() -> {
             userWindowPatternView.cleanSelection();
@@ -554,7 +553,7 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleChangeDraftedDiceValueMove() {
         if (diceValuePicker.getValue() == null) {
-            errorMessage("You have to choose a new value for the dice.");
+            showError("You have to choose a new value for the dice.");
         } else {
             int newDiceValue = Integer.parseInt((String) diceValuePicker.getValue());
             try {
@@ -585,7 +584,7 @@ public class SagradaSceneController extends View implements Initializable {
             }
 
         } else {
-            errorMessage("You have not selected a dice from the track yet!");
+            showError("You have not selected a dice from the track yet!");
         }
 
     }
@@ -612,7 +611,7 @@ public class SagradaSceneController extends View implements Initializable {
             }
 
         } else {
-            errorMessage("Select TO and FROM cell to make the move.");
+            showError("Select TO and FROM cell to make the move.");
         }
         Platform.runLater(() -> {
             userWindowPatternView.cleanSelection();
@@ -823,7 +822,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
-    void errorMessage(String message) { printOnConsole("ERROR: "+message);}
+    void showError(String message) { printOnConsole("ERROR: "+message);}
 
     private void setupCards() {
         updateCards();

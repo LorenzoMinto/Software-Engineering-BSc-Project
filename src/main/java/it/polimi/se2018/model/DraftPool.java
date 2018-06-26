@@ -75,9 +75,9 @@ public class DraftPool extends Observable implements Serializable {
      * @return if the removal succeeded or not
      */
     public boolean draftDice(Dice dice) {
-        System.out.println("Draft dice called on DraftPool: " + dices);
+        //System.out.println("Draft dice called on DraftPool: " + dices);
         if(dices.remove(dice)) {
-            System.out.println("Dice removed, new dice: "+ dices);
+            //System.out.println("Dice removed, new dice: "+ dices);
             notifyGame();
             return true;
         } else {

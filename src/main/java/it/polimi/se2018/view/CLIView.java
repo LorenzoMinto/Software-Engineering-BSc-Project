@@ -40,6 +40,7 @@ public class CLIView extends View{
     private static final String SHOW_MY_PRIVATE_OBJECTIVE_CARD = "Show my private objective card";
     private static final String SHOW_PUBLIC_OBJECTIVE_CARDS = "Show public objective cards";
     private static final String SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS = "Show window patterns of other players";
+    private static final String SHOW_TOOLCARDS = "Show toolcards";
     private static final String ASK_FOR_MOVE = "Which move would you like to perform?";
     private static final String REMEMBER_DRAFTED_DICE = "Remember you have drafted a dice that is waiting to be placed: ";
     private static final String WINDOW_PATTERN_OF = "Window pattern of ";
@@ -286,6 +287,8 @@ public class CLIView extends View{
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_MY_PRIVATE_OBJECTIVE_CARD,this::printPrivateObjectiveCard));
             index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_TOOLCARDS,this::printToolCards));
+
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_PUBLIC_OBJECTIVE_CARDS,this::printPublicObjectiveCards));
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS,this::printOthersWindowPatterns));
@@ -346,6 +349,9 @@ public class CLIView extends View{
             case CHOOSE_DICE_FROM_TRACK:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleChooseDiceFromTrackMove);
                 break;
+            case RETURN_DICE_TO_DRAFTPOOL:
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleReturnDiceToDraftpoolMove);
+                break;
             case MOVE_DICE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleMoveDiceMove);
                 break;
@@ -391,7 +397,7 @@ public class CLIView extends View{
     }
 
     @Override
-    void errorMessage(String message) {
+    void showError(String message) {
         print(ERROR_MESSAGE +message);
         waitForMove();
     }
@@ -412,6 +418,9 @@ public class CLIView extends View{
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
             int index = 0;
             for(WindowPattern windowPattern : windowPatterns){
+                if(windowPattern.getID().equals(this.windowPattern.getID())){
+                    continue;
+                }
                 print(WINDOW_PATTERN_OF +players.get(index)); //assumes that windowPatterns and players are in the same order
                 print(windowPattern.toString());
                 index++;
@@ -462,6 +471,12 @@ public class CLIView extends View{
 
 
     // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
+
+    @Override
+    void handleReturnDiceToDraftpoolMove(){
+        super.handleReturnDiceToDraftpoolMove();
+        waitForMove();
+    }
 
     @Override
     void handleEndEffectMove(){
@@ -519,13 +534,14 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             }
 
-            waitForMove();
+            //waitForMove() is not called here because user must wait for acknowledgement message
         });
     }
 
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
         super.handlePlaceDiceOnWindowPatternMove();
+        printWindowPattern();
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN);
         waitForConsoleInput(rowString -> {
             int row;
@@ -565,14 +581,21 @@ public class CLIView extends View{
         });
     }
 
-    @Override
-    void handleUseToolCardMove() {
-        super.handleUseToolCardMove();
+    /**
+     * Prints the toolcards.
+     */
+    private void printToolCards(){
         int index = 1;
         for(ToolCard toolCard : drawnToolCards){
             print(Integer.toString(index)+". "+toolCard);
             index++;
         }
+    }
+
+    @Override
+    void handleUseToolCardMove() {
+        super.handleUseToolCardMove();
+        printToolCards();
         waitForConsoleInput(toolCardIndexString -> {
             int toolCardIndex;
             try {

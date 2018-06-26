@@ -405,13 +405,13 @@ public class Controller extends Observable {
             if( game.assignWindowPatternToPlayer(wp,playerID) ){
 
                 if( checkIfAllPlayersChoseWP() ){
-                    waitingForPatternsChoice.cancel();
-                    startGame();
-                    return null;
-
-                } else {
-                    return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
+                    new Thread(()->{
+                        waitingForPatternsChoice.cancel();
+                        startGame();
+                    }).start();
                 }
+
+                return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"WindowPattern assigned");
 
             } else {
                 return new Message(ViewBoundMessageType.ERROR_MESSAGE,"Player has already an assigned WindowPattern");
