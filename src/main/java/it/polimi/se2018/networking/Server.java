@@ -161,6 +161,11 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private HashMap<ClientProxyInterface,List<Message>> unSentMessages = new HashMap<>();
 
     /**
+     * Pinging class
+     */
+    private Pinging pinging;
+
+    /**
      * The main class for server in order to make it runnable.
      *
      * @param args arguments passed by command line
@@ -227,7 +232,8 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         this.controller = createController();
         this.controller.register(this);
 
-        new Pinging(this,ViewBoundMessageType.PING).start();
+        this.pinging = new Pinging(this,ViewBoundMessageType.PING);
+        this.pinging.start();
     }
 
     /**
@@ -313,10 +319,10 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
                 //Notify all players
                 if(returnMessage.getType()==ViewBoundMessageType.ADDED_TO_WR){
-                    sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,returnMessage.getPlayerID()));
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_ADDED_TO_WR,Message.fastMap("player",returnMessage.getPlayerID())));
 
                 } else if(returnMessage.getType()==ViewBoundMessageType.REMOVED_FROM_WR){
-                    sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,returnMessage.getPlayerID()));
+                    sendMessage(new Message(ViewBoundMessageType.PLAYER_REMOVED_FROM_WR,Message.fastMap("player",returnMessage.getPlayerID())));
                 }
 
             } catch (NetworkingException e){
@@ -391,7 +397,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * @return a message containing if the operation went good or not
      */
     private Message removeFromWaitingRoom(String nickname, ClientProxyInterface client){
-        if( waitingList.get(nickname) == client ){
+        if( waitingList.containsKey(nickname) && waitingList.get(nickname).equals(client) ){
             //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
 
@@ -403,6 +409,21 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         } else {
             return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }
+    }
+
+    /**
+     * Remove the given client from the waiting room
+     * @param client the client to remove from the waiting room
+     * @return a message containing if the operation went good or not
+     */
+    private boolean removeFromWaitingRoom(ClientProxyInterface client){
+        for (Map.Entry<String, ClientProxyInterface> entry : waitingList.entrySet()) {
+            if (entry.getValue().equals(client)) {
+                waitingList.remove(entry.getKey());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -475,7 +496,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         List<ClientProxyInterface> g;
 
         if(message.getPlayerID()==null){ //Means that message is broadcast
-            g = gateways;
+            g = this.serverState == ServerState.WAITING_ROOM ? new ArrayList<>(waitingList.values()) : gateways;
         } else {
             g = new ArrayList<>();
             g.add(playerIDToGatewayMap.get(message.getPlayerID()));
@@ -508,7 +529,11 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
             if(!correctlySent){
-                handleDisconnectedGateway(o);
+                if(this.serverState==ServerState.WAITING_ROOM){
+                    removeFromWaitingRoom(o);
+                } else {
+                    handleDisconnectedGateway(o);
+                }
                 somethingFailed=true;
             }
         }
@@ -521,8 +546,8 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * @param gateway the disconnected client's gateway
      */
     private void handleDisconnectedGateway(ClientProxyInterface gateway){
-        this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
         this.disconnectedGateways.add(gateway);
+        this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
 
         new Thread(()->{
             while(true){
@@ -578,15 +603,13 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
     @Override
     public void lostConnection(ClientProxyInterface sender) {
-
+        System.out.println("Lost connection");
         if (serverState == ServerState.WAITING_ROOM) {
-            for (Map.Entry<String, ClientProxyInterface> entry : waitingList.entrySet()) {
-                if (entry.getValue().equals(sender)) {
-                    waitingList.remove(entry.getKey());
-                }
-            }
+
+            removeFromWaitingRoom(sender);
 
         } else if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(sender)){
+            this.disconnectedGateways.add(sender);
             controller.playerLostConnection(gatewayToPlayerIDMap.get(sender));
         }
     }
@@ -599,6 +622,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             gatewayToPlayerIDMap.put(next,playerID);
             playerIDToGatewayMap.remove(playerID);
             playerIDToGatewayMap.put(playerID,next);
+            this.disconnectedGateways.remove(previous);
             controller.playerRestoredConnection(playerID);
         }
     }

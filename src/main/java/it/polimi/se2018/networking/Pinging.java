@@ -26,7 +26,7 @@ public class Pinging extends Thread{
                 try {
                     sender.sendMessage(new Message(this.ping));
                 } catch (NetworkingException e) {
-                    stopPinging();
+                    //stopPinging();
                 }
             }
 
@@ -36,13 +36,5 @@ public class Pinging extends Thread{
                 Thread.currentThread().interrupt();
             }
         }
-    }
-
-    private void stopPinging(){
-        this.doPing = false;
-    }
-
-    public void restartPinging(){
-        this.doPing = true;
     }
 }

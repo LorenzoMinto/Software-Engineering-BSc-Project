@@ -41,7 +41,7 @@ public class CLIView extends View{
     private static final String SHOW_PUBLIC_OBJECTIVE_CARDS = "Show public objective cards";
     private static final String SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS = "Show window patterns of other players";
     private static final String ASK_FOR_MOVE = "Which move would you like to perform?";
-    private static final String REMEMBER_DRAFTED_DICE = "Remember you have drafted a dice that is waiting to be placed: ";
+    private static final String REMEMBER_DRAFTED_DICE = "Current drafted dice: ";
     private static final String WINDOW_PATTERN_OF = "Window pattern of ";
     private static final String PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS = "Players have not already received window patterns.";
     private static final String THERE_ARE_NO_PUBLIC_OBJECTIVE_CARDS_YET = "There are no public objective cards yet.";
@@ -67,6 +67,7 @@ public class CLIView extends View{
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
     private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
     private static final String PORT_NUMBER_MUST_BE_A_NUMBER = "Port number must be a number";
+    private static final String SHOW_TOOLCARDS = "Show toolcards";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -87,6 +88,7 @@ public class CLIView extends View{
     private static final String PARAM_COL = "col";
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_DICE = "dice";
+    private static final String PLEASE_INSERT_A_NUMBER = "Please insert a number";
 
 
     // AUXILIARY CLASSES
@@ -286,6 +288,8 @@ public class CLIView extends View{
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_MY_PRIVATE_OBJECTIVE_CARD,this::printPrivateObjectiveCard));
             index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_TOOLCARDS,this::handleShowToolCards));
+            index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_PUBLIC_OBJECTIVE_CARDS,this::printPublicObjectiveCards));
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS,this::printOthersWindowPatterns));
@@ -346,6 +350,9 @@ public class CLIView extends View{
             case CHOOSE_DICE_FROM_TRACK:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleChooseDiceFromTrackMove);
                 break;
+            case RETURN_DICE_TO_DRAFTPOOL:
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleReturnDiceToDraftpoolMove);
+                break;
             case MOVE_DICE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleMoveDiceMove);
                 break;
@@ -378,7 +385,7 @@ public class CLIView extends View{
      * Cleans the console screen
      */
     private void cleanConsole(){
-        for(int i = 0; i<=15; i++){
+        for(int i = 0; i<=2; i++){
             print("");
         }
         //TODO: implement better this method
@@ -410,11 +417,14 @@ public class CLIView extends View{
      */
     private void printOthersWindowPatterns() {
         if(this.windowPatterns!=null && !this.windowPatterns.isEmpty()){
-            int index = 0;
+            int index = -1;
             for(WindowPattern windowPattern : windowPatterns){
+                index++;
+                if(windowPattern.getID().equals(this.windowPattern.getID())) {
+                    continue;
+                }
                 print(WINDOW_PATTERN_OF +players.get(index)); //assumes that windowPatterns and players are in the same order
                 print(windowPattern.toString());
-                index++;
             }
         } else {
             print(PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS);
@@ -464,9 +474,15 @@ public class CLIView extends View{
     // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
 
     @Override
+    void handleReturnDiceToDraftpoolMove(){
+        super.handleReturnDiceToDraftpoolMove();
+        waitForMove();
+    }
+
+    @Override
     void handleEndEffectMove(){
         super.handleEndEffectMove();
-        waitForMove();
+        //waitForMove() is not called here because user must wait for acknowledgement message
     }
 
     @Override
@@ -511,7 +527,7 @@ public class CLIView extends View{
 
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt).copy())));
+                    sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt))));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -526,6 +542,7 @@ public class CLIView extends View{
     @Override
     void handlePlaceDiceOnWindowPatternMove() {
         super.handlePlaceDiceOnWindowPatternMove();
+        printWindowPattern();
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN);
         waitForConsoleInput(rowString -> {
             int row;
@@ -568,23 +585,25 @@ public class CLIView extends View{
     @Override
     void handleUseToolCardMove() {
         super.handleUseToolCardMove();
-        int index = 1;
-        for(ToolCard toolCard : drawnToolCards){
-            print(Integer.toString(index)+". "+toolCard);
-            index++;
-        }
+        printToolCards();
         waitForConsoleInput(toolCardIndexString -> {
             int toolCardIndex;
             try {
-                toolCardIndex = Integer.parseInt(toolCardIndexString);
+                toolCardIndex = Integer.parseInt(toolCardIndexString) - 1;
             } catch (NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleUseToolCardMove();
+                print(INPUT_NOT_VALID);
+                waitForMove();
                 return;
             }
+            if(toolCardIndex>=drawnToolCards.size() || toolCardIndex<0){
+                print(INPUT_NOT_VALID);
+                waitForMove();
+                return;
+            }
+
             try {
-                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex).copy())));
+                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex))));
             } catch (NetworkingException e) {
                 print(e.getMessage());
             }
@@ -649,7 +668,7 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleChooseDiceFromTrackMove();
+                waitForMove();
                 return;
             }
             print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK);
@@ -666,12 +685,12 @@ public class CLIView extends View{
                     cleanConsole();
                     print(PORT_NUMBER_MUST_BE_A_NUMBER);
                     connect();
-                    handleChooseDiceFromTrackMove();
+                    waitForMove();
                     return;
                 }
                 HashMap<String,Object> params = new HashMap<>();
                 params.put(PARAM_SLOT_NUMBER,trackSlotNumber);
-                params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex).copy());
+                params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex));
 
                 try {
                     sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
@@ -695,7 +714,7 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleMoveDiceMove();
+                waitForMove();
                 return;
             }
             print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1);
@@ -706,7 +725,7 @@ public class CLIView extends View{
                 } catch (NumberFormatException e){
                     cleanConsole();
                     print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                    handleMoveDiceMove();
+                    waitForMove();
                     return;
                 }
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
@@ -719,7 +738,7 @@ public class CLIView extends View{
                         } catch (NumberFormatException e){
                             cleanConsole();
                             print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                            handleMoveDiceMove();
+                            waitForMove();
                             return;
                         }
                         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1);
@@ -730,7 +749,7 @@ public class CLIView extends View{
                             } catch (NumberFormatException e){
                                 cleanConsole();
                                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                                handleMoveDiceMove();
+                                waitForMove();
                                 return;
                             }
                             if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
@@ -774,6 +793,10 @@ public class CLIView extends View{
         });
     }
 
+    private void handleShowToolCards(){
+        printToolCards();
+        waitForMove();
+    }
 
     // HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
 
@@ -811,13 +834,13 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleGiveWindowPatternsEvent(m);
+                waitForMove();
                 return;
             }
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern.copy())));
+                    sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern)));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                     return;
@@ -856,7 +879,6 @@ public class CLIView extends View{
         super.handleInactiveEvent(m);
         removeHandlingMessage(m);
         waitForMove();
-        //TODO: check if this waitForMove() is necessary or not
     }
 
     @Override
@@ -878,14 +900,14 @@ public class CLIView extends View{
     void handleUpdatedWindowPatternEvent(Message m){
         super.handleUpdatedWindowPatternEvent(m);
         removeHandlingMessage(m);
-        //TODO: decidere se serve waitForMove() o no
+        waitForMove();
     }
 
     @Override
     void handleChangedDraftPoolEvent(Message m){
         super.handleChangedDraftPoolEvent(m);
         removeHandlingMessage(m);
-        //TODO: decidere se serve waitForMove() o no
+        waitForMove();
     }
 
     @Override
@@ -927,21 +949,20 @@ public class CLIView extends View{
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
         removeHandlingMessage(m);
-        //TODO: decidere se serve waitForMove() o no
     }
 
     @Override
     void handleSlotOfTrackChosenDice(Message m){
         super.handleSlotOfTrackChosenDice(m);
         removeHandlingMessage(m);
-        //TODO: decidere se serve waitForMove() o no
+        waitForMove();
     }
 
     @Override
     void handleTrackChosenDiceEvent(Message m){
         super.handleTrackChosenDiceEvent(m);
         removeHandlingMessage(m);
-        //TODO: decidere se serve waitForMove() o no
+        waitForMove();
     }
 
     @Override
@@ -962,5 +983,15 @@ public class CLIView extends View{
     void notifyNewTurn(){
         super.notifyNewTurn();
         waitForMove();
+    }
+
+
+
+    private void printToolCards(){
+        int index = 1;
+        for(ToolCard toolCard : drawnToolCards){
+            print(Integer.toString(index)+". "+toolCard);
+            index++;
+        }
     }
 }

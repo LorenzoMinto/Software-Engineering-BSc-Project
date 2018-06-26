@@ -536,19 +536,26 @@ public class Controller extends Observable {
         this.waitingForPatternsChoice = new TimerTask() {
             @Override
             public void run() {
-                logger.info("waitingForPatternsChoice timer has expired. Setting windowPatterns automatically...");
-
-                //Assign the first of the given windowPattern to players that did not choose
-                for(Player p : game.getPlayers()){
-                    if(p.getWindowPattern()==null){
-                        p.setWindowPattern(assignedWindowPatterns.get(p.getID()).get(0));
-                    }
-                }
-
-                if( checkIfAllPlayersChoseWP() ){ startGame(); }
+                forcePatternChoice();
             }
         };
         TIMER.schedule(this.waitingForPatternsChoice,(long)(getConfigProperty("timeoutChoosingPatterns")*1000));
+    }
+
+    /**
+     * Players who did not choose a pattern, receive one randomly
+     */
+    private void forcePatternChoice(){
+        logger.info("waitingForPatternsChoice timer has expired. Setting windowPatterns automatically...");
+
+        //Assign the first of the given windowPattern to players that did not choose
+        for(Player p : game.getPlayers()){
+            if(p.getWindowPattern()==null){
+                p.setWindowPattern(assignedWindowPatterns.get(p.getID()).get(0));
+            }
+        }
+
+        if( checkIfAllPlayersChoseWP() ){ startGame(); }
     }
 
     /**
@@ -807,6 +814,8 @@ public class Controller extends Observable {
             this.inactiveDisconnectedPlayers.add(playerID);
         }
         notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap("player",playerID)));
+        waitingForPatternsChoice.cancel();
+        forcePatternChoice();
         advanceGameDueToPlayerInactivity();
     }
 

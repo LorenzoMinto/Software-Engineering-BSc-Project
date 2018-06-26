@@ -47,7 +47,7 @@ public class ToolCard implements Serializable{
     /**
      * Part of the toString representation of the toolCard. Contains content shown after used tokens
      */
-    private static final String POST_USED_TOKENS = ")";
+    private static final String POST_USED_TOKENS = "]";
     /**
      * Part of the toString representation of the toolCard. Contains content shown before description
      */

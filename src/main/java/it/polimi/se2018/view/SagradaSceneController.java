@@ -91,6 +91,7 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private HBox trackHBox;
     @FXML private GridPane trackGridPane;
     @FXML private Button trackImageButton;
+    @FXML private Button trackBackButton;
 
     private List<HBox> trackHBoxes = new ArrayList<>();
     @FXML private HBox trackHBox10;
@@ -124,6 +125,8 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button toolCards3FavorTokensButton;
 
     @FXML private Button toolCardsPlayerFavorTokensButton;
+
+    @FXML private Button toolCardsBackButton;
 
 
     //WINDOWPATTERNS
@@ -212,6 +215,7 @@ public class SagradaSceneController extends View implements Initializable {
         trackVisibleComponents.add(trackGridPane);
         trackVisibleComponents.add(trackHBox);
         trackVisibleComponents.add(trackImageButton);
+        trackVisibleComponents.add(trackBackButton);
 
 
         disable(trackVisibleComponents);
@@ -241,6 +245,7 @@ public class SagradaSceneController extends View implements Initializable {
         toolCardsVisibleComponents.add(toolCards2FavorTokensButton);
         toolCardsVisibleComponents.add(toolCards3FavorTokensButton);
         toolCardsVisibleComponents.add(toolCardsPlayerHBox);
+        toolCardsVisibleComponents.add(toolCardsBackButton);
 
         disable(toolCardsVisibleComponents);
 
@@ -361,6 +366,16 @@ public class SagradaSceneController extends View implements Initializable {
     public void onCardCarouselPrivateButtonPressed(){
         cardCarouselCurrentIndex = drawnToolCards.size() + drawnPublicObjectiveCards.size();
         updateCardCarousel();
+    }
+
+    public void onTrackBackButtonPressed(){
+        disable(trackVisibleComponents);
+        disableBlackAnchorPane();
+    }
+
+    public void onToolCardsBackButtonPressed(){
+        disable(toolCardsVisibleComponents);
+        disableBlackAnchorPane();
     }
 
     @Override
@@ -691,6 +706,7 @@ public class SagradaSceneController extends View implements Initializable {
         super.handleGiveWindowPatternsEvent(m);
         enableBlackAnchorPane();
 
+        disable(trackVisibleComponents);
 
         enable(windowPatternsVisibleComponents);
 
@@ -721,7 +737,6 @@ public class SagradaSceneController extends View implements Initializable {
                     @Override
                     public void handle(ActionEvent event) {
                         WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
-                        setWindowPattern(windowPattern);
                         try {
                             sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern.copy())));
                         } catch (NetworkingException e) {
@@ -729,7 +744,6 @@ public class SagradaSceneController extends View implements Initializable {
                         }
                         hasChosenWindowPattern();
                         printOnConsole(windowPattern.getTitle() +" chosen.");
-                        disable(windowPatternsVisibleComponents);
                     }
                 });
             }
@@ -796,13 +810,9 @@ public class SagradaSceneController extends View implements Initializable {
         updateWindowPatterns();
     }
 
-    public void handleTrackImageButtonPressedEvent(){
-        disable(trackVisibleComponents);
-        disableBlackAnchorPane();
-    }
-
 
     private void hasChosenWindowPattern() {
+        disable(windowPatternsVisibleComponents);
         disableBlackAnchorPane();
         disableBlackHBox();
         disable(trackVisibleComponents);
