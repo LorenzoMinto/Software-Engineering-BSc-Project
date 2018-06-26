@@ -38,7 +38,7 @@ public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
     private List<Image> cards = new ArrayList<>();
-    private int cardCarouselCurrentIndex = 0;
+    private int cardsCarouselCurrentIndex = 0;
 
     @FXML private AnchorPane blackAnchorPane;
     @FXML private HBox blackPane;
@@ -183,7 +183,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselVisibleComponents.add(cardsCarouselPrivateButton);
         cardsCarouselVisibleComponents.add(cardsCarouselFavorTokensValue);
 
-        cardCarouselCurrentIndex = 0;
+        cardsCarouselCurrentIndex = 0;
 
         cardsCarouselVisibleComponents.forEach(component->component.setVisible(false));
         cardsCarouselCardImageView.setVisible(true);
@@ -311,33 +311,46 @@ public class SagradaSceneController extends View implements Initializable {
 
     @FXML
     public void handleCardCarouselNext(){
-        if(cardCarouselCurrentIndex == cards.size()-1){
-            cardCarouselCurrentIndex = 0;
+        if(cardsCarouselCurrentIndex == cards.size()-1){
+            cardsCarouselCurrentIndex = 0;
         }else {
-            cardCarouselCurrentIndex ++;
+            cardsCarouselCurrentIndex ++;
         }
         updateCardCarousel();
     }
 
     @FXML
     public void handleCardCarouselPrevious(){
-        if(cardCarouselCurrentIndex == 0){
-            cardCarouselCurrentIndex = cards.size()-1;
+        if(cardsCarouselCurrentIndex == 0){
+            cardsCarouselCurrentIndex = cards.size()-1;
         }else {
-            cardCarouselCurrentIndex --;
+            cardsCarouselCurrentIndex --;
         }
         updateCardCarousel();
     }
 
     private void updateCardCarousel() {
         Platform.runLater(() -> {
+            if(cardsCarouselCurrentIndex<drawnToolCards.size()){
+                cardsCarouselToolCardsButton.arm();
+                cardsCarouselPublicsButton.disarm();
+                cardsCarouselPrivateButton.disarm();
+            } else if (cardsCarouselCurrentIndex<drawnToolCards.size()+drawnPublicObjectiveCards.size()) {
+                cardsCarouselToolCardsButton.disarm();
+                cardsCarouselPublicsButton.arm();
+                cardsCarouselPrivateButton.disarm();
+            }else {
+                cardsCarouselToolCardsButton.disarm();
+                cardsCarouselPublicsButton.disarm();
+                cardsCarouselPrivateButton.arm();
+            }
             setImageWithHeightAndWidth(
                     cardsCarouselCardImageView,
-                    cards.get(cardCarouselCurrentIndex),
+                    cards.get(cardsCarouselCurrentIndex),
                     cardsCarouselCardHBox);
 
-            if(cardCarouselCurrentIndex<drawnToolCards.size()) {
-                cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardCarouselCurrentIndex).getNeededTokens()));
+            if(cardsCarouselCurrentIndex<drawnToolCards.size()) {
+                cardsCarouselFavorTokensValue.setText(String.valueOf(drawnToolCards.get(cardsCarouselCurrentIndex).getNeededTokens()));
             }else{
                 cardsCarouselFavorTokensValue.setText("");
             }
@@ -352,17 +365,17 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     public void onCardCarouselToolCardsButtonPressed() {
-        cardCarouselCurrentIndex = 0;
+        cardsCarouselCurrentIndex = 0;
         updateCardCarousel();
     }
 
     public void onCardCarouselPublicsButtonPressed(){
-        cardCarouselCurrentIndex = drawnToolCards.size();
+        cardsCarouselCurrentIndex = drawnToolCards.size();
         updateCardCarousel();
     }
 
     public void onCardCarouselPrivateButtonPressed(){
-        cardCarouselCurrentIndex = drawnToolCards.size() + drawnPublicObjectiveCards.size();
+        cardsCarouselCurrentIndex = drawnToolCards.size() + drawnPublicObjectiveCards.size();
         updateCardCarousel();
     }
 
@@ -472,7 +485,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     public void onToolCards1ButtonPressed(){
-        cardCarouselCurrentIndex = 0;
+        cardsCarouselCurrentIndex = 0;
 
         try {
             sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
@@ -480,6 +493,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: implementa
         }
         Platform.runLater(() -> {
+            updateCardCarousel();
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         });
@@ -488,7 +502,7 @@ public class SagradaSceneController extends View implements Initializable {
 
 
     public void onToolCards2ButtonPressed(){
-        cardCarouselCurrentIndex = 1;
+        cardsCarouselCurrentIndex = 1;
 
         try {
             sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
@@ -496,13 +510,14 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: implementa
         }
         Platform.runLater(() -> {
+            updateCardCarousel();
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         });
     }
 
     public void onToolCards3ButtonPressed(){
-        cardCarouselCurrentIndex = 2;
+        cardsCarouselCurrentIndex = 2;
 
         try {
             sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
@@ -510,6 +525,7 @@ public class SagradaSceneController extends View implements Initializable {
             //TODO: implementa
         }
         Platform.runLater(() -> {
+            updateCardCarousel();
             disable(toolCardsVisibleComponents);
             disableBlackAnchorPane();
         });
