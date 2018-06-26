@@ -183,7 +183,6 @@ public class Client extends Observable implements ClientInterface {
             this.connectionAvailable = status;
             if(status){
                 notify(new Message(ViewBoundMessageType.CONNECTION_RESTORED));
-                this.pinging.restartPinging(); //if no pinging was necessary, this calls just do nothing
             } else {
                 notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
             }

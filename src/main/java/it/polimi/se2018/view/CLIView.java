@@ -41,7 +41,7 @@ public class CLIView extends View{
     private static final String SHOW_PUBLIC_OBJECTIVE_CARDS = "Show public objective cards";
     private static final String SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS = "Show window patterns of other players";
     private static final String ASK_FOR_MOVE = "Which move would you like to perform?";
-    private static final String REMEMBER_DRAFTED_DICE = "Drafted dice: ";
+    private static final String REMEMBER_DRAFTED_DICE = "Current drafted dice: ";
     private static final String WINDOW_PATTERN_OF = "Window pattern of ";
     private static final String PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS = "Players have not already received window patterns.";
     private static final String THERE_ARE_NO_PUBLIC_OBJECTIVE_CARDS_YET = "There are no public objective cards yet.";
@@ -593,12 +593,12 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(INPUT_NOT_VALID);
-                handleUseToolCardMove();
+                waitForMove();
                 return;
             }
-            if(toolCardIndex>=drawnToolCards.size()){
+            if(toolCardIndex>=drawnToolCards.size() || toolCardIndex<0){
                 print(INPUT_NOT_VALID);
-                handleUseToolCardMove();
+                waitForMove();
                 return;
             }
 
@@ -668,7 +668,7 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleChooseDiceFromTrackMove();
+                waitForMove();
                 return;
             }
             print(INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK);
@@ -685,7 +685,7 @@ public class CLIView extends View{
                     cleanConsole();
                     print(PORT_NUMBER_MUST_BE_A_NUMBER);
                     connect();
-                    handleChooseDiceFromTrackMove();
+                    waitForMove();
                     return;
                 }
                 HashMap<String,Object> params = new HashMap<>();
@@ -714,7 +714,7 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleMoveDiceMove();
+                waitForMove();
                 return;
             }
             print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1);
@@ -725,7 +725,7 @@ public class CLIView extends View{
                 } catch (NumberFormatException e){
                     cleanConsole();
                     print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                    handleMoveDiceMove();
+                    waitForMove();
                     return;
                 }
                 if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
@@ -738,7 +738,7 @@ public class CLIView extends View{
                         } catch (NumberFormatException e){
                             cleanConsole();
                             print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                            handleMoveDiceMove();
+                            waitForMove();
                             return;
                         }
                         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1);
@@ -749,7 +749,7 @@ public class CLIView extends View{
                             } catch (NumberFormatException e){
                                 cleanConsole();
                                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                                handleMoveDiceMove();
+                                waitForMove();
                                 return;
                             }
                             if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
@@ -834,7 +834,7 @@ public class CLIView extends View{
             } catch (NumberFormatException e){
                 cleanConsole();
                 print(PORT_NUMBER_MUST_BE_A_NUMBER);
-                handleGiveWindowPatternsEvent(m);
+                waitForMove();
                 return;
             }
             if(i <= drawnWindowPatterns.size() && i >= 0){
@@ -949,7 +949,6 @@ public class CLIView extends View{
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
         removeHandlingMessage(m);
-        waitForMove();
     }
 
     @Override
