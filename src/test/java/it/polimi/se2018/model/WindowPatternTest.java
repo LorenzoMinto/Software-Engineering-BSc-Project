@@ -4,6 +4,8 @@ import it.polimi.se2018.utils.ValueOutOfBoundsException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import static it.polimi.se2018.model.DiceColor.*;
 import static org.junit.Assert.*;
@@ -13,6 +15,7 @@ import static org.junit.Assert.*;
  *
  * @author Jacopo Pio Gargano
  */
+
 public class WindowPatternTest {
 
     private WindowPattern windowPattern;

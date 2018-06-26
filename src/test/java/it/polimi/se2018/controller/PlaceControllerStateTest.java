@@ -67,7 +67,6 @@ public class PlaceControllerStateTest {
         }
 
         dice = game.getCurrentRound().getDraftPool().getDices().get(0);
-
     }
 
     /**
@@ -175,7 +174,9 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testDraftDiceFromDraftPool(){
-        Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
+        controller.controllerState.draftDiceFromDraftPool(dice);
+        //Now actually in PlaceControllerState
+        Message m = controller.controllerState.draftDiceFromDraftPool(dice);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
     
@@ -195,7 +196,7 @@ public class PlaceControllerStateTest {
 
         ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
 
-        controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -207,7 +208,7 @@ public class PlaceControllerStateTest {
     @Test
     public void testChooseDiceFromTrack(){
         controller.controllerState.draftDiceFromDraftPool(dice);
-        Message m = controller.controllerState.chooseDiceFromTrack(new Dice(DiceColor.RED), 1);
+        Message m = controller.controllerState.chooseDiceFromTrack(dice, 1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 

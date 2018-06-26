@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.controller.ObjectiveCardManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

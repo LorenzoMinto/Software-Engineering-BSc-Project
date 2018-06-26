@@ -12,11 +12,16 @@ import static org.junit.Assert.*;
 
 /**
  * Test for {@link Scorer} Class
+ * The tests are run with {@link RowsColumnsPublicObjectiveCardTest}, {@link DiagonalsPublicObjectiveCardTest},
+ * {@link SetPublicObjectiveCardTest} and {@link PrivateObjectiveCardTest} since the scorer uses these cards and
+ * the scores strongly depend on the scoring processo of the {@link PublicObjectiveCard}.
  *
  * @author Jacopo Pio Gargano
  */
-public class ScorerTest {
 
+
+
+public class ScorerTest {
     private static Scorer scorer;
 
     //generic patterns
@@ -78,10 +83,6 @@ public class ScorerTest {
      */
     @BeforeClass
     public static void initializePlayersAndCards(){
-//        p1 = new Player("p1", card1);
-//        p2 = new Player("p2", card2);
-//        p3 = new Player("p3", card3);
-//        p4 = new Player("p4", card4);
 
         PublicObjectiveCard rowsColorPublicObjectiveCard = new RowsColumnsPublicObjectiveCard(
                 null, null, null, Dice::getColor, 6, true);
