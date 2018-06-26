@@ -24,8 +24,8 @@ public class MoveControllerStateTest {
     private Controller controller;
 
     private ToolCard toolCard;
+    private ToolCard toolcardMoveCounter;
 
-    private Dice redDice;
     private Dice blueDice;
 
     private static final int r0 = 0;
@@ -63,7 +63,7 @@ public class MoveControllerStateTest {
                 pattern[i][j] = new Cell();
             }
         }
-        redDice = new Dice(DiceColor.RED,2);
+        Dice redDice = new Dice(DiceColor.RED, 2);
         blueDice = new Dice(DiceColor.BLUE, 3);
         pattern[r0][c0].setDice(redDice);
         pattern[r2][c2].setDice(blueDice);
@@ -86,7 +86,13 @@ public class MoveControllerStateTest {
         toolCardProperties.put("imageURL", "imageURL");
 
         toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
-        controller.controllerState.useToolCard(toolCard);
+
+        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+
+        while (toolcardMoveCounter == null || !toolcardMoveCounter.getTitle().equals("Tap Wheel")) {
+            toolcardMoveCounter = manager.getRandomToolCards(1).get(0);
+        }
+
     }
 
     /**
@@ -95,6 +101,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testConstructorWithNullController() {
+        controller.controllerState.useToolCard(toolCard);
+
         try {
             new MoveControllerState(null);
             fail();
@@ -107,6 +115,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testMoveDice() {
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.moveDice(r2,c2,r0,c1);
 
         Player player = controller.game.getCurrentRound().getCurrentTurn().getPlayer();
@@ -123,6 +133,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testMoveDiceWhenNoDiceInPosition() {
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.moveDice(r1,c1,r0,c0);
         assertEquals(ERROR_MESSAGE, m.getType());
         try {
@@ -138,6 +150,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testMoveDiceToCellWithDice() {
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.moveDice(r1,c1,r2,c2);
         assertEquals(ERROR_MESSAGE, m.getType());
         try {
@@ -148,11 +162,28 @@ public class MoveControllerStateTest {
     }
 
     /**
+     * Tests the ending a toolCard effect in this state
+     * @see ControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testEndToolCardEffect(){
+        List<Dice> dices = new ArrayList<>();
+        dices.add(new Dice(DiceColor.RED, 1));
+        controller.game.getTrack().processDices(dices);
+        controller.controllerState.useToolCard(toolcardMoveCounter);
+        controller.controllerState.chooseDiceFromTrack(dices.get((0)), 0);
+        Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+    }
+
+    /**
      * Tests ending the current turn in this state
      * @see MoveControllerState#endCurrentTurn()
      */
     @Test
     public void testEndCurrentTurn(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.endCurrentTurn();
         assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
@@ -164,6 +195,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testDraftDiceFromDraftPool(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -174,6 +207,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testPlaceDice(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.placeDice(0,0);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -184,6 +219,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testUseToolCard(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -194,6 +231,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testChooseDiceFromTrack(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.chooseDiceFromTrack(new Dice(DiceColor.RED), 1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -204,6 +243,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testIncrementDice(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.incrementDice();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -214,6 +255,8 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testDecrementDice(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.decrementDice();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -224,18 +267,19 @@ public class MoveControllerStateTest {
      */
     @Test
     public void testChooseDiceValue(){
+        controller.controllerState.useToolCard(toolCard);
+
         Message m = controller.controllerState.chooseDiceValue(1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 
-
     /**
-     * Tests the impossibility of ending a toolCard effect in this state
+     * Tests the impossibility of returning a dice to the draftpool in this state
      * @see ControllerState#endToolCardEffect()
      */
     @Test
-    public void testEndToolCardEffect(){
-        Message m = controller.controllerState.endToolCardEffect();
+    public void testReturnDiceToDraftPool(){
+        Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 }

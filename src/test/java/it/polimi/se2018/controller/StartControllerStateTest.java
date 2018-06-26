@@ -32,7 +32,7 @@ public class StartControllerStateTest {
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
         gameProperties.setProperty("numberOfDicesPerColor","18");
-        gameProperties.setProperty("numberOfToolCards","3");
+        gameProperties.setProperty("numberOfToolCards","12");
         gameProperties.setProperty("numberOfPublicObjectiveCards","2");
         gameProperties.setProperty("maxNumberOfPlayers","4");
         gameProperties.setProperty("minNumberOfPlayers","2");
@@ -118,15 +118,18 @@ public class StartControllerStateTest {
 
     /**
      * Tests using a {@link ToolCard} that is in the drawn set of toolCards
+     * Here testing the usage of a specific {@link ToolCard} that can be used when in this state
      * @see StartControllerState#useToolCard(ToolCard) (Dice)
      */
     @Test
     public void testUseToolCard() {
-        ToolCard toolCard = controller.game.getDrawnToolCards().get(0);
+        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+        ToolCard toolCard = null;
+        while (toolCard == null || !toolCard.getTitle().equals("Grinding Stone")) {
+            toolCard = manager.getRandomToolCards(1).get(0);
+        }
 
         Message m = controller.controllerState.useToolCard(toolCard);
-
-        System.out.println(m);
 
         assertEquals(toolCard, controller.getActiveToolCard());
         assertTrue(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
@@ -287,6 +290,16 @@ public class StartControllerStateTest {
     @Test
     public void testEndToolCardEffect(){
         Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of returning a dice to the draftpool in this state
+     * @see ControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testReturnDiceToDraftPool(){
+        Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 }

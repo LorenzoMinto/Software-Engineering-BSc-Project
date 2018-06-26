@@ -238,4 +238,13 @@ public class ChangeDiceValueUnitaryControllerStateTest {
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 
+    /**
+     * Tests the impossibility of returning a dice to the draftpool in this state
+     * @see ControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testReturnDiceToDraftPool(){
+        Message m = controller.controllerState.returnDiceToDraftPool();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
 }

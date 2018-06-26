@@ -36,7 +36,7 @@ public class PlaceControllerStateTest {
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
         gameProperties.setProperty("numberOfDicesPerColor","18");
-        gameProperties.setProperty("numberOfToolCards","3");
+        gameProperties.setProperty("numberOfToolCards","12");
         gameProperties.setProperty("numberOfPublicObjectiveCards","2");
         gameProperties.setProperty("maxNumberOfPlayers","4");
         gameProperties.setProperty("minNumberOfPlayers","2");
@@ -67,7 +67,7 @@ public class PlaceControllerStateTest {
         }
 
         dice = game.getCurrentRound().getDraftPool().getDices().get(0);
-        controller.controllerState.draftDiceFromDraftPool(dice);
+
     }
 
     /**
@@ -88,6 +88,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testPlaceDice() {
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.placeDice(0,0);
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         WindowPattern wp = currentTurn.getPlayer().getWindowPattern();
@@ -104,6 +105,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testPlaceDiceAtIllegalPosition() {
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.placeDice(1,1);
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         WindowPattern wp = currentTurn.getPlayer().getWindowPattern();
@@ -124,6 +126,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testPlaceDiceOnCellWithDice(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.placeDice(r0,c0);
         Turn currentTurn = controller.game.getCurrentRound().getCurrentTurn();
         WindowPattern wp = currentTurn.getPlayer().getWindowPattern();
@@ -138,12 +141,29 @@ public class PlaceControllerStateTest {
         }
     }
 
+    @Test
+    public void testReturnDiceToDraftPool(){
+        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+        ToolCard toolCard = null;
+        while (toolCard == null || !toolCard.getTitle().equals("Flux Brush")) {
+            toolCard = manager.getRandomToolCards(1).get(0);
+        }
+
+        controller.controllerState.useToolCard(toolCard);
+        controller.controllerState.draftDiceFromDraftPool(dice);
+        Message m = controller.controllerState.returnDiceToDraftPool();
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+        m = controller.controllerState.placeDice(r0,c0);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
     /**
      * Tests ending the current turn in this state
      * @see PlaceControllerState#endCurrentTurn()
      */
     @Test
     public void testEndCurrentTurn(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.endCurrentTurn();
         assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
@@ -175,6 +195,7 @@ public class PlaceControllerStateTest {
 
         ToolCard toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
 
+        controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
         Message m = controller.controllerState.useToolCard(toolCard);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -185,6 +206,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testChooseDiceFromTrack(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.chooseDiceFromTrack(new Dice(DiceColor.RED), 1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -195,6 +217,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testMoveDice(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.moveDice(0,0,1,1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -205,6 +228,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testIncrementDice(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.incrementDice();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -215,6 +239,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testDecrementDice(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.decrementDice();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -225,6 +250,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testChooseDiceValue(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.chooseDiceValue(1);
         assertEquals(ERROR_MESSAGE, m.getType());
     }
@@ -236,6 +262,7 @@ public class PlaceControllerStateTest {
      */
     @Test
     public void testEndToolCardEffect(){
+        controller.controllerState.draftDiceFromDraftPool(dice);
         Message m = controller.controllerState.endToolCardEffect();
         assertEquals(ERROR_MESSAGE, m.getType());
     }

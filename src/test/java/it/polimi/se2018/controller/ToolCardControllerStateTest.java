@@ -33,7 +33,7 @@ public class ToolCardControllerStateTest {
         Properties gameProperties = new Properties();
         gameProperties.setProperty("numberOfRounds","10");
         gameProperties.setProperty("numberOfDicesPerColor","18");
-        gameProperties.setProperty("numberOfToolCards","3");
+        gameProperties.setProperty("numberOfToolCards","12");
         gameProperties.setProperty("numberOfPublicObjectiveCards","2");
         gameProperties.setProperty("maxNumberOfPlayers","4");
         gameProperties.setProperty("minNumberOfPlayers","2");
@@ -48,6 +48,9 @@ public class ToolCardControllerStateTest {
 
         WindowPatternManager WPManager = new WindowPatternManager();
         wp = WPManager.getPairsOfPatterns(1).iterator().next();
+        while (!wp.getTitle().equals("Batllo") && !wp.getTitle().equals("Shadow Thief")){
+            wp = WPManager.getPairsOfPatterns(1).iterator().next();
+        }
 
         controller.launchGame(nicknames);
 
@@ -67,6 +70,10 @@ public class ToolCardControllerStateTest {
         toolCardProperties.put("imageURL", "imageURL");
 
         toolCard = new ToolCard(toolCardProperties, new HashMap<>(), null, null);
+
+        Dice diceToDraft = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
+        controller.controllerState.draftDiceFromDraftPool(diceToDraft);
+        controller.controllerState.placeDice(1,4);
     }
 
     /**
@@ -83,14 +90,18 @@ public class ToolCardControllerStateTest {
 
     /**
      * Tests using a {@link ToolCard} that is in the drawn set of toolCards
+     * Here testing the usage of a specific {@link ToolCard} that can be used when in this state
      * @see ToolCardControllerState#useToolCard(ToolCard) (Dice)
      */
     @Test
     public void testUseToolCard() {
-        ToolCard toolCard = controller.game.getDrawnToolCards().get(1);
+        ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
+        ToolCard toolCard = null;
+        while (toolCard == null || !toolCard.getTitle().equals("Eglomise Brush")) {
+            toolCard = manager.getRandomToolCards(1).get(0);
+        }
 
         Message m = controller.controllerState.useToolCard(toolCard);
-
         assertEquals(toolCard, controller.getActiveToolCard());
         assertTrue(controller.game.getCurrentRound().getCurrentTurn().hasUsedToolCard());
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
@@ -258,6 +269,16 @@ public class ToolCardControllerStateTest {
     @Test
     public void testEndToolCardEffect(){
         Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the impossibility of returning a dice to the draftpool in this state
+     * @see ControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testReturnDiceToDraftPool(){
+        Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 }
