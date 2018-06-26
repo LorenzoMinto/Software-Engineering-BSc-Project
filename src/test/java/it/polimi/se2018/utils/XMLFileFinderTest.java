@@ -5,6 +5,11 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link XMLFileFinder} class
+ *
+ * @author Federico Haag
+ */
 public class XMLFileFinderTest {
 
     /**
@@ -14,17 +19,17 @@ public class XMLFileFinderTest {
     @Test
     public void testGetFilesNames() {
         try{
-            assertEquals(true,XMLFileFinder.getFilesNames("assets/persistency/").contains("GlobalRankings"));
+            assertTrue(XMLFileFinder.getFilesNames("assets/persistency/").contains("GlobalRankings"));
         } catch (IOException e) {
             fail();
         }
 
         try{
-            assertEquals(true,XMLFileFinder.getFilesNames("assets/notadirectory/").contains("GlobalRankings"));
+            XMLFileFinder.getFilesNames("assets/notadirectory/");
             fail();
         } catch (IOException e) {
             fail();
-        }
+        } catch (IllegalArgumentException e) {}
     }
 
     /**

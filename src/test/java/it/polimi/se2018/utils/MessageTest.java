@@ -10,6 +10,11 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for {@link Message} class
+ *
+ * @author Federico Haag
+ */
 public class MessageTest {
 
     private Message message;
@@ -51,12 +56,14 @@ public class MessageTest {
     @Test
     public void testParameters(){
 
+        Message m = new Message(ViewBoundMessageType.NEW_TURN);
+
         Map<String, Object> params = new HashMap<>();
         params.put("id", playerID);
 
-        message.setParams(params);
+        m.setParams(params);
         try {
-            assertEquals(playerID, message.getParam("id"));
+            assertEquals(playerID, m.getParam("id"));
         } catch (NoSuchParamInMessageException e) {
             fail();
         }
@@ -98,6 +105,10 @@ public class MessageTest {
         } catch (NoSuchParamInMessageException e) {}
     }
 
+    /**
+     * Tests that a Message with a single string is created
+     * @see Message#Message(Enum, String)
+     */
     @Test
     public void testFastMessage(){
         String messageString = "HELLO!";
@@ -109,6 +120,10 @@ public class MessageTest {
         }
     }
 
+    /**
+     * Tests the fastMap() method of Message
+     * @see Message#fastMap(String, Object)
+     */
     @Test
     public void testFastMap(){
         message = new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("id",playerID));
