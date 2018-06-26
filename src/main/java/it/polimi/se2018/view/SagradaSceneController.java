@@ -37,6 +37,8 @@ import java.util.List;
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
+    private boolean isOnWaitingList = true;
+
     private List<Image> cards = new ArrayList<>();
     private int cardCarouselCurrentIndex = 0;
 
@@ -412,9 +414,6 @@ public class SagradaSceneController extends View implements Initializable {
                 break;
             case LEAVE:
                 handleLeaveWaitingRoomMove();
-                Stage stage = (Stage) playerTerminal.getScene().getWindow();
-                stage.setFullScreen(false);
-                stage.setScene(loginScene);
                 break;
             default:
                 break;
@@ -620,6 +619,15 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     @Override
+    public void handleLeaveWaitingRoomMove() {
+        super.handleLeaveWaitingRoomMove();
+        isOnWaitingList = true;
+    }
+
+
+    //EVENTS
+
+    @Override
     void handleUpdatedWindowPatternEvent(Message m) {
         super.handleUpdatedWindowPatternEvent(m);
         updateWindowPatterns();
@@ -774,6 +782,12 @@ public class SagradaSceneController extends View implements Initializable {
                 }catch (ValueOutOfBoundsException e){}
             }
         });
+    }
+
+    public void handleExitEvent() {
+        Stage stage = (Stage) playerTerminal.getScene().getWindow();
+        stage.setFullScreen(false);
+        stage.setScene(loginScene);
     }
 
     @Override
