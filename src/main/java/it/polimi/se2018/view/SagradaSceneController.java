@@ -481,6 +481,7 @@ public class SagradaSceneController extends View implements Initializable {
         visibleComponents.forEach(component -> component.setVisible(true));
         visibleComponents.forEach(component -> component.setOpacity(1));
         visibleComponents.forEach(component -> component.setDisable(false));
+
     }
 
     public void onToolCards1ButtonPressed(){
@@ -779,6 +780,11 @@ public class SagradaSceneController extends View implements Initializable {
         enable(trackVisibleComponents);
 
 
+        //TEST::::
+        for (Dice d: track.getDicesFromSlotNumber(0)) {
+            System.out.println(d.toString());
+        }
+
         Platform.runLater(() -> {
             for (HBox hBox: trackHBoxes) {
                 hBox.getChildren().clear();
@@ -1017,7 +1023,6 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void notifyNewRound(){
         super.notifyNewRound();
-        highlightCurrentPlayer();
         updateDraftPool();
         updateWindowPatterns();
     }

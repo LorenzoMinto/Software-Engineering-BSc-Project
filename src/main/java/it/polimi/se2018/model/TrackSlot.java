@@ -73,7 +73,7 @@ public class TrackSlot implements Serializable {
     public List<Dice> getDices() {
         return new ArrayList<>(dices);
     }
-
+    //TODO: cambia in return dices
     /**
      * Returns a new TrackSlot instance with the same properties and data of the current one.
      * @return a new TrackSlot instance with the same properties and data of the current one
@@ -81,6 +81,7 @@ public class TrackSlot implements Serializable {
     public TrackSlot copy(){
         return new TrackSlot( new ArrayList<>(this.dices) );
     }
+    //TODO: eliminare
 
     /**
      * Returns the string representation of the Track Slot.

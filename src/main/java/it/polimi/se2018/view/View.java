@@ -427,15 +427,6 @@ public abstract class View implements Observer {
         int number = (int) o;
 
         try {
-            o = m.getParam(PARAM_TRACK);
-        } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        Track mTrack = (Track) o;
-
-        try {
             o = m.getParam(PARAM_DRAFT_POOL_DICES);
         } catch (NoSuchParamInMessageException e) {
             showMessage(FAILED_SETUP_ROUND);
@@ -446,7 +437,6 @@ public abstract class View implements Observer {
 
         setRoundNumber(number);
         setDraftPoolDices(mDraftPoolDices);
-        setTrack(mTrack);
 
         notifyNewRound();
     }
@@ -1134,6 +1124,12 @@ public abstract class View implements Observer {
                 handleChangedDraftPoolEvent(m);
                 break;
             case SOMETHING_CHANGED_IN_TRACK:
+                //TODO: remove after debug
+                try {
+                    System.out.println(((Track)m.getParam("track")).toString());
+                } catch (NoSuchParamInMessageException e) {
+                    e.printStackTrace();
+                }
                 handleChangedTrackEvent(m);
                 break;
             case DRAFTED_DICE:

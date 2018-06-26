@@ -40,9 +40,7 @@ public class Track extends Observable implements Serializable{
      * @param dices list of dices passed.
      */
     public void processDicesAndNotify(List<Dice> dices) {
-        if(dices == null){ throw new IllegalArgumentException(NULL_DICE);}
-        TrackSlot slot = new TrackSlot(dices);
-        slots.add(slot);
+        processDices(dices);
         notifyGame();
     }
 
@@ -122,7 +120,14 @@ public class Track extends Observable implements Serializable{
      */
     public Track copy() {
         Track trackCopy = new Track();
-        this.slots.forEach(slot->trackCopy.processDices(slot.getDices()));
+        for(TrackSlot trackSlot : this.slots){
+            List<Dice> dices = trackSlot.getDices();
+            List<Dice> copiedDices = new ArrayList<>();
+            for(Dice dice : dices){
+                copiedDices.add(dice.copy());
+            }
+            trackCopy.processDices(copiedDices);
+        }
         return trackCopy;
     }
 
@@ -136,5 +141,18 @@ public class Track extends Observable implements Serializable{
         messageAttributes.put("track", this.copy());
 
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_TRACK, messageAttributes));
+    }
+
+    @Override
+    public String toString() {
+        String returnString = "";
+        for(TrackSlot trackSlot : this.slots){
+            returnString = returnString.concat("Slot:");
+            for(Dice dice : trackSlot.getDices()){
+                returnString = returnString.concat(dice.toString());
+            }
+            returnString = returnString.concat(".");
+        }
+        return returnString;
     }
 }
