@@ -108,7 +108,6 @@ public final class SocketServerGatherer extends Thread{
                         socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
                         c = false;
                     } catch (Exception e) {
-                        e.printStackTrace();
                         receiver.fail(READING_STREAM_EXCEPTION);
                         c = false;
                     }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.controller.ObjectiveCardManager;
 import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
@@ -37,7 +38,7 @@ public abstract class View implements Observer {
     private static final String FAILED_SETUP_TURN = "New turn setup failed. You could face crucial issues playing.";
     private static final String YOU_ARE_THE_WINNER = "You are the winner! Congratulations!";
     private static final String THE_WINNER_IS = "The winner is ";
-    private static final String WINDOW_PATTERN_UPDATED = " made a move on his/her window pattern";
+    private static final String WINDOW_PATTERN_UPDATED = "A Window pattern has been updated ";
     private static final String ITS_YOUR_TURN = "It's your turn!";
     private static final String ERROR_MOVE = "An unexpected error wouldn't let you perform the move. Try again.";
     private static final String MAX_PLAYERS_ERROR = "You can't join the game as there is already the maximum number of players in the game.";
@@ -48,7 +49,7 @@ public abstract class View implements Observer {
     private static final String JOINS_THE_WAITING_ROOM = " joins the waiting room";
     private static final String LEAVES_THE_WAITING_ROOM = " leaves the waiting room";
     private static final String ROUND_NOW_STARTS = "# Round now starts!";
-    private static final String NOW_ITS_TURN_OF = "Now it's the turn of ";
+    private static final String NOW_ITS_TURN_OF = "Now it's the turn of";
     private static final String THE_GAME_IS_STARTED = "The game started!";
     private static final String PROBLEMS_WITH_CONNECTION = "There are some problems with connection. Check if it depends on you, if not wait or restart game.";
     private static final String CONNECTION_RESTORED = "Connection restored!";
@@ -336,13 +337,6 @@ public abstract class View implements Observer {
         //no behaviour in common between CLI and GUI
     }
 
-    /**
-     * Handles the move "Return dice to draft pool move"
-     */
-    void handleReturnDiceToDraftpoolMove(){
-        //TODO: implement
-    }
-
 
     /*  HANDLING OF EVENTS. EVENTS ARE BASICALLY MESSAGES RECEIVED FROM SERVER.
         Some of the following methods are private because they are not extended or overridden by CLI and GUI.
@@ -352,7 +346,7 @@ public abstract class View implements Observer {
      * Handles an Acknowledgment
      * @param m message containing the acknowledgment
      */
-    void handleAcknowledgmentEvent(Message m){
+    private void handleAcknowledgmentEvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_MESSAGE);
@@ -404,9 +398,9 @@ public abstract class View implements Observer {
         String err = (String) o;
 
         if(!err.equals("")){
-            showError(err);
+            errorMessage(err);
         } else {
-            showError(THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID);
+            errorMessage(THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID);
         }
     }
 
@@ -756,11 +750,7 @@ public abstract class View implements Observer {
         int index = players.indexOf(pID);
         windowPatterns.set(index, wp);
 
-        if(pID.equals(this.playerID)){
-            this.windowPattern = wp;
-        } else {
-            showMessage(pID + WINDOW_PATTERN_UPDATED);
-        }
+        showMessage(WINDOW_PATTERN_UPDATED);
     }
 
     /**
@@ -1093,14 +1083,6 @@ public abstract class View implements Observer {
             System.out.println("RECEIVED:"+type.toString());
         }
 
-        if(type!=ViewBoundMessageType.ERROR_MESSAGE && type!=ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE){
-            //UPDATE PERMISSIONS
-            EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
-            if(!p.isEmpty()){
-                setPermissions(p);
-            }//else keep same permissions
-        }
-
         switch (type) {
             case ERROR_MESSAGE:
                 handleErrorEvent(m);
@@ -1193,6 +1175,14 @@ public abstract class View implements Observer {
                 //No other messages are evaluated in this state
                 break;
         }
+
+        if(type!=ViewBoundMessageType.ERROR_MESSAGE){
+            //UPDATE PERMISSIONS
+            EnumSet<Move> p = (EnumSet<Move>) m.getPermissions();
+            if(!p.isEmpty()){
+                setPermissions(p);
+            }//else keep same permissions
+        }
     }
 
 
@@ -1208,7 +1198,7 @@ public abstract class View implements Observer {
      * Display an error message to the user. Abstract, so it is implemented differently by CLI and GUI.
      * @param message the error message to be displayed
      */
-    abstract void showError(String message);
+    abstract void errorMessage(String message);
 
     /**
      * Connects View to the server, creating a new Client instance.

@@ -3,7 +3,6 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.utils.*;
 
 import java.io.Serializable;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -200,8 +199,7 @@ public class Turn extends Observable implements Serializable {
         this.draftedDice = dice.copy();
         setDraftedAndPlaced();
 
-        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, Message.fastMap("draftedDice",dice), this.player.getID(), EnumSet.of(Move.PLACE_DICE_ON_WINDOWPATTERN)));
-        //TODO: eventualmente quì aggiungere alle permissions anche ABORT DICE - se introdotto
+        notify(new Message(ViewBoundMessageType.DRAFTED_DICE, Message.fastMap("draftedDice",dice)));
     }
 
     /**
