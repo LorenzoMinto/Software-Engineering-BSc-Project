@@ -89,6 +89,7 @@ public class CLIView extends View{
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_DICE = "dice";
     private static final String PLEASE_INSERT_A_NUMBER = "Please insert a number";
+    private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
 
 
     // AUXILIARY CLASSES
@@ -293,6 +294,8 @@ public class CLIView extends View{
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_PUBLIC_OBJECTIVE_CARDS,this::printPublicObjectiveCards));
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS,this::printOthersWindowPatterns));
+            index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(GET_FAVOUR_TOKENS_OF_PLAYERS,this::printFavourTokens));
         }
 
         if(this.draftedDice!=null){
@@ -428,6 +431,17 @@ public class CLIView extends View{
             }
         } else {
             print(PLAYERS_HAVE_NOT_ALREADY_RECEIVED_WINDOW_PATTERNS);
+        }
+        waitForMove();
+    }
+
+    /**
+     * Prints on console favour tokens
+     */
+    private void printFavourTokens(){
+        int index = 0;
+        for(Integer favourToken : this.playersFavourTokens){
+            print(this.players.get(index)+": "+favourToken);
         }
         waitForMove();
     }
