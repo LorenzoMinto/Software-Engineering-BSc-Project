@@ -333,19 +333,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     private void updateCardCarousel() {
         Platform.runLater(() -> {
-            if(cardsCarouselCurrentIndex<drawnToolCards.size()){
-                cardsCarouselToolCardsButton.arm();
-                cardsCarouselPublicsButton.disarm();
-                cardsCarouselPrivateButton.disarm();
-            } else if (cardsCarouselCurrentIndex<drawnToolCards.size()+drawnPublicObjectiveCards.size()) {
-                cardsCarouselToolCardsButton.disarm();
-                cardsCarouselPublicsButton.arm();
-                cardsCarouselPrivateButton.disarm();
-            }else {
-                cardsCarouselToolCardsButton.disarm();
-                cardsCarouselPublicsButton.disarm();
-                cardsCarouselPrivateButton.arm();
-            }
+            cardsCarouselFavorTokensValue.setDisable(true);
             setImageWithHeightAndWidth(
                     cardsCarouselCardImageView,
                     cards.get(cardsCarouselCurrentIndex),
@@ -356,6 +344,7 @@ public class SagradaSceneController extends View implements Initializable {
             }else{
                 cardsCarouselFavorTokensValue.setText("");
             }
+            cardsCarouselFavorTokensValue.setDisable(false);
         });
     }
 
@@ -830,6 +819,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void handleUsedToolCardEvent(Message m) {
         super.handleUsedToolCardEvent(m);
         updateWindowPatterns();
+        updateCardCarousel();
     }
 
 
