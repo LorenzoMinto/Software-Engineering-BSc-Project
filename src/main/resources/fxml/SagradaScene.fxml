@@ -213,7 +213,8 @@
             <GridPane fx:id="trackGridPane" alignment="CENTER_LEFT" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="80.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="65.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="5.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" percentHeight="8.0" vgrow="SOMETIMES" />
@@ -232,10 +233,10 @@
                <children>
                   <HBox fx:id="trackHBox" alignment="CENTER" opacity="0.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="12" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="trackImageButton" mnemonicParsing="false" onAction="#handleTrackImageButtonPressedEvent" prefHeight="420.0" prefWidth="175.0" text="Button" />
+                        <Button fx:id="trackImageButton" mnemonicParsing="false" prefHeight="420.0" prefWidth="175.0" text="Button" />
                      </children>
                   </HBox>
-                   <HBox fx:id="trackHBox10" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                   <HBox fx:id="trackHBox10" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -243,7 +244,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox9" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                   <HBox fx:id="trackHBox9" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -251,7 +252,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox8" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                   <HBox fx:id="trackHBox8" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -259,7 +260,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox7" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+                   <HBox fx:id="trackHBox7" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -267,7 +268,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox6" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+                   <HBox fx:id="trackHBox6" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -275,7 +276,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox5" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+                   <HBox fx:id="trackHBox5" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -283,7 +284,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                  <HBox fx:id="trackHBox4" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
+                  <HBox fx:id="trackHBox4" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -291,7 +292,7 @@
                         <Insets bottom="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                   <HBox fx:id="trackHBox3" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8">
+                   <HBox fx:id="trackHBox3" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -299,7 +300,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                   <HBox fx:id="trackHBox2" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+                   <HBox fx:id="trackHBox2" layoutX="130.0" layoutY="38.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
                        <opaqueInsets>
                            <Insets />
                        </opaqueInsets>
@@ -307,7 +308,7 @@
                            <Insets bottom="10.0" top="10.0" />
                        </padding>
                    </HBox>
-                  <HBox fx:id="trackHBox1" layoutX="130.0" layoutY="324.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                  <HBox fx:id="trackHBox1" layoutX="130.0" layoutY="324.0" prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -315,13 +316,23 @@
                         <Insets bottom="10.0" top="10.0" />
                      </padding>
                   </HBox>
+                  <Button fx:id="trackBackButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTrackBackButtonPressed" text="BACK" textAlignment="CENTER" textFill="#ff0707" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
             <GridPane fx:id="toolCardsGridPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -329,7 +340,7 @@
                 <RowConstraints minHeight="10.0" percentHeight="20.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <AnchorPane GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                  <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <GridPane.margin>
                         <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
@@ -337,7 +348,7 @@
                         <Button fx:id="toolCards1Button" mnemonicParsing="false" onAction="#onToolCards1ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <children>
                         <Button fx:id="toolCards2Button" mnemonicParsing="false" onAction="#onToolCards2ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
@@ -345,7 +356,7 @@
                         <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
                   </AnchorPane>
-                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                  <AnchorPane layoutX="20.0" layoutY="20.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <children>
                         <Button fx:id="toolCards3Button" mnemonicParsing="false" onAction="#onToolCards3ButtonPressed" opacity="0.0" prefHeight="318.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
@@ -353,22 +364,22 @@
                         <Insets bottom="40.0" left="30.0" right="30.0" top="40.0" />
                      </GridPane.margin>
                   </AnchorPane>
-                  <Button fx:id="toolCards1FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="toolCards1FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Button>
-                  <Button fx:id="toolCards2FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="toolCards2FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Button>
-                  <Button fx:id="toolCards3FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <Button fx:id="toolCards3FavorTokensButton" mnemonicParsing="false" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Button>
-                  <HBox fx:id="toolCardsPlayerHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                  <HBox fx:id="toolCardsPlayerHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -394,6 +405,14 @@
                         </Button>
                      </children>
                   </HBox>
+                  <Button fx:id="toolCardsBackButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onToolCardsBackButtonPressed" text="BACK" textAlignment="CENTER" textFill="#ff0707" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
             <!--<HBox fx:id="blackHBox" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" />-->
