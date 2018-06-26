@@ -24,7 +24,8 @@ public class MoveControllerStateTest {
     private Controller controller;
 
     private ToolCard toolCard;
-    private ToolCard toolcardMoveCounter;
+    private ToolCard toolCardMoveCounter;
+    private ToolCard toolCardEndToolCardEffect;
 
     private Dice blueDice;
 
@@ -34,6 +35,7 @@ public class MoveControllerStateTest {
     private static final int c1 = 1;
     private static final int r2 = 2;
     private static final int c2 = 2;
+    private Dice diceToDraft;
 
     /**
      * Advances the Game in order to set the ControllerState to MoveControllerState
@@ -89,9 +91,17 @@ public class MoveControllerStateTest {
 
         ToolCardManager manager = new ToolCardManager(new EmptyPlacementRule());
 
-        while (toolcardMoveCounter == null || !toolcardMoveCounter.getTitle().equals("Tap Wheel")) {
-            toolcardMoveCounter = manager.getRandomToolCards(1).get(0);
+        while (toolCardMoveCounter == null || !toolCardMoveCounter.getTitle().equals("Tap Wheel")) {
+            toolCardMoveCounter = manager.getRandomToolCards(1).get(0);
         }
+
+        manager = new ToolCardManager(new EmptyPlacementRule());
+
+        while (toolCardEndToolCardEffect == null || !toolCardEndToolCardEffect.getTitle().equals("Eglomise Brush")) {
+            toolCardEndToolCardEffect = manager.getRandomToolCards(1).get(0);
+        }
+
+        diceToDraft = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
 
     }
 
@@ -170,9 +180,41 @@ public class MoveControllerStateTest {
         List<Dice> dices = new ArrayList<>();
         dices.add(new Dice(DiceColor.RED, 1));
         controller.game.getTrack().processDices(dices);
-        controller.controllerState.useToolCard(toolcardMoveCounter);
+        controller.controllerState.useToolCard(toolCardMoveCounter);
         controller.controllerState.chooseDiceFromTrack(dices.get((0)), 0);
         Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+    }
+
+    /**
+     * Tests the ending a toolCard effect in this state when already drafted and placed
+     * @see ControllerState#endToolCardEffect()
+     */
+    @Test
+    public void testEndToolCardEffectHasDraftedAndPlaced(){
+        controller.controllerState.draftDiceFromDraftPool(diceToDraft);
+        controller.controllerState.placeDice(r0,c1);
+
+        List<Dice> dices = new ArrayList<>();
+        dices.add(new Dice(DiceColor.RED, 1));
+        controller.game.getTrack().processDices(dices);
+        controller.controllerState.useToolCard(toolCardMoveCounter);
+        controller.controllerState.chooseDiceFromTrack(dices.get((0)), 0);
+        Message m = controller.controllerState.endToolCardEffect();
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
+
+        diceToDraft = controller.game.getCurrentRound().getDraftPool().getDices().get(0);
+        m = controller.controllerState.draftDiceFromDraftPool(diceToDraft);
+        assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    @Test
+    public void testEndToolCardEffectImplicitState(){
+        controller.controllerState.draftDiceFromDraftPool(diceToDraft);
+        controller.controllerState.placeDice(r0,c1);
+
+        controller.controllerState.useToolCard(toolCardEndToolCardEffect);
+        Message m = controller.controllerState.moveDice(r0,c0,r1,c1);
         assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
@@ -281,5 +323,14 @@ public class MoveControllerStateTest {
     public void testReturnDiceToDraftPool(){
         Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Testing the retrieval of the state permissions
+     * @see MoveControllerState#getStatePermissions()
+     */
+    @Test
+    public void testGetStatePermissions(){
+        assertNotNull(controller.controllerState.getStatePermissions());
     }
 }

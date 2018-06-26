@@ -3,7 +3,6 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Move;
 import it.polimi.se2018.utils.ValueOutOfBoundsException;
-import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;

@@ -267,4 +267,13 @@ public class PlaceControllerStateTest {
         Message m = controller.controllerState.endToolCardEffect();
         assertEquals(ERROR_MESSAGE, m.getType());
     }
+
+    /**
+     * Testing the retrieval of the state permissions
+     * @see PlaceControllerState#getStatePermissions()
+     */
+    @Test
+    public void testGetStatePermissions(){
+        assertNotNull(controller.controllerState.getStatePermissions());
+    }
 }

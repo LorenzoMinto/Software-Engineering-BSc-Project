@@ -12,9 +12,7 @@ import java.util.*;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Test for {@link ChangeDiceValueUnitaryControllerState} class
@@ -246,5 +244,14 @@ public class ChangeDiceValueUnitaryControllerStateTest {
     public void testReturnDiceToDraftPool(){
         Message m = controller.controllerState.returnDiceToDraftPool();
         assertEquals(ERROR_MESSAGE, m.getType());
+    }
+
+    /**
+     * Testing the retrieval of the state permissions
+     * @see ChangeDiceValueUnitaryControllerState#getStatePermissions()
+     */
+    @Test
+    public void testGetStatePermissions(){
+        assertNotNull(controller.controllerState.getStatePermissions());
     }
 }
