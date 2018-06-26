@@ -42,6 +42,11 @@ public class MoveControllerState extends ControllerState {
     private static final String CANT_END_TOOLCARD_EFFECT = "Can't end the ToolCard effect now.";
 
     /**
+     * String used as content of error message in moveDice()
+     */
+    private static final String NO_DICE_ON_CELL = "There is no dice on the selected cell";
+
+    /**
      * Class constructor.
      *
      * @param controller the controller of which this class is going to act as a state.
@@ -59,14 +64,17 @@ public class MoveControllerState extends ControllerState {
 
         Dice diceOnHold = pattern.removeDiceFromCell(rowFrom, colFrom);
         boolean isAllowed = controller.placementRule.isMoveAllowed(pattern, diceOnHold, rowTo, colTo);
-        pattern.putDiceOnCell(diceOnHold, rowFrom, colFrom);
+        try{
+            pattern.putDiceOnCell(diceOnHold, rowFrom, colFrom);
+        }catch (IllegalArgumentException e){
+            return new Message(ERROR_MESSAGE, NO_DICE_ON_CELL);
+        }
 
         if (isAllowed && pattern.moveDiceFromCellToCell(rowFrom, colFrom, rowTo, colTo)) {
 
             controller.movesCounter += 1;
-            List<Integer> possibleMovesCount = new ArrayList<>();
 
-            possibleMovesCount.addAll(controller.getActiveToolCard().getPossibleMovesCountSet());
+            List<Integer> possibleMovesCount = new ArrayList<>(controller.getActiveToolCard().getPossibleMovesCountSet());
 
             //if the moves counter is less than the maximum number of moves ask for another move
             if (possibleMovesCount.isEmpty() || controller.movesCounter < possibleMovesCount.get(possibleMovesCount.size()-1)) {

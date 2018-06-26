@@ -7,6 +7,7 @@ import it.polimi.se2018.utils.BadDiceReferenceException;
 import it.polimi.se2018.utils.Message;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
@@ -47,14 +48,20 @@ public class ChooseFromTrackControllerState extends ControllerState {
     @Override
     public Message chooseDiceFromTrack(Dice dice, int slotNumber) {
 
-        if (controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(dice)) {
+        List<Dice> dicesFromSlotNumber;
+
+        try{
+            dicesFromSlotNumber= controller.game.getTrack().getDicesFromSlotNumber(slotNumber);
+        }catch (ValueOutOfBoundsException e){
+            return new Message(ERROR_MESSAGE, SELECTED_TRACK_SLOT_DOES_NOT_EXIST);
+        }
+        if (dicesFromSlotNumber.contains(dice)) {
             controller.game.getCurrentRound().getCurrentTurn().setTrackChosenDice(dice);
             controller.game.getCurrentRound().getCurrentTurn().setSlotOfTrackChosenDice(slotNumber);
             controller.setControllerState(controller.stateManager.getNextState(this));
-
             return new Message(ACKNOWLEDGMENT_MESSAGE, DICE_FROM_TRACK_CHOSEN);
         } else {
-            return new Message(ERROR_MESSAGE, "Dice selected is not on Track!");
+            return new Message(ERROR_MESSAGE, DICE_NOT_IN_SELECTED_TRACK_SLOT);
         }
     }
 

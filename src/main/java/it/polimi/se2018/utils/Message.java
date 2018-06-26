@@ -162,9 +162,9 @@ public final class Message implements Serializable{
      * @param params hashmap containing parameters of the message
      */
     void setParams(Map<String, Object> params) {
-        if(this.params!=null){ return; }
+        if(!this.params.isEmpty()){ return; }
 
-        this.params = (HashMap<String,Object>) params;
+        this.params = new HashMap<>(params);
     }
 
     /**

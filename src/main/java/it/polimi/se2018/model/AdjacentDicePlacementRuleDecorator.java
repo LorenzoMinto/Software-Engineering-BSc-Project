@@ -42,8 +42,7 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
      * @param windowPattern the window pattern on which the move is played.
      * @param row the row index of the cell where the dice is to be placed.
      * @param col the column index of the cell where the dice is to be placed.
-     * @return whether or not the move complies with the dice adjacency constraint, or, in case invert is set to true,
-     * whether or not the dice to be placed is adjacent to any other dice on the window pattern.
+     * @return whether or not the move complies with the dice adjacency constraint
      *
      * @see AdjacentColorPlacementRuleDecorator for formal rule.
      */
