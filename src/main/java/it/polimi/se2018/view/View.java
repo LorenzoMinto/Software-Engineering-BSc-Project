@@ -545,8 +545,18 @@ public abstract class View implements Observer {
         }
         @SuppressWarnings("unchecked")
         List<WindowPattern> patterns = (List<WindowPattern>) o;
+
         this.drawnWindowPatterns = patterns;
         showMessage(WINDOW_PATTERNS_RECEIVED);
+
+        try {
+            o = m.getParam(PARAM_PRIVATE_OBJECTIVE_CARD);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        PrivateObjectiveCard pobj = (PrivateObjectiveCard) o;
+        setPrivateObjectiveCard(pobj);
     }
 
     /**
