@@ -100,25 +100,24 @@ public class ChooseFromTrackControllerStateTest {
         List<Dice> dices = new ArrayList<>();
         Dice dice1 = new Dice(DiceColor.BLUE, 2);
         Dice dice2 = new Dice(DiceColor.RED, 3);
+
+        if(draftedDice.equals(dice1)){
+            dice1 = new Dice(DiceColor.YELLOW,3);
+        }
+
         dices.add(dice1);
         dices.add(dice2);
 
         int slotNumber = 0;
         controller.game.getTrack().processDices(dices);
 
-        Message m;
-
-        if(controller.game.getCurrentRound().getCurrentTurn().getDraftedDice().equals(dice1)) {
-            m = controller.controllerState.chooseDiceFromTrack(dice2, slotNumber);
-        }else {
-            m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
-        }
+        Message m = controller.controllerState.chooseDiceFromTrack(dice1, slotNumber);
+        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
 
         assertNull(currentTurn.getTrackChosenDice());
         assertFalse(controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(dice1));
         assertTrue(controller.game.getTrack().getDicesFromSlotNumber(slotNumber).contains(draftedDice));
         assertEquals(dice1, currentTurn.getDraftedDice());
-        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
     }
 
     /**
