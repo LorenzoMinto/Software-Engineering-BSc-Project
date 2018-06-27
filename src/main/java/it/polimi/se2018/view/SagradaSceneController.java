@@ -137,8 +137,9 @@ public class SagradaSceneController extends View implements Initializable {
     //WINDOWPATTERNS
     private List<Node> windowPatternsVisibleComponents = new ArrayList<>();
     @FXML private HBox windowPatternsHBox;
+    @FXML private VBox windowPatternsVBox;
+    @FXML private Button windowPatternsPrivateObjectiveCardImage;
 
-    private Button selectedWindowPattern = null;
     private List<Button> windowPatternsImages = new ArrayList<>();
     @FXML private Button windowPatterns1Image;
     @FXML private Button windowPatterns2Image;
@@ -266,6 +267,8 @@ public class SagradaSceneController extends View implements Initializable {
         windowPatterns4FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
 
         windowPatternsVisibleComponents.add(windowPatternsHBox);
+        windowPatternsVisibleComponents.add(windowPatternsVBox);
+        windowPatternsVisibleComponents.add(windowPatternsPrivateObjectiveCardImage);
         windowPatternsVisibleComponents.add(windowPatterns1Image);
         windowPatternsVisibleComponents.add(windowPatterns2Image);
         windowPatternsVisibleComponents.add(windowPatterns3Image);
@@ -757,25 +760,42 @@ public class SagradaSceneController extends View implements Initializable {
 
         enable(windowPatternsVisibleComponents);
 
-
         Platform.runLater(() -> {
+            double widthProportion = 4.8;
+            double heightWidthWindowPatternProportion = 0.8;
+
+            Image privateObjectiveCardImage = getImageFromPath(privateObjectiveCard.getImageURL());
+            windowPatternsPrivateObjectiveCardImage.setBackground(getBackgroundFromImage(privateObjectiveCardImage));
+            windowPatternsPrivateObjectiveCardImage.prefHeightProperty().bind(windowPatternsVBox.heightProperty().divide(2));
+            windowPatternsPrivateObjectiveCardImage.prefWidthProperty().bind(windowPatternsPrivateObjectiveCardImage.heightProperty().multiply(0.712));
+
+            windowPatternsHBox.prefHeightProperty().bind(windowPatternsVBox.heightProperty().divide(2));
+
             WindowPattern windowPattern = drawnWindowPatterns.get(0);
             Image windowPatternImage = getImageFromPath(windowPattern.getImageURL());
             windowPatterns1Image.setBackground(getBackgroundFromImage(windowPatternImage));
+            windowPatterns1Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
+            windowPatterns1Image.prefHeightProperty().bind(windowPatterns1Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
             windowPatterns1FavorTokens.setText(String.valueOf(windowPattern.getDifficulty()));
 
             windowPattern = drawnWindowPatterns.get(1);
             windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns2Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
+            windowPatterns2Image.prefHeightProperty().bind(windowPatterns2Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
             windowPatterns2Image.setBackground(getBackgroundFromImage(windowPatternImage));
             windowPatterns2FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(1).getDifficulty()));
 
             windowPattern = drawnWindowPatterns.get(2);
             windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns3Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
+            windowPatterns3Image.prefHeightProperty().bind(windowPatterns3Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
             windowPatterns3Image.setBackground(getBackgroundFromImage(windowPatternImage));
             windowPatterns3FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(2).getDifficulty()));
 
             windowPattern = drawnWindowPatterns.get(3);
             windowPatternImage = getImageFromPath(windowPattern.getImageURL());
+            windowPatterns4Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
+            windowPatterns4Image.prefHeightProperty().bind(windowPatterns4Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
             windowPatterns4Image.setBackground(getBackgroundFromImage(windowPatternImage));
             windowPatterns4FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(3).getDifficulty()));
 
