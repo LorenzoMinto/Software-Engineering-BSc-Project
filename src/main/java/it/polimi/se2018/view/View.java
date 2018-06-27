@@ -572,6 +572,8 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         List<String> playersList = (ArrayList<String>) o;
 
+        waitingRoomPlayers = playersList;
+
         String msg = "";
         int index = 0;
         for(String player : playersList){

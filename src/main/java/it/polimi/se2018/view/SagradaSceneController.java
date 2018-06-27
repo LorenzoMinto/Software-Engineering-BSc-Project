@@ -403,7 +403,8 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleAddedEvent(Message m) {
-
+        super.handleAddedEvent(m);
+        waitingRoomView.setWaitingPlayers(waitingRoomPlayers);
     }
 
     @Override
