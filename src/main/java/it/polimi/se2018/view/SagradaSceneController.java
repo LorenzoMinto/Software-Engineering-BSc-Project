@@ -325,6 +325,7 @@ public class SagradaSceneController extends View implements Initializable {
         waitingRoomView.setExitHandler(handler);
 
         Platform.runLater(() -> {
+            backPaneBox.getChildren().clear();
             backPaneBox.getChildren().add(waitingRoomView);
             backPaneBox.toFront();
 
@@ -752,6 +753,7 @@ public class SagradaSceneController extends View implements Initializable {
         });
 
         RankingsSceneController rankingsController = fxmlLoader.getController();
+        rankingsController.setLoginScene(loginScene);
 
         Platform.runLater(() -> {
             rankingsController.setLocalRanking(rankings);
@@ -882,9 +884,8 @@ public class SagradaSceneController extends View implements Initializable {
 
     public void handleExitEvent() {
         Stage stage = (Stage) playerTerminal.getScene().getWindow();
-        Platform.runLater(() -> backPaneBox.getChildren().clear());
-        stage.setFullScreen(false);
         stage.setScene(loginScene);
+        stage.centerOnScreen();
     }
 
     @Override
@@ -1011,8 +1012,9 @@ public class SagradaSceneController extends View implements Initializable {
         for (WindowPattern wp: windowPatterns) {
             String nickname = players.get(i);
             WindowPatternPlayerView wpView = new WindowPatternPlayerView();
-            //TODO: resiza bene
+
             wpView.prefHeightProperty().bind(windowPatternsBox.heightProperty());
+
             wpView.setFavourTokens(playersFavourTokens.get(i));
             wpView.setNickname(nickname);
             wpView.setWindowPattern(wp);

@@ -6,15 +6,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -28,6 +32,7 @@ public class RankingsSceneController {
     @FXML Button localityButton;
 
     private boolean showingLocal = true;
+    private Scene loginScene;
 
     public static final ObservableList localRanking =
             FXCollections.observableArrayList();
@@ -35,6 +40,9 @@ public class RankingsSceneController {
             FXCollections.observableArrayList();
 
     public void setLocalRanking(List<RankingRecord> records) {
+        records.sort(Comparator.comparing(RankingRecord::getPoints));
+        Collections.reverse(records);
+
         localRanking.addAll(records);
         rankingListView.setItems(localRanking);
 
@@ -58,6 +66,10 @@ public class RankingsSceneController {
         });
     }
 
+    public void setLoginScene(Scene login) {
+        this.loginScene = login;
+    }
+
     public void setWinner(boolean isWinner) {
         if (isWinner) {
             resultLabel.setText("Congratulations! You won.");
@@ -67,6 +79,9 @@ public class RankingsSceneController {
     }
 
     public void setGlobalRanking(List<RankingRecord> records) {
+        records.sort(Comparator.comparing(RankingRecord::getCumulativePoints));
+        Collections.reverse(records);
+
         globalRanking.addAll(records);
     }
 
@@ -81,6 +96,16 @@ public class RankingsSceneController {
             localityButton.setText("Show Global");
             rankingListView.setItems(localRanking);
         }
+    }
+
+    public void handleExitEvent() {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
+    }
+
+    public void handleNewGameEvent() {
+
     }
 
 

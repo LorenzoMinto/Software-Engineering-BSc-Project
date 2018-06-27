@@ -44,6 +44,8 @@ public class Dice implements Serializable {
      */
     private static final IntFunction<Integer> rollDiceFunction = v -> 7 - v;
 
+    private static final Random random = new Random();
+
     /**
      * The value of the Dice
      */
@@ -112,9 +114,7 @@ public class Dice implements Serializable {
      * Rolls the Dice. Means that assign a new random value to it.
      */
     public void roll() {
-
-        Random r = new Random();
-        this.value = r.nextInt(MAX_VALUE)+1;
+        this.value = random.nextInt(MAX_VALUE)+1;
     }
 
 

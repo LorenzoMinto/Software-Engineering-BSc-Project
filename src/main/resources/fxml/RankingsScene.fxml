@@ -36,7 +36,6 @@
             </VBox>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4">
                <children>
-                  <Button fx:id="newGameButton" mnemonicParsing="false" prefWidth="100.0" text="New Game" />
                   <Button fx:id="exitButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: indianred;" text="Exit" />
                </children>
                <GridPane.margin>
