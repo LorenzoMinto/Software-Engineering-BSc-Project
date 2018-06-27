@@ -546,8 +546,18 @@ public abstract class View implements Observer {
         }
         @SuppressWarnings("unchecked")
         List<WindowPattern> patterns = (List<WindowPattern>) o;
+
         this.drawnWindowPatterns = patterns;
         showMessage(WINDOW_PATTERNS_RECEIVED);
+
+        try {
+            o = m.getParam(PARAM_PRIVATE_OBJECTIVE_CARD);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        PrivateObjectiveCard pobj = (PrivateObjectiveCard) o;
+        setPrivateObjectiveCard(pobj);
     }
 
     /**
@@ -1133,12 +1143,6 @@ public abstract class View implements Observer {
                 handleChangedDraftPoolEvent(m);
                 break;
             case SOMETHING_CHANGED_IN_TRACK:
-                //TODO: remove after debug
-                try {
-                    System.out.println(((Track)m.getParam("track")).toString());
-                } catch (NoSuchParamInMessageException e) {
-                    e.printStackTrace();
-                }
                 handleChangedTrackEvent(m);
                 break;
             case DRAFTED_DICE:

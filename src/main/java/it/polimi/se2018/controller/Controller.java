@@ -527,6 +527,7 @@ public class Controller extends Observable {
 
             HashMap<String,Object> params = new HashMap<>();
             params.put("windowPatterns",new ArrayList<>(patterns));
+            params.put("privateObjectiveCard", player.getPrivateObjectiveCard());
             notify(new Message(ViewBoundMessageType.DISTRIBUTION_OF_WINDOW_PATTERNS,params,player.getID()));
         }
 
