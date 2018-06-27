@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 //TODO: commentare questa classe
-public class ViewGUI extends Application {
+public class GUIView extends Application {
 
     //LOGIN SCENE
     private TextField userTextField;
