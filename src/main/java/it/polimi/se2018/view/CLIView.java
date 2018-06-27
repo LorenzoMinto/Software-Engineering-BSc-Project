@@ -397,20 +397,20 @@ public class CLIView extends View{
     }
 
     @Override
-    void showMessage(String message) {
+    void showInformation(String message) {
         cleanConsole();
         print(message);
     }
 
     @Override
-    void errorMessage(String message) {
+    void showError(String message) {
         print(ERROR_MESSAGE +message);
         waitForMove();
     }
 
     @Override
     void ack(String text){
-        showMessage(text);
+        showInformation(text);
         waitForMove();
     }
 

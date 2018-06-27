@@ -229,7 +229,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -240,7 +240,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -251,7 +251,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -283,7 +283,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.INCREMENT_DICE));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -294,7 +294,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.DECREMENT_DICE));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -305,7 +305,7 @@ public abstract class View implements Observer {
         try {
             notifyGame(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
         } catch (NetworkingException e) {
-            showMessage(e.getMessage());
+            showInformation(e.getMessage());
         }
     }
 
@@ -380,14 +380,14 @@ public abstract class View implements Observer {
         @SuppressWarnings("unchecked")
         String pID = (String) o;
 
-        showMessage(pID.concat(A_PLAYER_BECAME_INACTIVE));
+        showInformation(pID.concat(A_PLAYER_BECAME_INACTIVE));
     }
 
     /**
      * Handles the event "Game ended"
      */
     private void handleGameEndedEvent(Message m){
-        showMessage(THE_GAME_IS_ENDED);
+        showInformation(THE_GAME_IS_ENDED);
     }
 
     /**
@@ -405,9 +405,9 @@ public abstract class View implements Observer {
         String err = (String) o;
 
         if(!err.equals("")){
-            errorMessage(err);
+            showError(err);
         } else {
-            errorMessage(THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID);
+            showError(THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID);
         }
     }
 
@@ -420,7 +420,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam("number");
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
+            showInformation(FAILED_SETUP_ROUND);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -429,7 +429,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_DRAFT_POOL_DICES);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_ROUND);
+            showInformation(FAILED_SETUP_ROUND);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -451,7 +451,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_WHO_IS_PLAYING);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_TURN);
+            showInformation(FAILED_SETUP_TURN);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -477,7 +477,7 @@ public abstract class View implements Observer {
         String nickname = (String) o;
 
         if(!nickname.equals(this.playerID)) {
-            showMessage(nickname + LEAVES_THE_WAITING_ROOM);
+            showInformation(nickname + LEAVES_THE_WAITING_ROOM);
         }
 
         waitingRoomPlayers.remove(nickname);
@@ -498,7 +498,7 @@ public abstract class View implements Observer {
         String nickname = (String) o;
 
         if(!nickname.equals(this.playerID)){
-            showMessage(nickname+ JOINS_THE_WAITING_ROOM);
+            showInformation(nickname+ JOINS_THE_WAITING_ROOM);
             waitingRoomPlayers.add(nickname);
         }
     }
@@ -510,7 +510,7 @@ public abstract class View implements Observer {
      * Handles the event "Connection Lost"
      */
     void handleConnectionLostEvent(Message m){
-        showMessage(PROBLEMS_WITH_CONNECTION);
+        showInformation(PROBLEMS_WITH_CONNECTION);
         this.wasInactiveBeforeConnectionDrop = this.state == ViewState.INACTIVE;
         changeStateTo(ViewState.DISCONNECTED);
     }
@@ -519,12 +519,12 @@ public abstract class View implements Observer {
      * Handles the event "Connection Restored"
      */
     void handleConnectionRestoredEvent(){
-        showMessage(CONNECTION_RESTORED);
+        showInformation(CONNECTION_RESTORED);
         changeStateTo( (this.wasInactiveBeforeConnectionDrop) ? ViewState.INACTIVE : ViewState.ACTIVE );
 
         //Handles again message that did not ended handling due to connection drop
         if(this.handlingMessage!=null){
-            handleMessage(this.handlingMessage);
+            handleReceivedMessage(this.handlingMessage);
         }
     }
 
@@ -542,7 +542,7 @@ public abstract class View implements Observer {
         List<WindowPattern> patterns = (List<WindowPattern>) o;
 
         this.drawnWindowPatterns = patterns;
-        showMessage(WINDOW_PATTERNS_RECEIVED);
+        showInformation(WINDOW_PATTERNS_RECEIVED);
 
         try {
             o = m.getParam(PARAM_PRIVATE_OBJECTIVE_CARD);
@@ -579,14 +579,14 @@ public abstract class View implements Observer {
             index++;
         }
 
-        showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM + msg);
+        showInformation(YOU_HAVE_JOINED_THE_WAITING_ROOM + msg);
     }
 
     /**
      * Handles the event "Removed from the waiting room"
      */
     void handleRemovedEvent(Message m){
-        showMessage(REMOVED_FROM_GAME);
+        showInformation(REMOVED_FROM_GAME);
         waitingRoomPlayers = new ArrayList<>();
     }
 
@@ -596,7 +596,7 @@ public abstract class View implements Observer {
      */
     void ack(String text){
         if(!text.equals("")){
-            showMessage(text);
+            showInformation(text);
         }
     }
 
@@ -605,7 +605,7 @@ public abstract class View implements Observer {
      */
     void handleBackToGameEvent(Message m){
         changeStateTo(ViewState.ACTIVE);
-        showMessage(BACK_TO_GAME);
+        showInformation(BACK_TO_GAME);
     }
 
     /**
@@ -613,7 +613,7 @@ public abstract class View implements Observer {
      */
     void handleInactiveEvent(Message m){
         changeStateTo(ViewState.INACTIVE);
-        showMessage(YOU_ARE_NOW_INACTIVE);
+        showInformation(YOU_ARE_NOW_INACTIVE);
     }
 
     /**
@@ -625,7 +625,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_DRAWN_TOOL_CARDS);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -634,7 +634,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_DRAWN_PUBLIC_OBJECTIVE_CARDS);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -643,7 +643,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_PLAYERS);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -652,7 +652,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_TRACK);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -661,7 +661,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_DRAFT_POOL_DICES);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -670,7 +670,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_WINDOW_PATTERNS);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -679,7 +679,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_YOUR_WINDOW_PATTERN);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -688,7 +688,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_PRIVATE_OBJECTIVE_CARD);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -697,7 +697,7 @@ public abstract class View implements Observer {
         try {
             o = m.getParam(PARAM_PLAYERS_FAVOUR_TOKENS);
         } catch (NoSuchParamInMessageException e) {
-            showMessage(FAILED_SETUP_GAME);
+            showInformation(FAILED_SETUP_GAME);
             return;
         }
         @SuppressWarnings("unchecked")
@@ -782,7 +782,7 @@ public abstract class View implements Observer {
         int index = players.indexOf(pID);
         windowPatterns.set(index, wp);
 
-        showMessage(pID+WINDOW_PATTERN_UPDATED);
+        showInformation(pID+WINDOW_PATTERN_UPDATED);
     }
 
     /**
@@ -810,14 +810,14 @@ public abstract class View implements Observer {
         }
         Track mTrack = (Track)o;
         setTrack(mTrack);
-        showMessage(TRACK_HAS_NOW_NEW_DICES);
+        showInformation(TRACK_HAS_NOW_NEW_DICES);
     }
 
     /**
      * Handles the event "It is now your turn"
      */
     void handleYourTurnEvent(Message m) {
-        showMessage(ITS_YOUR_TURN);
+        showInformation(ITS_YOUR_TURN);
     }
 
     /**
@@ -825,28 +825,28 @@ public abstract class View implements Observer {
      * sent to server was bad formatted or contained unexpected data.
      */
     void handleBadFormattedEvent(Message m) {
-        showMessage(ERROR_MOVE);
+        showInformation(ERROR_MOVE);
     }
 
     /**
      * Handles the event "Can't join waiting room because players limit has been reached"
      */
     void handleDeniedLimitEvent(Message m) {
-        showMessage(MAX_PLAYERS_ERROR);
+        showInformation(MAX_PLAYERS_ERROR);
     }
 
     /**
      * Handles the event "Can't join waiting room because your requested nickname is already used in this game"
      */
     void handleDeniedNicknameEvent(Message m) {
-        showMessage(NICKNAME_ALREADY_USED_ERROR);
+        showInformation(NICKNAME_ALREADY_USED_ERROR);
     }
 
     /**
      * Handles the event "Can't join because game is already running"
      */
     void handleDeniedPlayingEvent(Message m) {
-        showMessage(ALREADY_PLAYING_ERROR);
+        showInformation(ALREADY_PLAYING_ERROR);
     }
 
     void handleAPlayerDisconnectedEvent(Message m){
@@ -857,7 +857,7 @@ public abstract class View implements Observer {
             return;
         }
         String mPlayerID = (String)o;
-        showMessage(mPlayerID + DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS);
+        showInformation(mPlayerID + DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS);
     }
 
     void handleAPlayerReconnectedEvent(Message m){
@@ -868,7 +868,7 @@ public abstract class View implements Observer {
             return;
         }
         String mPlayerID = (String)o;
-        showMessage(mPlayerID + RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS);
+        showInformation(mPlayerID + RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS);
     }
 
     /**
@@ -912,7 +912,7 @@ public abstract class View implements Observer {
         setDrawnToolCards(toolCards);
         setPlayersFavourTokens(favourTokens);
 
-        showMessage(p+ USE_TOOL_CARD +toolCard.getTitle());
+        showInformation(p+ USE_TOOL_CARD +toolCard.getTitle());
     }
 
     /**
@@ -937,7 +937,7 @@ public abstract class View implements Observer {
             Object o = m.getParam("noDrafted");
             setDraftedDice(null);
             reset = true;
-            showMessage(THERE_IS_NO_MORE_DRAFTED_DICE);
+            showInformation(THERE_IS_NO_MORE_DRAFTED_DICE);
         } catch (NoSuchParamInMessageException e) { }
 
         if (!reset) {
@@ -950,7 +950,7 @@ public abstract class View implements Observer {
             @SuppressWarnings("unchecked")
             Dice mDraftedDice = (Dice) o;
             setDraftedDice(mDraftedDice);
-            showMessage(YOU_HAVE_DRAFTED +mDraftedDice);
+            showInformation(YOU_HAVE_DRAFTED +mDraftedDice);
         }
     }
 
@@ -960,7 +960,7 @@ public abstract class View implements Observer {
      * Notify classes that extends View (CLI and GUI) about the beginning of a new round
      */
     void notifyNewRound(){
-        showMessage((this.roundNumber+1)+ ROUND_NOW_STARTS);
+        showInformation((this.roundNumber+1)+ ROUND_NOW_STARTS);
     }
 
     /**
@@ -968,7 +968,7 @@ public abstract class View implements Observer {
      */
     void notifyNewTurn(){
         if(!playingPlayerID.equals(playerID)){
-            showMessage(NOW_ITS_TURN_OF + playingPlayerID);
+            showInformation(NOW_ITS_TURN_OF + playingPlayerID);
             setPermissions(EnumSet.noneOf(Move.class));
         }
     }
@@ -977,7 +977,7 @@ public abstract class View implements Observer {
      * Notify classes that extends View (CLI and GUI) about the beginning of the game
      */
     void notifyGameStarted(){
-        showMessage(THE_GAME_IS_STARTED);
+        showInformation(THE_GAME_IS_STARTED);
     }
 
     /**
@@ -1013,16 +1013,16 @@ public abstract class View implements Observer {
      * Handles a message and calls relative handle method
      * @param m the message to handle
      */
-    private void handleMessage(Message m){
+    private void handleReceivedMessage(Message m){
         switch (state) {
             case INACTIVE:
-                handleMessageOnInactiveState(m);
+                handleReceivedMessageOnInactiveState(m);
                 break;
             case ACTIVE:
-                handleMessageOnActiveState(m);
+                handleReceivedMessageOnActiveState(m);
                 break;
             case DISCONNECTED:
-                handleMessageOnDisconnectedState(m);
+                handleReceivedMessageOnDisconnectedState(m);
                 break;
         }
     }
@@ -1056,7 +1056,7 @@ public abstract class View implements Observer {
      * Handles the received message if the current view state is "DISCONNECTED"
      * @param m the received message
      */
-    private void handleMessageOnDisconnectedState(Message m){
+    private void handleReceivedMessageOnDisconnectedState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
@@ -1070,7 +1070,7 @@ public abstract class View implements Observer {
      * Handles the received message if the current view state is "INACTIVE"
      * @param m the received message
      */
-    private void handleMessageOnInactiveState(Message m){
+    private void handleReceivedMessageOnInactiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
@@ -1097,7 +1097,7 @@ public abstract class View implements Observer {
      * Handles the received message if the current view state is "ACTIVE"
      * @param m the received message
      */
-    private void handleMessageOnActiveState(Message m){
+    private void handleReceivedMessageOnActiveState(Message m){
 
         ViewBoundMessageType type = (ViewBoundMessageType) m.getType();
 
@@ -1210,13 +1210,13 @@ public abstract class View implements Observer {
      * Display a message to the user. Abstract, so it is implemented differently by CLI and GUI.
      * @param message the message to be displayed
      */
-    abstract void showMessage(String message);
+    abstract void showInformation(String message);
 
     /**
      * Display an error message to the user. Abstract, so it is implemented differently by CLI and GUI.
      * @param message the error message to be displayed
      */
-    abstract void errorMessage(String message);
+    abstract void showError(String message);
 
     /**
      * Connects View to the server, creating a new Client instance.
@@ -1264,7 +1264,7 @@ public abstract class View implements Observer {
     @Override
     public boolean update(Message m) {
         addHandlingMessage(m);
-        handleMessage(m);
+        handleReceivedMessage(m);
 
         return true;
     }
