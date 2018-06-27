@@ -141,7 +141,7 @@ public class GUIView extends Application {
         primaryStage.setWidth(primaryScreenBounds.getWidth());
         primaryStage.setHeight(primaryScreenBounds.getHeight());
 
-        primaryStage.setMinHeight(primaryScreenBounds.getWidth()/1.5*13/16);
+        primaryStage.setMinHeight(primaryScreenBounds.getWidth()/1.5*13.5/16);
         primaryStage.setMinWidth(primaryScreenBounds.getWidth()/1.5);
 
         sagradaScene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());

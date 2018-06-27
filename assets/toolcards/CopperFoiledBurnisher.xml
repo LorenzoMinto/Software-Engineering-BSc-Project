@@ -8,6 +8,7 @@
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <placementRule decoratorName="AdjacentDicePlacementRuleDecorator"/>
     <placementRule decoratorName="AdjacentColorPlacementRuleDecorator"/>
+    <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
     <placementRule decoratorName="ColorPlacementRuleDecorator"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />

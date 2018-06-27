@@ -6,8 +6,9 @@
         You must obey all other placement restrictions</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
-    <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
     <placementRule decoratorName="AdjacentDicePlacementRuleDecorator"/>
+    <placementRule decoratorName="AdjacentValuePlacementRuleDecorator"/>
+    <placementRule decoratorName="AdjacentColorPlacementRuleDecorator"/>
     <placementRule decoratorName="ValuePlacementRuleDecorator"/>
     <controllerStateRule prevState="StartControllerState" nextState="MoveControllerState" />
     <controllerStateRule prevState="ToolCardControllerState" nextState="MoveControllerState" />

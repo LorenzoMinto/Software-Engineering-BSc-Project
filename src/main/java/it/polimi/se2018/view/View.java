@@ -219,11 +219,7 @@ public abstract class View implements Observer {
      * Handles the move "Return dice to draft pool move"
      */
     void handleReturnDiceToDraftpoolMove(){
-        try {
-            sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
-        } catch (NetworkingException e) {
-            showMessage(e.getMessage());
-        }
+        //TODO: implement
     }
 
     /**
