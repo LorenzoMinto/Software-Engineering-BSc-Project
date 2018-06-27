@@ -71,30 +71,31 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
 
-        Cell[][] pattern = windowPattern.getPattern();
-
-        //Number of sets that contain the same elements (colors or values) as the 'items' set
-        int numberOfCompletedSets;
-
-        /* List of sets that can be formed with the dice of a WindowPattern.
-           Not necessarily all sets of the list will be completed sets */
-        List<HashSet<Object>> listOfSets = new ArrayList<>();
+        int numberOf1 = 0;
+        int numberOf2 = 0;
         Object currentProperty;
 
-        listOfSets.add(new HashSet<>());
+        Cell[][] pattern = windowPattern.getPattern();
+        List<Object> itemsList = new ArrayList<>(items);
 
         for(int i=0; i<windowPattern.getNumberOfRows(); i++){
             for(int j=0; j < windowPattern.getNumberOfColumns(); j++){
 
                 currentProperty = getDiceProperty(pattern[i][j]);
 
-                updateSets(listOfSets, currentProperty);
+                if(currentProperty!= null && currentProperty.equals(itemsList.get(0))){
+                    numberOf1++;
+                }else if(currentProperty!= null && currentProperty.equals(itemsList.get(1))){
+                    numberOf2++;
+                }
             }
         }
 
-        numberOfCompletedSets = countCompletedSets(listOfSets);
-
-        return this.multiplier*numberOfCompletedSets;
+        if(numberOf1<numberOf2){
+            return this.multiplier*numberOf1;
+        }else{
+            return this.multiplier*numberOf2;
+        }
     }
 
     /**
@@ -109,61 +110,6 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
         }else{
             return null;
         }
-    }
-
-    /**
-     * Updates the sets adding the current property if it is different from null and it is contained in 'items'.
-     *
-     * @param listOfSets the sets that are or can become completed sets of properties
-     * @param currentProperty the property of the dice that is being evaluated
-     */
-    private void updateSets(List<HashSet<Object>> listOfSets, Object currentProperty) {
-
-        /*
-        If there is not a dice on the current cell or if the property to be evaluated is not contained in 'items',
-        no set can become a completed set
-        */
-        if(currentProperty == null || !items.contains(currentProperty)){
-            return;
-        }
-
-        /*
-        Otherwise, the property is necessarily contained in the 'items' set
-        For each set, if the set does not already contain the current property, then add it to it
-        If all sets already have the current property, then create a new set containing the current property
-        */
-        for (HashSet<Object> set: listOfSets) {
-
-            if (!set.contains(currentProperty)){
-                set.add(currentProperty);
-                return;
-            }
-
-            else if(listOfSets.indexOf(set) == listOfSets.size()-1){
-                set = new HashSet<>();
-                set.add(currentProperty);
-                listOfSets.add(set);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Counts the number of sets that are equal to the requested set ('items') specified in the constructor of the card
-     *
-     * @param listOfSets the sets, both completed and not, that were formed after the execution of the algorithm
-     * @return the number of sets that are equal to the requested set ('items') specified in the constructor of the card
-     */
-    private int countCompletedSets(List<HashSet<Object>> listOfSets) {
-
-        int numberOfCompletedSets = 0;
-
-        for (HashSet set: listOfSets) {
-            if (set.equals(items)) {
-                numberOfCompletedSets++;
-            }
-        }
-        return numberOfCompletedSets;
     }
 
     /**
