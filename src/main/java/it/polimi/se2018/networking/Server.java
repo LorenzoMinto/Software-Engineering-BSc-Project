@@ -74,7 +74,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     /**
      * Timer used to call launchGame() after a specified time
      */
-    private Timer timerForLaunchingGame;
+    private Timer timerForLaunchingGame = new Timer();
 
     /**
      * Variable used to know if the timerForLaunchingGame is running or not
@@ -392,7 +392,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
-                message = new Message(ViewBoundMessageType.ADDED_TO_WR,null,nickname,EnumSet.of(Move.LEAVE));
+                message = new Message(ViewBoundMessageType.ADDED_TO_WR,Message.fastMap("players",waitingList.keySet()),nickname,EnumSet.of(Move.LEAVE));
             } else {
                 message = new Message(ViewBoundMessageType.JOIN_WR_DENIED_NICKNAME);
             }
@@ -466,7 +466,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private void startTimerForLaunchingGame(){
         this.isTimerForLaunchingGameActive = true;
 
-        this.timerForLaunchingGame = new Timer();
         this.timerForLaunchingGame.schedule(new TimerTask() {
             @Override
             public void run() {

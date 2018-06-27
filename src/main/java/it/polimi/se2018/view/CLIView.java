@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
@@ -68,6 +69,9 @@ public class CLIView extends View{
     private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
     private static final String PORT_NUMBER_MUST_BE_A_NUMBER = "Port number must be a number";
     private static final String SHOW_TOOLCARDS = "Show toolcards";
+    private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
+    private static final String THE_WINNER_IS = "The winner is: ";
+    private static final String GLOBAL_RANKINGS_FOLLOWING = "Global rankings following:";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -88,8 +92,6 @@ public class CLIView extends View{
     private static final String PARAM_COL = "col";
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_DICE = "dice";
-    private static final String PLEASE_INSERT_A_NUMBER = "Please insert a number";
-    private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
 
 
     // AUXILIARY CLASSES
@@ -905,8 +907,20 @@ public class CLIView extends View{
     @Override
     void handleRankingsEvent(Message m){
         super.handleRankingsEvent(m);
+
+        for(RankingRecord rankingRecord : this.rankings){
+            print(rankingRecord.toString());
+        }
+
+        print(THE_WINNER_IS + getWinnerID());
+
+        print(GLOBAL_RANKINGS_FOLLOWING);
+
+        for(RankingRecord rankingRecord : this.globalRankings){
+            print(rankingRecord.toString());
+        }
+
         removeHandlingMessage(m);
-        //TODO: print rankings (winner is printed by super())
     }
 
 
@@ -982,6 +996,13 @@ public class CLIView extends View{
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        removeHandlingMessage(m);
+        waitForMove();
+    }
+
+    @Override
+    void handleChangedTrackEvent(Message m){
+        super.handleChangedTrackEvent(m);
         removeHandlingMessage(m);
         waitForMove();
     }

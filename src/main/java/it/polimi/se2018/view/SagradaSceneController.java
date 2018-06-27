@@ -916,7 +916,7 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     private void updateCards() {
-        if(drawnToolCards.isEmpty() || drawnPublicObjectiveCards.isEmpty() || getPrivateObjectiveCard() == null){
+        if(drawnToolCards.isEmpty() || drawnPublicObjectiveCards.isEmpty()){
             throw new BadBehaviourRuntimeException("Cards shouldn't be empty");}
         //getting the cards images
         drawnToolCards.forEach(card
