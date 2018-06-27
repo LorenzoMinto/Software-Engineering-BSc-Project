@@ -844,7 +844,7 @@ public class CLIView extends View{
         }
         print("Your private objective card is:");
         print(this.privateObjectiveCard.toString());
-        
+
         print(INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE);
         waitForConsoleInput(s -> {
             int i;
