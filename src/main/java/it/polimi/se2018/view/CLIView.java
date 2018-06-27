@@ -983,8 +983,8 @@ public class CLIView extends View{
     }
 
     @Override
-    void handleSlotOfTrackChosenDice(Message m){
-        super.handleSlotOfTrackChosenDice(m);
+    void handleSlotOfTrackChosenDiceEvent(Message m){
+        super.handleSlotOfTrackChosenDiceEvent(m);
         removeHandlingMessage(m);
         waitForMove();
     }
