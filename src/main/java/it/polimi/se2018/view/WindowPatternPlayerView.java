@@ -29,6 +29,7 @@ public class WindowPatternPlayerView extends Pane {
     @FXML private GridPane wpGrid;
     @FXML private Label titleLabel;
     @FXML private ImageView userIcon;
+    @FXML private GridPane patternGrid;
 
     private Pane[][] gridDiceButtons;
     private int xSelected = -1;
@@ -47,6 +48,7 @@ public class WindowPatternPlayerView extends Pane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+
     }
 
     public void setNickname(String nickname) {

@@ -219,7 +219,11 @@ public abstract class View implements Observer {
      * Handles the move "Return dice to draft pool move"
      */
     void handleReturnDiceToDraftpoolMove(){
-        //TODO: implement
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
+        } catch (NetworkingException e) {
+            showMessage(e.getMessage());
+        }
     }
 
     /**
@@ -320,11 +324,7 @@ public abstract class View implements Observer {
      * Handles the move "Return drafted dice to draft pool"
      */
     void handleReturnDiceFromTrackMove() {
-        try {
-            sendMessage(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
-        } catch (NetworkingException e) {
-            showMessage(e.getMessage());
-        }
+
     }
 
     /**
@@ -503,9 +503,8 @@ public abstract class View implements Observer {
 
         if(!nickname.equals(this.playerID)){
             showMessage(nickname+ JOINS_THE_WAITING_ROOM);
+            waitingRoomPlayers.add(nickname);
         }
-
-        waitingRoomPlayers.add(nickname);
     }
 
 
@@ -592,6 +591,7 @@ public abstract class View implements Observer {
      */
     void handleRemovedEvent(Message m){
         showMessage(REMOVED_FROM_GAME);
+        waitingRoomPlayers = new ArrayList<>();
     }
 
     /**

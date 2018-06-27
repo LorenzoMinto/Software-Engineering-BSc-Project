@@ -412,7 +412,8 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleRemovedEvent(Message m) {
-
+        super.handleRemovedEvent(m);
+        waitingRoomView.setWaitingPlayers(waitingRoomPlayers);
     }
 
     private void checkID(Move move){
@@ -445,7 +446,7 @@ public class SagradaSceneController extends View implements Initializable {
                 handleChooseDiceFromTrackMove();
                 break;
             case RETURN_DICE_TO_DRAFTPOOL:
-                handleReturnDiceFromTrackMove();
+                handleReturnDiceToDraftpoolMove();
                 break;
             case MOVE_DICE:
                 handleMoveDiceMove();
@@ -996,7 +997,7 @@ public class SagradaSceneController extends View implements Initializable {
         for (WindowPattern wp: windowPatterns) {
             String nickname = players.get(i);
             WindowPatternPlayerView wpView = new WindowPatternPlayerView();
-            trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
+            //TODO: resiza bene
             wpView.prefHeightProperty().bind(windowPatternsBox.heightProperty());
             wpView.setFavourTokens(playersFavourTokens.get(i));
             wpView.setNickname(nickname);

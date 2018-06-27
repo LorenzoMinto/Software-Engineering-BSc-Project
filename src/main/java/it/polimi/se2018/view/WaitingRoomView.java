@@ -46,8 +46,10 @@ public class WaitingRoomView extends Pane {
     }
 
     public void setWaitingPlayers(List<String> players) {
-        waitingPlayers.clear();
-        waitingPlayers.addAll(players);
+        Platform.runLater(() -> {
+            waitingPlayers.clear();
+            waitingPlayers.addAll(players);
+        });
     }
 
     public void forwardMessage(String m) {

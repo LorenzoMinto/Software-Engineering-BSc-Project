@@ -389,6 +389,10 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private Message addInWaitingRoom(String nickname, ClientProxyInterface client){
         Message message;
 
+        if (nickname.equals("")) {
+            return new Message(ViewBoundMessageType.ERROR_MESSAGE);
+        }
+
         if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS)){
             if(!waitingList.containsKey(nickname)){
                 waitingList.put(nickname,client);
