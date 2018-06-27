@@ -486,6 +486,13 @@ public class CLIView extends View{
         waitForMove();
     }
 
+    private void printToolCards(){
+        int index = 1;
+        for(ToolCard toolCard : drawnToolCards){
+            print(Integer.toString(index)+". "+toolCard);
+            index++;
+        }
+    }
 
     // HANDLING OF MOVES (PERFORMED BY THE VIEW'S PLAYER)
 
@@ -1021,15 +1028,5 @@ public class CLIView extends View{
     void notifyNewTurn(){
         super.notifyNewTurn();
         waitForMove();
-    }
-
-
-
-    private void printToolCards(){
-        int index = 1;
-        for(ToolCard toolCard : drawnToolCards){
-            print(Integer.toString(index)+". "+toolCard);
-            index++;
-        }
     }
 }
