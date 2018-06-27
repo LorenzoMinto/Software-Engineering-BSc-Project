@@ -1135,6 +1135,7 @@ public class SagradaSceneController extends View implements Initializable {
         updateDraftPool();
         setupWindowPatterns();
         setupCards();
+        hasChosenWindowPattern();
     }
 
 
