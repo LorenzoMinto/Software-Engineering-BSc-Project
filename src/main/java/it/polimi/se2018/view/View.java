@@ -227,7 +227,7 @@ public abstract class View implements Observer {
      */
     void handleLeaveWaitingRoomMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
+            notifyGame(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -238,7 +238,7 @@ public abstract class View implements Observer {
      */
     void handleBackGameMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
+            notifyGame(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -249,7 +249,7 @@ public abstract class View implements Observer {
      */
     void handleEndTurnMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+            notifyGame(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -281,7 +281,7 @@ public abstract class View implements Observer {
      */
     void handleIncrementDraftedDiceMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.INCREMENT_DICE));
+            notifyGame(new Message(ControllerBoundMessageType.INCREMENT_DICE));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -292,7 +292,7 @@ public abstract class View implements Observer {
      */
     void handleDecrementDraftedDiceMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.DECREMENT_DICE));
+            notifyGame(new Message(ControllerBoundMessageType.DECREMENT_DICE));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -303,7 +303,7 @@ public abstract class View implements Observer {
      */
     void handleEndEffectMove(){
         try {
-            sendMessage(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
+            notifyGame(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
         } catch (NetworkingException e) {
             showMessage(e.getMessage());
         }
@@ -1001,23 +1001,12 @@ public abstract class View implements Observer {
      * Sends the given message to server
      * @param m the message to send to server
      */
-    void sendMessage(Message m) throws NetworkingException{
+    void notifyGame(Message m) throws NetworkingException{
         try {
             this.client.sendMessage(m);
         } catch (Exception ex){
             throw new NetworkingException(ex.getMessage());
         }
-    }
-
-    /**
-     * Receives a message from server (this method is called by client)
-     * @param m the received message
-     */
-    private void receiveMessage(Message m){
-        if(m.getType()!=ViewBoundMessageType.PING){System.out.println(m);}
-        addHandlingMessage(m);
-
-        handleMessage(m);
     }
 
     /**
@@ -1274,7 +1263,9 @@ public abstract class View implements Observer {
 
     @Override
     public boolean update(Message m) {
-        receiveMessage(m);
+        addHandlingMessage(m);
+        handleMessage(m);
+
         return true;
     }
 
