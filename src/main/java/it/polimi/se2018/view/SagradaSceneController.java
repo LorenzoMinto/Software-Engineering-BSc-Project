@@ -492,10 +492,10 @@ public class SagradaSceneController extends View implements Initializable {
             Image toolCardImage = getImageFromPath(toolCard.getImageURL());
             toolCards1Button.setBackground(getBackgroundFromImage(toolCardImage));
             toolCards1Button.prefWidthProperty().bind(toolCardsGridPane.widthProperty().divide(4));
-            toolCards1Button.prefHeightProperty().bind(toolCards1Button.widthProperty().divide(0.712));
+            toolCards1Button.prefHeightProperty().bind(toolCards1Button.prefWidthProperty().divide(0.712));
             toolCards1FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-            toolCards1FavorTokensButton.prefWidthProperty().bind(toolCards1Button.widthProperty().divide(4));
-            toolCards1FavorTokensButton.prefHeightProperty().bind(toolCards1FavorTokensButton.widthProperty());
+            toolCards1FavorTokensButton.prefWidthProperty().bind(toolCards1Button.prefWidthProperty().divide(4));
+            toolCards1FavorTokensButton.prefHeightProperty().bind(toolCards1FavorTokensButton.prefWidthProperty());
 
             toolCard = drawnToolCards.get(1);
             toolCardImage = getImageFromPath(toolCard.getImageURL());
@@ -519,6 +519,7 @@ public class SagradaSceneController extends View implements Initializable {
             toolCardsPlayerFavorTokensButton.prefWidthProperty().bind(toolCards1Button.widthProperty().divide(4));
             toolCardsPlayerFavorTokensButton.prefHeightProperty().bind(toolCardsPlayerFavorTokensButton.widthProperty());
         });
+
     }
 
     private void enable(List<Node> visibleComponents) {
@@ -782,10 +783,12 @@ public class SagradaSceneController extends View implements Initializable {
             double widthProportion = 4.8;
             double heightWidthWindowPatternProportion = 0.8;
 
+            Stage thisStage = (Stage) playerTerminal.getScene().getWindow();
+
             Image privateObjectiveCardImage = getImageFromPath(privateObjectiveCard.getImageURL());
             windowPatternsPrivateObjectiveCardImage.setBackground(getBackgroundFromImage(privateObjectiveCardImage));
-            windowPatternsPrivateObjectiveCardImage.prefHeightProperty().bind(windowPatternsVBox.heightProperty().divide(2));
-            windowPatternsPrivateObjectiveCardImage.prefWidthProperty().bind(windowPatternsPrivateObjectiveCardImage.heightProperty().multiply(0.712));
+            windowPatternsPrivateObjectiveCardImage.prefHeightProperty().bind(thisStage.heightProperty().divide(2));
+            windowPatternsPrivateObjectiveCardImage.prefWidthProperty().bind(windowPatternsPrivateObjectiveCardImage.prefHeightProperty().multiply(0.7));
 
             windowPatternsHBox.prefHeightProperty().bind(windowPatternsVBox.heightProperty().divide(2));
 
