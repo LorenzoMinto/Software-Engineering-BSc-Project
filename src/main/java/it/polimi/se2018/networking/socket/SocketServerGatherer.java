@@ -33,11 +33,6 @@ public final class SocketServerGatherer extends Thread{
     private final SocketReceiverInterface receiver;
 
     /**
-     * Boolean value that is used to, eventually, stop the gathering loop.
-     */
-    private boolean acceptConnections = true;
-
-    /**
      * Port number on which the socket connection is opened
      */
     private int portNumber;
@@ -59,7 +54,8 @@ public final class SocketServerGatherer extends Thread{
     public void run() {
         try(ServerSocket socket = new ServerSocket(portNumber)){
 
-            while(this.acceptConnections){
+            //noinspection InfiniteLoopStatement
+            while(true){
                 acceptConnection(socket);
             }
 
@@ -95,7 +91,7 @@ public final class SocketServerGatherer extends Thread{
                     return;
                 }
 
-                ((ServerInterface)receiver).restoredConnection(socketClientProxyBeforeConnectionDrop,socketClientAsAServer);
+                ((ServerInterface)receiver).restoredSocketConnection(socketClientProxyBeforeConnectionDrop,socketClientAsAServer);
 
                 boolean c = true;
                 while (c) {
@@ -104,7 +100,7 @@ public final class SocketServerGatherer extends Thread{
                         message = (Message) in.readObject();
                         receiver.receiveMessage(message, socketClientAsAServer);
                     } catch (SocketException e) {
-                        ((ServerInterface)receiver).lostConnection(socketClientAsAServer);
+                        ((ServerInterface)receiver).lostSocketConnection(socketClientAsAServer);
                         socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
                         c = false;
                     } catch (Exception e) {

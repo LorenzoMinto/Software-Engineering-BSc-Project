@@ -4,8 +4,6 @@ import it.polimi.se2018.utils.Message;
 
 public class Pinging extends Thread{
 
-    private boolean doPing = true;
-
     private final SenderInterface sender;
 
     private final Enum ping;
@@ -21,13 +19,11 @@ public class Pinging extends Thread{
 
         //noinspection InfiniteLoopStatement
         while(true){
-            if(doPing){
 
-                try {
-                    sender.sendMessage(new Message(this.ping));
-                } catch (NetworkingException e) {
-                    //stopPinging();
-                }
+            try {
+                sender.sendMessage(new Message(this.ping));
+            } catch (NetworkingException e) {
+                //Gateway may manage this
             }
 
             try {

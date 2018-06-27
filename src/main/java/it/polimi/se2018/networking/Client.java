@@ -60,11 +60,6 @@ public class Client extends Observable implements ClientInterface {
     private boolean connectionAvailable = true;
 
     /**
-     * Pinging server
-     */
-    private final Pinging pinging = new Pinging(this,ControllerBoundMessageType.PING);
-
-    /**
      * Constructor for Client
      *
      * @param type type of connection
@@ -92,7 +87,9 @@ public class Client extends Observable implements ClientInterface {
 
         this.gateway = g;
 
-        if(needsPinging){ this.pinging.start(); }
+        if(needsPinging){
+            new Pinging(this,ControllerBoundMessageType.PING).start();
+        }
 
         log(ACKNOWLEDGEMENT_MESSAGE_CONSTRUCTOR);
     }
