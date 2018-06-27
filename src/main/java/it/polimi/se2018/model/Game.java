@@ -127,10 +127,6 @@ public class Game extends Observable implements Observer{
      */
     private GameStatus status;
 
-    /**
-     * Represents the final players' rankings (during the middle of the game is a null object)
-     */
-    private Map<Player, Integer> rankings;
 
 
     /**
@@ -149,7 +145,6 @@ public class Game extends Observable implements Observer{
         track.register(this);
         this.players = new HashSet<>();
         this.status = GameStatus.WAITING_FOR_CARDS;
-        this.rankings = null;
 
         this.numberOfRounds = numberOfRounds;
         this.maxNumberOfPlayers = maxNumberOfPlayers;
@@ -190,6 +185,7 @@ public class Game extends Observable implements Observer{
     public List<ToolCard> getDrawnToolCards() {
         return drawnToolCards;
     }
+    //TODO: check this out
 
     /**
      * Returns the list of Public Objective Cards that were assigned to this game at the beginning of it.
@@ -235,8 +231,6 @@ public class Game extends Observable implements Observer{
         if(this.status != GameStatus.ENDED){ throw  new IllegalStateException(ASKED_TO_SET_RANKINGS_IN_BAD_STATE);}
         if(rankings == null){ throw new IllegalArgumentException(NULL_RANKINGS);}
 
-        this.rankings = rankings;
-        //TODO: COPY RANKINGS
     }
 
     /**
