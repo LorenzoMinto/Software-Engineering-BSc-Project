@@ -573,6 +573,8 @@ public abstract class View implements Observer {
         Set<String> players = (Set<String>) o;
         List<String> playersList = new ArrayList<>(players);
 
+        waitingRoomPlayers = playersList;
+
         String msg = "";
         int index = 0;
         for(String player : playersList){
