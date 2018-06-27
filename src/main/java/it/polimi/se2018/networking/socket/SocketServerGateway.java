@@ -53,12 +53,12 @@ public final class SocketServerGateway implements SocketReceiverInterface, Serve
     }
 
     @Override
-    public void lostConnection(ClientProxyInterface sender) {
-        this.server.lostConnection(sender);
+    public void lostSocketConnection(ClientProxyInterface sender) {
+        this.server.lostSocketConnection(sender);
     }
 
     @Override
-    public void restoredConnection(ClientProxyInterface previous, ClientProxyInterface next) {
-        this.server.restoredConnection(previous,next);
+    public void restoredSocketConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+        this.server.restoredSocketConnection(previous,next);
     }
 }

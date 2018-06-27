@@ -621,7 +621,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     }
 
     @Override
-    public void lostConnection(ClientProxyInterface sender) {
+    public void lostSocketConnection(ClientProxyInterface sender) {
         System.out.println("Lost connection");
         if (serverState == ServerState.WAITING_ROOM) {
 
@@ -634,7 +634,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     }
 
     @Override
-    public void restoredConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+    public void restoredSocketConnection(ClientProxyInterface previous, ClientProxyInterface next) {
         if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(previous)){
             String playerID = gatewayToPlayerIDMap.get(previous);
             gatewayToPlayerIDMap.remove(previous);

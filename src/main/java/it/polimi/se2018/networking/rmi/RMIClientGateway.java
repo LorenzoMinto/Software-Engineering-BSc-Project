@@ -3,7 +3,6 @@ package it.polimi.se2018.networking.rmi;
 import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ClientInterface;
 import it.polimi.se2018.networking.NetworkingException;
-import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
 
 import java.rmi.Naming;
@@ -41,9 +40,9 @@ public final class RMIClientGateway implements ClientInterface, RMIReceiverInter
     private static final String FIXING_CONNECTION_INTERRUPTED = "FixingConnection interrupted";
 
     /**
-     * The recipient of messages sent through this gateway
+     * The receiver of messages sent through this gateway
      */
-    private RMIReceiverInterface recipient;
+    private RMIReceiverInterface receiver;
 
     /**
      * The client connected to this gateway
@@ -82,12 +81,12 @@ public final class RMIClientGateway implements ClientInterface, RMIReceiverInter
     }
 
     /**
-     * Sets the recipient of the gateway based on the path given during class construction
+     * Sets the receiver of the gateway based on the path given during class construction
      * @throws NetworkingException if something during setting goes wrong
      */
     private void resetRecipient() throws NetworkingException {
         try{
-            this.recipient = (RMIReceiverInterface) Naming.lookup(path);
+            this.receiver = (RMIReceiverInterface) Naming.lookup(path);
         } catch(Exception e){
             throw new NetworkingException(FAILED_LOOKING_FOR_RMI_NAME);
         }
@@ -108,7 +107,7 @@ public final class RMIClientGateway implements ClientInterface, RMIReceiverInter
     @Override
     public void sendMessage(Message message) throws NetworkingException{
         try {
-            this.recipient.receiveMessage(message,this.sender);
+            this.receiver.receiveMessage(message,this.sender);
         } catch (RemoteException e) {
             throw new NetworkingException();
         }

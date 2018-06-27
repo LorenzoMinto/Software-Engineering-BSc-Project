@@ -583,7 +583,7 @@ public class SagradaSceneController extends View implements Initializable {
             Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices);
             showMessage("Drafted dice: " + draftedDice);
             try {
-                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice.copy())));
+                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }

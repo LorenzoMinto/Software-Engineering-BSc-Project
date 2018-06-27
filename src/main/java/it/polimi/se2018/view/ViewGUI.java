@@ -1,10 +1,7 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.networking.Client;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.networking.NetworkingException;
-import it.polimi.se2018.utils.ControllerBoundMessageType;
-import it.polimi.se2018.utils.Message;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,8 +26,6 @@ import javafx.stage.Stage;
 import java.net.URL;
 //TODO: commentare questa classe
 public class ViewGUI extends Application {
-
-    private Client client;
 
     //LOGIN SCENE
     private TextField userTextField;

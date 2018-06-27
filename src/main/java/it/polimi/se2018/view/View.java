@@ -919,7 +919,7 @@ public abstract class View implements Observer {
      * @param m
      */
     //TODO: completa javadoc
-    void handleSlotOfTrackChosenDice(Message m) {
+    void handleSlotOfTrackChosenDiceEvent(Message m) {
         //TODO: implement here
     }
 
@@ -1170,7 +1170,7 @@ public abstract class View implements Observer {
                 handleTrackChosenDiceEvent(m);
                 break;
             case SLOT_OF_TRACK_CHOSEN_DICE:
-                handleSlotOfTrackChosenDice(m);
+                handleSlotOfTrackChosenDiceEvent(m);
                 break;
             case IT_IS_YOUR_TURN: //needed just for setting permissions
                 handleYourTurnEvent(m);
