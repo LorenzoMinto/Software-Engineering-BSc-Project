@@ -1,7 +1,6 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.controller.ObjectiveCardManager;
+
 import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.networking.*;
@@ -28,7 +27,7 @@ public abstract class View implements Observer {
     */
     private static final String THE_GAME_IS_ENDED = "Game ended";
     private static final String WINDOW_PATTERNS_RECEIVED = "Received window patterns to choose from";
-    private static final String YOU_HAVE_JOINED_THE_WAITING_ROOM = "You have joined the waiting room";
+    private static final String YOU_HAVE_JOINED_THE_WAITING_ROOM = "You have joined the waiting room. Currently these are the waiting players: ";
     private static final String REMOVED_FROM_GAME = "You were successfully disconnected from the game";
     private static final String A_PLAYER_BECAME_INACTIVE = " has become inactive. Their turns will be skipped.";
     private static final String BACK_TO_GAME = "Welcome back";
@@ -36,8 +35,6 @@ public abstract class View implements Observer {
     private static final String FAILED_SETUP_GAME = "Initial game setup failed. You could face crucial issues playing.";
     private static final String FAILED_SETUP_ROUND = "New round setup failed. You could face crucial issues playing.";
     private static final String FAILED_SETUP_TURN = "New turn setup failed. You could face crucial issues playing.";
-    private static final String YOU_ARE_THE_WINNER = "You are the winner! Congratulations!";
-    private static final String THE_WINNER_IS = "The winner is ";
     private static final String WINDOW_PATTERN_UPDATED = " update window pattern";
     private static final String ITS_YOUR_TURN = "It's your turn!";
     private static final String ERROR_MOVE = "An unexpected error wouldn't let you perform the move. Try again.";
@@ -56,6 +53,8 @@ public abstract class View implements Observer {
     private static final String THE_ACTION_YOU_JUST_PERFORMED_WAS_NOT_VALID = "The action you just performed was not valid.";
     private static final String DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS = " disconnected due to connection problems.";
     private static final String RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS = " reconnected due to fixing of connection problems.";
+    private static final String TRACK_HAS_NOW_NEW_DICES = "Track has now new dices";
+    private static final String THERE_IS_NO_MORE_DRAFTED_DICE = "There is no more drafted dice";
 
     /*  CONSTANTS FOR MESSAGES PARAMS
         Following constants are not commented one by one because they are as self explaining as needed.
@@ -314,7 +313,7 @@ public abstract class View implements Observer {
      * Handles the move "Change drafted dice value"
      */
     void handleChangeDraftedDiceValueMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     /**
@@ -332,14 +331,14 @@ public abstract class View implements Observer {
      * Handles the move "Choose dice from track"
      */
     void handleChooseDiceFromTrackMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     /**
      * Handles the move "Move Dice"
      */
     void handleMoveDiceMove(){
-        //TODO: implement
+        //no behaviour in common between CLI and GUI
     }
 
     /**
@@ -564,7 +563,28 @@ public abstract class View implements Observer {
      * Handles the event "Added to the waiting room"
      */
     void handleAddedEvent(Message m){
-        showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM);
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYERS);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<String> playersList = (ArrayList<String>) o;
+
+        waitingRoomPlayers = playersList;
+
+        String msg = "";
+        int index = 0;
+        for(String player : playersList){
+            if(index>0){
+                msg = msg.concat(", ");
+            }
+            msg = msg.concat(player);
+            index++;
+        }
+
+        showMessage(YOU_HAVE_JOINED_THE_WAITING_ROOM + msg);
     }
 
     /**
@@ -794,6 +814,7 @@ public abstract class View implements Observer {
         }
         Track mTrack = (Track)o;
         setTrack(mTrack);
+        showMessage(TRACK_HAS_NOW_NEW_DICES);
     }
 
     /**
@@ -920,6 +941,7 @@ public abstract class View implements Observer {
             Object o = m.getParam("noDrafted");
             setDraftedDice(null);
             reset = true;
+            showMessage(THERE_IS_NO_MORE_DRAFTED_DICE);
         } catch (NoSuchParamInMessageException e) { }
 
         if (!reset) {
@@ -1293,15 +1315,6 @@ public abstract class View implements Observer {
      */
     public Set<Move> getPermissions() {
         return permissions;
-    }
-
-    /**
-     * @return the view's player private objective card
-     */
-    public PrivateObjectiveCard getPrivateObjectiveCard() {
-        //TODO: change this temporary implementation
-        ObjectiveCardManager manager = new ObjectiveCardManager();
-        return manager.getPrivateObjectiveCard();
     }
 
     private EnumSet<Move> takeOldPermissions(){

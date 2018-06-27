@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
@@ -61,13 +62,16 @@ public class CLIView extends View{
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the row number of the window pattern (destination)";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1 = "Insert the row number of the window pattern (destination)";
     private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
-    private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings:";
+    private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings (tip: look at your private objective card):";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
     public static final String ERROR_MESSAGE = "ERROR: ";
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
     private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
     private static final String PORT_NUMBER_MUST_BE_A_NUMBER = "Port number must be a number";
     private static final String SHOW_TOOLCARDS = "Show toolcards";
+    private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
+    private static final String THE_WINNER_IS = "The winner is: ";
+    private static final String GLOBAL_RANKINGS_FOLLOWING = "Global rankings following:";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -88,8 +92,6 @@ public class CLIView extends View{
     private static final String PARAM_COL = "col";
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_DICE = "dice";
-    private static final String PLEASE_INSERT_A_NUMBER = "Please insert a number";
-    private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
 
 
     // AUXILIARY CLASSES
@@ -840,6 +842,9 @@ public class CLIView extends View{
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
+        print("Your private objective card is:");
+        print(this.privateObjectiveCard.toString());
+
         print(INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE);
         waitForConsoleInput(s -> {
             int i;
@@ -905,8 +910,20 @@ public class CLIView extends View{
     @Override
     void handleRankingsEvent(Message m){
         super.handleRankingsEvent(m);
+
+        for(RankingRecord rankingRecord : this.rankings){
+            print(rankingRecord.toString());
+        }
+
+        print(THE_WINNER_IS + getWinnerID());
+
+        print(GLOBAL_RANKINGS_FOLLOWING);
+
+        for(RankingRecord rankingRecord : this.globalRankings){
+            print(rankingRecord.toString());
+        }
+
         removeHandlingMessage(m);
-        //TODO: print rankings (winner is printed by super())
     }
 
 
@@ -982,6 +999,13 @@ public class CLIView extends View{
     @Override
     void handleDraftedDiceEvent(Message m){
         super.handleDraftedDiceEvent(m);
+        removeHandlingMessage(m);
+        waitForMove();
+    }
+
+    @Override
+    void handleChangedTrackEvent(Message m){
+        super.handleChangedTrackEvent(m);
         removeHandlingMessage(m);
         waitForMove();
     }
