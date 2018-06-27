@@ -62,7 +62,7 @@ public class CLIView extends View{
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the row number of the window pattern (destination)";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1 = "Insert the row number of the window pattern (destination)";
     private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
-    private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings:";
+    private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings (tip: look at your private objective card):";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
     public static final String ERROR_MESSAGE = "ERROR: ";
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
@@ -842,6 +842,9 @@ public class CLIView extends View{
             print(Integer.toString(index)+". "+windowPattern);
             index++;
         }
+        print("Your private objective card is:");
+        print(this.privateObjectiveCard.toString());
+        
         print(INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE);
         waitForConsoleInput(s -> {
             int i;
