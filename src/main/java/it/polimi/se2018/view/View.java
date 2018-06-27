@@ -570,8 +570,7 @@ public abstract class View implements Observer {
             return;
         }
         @SuppressWarnings("unchecked")
-        Set<String> players = (Set<String>) o;
-        List<String> playersList = new ArrayList<>(players);
+        List<String> playersList = (ArrayList<String>) o;
 
         waitingRoomPlayers = playersList;
 
