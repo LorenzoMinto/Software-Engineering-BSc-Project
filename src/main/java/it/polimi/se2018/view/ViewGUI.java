@@ -24,24 +24,51 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.net.URL;
-//TODO: commentare questa classe
+
 public class ViewGUI extends Application {
 
     //LOGIN SCENE
+    /**
+     * TextField where the user inputs his wanted username
+     */
     private TextField userTextField;
+
+    /**
+     * CheckBox that is selected when RMI is the wanted communication interface
+     */
     private CheckBox rmiBox;
+
+    /**
+     * CheckBox that is selected when SOCKET is the wanted communication interface
+     */
     private CheckBox socketBox;
+
+    /**
+     * TextField where the user can input the port to be used
+     */
     private TextField portTextField;
+
+    /**
+     * TextField where the user can input the Server's hostname to be used
+     */
     private TextField serverNameTextField;
 
     //SAGRADA SCENE
+
+    /**
+     * Reference to main Sagrada Scene's controller
+     */
     private SagradaSceneController sagradaSceneController;
 
+    /**
+     * Reference to main Sagrada Scene
+     */
     private Scene sagradaScene;
 
     public static void main(String[] args) {
         launch(args);
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {

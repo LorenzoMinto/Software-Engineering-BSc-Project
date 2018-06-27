@@ -39,7 +39,14 @@ public class SagradaSceneController extends View implements Initializable {
 
     //WAITING LIST
 
+    /**
+     * Flag that is set to true when WaitingRoomView is showing so that console messages can be redirected to it
+     */
     private boolean isOnWaitingList = true;
+
+    /**
+     * View used to show the Server's Waiting Room status before the start of the game
+     */
     private WaitingRoomView waitingRoomView;
 
     @FXML HBox backPaneBox;
@@ -754,7 +761,6 @@ public class SagradaSceneController extends View implements Initializable {
         });
 
         RankingsSceneController rankingsController = fxmlLoader.getController();
-        rankingsController.setLoginScene(loginScene);
 
         Platform.runLater(() -> {
             rankingsController.setLocalRanking(rankings);
