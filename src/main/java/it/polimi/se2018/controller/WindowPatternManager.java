@@ -35,7 +35,7 @@ public class WindowPatternManager {
     /**
      * List of all the toolCards that can be distributed in the current game
      */
-    private List<String> availablePatterns;
+    private List<String> availablePatternsIDs;
 
     /**
      * Constructor of the class. Checks if there are window patterns than can be loaded
@@ -44,7 +44,7 @@ public class WindowPatternManager {
     public WindowPatternManager() {
 
         try{
-            this.availablePatterns = XMLFileFinder.getFilesNames(PATH);
+            this.availablePatternsIDs = XMLFileFinder.getFilesNames(PATH);
         } catch (IOException e){
             throw new NoPatternsFoundInFileSystemException();
         }
@@ -64,18 +64,18 @@ public class WindowPatternManager {
 
         Set<WindowPattern> couplesOfPatterns = new HashSet<>();
 
-        if( availablePatterns.size() >= numberOfPairs * 2 ){
+        if( availablePatternsIDs.size() >= numberOfPairs * 2 ){
 
             Random r = new Random();
 
             for(int i=0; i<numberOfPairs; i++){
 
                 //Choose randomly one of the available patterns
-                int randomIndex = r.nextInt(availablePatterns.size());
-                String randomPatternID = availablePatterns.get(randomIndex);
+                int randomIndex = r.nextInt(availablePatternsIDs.size());
+                String randomPatternID = availablePatternsIDs.get(randomIndex);
 
                 //Removes the selected pattern from the available to avoid double choise
-                availablePatterns.remove(randomPatternID);
+                availablePatternsIDs.remove(randomPatternID);
 
                 //Load the randomly selected pattern
                 WindowPattern randomPattern = loadPatternFromFileSystem(randomPatternID);

@@ -22,7 +22,7 @@ public abstract class ControllerState {
     /**
      * String passed as message of IllegalArgumentException when it is asked to create the state but controller is null.
      */
-    static final String NO_CONTROLLER = "Can't create a Controller State without a Controller.";
+    private static final String NO_CONTROLLER = "Can't create a Controller State without a Controller.";
 
     /**
      * String to be printed if a non pertaining method is called in the middle of a ToolCard effect.
