@@ -21,7 +21,7 @@ public class RankingRecord implements Serializable {
     private int gamesLost;
     private int timePlayed;
 
-    public RankingRecord(String playerID, int cumulativePoints, int gamesWon, int gamesLost, int timePlayed) {
+    RankingRecord(String playerID, int cumulativePoints, int gamesWon, int gamesLost, int timePlayed) {
         this.cumulativePoints = cumulativePoints;
         this.gamesWon = gamesWon;
         this.gamesLost = gamesLost;
@@ -37,6 +37,7 @@ public class RankingRecord implements Serializable {
     public String getPlayerID() { return playerID; }
 
     public int getPoints() { return points; }
+
     public void setPoints(int points) { this.points = points; }
 
     public int getCumulativePoints() { return cumulativePoints; }

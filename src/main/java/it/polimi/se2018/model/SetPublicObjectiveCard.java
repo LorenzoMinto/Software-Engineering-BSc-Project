@@ -1,9 +1,6 @@
 package it.polimi.se2018.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -71,8 +68,8 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
     @Override
     public int calculateScore(WindowPattern windowPattern) {
 
-        int numberOf1 = 0;
-        int numberOf2 = 0;
+        int[] counters = new int[items.size()];
+
         Object currentProperty;
 
         Cell[][] pattern = windowPattern.getPattern();
@@ -83,19 +80,24 @@ public class SetPublicObjectiveCard extends PublicObjectiveCard {
 
                 currentProperty = getDiceProperty(pattern[i][j]);
 
-                if(currentProperty!= null && currentProperty.equals(itemsList.get(0))){
-                    numberOf1++;
-                }else if(currentProperty!= null && currentProperty.equals(itemsList.get(1))){
-                    numberOf2++;
+                if (currentProperty != null && items.contains(currentProperty)){
+                    counters[itemsList.indexOf(currentProperty)] ++;
                 }
             }
         }
 
-        if(numberOf1<numberOf2){
-            return this.multiplier*numberOf1;
-        }else{
-            return this.multiplier*numberOf2;
+        int min = 1000;
+
+        for (Object o: itemsList) {
+            int tempCounter = counters[itemsList.indexOf(o)];
+
+            if(tempCounter < min){
+                min = tempCounter;
+            }
         }
+
+        return this.multiplier*min;
+
     }
 
     /**

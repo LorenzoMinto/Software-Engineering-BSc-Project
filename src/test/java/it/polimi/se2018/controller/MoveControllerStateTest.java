@@ -208,16 +208,6 @@ public class MoveControllerStateTest {
         assertEquals(ERROR_MESSAGE, m.getType());
     }
 
-    @Test
-    public void testEndToolCardEffectImplicitState(){
-        controller.controllerState.draftDiceFromDraftPool(diceToDraft);
-        controller.controllerState.placeDice(r0,c1);
-
-        controller.controllerState.useToolCard(toolCardEndToolCardEffect);
-        Message m = controller.controllerState.moveDice(r0,c0,r1,c1);
-        assertEquals(ACKNOWLEDGMENT_MESSAGE, m.getType());
-    }
-
     /**
      * Tests ending the current turn in this state
      * @see MoveControllerState#endCurrentTurn()

@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.RankingRecord;
 import it.polimi.se2018.model.Dice;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowPattern;
@@ -479,9 +478,9 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleJoinGameMove() {
         try {
-            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname", getPlayerID())));
+            notifyGame(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname", getPlayerID())));
         } catch (NetworkingException e) {
-            errorMessage(e.getMessage());
+            showError(e.getMessage());
         }
     }
 
@@ -540,7 +539,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 0;
 
         try {
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
+            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
         } catch (NetworkingException e) {
             //TODO: implementa
         }
@@ -557,7 +556,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 1;
 
         try {
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
+            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
         } catch (NetworkingException e) {
             //TODO: implementa
         }
@@ -572,7 +571,7 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 2;
 
         try {
-            sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
+            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
         } catch (NetworkingException e) {
             //TODO: implementa
         }
@@ -589,14 +588,14 @@ public class SagradaSceneController extends View implements Initializable {
         super.handleDraftDiceFromDraftPoolMove();
         if (selectedDiceButton != null) {
             Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices);
-            showMessage("Drafted dice: " + draftedDice);
+            showInformation("Drafted dice: " + draftedDice);
             try {
-                sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
+                notifyGame(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
         } else {
-            errorMessage("You have not selected a dice from the draft pool yet!");
+            showError("You have not selected a dice from the draft pool yet!");
         }
     }
 
@@ -617,17 +616,17 @@ public class SagradaSceneController extends View implements Initializable {
         int y = userWindowPatternView.getySelected();
 
         if (x != -1  && y != -1) {
-            showMessage("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
+            showInformation("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
             HashMap<String,Object> params = new HashMap<>();
             params.put("row",x);
             params.put("col",y);
             try {
-                sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                notifyGame(new Message(ControllerBoundMessageType.PLACE_DICE,params));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
         } else {
-            errorMessage("No cell was selected!");
+            showError("No cell was selected!");
         }
         Platform.runLater(() -> {
             userWindowPatternView.cleanSelection();
@@ -637,11 +636,11 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleChangeDraftedDiceValueMove() {
         if (diceValuePicker.getValue() == null) {
-            errorMessage("You have to choose a new value for the dice.");
+            showError("You have to choose a new value for the dice.");
         } else {
             int newDiceValue = Integer.parseInt((String) diceValuePicker.getValue());
             try {
-                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value", newDiceValue)));
+                notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value", newDiceValue)));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
@@ -655,20 +654,20 @@ public class SagradaSceneController extends View implements Initializable {
 
         if (trackSelectedDiceButton != null && selectedTrackSlotNumber >-1) {
             Dice trackChosenDice = getDiceForDiceButton(trackSelectedDiceButton, track.getDicesFromSlotNumber(selectedTrackSlotNumber));
-            showMessage("Selected dice: " + trackChosenDice);
+            showInformation("Selected dice: " + trackChosenDice);
 
             HashMap<String,Object> params = new HashMap<>();
             params.put("slotNumber", selectedTrackSlotNumber);
             params.put("dice",trackChosenDice);
 
             try {
-                sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
 
         } else {
-            errorMessage("You have not selected a dice from the track yet!");
+            showError("You have not selected a dice from the track yet!");
         }
 
     }
@@ -689,13 +688,13 @@ public class SagradaSceneController extends View implements Initializable {
             params.put("colTo",colDest);
 
             try {
-                sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                notifyGame(new Message(ControllerBoundMessageType.MOVE_DICE,params));
             } catch (NetworkingException e) {
                 //TODO: implementa
             }
 
         } else {
-            errorMessage("Select TO and FROM cell to make the move.");
+            showError("Select TO and FROM cell to make the move.");
         }
         Platform.runLater(() -> {
             userWindowPatternView.cleanSelection();
@@ -832,7 +831,7 @@ public class SagradaSceneController extends View implements Initializable {
                     public void handle(ActionEvent event) {
                         WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
                         try {
-                            sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern.copy())));
+                            notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern.copy())));
                         } catch (NetworkingException e) {
                             //TODO: implementa
                         }
@@ -948,12 +947,12 @@ public class SagradaSceneController extends View implements Initializable {
 
 
     @Override
-    void showMessage(String message) {
+    void showInformation(String message) {
         printOnConsole(message);
     }
 
     @Override
-    void errorMessage(String message) { printOnConsole("ERROR: "+message);}
+    void showError(String message) { printOnConsole("ERROR: "+message);}
 
     private void setupCards() {
         updateCards();

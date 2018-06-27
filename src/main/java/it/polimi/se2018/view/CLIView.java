@@ -397,20 +397,20 @@ public class CLIView extends View{
     }
 
     @Override
-    void showMessage(String message) {
+    void showInformation(String message) {
         cleanConsole();
         print(message);
     }
 
     @Override
-    void errorMessage(String message) {
+    void showError(String message) {
         print(ERROR_MESSAGE +message);
         waitForMove();
     }
 
     @Override
     void ack(String text){
-        showMessage(text);
+        showInformation(text);
         waitForMove();
     }
 
@@ -550,7 +550,7 @@ public class CLIView extends View{
 
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt))));
+                    notifyGame(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt))));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -593,7 +593,7 @@ public class CLIView extends View{
                     params.put(PARAM_ROW,row);
                     params.put(PARAM_COL,col);
                     try {
-                        sendMessage(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                        notifyGame(new Message(ControllerBoundMessageType.PLACE_DICE,params));
                     } catch (NetworkingException e) {
                         print(e.getMessage());
                     }
@@ -626,7 +626,7 @@ public class CLIView extends View{
             }
 
             try {
-                sendMessage(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex))));
+                notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex))));
             } catch (NetworkingException e) {
                 print(e.getMessage());
             }
@@ -664,7 +664,7 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             } else {
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
+                    notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -716,7 +716,7 @@ public class CLIView extends View{
                 params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex));
 
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                    notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -782,7 +782,7 @@ public class CLIView extends View{
                                 params.put(PARAM_ROW_TO,rowDest);
                                 params.put(PARAM_COL_TO,colDest);
                                 try {
-                                    sendMessage(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                                    notifyGame(new Message(ControllerBoundMessageType.MOVE_DICE,params));
                                 } catch (NetworkingException e) {
                                     print(e.getMessage());
                                 }
@@ -809,7 +809,7 @@ public class CLIView extends View{
         waitForConsoleInput(nickname->{
             setPlayer(nickname);
             try {
-                sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
+                notifyGame(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
             } catch (NetworkingException e) {
                 print(e.getMessage());
             }
@@ -866,7 +866,7 @@ public class CLIView extends View{
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 try {
-                    sendMessage(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern)));
+                    notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern)));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                     return;

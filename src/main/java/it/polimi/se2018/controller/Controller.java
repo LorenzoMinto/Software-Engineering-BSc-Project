@@ -227,11 +227,11 @@ public class Controller extends Observable {
     }
 
     /**
-     * @param m the error message
+     * @param text the error message
      * @return * @return a Message of type ViewBound of ERROR_MESSAGE type
      */
-    private Message errorMessage(String m){
-        return new Message(ViewBoundMessageType.ERROR_MESSAGE,m);
+    private Message errorMessage(String text){
+        return new Message(ViewBoundMessageType.ERROR_MESSAGE,text);
     }
 
     /**

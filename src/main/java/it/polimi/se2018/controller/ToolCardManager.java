@@ -37,7 +37,7 @@ public class ToolCardManager {
     /**
      * List of all the toolCards that can be distributed in the current game
      */
-    private List<String> availableToolCards;
+    private List<String> availableToolCardsIDs;
 
     /**
      * Default {@link PlacementRule}
@@ -56,7 +56,7 @@ public class ToolCardManager {
         this.defaultPlacementRule = defaultPlacementRule;
 
         try{
-            this.availableToolCards = XMLFileFinder.getFilesNames(PATH);
+            this.availableToolCardsIDs = XMLFileFinder.getFilesNames(PATH);
         } catch (IOException e) {
             throw new NoToolCardsFoundInFileSystemException();
         }
@@ -77,18 +77,18 @@ public class ToolCardManager {
 
         List<ToolCard> toolCards = new ArrayList<>();
 
-        if( availableToolCards.size() >= quantity ){
+        if( availableToolCardsIDs.size() >= quantity ){
 
             Random r = new Random();
 
             for(int i=0; i<quantity; i++){
 
                 //Choose randomly one of the available toolCards
-                int randomIndex = r.nextInt(availableToolCards.size());
-                String randomToolCardID = availableToolCards.get(randomIndex);
+                int randomIndex = r.nextInt(availableToolCardsIDs.size());
+                String randomToolCardID = availableToolCardsIDs.get(randomIndex);
 
                 //Remove the selected toolCard from the available ones to avoid double choice
-                availableToolCards.remove(randomToolCardID);
+                availableToolCardsIDs.remove(randomToolCardID);
 
                 //Load the randomly selected pattern
                 ToolCard randomToolCard = loadToolCardFromFileSystem(randomToolCardID);

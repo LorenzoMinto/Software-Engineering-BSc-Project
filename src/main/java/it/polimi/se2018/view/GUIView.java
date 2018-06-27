@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class ViewGUI extends Application {
+public class GUIView extends Application {
 
     //LOGIN SCENE
     /**
