@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -112,14 +114,12 @@ public class ViewGUI extends Application {
                     sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
                             serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
                 } catch (NetworkingException e1) {
-                    //TODO: implementa gestione di parametri errati (o comunque connessione fallita)
+                    System.out.println("Connessione fallita");
+                    return;
                 }
                 sagradaSceneController.setPlayer(userTextField.getText());
-                try {
-                    sagradaSceneController.sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname",userTextField.getText())));
-                } catch (NetworkingException e1) {
-                    //TODO: implementa
-                }
+                sagradaSceneController.showWaitingRoom(userTextField.getText());
+
                 primaryStage.setScene(sagradaScene);
                 primaryStage.show();
             }
@@ -137,7 +137,19 @@ public class ViewGUI extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
 
         Parent root = fxmlLoader.load();
-        sagradaScene = new Scene(root, 2000, 1000);
+
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+        //set Stage boundaries to visible bounds of the main screen
+        primaryStage.setX(primaryScreenBounds.getMinX());
+        primaryStage.setY(primaryScreenBounds.getMinY());
+        primaryStage.setWidth(primaryScreenBounds.getWidth());
+        primaryStage.setHeight(primaryScreenBounds.getHeight());
+
+        primaryStage.setMinHeight(primaryScreenBounds.getWidth()/1.5*13/16);
+        primaryStage.setMinWidth(primaryScreenBounds.getWidth()/1.5);
+
+        sagradaScene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         sagradaSceneController = fxmlLoader.getController();
         sagradaSceneController.setLoginScene(loginScene);
 

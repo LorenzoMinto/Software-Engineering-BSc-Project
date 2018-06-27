@@ -37,7 +37,12 @@ import java.util.List;
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
 
+    //WAITING LIST
+
     private boolean isOnWaitingList = true;
+    private WaitingRoomView waitingRoomView;
+
+    @FXML HBox backPaneBox;
 
     private List<Image> cards = new ArrayList<>();
     private int cardsCarouselCurrentIndex = 0;
@@ -311,6 +316,22 @@ public class SagradaSceneController extends View implements Initializable {
         this.loginScene = loginScene;
     }
 
+    public void showWaitingRoom(String username) {
+        waitingRoomView = new WaitingRoomView(username);
+        EventHandler<ActionEvent> handler = event -> handleExitEvent();
+        waitingRoomView.setExitHandler(handler);
+
+        Platform.runLater(() -> {
+            backPaneBox.getChildren().add(waitingRoomView);
+            backPaneBox.toFront();
+
+            Move m = Move.JOIN_GAME;
+            Button join = new Button(m.getTextualREP());
+            join.setOnAction(event -> checkID(m));
+            waitingRoomView.addPermissions(join);
+        });
+    }
+
     @FXML
     public void handleCardCarouselNext(){
         if(cardsCarouselCurrentIndex == cards.size()-1){
@@ -441,10 +462,24 @@ public class SagradaSceneController extends View implements Initializable {
                 handleBackGameMove();
                 break;
             case LEAVE:
+                System.out.println("Called to leave the waiting room.");
                 handleLeaveWaitingRoomMove();
+                break;
+            case JOIN_GAME:
+                System.out.println("Calling join game");
+                handleJoinGameMove();
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    void handleJoinGameMove() {
+        try {
+            sendMessage(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname", getPlayerID())));
+        } catch (NetworkingException e) {
+            errorMessage(e.getMessage());
         }
     }
 
@@ -653,7 +688,6 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     public void handleLeaveWaitingRoomMove() {
         super.handleLeaveWaitingRoomMove();
-        isOnWaitingList = true;
     }
 
 
@@ -714,13 +748,20 @@ public class SagradaSceneController extends View implements Initializable {
         Platform.runLater(() -> {
             rankingsController.setLocalRanking(rankings);
             rankingsController.setGlobalRanking(globalRankings);
-            rankingsController.setWinner(getPlayerID().equals(getWinnerID()) ? true : false);
+            rankingsController.setWinner(getPlayerID().equals(getWinnerID()));
         });
     }
 
     @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
+
+        //taking out of the game the waiting room view
+        isOnWaitingList = false;
+        Platform.runLater(() -> {
+            backPaneBox.toBack();
+        });
+
         enableBlackAnchorPane();
 
         disable(trackVisibleComponents);
@@ -779,12 +820,6 @@ public class SagradaSceneController extends View implements Initializable {
 
         enable(trackVisibleComponents);
 
-
-        //TEST::::
-        for (Dice d: track.getDicesFromSlotNumber(0)) {
-            System.out.println(d.toString());
-        }
-
         Platform.runLater(() -> {
             for (HBox hBox: trackHBoxes) {
                 hBox.getChildren().clear();
@@ -822,8 +857,21 @@ public class SagradaSceneController extends View implements Initializable {
 
     public void handleExitEvent() {
         Stage stage = (Stage) playerTerminal.getScene().getWindow();
+        Platform.runLater(() -> backPaneBox.getChildren().clear());
         stage.setFullScreen(false);
         stage.setScene(loginScene);
+    }
+
+    @Override
+    void handlePlayerAddedToWREvent(Message m) {
+        super.handlePlayerAddedToWREvent(m);
+        waitingRoomView.setWaitingPlayers(waitingRoomPlayers);
+    }
+
+    @Override
+    void handlePlayerRemovedFromWREvent(Message m) {
+        super.handlePlayerRemovedFromWREvent(m);
+        waitingRoomView.setWaitingPlayers(waitingRoomPlayers);
     }
 
     @Override
@@ -901,9 +949,9 @@ public class SagradaSceneController extends View implements Initializable {
         System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
             Button dice = new Button();
+            dice.prefWidthProperty().bind(draftPoolPane.widthProperty().multiply(0.3));
+            dice.prefHeightProperty().bind(dice.prefWidthProperty());
             dice.setId(d.toString());
-            dice.setPrefWidth(80);
-            dice.setPrefHeight(80);
 
             Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+d.toString()+".jpg");
             dice.setBackground(getBackgroundFromImage(diceImage));
@@ -937,6 +985,8 @@ public class SagradaSceneController extends View implements Initializable {
         for (WindowPattern wp: windowPatterns) {
             String nickname = players.get(i);
             WindowPatternPlayerView wpView = new WindowPatternPlayerView();
+            trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
+            wpView.prefHeightProperty().bind(windowPatternsBox.heightProperty());
             wpView.setFavourTokens(playersFavourTokens.get(i));
             wpView.setNickname(nickname);
             wpView.setWindowPattern(wp);
@@ -980,30 +1030,45 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyPermissionsChanged() {
-        if (getPermissions().isEmpty()) {
-            //TODO: add label here to remind user is not his turn
-            Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
-        } else {
-            Set<Move> permissions = getPermissions();
-            Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
-            for (Move m: permissions) {
+        if (isOnWaitingList) {
+            waitingRoomView.resetPermissions();
+            for (Move m: getPermissions()) {
                 Button button = new Button(m.getTextualREP());
                 button.setId(m.toString());
                 button.setOnAction(event -> checkID(m));
-                Platform.runLater(() -> dynamicChoicesPane.getChildren().add(button));
+
+                waitingRoomView.addPermissions(button);
             }
+
+        } else {
+
+            if (getPermissions().isEmpty()) {
+                //TODO: add label here to remind user is not his turn
+                Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
+            } else {
+                Set<Move> permissions = getPermissions();
+                Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
+                for (Move m: permissions) {
+                    Button button = new Button(m.getTextualREP());
+                    button.setId(m.toString());
+
+                    button.setOnAction(event -> checkID(m));
+                    Platform.runLater(() -> dynamicChoicesPane.getChildren().add(button));
+                }
+            }
+            Platform.runLater(() -> {
+                if (userWindowPatternView != null) {
+                    userWindowPatternView.enableMoveSelection(false);
+                }
+                if (getPermissions().contains(Move.MOVE_DICE)) {
+                    userWindowPatternView.enableMoveSelection(true);
+                    System.out.println("Move selection enabled.");
+                } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
+                    diceValuePicker.setDisable(false);
+                }
+            });
+
         }
-        Platform.runLater(() -> {
-            if (userWindowPatternView != null) {
-                userWindowPatternView.enableMoveSelection(false);
-            }
-            if (getPermissions().contains(Move.MOVE_DICE)) {
-                userWindowPatternView.enableMoveSelection(true);
-                System.out.println("Move selection enabled.");
-            } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
-                diceValuePicker.setDisable(false);
-            }
-        });
     }
 
     private void highlightCurrentPlayer() {
@@ -1048,7 +1113,11 @@ public class SagradaSceneController extends View implements Initializable {
 
     protected void printOnConsole(String s) {
         String ss = "\n"+s;
-        Platform.runLater(() -> playerTerminal.appendText(ss));
+        if (!isOnWaitingList) {
+            Platform.runLater(() -> playerTerminal.appendText(ss));
+        } else {
+            Platform.runLater(() -> waitingRoomView.forwardMessage(s));
+        }
     }
 
 }

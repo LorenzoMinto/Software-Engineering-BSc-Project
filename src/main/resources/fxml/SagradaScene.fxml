@@ -22,7 +22,12 @@
 
 <AnchorPane fx:id="backgroundPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.SagradaSceneController">
    <children>
-      <GridPane alignment="CENTER" prefHeight="385.0" prefWidth="589.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="backPaneBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+      <GridPane alignment="CENTER" prefHeight="385.0" prefWidth="589.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="ALWAYS" maxWidth="348.0" minWidth="10.0" prefWidth="297.0" />
           <ColumnConstraints hgrow="ALWAYS" maxWidth="292.0" minWidth="10.0" prefWidth="292.0" />
@@ -207,6 +212,9 @@
             </VBox>
 
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </GridPane>
       <AnchorPane fx:id="blackAnchorPane" opacity="0.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

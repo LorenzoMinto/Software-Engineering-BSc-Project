@@ -4,6 +4,8 @@ import it.polimi.se2018.utils.Move;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -14,7 +16,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.Set;
+import java.util.List;
 
 public class WaitingRoomView extends Pane {
 
@@ -22,6 +24,8 @@ public class WaitingRoomView extends Pane {
     @FXML private Label messageLabel;
     @FXML private HBox dynamicChoicesBox;
     @FXML private ListView<String> waitingRoomList;
+
+    @FXML private Button exitButton;
 
     public static final ObservableList waitingPlayers = FXCollections.observableArrayList();
 
@@ -35,33 +39,34 @@ public class WaitingRoomView extends Pane {
             throw new RuntimeException(exception);
         }
 
-        waitingRoomList.setItems(waitingPlayers);
+        Platform.runLater(() -> {
+            waitingRoomList.setItems(waitingPlayers);
+            nameLabel.setText(username);
+        });
     }
 
-    public void addPlayer(String player) {
-        waitingPlayers.add(player);
+    public void setWaitingPlayers(List<String> players) {
+        waitingPlayers.clear();
+        waitingPlayers.addAll(players);
     }
 
     public void forwardMessage(String m) {
         messageLabel.setText(m);
     }
 
-    public void updatePermissions(EnumSet<Move> permissions) {
-        //TODO: assign action here to be passed to setOnAction so events are handled on SagradaScene
-        if (permissions.isEmpty()) {
-            Platform.runLater(() -> dynamicChoicesBox.getChildren().clear());
-        } else {
-            Platform.runLater(() -> dynamicChoicesBox.getChildren().clear());
-            for (Move m: permissions) {
-                Button button = new Button(m.getTextualREP());
-                button.setId(m.toString());
-                button.setOnAction(event -> checkID(m));
-                Platform.runLater(() -> dynamicChoicesBox.getChildren().add(button));
-            }
-        }
+    public void setExitHandler(EventHandler<ActionEvent> e) {
+        exitButton.setOnAction(e);
     }
 
-    private void checkID(Move m) {
+    public void addPermissions(Button p) {
+        Platform.runLater(() -> {
+            dynamicChoicesBox.getChildren().add(p);
+        });
+    }
 
+    public void resetPermissions() {
+        Platform.runLater(() -> {
+            dynamicChoicesBox.getChildren().clear();
+        });
     }
 }

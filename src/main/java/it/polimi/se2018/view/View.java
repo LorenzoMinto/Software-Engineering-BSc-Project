@@ -155,6 +155,11 @@ public abstract class View implements Observer {
     List<String> players;
 
     /**
+     * List of players in waiting room.
+     */
+    List<String> waitingRoomPlayers = new ArrayList<>();
+
+    /**
      * List of the players' favour tokens, order corresponds to player's list.
      */
     List<Integer> playersFavourTokens;
@@ -466,7 +471,7 @@ public abstract class View implements Observer {
      * Handles the event "A player has been removed from the waiting room"
      * @param m the message containing the removed player information
      */
-    private void handlePlayerRemovedFromWREvent(Message m){
+    void handlePlayerRemovedFromWREvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_PLAYER);
@@ -479,13 +484,15 @@ public abstract class View implements Observer {
         if(!nickname.equals(this.playerID)) {
             showMessage(nickname + LEAVES_THE_WAITING_ROOM);
         }
+
+        waitingRoomPlayers.remove(nickname);
     }
 
     /**
      * Handles the event "A player has been added to the waiting room"
      * @param m the message containing the added player information
      */
-    private void handlePlayerAddedToWREvent(Message m){
+    void handlePlayerAddedToWREvent(Message m){
         Object o;
         try {
             o = m.getParam(PARAM_PLAYER);
@@ -498,6 +505,8 @@ public abstract class View implements Observer {
         if(!nickname.equals(this.playerID)){
             showMessage(nickname+ JOINS_THE_WAITING_ROOM);
         }
+
+        waitingRoomPlayers.add(nickname);
     }
 
 
