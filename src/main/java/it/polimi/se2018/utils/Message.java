@@ -189,6 +189,7 @@ public final class Message implements Serializable{
 
     /**
      * Returns if this message is a "move" message of the given move or not
+     * @param move the move that is compared to the built in message param "move"
      * @return if this message is a "move" message or the given move or not
      */
     public boolean isMove(Move move){

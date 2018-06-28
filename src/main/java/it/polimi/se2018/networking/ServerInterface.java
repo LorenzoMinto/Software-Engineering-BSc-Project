@@ -5,7 +5,6 @@ public interface ServerInterface {
     /**
      * Method called when the connection is lost
      * @param sender socket that lost connection
-     * @return true if the connection was relative to a playing player. false if user in wr or neither.
      */
     void lostSocketConnection(ClientProxyInterface sender);
 

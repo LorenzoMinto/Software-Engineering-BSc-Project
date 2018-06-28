@@ -1328,6 +1328,7 @@ public abstract class View implements Observer {
 
 
     /**
+     * @param playerID the player id
      * @see View#playerID
      */
     public void setPlayer(String playerID) {
@@ -1335,6 +1336,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param permissions set of permissions
      * @see View#permissions
      */
     public void setPermissions(Set<Move> permissions) {
@@ -1349,6 +1351,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param drawnToolCards  list of draw Tool cards
      * @see View#drawnToolCards
      */
     private void setDrawnToolCards(List<ToolCard> drawnToolCards) {
@@ -1356,6 +1359,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param drawnPublicObjectiveCards list of drawn Public Objective cards
      * @see View#drawnPublicObjectiveCards
      */
     private void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
@@ -1363,6 +1367,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param players list of players
      * @see View#players
      */
     public void setPlayers(List<String> players) {
@@ -1370,6 +1375,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param track track
      * @see View#track
      */
     public void setTrack(Track track) {
@@ -1377,6 +1383,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param draftPoolDices dices in the draftpool
      * @see View#draftPoolDices
      */
     private void setDraftPoolDices(List<Dice> draftPoolDices) {
@@ -1384,6 +1391,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param roundNumber sequential number of round
      * @see View#roundNumber
      */
     private void setRoundNumber(int roundNumber) {
@@ -1391,6 +1399,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param playingPlayerID id of the playing player
      * @see View#playingPlayerID
      */
     private void setPlayingPlayerID(String playingPlayerID) {
@@ -1398,6 +1407,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param draftedDice drafted dice
      * @see View#draftedDice
      */
     public void setDraftedDice(Dice draftedDice) {
@@ -1405,6 +1415,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param privateObjectiveCard Private Objective card
      * @see View#privateObjectiveCard
      */
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
@@ -1412,6 +1423,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param playersFavourTokens favour tokens of players
      * @see View#playersFavourTokens
      */
     private void setPlayersFavourTokens(List<Integer> playersFavourTokens) {
@@ -1419,6 +1431,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param windowPatterns Window Patterns of players
      * @see View#windowPatterns
      */
     public void setWindowPatterns(List<WindowPattern> windowPatterns) {
