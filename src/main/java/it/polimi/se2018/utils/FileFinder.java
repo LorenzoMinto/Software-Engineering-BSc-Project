@@ -46,6 +46,8 @@ public final class FileFinder {
                 filenames.add( reader.readLine() );
             }
 
+        } catch (Exception e){
+            throw new IOException();
         }
         return filenames;
     }
@@ -65,6 +67,7 @@ public final class FileFinder {
      * @throws SAXException if parsing of the document fails
      */
     public Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+        System.out.println(path);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         System.out.println(getClass().getClassLoader().getResource(path));

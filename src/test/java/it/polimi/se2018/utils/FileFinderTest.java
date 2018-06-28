@@ -19,17 +19,17 @@ public class FileFinderTest {
     @Test
     public void testGetFilesNames() {
         try{
-            assertTrue(new FileFinder().getFilesNamesInDirectory("assets/persistency/").contains("GlobalRankings"));
+            assertTrue(new FileFinder().getFilesNamesInDirectory("patterns/").contains("Gravitas.xml"));
         } catch (IOException e) {
             fail();
         }
 
         try{
-            new FileFinder().getFilesNamesInDirectory("assets/notadirectory/");
+            new FileFinder().getFilesNamesInDirectory("notadirectory/");
             fail();
         } catch (IOException e) {
-            fail();
-        } catch (IllegalArgumentException e) {}
+            //assert true
+        }
     }
 
     /**
@@ -39,7 +39,7 @@ public class FileFinderTest {
     @Test
     public void testGetFileDocument() {
         try {
-            assertEquals(true, new FileFinder().getFileDocument("assets/persistency/GlobalRankings.xml") != null);
+            assertEquals(true, new FileFinder().getFileDocument("patterns/Batllo.xml") != null);
         } catch (Exception e) {
             fail();
         }

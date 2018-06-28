@@ -54,6 +54,7 @@ public class WindowPatternManager {
 
             List<String> fileNames = fileFinder.getFilesNamesInDirectory(PATH);
             this.availablePatternsIDs = fileNames.stream().map(FileFinder::getXMLFileName).collect(Collectors.toList());
+            System.out.println(availablePatternsIDs);
         } catch (Exception e){
             throw new NoPatternsFoundInFileSystemException();
         }
