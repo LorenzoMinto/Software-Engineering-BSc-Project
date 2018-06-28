@@ -76,9 +76,24 @@ public final class SocketServerGatherer extends Thread{
         outputStream.flush();
 
         //Starts a thread listening for messages
-        new Thread(() -> {
+        new ConnectionFixer(clientSocket,outputStream).start();
+    }
 
-            SocketClientProxy socketClientProxyBeforeConnectionDrop = null;
+    private class ConnectionFixer extends Thread {
+
+        private final Socket clientSocket;
+        private final ObjectOutputStream outputStream;
+        private SocketClientProxy socketClientProxyBeforeConnectionDrop;
+
+        ConnectionFixer(Socket clientSocket, ObjectOutputStream outputStream) {
+            this.clientSocket=clientSocket;
+            this.outputStream=outputStream;
+            this.socketClientProxyBeforeConnectionDrop = null;
+        }
+
+        @Override
+        public void run() {
+            super.run();
 
             while(true) {
 
@@ -87,27 +102,16 @@ public final class SocketServerGatherer extends Thread{
                 try {
                     in = new ObjectInputStream(clientSocket.getInputStream());
                     socketClientAsAServer = new SocketClientProxy(outputStream);
+                    if(socketClientProxyBeforeConnectionDrop==null){
+                        socketClientProxyBeforeConnectionDrop=socketClientAsAServer;
+                    }
                 } catch (IOException e) {
                     return;
                 }
 
                 ((ServerInterface)receiver).restoredSocketConnection(socketClientProxyBeforeConnectionDrop,socketClientAsAServer);
 
-                boolean c = true;
-                while (c) {
-                    Message message;
-                    try {
-                        message = (Message) in.readObject();
-                        receiver.receiveMessage(message, socketClientAsAServer);
-                    } catch (SocketException e) {
-                        ((ServerInterface)receiver).lostSocketConnection(socketClientAsAServer);
-                        socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
-                        c = false;
-                    } catch (Exception e) {
-                        receiver.fail(READING_STREAM_EXCEPTION);
-                        c = false;
-                    }
-                }
+                tryToFix(in,socketClientAsAServer);
 
                 try {
                     sleep(500);
@@ -117,6 +121,24 @@ public final class SocketServerGatherer extends Thread{
                     return;
                 }
             }
-        }).start();
+        }
+
+        private void tryToFix(ObjectInputStream in, SocketClientProxy socketClientAsAServer){
+            boolean c = true;
+            while (c) {
+                Message message;
+                try {
+                    message = (Message) in.readObject();
+                    receiver.receiveMessage(message, socketClientAsAServer);
+                } catch (SocketException e) {
+                    ((ServerInterface)receiver).lostSocketConnection(socketClientAsAServer);
+                    socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
+                    c = false;
+                } catch (Exception e) {
+                    receiver.fail(READING_STREAM_EXCEPTION);
+                    c = false;
+                }
+            }
+        }
     }
 }

@@ -353,7 +353,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         }
 
         //Log that message was handled
-        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + "."); }
+        logInfo(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + ".");
     }
 
     /**
@@ -513,17 +513,27 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         controller.launchGame(waitingList.keySet());
     }
 
-    @Override
-    public void sendMessage(Message message) throws NetworkingException {
-        boolean somethingFailed = false;
+    /**
+     * Rreturns the gateway(s) to send the given message
+     * @param message message to analyze
+     * @return the list of gateways to send to the message
+     */
+    private List<ClientProxyInterface> getGateway(Message message){
         List<ClientProxyInterface> g;
-
         if(message.getPlayerID()==null){ //Means that message is broadcast
             g = this.serverState == ServerState.WAITING_ROOM ? new ArrayList<>(waitingList.values()) : gateways;
         } else {
             g = new ArrayList<>();
             g.add(playerIDToGatewayMap.get(message.getPlayerID()));
         }
+        return g;
+    }
+
+    @Override
+    public void sendMessage(Message message) throws NetworkingException {
+        boolean somethingFailed = false;
+        List<ClientProxyInterface> g = getGateway(message);
+
 
         for(ClientProxyInterface o : g){
             int attempts = 0;
@@ -546,22 +556,32 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
                 correctlySent = true;
 
-                if (LOGGER.isLoggable(Level.INFO) && message.getType()!=ViewBoundMessageType.PING) {
-                    LOGGER.info(ATTEMPT + attempts + ": " + SUCCESSFULLY_SENT_MESSAGE_TO + ": " + o + ". " + THE_MESSAGE_WAS + ": " + message);
+                if (message.getType()!=ViewBoundMessageType.PING) {
+                    logInfo(ATTEMPT + attempts + ": " + SUCCESSFULLY_SENT_MESSAGE_TO + ": " + o + ". " + THE_MESSAGE_WAS + ": " + message);
                 }
             }
             //Add failed gateway to a list that will be returned at the end of this method execution
+
+
             if(!correctlySent){
-                if(this.serverState==ServerState.WAITING_ROOM){
-                    removeFromWaitingRoom(o);
-                } else {
-                    handleDisconnectedGateway(o);
-                }
+                handleSendMessageError(o);
                 somethingFailed=true;
             }
         }
         //Throws exception if at least one message failed to be sent. The caller will decide the severity of this problem
         if(somethingFailed) throw new NetworkingException(ERROR_SENDING_MESSAGE +message);
+    }
+
+    /**
+     * Method created to decrease cognitive complexity of sendMessage()
+     * @param o the gateway where the sending message call failed
+     */
+    private void handleSendMessageError(ClientProxyInterface o){
+        if(this.serverState==ServerState.WAITING_ROOM){
+            removeFromWaitingRoom(o);
+        } else {
+            handleDisconnectedGateway(o);
+        }
     }
 
     /**
@@ -588,17 +608,26 @@ public class Server implements Observer, SenderInterface, ServerInterface {
                 }
 
                 if(restored){
-                    for(Message message : this.unSentMessages.get(gateway)){
-                        try {
-                            sendMessage(message);
-                        } catch (NetworkingException e) {
-                            return;
-                        }
-                    }
+                    resendUnSentMessages(gateway);
                     return;
                 }
             }
         }).start();
+    }
+
+    /**
+     * Method created to lower cognitive compexity of handleDisconnectedGateway().
+     * Try to send messages that were not sent of a given gateway
+     * @param gateway the gateway to look into for un sent messages
+     */
+    private void resendUnSentMessages(ClientProxyInterface gateway){
+        for(Message message : this.unSentMessages.get(gateway)){
+            try {
+                sendMessage(message);
+            } catch (NetworkingException e) {
+                return;
+            }
+        }
     }
 
     @Override
@@ -647,5 +676,9 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             this.disconnectedGateways.remove(previous);
             controller.playerRestoredConnection(playerID);
         }
+    }
+
+    private void logInfo(String text){
+        if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info(text); }
     }
 }

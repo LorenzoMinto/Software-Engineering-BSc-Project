@@ -58,7 +58,9 @@ public class CLIView extends View{
     private static final String INSERT_THE_NUMBER_OF_SLOT_YOU_WANT_TO_DRAFT_THE_DICE_FROM = "Insert the number of slot you want to draft the dice from";
     private static final String INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK = "Insert the index of the dice you want to pick:";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN = "Insert the row number of the window pattern (origin)";
+    private static final String INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN = "Insert the col number of the window pattern (origin)";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the row number of the window pattern (destination)";
+    private static final String INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the col number of the window pattern (destination)";
     private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
     private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings (tip: look at your private objective card):";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
@@ -391,10 +393,9 @@ public class CLIView extends View{
      * Cleans the console screen
      */
     private void cleanConsole(){
-        for(int i = 0; i<=2; i++){
-            print("");
-        }
-        //TODO: implement better this method
+        print("");
+        print("");
+        print("");
     }
 
     @Override
@@ -733,9 +734,7 @@ public class CLIView extends View{
 
     }
 
-    @Override
-    void handleMoveDiceMove() {
-        super.handleMoveDiceMove();
+    private void askForRowWP(){
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
         waitForConsoleInput(rowString -> {
             int row;
@@ -747,66 +746,84 @@ public class CLIView extends View{
                 waitForMove();
                 return;
             }
-            print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
-            waitForConsoleInput(colString -> {
-                int col;
-                try{
-                    col = Integer.parseInt(colString) - 1;
-                } catch (NumberFormatException e){
-                    cleanConsole();
-                    print(INPUT_NOT_VALID);
-                    waitForMove();
-                    return;
-                }
-                if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
-
-                    print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
-                    waitForConsoleInput(rowDestString -> {
-                        int rowDest;
-                        try{
-                            rowDest = Integer.parseInt(rowDestString) - 1;
-                        } catch (NumberFormatException e){
-                            cleanConsole();
-                            print(INPUT_NOT_VALID);
-                            waitForMove();
-                            return;
-                        }
-                        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
-                        waitForConsoleInput(colDestString -> {
-                            int colDest;
-                            try{
-                                colDest = Integer.parseInt(colDestString) - 1;
-                            } catch (NumberFormatException e){
-                                cleanConsole();
-                                print(INPUT_NOT_VALID);
-                                waitForMove();
-                                return;
-                            }
-                            if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
-                                HashMap<String,Object> params = new HashMap<>();
-                                params.put(PARAM_ROW_FROM,row);
-                                params.put(PARAM_COL_FROM,col);
-                                params.put(PARAM_ROW_TO,rowDest);
-                                params.put(PARAM_COL_TO,colDest);
-                                params.put(PARAM_MOVE,Move.MOVE_DICE);
-                                try {
-                                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
-                                } catch (NetworkingException e) {
-                                    print(e.getMessage());
-                                }
-                            } else {
-                                print(INPUT_NOT_VALID);
-                            }
-                            waitForMove();
-                        });
-                    });
-
-                } else {
-                    print(INPUT_NOT_VALID);
-                    waitForMove();
-                }
-            });
+            askForColWP(row);
         });
+    }
+
+    private void askForColWP(int row){
+        print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
+        waitForConsoleInput(colString -> {
+            int col;
+            try{
+                col = Integer.parseInt(colString) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(INPUT_NOT_VALID);
+                waitForMove();
+                return;
+            }
+            if(row < windowPattern.getNumberOfRows() && row >= 0 && col < windowPattern.getNumberOfColumns() && col>=0){
+
+                askForRowDestWP(row,col);
+
+            } else {
+                print(INPUT_NOT_VALID);
+                waitForMove();
+            }
+        });
+    }
+
+    private void askForRowDestWP(int row, int col){
+        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
+        waitForConsoleInput(rowDestString -> {
+            int rowDest;
+            try{
+                rowDest = Integer.parseInt(rowDestString) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(INPUT_NOT_VALID);
+                waitForMove();
+                return;
+            }
+            askForColDestWP(row,col,rowDest);
+        });
+    }
+
+    private void askForColDestWP(int row, int col, int rowDest){
+        print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
+        waitForConsoleInput(colDestString -> {
+            int colDest;
+            try{
+                colDest = Integer.parseInt(colDestString) - 1;
+            } catch (NumberFormatException e){
+                cleanConsole();
+                print(INPUT_NOT_VALID);
+                waitForMove();
+                return;
+            }
+            if(rowDest < windowPattern.getNumberOfRows() && rowDest >= 0 && colDest < windowPattern.getNumberOfColumns() && colDest>=0){
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(PARAM_ROW_FROM,row);
+                params.put(PARAM_COL_FROM,col);
+                params.put(PARAM_ROW_TO,rowDest);
+                params.put(PARAM_COL_TO,colDest);
+                params.put(PARAM_MOVE,Move.MOVE_DICE);
+                try {
+                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
+                } catch (NetworkingException e) {
+                    print(e.getMessage());
+                }
+            } else {
+                print(INPUT_NOT_VALID);
+            }
+            waitForMove();
+        });
+    }
+
+    @Override
+    void handleMoveDiceMove() {
+        super.handleMoveDiceMove();
+        askForRowWP();
     }
 
     @Override
