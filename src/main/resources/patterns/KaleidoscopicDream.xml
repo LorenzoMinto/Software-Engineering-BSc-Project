@@ -2,7 +2,7 @@
 <pattern>
     <title>Kaleidoscopic Dream</title>
     <partnerID>Virtus</partnerID>
-    <imageURL>src/main/resources/images/WindowPatterns/KaleidoscopicDream.jpg</imageURL>
+    <imageURL>images/WindowPatterns/KaleidoscopicDream.jpg</imageURL>
     <rows>4</rows>
     <cols>5</cols>
     <difficulty>4</difficulty>

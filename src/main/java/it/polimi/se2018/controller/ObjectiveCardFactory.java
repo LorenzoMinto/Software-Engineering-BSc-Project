@@ -29,11 +29,11 @@ public class ObjectiveCardFactory {
     /**
      * Path for images of private objective cards
      */
-    private static final String PRIVATE_OBJECTIVE_CARDS_PATH = "src/main/resources/images/PrivateObjectiveCards/";
+    private static final String PRIVATE_OBJECTIVE_CARDS_PATH = "images/PrivateObjectiveCards/";
     /**
      * Path for images of public objective cards
      */
-    private static final String PUBLIC_OBJECTIVE_CARDS_PATH = "src/main/resources/images/PublicObjectiveCards/";
+    private static final String PUBLIC_OBJECTIVE_CARDS_PATH = "images/PublicObjectiveCards/";
 
     /**
      * Private Constructor in order to prevent from multiple instantiation of the class

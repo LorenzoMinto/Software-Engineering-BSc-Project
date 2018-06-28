@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Flux Remover</title>
-    <imageURL>src/main/resources/images/ToolCards/FluxRemover.jpg</imageURL>
+    <imageURL>images/ToolCards/FluxRemover.jpg</imageURL>
     <description>After drafting, return the die to the Dice Bag and pull 1 die from the bag. \n
         Choose a value and place the new die, obeying all placement restrictions, or return it to the Draft Pool.</description>
     <neededTokens>1</neededTokens>

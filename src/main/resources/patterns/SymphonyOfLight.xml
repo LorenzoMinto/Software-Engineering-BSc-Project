@@ -2,7 +2,7 @@
 <pattern>
    <title>Symphony of Light</title>
    <partnerID>Firmitas</partnerID>
-   <imageURL>src/main/resources/images/WindowPatterns/SymphonyOfLight.jpg</imageURL>
+   <imageURL>images/WindowPatterns/SymphonyOfLight.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>6</difficulty>

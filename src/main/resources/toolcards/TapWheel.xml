@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Tap Wheel</title>
-    <imageURL>src/main/resources/images/ToolCards/TapWheel.jpg</imageURL>
+    <imageURL>images/ToolCards/TapWheel.jpg</imageURL>
     <description>Move up to two dice of the same color that match the color of a die on the Round Track. \n
     You must obey all placement restrictions.</description>
     <neededTokens>1</neededTokens>

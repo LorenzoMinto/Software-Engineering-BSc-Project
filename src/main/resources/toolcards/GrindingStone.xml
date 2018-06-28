@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Grinding Stone</title>
-    <imageURL>src/main/resources/images/ToolCards/GrindingStone.jpg</imageURL>
+    <imageURL>images/ToolCards/GrindingStone.jpg</imageURL>
     <description>After drafting, flip the die to its opposite side.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>

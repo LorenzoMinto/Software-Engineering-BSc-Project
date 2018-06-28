@@ -12,7 +12,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -116,7 +115,7 @@ public class WindowPatternPlayerView extends Pane {
             for (int j=0; j<wp.getNumberOfColumns(); j++) {
                 Pane dice = new Pane();
                 wpGrid.add(dice, j, i);
-                Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
+                Image cellBack = new Image(getClass().getClassLoader().getResourceAsStream("images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg"));
                 dice.setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 dice.setOnMouseClicked(e -> mouseEventHandler(wp, dice));
 
@@ -186,10 +185,10 @@ public class WindowPatternPlayerView extends Pane {
             for (int j = 0; j < wp.getNumberOfColumns(); j++) {
                 Dice dice = pattern[i][j].getDice();
                 if (dice != null) {
-                    Image diceImage = new Image((new File("src/main/resources/images/Dices/" + dice.toString() + ".jpg")).toURI().toString());
+                    Image diceImage = new Image(getClass().getClassLoader().getResourceAsStream("images/Dices/" + dice.toString() + ".jpg"));
                     gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(diceImage), CornerRadii.EMPTY, Insets.EMPTY)));
                 } else {
-                    Image cellBack = new Image((new File("src/main/resources/images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg")).toURI().toString());
+                    Image cellBack = new Image(getClass().getClassLoader().getResourceAsStream("images/Cells/" + pattern[i][j].getCellConstraintsToString() + ".jpg"));
                     gridDiceButtons[i][j].setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 gridDiceButtons[i][j].setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,

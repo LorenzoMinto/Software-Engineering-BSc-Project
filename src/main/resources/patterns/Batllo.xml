@@ -2,7 +2,7 @@
 <pattern>
     <title>Batllo</title>
     <partnerID>ShadowThief</partnerID>
-    <imageURL>src/main/resources/images/WindowPatterns/Batllo.jpg</imageURL>
+    <imageURL>images/WindowPatterns/Batllo.jpg</imageURL>
     <rows>4</rows>
     <cols>5</cols>
     <difficulty>5</difficulty>

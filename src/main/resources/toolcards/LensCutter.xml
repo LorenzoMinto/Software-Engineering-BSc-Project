@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Lens Cutter</title>
-    <imageURL>src/main/resources/images/ToolCards/LensCutter.jpg</imageURL>
+    <imageURL>images/ToolCards/LensCutter.jpg</imageURL>
     <description>After drafting, swap the drafted die with a die from the Round Track.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>

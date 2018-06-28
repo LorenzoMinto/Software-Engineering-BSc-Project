@@ -2,7 +2,7 @@
 <pattern>
     <title>Bellesguard</title>
     <partnerID>SunCatcher</partnerID>
-    <imageURL>src/main/resources/images/WindowPatterns/Bellesguard.jpg</imageURL>
+    <imageURL>images/WindowPatterns/Bellesguard.jpg</imageURL>
     <rows>4</rows>
     <cols>5</cols>
     <difficulty>3</difficulty>

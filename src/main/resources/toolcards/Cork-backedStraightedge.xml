@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Cork-backed Straightedge</title>
-    <imageURL>src/main/resources/images/ToolCards/Cork-backedStraightedge.jpg</imageURL>
+    <imageURL>images/ToolCards/Cork-backedStraightedge.jpg</imageURL>
     <description>After drafting, place the die in a spot that is not adjacent to another die. \n
         You must obey all other placement restrictions.</description>
     <neededTokens>1</neededTokens>

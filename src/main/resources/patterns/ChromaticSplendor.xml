@@ -2,7 +2,7 @@
 <pattern>
    <title>Chromatic Splendor</title>
    <partnerID>LuxAstram</partnerID>
-   <imageURL>src/main/resources/images/WindowPatterns/ChromaticSplendor.jpg</imageURL>
+   <imageURL>images/WindowPatterns/ChromaticSplendor.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>4</difficulty>

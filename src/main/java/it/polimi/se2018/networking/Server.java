@@ -353,7 +353,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         }
 
         //Log that message was handled
-        logInfo(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + ".");
+        if(message.getType()!=ControllerBoundMessageType.PING){logInfo(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + ".");}
     }
 
     /**

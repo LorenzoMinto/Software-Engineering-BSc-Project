@@ -26,7 +26,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -53,7 +52,7 @@ public class SagradaSceneController extends View implements Initializable {
     private static final String PARAM_TOOLCARD = "toolCard";
     private static final String PARAM_MOVE = "move";
     private static final String PARAM_NICKNAME = "nickname";
-    private static final String SRC_MAIN_RESOURCES_IMAGES_DICES = "src/main/resources/images/Dices/";
+    private static final String SRC_MAIN_RESOURCES_IMAGES_DICES = "images/Dices/";
 
     //WAITING LIST
 
@@ -260,12 +259,12 @@ public class SagradaSceneController extends View implements Initializable {
         diceValuePicker.getItems().addAll("1","2","3","4","5", "6");
         diceValuePicker.setDisable(true);
 
-        Image cardsCarouselDefaultCardImage = getImageFromPath("src/main/resources/images/CardsBack.jpg");
+        Image cardsCarouselDefaultCardImage = getImageFromPath("images/CardsBack.jpg");
 
-        String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
+        String favorTokensImagePath = "images/FavorToken.jpg";
         Image favorTokensImage = getImageFromPath(favorTokensImagePath);
-        Image cardsCarouselPreviousImage = getImageFromPath("src/main/resources/images/Previous.jpg");
-        Image cardsCarouselNextImage = getImageFromPath("src/main/resources/images/Next.jpg");
+        Image cardsCarouselPreviousImage = getImageFromPath("images/Previous.jpg");
+        Image cardsCarouselNextImage = getImageFromPath("images/Next.jpg");
 
         setImageWithHeightAndWidth(cardsCarouselCardImageView, cardsCarouselDefaultCardImage, cardsCarouselCardHBox);
 
@@ -418,7 +417,7 @@ public class SagradaSceneController extends View implements Initializable {
      * @return an Image object for the wanted asset
      */
     private Image getImageFromPath(String path) {
-        return new Image((new File(path).toURI().toString()));
+        return new Image(getClass().getClassLoader().getResourceAsStream(path));
     }
 
     /**
@@ -996,7 +995,7 @@ public class SagradaSceneController extends View implements Initializable {
         enable(trackVisibleComponents);
 
         Platform.runLater(() -> {
-            String trackPath = "src/main/resources/images/Track.jpg";
+            String trackPath = "images/Track.jpg";
             Image trackImage = getImageFromPath(trackPath);
             trackImageButton.setBackground(getBackgroundFromImage(trackImage));
             trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());

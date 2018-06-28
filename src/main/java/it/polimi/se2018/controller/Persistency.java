@@ -15,8 +15,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class Persistency {
     /**
      * The file system path to find GlobalRankings.xml
      */
-    private static final String PATH = "persistency/GlobalRankings.xml";
+    private static final String PATH = "C:\\Users\\Federico Haag\\IdeaProjects\\ing-sw-2018-gargano-haag-minto\\globalranking.xml";
 
     /**
      * List of Ranking Records representing the Global Rankings
@@ -60,7 +59,7 @@ public class Persistency {
         List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
         try {
-            Document document = fileFinder.getFileDocument(PATH);
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(PATH);
 
             NodeList rankings = document.getElementsByTagName("ranking");
 
@@ -78,7 +77,7 @@ public class Persistency {
                 newGlobalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
             }
         } catch (Exception e) {
-            throw new BadBehaviourRuntimeException();
+            //no global ranking was found, global ranking starts out as empty
         }
 
         this.globalRankings = newGlobalRankings;
@@ -184,12 +183,19 @@ public class Persistency {
             throw new BadBehaviourRuntimeException();
         }
 
-        StreamResult result = new StreamResult();
+
+        StreamResult result = null;
+        try {
+            result = new StreamResult(new BufferedWriter(new FileWriter(PATH)));
+        } catch (IOException e) {
+            throw new BadBehaviourRuntimeException();
+        }
         try {
             if (transformer != null) {
                 transformer.transform(source, result);
             }
         } catch (TransformerException e) {
+            e.printStackTrace();
             throw new BadBehaviourRuntimeException();
         }
     }

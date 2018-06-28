@@ -2,7 +2,7 @@
 <pattern>
    <title>Aurora Sagradis</title>
    <partnerID>Industria</partnerID>
-   <imageURL>src/main/resources/images/WindowPatterns/AuroraSagradis.jpg</imageURL>
+   <imageURL>images/WindowPatterns/AuroraSagradis.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>4</difficulty>

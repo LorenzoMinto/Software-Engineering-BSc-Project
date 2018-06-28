@@ -2,7 +2,7 @@
 <pattern>
    <title>Lux Mundi</title>
    <partnerID>Comitas</partnerID>
-   <imageURL>src/main/resources/images/WindowPatterns/LuxMundi.jpg</imageURL>
+   <imageURL>images/WindowPatterns/LuxMundi.jpg</imageURL>
    <rows>4</rows>
    <cols>5</cols>
    <difficulty>6</difficulty>

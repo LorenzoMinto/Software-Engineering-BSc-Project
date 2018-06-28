@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Copper Foiled Burnisher</title>
-    <imageURL>src/main/resources/images/ToolCards/CopperFoiledBurnisher.jpg</imageURL>
+    <imageURL>images/ToolCards/CopperFoiledBurnisher.jpg</imageURL>
     <description>Move any one die in your window ignoring shade restriction. \n
     You must obey all other placement restrictions.</description>
     <neededTokens>1</neededTokens>

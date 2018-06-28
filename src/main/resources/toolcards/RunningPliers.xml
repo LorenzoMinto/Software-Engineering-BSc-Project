@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolcard>
     <title>Running Pliers</title>
-    <imageURL>src/main/resources/images/ToolCards/RunningPliers.jpg</imageURL>
+    <imageURL>images/ToolCards/RunningPliers.jpg</imageURL>
     <description>After your first turn, immediately draft a dice. \n
         Skip your next turn this round.</description>
     <neededTokens>1</neededTokens>
