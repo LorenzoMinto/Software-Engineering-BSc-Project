@@ -58,9 +58,7 @@ public class CLIView extends View{
     private static final String INSERT_THE_NUMBER_OF_SLOT_YOU_WANT_TO_DRAFT_THE_DICE_FROM = "Insert the number of slot you want to draft the dice from";
     private static final String INSERT_THE_INDEX_OF_THE_DICE_YOU_WANT_TO_PICK = "Insert the index of the dice you want to pick:";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN = "Insert the row number of the window pattern (origin)";
-    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1 = "Insert the row number of the window pattern (origin)";
     private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION = "Insert the row number of the window pattern (destination)";
-    private static final String INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1 = "Insert the row number of the window pattern (destination)";
     private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
     private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings (tip: look at your private objective card):";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
@@ -373,6 +371,9 @@ public class CLIView extends View{
             case LEAVE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleLeaveWaitingRoomMove);
                 break;
+            default:
+                break;
+
         }
         return consoleMove;
     }
@@ -502,11 +503,6 @@ public class CLIView extends View{
         waitForMove();
     }
 
-    @Override
-    void handleEndEffectMove(){
-        super.handleEndEffectMove();
-        //waitForMove() is not called here because user must wait for acknowledgement message
-    }
 
     @Override
     void handleLeaveWaitingRoomMove() {
@@ -751,7 +747,7 @@ public class CLIView extends View{
                 waitForMove();
                 return;
             }
-            print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN1);
+            print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
             waitForConsoleInput(colString -> {
                 int col;
                 try{
@@ -775,7 +771,7 @@ public class CLIView extends View{
                             waitForMove();
                             return;
                         }
-                        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION1);
+                        print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
                         waitForConsoleInput(colDestString -> {
                             int colDest;
                             try{

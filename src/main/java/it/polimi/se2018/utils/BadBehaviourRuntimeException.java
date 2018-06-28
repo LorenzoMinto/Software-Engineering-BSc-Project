@@ -13,7 +13,7 @@ package it.polimi.se2018.utils;
  */
 public class BadBehaviourRuntimeException extends RuntimeException {
     /**
-     * Basic constructor. Just calls the super().
+     * Basic constructor. Just calls super().
      */
     public BadBehaviourRuntimeException() {
         super();
@@ -21,12 +21,21 @@ public class BadBehaviourRuntimeException extends RuntimeException {
     }
 
     /**
-     * Constructor with message. Just calls the super().
+     * Constructor with message. Just calls super().
      *
      * @param message message sent within the exception
      */
     public BadBehaviourRuntimeException(String message) {
         super(message);
         //do nothing else
+    }
+
+    /**
+     * Constructor with throwable. Just calls super().
+     *
+     * @param cause the cause of the exception
+     */
+    public BadBehaviourRuntimeException(Throwable cause) {
+        super(cause);
     }
 }

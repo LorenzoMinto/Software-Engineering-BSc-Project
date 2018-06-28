@@ -49,6 +49,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private static final String SECOND_PARAMETER_PORT_NUMBER_FOR_RMI_IS_COMPULSORY = "Second parameter (port number for RMI) is compulsory.";
     private static final String THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY = "Third parameter (port number for SOCKET) is compulsory.";
     private static final String FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Fourth parameter (max number of attempts) is compulsory.";
+    private static final String SIXTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Sixth parameter (server hostname) is compulsory.";
     private static final String STARTING_RMI = "Starting RMI...";
     private static final String FAILED_RMI_SETUP = "Failed RMI setup";
     private static final String STARTING_SOCKET = "Starting Socket...";
@@ -215,7 +216,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         try{
             serverIP = args[5];
         } catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
+            LOGGER.info(SIXTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY);
             return;
         }
 
@@ -422,7 +423,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      */
     private Message removeFromWaitingRoom(String nickname, ClientProxyInterface client){
         if( waitingList.containsKey(nickname) && waitingList.get(nickname).equals(client) ){
-            //TODO: check this method: the == does not work as expected
             waitingList.remove(nickname);
 
             if(waitingList.size() < controller.getConfigProperty(CONFIG_PROPERTY_MIN_NUMBER_OF_PLAYERS)){
@@ -626,7 +626,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
     @Override
     public void lostSocketConnection(ClientProxyInterface sender) {
-        System.out.println("Lost connection");
         if (serverState == ServerState.WAITING_ROOM) {
 
             removeFromWaitingRoom(sender);

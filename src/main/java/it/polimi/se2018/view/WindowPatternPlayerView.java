@@ -1,14 +1,13 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
-import javafx.event.EventHandler;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -88,7 +87,7 @@ public class WindowPatternPlayerView extends Pane {
         try {
             fxmlLoader.load();
         } catch (IOException exception) {
-            throw new RuntimeException(exception);
+            throw new BadBehaviourRuntimeException(exception);
         }
 
     }

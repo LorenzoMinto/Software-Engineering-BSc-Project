@@ -56,6 +56,11 @@ public class ToolCard implements Serializable{
      * Part of the toString representation of the toolCard. Contains content shown after description
      */
     private static final String POST_DESCRIPTION = "";
+
+    /**
+     * The parameter literal for the needed tokens
+     */
+    private static final String NEEDED_TOKENS = "neededTokens";
     /**
      * The id of the toolCard
      */
@@ -127,8 +132,8 @@ public class ToolCard implements Serializable{
         //the description of the tool card.
         this.description = p.getProperty("description");
         //the tokens needed to activate the tool card.
-        this.neededTokens = Integer.parseInt( p.getProperty("neededTokens") );
-        this.baseNeededTokens = Integer.parseInt( p.getProperty("neededTokens") );
+        this.neededTokens = Integer.parseInt( p.getProperty(NEEDED_TOKENS) );
+        this.baseNeededTokens = Integer.parseInt( p.getProperty(NEEDED_TOKENS) );
         this.tokensUsed = 0;
         //the factor that multiplies needed tokens after the first activation.
         this.tokensUsageMultiplier = Integer.parseInt( p.getProperty("tokensUsageMultiplier") );
@@ -288,7 +293,7 @@ public class ToolCard implements Serializable{
         p.put("id",this.toolCardID);
         p.put("title",this.title);
         p.put("description",this.description);
-        p.put("neededTokens",String.valueOf(this.neededTokens));
+        p.put(NEEDED_TOKENS,String.valueOf(this.neededTokens));
         p.put("tokensUsageMultiplier",String.valueOf(this.tokensUsageMultiplier));
         p.put("imageURL",this.imageURL);
 

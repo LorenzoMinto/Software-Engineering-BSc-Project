@@ -248,11 +248,6 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button windowPatterns3FavorTokens;
     @FXML private Button windowPatterns4FavorTokens;
 
-    //IMAGES
-    private String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
-    private String trackPath = "src/main/resources/images/Track.jpg";
-
-
 
     /**
      * Initializes the scene's fundamental structure
@@ -268,6 +263,7 @@ public class SagradaSceneController extends View implements Initializable {
 
         Image cardsCarouselDefaultCardImage = getImageFromPath("src/main/resources/images/CardsBack.jpg");
 
+        String favorTokensImagePath = "src/main/resources/images/FavorToken.jpg";
         Image favorTokensImage = getImageFromPath(favorTokensImagePath);
         Image cardsCarouselPreviousImage = getImageFromPath("src/main/resources/images/Previous.jpg");
         Image cardsCarouselNextImage = getImageFromPath("src/main/resources/images/Next.jpg");
@@ -884,11 +880,6 @@ public class SagradaSceneController extends View implements Initializable {
         Platform.runLater(userWindowPatternView::cleanSelection);
     }
 
-    @Override
-    public void handleLeaveWaitingRoomMove() {
-        super.handleLeaveWaitingRoomMove();
-    }
-
 
     //EVENTS
 
@@ -1028,6 +1019,7 @@ public class SagradaSceneController extends View implements Initializable {
      */
     public void handleTrackButtonPressedEvent(){
 
+        String trackPath = "src/main/resources/images/Track.jpg";
         Image trackImage = getImageFromPath(trackPath);
         trackImageButton.setBackground(getBackgroundFromImage(trackImage));
         trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
@@ -1129,12 +1121,6 @@ public class SagradaSceneController extends View implements Initializable {
     private void disableBlackAnchorPane() {
         blackAnchorPane.setOpacity(0);
         blackAnchorPane.setDisable(true);
-    }
-
-    //TODO: this is not used, ask Jack
-    private void enableBlackHBox() {
-        blackPane.setOpacity(0.8);
-        blackPane.setDisable(false);
     }
 
     /**

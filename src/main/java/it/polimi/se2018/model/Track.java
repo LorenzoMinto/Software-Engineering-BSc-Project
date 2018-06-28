@@ -5,7 +5,6 @@ import it.polimi.se2018.utils.Observable;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**

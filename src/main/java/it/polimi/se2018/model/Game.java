@@ -177,15 +177,6 @@ public class Game extends Observable implements Observer{
         return new ArrayList<>(this.players);
     }
 
-    /**
-     * Returns the list of ToolCards that were assigned to this game at the beginning of it.
-     *
-     * @return the list of ToolCards that were assigned to this game at the beginning of it
-     */
-    public List<ToolCard> getDrawnToolCards() {
-        return drawnToolCards;
-    }
-    //TODO: check this out
 
     /**
      * Returns the list of Public Objective Cards that were assigned to this game at the beginning of it.

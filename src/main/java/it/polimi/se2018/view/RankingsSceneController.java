@@ -4,23 +4,15 @@ import it.polimi.se2018.controller.RankingRecord;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.awt.*;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Controller class for RankingScene fxml scene. Displays local and global rankings to user, gives the option
@@ -55,12 +47,12 @@ public class RankingsSceneController {
     /**
      * Observable list representing the local rankings
      */
-    public static final ObservableList localRanking =
+    private static final ObservableList localRanking =
             FXCollections.observableArrayList();
     /**
      * Observable list representing the global rankings
      */
-    public static final ObservableList globalRanking =
+    private static final ObservableList globalRanking =
             FXCollections.observableArrayList();
 
     /**
@@ -96,7 +88,7 @@ public class RankingsSceneController {
 
     /**
      * Setter for winner property
-     * @param isWinner
+     * @param isWinner boolean
      */
     public void setWinner(boolean isWinner) {
         if (isWinner) {

@@ -1,5 +1,6 @@
 package it.polimi.se2018.controller;
 
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.XMLFileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -76,7 +77,7 @@ public class Persistency {
                 newGlobalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
             }
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            e.printStackTrace();
+            throw new BadBehaviourRuntimeException();
         }
 
         this.globalRankings = newGlobalRankings;
@@ -135,10 +136,13 @@ public class Persistency {
         try {
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new BadBehaviourRuntimeException();
         }
         Document document = documentBuilder != null ? documentBuilder.newDocument() : null;
 
+        if (document == null) {
+            throw new BadBehaviourRuntimeException();
+        }
         Element root = document.createElement("GlobalRanking");
         document.appendChild(root);
 
@@ -176,7 +180,7 @@ public class Persistency {
         try {
             transformer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+            throw new BadBehaviourRuntimeException();
         }
         StreamResult result = new StreamResult(new File(PATH));
         try {
@@ -184,7 +188,7 @@ public class Persistency {
                 transformer.transform(source, result);
             }
         } catch (TransformerException e) {
-            e.printStackTrace();
+            throw new BadBehaviourRuntimeException();
         }
     }
 

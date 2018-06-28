@@ -643,7 +643,7 @@ public class Controller extends Observable {
             return;
         }
 
-        //TODO: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player. se no rimuovi questo todo.
+        //Note: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player.
 
         advanceGame();
     }

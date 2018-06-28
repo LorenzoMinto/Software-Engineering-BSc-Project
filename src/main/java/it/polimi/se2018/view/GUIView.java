@@ -3,8 +3,6 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.networking.ConnectionType;
 import it.polimi.se2018.networking.NetworkingException;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,30 +26,6 @@ import java.net.URL;
 public class GUIView extends Application {
 
     //LOGIN SCENE
-    /**
-     * TextField where the user inputs his wanted username
-     */
-    private TextField userTextField;
-
-    /**
-     * CheckBox that is selected when RMI is the wanted communication interface
-     */
-    private CheckBox rmiBox;
-
-    /**
-     * CheckBox that is selected when SOCKET is the wanted communication interface
-     */
-    private CheckBox socketBox;
-
-    /**
-     * TextField where the user can input the port to be used
-     */
-    private TextField portTextField;
-
-    /**
-     * TextField where the user can input the Server's hostname to be used
-     */
-    private TextField serverNameTextField;
 
     //SAGRADA SCENE
 
@@ -87,64 +61,52 @@ public class GUIView extends Application {
         Label userName = new Label("User Name:");
         grid.add(userName, 0, 2);
 
-        rmiBox = new CheckBox("RMI");
+        CheckBox rmiBox = new CheckBox("RMI");
         grid.add(rmiBox, 0,3);
         rmiBox.setSelected(true);
-        rmiBox.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent e) {
-                if (rmiBox.isSelected()) {
-                    socketBox.setSelected(false);
-                }
+        CheckBox socketBox = new CheckBox("Socket");
+        grid.add(socketBox, 1,3);
+        socketBox.setOnAction(e -> {
+            if (socketBox.isSelected()) {
+                rmiBox.setSelected(false);
             }
         });
-
-        socketBox = new CheckBox("Socket");
-        grid.add(socketBox, 1,3);
-        socketBox.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                if (socketBox.isSelected()) {
-                    rmiBox.setSelected(false);
-                }
+        rmiBox.setOnAction(e -> {
+            if (rmiBox.isSelected()) {
+                socketBox.setSelected(false);
             }
         });
 
         Label portLabel = new Label("Port:");
         grid.add(portLabel, 0,5);
 
-        portTextField = new TextField("0");
+        TextField portTextField = new TextField("0");
         grid.add(portTextField, 1,5);
 
         Label serverLabel = new Label("Server name:");
         grid.add(serverLabel, 0,4);
 
-        serverNameTextField = new TextField("//localhost/sagradaserver");
+        TextField serverNameTextField = new TextField("//localhost/sagradaserver");
         grid.add(serverNameTextField, 1,4);
 
-        userTextField = new TextField("Johnnyfer");
+        TextField userTextField = new TextField("Johnnyfer");
         grid.add(userTextField, 1, 2);
 
         Button btn = new Button("Log in to Sagrada");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
-            @Override
-            public void handle(ActionEvent e) {
-                try {
-                    sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
-                            serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
-                } catch (NetworkingException e1) {
-                    System.out.println("Connessione fallita");
-                    return;
-                }
-                sagradaSceneController.setPlayer(userTextField.getText());
-                sagradaSceneController.showWaitingRoom(userTextField.getText());
-
-                primaryStage.setScene(sagradaScene);
-                primaryStage.show();
+        //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
+        btn.setOnAction(e -> {
+            try {
+                sagradaSceneController.connectToRemoteServer(rmiBox.isSelected() ? ConnectionType.RMI : ConnectionType.SOCKET,
+                        serverNameTextField.getText(), Integer.parseInt(portTextField.getText()));
+            } catch (NetworkingException e1) {
+                return;
             }
+            sagradaSceneController.setPlayer(userTextField.getText());
+            sagradaSceneController.showWaitingRoom(userTextField.getText());
+
+            primaryStage.setScene(sagradaScene);
+            primaryStage.show();
         });
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);

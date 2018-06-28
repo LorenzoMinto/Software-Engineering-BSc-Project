@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.BadBehaviourRuntimeException;
 import it.polimi.se2018.utils.BadDiceReferenceException;
 
 /**
@@ -30,7 +31,7 @@ public class SwapDraftedWithTrackControllerState extends ImplicitControllerState
         try {
             game.getTrack().takeDice(turn.getTrackChosenDice(), turn.getSlotOfTrackChosenDice());
         } catch (BadDiceReferenceException e) {
-            e.printStackTrace();
+            throw new BadBehaviourRuntimeException();
         }
         game.getTrack().putDice(turn.getDraftedDice(), turn.getSlotOfTrackChosenDice());
 

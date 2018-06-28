@@ -70,7 +70,6 @@ public abstract class View implements Observer {
     private static final String PARAM_TRACK = "track";
     private static final String PARAM_DRAFT_POOL_DICES = "draftPoolDices";
     private static final String PARAM_WINDOW_PATTERNS = "windowPatterns";
-    private static final String PARAM_YOUR_WINDOW_PATTERN = "yourWindowPattern";
     private static final String PARAM_PRIVATE_OBJECTIVE_CARD = "privateObjectiveCard";
     private static final String PARAM_WHO_IS_PLAYING = "whoIsPlaying";
     private static final String PARAM_WINNER_PLAYER_ID = "winnerPlayerID";
@@ -388,7 +387,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Game ended"
      */
-    private void handleGameEndedEvent(Message m){
+    private void handleGameEndedEvent(){
         showInformation(THE_GAME_IS_ENDED);
     }
 
@@ -511,7 +510,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Connection Lost"
      */
-    void handleConnectionLostEvent(Message m){
+    void handleConnectionLostEvent(@SuppressWarnings("unused") Message m){
         showInformation(PROBLEMS_WITH_CONNECTION);
         this.wasInactiveBeforeConnectionDrop = this.state == ViewState.INACTIVE;
         changeStateTo(ViewState.DISCONNECTED);
@@ -587,7 +586,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Removed from the waiting room"
      */
-    void handleRemovedEvent(Message m){
+    void handleRemovedEvent(@SuppressWarnings("unused") Message m){
         showInformation(REMOVED_FROM_GAME);
         waitingRoomPlayers = new ArrayList<>();
     }
@@ -605,7 +604,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Back to game"
      */
-    void handleBackToGameEvent(Message m){
+    void handleBackToGameEvent(@SuppressWarnings("unused") Message m){
         changeStateTo(ViewState.ACTIVE);
         showInformation(BACK_TO_GAME);
     }
@@ -613,7 +612,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "You are inactive"
      */
-    void handleInactiveEvent(Message m){
+    void handleInactiveEvent(@SuppressWarnings("unused") Message m){
         changeStateTo(ViewState.INACTIVE);
         showInformation(YOU_ARE_NOW_INACTIVE);
     }
@@ -679,15 +678,6 @@ public abstract class View implements Observer {
         List<WindowPattern> mWindowPatterns = (List<WindowPattern>) o;
 
         try {
-            o = m.getParam(PARAM_YOUR_WINDOW_PATTERN);
-        } catch (NoSuchParamInMessageException e) {
-            showInformation(FAILED_SETUP_GAME);
-            return;
-        }
-        @SuppressWarnings("unchecked")
-        WindowPattern mWindowPattern = (WindowPattern) o;
-
-        try {
             o = m.getParam(PARAM_PRIVATE_OBJECTIVE_CARD);
         } catch (NoSuchParamInMessageException e) {
             showInformation(FAILED_SETUP_GAME);
@@ -713,7 +703,6 @@ public abstract class View implements Observer {
         setTrack(mTrack);
         setPrivateObjectiveCard(mPrivateObjectiveCard);
         setWindowPatterns(mWindowPatterns);
-        //setWindowPattern(mWindowPattern);
         setPlayersFavourTokens(mPlayersFavourTokens);
 
         notifyGameStarted();
@@ -818,7 +807,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "It is now your turn"
      */
-    void handleYourTurnEvent(Message m) {
+    void handleYourTurnEvent(@SuppressWarnings("unchecked") Message m) {
         showInformation(ITS_YOUR_TURN);
     }
 
@@ -826,28 +815,28 @@ public abstract class View implements Observer {
      * Handles the event "Bad Formatted". It is received when some previous message
      * sent to server was bad formatted or contained unexpected data.
      */
-    void handleBadFormattedEvent(Message m) {
+    void handleBadFormattedEvent(@SuppressWarnings("unchecked") Message m) {
         showInformation(ERROR_MOVE);
     }
 
     /**
      * Handles the event "Can't join waiting room because players limit has been reached"
      */
-    void handleDeniedLimitEvent(Message m) {
+    void handleDeniedLimitEvent(@SuppressWarnings("unchecked") Message m) {
         showInformation(MAX_PLAYERS_ERROR);
     }
 
     /**
      * Handles the event "Can't join waiting room because your requested nickname is already used in this game"
      */
-    void handleDeniedNicknameEvent(Message m) {
+    void handleDeniedNicknameEvent(@SuppressWarnings("unchecked") Message m) {
         showInformation(NICKNAME_ALREADY_USED_ERROR);
     }
 
     /**
      * Handles the event "Can't join because game is already running"
      */
-    void handleDeniedPlayingEvent(Message m) {
+    void handleDeniedPlayingEvent( Message m) {
         showInformation(ALREADY_PLAYING_ERROR);
     }
 
@@ -918,13 +907,12 @@ public abstract class View implements Observer {
     }
 
 
-    //TODO: questi eventi sono potenzialmente inutili
     void handleSlotOfTrackChosenDiceEvent(Message m) {
-        //do nothing
+        //no action is required by the view under this implementation of the game
     }
 
     void handleTrackChosenDiceEvent(Message m) {
-        //do nothing
+        //no action is required by the view under this implementation of the game
     }
 
     /**
@@ -932,26 +920,23 @@ public abstract class View implements Observer {
      * @param m the message containing drafted dice information
      */
     void handleDraftedDiceEvent(Message m) {
-        boolean reset = false;
         try {  //drafted dice changed to null update
-            Object o = m.getParam("noDrafted");
+            m.getParam("noDrafted");
             setDraftedDice(null);
-            reset = true;
             showInformation(THERE_IS_NO_MORE_DRAFTED_DICE);
-        } catch (NoSuchParamInMessageException e) { }
-
-        if (!reset) {
-            Object o;
-            try {
-                o = m.getParam(PARAM_DRAFTED_DICE);
-            } catch (NoSuchParamInMessageException e) {
-                return;
-            }
-            @SuppressWarnings("unchecked")
-            Dice mDraftedDice = (Dice) o;
-            setDraftedDice(mDraftedDice);
-            showInformation(YOU_HAVE_DRAFTED +mDraftedDice);
+        } catch (NoSuchParamInMessageException e) {
+            return;
         }
+        Object o;
+        try {
+            o = m.getParam(PARAM_DRAFTED_DICE);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        Dice mDraftedDice = (Dice) o;
+        setDraftedDice(mDraftedDice);
+        showInformation(YOU_HAVE_DRAFTED +mDraftedDice);
     }
 
     // NOTIFY METHODS
@@ -1024,6 +1009,8 @@ public abstract class View implements Observer {
             case DISCONNECTED:
                 handleReceivedMessageOnDisconnectedState(m);
                 break;
+            default:
+                break;
         }
     }
 
@@ -1079,7 +1066,7 @@ public abstract class View implements Observer {
                 handleBackToGameEvent(m);
                 break;
             case GAME_ENDED:
-                handleGameEndedEvent(m);
+                handleGameEndedEvent();
                 break;
             case RANKINGS:
                 handleRankingsEvent(m);
@@ -1126,7 +1113,7 @@ public abstract class View implements Observer {
                 handleGiveWindowPatternsEvent(m);
                 break;
             case GAME_ENDED:
-                handleGameEndedEvent(m);
+                handleGameEndedEvent();
                 break;
             case SETUP:
                 handleSetupEvent(m);
@@ -1255,6 +1242,9 @@ public abstract class View implements Observer {
                     storePermissions();
                     setPermissions(EnumSet.noneOf(Move.class));
                     break;
+
+                default:
+                    break;
             }
 
             this.state = state;
@@ -1318,7 +1308,6 @@ public abstract class View implements Observer {
         The following methods are not commented because they are self explaining
      */
 
-    //TODO: verificare perchè alcuni sono segnalati da IntelliJ come possibilmente spostabili a "private"
 
     /**
      * @see View#playerID
