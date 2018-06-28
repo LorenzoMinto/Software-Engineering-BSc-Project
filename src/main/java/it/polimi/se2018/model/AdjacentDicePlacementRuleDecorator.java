@@ -58,6 +58,16 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
                 checkDiagonallyAdjacentCells(pattern, numberOfRows, numberOfColumns, row, col);
     }
 
+    /**
+     * Returns true if there's a dice in the cardinally adjacent cells
+     *
+     * @param pattern the cell pattern
+     * @param numberOfRows the number of rows in the pattern
+     * @param numberOfColumns the number of cols in the pattern
+     * @param row the row index of the cell
+     * @param col the col index of the cell
+     * @return true if there's a dice in the cardinally adjacent cells, false otherwise
+     */
     private boolean checkAdjacentCells(Cell[][] pattern, int numberOfRows, int numberOfColumns, int row, int col) {
         return (row != 0 && pattern[row-1][col].hasDice()) ||
                 (col != numberOfColumns-1 && pattern[row][col+1].hasDice()) ||
@@ -66,6 +76,16 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
 
     }
 
+    /**
+     * Returns true if there's a dice in the diagonally adjacent cells
+     *
+     * @param pattern the cell pattern
+     * @param numberOfRows the number of rows in the pattern
+     * @param numberOfColumns the number of cols in the pattern
+     * @param row the row index of the cell
+     * @param col the col index of the cell
+     * @return true if there's a dice in the diagonally adjacent cells, false otherwise
+     */
     private boolean checkDiagonallyAdjacentCells(Cell[][] pattern, int numberOfRows, int numberOfColumns, int row, int col) {
         return (row!=0 && col!=0 && pattern[row-1][col-1].hasDice()) ||
                 (row!=0 && col!=numberOfColumns-1 && pattern[row-1][col+1].hasDice()) ||
