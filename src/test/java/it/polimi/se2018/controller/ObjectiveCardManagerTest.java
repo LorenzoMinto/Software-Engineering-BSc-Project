@@ -92,8 +92,6 @@ public class ObjectiveCardManagerTest {
         }catch (BadBehaviourRuntimeException e){}
     }
 
-    //TODO: to be run with testGetAllPrivateObjectiveCards @jack
-
     /**
      * Tests that there are no PrivateObjectiveCards retrieved with no color
      * @see ObjectiveCardManager#getPrivateObjectiveCard()
@@ -138,8 +136,6 @@ public class ObjectiveCardManagerTest {
             assertNotNull(card);
         }
     }
-
-    //TODO: to be run with testAllPublicObjectiveCardsTitlesAreDifferent of ObjectiveCardFactoryTest @jack
 
     /**
      * Tests that all {@link PublicObjectiveCard} retrieved are different by comparing their titles
