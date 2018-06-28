@@ -14,7 +14,6 @@ import java.util.*;
  * @author Jacopo Pio Gargano
  */
 public class ObjectiveCardFactory {
-    //TODO: in questa classe ci sono molte stringhe hardcodate, decidere cosa fare
 
     /**
      * String used as content of IllegalArgumentException thrown when requested objectiveCard has not a specified color.

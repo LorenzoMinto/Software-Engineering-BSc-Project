@@ -22,23 +22,51 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-//TODO: commentare questa classe
+/**
+ * Controller class for RankingScene fxml scene. Displays local and global rankings to user, gives the option
+ * to close the application.
+ *
+ * @author Lorenzo Minto
+ */
 public class RankingsSceneController {
 
+    /**
+     * Result label showing textually the outcome of the game
+     */
     @FXML Label resultLabel;
+    /**
+     * Button used to exit the game
+     */
     @FXML Button exitButton;
-    @FXML Button newGameButton;
+    /**
+     * Ranking List View showing the users scores sorted top to bottom.
+     */
     @FXML ListView rankingListView;
+    /**
+     * Button used to switch between the Local Ranking and the Global Ranking
+     */
     @FXML Button localityButton;
 
+    /**
+     * Flag set to true if rankingListView is displaying Local Rankings, false otherwise
+     */
     private boolean showingLocal = true;
-    private Scene loginScene;
 
+    /**
+     * Observable list representing the local rankings
+     */
     public static final ObservableList localRanking =
             FXCollections.observableArrayList();
+    /**
+     * Observable list representing the global rankings
+     */
     public static final ObservableList globalRanking =
             FXCollections.observableArrayList();
 
+    /**
+     * Setter for localRankings property
+     * @param records ranking records list to be set as localRankings
+     */
     public void setLocalRanking(List<RankingRecord> records) {
         records.sort(Comparator.comparing(RankingRecord::getPoints));
         Collections.reverse(records);
@@ -66,10 +94,10 @@ public class RankingsSceneController {
         });
     }
 
-    public void setLoginScene(Scene login) {
-        this.loginScene = login;
-    }
-
+    /**
+     * Setter for winner property
+     * @param isWinner
+     */
     public void setWinner(boolean isWinner) {
         if (isWinner) {
             resultLabel.setText("Congratulations! You won.");
@@ -78,6 +106,10 @@ public class RankingsSceneController {
         }
     }
 
+    /**
+     * Setter for globalRankings property
+     * @param records ranking records list to be set as globalRankings
+     */
     public void setGlobalRanking(List<RankingRecord> records) {
         records.sort(Comparator.comparing(RankingRecord::getCumulativePoints));
         Collections.reverse(records);
@@ -86,6 +118,9 @@ public class RankingsSceneController {
     }
 
 
+    /**
+     * Locality button event handler, implements the switching logic between Local and Global
+     */
     public void handleLocalityButtonPressedEvent(){
         if (showingLocal) {
             showingLocal = false;
@@ -98,14 +133,13 @@ public class RankingsSceneController {
         }
     }
 
-    public void handleExitEvent() {
+
+    /**
+     * Exit button event handler, closes the application
+     */
+    @FXML public void handleExitEvent() {
         Stage stage = (Stage) exitButton.getScene().getWindow();
-        // do what you have to do
         stage.close();
-    }
-
-    public void handleNewGameEvent() {
-
     }
 
 

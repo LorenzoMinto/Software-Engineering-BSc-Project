@@ -2,10 +2,20 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.utils.XMLFileFinder;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +28,22 @@ public class Persistency {
     private static Persistency instance = null;
 
     /**
-     * The file system path to find GlobalRankings.xml.xml
+     * The file system path to find GlobalRankings.xml
      */
     private static final String PATH = "assets/persistency/GlobalRankings.xml";
 
+    /**
+     * List of Ranking Records representing the Global Rankings
+     */
     private List<RankingRecord> globalRankings;
 
     private Persistency() { }
 
+    /**
+     * Gets the instance of the class (according to Singleton Pattern).
+     *
+     * @return the instance of the class
+     */
     public static Persistency getInstance(){
         if (instance == null){
             instance = new Persistency();
@@ -33,6 +51,9 @@ public class Persistency {
         return instance;
     }
 
+    /**
+     * Loads to Scorer#globalRankings the rankings stored in the xml file GlobalRankings.xml
+     */
     public void loadRankings() {
         List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
@@ -54,17 +75,18 @@ public class Persistency {
                 int cumulativePoints = Integer.parseInt(cumulativePointsNodes.item(i).getTextContent());
                 newGlobalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
 
         this.globalRankings = newGlobalRankings;
     }
 
+    /**
+     * Returns, if it exists, the global ranking record for the specified player
+     * @param playerID the player's username
+     * @return a global {@link RankingRecord}
+     */
     public RankingRecord getRankingForPlayerID(String playerID) {
         for (RankingRecord r: globalRankings) {
             if (r.getPlayerID().equals(playerID)) {
@@ -74,6 +96,15 @@ public class Persistency {
         return null;
     }
 
+    /**
+     * Updates, if it already exists, the {@link RankingRecord} for the specified player. If it doesn't exist yet,
+     * it is created and added to Scorer#globalRankings
+     *
+     * @param playerID the player's username
+     * @param points the player's points
+     * @param hasWon whether the player has won
+     * @param timePlayed the time elapsed in the game
+     */
     public void updateRankingForPlayerID(String playerID, int points, boolean hasWon, int timePlayed) {
         RankingRecord updated = null;
         RankingRecord toRemove = null;
@@ -95,38 +126,71 @@ public class Persistency {
         globalRankings.add(updated);
     }
 
+    /**
+     * Stores and persists to GlobalRanking.xml the updated globalRankings
+     */
     public void persist() {
-        //TODO: convert ranking into new globalRanking.xml
-       /* DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse("server.xml");
-        Element root = document.getDocumentElement();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = null;
+        try {
+            documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = documentBuilder != null ? documentBuilder.newDocument() : null;
 
-        Collection<Server> servers = new ArrayList<Server>();
-        servers.add(new Server());
+        Element root = document.createElement("GlobalRanking");
+        document.appendChild(root);
 
-        for (Server server : servers) {
+
+        for (RankingRecord record : globalRankings) {
+
             // server elements
-            Element newServer = document.createElement("server");
+            Element newRecord = document.createElement("ranking");
+            newRecord.setAttribute("id", record.getPlayerID());
 
-            Element name = document.createElement("name");
-            name.appendChild(document.createTextNode(server.getName()));
-            newServer.appendChild(name);
+            Element gamesWon = document.createElement("gamesWon");
+            gamesWon.appendChild(document.createTextNode(Integer.toString(record.getGamesWon())));
+            newRecord.appendChild(gamesWon);
 
-            Element port = document.createElement("port");
-            port.appendChild(document.createTextNode(Integer.toString(server.getPort())));
-            newServer.appendChild(port);
+            Element gamesLost = document.createElement("gamesLost");
+            gamesLost.appendChild(document.createTextNode(Integer.toString(record.getGamesLost())));
+            newRecord.appendChild(gamesLost);
 
-            root.appendChild(newServer);
+            Element cumulativePoints = document.createElement("cumulativePoints");
+            cumulativePoints.appendChild(document.createTextNode(Integer.toString(record.getCumulativePoints())));
+            newRecord.appendChild(cumulativePoints);
+
+            Element timePlayed = document.createElement("timePlayed");
+            timePlayed.appendChild(document.createTextNode(Integer.toString(record.getTimePlayed())));
+            newRecord.appendChild(timePlayed);
+
+            root.appendChild(newRecord);
         }
 
         DOMSource source = new DOMSource(document);
 
+
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        StreamResult result = new StreamResult("server.xml");
-        transformer.transform(source, result);*/
+        Transformer transformer = null;
+        try {
+            transformer = transformerFactory.newTransformer();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        }
+        StreamResult result = new StreamResult(new File(PATH));
+        try {
+            if (transformer != null) {
+                transformer.transform(source, result);
+            }
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Returns the global rankings
+     * @return the global rankings
+     */
     public List<RankingRecord> getGlobalRankings() { return globalRankings; }
 }

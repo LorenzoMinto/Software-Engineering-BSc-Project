@@ -765,7 +765,6 @@ public class Controller extends Observable {
         //this is called to save the new updated rankings to memory
         persistency.persist();
 
-        //TODO: verificare utilità di questo messaggio (considerare che che game.setRankings() manda msg con rankings)
         notify(new Message(ViewBoundMessageType.GAME_ENDED, null, null,EnumSet.noneOf(Move.class)));
     }
 

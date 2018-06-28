@@ -106,9 +106,5 @@ public class DraftPool extends Observable implements Serializable {
         notify(new Message(ViewBoundMessageType.SOMETHING_CHANGED_IN_DRAFTPOOL, messageAttributes));
     }
 
-    private DraftPool copy() {
-        return new DraftPool(this.getDices());
-    }
-
 
 }

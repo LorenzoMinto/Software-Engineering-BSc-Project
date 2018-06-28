@@ -1,7 +1,6 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,30 +15,73 @@ import javafx.scene.paint.ImagePattern;
 
 import java.io.File;
 import java.io.IOException;
-//TODO: commentare questa classe
+
+/**
+ * Custom Pane that displays a player's window pattern and available favour tokens, while allowing the player
+ * to interact with the window pattern grid in order to set his moves
+ *
+ * @author Lorenzo Minto
+ */
 public class WindowPatternPlayerView extends Pane {
-    private Player player;
 
+    /**
+     * The player's username
+     */
     private String nickname;
-    private int favourTokens;
-    private WindowPattern windowPattern;
 
+    /**
+     * The label that shows the player's username
+     */
     @FXML private Label nicknameLabel;
+    /**
+     * The label that shows the player's available favour tokens
+     */
     @FXML private Label favourTokensLabel;
+    /**
+     * The GridPane representing the window pattern's cells
+     */
     @FXML private GridPane wpGrid;
+    /**
+     * The Label that shows the window pattern's title
+     */
     @FXML private Label titleLabel;
+    /**
+     * The user icon ImageView marking the user's playerView
+     */
     @FXML private ImageView userIcon;
-    @FXML private GridPane patternGrid;
 
+    /**
+     * The matrix of cell buttons in the window pattern grid
+     */
     private Pane[][] gridDiceButtons;
+    /**
+     * The x coordinate of the selected cell, or of the selected origin cell if canMoveSelect is set to true
+     */
     private int xSelected = -1;
+
+    /**
+     * The y coordinate of the selected cell, or of the selected origin cell if canMoveSelect is set to true
+     */
     private int ySelected = -1;
 
+
+    /**
+     * Flag set to true if WindowPatternPlayerView is in Move Selection mode
+     */
     private boolean canMoveSelect = false;
+    /**
+     * The x coordinate of the selected destination cell
+     */
     private int xDestSelected = -1;
+    /**
+     * The y coordinate of the selected destination cell
+     */
     private int yDestSelected = -1;
 
-    public WindowPatternPlayerView() {
+    /**
+     * Class constructor.
+     */
+    WindowPatternPlayerView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WindowPatternPlayerView.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
@@ -51,14 +93,23 @@ public class WindowPatternPlayerView extends Pane {
 
     }
 
+    /**
+     * Sets the nickname property to the player's username
+     *
+     * @param nickname the player's username
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
         this.nicknameLabel.setText(nickname);
     }
 
+    /**
+     * Sets the WindowPattern represented by this PlayerView and handles its representation of the wpGrid
+     *
+     * @param wp the window pattern to be represented
+     */
     public void setWindowPattern(WindowPattern wp) {
-        this.windowPattern = wp;
-        titleLabel.setText(windowPattern.getTitle());
+        titleLabel.setText(wp.getTitle());
 
         gridDiceButtons = new Pane[wp.getNumberOfRows()][wp.getNumberOfColumns()];
         Cell[][] pattern = wp.getPattern();
@@ -68,38 +119,36 @@ public class WindowPatternPlayerView extends Pane {
                 wpGrid.add(dice, j, i);
                 Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
                 dice.setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
-                dice.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override public void handle(MouseEvent e) {
-                        int x = 0;
-                        int y = 0;
-                        for (int i=0; i<wp.getNumberOfRows(); i++) {
-                            for (int j=0; j<wp.getNumberOfColumns(); j++) {
-                                if (dice == gridDiceButtons[i][j]) {
-                                    x = i;
-                                    y = j;
-                                }
+                dice.setOnMouseClicked(e -> {
+                    int x = 0;
+                    int y = 0;
+                    for (int i1 = 0; i1 <wp.getNumberOfRows(); i1++) {
+                        for (int j1 = 0; j1 <wp.getNumberOfColumns(); j1++) {
+                            if (dice == gridDiceButtons[i1][j1]) {
+                                x = i1;
+                                y = j1;
                             }
                         }
-                        if (canMoveSelect) {
-                            //this handles the double selection
-                            if (xSelected != -1 && ySelected != -1 && xDestSelected != -1 && yDestSelected != -1) {
-                                xSelected = x;
-                                ySelected = y;
-                                xDestSelected = -1;
-                                yDestSelected = -1;
-                            } else if (xSelected != -1 && ySelected != -1) {
-                                xDestSelected = x;
-                                yDestSelected = y;
-                            } else {
-                                xSelected = x;
-                                ySelected = y;
-                            }
+                    }
+                    if (canMoveSelect) {
+                        //this handles the double selection
+                        if (xSelected != -1 && ySelected != -1 && xDestSelected != -1 && yDestSelected != -1) {
+                            xSelected = x;
+                            ySelected = y;
+                            xDestSelected = -1;
+                            yDestSelected = -1;
+                        } else if (xSelected != -1 && ySelected != -1) {
+                            xDestSelected = x;
+                            yDestSelected = y;
                         } else {
                             xSelected = x;
                             ySelected = y;
                         }
-                        visualizeSelection();
+                    } else {
+                        xSelected = x;
+                        ySelected = y;
                     }
+                    visualizeSelection();
                 });
 
                 gridDiceButtons[i][j] = dice;
@@ -107,6 +156,11 @@ public class WindowPatternPlayerView extends Pane {
         }
     }
 
+    /**
+     * Updates window pattern visualization where needed, in the case something was placed or moved
+     *
+     * @param wp the window pattern to be represented
+     */
     public void updateWindowPattern(WindowPattern wp) {
         Cell[][] pattern = wp.getPattern();
         for (int i = 0; i < wp.getNumberOfRows(); i++) {
@@ -125,17 +179,28 @@ public class WindowPatternPlayerView extends Pane {
         }
     }
 
+    /**
+     * Sets the player's favour tokens
+     *
+     * @param ft the player's favour tokens
+     */
     public void setFavourTokens(int ft) {
-
-        this.favourTokens = ft;
         this.favourTokensLabel.setText(String.valueOf(ft));
     }
 
 
+    /**
+     * Sets this view as the user view by showing the user icon on the bottom right
+     */
     public void setThisAsUser() {
         this.userIcon.setVisible(true);
     }
 
+    /**
+     * Sets this view as the current player by highlighting the border red
+     *
+     * @param t boolean
+     */
     public void setThisAsCurrentPlayer(boolean t) {
         if (t) {
             this.setBorder(new Border(new BorderStroke(Color.RED,
@@ -146,13 +211,44 @@ public class WindowPatternPlayerView extends Pane {
         }
     }
 
+    /**
+     * Returns the player's username
+     *
+     * @return the player's username
+     */
     public String getNickname() { return nickname; }
 
+    /**
+     * Returns the x coordinate of the selected cell
+     *
+     * @return the x coordinate of the selected cell
+     */
     public int getxSelected() { return xSelected; }
+
+    /**
+     * Returns the y coordinate of the selected cell
+     *
+     * @return the y coordinate of the selected cell
+     */
     public int getySelected() { return ySelected; }
+
+    /**
+     * Returns the x coordinate of the selected destination cell
+     *
+     * @return the x coordinate of the selected destination cell
+     */
     public int getxDestSelected() { return xDestSelected; }
+
+    /**
+     * Returns the y coordinate of the selected destination cell
+     *
+     * @return the y coordinate of the selected destination cell
+     */
     public int getyDestSelected() { return yDestSelected; }
 
+    /**
+     * Cleans the current selection the window pattern grid
+     */
     public void cleanSelection() {
         this.xSelected = -1;
         this.ySelected = -1;
@@ -161,7 +257,10 @@ public class WindowPatternPlayerView extends Pane {
         visualizeSelection();
     }
 
-    void visualizeSelection() {
+    /**
+     * Renders the current selection/double selection on the window pattern grid
+     */
+    private void visualizeSelection() {
         for (int i=0; i<gridDiceButtons.length; i++) {
             for (int j=0; j<gridDiceButtons[0].length; j++) {
                 if (i==xSelected && j==ySelected) {
@@ -178,5 +277,10 @@ public class WindowPatternPlayerView extends Pane {
         }
     }
 
+    /**
+     * Enables double selection
+     *
+     * @param canMoveSelect boolean
+     */
     public void enableMoveSelection(boolean canMoveSelect) { this.canMoveSelect = canMoveSelect; }
 }

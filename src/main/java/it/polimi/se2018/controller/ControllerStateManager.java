@@ -34,12 +34,30 @@ public class ControllerStateManager {
      */
     private HashMap<String, ControllerState> stateTable;
 
-    //TODO: @lorenzo verifica se hanno ancora senso questi e se si trova dei commenti sensati
+
+    /**
+     * The default start controller state used in the state transitions
+     */
     private StartControllerState startState;
+    /**
+     * The default place controller state used in the state transitions
+     */
     private PlaceControllerState placeState;
+    /**
+     * The default toolcard controller state used in the state transitions
+     */
     private ToolCardControllerState toolCardState;
+    /**
+     * The default draft controller state used in the state transitions
+     */
     private DraftControllerState draftControllerState;
+    /**
+     * The default end controller state used in the state transitions
+     */
     private EndControllerState endControllerState;
+    /**
+     * The default end toolcard effect controller state used in the state transitions
+     */
     private EndToolCardEffectControllerState endToolCardEffectControllerState;
 
     /**
