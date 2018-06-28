@@ -73,6 +73,9 @@ public class WindowPattern extends Observable implements Serializable{
      */
     private boolean isEmpty;
 
+    /**
+     * The player that owns the window pattern
+     */
     private Player owner;
 
 
@@ -96,6 +99,11 @@ public class WindowPattern extends Observable implements Serializable{
         this.isEmpty = true;
     }
 
+    /**
+     * Sets the window pattern's owner
+     *
+     * @param player the window pattern's owner
+     */
     public void setOwner(Player player){
         if(player.getWindowPattern().equals(this)){
             this.owner = player;
