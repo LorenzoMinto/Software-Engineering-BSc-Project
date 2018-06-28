@@ -216,9 +216,9 @@
             <Insets />
          </opaqueInsets>
       </GridPane>
-      <AnchorPane fx:id="blackAnchorPane" opacity="0.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="blackAnchorPane" opacity="0.0" style="-fx-background-color: rgba(0, 0, 0, 0.8);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <GridPane fx:id="trackGridPane" alignment="CENTER_LEFT" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane fx:id="trackGridPane" alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="65.0" />
@@ -239,7 +239,7 @@
                 <RowConstraints percentHeight="4.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                <children>
-                  <HBox fx:id="trackHBox" alignment="CENTER" opacity="0.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="12" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                  <HBox fx:id="trackHBox" alignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="12" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                      <children>
                         <Button fx:id="trackImageButton" mnemonicParsing="false" prefHeight="420.0" prefWidth="175.0" text="Button" />
                      </children>
@@ -334,7 +334,7 @@
                   </Button>
                </children>
             </GridPane>
-            <GridPane fx:id="toolCardsGridPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane fx:id="toolCardsGridPane" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="5.0" prefWidth="100.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
@@ -402,8 +402,6 @@
                   </Button>
                </children>
             </GridPane>
-            <!--<HBox fx:id="blackHBox" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" />-->
-            <HBox fx:id="blackPane" alignment="CENTER" opacity="0.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <VBox fx:id="windowPatternsVBox" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox fx:id="windowPatternsHBox" alignment="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="200.0">

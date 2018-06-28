@@ -82,7 +82,6 @@ public class SagradaSceneController extends View implements Initializable {
     private int cardsCarouselCurrentIndex = 0;
 
     @FXML private AnchorPane blackAnchorPane;
-    @FXML private HBox blackPane;
 
     /**
      * The TextArea where all the server's game message are displayed
@@ -322,20 +321,9 @@ public class SagradaSceneController extends View implements Initializable {
 
 
         toolCards1FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
-        toolCards1FavorTokensButton.setPrefWidth(70);
-        toolCards1FavorTokensButton.setPrefHeight(70);
-
         toolCards2FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
-        toolCards2FavorTokensButton.setPrefWidth(70);
-        toolCards2FavorTokensButton.setPrefHeight(70);
-
         toolCards3FavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
-        toolCards3FavorTokensButton.setPrefWidth(70);
-        toolCards3FavorTokensButton.setPrefHeight(70);
-
         toolCardsPlayerFavorTokensButton.setBackground(getBackgroundFromImage(favorTokensImage));
-        toolCardsPlayerFavorTokensButton.setPrefWidth(85);
-        toolCardsPlayerFavorTokensButton.setPrefHeight(85);
 
         toolCardsVisibleComponents.add(toolCardsGridPane);
         toolCardsVisibleComponents.add(toolCards1Button);
@@ -375,10 +363,21 @@ public class SagradaSceneController extends View implements Initializable {
         disable(windowPatternsVisibleComponents);
 
 
-        disableBlackAnchorPane();
-        disableBlackHBox();
+        enableBlackAnchorPane();
+        blackAnchorPane.setStyle("-fx-background-color: rgba(255, 255, 255, 1);");
+    }
 
-        }
+    /**
+     * Enables and sets to visible the given list of nodes
+     *
+     * @param visibleComponents the list of nodes
+     */
+    private void enable(List<Node> visibleComponents) {
+        visibleComponents.forEach(component -> component.setVisible(true));
+        visibleComponents.forEach(component -> component.setOpacity(1));
+        visibleComponents.forEach(component -> component.setDisable(false));
+
+    }
 
     /**
      * Sets to invisible and disabled the passed list of nodes
@@ -387,6 +386,7 @@ public class SagradaSceneController extends View implements Initializable {
      */
     private void disable(List<Node> visibleComponents) {
         visibleComponents.forEach(component -> component.setVisible(false));
+        visibleComponents.forEach(component -> component.setOpacity(0));
         visibleComponents.forEach(component -> component.setDisable(true));
     }
 
@@ -633,11 +633,17 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleUseToolCardMove() {
 
+
+        Platform.runLater(() -> backPaneBox.toBack());
+
+        enableBlackAnchorPane();
+
+        enable(toolCardsVisibleComponents);
+
         Platform.runLater(() -> {
-            enableBlackAnchorPane();
-            blackAnchorPane.setOpacity(0.93);
-            disableBlackHBox();
-            enable(toolCardsVisibleComponents);
+
+//            blackAnchorPane.setOpacity(0.93);
+//            disableBlackHBox();
             double toolCardsProportions = 0.712;
 
             //Retrieving ToolCards images
@@ -672,18 +678,6 @@ public class SagradaSceneController extends View implements Initializable {
             toolCardsPlayerFavorTokensButton.prefWidthProperty().bind(toolCards1Button.prefWidthProperty().divide(4));
             toolCardsPlayerFavorTokensButton.prefHeightProperty().bind(toolCardsPlayerFavorTokensButton.prefWidthProperty());
         });
-
-    }
-
-    /**
-     * Enables and sets to visible the given list of nodes
-     *
-     * @param visibleComponents the list of nodes
-     */
-    private void enable(List<Node> visibleComponents) {
-        visibleComponents.forEach(component -> component.setVisible(true));
-        visibleComponents.forEach(component -> component.setOpacity(1));
-        visibleComponents.forEach(component -> component.setDisable(false));
 
     }
 
@@ -931,8 +925,6 @@ public class SagradaSceneController extends View implements Initializable {
 
         enableBlackAnchorPane();
 
-        disable(trackVisibleComponents);
-
         enable(windowPatternsVisibleComponents);
 
         Platform.runLater(() -> {
@@ -1000,17 +992,18 @@ public class SagradaSceneController extends View implements Initializable {
      */
     public void handleTrackButtonPressedEvent(){
 
-        String trackPath = "src/main/resources/images/Track.jpg";
-        Image trackImage = getImageFromPath(trackPath);
-        trackImageButton.setBackground(getBackgroundFromImage(trackImage));
-        trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
+        Platform.runLater(() -> backPaneBox.toBack());
 
         enableBlackAnchorPane();
-        disableBlackHBox();
 
         enable(trackVisibleComponents);
 
         Platform.runLater(() -> {
+            String trackPath = "src/main/resources/images/Track.jpg";
+            Image trackImage = getImageFromPath(trackPath);
+            trackImageButton.setBackground(getBackgroundFromImage(trackImage));
+            trackImageButton.prefHeightProperty().bind(trackHBox.heightProperty());
+
             for (HBox hBox: trackHBoxes) {
                 hBox.getChildren().clear();
                 try {
@@ -1090,7 +1083,6 @@ public class SagradaSceneController extends View implements Initializable {
     private void hasChosenWindowPattern() {
         disable(windowPatternsVisibleComponents);
         disableBlackAnchorPane();
-        disableBlackHBox();
         disable(trackVisibleComponents);
     }
 
@@ -1098,9 +1090,9 @@ public class SagradaSceneController extends View implements Initializable {
      * Enables and sets to visible the BlackAnchorPane
      */
     private void enableBlackAnchorPane() {
-        blackAnchorPane.setOpacity(0.8);
+        blackAnchorPane.setOpacity(1);
         blackAnchorPane.setDisable(false);
-        disableBlackHBox();
+        blackAnchorPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);");
     }
 
 
@@ -1110,14 +1102,6 @@ public class SagradaSceneController extends View implements Initializable {
     private void disableBlackAnchorPane() {
         blackAnchorPane.setOpacity(0);
         blackAnchorPane.setDisable(true);
-    }
-
-    /**
-     * Disables and sets to invisible the BlackHBox
-     */
-    private void disableBlackHBox() {
-        blackPane.setOpacity(0);
-        blackPane.setDisable(true);
     }
 
 
