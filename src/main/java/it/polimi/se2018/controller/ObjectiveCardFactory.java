@@ -152,7 +152,6 @@ public class ObjectiveCardFactory {
 
         switch(values.size()){
             case 2:
-                //TODO: risolvere questi warning: se si mette solo int da errore containts. Così da errore unecesssary boxing.
                 if(values.contains(Integer.valueOf(1)) && values.contains(Integer.valueOf(2))){
                     title = "Light Shades";
                     description = "Sets of 1 & 2 values anywhere";

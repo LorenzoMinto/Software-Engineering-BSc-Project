@@ -28,5 +28,6 @@ abstract class ImplicitControllerState extends ControllerState {
     /**
      * Executes some implicit behaviour relative to the state. It does nothing when state is not Implicit.
      */
+    @Override
     public abstract void executeImplicitBehaviour();
 }

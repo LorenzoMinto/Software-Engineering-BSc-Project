@@ -36,6 +36,8 @@ import java.util.logging.Logger;
  */
 public class Controller extends Observable {
 
+    private static final String PLAYER = "player";
+
     private final Logger logger;
 
     /**
@@ -450,9 +452,6 @@ public class Controller extends Observable {
             return false;
         }
 
-        System.out.println(game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size());
-        System.out.println(!game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced());
-
         //check for card's timing constraints
         switch (toolCard.getTitle()) {
             case "Glazing Hammer": //second turn before drafting only
@@ -607,7 +606,7 @@ public class Controller extends Observable {
 
         //If statement prevents sending every turn the notification for all inactive players
         if( inactivePlayers.add(currentPlayerID) ){
-            notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap("player",currentPlayerID))); //notify everyone that the player is now inactive
+            notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap(PLAYER,currentPlayerID))); //notify everyone that the player is now inactive
             notify(new Message(ViewBoundMessageType.YOU_ARE_INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
         }
 
@@ -813,7 +812,7 @@ public class Controller extends Observable {
         if(this.inactivePlayers.add(playerID)){
             this.inactiveDisconnectedPlayers.add(playerID);
         }
-        notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap("player",playerID)));
+        notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap(PLAYER,playerID)));
         if(waitingForPatternsChoice.cancel()){
             forcePatternChoice();
         }
@@ -832,7 +831,7 @@ public class Controller extends Observable {
                 //player is not removed from inactive ones because it was so before loosing connection
             } else {
                 this.inactivePlayers.remove(playerID);
-                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap("player",playerID)));
+                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap(PLAYER,playerID)));
             }
         }
     }

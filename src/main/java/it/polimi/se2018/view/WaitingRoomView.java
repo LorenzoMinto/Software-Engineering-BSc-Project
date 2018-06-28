@@ -61,7 +61,7 @@ public class WaitingRoomView extends Pane {
         try {
             fxmlLoader.load();
         } catch (IOException exception) {
-            throw new RuntimeException(exception);
+            forwardMessage(exception.getMessage());
         }
 
         Platform.runLater(() -> {
