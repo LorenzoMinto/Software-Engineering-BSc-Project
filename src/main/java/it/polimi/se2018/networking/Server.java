@@ -166,11 +166,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private HashMap<ClientProxyInterface,List<Message>> unSentMessages = new HashMap<>();
 
     /**
-     * Pinging class
-     */
-    private Pinging pinging;
-
-    /**
      * The main class for server in order to make it runnable.
      *
      * @param args arguments passed by command line
@@ -245,8 +240,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         this.controller = createController();
         this.controller.register(this);
 
-        this.pinging = new Pinging(this,ViewBoundMessageType.PING);
-        this.pinging.start();
+        new Pinging(this,ViewBoundMessageType.PING).start();
     }
 
     /**
