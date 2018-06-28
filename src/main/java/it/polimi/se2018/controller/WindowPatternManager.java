@@ -17,6 +17,8 @@ import java.util.*;
  */
 public class WindowPatternManager {
 
+    private static final Random RANDOM = new Random();
+
     /**
      * The file system path to find windowPatterns .xml files
      */
@@ -66,20 +68,20 @@ public class WindowPatternManager {
 
         if( availablePatternsIDs.size() >= numberOfPairs * 2 ){
 
-            Random r = new Random();
-
             for(int i=0; i<numberOfPairs; i++){
 
                 //Choose randomly one of the available patterns
-                int randomIndex = r.nextInt(availablePatternsIDs.size());
+                int randomIndex = RANDOM.nextInt(availablePatternsIDs.size());
                 String randomPatternID = availablePatternsIDs.get(randomIndex);
+                String randomPartnerPatternID = getPartnerPatternID(randomPatternID);
 
                 //Removes the selected pattern from the available to avoid double choise
                 availablePatternsIDs.remove(randomPatternID);
+                availablePatternsIDs.remove(randomPartnerPatternID);
 
                 //Load the randomly selected pattern
                 WindowPattern randomPattern = loadPatternFromFileSystem(randomPatternID);
-                WindowPattern randomPartnerPattern = loadPatternFromFileSystem(getPartnerPatternID(randomPatternID));
+                WindowPattern randomPartnerPattern = loadPatternFromFileSystem(randomPartnerPatternID);
 
                 //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
                 couplesOfPatterns.add(randomPattern);
