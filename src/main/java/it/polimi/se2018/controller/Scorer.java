@@ -93,6 +93,13 @@ public class Scorer {
         return rankings;
     }
 
+    /**
+     * Orders players rankings based on their status: if inactive they are pushed to the bottom
+     *
+     * @param rankings the rankings to be ordered
+     * @param inactivePlayersIDs the IDs of the players that are inactive. Can be empty
+     * @return rankings sorted by Player status
+     */
     private Map<Player, Integer> sortRankingsByStatus(Map<Player, Integer> rankings, List<String> inactivePlayersIDs) {
         Map<Player, Integer> rankingsByStatus = new LinkedHashMap<>(rankings);
         List<Player> players = new ArrayList<>(rankings.keySet());

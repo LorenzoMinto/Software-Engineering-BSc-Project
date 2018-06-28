@@ -4,11 +4,12 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.ControllerBoundMessageType;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.Move;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
+import static it.polimi.se2018.model.GameStatus.ENDED;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE;
 import static it.polimi.se2018.utils.ViewBoundMessageType.ERROR_MESSAGE;
 import static org.junit.Assert.*;
@@ -27,10 +28,11 @@ import static org.junit.Assert.*;
  */
 public class ControllerTest {
 
-    private static Controller controller;
+    private  Controller controller;
+    private List<String> nicknames;
 
-    @BeforeClass
-    public static void init(){
+    @Before
+    public void init(){
 
         Game game = new Game(4,4);
         Properties gameProperties = new Properties();
@@ -47,19 +49,27 @@ public class ControllerTest {
 
         controller = new Controller(game, gameProperties);
 
-        Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));
+        nicknames = new ArrayList<>();
+        nicknames.add("Johnnyfer");
+        nicknames.add("Rubens");
+        nicknames.add("Frida");
+    }
 
+    /**
+     * Launches game and sets windowPatterns for players
+     */
+    private void launchGameAndSetWindowPatterns() {
         WindowPatternManager WPManager = new WindowPatternManager();
         WindowPattern wp = WPManager.getPairsOfPatterns(1).iterator().next();
 
-        controller.launchGame(nicknames);
+        controller.launchGame(new HashSet<>(nicknames));
 
-        for (Player p : controller.game.getPlayers()) {
+        for (Player player : controller.game.getPlayers()) {
             HashMap<String, Object> params = new HashMap<>();
 
             params.put("windowPattern", wp);
             params.put("move", Move.CHOOSE_WINDOW_PATTERN);
-            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE, params, p.getID()));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE, params, player.getID()));
         }
     }
 
@@ -69,6 +79,8 @@ public class ControllerTest {
      */
     @Test
     public void testSetControllerState() {
+        launchGameAndSetWindowPatterns();
+
         controller.setControllerState(controller.stateManager.getToolCardState());
         Message m = controller.controllerState.draftDiceFromDraftPool(new Dice(DiceColor.RED));
         assertEquals(ERROR_MESSAGE, m.getType());
@@ -88,7 +100,79 @@ public class ControllerTest {
      */
     @Test
     public void getConfigProperty() {
+
+
         assertEquals(4,controller.getConfigProperty("maxNumberOfPlayers"));
         assertEquals(10,controller.getConfigProperty("numberOfRounds"));
+    }
+
+    /**
+     * Tests the game ends if there are only two players and one of them disconnects
+     * @see Controller#playerLostConnection(String)
+     */
+    @Test
+    public void testPlayerLostConnectionGameWithTwoPlayers(){
+        nicknames.remove("Frida");
+        launchGameAndSetWindowPatterns();
+
+        controller.playerLostConnection(nicknames.get(0));
+
+        assertEquals(2, controller.game.getPlayers().size());
+        assertEquals(ENDED,controller.game.getStatus());
+    }
+
+
+    /**
+     * Tests the game advances if there are three players and one of them disconnects
+     * @see Controller#playerLostConnection(String)
+     */
+    @Test
+    public void testPlayerLostConnection(){
+        launchGameAndSetWindowPatterns();
+
+        controller.playerLostConnection(nicknames.get(0));
+
+        assertEquals(3, controller.game.getPlayers().size());
+        assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+    }
+
+    /**
+     * Tests the game advances correctly if a player disconnects and reconnects (three players game)
+     * @see Controller#playerLostConnection(String)
+     */
+    @Test
+    public void testPlayerReconnected(){
+        launchGameAndSetWindowPatterns();
+
+        controller.playerLostConnection(nicknames.get(0));
+        controller.playerRestoredConnection(nicknames.get(0));
+
+        assertEquals(3, controller.game.getPlayers().size());
+        assertEquals(1,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+    }
+
+    /**
+     * Tests the game ends after 4 rounds
+     * @see Controller#advanceGame()
+     */
+    @Test
+    public void testRunAllGame(){
+        nicknames.remove("Frida");
+        launchGameAndSetWindowPatterns();
+
+        for(int i=0; i < 2; i++){
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Johnnyfer"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Rubens"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Rubens"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Johnnyfer"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Rubens"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Johnnyfer"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Johnnyfer"));
+            controller.handleMoveMessage(new Message(ControllerBoundMessageType.MOVE,Message.fastMap("move",Move.END_TURN),"Rubens"));
+        }
+
+        assertEquals(3,controller.game.getCurrentRound().getNumber());
+        assertEquals(3,controller.game.getCurrentRound().getCurrentTurn().getNumber());
+        assertEquals(ENDED,controller.game.getStatus());
     }
 }

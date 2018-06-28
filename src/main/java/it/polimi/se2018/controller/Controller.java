@@ -753,12 +753,13 @@ public class Controller extends Observable {
      * Ends the current game. Calculates rankings and scores and then notify them to players.
      */
     private void manageRankings(){
-        Map<Player, Integer> rankings = getRankingsAndScores();
+        LinkedHashMap<Player, Integer> rankings = (LinkedHashMap<Player,Integer>) getRankingsAndScores();
         game.setRankings(rankings);
 
         List<RankingRecord> localRanking = new ArrayList<>();
 
         int index = 0;
+
         for (Map.Entry<Player, Integer> entry : rankings.entrySet())
         {
             int timePlayedInMinute = (int) (System.currentTimeMillis() - startTime)/1000/60;
