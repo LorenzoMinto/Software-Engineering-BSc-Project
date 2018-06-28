@@ -28,14 +28,22 @@ public class Persistency {
     private static Persistency instance = null;
 
     /**
-     * The file system path to find GlobalRankings.xml.xml
+     * The file system path to find GlobalRankings.xml
      */
     private static final String PATH = "assets/persistency/GlobalRankings.xml";
 
+    /**
+     * List of Ranking Records representing the Global Rankings
+     */
     private List<RankingRecord> globalRankings;
 
     private Persistency() { }
 
+    /**
+     * Gets the instance of the class (according to Singleton Pattern).
+     *
+     * @return the instance of the class
+     */
     public static Persistency getInstance(){
         if (instance == null){
             instance = new Persistency();
@@ -43,6 +51,9 @@ public class Persistency {
         return instance;
     }
 
+    /**
+     * Loads to Scorer#globalRankings the rankings stored in the xml file GlobalRankings.xml
+     */
     public void loadRankings() {
         List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
@@ -71,6 +82,11 @@ public class Persistency {
         this.globalRankings = newGlobalRankings;
     }
 
+    /**
+     * Returns, if it exists, the global ranking record for the specified player
+     * @param playerID the player's username
+     * @return a global {@link RankingRecord}
+     */
     public RankingRecord getRankingForPlayerID(String playerID) {
         for (RankingRecord r: globalRankings) {
             if (r.getPlayerID().equals(playerID)) {
@@ -80,6 +96,15 @@ public class Persistency {
         return null;
     }
 
+    /**
+     * Updates, if it already exists, the {@link RankingRecord} for the specified player. If it doesn't exist yet,
+     * it is created and added to Scorer#globalRankings
+     *
+     * @param playerID the player's username
+     * @param points the player's points
+     * @param hasWon whether the player has won
+     * @param timePlayed the time elapsed in the game
+     */
     public void updateRankingForPlayerID(String playerID, int points, boolean hasWon, int timePlayed) {
         RankingRecord updated = null;
         RankingRecord toRemove = null;
@@ -101,6 +126,9 @@ public class Persistency {
         globalRankings.add(updated);
     }
 
+    /**
+     * Stores and persists to GlobalRanking.xml the updated globalRankings
+     */
     public void persist() {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = null;
@@ -160,5 +188,9 @@ public class Persistency {
         }
     }
 
+    /**
+     * Returns the global rankings
+     * @return the global rankings
+     */
     public List<RankingRecord> getGlobalRankings() { return globalRankings; }
 }
