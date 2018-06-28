@@ -47,7 +47,6 @@ public class SagradaSceneController extends View implements Initializable {
     private static final String PARAM_COL_TO = "colTo";
     private static final String ERROR_SELECT_TO_AND_FROM_CELL_TO_MAKE_THE_MOVE = "Select TO and FROM cell to make the move.";
     private static final String PARAM_WINDOW_PATTERN = "windowPattern";
-    private Scene loginScene;
 
     private static final String PARAM_TOOLCARD = "toolCard";
     private static final String PARAM_MOVE = "move";
@@ -418,15 +417,6 @@ public class SagradaSceneController extends View implements Initializable {
      */
     private Image getImageFromPath(String path) {
         return new Image(getClass().getClassLoader().getResourceAsStream(path));
-    }
-
-    /**
-     * Sets the login scene to be used when exiting the game
-     *
-     * @param loginScene the login scene
-     */
-    public void setLoginScene(Scene loginScene) {
-        this.loginScene = loginScene;
     }
 
     /**
@@ -1049,8 +1039,7 @@ public class SagradaSceneController extends View implements Initializable {
      */
     public void handleExitEvent() {
         Stage stage = (Stage) playerTerminal.getScene().getWindow();
-        stage.setScene(loginScene);
-        stage.centerOnScreen();
+        stage.close();
     }
 
     @Override
@@ -1250,7 +1239,6 @@ public class SagradaSceneController extends View implements Initializable {
         } else {
 
             if (getPermissions().isEmpty()) {
-                //TODO: add label here to remind user is not his turn @lorenzo
                 Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
             } else {
                 Set<Move> permissions = getPermissions();

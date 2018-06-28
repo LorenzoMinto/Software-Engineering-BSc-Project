@@ -130,7 +130,6 @@ public class GUIView extends Application {
 
         sagradaScene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         sagradaSceneController = fxmlLoader.getController();
-        sagradaSceneController.setLoginScene(loginScene);
 
         primaryStage.show();
     }
