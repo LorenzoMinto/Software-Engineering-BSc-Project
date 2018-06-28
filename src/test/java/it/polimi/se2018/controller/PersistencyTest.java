@@ -16,13 +16,13 @@ public class PersistencyTest {
 
     @BeforeClass
     public static void getSingleton(){
-        persistency = Persistency.getInstance();
+        persistency = new Persistency("C:/home/lorenzo/IdeaProjects/sagrada/globalranking.xml");
     }
 
-    /**
+/*    *//**
      * Tests the singleton getInstance method does not return null, even if called multiple times
      * @see Persistency#getInstance()
-     */
+     *//*
     @Test
     public void testSingletonInstanceIsNotNull(){
         assertNotNull(Persistency.getInstance());
@@ -30,16 +30,16 @@ public class PersistencyTest {
         assertNotNull(Persistency.getInstance());
     }
 
-    /**
+    *//**
      * Tests that the two instances of the singleton are the same instance
      * @see Persistency#getInstance()
-     */
+     *//*
     @Test
     public void testSingletonInstance(){
         Persistency Persistency1 = Persistency.getInstance();
         Persistency Persistency2 = Persistency.getInstance();
         assertEquals(Persistency1, Persistency2);
-    }
+    }*/
 
     /**
      * Tests the loading and retrieval of Global Rankings

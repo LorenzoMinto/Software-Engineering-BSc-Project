@@ -15,15 +15,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -110,10 +108,12 @@ public class SagradaSceneController extends View implements Initializable {
      * FlowPane that contains the draft pool dices.
      */
     @FXML private FlowPane draftPoolPane;
+
     /**
      * The HBox below the draftPoolPane that contains the current drafted dice
      */
     @FXML private HBox currentDraftedPane;
+
     /**
      * The ChoiceBox that allows, when active, to choose a value for the drafted dice
      */
@@ -123,10 +123,12 @@ public class SagradaSceneController extends View implements Initializable {
      * The Button that references to the currently selected dice in the draft pool, not yet drafted
      */
     private Button selectedDiceButton = null;
+
     /**
      * The track slot number of the currently selected dice from the track
      */
     private int selectedTrackSlotNumber = -1;
+
     /**
      * List of Buttons representing the draftpool dices
      */
@@ -788,6 +790,7 @@ public class SagradaSceneController extends View implements Initializable {
             }
             diceValuePicker.setDisable(true);
         }
+
     }
 
     @Override
@@ -872,6 +875,9 @@ public class SagradaSceneController extends View implements Initializable {
         } else {
             Platform.runLater(() -> currentDraftedPane.getChildren().clear());
         }
+
+        //TODO: TESTING
+        handleAbortedEvent();
     }
 
     @Override
@@ -967,6 +973,9 @@ public class SagradaSceneController extends View implements Initializable {
                     }
                     hasChosenWindowPattern();
                     printOnConsole(windowPattern1.getTitle() +" chosen.");
+                    Label waitLabel = new Label("Your window pattern was assigned. Waiting for the other players to pick theirs.");
+                    waitLabel.setFont(new Font(24));
+                    windowPatternsBox.getChildren().add(waitLabel);
                 });
             }
         });
@@ -1011,6 +1020,19 @@ public class SagradaSceneController extends View implements Initializable {
                 }catch (ValueOutOfBoundsException e){
                     printOnConsole(e.getMessage());
                 }
+            }
+        });
+    }
+
+    @Override
+    void handleAbortedEvent() {
+        super.handleAbortedEvent();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Game was aborted by the server.", ButtonType.FINISH);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.FINISH) {
+                handleExitEvent();
             }
         });
     }
@@ -1165,6 +1187,9 @@ public class SagradaSceneController extends View implements Initializable {
     private void setupWindowPatterns() {
         wpViews = new ArrayList<>();
         int i = 0;
+
+        Platform.runLater(() -> windowPatternsBox.getChildren().clear());
+
         for (WindowPattern wp: windowPatterns) {
             String nickname = players.get(i);
             WindowPatternPlayerView wpView = new WindowPatternPlayerView();

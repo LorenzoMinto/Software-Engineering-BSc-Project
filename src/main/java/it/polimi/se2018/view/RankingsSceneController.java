@@ -100,7 +100,7 @@ public class RankingsSceneController {
      * @param records ranking records list to be set as globalRankings
      */
     public void setGlobalRanking(List<RankingRecord> records) {
-        records.sort(Comparator.comparing(RankingRecord::getCumulativePoints));
+        records.sort(Comparator.comparing(RankingRecord::getGamesWon));
         Collections.reverse(records);
 
         globalRanking.addAll(records);
