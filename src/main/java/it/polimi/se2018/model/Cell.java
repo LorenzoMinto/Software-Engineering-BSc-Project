@@ -41,12 +41,10 @@ public class Cell implements Serializable{
      */
     private int allowedValue;
 
-
     /**
      * The color that a Dice must have to be set on this Cell. 'NOCOLOR' means every color is allowed.
      */
     private DiceColor allowedColor;
-
 
     /**
      * The Dice placed on this Cell
@@ -148,6 +146,10 @@ public class Cell implements Serializable{
         }
     }
 
+    /**
+     * Returns a string representation of cell constraints
+     * @return a string representation of cell constraints
+     */
     public String getCellConstraintsToString() {
         String constraint;
         if (allowedColor == DiceColor.NOCOLOR) { //value constraint

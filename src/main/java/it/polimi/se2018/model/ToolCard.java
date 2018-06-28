@@ -24,34 +24,42 @@ public class ToolCard implements Serializable{
      * Part of the toString representation of the toolCard. Contains content shown before title
      */
     private static final String PRE_TITLE = "[";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown after title
      */
     private static final String POST_TITLE = "]";
+
     /**
      * Part of the toString representation of the toolCard. Contains a divider that separates each block of information
      */
     private static final String DIVIDER = " ";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown before needed tokens
      */
     private static final String PRE_NEEDED_TOKENS = "Needed: ";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown before used tokens
      */
     private static final String PRE_USED_TOKENS = "Used: ";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown after needed tokens
      */
     private static final String POST_NEEDED_TOKENS = "|";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown after used tokens
      */
     private static final String POST_USED_TOKENS = "]";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown before description
      */
     private static final String PRE_DESCRIPTION = "";
+
     /**
      * Part of the toString representation of the toolCard. Contains content shown after description
      */
@@ -159,52 +167,52 @@ public class ToolCard implements Serializable{
     private String getToolCardID() { return toolCardID; }
 
     /**
-     * Returns the title of the tool card.
+     * Returns the title of the tool card
      *
-     * @return the title of the tool card.
+     * @return the title of the tool card
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Returns the title of the tool card.
+     * Returns the title of the tool card
      *
-     * @return the title of the tool card.
+     * @return the title of the tool card
      */
     public Set<Integer> getPossibleMovesCountSet() {
         return possibleMovesCountSet;
     }
 
     /**
-     * Returns the description of the tool card's effect.
+     * Returns the description of the tool card's effect
      *
-     * @return the description of the tool card's effect.
+     * @return the description of the tool card's effect
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Returns the number of tokens spent on the tool card.
+     * Returns the number of tokens spent on the tool card
      *
-     * @return the number of tokens spent on the tool card.
+     * @return the number of tokens spent on the tool card
      */
     public int getUsedTokens() { return tokensUsed; }
 
     /**
-     * Returns the number of tokens needed to activate the tool card.
+     * Returns the number of tokens needed to activate the tool card
      *
-     * @return the number of tokens needed to activate the tool card.
+     * @return the number of tokens needed to activate the tool card
      */
     public int getNeededTokens() {
         return neededTokens;
     }
 
     /**
-     * Returns the url of the tool card's image.
+     * Returns the url of the tool card's image
      *
-     * @return the url of the tool card's image.
+     * @return the url of the tool card's image
      */
     public String getImageURL() {
         return imageURL;
@@ -212,9 +220,9 @@ public class ToolCard implements Serializable{
 
 
     /**
-     * Returns the placement rule relative to the tool card's effect.
+     * Returns the placement rule relative to the tool card's effect
      *
-     * @return the placement rule relative to the tool card's effect.
+     * @return the placement rule relative to the tool card's effect
      */
     public PlacementRule getPlacementRule() { return placementRule; }
 
@@ -223,7 +231,7 @@ public class ToolCard implements Serializable{
      * transition table.
      *
      * @param currentState the current state.
-     * @return the ID of the state that follows the current according to the card's transition table.
+     * @return the ID of the state that follows the current according to the card's transition table
      */
     public String nextStateID(ControllerState currentState){
 
@@ -231,9 +239,9 @@ public class ToolCard implements Serializable{
     }
 
     /**
-     * Returns true if the ToolCard's effect requires drafting, else false.
+     * Returns true if the ToolCard's effect requires drafting, else false
      *
-     * @return whether or not the ToolCard's effect requires drafting.
+     * @return whether or not the ToolCard's effect requires drafting
      */
     public boolean needsDrafting(){
         return controllerStateRules.containsKey(DraftControllerState.class.getSimpleName());
@@ -261,9 +269,9 @@ public class ToolCard implements Serializable{
     }
 
     /**
-     * Returns a hash code value for the ToolCard.
+     * Returns a hash code value for the ToolCard
      *
-     * @return a hash code value for the ToolCard.
+     * @return a hash code value for the ToolCard
      * @see Object#hashCode()
      */
     @Override
@@ -272,7 +280,8 @@ public class ToolCard implements Serializable{
     }
 
     /**
-     * Returns string representation of the ToolCard.
+     * Returns string representation of the ToolCard
+     *
      * @return string representation of the ToolCard
      */
     @Override
@@ -280,14 +289,28 @@ public class ToolCard implements Serializable{
         return PRE_TITLE + getTitle() + POST_TITLE + DIVIDER + PRE_NEEDED_TOKENS +getNeededTokens()+ POST_NEEDED_TOKENS + DIVIDER + PRE_USED_TOKENS + getUsedTokens()+ POST_USED_TOKENS + DIVIDER + PRE_DESCRIPTION + getDescription() + POST_DESCRIPTION;
     }
 
+    /**
+     * Set used tokens to the given quantity
+     *
+     * @param tokensUsed new amount of tokens used
+     */
     void setTokensUsed(int tokensUsed) {
         this.tokensUsed = tokensUsed;
     }
 
+    /**
+     * Set base needed tokens
+     * @param baseNeededTokens amount of base needed tokens
+     */
     void setBaseNeededTokens(int baseNeededTokens) {
         this.baseNeededTokens = baseNeededTokens;
     }
 
+    /**
+     * Returns a new ToolCard instance with same properties of this ToolCard
+     *
+     * @return new ToolCard instance with same properties of this ToolCard
+     */
     public ToolCard copy(){
         Properties p = new Properties();
         p.put("id",this.toolCardID);

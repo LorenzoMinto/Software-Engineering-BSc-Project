@@ -926,10 +926,18 @@ public abstract class View implements Observer {
     }
 
 
+    /**
+     * Handles the event "Slot Of Track Chosen Dice"
+     * @param m the message containing slot information
+     */
     void handleSlotOfTrackChosenDiceEvent(Message m) {
         //no action is required by the view under this implementation of the game
     }
 
+    /**
+     * Handles the event "Track Chosen Dice"
+     * @param m the message containing track information
+     */
     void handleTrackChosenDiceEvent(Message m) {
         //no action is required by the view under this implementation of the game
     }
@@ -1326,10 +1334,10 @@ public abstract class View implements Observer {
         }
     }
 
+
     /*  SETTERS
         The following methods are not commented because they are self explaining
      */
-
 
     /**
      * @param playerID the player id
@@ -1348,6 +1356,9 @@ public abstract class View implements Observer {
         notifyPermissionsChanged();
     }
 
+    /**
+     * Store current permissions in this.storedPermissions
+     */
     private void storePermissions(){
         if(this.storedPermissions == null){
             this.storedPermissions = (EnumSet<Move>) getPermissions();

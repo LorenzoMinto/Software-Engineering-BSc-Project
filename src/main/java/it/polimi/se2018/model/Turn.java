@@ -22,28 +22,34 @@ public class Turn extends Observable implements Serializable {
      * String passed as message of ValueOutOfBoundsException when it is asked to create a turn with a negative turnnumber
      */
     private static final String CREATE_TURN_WITH_NEGATIVE_TURN_NUMBER = "Can't create a turn with negative turnNumber.";
+
     /**
      * String passed as message of IllegalArgumentException when it is asked to create a turn giving as a parameter
      * a null player
      */
     private static final String NEW_TURN_WITH_NULL_PLAYER = "Can't create a turn giving null player.";
+
     /**
      * String passed as message of BadBehaviourRuntimeException when it is asked to get a track slot that does not exist
      */
     private static final String REQUESTED_TRACKSLOT_DOES_NOT_EXIST = "The requested trackslot does not exists.";
+
     /**
      * String passed as message of ValueOutOfBounds when it is asked to set the slot number of the slot
      * where it is drafted the current track drafted dice, but a negative value is passed.
      */
     private static final String NEGATIVE_VALUE_AS_SLOT_NUMBER = "Can't set the slot of chosen dice to a negative value.";
+
     /**
      * String passed as message of IllegalArgumentException or IllegalStateException when referenced dice is null
      */
     private static final String NULL_DICE = "Can't use or reference a null dice.";
+
     /**
      * String passed as message of IllegalArgumentException when it is asked to set a null toolCard as the current one
      */
     private static final String NULL_TOOL_CARD = "Can't use or reference a null toolCard.";
+
     /**
      * String passed as message of IllegalArgumentException when it is asked to check if a given
      * player is the current one, but it is passed as argument a null object.

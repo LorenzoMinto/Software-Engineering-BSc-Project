@@ -678,6 +678,10 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         }
     }
 
+    /**
+     * Log message on console
+     * @param text message to log
+     */
     private void logInfo(String text){
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info(text); }
     }
