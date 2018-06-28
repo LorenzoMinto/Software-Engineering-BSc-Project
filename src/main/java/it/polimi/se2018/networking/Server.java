@@ -310,21 +310,32 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
         Message returnMessage;
-        if(type==ControllerBoundMessageType.PING){
-            return;
-        } else if(type==ControllerBoundMessageType.JOIN_WR || type==ControllerBoundMessageType.LEAVE_WR){
-            returnMessage = handleWaitingRoomMessage(message,sender);
+
+        if(message.isMove()){
+
+            message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
+
+            if(message.isMove(Move.JOIN) || message.isMove(Move.LEAVE)){
+                returnMessage = handleWaitingRoomMessage(message,sender);
+
+            } else {
+                returnMessage = controller.handleMoveMessage(message);
+            }
 
         } else {
-            message.setPlayerID( gatewayToPlayerIDMap.get(sender) );
-            returnMessage = controller.handleMoveMessage(message);
+
+            if(type==ControllerBoundMessageType.PING) {
+                returnMessage = null;
+
+            } else {
+                returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE);
+            }
+
         }
 
-        //Send answer message back to the sender
         if(returnMessage!=null){
-
             try{
-
+                //Send answer message back to the sender
                 sender.receiveMessage(returnMessage);
 
                 //Notify all players
@@ -340,6 +351,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             }
         }
 
+        //Log that message was handled
         if (LOGGER.isLoggable(Level.INFO)) { LOGGER.info(RECEIVED_MESSAGE + message + ". " + ANSWERED_WITH +returnMessage + "."); }
     }
 
@@ -361,12 +373,10 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }
 
-        ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
-
-        if(type==ControllerBoundMessageType.JOIN_WR){
+        if(message.isMove(Move.JOIN)){
             return addInWaitingRoom(nickname,sender);
 
-        } else if(type==ControllerBoundMessageType.LEAVE_WR){
+        } else if(message.isMove(Move.LEAVE)){
             return removeFromWaitingRoom(nickname,sender);
 
         } else {
@@ -419,7 +429,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
                 cancelTimerForLaunchingGame();
             }
 
-            return new Message(ViewBoundMessageType.REMOVED_FROM_WR,null,nickname,EnumSet.of(Move.JOIN_GAME));
+            return new Message(ViewBoundMessageType.REMOVED_FROM_WR,null,nickname,EnumSet.of(Move.JOIN));
         } else {
             return new Message(ViewBoundMessageType.BAD_FORMATTED);
         }

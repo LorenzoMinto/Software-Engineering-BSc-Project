@@ -80,7 +80,7 @@ public class MessageTest {
         Map<String, Object> params = new HashMap<>();
         params.put("id", playerID);
 
-        message = new Message(ControllerBoundMessageType.USE_TOOLCARD, params);
+        message = new Message(ControllerBoundMessageType.PING, params);
         try {
             assertEquals(playerID, message.getParam("id"));
         } catch (NoSuchParamInMessageException e) {
@@ -112,7 +112,7 @@ public class MessageTest {
     @Test
     public void testFastMessage(){
         String messageString = "HELLO!";
-        message = new Message(ControllerBoundMessageType.USE_TOOLCARD, messageString);
+        message = new Message(ControllerBoundMessageType.PING, messageString);
         try {
             assertEquals(messageString, message.getParam("message") );
         } catch (NoSuchParamInMessageException e) {
@@ -126,7 +126,7 @@ public class MessageTest {
      */
     @Test
     public void testFastMap(){
-        message = new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("id",playerID));
+        message = new Message(ControllerBoundMessageType.PING, Message.fastMap("id",playerID));
         try {
             assertEquals(playerID, message.getParam("id") );
         } catch (NoSuchParamInMessageException e) {

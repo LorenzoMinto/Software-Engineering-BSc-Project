@@ -180,6 +180,33 @@ public final class Message implements Serializable{
     }
 
     /**
+     * Returns if this message is a "move" message or not
+     * @return if this message is a "move" message or not
+     */
+    public boolean isMove(){
+        return this.type==ControllerBoundMessageType.MOVE;
+    }
+
+    /**
+     * Returns if this message is a "move" message of the given move or not
+     * @return if this message is a "move" message or the given move or not
+     */
+    public boolean isMove(Move move){
+        if(!isMove()){
+            return false;
+        }
+
+        Object o;
+        try {
+            o = getParam("move");
+        } catch (NoSuchParamInMessageException e) {
+            return false;
+        }
+        Move mMove = (Move) o;
+        return move.equals(mMove);
+    }
+
+    /**
      * Returns the string representation of the message.
      * @return the string representation of the message
      */

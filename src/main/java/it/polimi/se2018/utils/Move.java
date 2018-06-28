@@ -4,6 +4,7 @@ package it.polimi.se2018.utils;
  * Enum for each kind of move that can be performed during game play
  */
 public enum Move {
+    CHOOSE_WINDOW_PATTERN ("Choose window pattern"),
     END_TURN ("End turn"),
     DRAFT_DICE_FROM_DRAFTPOOL ("Draft dice from draft pool"),
     PLACE_DICE_ON_WINDOWPATTERN ("Place dice on windowPattern"),
@@ -15,7 +16,7 @@ public enum Move {
     RETURN_DICE_TO_DRAFTPOOL ("Return dice to draft pool"),
     MOVE_DICE ("Move dice"),
     END_EFFECT ("End toolCard effect"),
-    JOIN_GAME ("Join game"),
+    JOIN("Join waiting room"),
     BACK_GAME ("Back to game"),
     LEAVE ("Leave waiting room");
 
