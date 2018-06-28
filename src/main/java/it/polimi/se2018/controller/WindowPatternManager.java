@@ -54,7 +54,6 @@ public class WindowPatternManager {
 
             List<String> fileNames = fileFinder.getFilesNamesInDirectory(PATH);
             this.availablePatternsIDs = fileNames.stream().map(FileFinder::getXMLFileName).collect(Collectors.toList());
-            System.out.println(availablePatternsIDs);
         } catch (Exception e){
             throw new NoPatternsFoundInFileSystemException();
         }
@@ -161,7 +160,6 @@ public class WindowPatternManager {
             return new WindowPattern(patternID,title,imageURL,difficulty,pattern);
 
         } catch (Exception e) {
-            e.printStackTrace();
             //Bad formatting of xml is caught and method returns false
             throw new BadFormattedPatternFileException();
         }

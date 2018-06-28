@@ -8,7 +8,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,11 @@ public final class FileFinder {
         return filenames;
     }
 
-    //TODO: javadoc
+    /**
+     * Given a path returns the relative input stream
+     * @param path given path to access
+     * @return given path relative input stream
+     */
     public InputStream getResourceAsStream(String path){
         return getClass().getClassLoader().getResourceAsStream(path);
     }
@@ -67,14 +70,16 @@ public final class FileFinder {
      * @throws SAXException if parsing of the document fails
      */
     public Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
-        System.out.println(path);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        System.out.println(getClass().getClassLoader().getResource(path));
         return documentBuilder.parse(getClass().getClassLoader().getResource(path).toURI().toString());
     }
 
-    //TODO: javadoc
+    /**
+     * Returns the given filename string without (if it has it) the end ".xml"
+     * @param filename the filename to convert
+     * @return the given filename string without (if it has it) the end ".xml"
+     */
     public static String getXMLFileName(String filename){
 
         if(filename.endsWith(".xml")){

@@ -185,6 +185,8 @@ public class Controller extends Observable {
         int numberOfToolCards = Integer.parseInt( properties.getProperty("numberOfToolCards") );
         int numberOfPublicObjectiveCards =  Integer.parseInt( properties.getProperty("numberOfPublicObjectiveCards") );
 
+        String persistencyPath = properties.getProperty("persistencyPath");
+
         //Create Managers
         this.stateManager = new ControllerStateManager(this);
 
@@ -211,7 +213,7 @@ public class Controller extends Observable {
 
         this.game.setCards(toolCards,publicObjectiveCards);
 
-        this.persistency = Persistency.getInstance();
+        this.persistency = new Persistency(persistencyPath);
         this.persistency.loadRankings();
     }
 

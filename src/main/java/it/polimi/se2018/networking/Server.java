@@ -325,12 +325,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
         } else {
 
-            if(type==ControllerBoundMessageType.PING) {
-                returnMessage = null;
-
-            } else {
-                returnMessage = new Message(ViewBoundMessageType.ERROR_MESSAGE);
-            }
+            returnMessage = (type==ControllerBoundMessageType.PING) ? null : new Message(ViewBoundMessageType.ERROR_MESSAGE);
 
         }
 

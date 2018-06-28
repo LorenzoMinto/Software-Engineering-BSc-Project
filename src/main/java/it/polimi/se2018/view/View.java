@@ -1220,6 +1220,7 @@ public abstract class View implements Observer {
                 break;
             case ABORTED:
                 handleAbortedEvent();
+                break;
             default:
                 //No other messages are evaluated in this state
                 break;

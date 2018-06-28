@@ -196,7 +196,6 @@ public class ToolCardManager {
             return new ToolCard(params,controllerStateRules,placementRule, possibleMovesCountSet);
 
         } catch (Exception e){
-            e.printStackTrace();
             throw new BadFormattedToolCardFileException();
         }
     }

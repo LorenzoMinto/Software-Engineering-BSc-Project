@@ -1,7 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.FileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,34 +21,20 @@ import java.util.List;
 public class Persistency {
 
     /**
-     * Instance of the class in order to achieve the Singleton Pattern.
-     */
-    private static Persistency instance = null;
-
-    /**
      * The file system path to find GlobalRankings.xml
      */
-    private static final String PATH = "C:\\Users\\Federico Haag\\IdeaProjects\\ing-sw-2018-gargano-haag-minto\\globalranking.xml";
+    private final String path;
 
     /**
      * List of Ranking Records representing the Global Rankings
      */
     private List<RankingRecord> globalRankings;
 
-    private FileFinder fileFinder = new FileFinder();
-
-    private Persistency() { }
-
     /**
-     * Gets the instance of the class (according to Singleton Pattern).
-     *
-     * @return the instance of the class
+     * Constructor
      */
-    public static Persistency getInstance(){
-        if (instance == null){
-            instance = new Persistency();
-        }
-        return instance;
+    Persistency(String path) {
+        this.path = path;
     }
 
     /**
@@ -59,7 +44,7 @@ public class Persistency {
         List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
         try {
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(PATH);
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path);
 
             NodeList rankings = document.getElementsByTagName("ranking");
 
@@ -186,7 +171,7 @@ public class Persistency {
 
         StreamResult result = null;
         try {
-            result = new StreamResult(new BufferedWriter(new FileWriter(PATH)));
+            result = new StreamResult(new BufferedWriter(new FileWriter(path)));
         } catch (IOException e) {
             throw new BadBehaviourRuntimeException();
         }
@@ -195,7 +180,6 @@ public class Persistency {
                 transformer.transform(source, result);
             }
         } catch (TransformerException e) {
-            e.printStackTrace();
             throw new BadBehaviourRuntimeException();
         }
     }

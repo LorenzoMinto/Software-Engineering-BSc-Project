@@ -25,7 +25,6 @@ public class ObjectiveCardFactory {
      */
     private static ObjectiveCardFactory instance = null;
 
-    //TODO: spostare queste immagini in assets
     /**
      * Path for images of private objective cards
      */

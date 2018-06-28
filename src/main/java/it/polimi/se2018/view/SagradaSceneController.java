@@ -1250,7 +1250,7 @@ public class SagradaSceneController extends View implements Initializable {
         } else {
 
             if (getPermissions().isEmpty()) {
-                //TODO: add label here to remind user is not his turn
+                //TODO: add label here to remind user is not his turn @lorenzo
                 Platform.runLater(() -> dynamicChoicesPane.getChildren().clear());
             } else {
                 Set<Move> permissions = getPermissions();
