@@ -274,10 +274,16 @@ public class Controller extends Observable {
         String sendingPlayerID = message.getPlayerID(); //In this case, playerID is the sending player ID
 
         if (game.isCurrentPlayer(sendingPlayerID)) {
-            return handleMoveForCurrentPlayer(message);
+
+            Message returnMessage = handleMoveForCurrentPlayer(message);
+
+            //Update permissions
+            if (returnMessage.getType() == ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE) {
+                returnMessage.setPermissions(controllerState.getStatePermissions());
+            }
+            return returnMessage;
 
         } else {
-
             if (message.isMove(Move.BACK_GAME)) {
                 //this cause that the next turn of this player will not be skipped and player will be notified
                 inactivePlayers.remove(sendingPlayerID);
