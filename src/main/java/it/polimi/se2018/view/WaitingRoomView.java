@@ -18,6 +18,8 @@ import java.util.List;
 
 /**
  * Custom Pane that displays the Server's waiting room and that enables the player to interact with it.
+ *
+ * @author Lorenzo Minto
  */
 public class WaitingRoomView extends Pane {
 
@@ -46,13 +48,13 @@ public class WaitingRoomView extends Pane {
     /**
      * Observable list of players waiting in the Server's waiting room
      */
-    public static final ObservableList waitingPlayers = FXCollections.observableArrayList();
+    private static final ObservableList waitingPlayers = FXCollections.observableArrayList();
 
     /**
      * Class constructor
      * @param username the player's username
      */
-    public WaitingRoomView(String username) {
+    WaitingRoomView(String username) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WaitingRoomView.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
@@ -104,17 +106,13 @@ public class WaitingRoomView extends Pane {
      * @param p the interaction permission
      */
     public void addPermissions(Button p) {
-        Platform.runLater(() -> {
-            dynamicChoicesBox.getChildren().add(p);
-        });
+        Platform.runLater(() -> dynamicChoicesBox.getChildren().add(p));
     }
 
     /**
      * Empties the possible interactions in the dynamicChoicesBox
      */
     public void resetPermissions() {
-        Platform.runLater(() -> {
-            dynamicChoicesBox.getChildren().clear();
-        });
+        Platform.runLater(() -> dynamicChoicesBox.getChildren().clear());
     }
 }
