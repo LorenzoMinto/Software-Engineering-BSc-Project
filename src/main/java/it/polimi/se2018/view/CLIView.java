@@ -488,6 +488,9 @@ public class CLIView extends View{
         waitForMove();
     }
 
+    /**
+     * Prints toolcards
+     */
     private void printToolCards(){
         int index = 1;
         for(ToolCard toolCard : drawnToolCards){
@@ -734,6 +737,9 @@ public class CLIView extends View{
 
     }
 
+    /**
+     * Method created to decrease cognitive complexity of handleMoveDiceMove(). Step 1/4
+     */
     private void askForRowWP(){
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
         waitForConsoleInput(rowString -> {
@@ -750,6 +756,9 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Method created to decrease cognitive complexity of handleMoveDiceMove(). Step 2/4
+     */
     private void askForColWP(int row){
         print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_ORIGIN);
         waitForConsoleInput(colString -> {
@@ -773,6 +782,9 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Method created to decrease cognitive complexity of handleMoveDiceMove(). Step 3/4
+     */
     private void askForRowDestWP(int row, int col){
         print(INSERT_THE_ROW_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
         waitForConsoleInput(rowDestString -> {
@@ -789,6 +801,9 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Method created to decrease cognitive complexity of handleMoveDiceMove(). Step 4/4
+     */
     private void askForColDestWP(int row, int col, int rowDest){
         print(INSERT_THE_COL_NUMBER_OF_THE_WINDOW_PATTERN_DESTINATION);
         waitForConsoleInput(colDestString -> {
@@ -844,6 +859,9 @@ public class CLIView extends View{
         });
     }
 
+    /**
+     * Print toolcards and then wait for new move
+     */
     private void handleShowToolCards(){
         printToolCards();
         waitForMove();

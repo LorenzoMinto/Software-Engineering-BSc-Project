@@ -18,14 +18,17 @@ public class Track extends Observable implements Serializable{
      * Serial Version UID
      */
     private static final long serialVersionUID = 5006029947494003833L;
+
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
     private static final String NULL_DICE = "Can't use or reference a null dice.";
+
     /**
      * String passed as message of ValueOutOfBoundsException when referenced to a trackslot that does not exists.
      */
     private static final String SELECTED_TRACK_SLOT_DOES_NOT_EXIST = "TrackSlot selected doesn't exist.";
+
 
     /**
      * List of {@link TrackSlot}, on which the leftover dices of the draft pool of every round are kept.
@@ -53,7 +56,6 @@ public class Track extends Observable implements Serializable{
         TrackSlot slot = new TrackSlot(dices);
         slots.add(slot);
     }
-
 
     /**
      * Return a list of dices kept in the TrackSlot with given slot number.
@@ -111,8 +113,6 @@ public class Track extends Observable implements Serializable{
     public int size(){
         return slots.size();
     }
-
-
 
     /** Creates a copy of the track
      * @return a copy of the track

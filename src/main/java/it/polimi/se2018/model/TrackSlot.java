@@ -17,20 +17,22 @@ public class TrackSlot implements Serializable {
      * Serial Version UID
      */
     private static final long serialVersionUID = -5716313610769359452L;
+
     /**
      * String passed as message of IllegalArgumentException when referenced dice is null
      */
     private static final String NULL_DICE = "Can't use or reference a null dice.";
+
     /**
      * String passed as message of IllegalArgumentException when it asked to remove a dice from a trackslot
      * but the given dice reference is not contained in this trackslot.
      */
     private static final String NO_DICE_IN_TRACKSLOT = "The given dice is not present in the track slot.";
+
     /**
      * List of dices kept in the TrackSlot
      */
     private List<Dice> dices;
-
 
     /**
      * Class constructor.
@@ -38,7 +40,6 @@ public class TrackSlot implements Serializable {
      * @param dices the list of dices with which to initialize the TrackSlot.
      */
     public TrackSlot(List<Dice> dices) { this.dices = dices; }
-
 
     /**
      * Adds a given dice to the TrackSlot's list of dices.
@@ -73,8 +74,10 @@ public class TrackSlot implements Serializable {
     public List<Dice> getDices() {
         return dices;
     }
+
     /**
      * Returns a new TrackSlot instance with the same properties and data of the current one.
+     *
      * @return a new TrackSlot instance with the same properties and data of the current one
      */
     public TrackSlot copy(){
@@ -83,6 +86,7 @@ public class TrackSlot implements Serializable {
 
     /**
      * Returns the string representation of the Track Slot.
+     *
      * @return the string representation of the Track Slot
      */
     @Override

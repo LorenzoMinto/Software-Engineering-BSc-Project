@@ -168,7 +168,6 @@ public class RowsColumnsPublicObjectiveCard extends PublicObjectiveCard {
      * @param columns the number of columns of the pattern
      * @return the transposed pattern
      */
-
     private Cell[][] transpose(Cell[][] pattern, int rows, int columns) {
 
         Cell[][] transposedPattern = new Cell[columns][rows];

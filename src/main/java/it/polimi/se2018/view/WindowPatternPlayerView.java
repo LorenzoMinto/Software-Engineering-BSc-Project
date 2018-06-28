@@ -207,7 +207,6 @@ public class WindowPatternPlayerView extends Pane {
         this.favourTokensLabel.setText(String.valueOf(ft));
     }
 
-
     /**
      * Sets this view as the user view by showing the user icon on the bottom right
      */

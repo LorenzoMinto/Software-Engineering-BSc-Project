@@ -25,10 +25,6 @@ import java.net.URL;
 
 public class GUIView extends Application {
 
-    //LOGIN SCENE
-
-    //SAGRADA SCENE
-
     /**
      * Reference to main Sagrada Scene's controller
      */
@@ -42,7 +38,6 @@ public class GUIView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {

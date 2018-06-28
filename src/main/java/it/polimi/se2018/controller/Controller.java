@@ -145,11 +145,6 @@ public class Controller extends Observable {
     int movesCounter = 0;
 
     /**
-     *  Flag set to true if current player can draft again.
-     */
-    boolean extraDrafting = false;
-
-    /**
      * Set of inactive players
      */
     private HashSet<String> inactivePlayers = new HashSet<>();
