@@ -1,14 +1,1 @@
-<globalRanking>
-    <ranking id="Johnnyfer">
-        <gamesWon>5</gamesWon>
-        <gamesLost>7</gamesLost>
-        <timePlayed>345649</timePlayed>
-        <cumulativePoints>134000</cumulativePoints>
-    </ranking>
-    <ranking id="Rubens">
-        <gamesWon>8</gamesWon>
-        <gamesLost>12</gamesLost>
-        <timePlayed>29001</timePlayed>
-        <cumulativePoints>1500000</cumulativePoints>
-    </ranking>
-</globalRanking>
+<?xml version="1.0" encoding="UTF-8"?><GlobalRanking><ranking id="Riggs"><gamesWon>1</gamesWon><gamesLost>0</gamesLost><cumulativePoints>-15</cumulativePoints><timePlayed>0</timePlayed></ranking><ranking id="Heinze"><gamesWon>0</gamesWon><gamesLost>1</gamesLost><cumulativePoints>-14</cumulativePoints><timePlayed>0</timePlayed></ranking><ranking id="Rubens"><gamesWon>9</gamesWon><gamesLost>12</gamesLost><cumulativePoints>186</cumulativePoints><timePlayed>33</timePlayed></ranking><ranking id="Johnnyfer"><gamesWon>5</gamesWon><gamesLost>8</gamesLost><cumulativePoints>136</cumulativePoints><timePlayed>42</timePlayed></ranking></GlobalRanking>
