@@ -219,7 +219,11 @@ public abstract class View implements Observer {
      * Handles the move "Return dice to draft pool move"
      */
     void handleReturnDiceToDraftpoolMove(){
-        //TODO: implement
+        try {
+            notifyGame(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
+        } catch (NetworkingException e) {
+            showInformation(e.getMessage());
+        }
     }
 
     /**
@@ -314,13 +318,6 @@ public abstract class View implements Observer {
      */
     void handleChangeDraftedDiceValueMove(){
         //no behaviour in common between CLI and GUI
-    }
-
-    /**
-     * Handles the move "Return drafted dice to draft pool"
-     */
-    void handleReturnDiceFromTrackMove() {
-
     }
 
     /**
@@ -731,7 +728,7 @@ public abstract class View implements Observer {
             return;
         }
         @SuppressWarnings("unchecked")
-        String winnerID = (String) o;
+        String mwinnerID = (String) o;
 
         try {
             o = m.getParam(PARAM_RANKINGS);
@@ -753,7 +750,7 @@ public abstract class View implements Observer {
         this.rankings = receivedRankings;
         this.globalRankings = receivedGlobalRankings;
 
-        this.winnerID = winnerID;
+        this.winnerID = mwinnerID;
     }
 
     /**
@@ -915,16 +912,14 @@ public abstract class View implements Observer {
         showInformation(p+ USE_TOOL_CARD +toolCard.getTitle());
     }
 
-    /**
-     * @param m
-     */
-    //TODO: completa javadoc
+
+    //TODO: questi eventi sono potenzialmente inutili
     void handleSlotOfTrackChosenDiceEvent(Message m) {
-        //TODO: implement here
+        //do nothing
     }
 
     void handleTrackChosenDiceEvent(Message m) {
-        //TODO: verificare che questo metodo serva a qualcosa
+        //do nothing
     }
 
     /**
@@ -1284,7 +1279,7 @@ public abstract class View implements Observer {
      * Returns the game's winner's id
      * @return the game's winner's id
      */
-    public String getWinnerID() {
+    String getWinnerID() {
         return winnerID;
     }
 
@@ -1292,7 +1287,7 @@ public abstract class View implements Observer {
      * Returns the view's player's id
      * @return the view's player's id
      */
-    public Integer getPlayerFavourTokens() {
+    Integer getPlayerFavourTokens() {
         return playersFavourTokens.get(players.indexOf(playerID));
     }
 
@@ -1344,14 +1339,14 @@ public abstract class View implements Observer {
     /**
      * @see View#drawnToolCards
      */
-    public void setDrawnToolCards(List<ToolCard> drawnToolCards) {
+    private void setDrawnToolCards(List<ToolCard> drawnToolCards) {
         this.drawnToolCards = drawnToolCards;
     }
 
     /**
      * @see View#drawnPublicObjectiveCards
      */
-    public void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
+    private void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
         this.drawnPublicObjectiveCards = drawnPublicObjectiveCards;
     }
 
@@ -1372,21 +1367,21 @@ public abstract class View implements Observer {
     /**
      * @see View#draftPoolDices
      */
-    public void setDraftPoolDices(List<Dice> draftPoolDices) {
+    private void setDraftPoolDices(List<Dice> draftPoolDices) {
         this.draftPoolDices = draftPoolDices;
     }
 
     /**
      * @see View#roundNumber
      */
-    public void setRoundNumber(int roundNumber) {
+    private void setRoundNumber(int roundNumber) {
         this.roundNumber = roundNumber;
     }
 
     /**
      * @see View#playingPlayerID
      */
-    public void setPlayingPlayerID(String playingPlayerID) {
+    private void setPlayingPlayerID(String playingPlayerID) {
         this.playingPlayerID = playingPlayerID;
     }
 
@@ -1407,7 +1402,7 @@ public abstract class View implements Observer {
     /**
      * @see View#playersFavourTokens
      */
-    public void setPlayersFavourTokens(List<Integer> playersFavourTokens) {
+    private void setPlayersFavourTokens(List<Integer> playersFavourTokens) {
         this.playersFavourTokens = playersFavourTokens;
     }
 
