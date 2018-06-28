@@ -641,9 +641,6 @@ public class SagradaSceneController extends View implements Initializable {
         enable(toolCardsVisibleComponents);
 
         Platform.runLater(() -> {
-
-//            blackAnchorPane.setOpacity(0.93);
-//            disableBlackHBox();
             double toolCardsProportions = 0.712;
 
             //Retrieving ToolCards images
