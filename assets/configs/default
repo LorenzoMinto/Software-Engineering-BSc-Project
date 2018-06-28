@@ -6,5 +6,5 @@ numberOfToolCards=3
 numberOfPublicObjectiveCards=3
 timeoutLaunchingGame=2
 timeoutChoosingPatterns=30
-timeoutPlayerMove=30
+timeoutPlayerMove=300
 amountOfCouplesOfPatternsPerPlayer=2

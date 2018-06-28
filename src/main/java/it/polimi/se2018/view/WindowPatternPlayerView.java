@@ -118,40 +118,60 @@ public class WindowPatternPlayerView extends Pane {
                 wpGrid.add(dice, j, i);
                 Image cellBack = new Image((new File("src/main/resources/images/Cells/"+pattern[i][j].getCellConstraintsToString()+".jpg")).toURI().toString());
                 dice.setBackground(new Background(new BackgroundFill(new ImagePattern(cellBack), CornerRadii.EMPTY, Insets.EMPTY)));
-                dice.setOnMouseClicked(e -> {
-                    int x = 0;
-                    int y = 0;
-                    for (int i1 = 0; i1 <wp.getNumberOfRows(); i1++) {
-                        for (int j1 = 0; j1 <wp.getNumberOfColumns(); j1++) {
-                            if (dice == gridDiceButtons[i1][j1]) {
-                                x = i1;
-                                y = j1;
-                            }
-                        }
-                    }
-                    if (canMoveSelect) {
-                        //this handles the double selection
-                        if (xSelected != -1 && ySelected != -1 && xDestSelected != -1 && yDestSelected != -1) {
-                            xSelected = x;
-                            ySelected = y;
-                            xDestSelected = -1;
-                            yDestSelected = -1;
-                        } else if (xSelected != -1 && ySelected != -1) {
-                            xDestSelected = x;
-                            yDestSelected = y;
-                        } else {
-                            xSelected = x;
-                            ySelected = y;
-                        }
-                    } else {
-                        xSelected = x;
-                        ySelected = y;
-                    }
-                    visualizeSelection();
-                });
+                dice.setOnMouseClicked(e -> mouseEventHandler(wp, dice));
 
                 gridDiceButtons[i][j] = dice;
             }
+        }
+    }
+
+    /**
+     * Event Handler for mouse events on the window pattern grid
+     *
+     * @param wp the window pattern
+     * @param dice the grid cell pressed
+     */
+    private void mouseEventHandler(WindowPattern wp, Pane dice) {
+        int x = 0;
+        int y = 0;
+        for (int i1 = 0; i1 <wp.getNumberOfRows(); i1++) {
+            for (int j1 = 0; j1 <wp.getNumberOfColumns(); j1++) {
+                if (dice == gridDiceButtons[i1][j1]) {
+                    x = i1;
+                    y = j1;
+                }
+            }
+        }
+
+        handleCanMoveSelection(x, y);
+        visualizeSelection();
+    }
+
+    /**
+     * Sets the x/ySelected properties and x/yDestSelected properties making sure to comply with
+     * the canMoveSelect flag
+     *
+     * @param x
+     * @param y
+     */
+    private void handleCanMoveSelection(int x, int y) {
+        if (canMoveSelect) {
+            //this handles the double selection
+            if (xSelected != -1 && ySelected != -1 && xDestSelected != -1 && yDestSelected != -1) {
+                xSelected = x;
+                ySelected = y;
+                xDestSelected = -1;
+                yDestSelected = -1;
+            } else if (xSelected != -1 && ySelected != -1) {
+                xDestSelected = x;
+                yDestSelected = y;
+            } else {
+                xSelected = x;
+                ySelected = y;
+            }
+        } else {
+            xSelected = x;
+            ySelected = y;
         }
     }
 

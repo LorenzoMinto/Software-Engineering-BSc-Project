@@ -54,14 +54,22 @@ public class AdjacentDicePlacementRuleDecorator extends PlacementRuleDecorator {
         int numberOfRows = windowPattern.getNumberOfRows();
         int numberOfColumns = windowPattern.getNumberOfColumns();
 
-        return (row != 0 && pattern[row-1][col].hasDice()) ||
-                (row!=0 && col!=0 && pattern[row-1][col-1].hasDice()) ||
-                (col != numberOfColumns-1 && pattern[row][col+1].hasDice()) ||
-                (row!=0 && col!=numberOfColumns-1 && pattern[row-1][col+1].hasDice()) ||
-                (row != numberOfRows-1 && pattern[row+1][col].hasDice()) ||
-                (row!=numberOfRows-1 && col!=0 && pattern[row+1][col-1].hasDice()) ||
-                (col != 0 && pattern[row][col-1].hasDice()) ||
-                (row!=numberOfRows-1 && col!=numberOfColumns-1 && pattern[row+1][col+1].hasDice());
+        return checkAdjacentCells(pattern, numberOfRows, numberOfColumns, row, col) ||
+                checkDiagonallyAdjacentCells(pattern, numberOfRows, numberOfColumns, row, col);
+    }
 
+    private boolean checkAdjacentCells(Cell[][] pattern, int numberOfRows, int numberOfColumns, int row, int col) {
+        return (row != 0 && pattern[row-1][col].hasDice()) ||
+                (col != numberOfColumns-1 && pattern[row][col+1].hasDice()) ||
+                (row != numberOfRows-1 && pattern[row+1][col].hasDice()) ||
+                (col != 0 && pattern[row][col-1].hasDice());
+
+    }
+
+    private boolean checkDiagonallyAdjacentCells(Cell[][] pattern, int numberOfRows, int numberOfColumns, int row, int col) {
+        return (row!=0 && col!=0 && pattern[row-1][col-1].hasDice()) ||
+                (row!=0 && col!=numberOfColumns-1 && pattern[row-1][col+1].hasDice()) ||
+                (row!=numberOfRows-1 && col!=0 && pattern[row+1][col-1].hasDice()) ||
+                (row!=numberOfRows-1 && col!=numberOfColumns-1 && pattern[row+1][col+1].hasDice());
     }
 }

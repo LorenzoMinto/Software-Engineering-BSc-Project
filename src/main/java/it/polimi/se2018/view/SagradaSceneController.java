@@ -692,19 +692,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards1ButtonPressed(){
         cardsCarouselCurrentIndex = 0;
 
-        try {
-            HashMap<String,Object> params = new HashMap<>();
-            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
-            params.put(PARAM_TOOLCARD,drawnToolCards.get(0));
-            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
-        } catch (NetworkingException e) {
-            printOnConsole(e.getMessage());
-        }
-        Platform.runLater(() -> {
-            updateCardCarousel();
-            disable(toolCardsVisibleComponents);
-            disableBlackAnchorPane();
-        });
+        onToolCardButtonPressed(0);
     }
 
 
@@ -715,19 +703,7 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards2ButtonPressed(){
         cardsCarouselCurrentIndex = 1;
 
-        try {
-            HashMap<String,Object> params = new HashMap<>();
-            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
-            params.put(PARAM_TOOLCARD,drawnToolCards.get(1));
-            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
-        } catch (NetworkingException e) {
-            printOnConsole(e.getMessage());
-        }
-        Platform.runLater(() -> {
-            updateCardCarousel();
-            disable(toolCardsVisibleComponents);
-            disableBlackAnchorPane();
-        });
+        onToolCardButtonPressed(1);
     }
 
     /**
@@ -736,10 +712,14 @@ public class SagradaSceneController extends View implements Initializable {
     public void onToolCards3ButtonPressed(){
         cardsCarouselCurrentIndex = 2;
 
+        onToolCardButtonPressed(2);
+    }
+
+    private void onToolCardButtonPressed(int i) {
         try {
-            HashMap<String,Object> params = new HashMap<>();
-            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
-            params.put(PARAM_TOOLCARD,drawnToolCards.get(2));
+            HashMap<String, Object> params = new HashMap<>();
+            params.put(PARAM_MOVE, Move.USE_TOOLCARD);
+            params.put(PARAM_TOOLCARD, drawnToolCards.get(i));
             notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
         } catch (NetworkingException e) {
             printOnConsole(e.getMessage());
@@ -1044,18 +1024,7 @@ public class SagradaSceneController extends View implements Initializable {
                         trackSlotDice.setPrefHeight(50);
                         trackSlotDice.setPrefWidth(50);
 
-                        trackSlotDice.setOnAction(event -> {
-                            trackSelectedDiceButton = trackSlotDice;
-                            selectedTrackSlotNumber = trackHBoxes.indexOf(hBox);
-                            for (Button d: trackDiceButtons) {
-                                if (d == trackSelectedDiceButton) {
-                                    d.setBorder(getBorderWithColor(Color.WHITE));
-                                } else {
-                                    d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
-                                            BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-                                }
-                            }
-                        });
+                        trackSlotDice.setOnAction(event -> handleTrackSlotDicePressedEvent(hBox, trackSlotDice));
 
                         hBox.getChildren().add(trackSlotDice);
                     }
@@ -1064,6 +1033,25 @@ public class SagradaSceneController extends View implements Initializable {
                 }
             }
         });
+    }
+
+    /**
+     * Event handler for track slots dice pressed
+     *
+     * @param hBox the track slot hbox
+     * @param trackSlotDice the track slot dice pressed
+     */
+    private void handleTrackSlotDicePressedEvent(HBox hBox, Button trackSlotDice) {
+        trackSelectedDiceButton = trackSlotDice;
+        selectedTrackSlotNumber = trackHBoxes.indexOf(hBox);
+        for (Button d: trackDiceButtons) {
+            if (d == trackSelectedDiceButton) {
+                d.setBorder(getBorderWithColor(Color.WHITE));
+            } else {
+                d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                        BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            }
+        }
     }
 
     /**
@@ -1267,6 +1255,7 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void notifyPermissionsChanged() {
+
         if (isOnWaitingList) {
             waitingRoomView.resetPermissions();
             for (Move m: getPermissions()) {
@@ -1293,17 +1282,22 @@ public class SagradaSceneController extends View implements Initializable {
                     Platform.runLater(() -> dynamicChoicesPane.getChildren().add(button));
                 }
             }
-            Platform.runLater(() -> {
-                if (userWindowPatternView != null) {
-                    userWindowPatternView.enableMoveSelection(false);
-                }
-                if (getPermissions().contains(Move.MOVE_DICE)) {
-                    userWindowPatternView.enableMoveSelection(true);
-                } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
-                    diceValuePicker.setDisable(false);
-                }
-            });
+            Platform.runLater(this::enableAuxiliaryComponents);
 
+        }
+    }
+
+    /**
+     * Enables the auxiliary components to the current presented permissions
+     */
+    private void enableAuxiliaryComponents() {
+        if (userWindowPatternView != null) {
+            userWindowPatternView.enableMoveSelection(false);
+        }
+        if (getPermissions().contains(Move.MOVE_DICE)) {
+            userWindowPatternView.enableMoveSelection(true);
+        } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
+            diceValuePicker.setDisable(false);
         }
     }
 

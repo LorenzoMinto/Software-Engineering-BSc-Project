@@ -10,6 +10,8 @@ import it.polimi.se2018.utils.Message;
 
 import java.util.*;
 
+import static it.polimi.se2018.utils.ViewBoundMessageType.PING;
+
 /**
  * This is the View class of the MVC paradigm.
  * It's an abstract class because a lot of actions depends strongly on implementation.
@@ -924,8 +926,9 @@ public abstract class View implements Observer {
             m.getParam("noDrafted");
             setDraftedDice(null);
             showInformation(THERE_IS_NO_MORE_DRAFTED_DICE);
-        } catch (NoSuchParamInMessageException e) {
             return;
+        } catch (NoSuchParamInMessageException e) {
+            //do nothing
         }
         Object o;
         try {
@@ -999,6 +1002,7 @@ public abstract class View implements Observer {
      * @param m the message to handle
      */
     private void handleReceivedMessage(Message m){
+
         switch (state) {
             case INACTIVE:
                 handleReceivedMessageOnInactiveState(m);
@@ -1022,7 +1026,7 @@ public abstract class View implements Observer {
         EnumSet<ViewBoundMessageType> ignoreList = EnumSet.of(
                 ViewBoundMessageType.CONNECTION_LOST,
                 ViewBoundMessageType.CONNECTION_RESTORED,
-                ViewBoundMessageType.PING
+                PING
         );
         if(!ignoreList.contains(message.getType())){
             this.handlingMessage = message;
