@@ -82,6 +82,8 @@ public abstract class View implements Observer {
     private static final String PARAM_TOOL_CARDS = "toolCards";
     private static final String PARAM_DRAFTED_DICE = "draftedDice";
     private static final String PARAM_PLAYERS_FAVOUR_TOKENS = "favourTokens";
+    private static final String PARAM_MOVE = "move";
+    private static final String PARAM_NICKNAME = "nickname";
 
 
     // CONSTANTS USED AS MESSAGE OF EXCEPTIONS
@@ -93,7 +95,7 @@ public abstract class View implements Observer {
     /**
      * Set of moves that the player can do with this view
      */
-    private EnumSet<Move> permissions = EnumSet.of(Move.JOIN_GAME);
+    private EnumSet<Move> permissions = EnumSet.of(Move.JOIN);
 
     /**
      * Permissions before connection lost
@@ -220,7 +222,7 @@ public abstract class View implements Observer {
      */
     void handleReturnDiceToDraftpoolMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.RETURN_DICE_TO_DRAFTPOOL));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.RETURN_DICE_TO_DRAFTPOOL)));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -231,7 +233,10 @@ public abstract class View implements Observer {
      */
     void handleLeaveWaitingRoomMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.LEAVE_WR,Message.fastMap("nickname",this.playerID)));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.JOIN);
+            params.put(PARAM_NICKNAME,this.playerID);
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -242,7 +247,7 @@ public abstract class View implements Observer {
      */
     void handleBackGameMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.BACK_GAMING,null,this.playerID));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.BACK_GAME),this.playerID));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -253,7 +258,7 @@ public abstract class View implements Observer {
      */
     void handleEndTurnMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.END_TURN,null,this.playerID));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.END_TURN),this.playerID));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -285,7 +290,7 @@ public abstract class View implements Observer {
      */
     void handleIncrementDraftedDiceMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.INCREMENT_DICE));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.INCREMENT_DRAFTED_DICE)));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -296,7 +301,7 @@ public abstract class View implements Observer {
      */
     void handleDecrementDraftedDiceMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.DECREMENT_DICE));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.DECREMENT_DRAFTED_DICE)));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }
@@ -307,7 +312,7 @@ public abstract class View implements Observer {
      */
     void handleEndEffectMove(){
         try {
-            notifyGame(new Message(ControllerBoundMessageType.END_TOOLCARD_EFFECT));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.END_EFFECT)));
         } catch (NetworkingException e) {
             showInformation(e.getMessage());
         }

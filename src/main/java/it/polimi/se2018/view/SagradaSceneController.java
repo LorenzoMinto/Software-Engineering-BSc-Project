@@ -39,9 +39,20 @@ import java.util.List;
  * @author Jacopo Gargano
  */
 public class SagradaSceneController extends View implements Initializable {
+    private static final String PARAM_DICE = "dice";
+    private static final String PARAM_VALUE = "value";
+    private static final String PARAM_SLOT_NUMBER = "slotNumber";
+    private static final String PARAM_ROW_FROM = "rowFrom";
+    private static final String PARAM_COL_FROM = "colFrom";
+    private static final String PARAM_ROW_TO = "rowTo";
+    private static final String PARAM_COL_TO = "colTo";
+    private static final String ERROR_SELECT_TO_AND_FROM_CELL_TO_MAKE_THE_MOVE = "Select TO and FROM cell to make the move.";
+    private static final String PARAM_WINDOW_PATTERN = "windowPattern";
     private Scene loginScene;
 
     private static final String PARAM_TOOLCARD = "toolCard";
+    private static final String PARAM_MOVE = "move";
+    private static final String PARAM_NICKNAME = "nickname";
     private static final String SRC_MAIN_RESOURCES_IMAGES_DICES = "src/main/resources/images/Dices/";
 
     //WAITING LIST
@@ -438,7 +449,7 @@ public class SagradaSceneController extends View implements Initializable {
             backPaneBox.getChildren().add(waitingRoomView);
             backPaneBox.toFront();
 
-            Move m = Move.JOIN_GAME;
+            Move m = Move.JOIN;
             Button join = new Button(m.getTextualREP());
             join.setOnAction(event -> checkID(m));
             waitingRoomView.addPermissions(join);
@@ -603,7 +614,7 @@ public class SagradaSceneController extends View implements Initializable {
             case LEAVE:
                 handleLeaveWaitingRoomMove();
                 break;
-            case JOIN_GAME:
+            case JOIN:
                 handleJoinGameMove();
                 break;
             default:
@@ -614,7 +625,10 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleJoinGameMove() {
         try {
-            notifyGame(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap("nickname", getPlayerID())));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.JOIN);
+            params.put(PARAM_NICKNAME,getPlayerID());
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
         } catch (NetworkingException e) {
             showError(e.getMessage());
         }
@@ -683,7 +697,10 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 0;
 
         try {
-            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap(PARAM_TOOLCARD, drawnToolCards.get(0))));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
+            params.put(PARAM_TOOLCARD,drawnToolCards.get(0));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
         } catch (NetworkingException e) {
             printOnConsole(e.getMessage());
         }
@@ -703,7 +720,10 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 1;
 
         try {
-            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
+            params.put(PARAM_TOOLCARD,drawnToolCards.get(1));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
         } catch (NetworkingException e) {
             printOnConsole(e.getMessage());
         }
@@ -721,7 +741,10 @@ public class SagradaSceneController extends View implements Initializable {
         cardsCarouselCurrentIndex = 2;
 
         try {
-            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.USE_TOOLCARD);
+            params.put(PARAM_TOOLCARD,drawnToolCards.get(2));
+            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
         } catch (NetworkingException e) {
             printOnConsole(e.getMessage());
         }
@@ -740,7 +763,10 @@ public class SagradaSceneController extends View implements Initializable {
             Dice draftedDice = getDiceForDiceButton(selectedDiceButton, draftPoolDices);
             showInformation("Drafted dice: " + draftedDice);
             try {
-                notifyGame(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(PARAM_MOVE,Move.DRAFT_DICE_FROM_DRAFTPOOL);
+                params.put(PARAM_DICE,draftedDice);
+                notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
             } catch (NetworkingException e) {
                 printOnConsole(e.getMessage());
             }
@@ -777,8 +803,9 @@ public class SagradaSceneController extends View implements Initializable {
             HashMap<String,Object> params = new HashMap<>();
             params.put("row",x);
             params.put("col",y);
+            params.put(PARAM_MOVE,Move.PLACE_DICE_ON_WINDOWPATTERN);
             try {
-                notifyGame(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
             } catch (NetworkingException e) {
                 printOnConsole(e.getMessage());
             }
@@ -795,7 +822,10 @@ public class SagradaSceneController extends View implements Initializable {
         } else {
             int newDiceValue = Integer.parseInt((String) diceValuePicker.getValue());
             try {
-                notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value", newDiceValue)));
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(PARAM_MOVE,Move.CHANGE_DRAFTED_DICE_VALUE);
+                params.put(PARAM_VALUE,newDiceValue);
+                notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
             } catch (NetworkingException e) {
                 printOnConsole(e.getMessage());
             }
@@ -812,11 +842,11 @@ public class SagradaSceneController extends View implements Initializable {
             showInformation("Selected dice: " + trackChosenDice);
 
             HashMap<String,Object> params = new HashMap<>();
-            params.put("slotNumber", selectedTrackSlotNumber);
-            params.put("dice",trackChosenDice);
-
+            params.put(PARAM_SLOT_NUMBER, selectedTrackSlotNumber);
+            params.put(PARAM_DICE,trackChosenDice);
+            params.put(PARAM_MOVE,Move.CHOOSE_DICE_FROM_TRACK);
             try {
-                notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
             } catch (NetworkingException e) {
                 printOnConsole(e.getMessage());
             }
@@ -837,19 +867,19 @@ public class SagradaSceneController extends View implements Initializable {
         int colDest = userWindowPatternView.getyDestSelected();
 
         if (row != -1  && col != -1  && rowDest != -1 && colDest != -1) {
-            params.put("rowFrom",row);
-            params.put("colFrom",col);
-            params.put("rowTo",rowDest);
-            params.put("colTo",colDest);
-
+            params.put(PARAM_ROW_FROM,row);
+            params.put(PARAM_COL_FROM,col);
+            params.put(PARAM_ROW_TO,rowDest);
+            params.put(PARAM_COL_TO,colDest);
+            params.put(PARAM_MOVE,Move.MOVE_DICE);
             try {
-                notifyGame(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
             } catch (NetworkingException e) {
                 printOnConsole(e.getMessage());
             }
 
         } else {
-            showError("Select TO and FROM cell to make the move.");
+            showError(ERROR_SELECT_TO_AND_FROM_CELL_TO_MAKE_THE_MOVE);
         }
         Platform.runLater(userWindowPatternView::cleanSelection);
     }
@@ -978,7 +1008,10 @@ public class SagradaSceneController extends View implements Initializable {
                 wp.setOnAction(event -> {
                     WindowPattern windowPattern1 = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
                     try {
-                        notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern", windowPattern1.copy())));
+                        HashMap<String,Object> params = new HashMap<>();
+                        params.put(PARAM_MOVE,Move.CHOOSE_WINDOW_PATTERN);
+                        params.put(PARAM_WINDOW_PATTERN,windowPattern1.copy());
+                        notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
                     } catch (NetworkingException e) {
                         printOnConsole(e.getMessage());
                     }

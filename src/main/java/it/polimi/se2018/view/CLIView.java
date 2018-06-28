@@ -67,7 +67,6 @@ public class CLIView extends View{
     public static final String ERROR_MESSAGE = "ERROR: ";
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
     private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
-    private static final String PORT_NUMBER_MUST_BE_A_NUMBER = "Port number must be a number";
     private static final String SHOW_TOOLCARDS = "Show toolcards";
     private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
     private static final String THE_WINNER_IS = "The winner is: ";
@@ -92,6 +91,7 @@ public class CLIView extends View{
     private static final String PARAM_COL = "col";
     private static final String PARAM_TOOL_CARD = "toolCard";
     private static final String PARAM_DICE = "dice";
+    private static final String PARAM_MOVE = "move";
 
 
     // AUXILIARY CLASSES
@@ -227,7 +227,7 @@ public class CLIView extends View{
                 connectionTypeInt = Integer.parseInt(connectionTypeString) - 1;
             } catch(NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 connect();
                 return;
             }
@@ -247,7 +247,7 @@ public class CLIView extends View{
                         portNumber = Integer.parseInt(portNumberString);
                     } catch (NumberFormatException e){
                         cleanConsole();
-                        print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                        print(INPUT_NOT_VALID);
                         connect();
                         return;
                     }
@@ -364,7 +364,7 @@ public class CLIView extends View{
             case END_EFFECT:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleEndEffectMove);
                 break;
-            case JOIN_GAME:
+            case JOIN:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleJoinGameMove);
                 break;
             case BACK_GAME:
@@ -543,14 +543,17 @@ public class CLIView extends View{
                 diceIndexInt = Integer.parseInt(diceIndex) - 1;
             } catch(NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 handleDraftDiceFromDraftPoolMove();
                 return;
             }
 
             if(diceIndexInt>=0 && diceIndexInt<draftPoolDices.size()){
                 try {
-                    notifyGame(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap(PARAM_DICE,draftPoolDices.get(diceIndexInt))));
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put(PARAM_DICE,draftPoolDices.get(diceIndexInt));
+                    params.put(PARAM_MOVE,Move.DRAFT_DICE_FROM_DRAFTPOOL);
+                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -573,7 +576,7 @@ public class CLIView extends View{
                 row = Integer.parseInt(rowString) - 1;
             } catch(NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 handlePlaceDiceOnWindowPatternMove();
                 return;
             }
@@ -584,7 +587,7 @@ public class CLIView extends View{
                     col = Integer.parseInt(colString) - 1;
                 } catch(NumberFormatException e){
                     cleanConsole();
-                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    print(INPUT_NOT_VALID);
                     handlePlaceDiceOnWindowPatternMove();
                     return;
                 }
@@ -592,8 +595,9 @@ public class CLIView extends View{
                     HashMap<String,Object> params = new HashMap<>();
                     params.put(PARAM_ROW,row);
                     params.put(PARAM_COL,col);
+                    params.put(PARAM_MOVE,Move.PLACE_DICE_ON_WINDOWPATTERN);
                     try {
-                        notifyGame(new Message(ControllerBoundMessageType.PLACE_DICE,params));
+                        notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                     } catch (NetworkingException e) {
                         print(e.getMessage());
                     }
@@ -626,7 +630,10 @@ public class CLIView extends View{
             }
 
             try {
-                notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD,Message.fastMap(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex))));
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(PARAM_TOOL_CARD,drawnToolCards.get(toolCardIndex));
+                params.put(PARAM_MOVE,Move.USE_TOOLCARD);
+                notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
             } catch (NetworkingException e) {
                 print(e.getMessage());
             }
@@ -656,7 +663,7 @@ public class CLIView extends View{
                 diceValue = Integer.parseInt(diceValueString);
             } catch(NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 handleChangeDraftedDiceValueMove();
                 return;
             }
@@ -664,7 +671,10 @@ public class CLIView extends View{
                 print(INPUT_NOT_VALID);
             } else {
                 try {
-                    notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap(PARAM_VALUE,diceValue)));
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put(PARAM_MOVE,Move.CHANGE_DRAFTED_DICE_VALUE);
+                    params.put(PARAM_VALUE,diceValue);
+                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -690,7 +700,7 @@ public class CLIView extends View{
                 trackSlotNumber = Integer.parseInt(trackSlotNumberString) - 1;
             } catch (NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 waitForMove();
                 return;
             }
@@ -706,7 +716,7 @@ public class CLIView extends View{
                     chosenDiceIndex = Integer.parseInt(choosenDiceIndexString) - 1;
                 } catch(NumberFormatException e){
                     cleanConsole();
-                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    print(INPUT_NOT_VALID);
                     connect();
                     waitForMove();
                     return;
@@ -714,9 +724,10 @@ public class CLIView extends View{
                 HashMap<String,Object> params = new HashMap<>();
                 params.put(PARAM_SLOT_NUMBER,trackSlotNumber);
                 params.put(PARAM_DICE,track.getDicesFromSlotNumber(trackSlotNumber).get(chosenDiceIndex));
+                params.put(PARAM_MOVE,Move.CHOOSE_DICE_FROM_TRACK);
 
                 try {
-                    notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
+                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                 }
@@ -736,7 +747,7 @@ public class CLIView extends View{
                 row = Integer.parseInt(rowString) - 1;
             } catch (NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 waitForMove();
                 return;
             }
@@ -747,7 +758,7 @@ public class CLIView extends View{
                     col = Integer.parseInt(colString) - 1;
                 } catch (NumberFormatException e){
                     cleanConsole();
-                    print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                    print(INPUT_NOT_VALID);
                     waitForMove();
                     return;
                 }
@@ -760,7 +771,7 @@ public class CLIView extends View{
                             rowDest = Integer.parseInt(rowDestString) - 1;
                         } catch (NumberFormatException e){
                             cleanConsole();
-                            print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                            print(INPUT_NOT_VALID);
                             waitForMove();
                             return;
                         }
@@ -771,7 +782,7 @@ public class CLIView extends View{
                                 colDest = Integer.parseInt(colDestString) - 1;
                             } catch (NumberFormatException e){
                                 cleanConsole();
-                                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                                print(INPUT_NOT_VALID);
                                 waitForMove();
                                 return;
                             }
@@ -781,8 +792,9 @@ public class CLIView extends View{
                                 params.put(PARAM_COL_FROM,col);
                                 params.put(PARAM_ROW_TO,rowDest);
                                 params.put(PARAM_COL_TO,colDest);
+                                params.put(PARAM_MOVE,Move.MOVE_DICE);
                                 try {
-                                    notifyGame(new Message(ControllerBoundMessageType.MOVE_DICE,params));
+                                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                                 } catch (NetworkingException e) {
                                     print(e.getMessage());
                                 }
@@ -809,7 +821,10 @@ public class CLIView extends View{
         waitForConsoleInput(nickname->{
             setPlayer(nickname);
             try {
-                notifyGame(new Message(ControllerBoundMessageType.JOIN_WR,Message.fastMap(PARAM_NICKNAME,nickname)));
+                HashMap<String,Object> params = new HashMap<>();
+                params.put(PARAM_MOVE,Move.JOIN);
+                params.put(PARAM_NICKNAME,nickname);
+                notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
             } catch (NetworkingException e) {
                 print(e.getMessage());
             }
@@ -859,14 +874,17 @@ public class CLIView extends View{
                 i = Integer.parseInt(s) - 1;
             } catch (NumberFormatException e){
                 cleanConsole();
-                print(PORT_NUMBER_MUST_BE_A_NUMBER);
+                print(INPUT_NOT_VALID);
                 waitForMove();
                 return;
             }
             if(i <= drawnWindowPatterns.size() && i >= 0){
                 WindowPattern chosenWindowPattern = drawnWindowPatterns.get(i);
                 try {
-                    notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap(PARAM_WINDOW_PATTERN,chosenWindowPattern)));
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put(PARAM_MOVE,Move.CHOOSE_WINDOW_PATTERN);
+                    params.put(PARAM_WINDOW_PATTERN,chosenWindowPattern);
+                    notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
                 } catch (NetworkingException e) {
                     print(e.getMessage());
                     return;
