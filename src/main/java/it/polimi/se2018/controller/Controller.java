@@ -639,7 +639,13 @@ public class Controller extends Observable {
 
         //Checks if due to players inactivity game can continuing or not
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
-            game.forceEndGameDueToInactivity();
+            try{
+                game.forceEndGameDueToInactivity();
+            } catch (IllegalStateException e){
+                notify(new Message(ViewBoundMessageType.ABORTED));
+                throw new BadBehaviourRuntimeException("Game was aborted due to premature disconnection of a player");
+            }
+
             manageRankings();
             return;
         }

@@ -2,13 +2,13 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.XMLFileFinder;
+import it.polimi.se2018.utils.FileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Manages the loading and creation of {@link WindowPattern}
@@ -22,7 +22,7 @@ public class WindowPatternManager {
     /**
      * The file system path to find windowPatterns .xml files
      */
-    private static final String PATH = "assets/patterns/";
+    private static final String PATH = "patterns/";
 
     /**
      * String used as message of BadBehaviourRuntimeException in getPairsOfPatterns()
@@ -40,14 +40,21 @@ public class WindowPatternManager {
     private List<String> availablePatternsIDs;
 
     /**
+     * FileFinder
+     */
+    private FileFinder fileFinder = new FileFinder();
+
+    /**
      * Constructor of the class. Checks if there are window patterns than can be loaded
      * from file system and if yes loads them.
      */
     public WindowPatternManager() {
 
         try{
-            this.availablePatternsIDs = XMLFileFinder.getFilesNames(PATH);
-        } catch (IOException e){
+
+            List<String> fileNames = fileFinder.getFilesNamesInDirectory(PATH);
+            this.availablePatternsIDs = fileNames.stream().map(FileFinder::getXMLFileName).collect(Collectors.toList());
+        } catch (Exception e){
             throw new NoPatternsFoundInFileSystemException();
         }
 
@@ -80,8 +87,8 @@ public class WindowPatternManager {
                 availablePatternsIDs.remove(randomPartnerPatternID);
 
                 //Load the randomly selected pattern
-                WindowPattern randomPattern = loadPatternFromFileSystem(randomPatternID);
-                WindowPattern randomPartnerPattern = loadPatternFromFileSystem(randomPartnerPatternID);
+                WindowPattern randomPattern = loadPatternFromFileSystem(randomPatternID.concat(".xml"));
+                WindowPattern randomPartnerPattern = loadPatternFromFileSystem(randomPartnerPatternID.concat(".xml"));
 
                 //The successfully loaded patterns are added in a list that will be returned at the end of bulk loading
                 couplesOfPatterns.add(randomPattern);
@@ -108,7 +115,7 @@ public class WindowPatternManager {
 
             Cell[][] pattern;
 
-            Document document = XMLFileFinder.getFileDocument(PATH.concat(patternID).concat(".xml"));
+            Document document = fileFinder.getFileDocument(PATH.concat(patternID));
 
             //Parse from xml the pattern's id
             String title = document.getElementsByTagName("title").item(0).getTextContent();
@@ -153,6 +160,7 @@ public class WindowPatternManager {
             return new WindowPattern(patternID,title,imageURL,difficulty,pattern);
 
         } catch (Exception e) {
+            e.printStackTrace();
             //Bad formatting of xml is caught and method returns false
             throw new BadFormattedPatternFileException();
         }
@@ -165,7 +173,7 @@ public class WindowPatternManager {
      */
     private String getPartnerPatternID(String patternID){
         try{
-            Document document = XMLFileFinder.getFileDocument(PATH.concat(patternID).concat(".xml"));
+            Document document = fileFinder.getFileDocument(PATH.concat(patternID).concat(".xml"));
             return document.getElementsByTagName("partnerID").item(0).getTextContent();
         } catch( Exception e ){
             //Bad formatting of xml is caught and method returns false

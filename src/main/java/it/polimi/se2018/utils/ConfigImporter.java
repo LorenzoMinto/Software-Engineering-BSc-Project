@@ -35,7 +35,7 @@ public final class ConfigImporter {
     /**
      * Path to the folder of config files
      */
-    private static final String GENERAL_PATH = "assets/configs/";
+    private static final String GENERAL_PATH = "configs/";
 
     /**
      * Constructor for a ConfigImporter that loads params from the default config file.
@@ -60,12 +60,12 @@ public final class ConfigImporter {
      * @throws NoConfigParamFoundException if an IOException throws during the file's opening & reading
      */
     private void loadParameters() throws NoConfigParamFoundException{
+        FileFinder fileFinder = new FileFinder();
         parametersLoaded = true;
 
-        try (InputStream input = new FileInputStream(GENERAL_PATH.concat(configFileName))) {
+        try (InputStream input = fileFinder.getResourceAsStream(GENERAL_PATH.concat(configFileName))) {
 
             this.properties.load(input);
-
         } catch(IOException e){
             throw new NoConfigParamFoundException();
         }

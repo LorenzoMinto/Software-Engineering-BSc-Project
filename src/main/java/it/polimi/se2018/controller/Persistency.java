@@ -1,11 +1,10 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.XMLFileFinder;
+import it.polimi.se2018.utils.FileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +30,14 @@ public class Persistency {
     /**
      * The file system path to find GlobalRankings.xml
      */
-    private static final String PATH = "assets/persistency/GlobalRankings.xml";
+    private static final String PATH = "persistency/GlobalRankings.xml";
 
     /**
      * List of Ranking Records representing the Global Rankings
      */
     private List<RankingRecord> globalRankings;
+
+    private FileFinder fileFinder = new FileFinder();
 
     private Persistency() { }
 
@@ -59,7 +60,7 @@ public class Persistency {
         List<RankingRecord> newGlobalRankings = new ArrayList<>();
 
         try {
-            Document document = XMLFileFinder.getFileDocument(PATH);
+            Document document = fileFinder.getFileDocument(PATH);
 
             NodeList rankings = document.getElementsByTagName("ranking");
 
@@ -76,7 +77,7 @@ public class Persistency {
                 int cumulativePoints = Integer.parseInt(cumulativePointsNodes.item(i).getTextContent());
                 newGlobalRankings.add(new RankingRecord(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed));
             }
-        } catch (IOException | ParserConfigurationException | SAXException e) {
+        } catch (Exception e) {
             throw new BadBehaviourRuntimeException();
         }
 
@@ -182,7 +183,8 @@ public class Persistency {
         } catch (TransformerConfigurationException e) {
             throw new BadBehaviourRuntimeException();
         }
-        StreamResult result = new StreamResult(new File(PATH));
+
+        StreamResult result = new StreamResult();
         try {
             if (transformer != null) {
                 transformer.transform(source, result);

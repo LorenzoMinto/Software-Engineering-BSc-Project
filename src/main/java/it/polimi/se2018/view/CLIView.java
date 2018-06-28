@@ -885,6 +885,12 @@ public class CLIView extends View{
     }
 
     @Override
+    void handleAbortedEvent(){
+        super.handleAbortedEvent();
+        this.currentInputConsumer = null;
+    }
+
+    @Override
     void handleGiveWindowPatternsEvent(Message m) {
         super.handleGiveWindowPatternsEvent(m);
 

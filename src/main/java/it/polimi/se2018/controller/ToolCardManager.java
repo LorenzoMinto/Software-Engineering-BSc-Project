@@ -2,15 +2,15 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.BadBehaviourRuntimeException;
-import it.polimi.se2018.utils.XMLFileFinder;
+import it.polimi.se2018.utils.FileFinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Manages creation and distribution of Tool Cards
@@ -22,7 +22,7 @@ public class ToolCardManager {
     /**
      * The file system path to find toolCards .xml files
      */
-    private static final String PATH = "assets/toolcards/";
+    private static final String PATH = "toolcards/";
 
     /**
      * String used as message of BadBehaviourRuntimeException in getRandomToolCards
@@ -45,6 +45,11 @@ public class ToolCardManager {
     private PlacementRule defaultPlacementRule;
 
     /**
+     * FileFinder
+     */
+    private FileFinder fileFinder = new FileFinder();
+
+    /**
      * Constructor of the class. Checks if there are toolCards than can be loaded
      * from file system and if yes loads them.
      *
@@ -56,8 +61,9 @@ public class ToolCardManager {
         this.defaultPlacementRule = defaultPlacementRule;
 
         try{
-            this.availableToolCardsIDs = XMLFileFinder.getFilesNames(PATH);
-        } catch (IOException e) {
+            List<String> fileNames = fileFinder.getFilesNamesInDirectory(PATH);
+            this.availableToolCardsIDs = fileNames.stream().map(FileFinder::getXMLFileName).collect(Collectors.toList());
+        } catch (Exception e) {
             throw new NoToolCardsFoundInFileSystemException();
         }
     }
@@ -118,7 +124,7 @@ public class ToolCardManager {
 
         try{
 
-            Document document = XMLFileFinder.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
+            Document document = fileFinder.getFileDocument(PATH.concat(toolCardID).concat(".xml"));
 
             //Parse from xml the properties of the toolCard
             params.put("title", document.getElementsByTagName("title").item(0).getTextContent());
@@ -190,6 +196,7 @@ public class ToolCardManager {
             return new ToolCard(params,controllerStateRules,placementRule, possibleMovesCountSet);
 
         } catch (Exception e){
+            e.printStackTrace();
             throw new BadFormattedToolCardFileException();
         }
     }

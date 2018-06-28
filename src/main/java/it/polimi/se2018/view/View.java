@@ -57,6 +57,7 @@ public abstract class View implements Observer {
     private static final String RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS = " reconnected due to fixing of connection problems.";
     private static final String TRACK_HAS_NOW_NEW_DICES = "Track has now new dices";
     private static final String THERE_IS_NO_MORE_DRAFTED_DICE = "There is no more drafted dice";
+    private static final String GAME_WAS_ABORTED = "Game was aborted";
 
     /*  CONSTANTS FOR MESSAGES PARAMS
         Following constants are not commented one by one because they are as self explaining as needed.
@@ -89,7 +90,6 @@ public abstract class View implements Observer {
 
     // CONSTANTS USED AS MESSAGE OF EXCEPTIONS
     private static final String CANT_TAKE_PERMISSIONS_IF_STORED_PERMISSIONS_SET_IS_NULL = "Can't take permissions if set is null";
-
 
     // CONFIGURATION INFORMATION
 
@@ -506,6 +506,10 @@ public abstract class View implements Observer {
         showInformation(PROBLEMS_WITH_CONNECTION);
         this.wasInactiveBeforeConnectionDrop = this.state == ViewState.INACTIVE;
         changeStateTo(ViewState.DISCONNECTED);
+    }
+
+    void handleAbortedEvent(){
+        showInformation(GAME_WAS_ABORTED);
     }
 
     /**
@@ -1214,6 +1218,8 @@ public abstract class View implements Observer {
             case A_PLAYER_RECONNECTED:
                 handleAPlayerReconnectedEvent(m);
                 break;
+            case ABORTED:
+                handleAbortedEvent();
             default:
                 //No other messages are evaluated in this state
                 break;
