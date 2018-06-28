@@ -32,9 +32,17 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-//TODO: commentare questa classe
+/**
+ * Controller class for SagradaScene fxml scene. Displays the main game interface.
+ *
+ * @author Lorenzo Minto
+ * @author Jacopo Gargano
+ */
 public class SagradaSceneController extends View implements Initializable {
     private Scene loginScene;
+
+    private static final String PARAM_TOOLCARD = "toolCard";
+    private static final String SRC_MAIN_RESOURCES_IMAGES_DICES = "src/main/resources/images/Dices/";
 
     //WAITING LIST
 
@@ -48,30 +56,72 @@ public class SagradaSceneController extends View implements Initializable {
      */
     private WaitingRoomView waitingRoomView;
 
+    /**
+     * HBox that contains the waitingRoomView
+     */
     @FXML HBox backPaneBox;
 
+    /**
+     * The list of cards shown in the card carousel
+     */
     private List<Image> cards = new ArrayList<>();
+    /**
+     * The index of the current card shown in the card carousel
+     */
     private int cardsCarouselCurrentIndex = 0;
 
     @FXML private AnchorPane blackAnchorPane;
     @FXML private HBox blackPane;
 
+    /**
+     * The TextArea where all the server's game message are displayed
+     */
     @FXML private TextArea playerTerminal;
+    /**
+     * The FlowPane that contains the buttons for the user interactions possible at the moment
+     */
     @FXML private FlowPane dynamicChoicesPane;
 
     //WINDOW PATTERNS DISPLAY
+    /**
+     * The List of {@link WindowPatternPlayerView}s, representing all the players' window patterns
+     */
     private List<WindowPatternPlayerView> wpViews;
+    /**
+     * The {@link WindowPatternPlayerView} representing the user's window pattern
+     */
     private WindowPatternPlayerView userWindowPatternView;
 
+    /**
+     * The HBox that contains the {@link WindowPatternPlayerView}s
+     */
     @FXML private HBox windowPatternsBox;
 
     //DRAFTPOOL DISPLAY
+    /**
+     * FlowPane that contains the draft pool dices.
+     */
     @FXML private FlowPane draftPoolPane;
+    /**
+     * The HBox below the draftPoolPane that contains the current drafted dice
+     */
     @FXML private HBox currentDraftedPane;
+    /**
+     * The ChoiceBox that allows, when active, to choose a value for the drafted dice
+     */
     @FXML private ChoiceBox diceValuePicker;
 
+    /**
+     * The Button that references to the currently selected dice in the draft pool, not yet drafted
+     */
     private Button selectedDiceButton = null;
+    /**
+     * The track slot number of the currently selected dice from the track
+     */
     private int selectedTrackSlotNumber = -1;
+    /**
+     * List of Buttons representing the draftpool dices
+     */
     private List<Button> dicesButtons = new ArrayList<>();
 
 
@@ -121,22 +171,52 @@ public class SagradaSceneController extends View implements Initializable {
 
 
     //TOOLCARDS COMPONENTS
+    /**
+     * The visible components for the toolcards display
+     */
     private List<Node> toolCardsVisibleComponents = new ArrayList<>();
 
+    /**
+     * The GridPane fixing the toolcards display layout
+     */
     @FXML private GridPane toolCardsGridPane;
 
+    /**
+     * The Button representing the first toolcard in the toolcard display
+     */
     @FXML private Button toolCards1Button;
+    /**
+     * The Button representing the second toolcard in the toolcard display
+     */
     @FXML private Button toolCards2Button;
+    /**
+     * The Button representing the third toolcard in the toolcard display
+     */
     @FXML private Button toolCards3Button;
 
     @FXML private HBox toolCardsPlayerHBox;
 
+    /**
+     * The Button representing the first toolcard's needed favour tokens
+     */
     @FXML private Button toolCards1FavorTokensButton;
+    /**
+     * The Button representing the second toolcard's needed favour tokens
+     */
     @FXML private Button toolCards2FavorTokensButton;
+    /**
+     * The Button representing the third toolcard's needed favour tokens
+     */
     @FXML private Button toolCards3FavorTokensButton;
 
+    /**
+     * The Button representing the player's available favour tokens
+     */
     @FXML private Button toolCardsPlayerFavorTokensButton;
 
+    /**
+     * The Button used to exit the toolcard display
+     */
     @FXML private Button toolCardsBackButton;
 
 
@@ -162,12 +242,13 @@ public class SagradaSceneController extends View implements Initializable {
     private String trackPath = "src/main/resources/images/Track.jpg";
 
 
-// DO NOT DELETE THIS COMMENT
-//
-// File file = new File("src/main/resources/images/toolcard1.png");
-// Image toolcard = new Image(file.toURI().toString());
 
-
+    /**
+     * Initializes the scene's fundamental structure
+     *
+     * @param location the url location
+     * @param resources the resource bundle
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -290,41 +371,63 @@ public class SagradaSceneController extends View implements Initializable {
         disableBlackAnchorPane();
         disableBlackHBox();
 
+        }
 
-
-
-
-
-
-
-        //setting a nice background
-        //Image backgroundImage = new Image((new File("src/main/resources/images/SagradaBackground.jpg")).toURI().toString());
-        //cardsCarouselGridPane.setBackground(new Background(new BackgroundFill(new ImagePattern(backgroundImage), CornerRadii.EMPTY, Insets.EMPTY)));
-        //backgroundPane.setBackground(new Background(new BackgroundFill(new ImagePattern(velvetBackground), CornerRadii.EMPTY, Insets.EMPTY)));
-    }
-
+    /**
+     * Sets to invisible and disabled the passed list of nodes
+     *
+     * @param visibleComponents the list of nodes
+     */
     private void disable(List<Node> visibleComponents) {
         visibleComponents.forEach(component -> component.setVisible(false));
         visibleComponents.forEach(component -> component.setDisable(true));
     }
 
+    /**
+     * Generates a Background object for a given image
+     *
+     * @param image the background image
+     * @return a Background object
+     */
     private Background getBackgroundFromImage(Image image) {
         return new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY));
     }
 
+    /**
+     * Generates a Border object for a given color
+     *
+     * @param color the wanted color
+     * @return a Border object
+     */
     private Border getBorderWithColor(Color color) {
         return new Border(new BorderStroke(color,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5)));
     }
 
+    /**
+     * Gets the Image object for a given URL
+     *
+     * @param path the asset path
+     * @return an Image object for the wanted asset
+     */
     private Image getImageFromPath(String path) {
         return new Image((new File(path).toURI().toString()));
     }
 
+    /**
+     * Sets the login scene to be used when exiting the game
+     *
+     * @param loginScene the login scene
+     */
     public void setLoginScene(Scene loginScene) {
         this.loginScene = loginScene;
     }
 
+    /**
+     * Brings to front and displays the WaitingRoomView
+     *
+     * @param username the username string
+     */
     public void showWaitingRoom(String username) {
         waitingRoomView = new WaitingRoomView(username);
         EventHandler<ActionEvent> handler = event -> handleExitEvent();
@@ -342,6 +445,9 @@ public class SagradaSceneController extends View implements Initializable {
         });
     }
 
+    /**
+     * Event handler for the NEXT button on the card carousel
+     */
     @FXML
     public void handleCardCarouselNext(){
         if(cardsCarouselCurrentIndex == cards.size()-1){
@@ -352,6 +458,9 @@ public class SagradaSceneController extends View implements Initializable {
         updateCardCarousel();
     }
 
+    /**
+     * Event handler for the NEXT button on the card carousel
+     */
     @FXML
     public void handleCardCarouselPrevious(){
         if(cardsCarouselCurrentIndex == 0){
@@ -362,6 +471,9 @@ public class SagradaSceneController extends View implements Initializable {
         updateCardCarousel();
     }
 
+    /**
+     * Updates the card carousel display
+     */
     private void updateCardCarousel() {
         Platform.runLater(() -> {
             cardsCarouselFavorTokensValue.setDisable(true);
@@ -379,6 +491,13 @@ public class SagradaSceneController extends View implements Initializable {
         });
     }
 
+    /**
+     * Sets image to imageView preserving the ratio of the pane
+     *
+     * @param imageView the ImageView
+     * @param image the image to set on the imageView
+     * @param pane the pane of which to maintain the ratio
+     */
     private void setImageWithHeightAndWidth(ImageView imageView, Image image, Pane pane) {
         imageView.setImage(image);
         imageView.setPreserveRatio(true);
@@ -386,26 +505,41 @@ public class SagradaSceneController extends View implements Initializable {
         imageView.fitHeightProperty().bind(pane.heightProperty());
     }
 
+    /**
+     * Event handler for the toolcard bookmark button on the card carousel
+     */
     public void onCardCarouselToolCardsButtonPressed() {
         cardsCarouselCurrentIndex = 0;
         updateCardCarousel();
     }
 
+    /**
+     * Event handler for the public objectives bookmark button on the card carousel
+     */
     public void onCardCarouselPublicsButtonPressed(){
         cardsCarouselCurrentIndex = drawnToolCards.size();
         updateCardCarousel();
     }
 
+    /**
+     * Event handler for the private objective bookmark button on the card carousel
+     */
     public void onCardCarouselPrivateButtonPressed(){
         cardsCarouselCurrentIndex = drawnToolCards.size() + drawnPublicObjectiveCards.size();
         updateCardCarousel();
     }
 
+    /**
+     * Event handler for the back button on the track display
+     */
     public void onTrackBackButtonPressed(){
         disable(trackVisibleComponents);
         disableBlackAnchorPane();
     }
 
+    /**
+     * Event handler for the back button on the toolcard display
+     */
     public void onToolCardsBackButtonPressed(){
         disable(toolCardsVisibleComponents);
         disableBlackAnchorPane();
@@ -423,6 +557,11 @@ public class SagradaSceneController extends View implements Initializable {
         waitingRoomView.setWaitingPlayers(waitingRoomPlayers);
     }
 
+    /**
+     * Callback that links a button move permission to the method that handle its behaviour
+     *
+     * @param move the move to be handled
+     */
     private void checkID(Move move){
         switch (move) {
             case END_TURN:
@@ -459,15 +598,12 @@ public class SagradaSceneController extends View implements Initializable {
                 handleMoveDiceMove();
                 break;
             case BACK_GAME:
-                printOnConsole("Trying to reconnect to the the game...");
                 handleBackGameMove();
                 break;
             case LEAVE:
-                System.out.println("Called to leave the waiting room.");
                 handleLeaveWaitingRoomMove();
                 break;
             case JOIN_GAME:
-                System.out.println("Calling join game");
                 handleJoinGameMove();
                 break;
             default:
@@ -528,6 +664,11 @@ public class SagradaSceneController extends View implements Initializable {
 
     }
 
+    /**
+     * Enables and sets to visible the given list of nodes
+     *
+     * @param visibleComponents the list of nodes
+     */
     private void enable(List<Node> visibleComponents) {
         visibleComponents.forEach(component -> component.setVisible(true));
         visibleComponents.forEach(component -> component.setOpacity(1));
@@ -535,13 +676,16 @@ public class SagradaSceneController extends View implements Initializable {
 
     }
 
+    /**
+     * Event handler for the first toolcard button on the toolcard display
+     */
     public void onToolCards1ButtonPressed(){
         cardsCarouselCurrentIndex = 0;
 
         try {
-            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(0))));
+            notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap(PARAM_TOOLCARD, drawnToolCards.get(0))));
         } catch (NetworkingException e) {
-            //TODO: implementa
+            printOnConsole(e.getMessage());
         }
         Platform.runLater(() -> {
             updateCardCarousel();
@@ -552,13 +696,16 @@ public class SagradaSceneController extends View implements Initializable {
 
 
 
+    /**
+     * Event handler for the second toolcard button on the toolcard display
+     */
     public void onToolCards2ButtonPressed(){
         cardsCarouselCurrentIndex = 1;
 
         try {
             notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(1))));
         } catch (NetworkingException e) {
-            //TODO: implementa
+            printOnConsole(e.getMessage());
         }
         Platform.runLater(() -> {
             updateCardCarousel();
@@ -567,13 +714,16 @@ public class SagradaSceneController extends View implements Initializable {
         });
     }
 
+    /**
+     * Event handler for the third toolcard button on the toolcard display
+     */
     public void onToolCards3ButtonPressed(){
         cardsCarouselCurrentIndex = 2;
 
         try {
             notifyGame(new Message(ControllerBoundMessageType.USE_TOOLCARD, Message.fastMap("toolCard", drawnToolCards.get(2))));
         } catch (NetworkingException e) {
-            //TODO: implementa
+            printOnConsole(e.getMessage());
         }
         Platform.runLater(() -> {
             updateCardCarousel();
@@ -592,13 +742,20 @@ public class SagradaSceneController extends View implements Initializable {
             try {
                 notifyGame(new Message(ControllerBoundMessageType.DRAFT_DICE_FROM_DRAFTPOOL,Message.fastMap("dice", draftedDice)));
             } catch (NetworkingException e) {
-                //TODO: implementa
+                printOnConsole(e.getMessage());
             }
         } else {
             showError("You have not selected a dice from the draft pool yet!");
         }
     }
 
+    /**
+     * Gets the Dice object corresponding to the given button in a list of dice
+     *
+     * @param btn the dice button
+     * @param dices the list of dice
+     * @return the Dice object corresponding to the dice button
+     */
     private Dice getDiceForDiceButton(Button btn, List<Dice> dices) {
         String id = btn.getId();
         for (Dice dice: dices) {
@@ -616,21 +773,19 @@ public class SagradaSceneController extends View implements Initializable {
         int y = userWindowPatternView.getySelected();
 
         if (x != -1  && y != -1) {
-            showInformation("Trying to place dice on: " + String.valueOf(x) + " " + String.valueOf(y));
+            showInformation("Trying to place dice on: " + x + " " + y);
             HashMap<String,Object> params = new HashMap<>();
             params.put("row",x);
             params.put("col",y);
             try {
                 notifyGame(new Message(ControllerBoundMessageType.PLACE_DICE,params));
             } catch (NetworkingException e) {
-                //TODO: implementa
+                printOnConsole(e.getMessage());
             }
         } else {
             showError("No cell was selected!");
         }
-        Platform.runLater(() -> {
-            userWindowPatternView.cleanSelection();
-        });
+        Platform.runLater(() -> userWindowPatternView.cleanSelection());
     }
 
     @Override
@@ -642,7 +797,7 @@ public class SagradaSceneController extends View implements Initializable {
             try {
                 notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_VALUE,Message.fastMap("value", newDiceValue)));
             } catch (NetworkingException e) {
-                //TODO: implementa
+                printOnConsole(e.getMessage());
             }
             diceValuePicker.setDisable(true);
         }
@@ -663,7 +818,7 @@ public class SagradaSceneController extends View implements Initializable {
             try {
                 notifyGame(new Message(ControllerBoundMessageType.CHOOSE_DICE_FROM_TRACK,params));
             } catch (NetworkingException e) {
-                //TODO: implementa
+                printOnConsole(e.getMessage());
             }
 
         } else {
@@ -690,15 +845,13 @@ public class SagradaSceneController extends View implements Initializable {
             try {
                 notifyGame(new Message(ControllerBoundMessageType.MOVE_DICE,params));
             } catch (NetworkingException e) {
-                //TODO: implementa
+                printOnConsole(e.getMessage());
             }
 
         } else {
             showError("Select TO and FROM cell to make the move.");
         }
-        Platform.runLater(() -> {
-            userWindowPatternView.cleanSelection();
-        });
+        Platform.runLater(userWindowPatternView::cleanSelection);
     }
 
     @Override
@@ -728,16 +881,14 @@ public class SagradaSceneController extends View implements Initializable {
             Button dice = new Button();
             dice.setPrefWidth(100);
             dice.setPrefHeight(100);
-            Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+draftedDice.toString()+".jpg");
+            Image diceImage = getImageFromPath(SRC_MAIN_RESOURCES_IMAGES_DICES +draftedDice.toString()+".jpg");
             dice.setBackground(getBackgroundFromImage(diceImage));
             Platform.runLater(() -> {
                 currentDraftedPane.getChildren().clear();
                 currentDraftedPane.getChildren().add(dice);
             });
         } else {
-            Platform.runLater(() -> {
-                currentDraftedPane.getChildren().clear();
-            });
+            Platform.runLater(() -> currentDraftedPane.getChildren().clear());
         }
     }
 
@@ -753,11 +904,11 @@ public class SagradaSceneController extends View implements Initializable {
         Parent root = new Pane();
         try {
             root = fxmlLoader.load();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            printOnConsole(e.getMessage());
+        }
         Scene rankingsScene = new Scene(root, thisStage.getWidth(), thisStage.getHeight());
-        Platform.runLater(() -> {
-            thisStage.setScene(rankingsScene);
-        });
+        Platform.runLater(() -> thisStage.setScene(rankingsScene));
 
         RankingsSceneController rankingsController = fxmlLoader.getController();
 
@@ -774,9 +925,7 @@ public class SagradaSceneController extends View implements Initializable {
 
         //taking out of the game the waiting room view
         isOnWaitingList = false;
-        Platform.runLater(() -> {
-            backPaneBox.toBack();
-        });
+        Platform.runLater(() -> backPaneBox.toBack());
 
         enableBlackAnchorPane();
 
@@ -826,24 +975,24 @@ public class SagradaSceneController extends View implements Initializable {
             windowPatterns4FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(3).getDifficulty()));
 
             for (Button wp: windowPatternsImages) {
-                wp.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        WindowPattern windowPattern = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
-                        try {
-                            notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern",windowPattern.copy())));
-                        } catch (NetworkingException e) {
-                            //TODO: implementa
-                        }
-                        hasChosenWindowPattern();
-                        printOnConsole(windowPattern.getTitle() +" chosen.");
+                wp.setOnAction(event -> {
+                    WindowPattern windowPattern1 = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
+                    try {
+                        notifyGame(new Message(ControllerBoundMessageType.CHOSEN_WINDOW_PATTERN,Message.fastMap("windowPattern", windowPattern1.copy())));
+                    } catch (NetworkingException e) {
+                        printOnConsole(e.getMessage());
                     }
+                    hasChosenWindowPattern();
+                    printOnConsole(windowPattern1.getTitle() +" chosen.");
                 });
             }
         });
     }
 
 
+    /**
+     * Event handler for the Track Button, shows the track display allowing track dice selection
+     */
     public void handleTrackButtonPressedEvent(){
 
         Image trackImage = getImageFromPath(trackPath);
@@ -864,7 +1013,7 @@ public class SagradaSceneController extends View implements Initializable {
                         trackSlotDice.setId(dice.toString());
                         trackDiceButtons.add(trackSlotDice);
 
-                        Image diceImage = getImageFromPath("src/main/resources/images/Dices/" + dice + ".jpg");
+                        Image diceImage = getImageFromPath(SRC_MAIN_RESOURCES_IMAGES_DICES + dice + ".jpg");
                         trackSlotDice.setBackground(getBackgroundFromImage(diceImage));
 
                         trackSlotDice.setPrefHeight(50);
@@ -885,11 +1034,16 @@ public class SagradaSceneController extends View implements Initializable {
 
                         hBox.getChildren().add(trackSlotDice);
                     }
-                }catch (ValueOutOfBoundsException e){}
+                }catch (ValueOutOfBoundsException e){
+                    printOnConsole(e.getMessage());
+                }
             }
         });
     }
 
+    /**
+     * Event handler for the Exit button, returns to the login scene
+     */
     public void handleExitEvent() {
         Stage stage = (Stage) playerTerminal.getScene().getWindow();
         stage.setScene(loginScene);
@@ -916,6 +1070,9 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
 
+    /**
+     * Disables and sets to invisible the choose window pattern display
+     */
     private void hasChosenWindowPattern() {
         disable(windowPatternsVisibleComponents);
         disableBlackAnchorPane();
@@ -923,6 +1080,9 @@ public class SagradaSceneController extends View implements Initializable {
         disable(trackVisibleComponents);
     }
 
+    /**
+     * Enables and sets to visible the BlackAnchorPane
+     */
     private void enableBlackAnchorPane() {
         blackAnchorPane.setOpacity(0.8);
         blackAnchorPane.setDisable(false);
@@ -930,16 +1090,23 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
 
+    /**
+     * Disables and sets to invisible the BlackAnchorPane
+     */
     private void disableBlackAnchorPane() {
         blackAnchorPane.setOpacity(0);
         blackAnchorPane.setDisable(true);
     }
 
+    //TODO: this is not used, ask Jack
     private void enableBlackHBox() {
         blackPane.setOpacity(0.8);
         blackPane.setDisable(false);
     }
 
+    /**
+     * Disables and sets to invisible the BlackHBox
+     */
     private void disableBlackHBox() {
         blackPane.setOpacity(0);
         blackPane.setDisable(true);
@@ -954,12 +1121,18 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void showError(String message) { printOnConsole("ERROR: "+message);}
 
+    /**
+     * Sets up the card carousel and updates it
+     */
     private void setupCards() {
         updateCards();
         cardsCarouselVisibleComponents.forEach(component-> component.setVisible(true));
         updateCardCarousel();
     }
 
+    /**
+     * Updates the card carousel displaying
+     */
     private void updateCards() {
         if(drawnToolCards.isEmpty() || drawnPublicObjectiveCards.isEmpty()){
             throw new BadBehaviourRuntimeException("Cards shouldn't be empty");}
@@ -973,34 +1146,31 @@ public class SagradaSceneController extends View implements Initializable {
         updateCardCarousel();
     }
 
-    private void updateTrack() {
-    }
-
+    /**
+     * Updates the draftpool displaying
+     */
     private void updateDraftPool() {
         if (!dicesButtons.isEmpty()) {
             dicesButtons.clear();
             Platform.runLater(() -> draftPoolPane.getChildren().clear());
         }
-        System.out.println(draftPoolDices);
         for (Dice d: draftPoolDices) {
             Button dice = new Button();
             dice.prefWidthProperty().bind(draftPoolPane.widthProperty().multiply(0.3));
             dice.prefHeightProperty().bind(dice.prefWidthProperty());
             dice.setId(d.toString());
 
-            Image diceImage = getImageFromPath("src/main/resources/images/Dices/"+d.toString()+".jpg");
+            Image diceImage = getImageFromPath(SRC_MAIN_RESOURCES_IMAGES_DICES +d.toString()+".jpg");
             dice.setBackground(getBackgroundFromImage(diceImage));
 
-            dice.setOnAction(new EventHandler<ActionEvent>() {
-                @Override public void handle(ActionEvent e) {
-                    selectedDiceButton = dice;
-                    for (Button d: dicesButtons) {
-                        if (d == selectedDiceButton) {
-                            d.setBorder(getBorderWithColor(Color.BLACK));
-                        } else {
-                            d.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
-                                    BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-                        }
+            dice.setOnAction(e -> {
+                selectedDiceButton = dice;
+                for (Button d1 : dicesButtons) {
+                    if (d1 == selectedDiceButton) {
+                        d1.setBorder(getBorderWithColor(Color.BLACK));
+                    } else {
+                        d1.setBorder(new Border(new BorderStroke(Color.YELLOWGREEN,
+                                BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                     }
                 }
             });
@@ -1011,9 +1181,10 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
-    private void updatePlayers() {
-    }
 
+    /**
+     * Sets up the WindowPatternViews for each player
+     */
     private void setupWindowPatterns() {
         wpViews = new ArrayList<>();
         int i = 0;
@@ -1038,6 +1209,9 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
+    /**
+     * Updates the WindowPatternView for each player
+     */
     private void updateWindowPatterns() {
         int i = 0;
         for (WindowPattern wp: windowPatterns) {
@@ -1045,8 +1219,10 @@ public class SagradaSceneController extends View implements Initializable {
             Integer favourTokens = playersFavourTokens.get(i);
 
             Platform.runLater(() -> {
-                wpv.updateWindowPattern(wp);
-                wpv.setFavourTokens(favourTokens);
+                if (wpv != null) {
+                    wpv.updateWindowPattern(wp);
+                    wpv.setFavourTokens(favourTokens);
+                }
             });
             i++;
         }
@@ -1055,6 +1231,12 @@ public class SagradaSceneController extends View implements Initializable {
         Platform.runLater(() -> currentDraftedPane.getChildren().clear());
     }
 
+    /**
+     * Returns the WindowPatternView in wpViews with the given title
+     *
+     * @param title the given title string
+     * @return a WindowPatternView object
+     */
     private WindowPatternPlayerView getWPViewById(String title) {
         for (WindowPatternPlayerView wpv : wpViews) {
             if (wpv.getId().equals(title)) {
@@ -1098,7 +1280,6 @@ public class SagradaSceneController extends View implements Initializable {
                 }
                 if (getPermissions().contains(Move.MOVE_DICE)) {
                     userWindowPatternView.enableMoveSelection(true);
-                    System.out.println("Move selection enabled.");
                 } else if (getPermissions().contains(Move.CHANGE_DRAFTED_DICE_VALUE)) {
                     diceValuePicker.setDisable(false);
                 }
@@ -1107,6 +1288,9 @@ public class SagradaSceneController extends View implements Initializable {
         }
     }
 
+    /**
+     * Highlights WindowPatternPlayerView of current player with a red border
+     */
     private void highlightCurrentPlayer() {
         Platform.runLater(() -> {
             for (WindowPatternPlayerView wpView: wpViews) {
@@ -1143,12 +1327,16 @@ public class SagradaSceneController extends View implements Initializable {
     void notifyGameVariablesChanged() {
         super.notifyGameVariablesChanged();
         updateWindowPatterns();
-        updateTrack();
         updateDraftPool();
-        updatePlayers();
     }
 
-    protected void printOnConsole(String s) {
+    /**
+     * Prints the string message on the playerTerminal, when not in waitingRoomView, otherwise it forwards
+     * the message to the waitingRoomView
+     *
+     * @param s the message string
+     */
+    private void printOnConsole(String s) {
         String ss = "\n"+s;
         if (!isOnWaitingList) {
             Platform.runLater(() -> playerTerminal.appendText(ss));
