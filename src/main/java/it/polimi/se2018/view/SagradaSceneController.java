@@ -638,13 +638,14 @@ public class SagradaSceneController extends View implements Initializable {
             blackAnchorPane.setOpacity(0.93);
             disableBlackHBox();
             enable(toolCardsVisibleComponents);
+            double toolCardsProportions = 0.712;
 
             //Retrieving ToolCards images
             ToolCard toolCard = drawnToolCards.get(0);
             Image toolCardImage = getImageFromPath(toolCard.getImageURL());
             toolCards1Button.setBackground(getBackgroundFromImage(toolCardImage));
             toolCards1Button.prefWidthProperty().bind(toolCardsGridPane.widthProperty().divide(4));
-            toolCards1Button.prefHeightProperty().bind(toolCards1Button.prefWidthProperty().divide(0.712));
+            toolCards1Button.prefHeightProperty().bind(toolCards1Button.prefWidthProperty().divide(toolCardsProportions));
             toolCards1FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
             toolCards1FavorTokensButton.prefWidthProperty().bind(toolCards1Button.prefWidthProperty().divide(4));
             toolCards1FavorTokensButton.prefHeightProperty().bind(toolCards1FavorTokensButton.prefWidthProperty());
@@ -653,23 +654,23 @@ public class SagradaSceneController extends View implements Initializable {
             toolCardImage = getImageFromPath(toolCard.getImageURL());
             toolCards2Button.setBackground(getBackgroundFromImage(toolCardImage));
             toolCards2Button.prefWidthProperty().bind(toolCardsGridPane.widthProperty().divide(4));
-            toolCards2Button.prefHeightProperty().bind(toolCards2Button.widthProperty().divide(0.712));
+            toolCards2Button.prefHeightProperty().bind(toolCards2Button.prefWidthProperty().divide(toolCardsProportions));
             toolCards2FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-            toolCards2FavorTokensButton.prefWidthProperty().bind(toolCards2Button.widthProperty().divide(4));
-            toolCards2FavorTokensButton.prefHeightProperty().bind(toolCards2FavorTokensButton.widthProperty());
+            toolCards2FavorTokensButton.prefWidthProperty().bind(toolCards2Button.prefWidthProperty().divide(4));
+            toolCards2FavorTokensButton.prefHeightProperty().bind(toolCards2FavorTokensButton.prefWidthProperty());
 
             toolCard = drawnToolCards.get(2);
             toolCardImage = getImageFromPath(toolCard.getImageURL());
             toolCards3Button.setBackground(getBackgroundFromImage(toolCardImage));
             toolCards3Button.prefWidthProperty().bind(toolCardsGridPane.widthProperty().divide(4));
-            toolCards3Button.prefHeightProperty().bind(toolCards3Button.widthProperty().divide(0.712));
+            toolCards3Button.prefHeightProperty().bind(toolCards3Button.prefWidthProperty().divide(toolCardsProportions));
             toolCards3FavorTokensButton.setText(String.valueOf(toolCard.getNeededTokens()));
-            toolCards3FavorTokensButton.prefWidthProperty().bind(toolCards3Button.widthProperty().divide(4));
-            toolCards3FavorTokensButton.prefHeightProperty().bind(toolCards3FavorTokensButton.widthProperty());
+            toolCards3FavorTokensButton.prefWidthProperty().bind(toolCards3Button.prefWidthProperty().divide(4));
+            toolCards3FavorTokensButton.prefHeightProperty().bind(toolCards3FavorTokensButton.prefWidthProperty());
 
             toolCardsPlayerFavorTokensButton.setText(String.valueOf(getPlayerFavourTokens()));
-            toolCardsPlayerFavorTokensButton.prefWidthProperty().bind(toolCards1Button.widthProperty().divide(4));
-            toolCardsPlayerFavorTokensButton.prefHeightProperty().bind(toolCardsPlayerFavorTokensButton.widthProperty());
+            toolCardsPlayerFavorTokensButton.prefWidthProperty().bind(toolCards1Button.prefWidthProperty().divide(4));
+            toolCardsPlayerFavorTokensButton.prefHeightProperty().bind(toolCardsPlayerFavorTokensButton.prefWidthProperty());
         });
 
     }
