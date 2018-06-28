@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 /**
  * Controller class for RankingScene fxml scene. Displays local and global rankings to user, gives the option
  * to close the application.
+ *
+ * @author Lorenzo Minto
  */
 public class RankingsSceneController {
 
