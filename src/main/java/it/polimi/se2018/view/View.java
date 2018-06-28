@@ -466,44 +466,33 @@ public abstract class View implements Observer {
     }
 
     /**
-     * Handles the event "A player has been removed from the waiting room"
-     * @param m the message containing the removed player information
+     * Handles the event "A player disconnected"
+     * @param m the message containing the playerID
      */
-    void handlePlayerRemovedFromWREvent(Message m){
+    private void handleAPlayerDisconnectedEvent(Message m){
         Object o;
         try {
-            o = m.getParam(PARAM_PLAYER);
+            o = m.getParam("playerID");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
-        @SuppressWarnings("unchecked")
-        String nickname = (String) o;
-
-        if(!nickname.equals(this.playerID)) {
-            showInformation(nickname + LEAVES_THE_WAITING_ROOM);
-        }
-
-        waitingRoomPlayers.remove(nickname);
+        String mPlayerID = (String)o;
+        showInformation(mPlayerID + DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS);
     }
 
     /**
-     * Handles the event "A player has been added to the waiting room"
-     * @param m the message containing the added player information
+     * Handles the event "A player disconnected"
+     * @param m the message containing the playerID
      */
-    void handlePlayerAddedToWREvent(Message m){
+    private void handleAPlayerReconnectedEvent(Message m){
         Object o;
         try {
-            o = m.getParam(PARAM_PLAYER);
+            o = m.getParam("playerID");
         } catch (NoSuchParamInMessageException e) {
             return;
         }
-        @SuppressWarnings("unchecked")
-        String nickname = (String) o;
-
-        if(!nickname.equals(this.playerID)){
-            showInformation(nickname+ JOINS_THE_WAITING_ROOM);
-            waitingRoomPlayers.add(nickname);
-        }
+        String mPlayerID = (String)o;
+        showInformation(mPlayerID + RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS);
     }
 
 
@@ -512,7 +501,8 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Connection Lost"
      */
-    void handleConnectionLostEvent(@SuppressWarnings("unused") Message m){
+    @SuppressWarnings("unused")
+    void handleConnectionLostEvent(Message m){
         showInformation(PROBLEMS_WITH_CONNECTION);
         this.wasInactiveBeforeConnectionDrop = this.state == ViewState.INACTIVE;
         changeStateTo(ViewState.DISCONNECTED);
@@ -588,7 +578,8 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Removed from the waiting room"
      */
-    void handleRemovedEvent(@SuppressWarnings("unused") Message m){
+    @SuppressWarnings("unused")
+    void handleRemovedEvent(Message m){
         showInformation(REMOVED_FROM_GAME);
         waitingRoomPlayers = new ArrayList<>();
     }
@@ -606,7 +597,8 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Back to game"
      */
-    void handleBackToGameEvent(@SuppressWarnings("unused") Message m){
+    @SuppressWarnings("unused")
+    void handleBackToGameEvent(Message m){
         changeStateTo(ViewState.ACTIVE);
         showInformation(BACK_TO_GAME);
     }
@@ -614,9 +606,51 @@ public abstract class View implements Observer {
     /**
      * Handles the event "You are inactive"
      */
-    void handleInactiveEvent(@SuppressWarnings("unused") Message m){
+    @SuppressWarnings("unused")
+    void handleInactiveEvent(Message m){
         changeStateTo(ViewState.INACTIVE);
         showInformation(YOU_ARE_NOW_INACTIVE);
+    }
+
+    /**
+     * Handles the event "A player has been removed from the waiting room"
+     * @param m the message containing the removed player information
+     */
+    void handlePlayerRemovedFromWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYER);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)) {
+            showInformation(nickname + LEAVES_THE_WAITING_ROOM);
+        }
+
+        waitingRoomPlayers.remove(nickname);
+    }
+
+    /**
+     * Handles the event "A player has been added to the waiting room"
+     * @param m the message containing the added player information
+     */
+    void handlePlayerAddedToWREvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYER);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+
+        if(!nickname.equals(this.playerID)){
+            showInformation(nickname+ JOINS_THE_WAITING_ROOM);
+            waitingRoomPlayers.add(nickname);
+        }
     }
 
     /**
@@ -809,7 +843,8 @@ public abstract class View implements Observer {
     /**
      * Handles the event "It is now your turn"
      */
-    void handleYourTurnEvent(@SuppressWarnings("unchecked") Message m) {
+    @SuppressWarnings("unused")
+    void handleYourTurnEvent(Message m) {
         showInformation(ITS_YOUR_TURN);
     }
 
@@ -817,51 +852,33 @@ public abstract class View implements Observer {
      * Handles the event "Bad Formatted". It is received when some previous message
      * sent to server was bad formatted or contained unexpected data.
      */
-    void handleBadFormattedEvent(@SuppressWarnings("unchecked") Message m) {
+    @SuppressWarnings("unused")
+    void handleBadFormattedEvent(Message m) {
         showInformation(ERROR_MOVE);
     }
 
     /**
      * Handles the event "Can't join waiting room because players limit has been reached"
      */
-    void handleDeniedLimitEvent(@SuppressWarnings("unchecked") Message m) {
+    @SuppressWarnings("unused")
+    void handleDeniedLimitEvent(Message m) {
         showInformation(MAX_PLAYERS_ERROR);
     }
 
     /**
      * Handles the event "Can't join waiting room because your requested nickname is already used in this game"
      */
-    void handleDeniedNicknameEvent(@SuppressWarnings("unchecked") Message m) {
+    @SuppressWarnings("unused")
+    void handleDeniedNicknameEvent(Message m) {
         showInformation(NICKNAME_ALREADY_USED_ERROR);
     }
 
     /**
      * Handles the event "Can't join because game is already running"
      */
+    @SuppressWarnings("unused")
     void handleDeniedPlayingEvent( Message m) {
         showInformation(ALREADY_PLAYING_ERROR);
-    }
-
-    void handleAPlayerDisconnectedEvent(Message m){
-        Object o;
-        try {
-            o = m.getParam("playerID");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        String mPlayerID = (String)o;
-        showInformation(mPlayerID + DISCONNECTED_DUE_TO_CONNECTION_PROBLEMS);
-    }
-
-    void handleAPlayerReconnectedEvent(Message m){
-        Object o;
-        try {
-            o = m.getParam("playerID");
-        } catch (NoSuchParamInMessageException e) {
-            return;
-        }
-        String mPlayerID = (String)o;
-        showInformation(mPlayerID + RECONNECTED_DUE_TO_FIXING_OF_CONNECTION_PROBLEMS);
     }
 
     /**
@@ -1028,7 +1045,8 @@ public abstract class View implements Observer {
                 ViewBoundMessageType.CONNECTION_RESTORED,
                 PING
         );
-        if(!ignoreList.contains(message.getType())){
+        ViewBoundMessageType type = (ViewBoundMessageType) message.getType();
+        if(!ignoreList.contains(type)){
             this.handlingMessage = message;
         }
     }
@@ -1314,6 +1332,7 @@ public abstract class View implements Observer {
 
 
     /**
+     * @param playerID the player id
      * @see View#playerID
      */
     public void setPlayer(String playerID) {
@@ -1321,6 +1340,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param permissions set of permissions
      * @see View#permissions
      */
     public void setPermissions(Set<Move> permissions) {
@@ -1335,6 +1355,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param drawnToolCards  list of draw Tool cards
      * @see View#drawnToolCards
      */
     private void setDrawnToolCards(List<ToolCard> drawnToolCards) {
@@ -1342,6 +1363,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param drawnPublicObjectiveCards list of drawn Public Objective cards
      * @see View#drawnPublicObjectiveCards
      */
     private void setDrawnPublicObjectiveCards(List<PublicObjectiveCard> drawnPublicObjectiveCards) {
@@ -1349,6 +1371,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param players list of players
      * @see View#players
      */
     public void setPlayers(List<String> players) {
@@ -1356,6 +1379,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param track track
      * @see View#track
      */
     public void setTrack(Track track) {
@@ -1363,6 +1387,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param draftPoolDices dices in the draftpool
      * @see View#draftPoolDices
      */
     private void setDraftPoolDices(List<Dice> draftPoolDices) {
@@ -1370,6 +1395,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param roundNumber sequential number of round
      * @see View#roundNumber
      */
     private void setRoundNumber(int roundNumber) {
@@ -1377,6 +1403,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param playingPlayerID id of the playing player
      * @see View#playingPlayerID
      */
     private void setPlayingPlayerID(String playingPlayerID) {
@@ -1384,6 +1411,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param draftedDice drafted dice
      * @see View#draftedDice
      */
     public void setDraftedDice(Dice draftedDice) {
@@ -1391,6 +1419,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param privateObjectiveCard Private Objective card
      * @see View#privateObjectiveCard
      */
     public void setPrivateObjectiveCard(PrivateObjectiveCard privateObjectiveCard) {
@@ -1398,6 +1427,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param playersFavourTokens favour tokens of players
      * @see View#playersFavourTokens
      */
     private void setPlayersFavourTokens(List<Integer> playersFavourTokens) {
@@ -1405,6 +1435,7 @@ public abstract class View implements Observer {
     }
 
     /**
+     * @param windowPatterns Window Patterns of players
      * @see View#windowPatterns
      */
     public void setWindowPatterns(List<WindowPattern> windowPatterns) {

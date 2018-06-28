@@ -67,6 +67,7 @@ public class Client extends Observable implements ClientInterface {
      * @param port port used for communication
      * @param view view that uses this client
      * @param debug boolean value for logging or not some debug messages
+     * @throws NetworkingException if creating RMI or Socket gateways failed
      */
     public Client(ConnectionType type, String serverName, int port, Observer view, boolean debug) throws NetworkingException {
         this.logger = createLogger();

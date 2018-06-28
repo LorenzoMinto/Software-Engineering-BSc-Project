@@ -68,6 +68,7 @@ public class RankingRecord implements Serializable {
      * @param gamesWon the number of games won
      * @param gamesLost the number of games lost
      * @param timePlayed the total played time
+     * @param points //TODO: @lorenzo
      */
     private RankingRecord(int points, String playerID, int cumulativePoints, int gamesWon, int gamesLost, int timePlayed) {
         this(playerID, cumulativePoints, gamesWon, gamesLost, timePlayed);
