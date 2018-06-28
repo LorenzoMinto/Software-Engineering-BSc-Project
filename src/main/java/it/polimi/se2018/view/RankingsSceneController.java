@@ -60,9 +60,6 @@ public class RankingsSceneController {
      * @param records ranking records list to be set as localRankings
      */
     public void setLocalRanking(List<RankingRecord> records) {
-        records.sort(Comparator.comparing(RankingRecord::getPoints));
-        Collections.reverse(records);
-
         localRanking.addAll(records);
         rankingListView.setItems(localRanking);
 
