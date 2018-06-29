@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,8 +18,8 @@
             <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="57.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="255.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="212.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="200.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="286.0" />
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.0" minWidth="10.0" prefWidth="54.0" />
                 </columnConstraints>
                 <rowConstraints>
@@ -29,7 +30,7 @@
                <RowConstraints maxHeight="75.0" minHeight="0.0" prefHeight="19.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
+                    <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="195.0" spacing="10.0" GridPane.columnIndex="1">
                         <children>
                             <Label text="Waiting Room" />
                             <Button fx:id="exitButton" mnemonicParsing="false" style="-fx-background-color: indianred;" text="Exit" />
@@ -38,7 +39,7 @@
                     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
                         <children>
                             <Label text="Username:" />
-                            <Label fx:id="nameLabel" text="NAME" />
+                     <TextField fx:id="usernameTextfield" promptText="Username" />
                         </children>
                         <padding>
                             <Insets right="10.0" />

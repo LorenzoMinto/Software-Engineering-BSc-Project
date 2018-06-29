@@ -53,9 +53,6 @@ public class GUIView extends Application {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Label userName = new Label("User Name:");
-        grid.add(userName, 0, 2);
-
         CheckBox rmiBox = new CheckBox("RMI");
         grid.add(rmiBox, 0,3);
         rmiBox.setSelected(true);
@@ -85,9 +82,6 @@ public class GUIView extends Application {
         TextField serverNameTextField = new TextField("//localhost/sagradaserver");
         grid.add(serverNameTextField, 1,4);
 
-        TextField userTextField = new TextField("Johnnyfer");
-        grid.add(userTextField, 1, 2);
-
         Button btn = new Button("Log in to Sagrada");
         //start the client and the game screen. This should be done only once in the whole application. SagradaScene becomes permanent.
         btn.setOnAction(e -> {
@@ -97,8 +91,7 @@ public class GUIView extends Application {
             } catch (NetworkingException e1) {
                 return;
             }
-            sagradaSceneController.setPlayer(userTextField.getText());
-            sagradaSceneController.showWaitingRoom(userTextField.getText());
+            sagradaSceneController.showWaitingRoom();
 
             primaryStage.setScene(sagradaScene);
             primaryStage.show();
