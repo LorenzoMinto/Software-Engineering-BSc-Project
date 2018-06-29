@@ -6,7 +6,6 @@ import it.polimi.se2018.utils.Message;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * Gatherer of new socket connections.
@@ -130,12 +129,9 @@ public final class SocketServerGatherer extends Thread{
                 try {
                     message = (Message) in.readObject();
                     receiver.receiveMessage(message, socketClientAsAServer);
-                } catch (SocketException e) {
+                } catch (Exception e) {
                     ((ServerInterface)receiver).lostSocketConnection(socketClientAsAServer);
                     socketClientProxyBeforeConnectionDrop = socketClientAsAServer;
-                    c = false;
-                } catch (Exception e) {
-                    receiver.fail(READING_STREAM_EXCEPTION);
                     c = false;
                 }
             }
