@@ -424,7 +424,6 @@ public class SagradaSceneController extends View implements Initializable {
     /**
      * Brings to front and displays the WaitingRoomView
      *
-     * @param username the username string
      */
     public void showWaitingRoom() {
         waitingRoomView = new WaitingRoomView();
@@ -1017,14 +1016,7 @@ public class SagradaSceneController extends View implements Initializable {
     @Override
     void handleAbortedEvent() {
         super.handleAbortedEvent();
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Game was aborted by the server.", ButtonType.FINISH);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.FINISH) {
-                handleExitEvent();
-            }
-        });
+        segueToExitScreenWithMessage("The game was aborted by the server.");
     }
 
     /**
@@ -1047,11 +1039,38 @@ public class SagradaSceneController extends View implements Initializable {
     }
 
     /**
-     * Event handler for the Exit button, returns to the login scene
+     * Event handler for the Exit button, segues to exit screen
      */
     public void handleExitEvent() {
-        Stage stage = (Stage) playerTerminal.getScene().getWindow();
-        stage.close();
+        handleQuitMove();
+        segueToExitScreenWithMessage("You have quit the game.");
+    }
+
+    /**
+     * Segues to the exit screen with the given message
+     *
+     * @param s the message to be displayed
+     */
+    public void segueToExitScreenWithMessage(String s) {
+        Stage thisStage = (Stage) playerTerminal.getScene().getWindow();
+
+        URL fxmlUrl = getClass().getClassLoader().getResource("fxml/ExitScene.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+
+        Parent root = new Pane();
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            printOnConsole(e.getMessage());
+        }
+        Scene exitScene = new Scene(root, thisStage.getWidth(), thisStage.getHeight());
+        Platform.runLater(() -> thisStage.setScene(exitScene));
+
+        ExitSceneController exitSceneController = fxmlLoader.getController();
+
+        Platform.runLater(() -> {
+            exitSceneController.setMessage(s);
+        });
     }
 
     @Override
