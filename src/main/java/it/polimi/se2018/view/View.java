@@ -1112,6 +1112,10 @@ public abstract class View implements Observer {
 
         if (type == ViewBoundMessageType.CONNECTION_RESTORED) {
             handleConnectionRestoredEvent();
+
+        } else if( type == ViewBoundMessageType.A_PLAYER_QUITTED ){
+                handleAPlayerQuittedEvent(m);
+
         }
         //No other messages are evaluated in this state
     }

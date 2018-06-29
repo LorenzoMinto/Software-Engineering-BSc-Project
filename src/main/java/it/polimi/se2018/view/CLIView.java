@@ -523,6 +523,7 @@ public class CLIView extends View{
 
     @Override
     void handleQuitMove(){
+        super.handleQuitMove();
         print(YOU_ARE_QUITTING);
         this.currentInputConsumer = null;
     }
@@ -990,7 +991,12 @@ public class CLIView extends View{
             print(rankingRecord.toString());
         }
 
+        print("");
+
         print(THE_WINNER_IS + getWinnerID());
+
+        print("");
+        print("");
 
         print(GLOBAL_RANKINGS_FOLLOWING);
 
