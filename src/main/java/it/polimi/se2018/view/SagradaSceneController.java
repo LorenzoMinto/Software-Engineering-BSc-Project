@@ -876,8 +876,8 @@ public class SagradaSceneController extends View implements Initializable {
         super.handleDraftedDiceEvent(m);
         if (draftedDice != null) {
             Button dice = new Button();
-            dice.setPrefWidth(100);
-            dice.setPrefHeight(100);
+            dice.prefWidthProperty().bind(currentDraftedPane.widthProperty().multiply(0.3));
+            dice.prefHeightProperty().bind(dice.prefWidthProperty());
             Image diceImage = getImageFromPath(SRC_MAIN_RESOURCES_IMAGES_DICES +draftedDice.toString()+".jpg");
             dice.setBackground(getBackgroundFromImage(diceImage));
             Platform.runLater(() -> {
@@ -1180,7 +1180,7 @@ public class SagradaSceneController extends View implements Initializable {
         }
         for (Dice d: draftPoolDices) {
             Button dice = new Button();
-            dice.prefWidthProperty().bind(draftPoolPane.widthProperty().multiply(0.3));
+            dice.prefWidthProperty().bind(draftPoolPane.widthProperty().multiply(0.25));
             dice.prefHeightProperty().bind(dice.prefWidthProperty());
             dice.setId(d.toString());
 
