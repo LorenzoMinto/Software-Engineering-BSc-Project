@@ -1068,9 +1068,7 @@ public class SagradaSceneController extends View implements Initializable {
 
         ExitSceneController exitSceneController = fxmlLoader.getController();
 
-        Platform.runLater(() -> {
-            exitSceneController.setMessage(s);
-        });
+        Platform.runLater(() -> exitSceneController.setMessage(s));
     }
 
     @Override

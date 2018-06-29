@@ -4,7 +4,6 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.view.View;
-import org.apache.xpath.SourceTree;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -295,7 +294,6 @@ public class Controller extends Observable {
             } else if(message.isMove(Move.QUIT)) {
 
                 inactivePlayers.add(sendingPlayerID);
-                System.out.println("A player is quitting");
                 notifyPlayerQuitted(sendingPlayerID);
                 return null;
 
@@ -417,7 +415,6 @@ public class Controller extends Observable {
                 return errorMessage();
 
             case QUIT:
-                System.out.println("Current player is quitting");
                 inactivePlayers.add(message.getPlayerID());
                 notifyPlayerQuitted(message.getPlayerID());
                 advanceGameDueToPlayerInactivity();
