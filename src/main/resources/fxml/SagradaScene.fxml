@@ -44,11 +44,6 @@
         </rowConstraints>
          <children>
             <HBox fx:id="windowPatternsBox" alignment="CENTER" prefHeight="178.0" prefWidth="542.0" spacing="10.0" GridPane.columnSpan="6" GridPane.rowSpan="2" />
-            <Pane prefHeight="139.0" prefWidth="96.0" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
-               <children>
-                  <Label layoutX="19.0" layoutY="14.0" text="History" />
-               </children>
-            </Pane>
             <GridPane fx:id="cardsCarouselGridPane" alignment="CENTER" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
@@ -210,6 +205,11 @@
                   </HBox>
                </children>
             </VBox>
+            <ScrollPane fx:id="historyScrollPane" hbarPolicy="NEVER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <content>
+                  <TextArea fx:id="historyTerminal" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+               </content>
+            </ScrollPane>
 
          </children>
          <opaqueInsets>

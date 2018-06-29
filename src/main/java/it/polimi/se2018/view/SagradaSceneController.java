@@ -247,6 +247,10 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private Button windowPatterns3FavorTokens;
     @FXML private Button windowPatterns4FavorTokens;
 
+    //HISTORY COMPONENTS
+    @FXML TextArea historyTerminal;
+    @FXML ScrollPane historyScrollPane;
+
 
     /**
      * Initializes the scene's fundamental structure
@@ -365,6 +369,10 @@ public class SagradaSceneController extends View implements Initializable {
 
         enableBlackAnchorPane();
         blackAnchorPane.setStyle("-fx-background-color: rgba(255, 255, 255, 1);");
+
+        historyTerminal.prefWidthProperty().bind(historyScrollPane.prefWidthProperty());
+        historyTerminal.prefHeightProperty().bind(historyScrollPane.heightProperty());
+        historyTerminal.appendText("---------HISTORY----------\n");
     }
 
     /**
@@ -1051,7 +1059,7 @@ public class SagradaSceneController extends View implements Initializable {
      *
      * @param s the message to be displayed
      */
-    public void segueToExitScreenWithMessage(String s) {
+    private void segueToExitScreenWithMessage(String s) {
         Stage thisStage = (Stage) playerTerminal.getScene().getWindow();
 
         URL fxmlUrl = getClass().getClassLoader().getResource("fxml/ExitScene.fxml");
@@ -1088,6 +1096,16 @@ public class SagradaSceneController extends View implements Initializable {
         super.handleUsedToolCardEvent(m);
         updateWindowPatterns();
         updateCardCarousel();
+    }
+
+    @Override
+    public void handleHistoryMessageEvent(Message m) {
+        super.handleHistoryMessageEvent(m);
+
+        Platform.runLater(() -> {
+            String sss = lastMovePlayer.concat(lastMove.getRepresentationOfMove(lastMoveParams)).concat("\n");
+            historyTerminal.appendText(sss);
+        });
     }
 
 

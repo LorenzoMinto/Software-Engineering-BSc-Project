@@ -125,6 +125,14 @@ public final class Message implements Serializable{
     }
 
     /**
+     * Returns all params of the message
+     * @return all params of the message
+     */
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    /**
      * Returns the recipient player if the message is specific (not in broadcast).
      *
      * @return the recipient player if the message is specific (not in broadcast)

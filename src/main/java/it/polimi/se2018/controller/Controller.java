@@ -45,8 +45,11 @@ public class Controller extends Observable {
     /**
      * Logger
      */
-    private static final String PLAYER = "player";
+    private static final String STRING_PLAYER = "player";
 
+    /**
+     * Logger
+     */
     private final Logger logger;
 
     /**
@@ -277,6 +280,11 @@ public class Controller extends Observable {
             //Update permissions
             if (returnMessage.getType() == ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE) {
                 returnMessage.setPermissions(controllerState.getStatePermissions());
+                HashMap<String,Object> params = new HashMap<>();
+                params.put("oldParams", message.getParams());
+                params.put(STRING_PLAYER, sendingPlayerID);
+                Message historyMessage = new Message(ViewBoundMessageType.HISTORY, params);
+                notify(historyMessage);
             }
             return returnMessage;
 
@@ -649,7 +657,7 @@ public class Controller extends Observable {
 
         //If statement prevents sending every turn the notification for all inactive players
         if( inactivePlayers.add(currentPlayerID) ){
-            notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap(PLAYER,currentPlayerID))); //notify everyone that the player is now inactive
+            notify(new Message(ViewBoundMessageType.A_PLAYER_BECOME_INACTIVE,Message.fastMap(STRING_PLAYER,currentPlayerID))); //notify everyone that the player is now inactive
             notify(new Message(ViewBoundMessageType.YOU_ARE_INACTIVE,null,currentPlayerID)); //notify view of inactive player that it is now considered inactive
         }
 
@@ -867,7 +875,7 @@ public class Controller extends Observable {
         if(this.inactivePlayers.add(playerID)){
             this.inactiveDisconnectedPlayers.add(playerID);
         }
-        notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap(PLAYER,playerID)));
+        notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
         if(waitingForPatternsChoice.cancel()){
             forcePatternChoice();
         }
@@ -887,7 +895,7 @@ public class Controller extends Observable {
                 //player is not removed from inactive ones because it was so before loosing connection
             } else {
                 this.inactivePlayers.remove(playerID);
-                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap(PLAYER,playerID)));
+                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
             }
         }
     }

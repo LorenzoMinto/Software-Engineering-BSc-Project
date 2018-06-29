@@ -119,6 +119,26 @@ public abstract class View implements Observer {
      */
     Message handlingMessage = null;
 
+    /**
+     * List of game moves
+     */
+    List<Move> historyMove = new ArrayList<>();
+
+    /**
+     * Reference to last move made params
+     */
+    HashMap<String, Object> lastMoveParams = null;
+
+    /**
+     * Reference to last move made
+     */
+    Move lastMove = null;
+
+    /**
+     * Reference to last move made player
+     */
+    String lastMovePlayer = null;
+
     // COPIES OF GAME INFORMATION TO GRAPHICALLY REPRESENT THEM
 
     /**
@@ -1262,10 +1282,46 @@ public abstract class View implements Observer {
             case A_PLAYER_QUITTED:
                 handleAPlayerQuittedEvent(m);
                 break;
+            case HISTORY:
+                handleHistoryMessageEvent(m);
+                break;
             default:
                 //No other messages are evaluated in this state
                 break;
         }
+    }
+
+    /**
+     * Handles message of "history" type
+     * @param m the received history message
+     */
+    void handleHistoryMessageEvent(Message m) {
+        Object o;
+        try {
+            o = m.getParam(PARAM_PLAYER);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String playerMove = (String) o;
+
+        try {
+            o = m.getParam("oldParams");
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        HashMap<String, Object> params = (HashMap<String, Object>) o;
+
+        o = params.get("move");
+        @SuppressWarnings("unchecked")
+        Move move = (Move) o;
+
+        this.lastMove = move;
+        this.lastMovePlayer = playerMove;
+        this.lastMoveParams = params;
+        this.historyMove.add(move);
     }
 
 
@@ -1372,6 +1428,10 @@ public abstract class View implements Observer {
         return permissions;
     }
 
+    /**
+     * Returns old permissions
+     * @return old permissions
+     */
     private EnumSet<Move> takeOldPermissions(){
         if(this.storedPermissions==null){
             throw new BadBehaviourRuntimeException(CANT_TAKE_PERMISSIONS_IF_STORED_PERMISSIONS_SET_IS_NULL);
