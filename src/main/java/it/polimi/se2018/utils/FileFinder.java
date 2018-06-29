@@ -68,6 +68,7 @@ public final class FileFinder {
      * @throws IOException if something in opening the file fails
      * @throws ParserConfigurationException if build of a new document fails
      * @throws SAXException if parsing of the document fails
+     * @throws URISyntaxException if something getting the url of the document fails
      */
     public Document getFileDocument(String path) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

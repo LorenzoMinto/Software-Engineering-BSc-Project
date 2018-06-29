@@ -2,6 +2,7 @@ it.polimi.se2018
 it.polimi.se2018.controller
 it.polimi.se2018.model
 it.polimi.se2018.networking
+it.polimi.se2018.networking.rmi
+it.polimi.se2018.networking.socket
 it.polimi.se2018.utils
-it.polimi.se2018.utils.message
 it.polimi.se2018.view

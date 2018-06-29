@@ -90,7 +90,7 @@ public class RankingRecord implements Serializable {
 
     /**
      * Sets the player's last game points
-     *
+     * @param points the player's last game points
      */
     public void setPoints(int points) { this.points = points; }
 
