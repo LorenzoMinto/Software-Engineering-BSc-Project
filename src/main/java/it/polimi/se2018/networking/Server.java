@@ -50,6 +50,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private static final String THIRD_PARAMETER_PORT_NUMBER_FOR_SOCKET_IS_COMPULSORY = "Third parameter (port number for SOCKET) is compulsory.";
     private static final String FOURTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Fourth parameter (max number of attempts) is compulsory.";
     private static final String SIXTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Sixth parameter (server hostname) is compulsory.";
+    private static final String SEVENTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY = "Seventh parameter (path for persistency) is compulsory.";
     private static final String STARTING_RMI = "Starting RMI...";
     private static final String FAILED_RMI_SETUP = "Failed RMI setup";
     private static final String STARTING_SOCKET = "Starting Socket...";
@@ -167,6 +168,11 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private HashMap<ClientProxyInterface,List<Message>> unSentMessages = new HashMap<>();
 
     /**
+     * Path for persistency rankings file
+     */
+    private final String persistencyPath;
+
+    /**
      * The main class for server in order to make it runnable.
      *
      * @param args arguments passed by command line
@@ -220,13 +226,21 @@ public class Server implements Observer, SenderInterface, ServerInterface {
             return;
         }
 
-        new Server(serverIP,serverName,portNumberRMI,portNumberSOCKET,maxNumberOfAttempts,configFileName);
+        String persistencyPath;
+        try{
+            persistencyPath = args[6];
+        } catch (IndexOutOfBoundsException e){
+            LOGGER.info(SEVENTH_PARAMETER_MAX_NUMBER_OF_ATTEMPTS_IS_COMPULSORY);
+            return;
+        }
+
+        new Server(serverIP,serverName,portNumberRMI,portNumberSOCKET,maxNumberOfAttempts,configFileName,persistencyPath);
     }
 
     /**
      * Server constructor. Do the netwroking setup, creates controller and game
      */
-    private Server(String serverIP, String serverName, int portNumberRMI, int portNumberSOCKET, int maxNumberOfAttempts, String configFileName) {
+    private Server(String serverIP, String serverName, int portNumberRMI, int portNumberSOCKET, int maxNumberOfAttempts, String configFileName, String persistencyPath) {
         LOGGER.setLevel(Level.ALL);
         this.serverIP = serverIP;
         this.serverName = serverName;
@@ -234,6 +248,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         this.portNumberSOCKET = portNumberSOCKET;
         this.configFileName = configFileName;
         this.maxNumberOfAttempts = maxNumberOfAttempts;
+        this.persistencyPath = persistencyPath;
 
         setupNetworking();
 
@@ -297,6 +312,8 @@ public class Server implements Observer, SenderInterface, ServerInterface {
                 Integer.parseInt( properties.getProperty(CONFIG_PROPERTY_MAX_NUMBER_OF_PLAYERS) )
         );
         game.register(this);
+
+        properties.put("persistencyPath",this.persistencyPath);
 
         return new Controller(game,properties,LOGGER);
     }
