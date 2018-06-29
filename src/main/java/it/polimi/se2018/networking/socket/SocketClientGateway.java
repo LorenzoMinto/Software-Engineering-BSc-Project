@@ -131,13 +131,10 @@ public final class SocketClientGateway extends Thread implements ClientInterface
                     receiveMessage((Message) in.readObject(), null);
                 }
 
-            } catch (SocketException e) {
+            } catch (Exception e) {
                 this.client.setConnectionAvailable(false);
                 //will retry to fix the error re running the previous code
 
-            } catch (Exception e) {
-                this.client.fail(EXCEPTION_THROWN_OPENING_SOCKET_OR_READING_FROM_STREAM);
-                return;
             }
 
             try {

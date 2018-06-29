@@ -6,6 +6,6 @@ numberOfToolCards=3
 numberOfPublicObjectiveCards=3
 timeoutLaunchingGame=2
 timeoutChoosingPatterns=30
-timeoutPlayerMove=30
+timeoutPlayerMove=300
 amountOfCouplesOfPatternsPerPlayer=2
 persistencyPath=C:\\Users\\Federico Haag\\IdeaProjects\\ing-sw-2018-gargano-haag-minto\\globalranking.xml
