@@ -917,8 +917,6 @@ public class SagradaSceneController extends View implements Initializable {
         enable(windowPatternsVisibleComponents);
 
         Platform.runLater(() -> {
-            double widthProportion = 4.8;
-            double heightWidthWindowPatternProportion = 0.8;
 
             Stage thisStage = (Stage) playerTerminal.getScene().getWindow();
 
