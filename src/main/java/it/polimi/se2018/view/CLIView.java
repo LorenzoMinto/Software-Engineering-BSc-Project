@@ -157,6 +157,11 @@ public class CLIView extends View{
     private boolean gameStarted = false;
 
     /**
+     * True if game is ended
+     */
+    private boolean gameEnded = false;
+
+    /**
      * Main method to make runnable the class.
      * A new instance of CLIView is created.
      * @param args default param for main. no args are processed.
@@ -280,6 +285,10 @@ public class CLIView extends View{
      *      SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS
      */
     private void waitForMove(){
+        if(this.gameEnded){
+            return;
+        }
+
         //Create a LinkedHashMap to map string choices from console to moves
         LinkedHashMap<String,ConsoleMove> mapConsoleMoves = new LinkedHashMap<>();
         int index = 1;
@@ -954,6 +963,13 @@ public class CLIView extends View{
         super.handleAddedEvent(m);
         removeHandlingMessage(m);
         waitForMove();
+    }
+
+    @Override
+    void handleGameEndedEvent(){
+        super.handleGameEndedEvent();
+        this.gameEnded = true;
+        this.currentInputConsumer = null;
     }
 
     @Override

@@ -422,7 +422,7 @@ public abstract class View implements Observer {
     /**
      * Handles the event "Game ended"
      */
-    private void handleGameEndedEvent(){
+    void handleGameEndedEvent(){
         showInformation(THE_GAME_IS_ENDED);
     }
 

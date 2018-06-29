@@ -879,7 +879,10 @@ public class Controller extends Observable {
         if(waitingForPatternsChoice.cancel()){
             forcePatternChoice();
         }
-        if(this.game.getStatus()!=GameStatus.ENDED && this.getCurrentPlayer().getID().equals(playerID)){
+
+        if(this.game.getStatus()!=GameStatus.ENDED
+                && checkIfGameCanContinue()
+                && this.getCurrentPlayer().getID().equals(playerID)){
             advanceGameDueToPlayerInactivity();
         }
     }
