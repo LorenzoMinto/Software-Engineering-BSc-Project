@@ -64,7 +64,7 @@ public class CLIView extends View{
     private static final String INSERT_YOUR_NICKNAME = "Insert your nickname";
     private static final String CHOOSE_A_WINDOW_PATTERN_FROM_THE_FOLLOWINGS = "Choose a window pattern from the followings (tip: look at your private objective card):";
     private static final String INSERT_THE_INDEX_OF_THE_WINDOW_PATTERN_YOU_WANT_TO_CHOOSE = "Insert the index of the window pattern you want to choose:";
-    public static final String ERROR_MESSAGE = "ERROR: ";
+    private static final String ERROR_MESSAGE = "ERROR: ";
     private static final String YOU_CANT_WRITE_ON_CONSOLE_NOW = "You can't write on console now";
     private static final String FAILED_ESTABLISHING_CONNECTION = "Failed establishing connection";
     private static final String SHOW_TOOLCARDS = "Show toolcards";
