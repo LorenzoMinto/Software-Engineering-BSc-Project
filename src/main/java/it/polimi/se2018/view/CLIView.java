@@ -453,6 +453,7 @@ public class CLIView extends View{
         int index = 0;
         for(Integer favourToken : this.playersFavourTokens){
             print(this.players.get(index)+": "+favourToken);
+            index++;
         }
         waitForMove();
     }
