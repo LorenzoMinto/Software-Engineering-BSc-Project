@@ -44,6 +44,8 @@ public class ChooseFromTrackControllerStateTest {
         gameProperties.setProperty("timeoutChoosingPatterns","1000");
         gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
         gameProperties.setProperty("timeoutPlayerMove","1000");
+        gameProperties.setProperty("persistencyPath","globalrankings.xml");
+
         controller = new Controller(game, gameProperties);
 
         Set<String> nicknames = new HashSet<>(Arrays.asList("Johnnyfer", "Rubens"));

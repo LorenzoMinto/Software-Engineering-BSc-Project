@@ -277,8 +277,6 @@ public class Controller extends Observable {
             //Update permissions
             if (returnMessage.getType() == ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE) {
                 returnMessage.setPermissions(controllerState.getStatePermissions());
-                //TODO: Broadcasta qua History message (deve essere succedevole per essere significativo)
-
             }
             return returnMessage;
 

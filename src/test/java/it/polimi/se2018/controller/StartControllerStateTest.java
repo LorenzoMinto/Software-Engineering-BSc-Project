@@ -40,6 +40,7 @@ public class StartControllerStateTest {
         gameProperties.setProperty("timeoutChoosingPatterns","1000");
         gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
         gameProperties.setProperty("timeoutPlayerMove","1000");
+        gameProperties.setProperty("persistencyPath","globalrankings.xml");
 
         controller = new Controller(game, gameProperties);
 
@@ -173,6 +174,7 @@ public class StartControllerStateTest {
         gameProperties.setProperty("timeoutChoosingPatterns","1000");
         gameProperties.setProperty("amountOfCouplesOfPatternsPerPlayer","4");
         gameProperties.setProperty("timeoutPlayerMove","1000");
+        gameProperties.setProperty("persistencyPath","globalrankings.xml");
 
         controller = new Controller(game, gameProperties);
 
