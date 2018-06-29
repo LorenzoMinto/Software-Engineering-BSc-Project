@@ -184,7 +184,7 @@
             <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <Button fx:id="trackButton" mnemonicParsing="false" onAction="#handleTrackButtonPressedEvent" prefHeight="20.0" prefWidth="80.0" text="Track" />
-                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#handleExitEvent" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: indianred;" text="Exit" />
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#handleExitEvent" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: indianred;" text="Quit" />
                </children></VBox>
             <FlowPane fx:id="dynamicChoicesPane" alignment="CENTER" columnHalignment="CENTER" hgap="5.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2" />
             <VBox GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
