@@ -58,6 +58,7 @@ public abstract class View implements Observer {
     private static final String TRACK_HAS_NOW_NEW_DICES = "Track has now new dices";
     private static final String THERE_IS_NO_MORE_DRAFTED_DICE = "There is no more drafted dice";
     private static final String GAME_WAS_ABORTED = "Game was aborted";
+    private static final String QUITTED_THE_GAME = " quitted the game";
 
     /*  CONSTANTS FOR MESSAGES PARAMS
         Following constants are not commented one by one because they are as self explaining as needed.
@@ -244,6 +245,18 @@ public abstract class View implements Observer {
     }
 
     /**
+     * Handles the move "Quit"
+     */
+    void handleQuitMove(){
+        changeStateTo(ViewState.DISCONNECTED);
+        try {
+            notifyGame(new Message(ControllerBoundMessageType.MOVE,Message.fastMap(PARAM_MOVE,Move.QUIT)));
+        } catch (NetworkingException e) {
+            showInformation(e.getMessage());
+        }
+    }
+
+    /**
      * Handles the move "Back to game"
      */
     void handleBackGameMove(){
@@ -391,6 +404,22 @@ public abstract class View implements Observer {
      */
     private void handleGameEndedEvent(){
         showInformation(THE_GAME_IS_ENDED);
+    }
+
+    /**
+     * Handles the event "A player quitted"
+     * @param m the message containing information about the error
+     */
+    private void handleAPlayerQuittedEvent(Message m){
+        Object o;
+        try {
+            o = m.getParam(PARAM_NICKNAME);
+        } catch (NoSuchParamInMessageException e) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        String nickname = (String) o;
+        showInformation(nickname+ QUITTED_THE_GAME);
     }
 
     /**
@@ -1108,6 +1137,9 @@ public abstract class View implements Observer {
             case CONNECTION_LOST:
                 handleConnectionLostEvent(m);
                 break;
+            case A_PLAYER_QUITTED:
+                handleAPlayerQuittedEvent(m);
+                break;
             default:
                 //No other messages are evaluated in this state
                 break;
@@ -1220,6 +1252,9 @@ public abstract class View implements Observer {
                 break;
             case ABORTED:
                 handleAbortedEvent();
+                break;
+            case A_PLAYER_QUITTED:
+                handleAPlayerQuittedEvent(m);
                 break;
             default:
                 //No other messages are evaluated in this state

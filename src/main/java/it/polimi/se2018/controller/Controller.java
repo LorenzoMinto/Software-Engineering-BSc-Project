@@ -289,10 +289,20 @@ public class Controller extends Observable {
 
                 return new Message(ViewBoundMessageType.BACK_TO_GAME);
 
+            } else if(message.isMove(Move.QUIT)) {
+
+                inactivePlayers.add(sendingPlayerID);
+                notifyPlayerQuitted(sendingPlayerID);
+                return null;
+
             } else {
                 return new Message(ViewBoundMessageType.ERROR_MESSAGE, "Not your turn!");
             }
         }
+    }
+
+    private void notifyPlayerQuitted(String playerID){
+        notify(new Message(ViewBoundMessageType.A_PLAYER_QUITTED,Message.fastMap("nickname",playerID)));
     }
 
     /**
@@ -401,6 +411,12 @@ public class Controller extends Observable {
             case LEAVE:
                 //Never enter this case because it is handled before in Server
                 return errorMessage();
+
+            case QUIT:
+                inactivePlayers.add(message.getPlayerID());
+                notifyPlayerQuitted(message.getPlayerID());
+                advanceGameDueToPlayerInactivity();
+                return new Message(ViewBoundMessageType.ACKNOWLEDGMENT_MESSAGE,"You are successfully quitted");
 
             default:
                 return errorMessage(UNRECOGNIZED_MOVE);

@@ -36,5 +36,6 @@ public enum ViewBoundMessageType {
     A_PLAYER_DISCONNECTED,
     A_PLAYER_RECONNECTED,
     ABORTED,
+    A_PLAYER_QUITTED,
     PING
 }

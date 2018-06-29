@@ -18,7 +18,8 @@ public enum Move {
     END_EFFECT ("End toolCard effect"),
     JOIN("Join waiting room"),
     BACK_GAME ("Back to game"),
-    LEAVE ("Leave waiting room");
+    LEAVE ("Leave waiting room"),
+    QUIT ("Quit the game");
 
     /**
      * A human readable text representation of the move

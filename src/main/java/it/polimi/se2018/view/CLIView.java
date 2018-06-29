@@ -71,6 +71,8 @@ public class CLIView extends View{
     private static final String GET_FAVOUR_TOKENS_OF_PLAYERS = "Get favour tokens of players";
     private static final String THE_WINNER_IS = "The winner is: ";
     private static final String GLOBAL_RANKINGS_FOLLOWING = "Global rankings following:";
+    private static final String YOU_ARE_QUITTING = "You are quitting...";
+    private static final String QUIT_GAME = "Quit game";
 
 
     /*  CONSTANTS FOR MESSAGES PARAMS
@@ -298,6 +300,8 @@ public class CLIView extends View{
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(SHOW_WINDOW_PATTERNS_OF_OTHER_PLAYERS,this::printOthersWindowPatterns));
             index++;
             mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(GET_FAVOUR_TOKENS_OF_PLAYERS,this::printFavourTokens));
+            index++;
+            mapConsoleMoves.put(Integer.toString(index), new ConsoleMove(QUIT_GAME,this::handleQuitMove));
         }
 
         if(this.draftedDice!=null){
@@ -372,6 +376,9 @@ public class CLIView extends View{
                 break;
             case LEAVE:
                 consoleMove = new ConsoleMove(move.getTextualREP(),this::handleLeaveWaitingRoomMove);
+                break;
+            case QUIT:
+                consoleMove = new ConsoleMove(move.getTextualREP(),this::handleQuitMove);
                 break;
             default:
                 break;
@@ -512,6 +519,12 @@ public class CLIView extends View{
     void handleLeaveWaitingRoomMove() {
         super.handleLeaveWaitingRoomMove();
         waitForMove();
+    }
+
+    @Override
+    void handleQuitMove(){
+        print(YOU_ARE_QUITTING);
+        this.currentInputConsumer = null;
     }
 
     @Override
