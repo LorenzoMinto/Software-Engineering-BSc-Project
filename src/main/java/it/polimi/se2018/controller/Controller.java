@@ -295,6 +295,7 @@ public class Controller extends Observable {
 
                 inactivePlayers.add(sendingPlayerID);
                 notifyPlayerQuitted(sendingPlayerID);
+                checkIfGameCanContinue();
                 return null;
 
             } else {
@@ -658,6 +659,12 @@ public class Controller extends Observable {
     private void advanceGameDueToPlayerInactivity() {
 
         //Checks if due to players inactivity game can continuing or not
+        if( checkIfGameCanContinue() ){
+            advanceGame();
+        }
+    }
+
+    private boolean checkIfGameCanContinue(){
         if( game.getPlayers().size() - inactivePlayers.size() < getConfigProperty("minNumberOfPlayers") ){
             try{
                 game.forceEndGameDueToInactivity();
@@ -667,12 +674,9 @@ public class Controller extends Observable {
             }
 
             manageRankings();
-            return;
+            return false;
         }
-
-        //Note: aggiungere quì eventuale codice di pulizia delle mosse lasciate in sospeso dal player.
-
-        advanceGame();
+        return true;
     }
 
     /**

@@ -1061,6 +1061,7 @@ public class CLIView extends View{
     void handleUsedToolCardEvent(Message m){
         super.handleUsedToolCardEvent(m);
         removeHandlingMessage(m);
+        waitForMove();
     }
 
     @Override

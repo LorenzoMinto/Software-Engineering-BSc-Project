@@ -842,6 +842,8 @@ public abstract class View implements Observer {
         int index = players.indexOf(pID);
         windowPatterns.set(index, wp);
 
+        updateMyWindowPattern();
+
         showInformation(pID+WINDOW_PATTERN_UPDATED);
     }
 
@@ -1497,6 +1499,13 @@ public abstract class View implements Observer {
      */
     public void setWindowPatterns(List<WindowPattern> windowPatterns) {
         this.windowPatterns = windowPatterns;
+        updateMyWindowPattern();
+    }
+
+    /**
+     * Updates the windowpattern of the current user
+     */
+    private void updateMyWindowPattern(){
         this.windowPattern = windowPatterns.get(players.indexOf(this.playerID));
     }
 }
