@@ -16,7 +16,7 @@ public class PersistencyTest {
 
     @BeforeClass
     public static void getSingleton(){
-        persistency = new Persistency("globalranking.xml");
+        persistency = new Persistency("globalrankings.xml");
     }
 
 /*    *//**
