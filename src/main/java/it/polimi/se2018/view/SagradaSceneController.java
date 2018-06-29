@@ -426,8 +426,8 @@ public class SagradaSceneController extends View implements Initializable {
      *
      * @param username the username string
      */
-    public void showWaitingRoom(String username) {
-        waitingRoomView = new WaitingRoomView(username);
+    public void showWaitingRoom() {
+        waitingRoomView = new WaitingRoomView();
         EventHandler<ActionEvent> handler = event -> handleExitEvent();
         waitingRoomView.setExitHandler(handler);
 
@@ -611,10 +611,15 @@ public class SagradaSceneController extends View implements Initializable {
 
     @Override
     void handleJoinGameMove() {
+        if (waitingRoomView.getUsername().isEmpty()) {
+            printOnConsole("You have to choose a username first!");
+            return;
+        }
         try {
             HashMap<String,Object> params = new HashMap<>();
             params.put(PARAM_MOVE,Move.JOIN);
-            params.put(PARAM_NICKNAME,getPlayerID());
+            params.put(PARAM_NICKNAME,waitingRoomView.getUsername());
+            setPlayer(waitingRoomView.getUsername());
             notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
         } catch (NetworkingException e) {
             showError(e.getMessage());

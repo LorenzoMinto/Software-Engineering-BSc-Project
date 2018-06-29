@@ -236,7 +236,7 @@ public abstract class View implements Observer {
     void handleLeaveWaitingRoomMove(){
         try {
             HashMap<String,Object> params = new HashMap<>();
-            params.put(PARAM_MOVE,Move.JOIN);
+            params.put(PARAM_MOVE,Move.LEAVE);
             params.put(PARAM_NICKNAME,this.playerID);
             notifyGame(new Message(ControllerBoundMessageType.MOVE,params));
         } catch (NetworkingException e) {

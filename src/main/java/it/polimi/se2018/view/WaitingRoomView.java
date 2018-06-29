@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -46,15 +47,19 @@ public class WaitingRoomView extends Pane {
     @FXML private Button exitButton;
 
     /**
+     * Textfield that allows the user to input the wanted username
+     */
+    @FXML private TextField usernameTextfield;
+
+    /**
      * Observable list of players waiting in the Server's waiting room
      */
     private static final ObservableList waitingPlayers = FXCollections.observableArrayList();
 
     /**
      * Class constructor
-     * @param username the player's username
      */
-    WaitingRoomView(String username) {
+    WaitingRoomView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WaitingRoomView.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
@@ -64,10 +69,8 @@ public class WaitingRoomView extends Pane {
             forwardMessage(exception.getMessage());
         }
 
-        Platform.runLater(() -> {
-            waitingRoomList.setItems(waitingPlayers);
-            nameLabel.setText(username);
-        });
+        Platform.runLater(() -> waitingRoomList.setItems(waitingPlayers));
+
     }
 
     /**
@@ -115,4 +118,11 @@ public class WaitingRoomView extends Pane {
     public void resetPermissions() {
         Platform.runLater(() -> dynamicChoicesBox.getChildren().clear());
     }
+
+    /**
+     * Returns the text inside the usernameTextfield
+     *
+     * @return the text inside the usernameTextfield
+     */
+    public String getUsername() { return usernameTextfield.getText(); }
 }
