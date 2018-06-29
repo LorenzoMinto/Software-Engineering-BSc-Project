@@ -492,32 +492,8 @@ public class Controller extends Observable {
         }
 
         //check for card's timing constraints
-        switch (toolCard.getTitle()) {
-            case "Glazing Hammer": //second turn before drafting only
-                if (game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced() ||  //or is player's first turn in the round
-                        game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
-                    return false;
-                }
-                break;
-            case "Running Pliers": //first turn only
-                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==1
-                        || !game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
-                    return false;
-                }
-                break;
-            case "Lens Cutter": //uses Track
-                if (game.getTrack().isEmpty()) {
-                    return false;
-                }
-                break;
-            case "Tap Wheel": //uses Track
-                if (game.getTrack().isEmpty()) {
-                    return false;
-                }
-                break;
-            default:
-                break;
-        }
+        Boolean x = conformsToCardTiminingContraints(toolCard);
+        if (!x) return x;
 
         Player currentPlayer = game.getCurrentRound().getCurrentTurn().getPlayer();
         if( currentPlayer.decreaseTokens(toolCard.getNeededTokens()) ){
@@ -532,6 +508,26 @@ public class Controller extends Observable {
         } else {
             return false;
         }
+    }
+
+    private Boolean conformsToCardTiminingContraints(ToolCard toolCard) {
+        switch (toolCard.getTitle()) {
+            case "Glazing Hammer": //second turn before drafting only
+                if (game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced() ||  //or is player's first turn in the round
+                        game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==0) {
+                    return false;
+                }
+                break;
+            case "Running Pliers": //first turn only
+                if (game.getCurrentRound().getCurrentTurn().getNumber()/game.getPlayers().size()==1
+                        || !game.getCurrentRound().getCurrentTurn().hasDraftedAndPlaced()) {
+                    return false;
+                }
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     /**

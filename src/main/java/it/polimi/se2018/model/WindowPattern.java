@@ -246,6 +246,10 @@ public class WindowPattern extends Observable implements Serializable{
             throw new ValueOutOfBoundsException(DICE_IN_ILLEGAL_POSITION_ERROR);
         }
 
+        if (isThereADice(row, col)) {
+            return false;
+        }
+
         this.pattern[row][col].setDice(dice);
         isEmpty = false;
 
@@ -263,10 +267,7 @@ public class WindowPattern extends Observable implements Serializable{
      */
     public boolean isThereADice(int row,int col) {
         //Checks if no dice is present on the specified cell
-        if(this.pattern[row][col].hasDice()){
-            return true;
-        }
-        return false;
+        return this.pattern[row][col].hasDice();
     }
 
     /**
