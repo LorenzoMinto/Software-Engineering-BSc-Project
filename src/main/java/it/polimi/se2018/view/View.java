@@ -1167,7 +1167,7 @@ public abstract class View implements Observer {
                 setPermissions(p);
             }//else keep same permissions
         }
-
+        System.out.println("Received message: "+m);
         switch (type) {
             case ERROR_MESSAGE:
                 handleErrorEvent(m);
