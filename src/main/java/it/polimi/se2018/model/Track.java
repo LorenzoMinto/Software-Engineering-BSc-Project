@@ -46,6 +46,16 @@ public class Track extends Observable implements Serializable{
         notifyGame();
     }
 
+
+    /**
+     * Returns true if the track is empty
+     *
+     * @return if the track is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return slots.isEmpty();
+    }
+
     /**
      * Creates new TrackSlot with the list of dice passed and appends it to the list.
      *

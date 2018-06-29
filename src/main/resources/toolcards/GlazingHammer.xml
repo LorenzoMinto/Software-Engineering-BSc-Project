@@ -2,7 +2,7 @@
 <toolcard>
     <title>Glazing Hammer</title>
     <imageURL>images/ToolCards/GlazingHammer.jpg</imageURL>
-    <description>After drafting, swap the drafted die with a die from the Round Track.</description>
+    <description>Re-roll all in dice in the Draft Pool. This may only be used on your second turn before drafting.</description>
     <neededTokens>1</neededTokens>
     <tokensUsageMultiplier>2</tokensUsageMultiplier>
     <controllerStateRule prevState="StartControllerState" nextState="RerollDraftPoolControllerState" />

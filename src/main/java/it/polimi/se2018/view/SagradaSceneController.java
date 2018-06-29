@@ -1007,7 +1007,7 @@ public class SagradaSceneController extends View implements Initializable {
                         hBox.getChildren().add(trackSlotDice);
                     }
                 }catch (ValueOutOfBoundsException e){
-                    printOnConsole(e.getMessage());
+                    //DO NOTHING
                 }
             }
         });

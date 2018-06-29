@@ -505,6 +505,16 @@ public class Controller extends Observable {
                     return false;
                 }
                 break;
+            case "Lens Cutter": //uses Track
+                if (game.getTrack().isEmpty()) {
+                    return false;
+                }
+                break;
+            case "Tap Wheel": //uses Track
+                if (game.getTrack().isEmpty()) {
+                    return false;
+                }
+                break;
             default:
                 break;
         }

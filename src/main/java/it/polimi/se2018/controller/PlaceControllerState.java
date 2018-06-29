@@ -49,8 +49,9 @@ public class PlaceControllerState extends ControllerState {
         WindowPattern pattern = currentTurn.getPlayer().getWindowPattern();
 
         if (controller.placementRule.isMoveAllowed(pattern, currentTurn.getDraftedDice(), row, col)
-                && pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col)) {
+                && pattern.isThereADice(row, col)) {
             currentTurn.resetDraftedDice();
+            pattern.putDiceOnCell(currentTurn.getDraftedDice(), row, col);
             if (controller.getActiveToolCard() != null) {
                 controller.setControllerState(controller.stateManager.getNextState(this));
             } else {
