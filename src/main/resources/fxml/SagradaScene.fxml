@@ -411,14 +411,11 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
                            <children>
-                              <Button fx:id="windowPatterns1Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                                 <opaqueInsets>
-                                    <Insets bottom="20.0" />
-                                 </opaqueInsets>
+                              <HBox fx:id="windowPatterns1ImageBox" alignment="BOTTOM_CENTER" VBox.vgrow="NEVER">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
-                              </Button>
+                              </HBox>
                               <Button fx:id="windowPatterns1FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
                                  <padding>
                                     <Insets top="5.0" />
@@ -431,14 +428,11 @@
                         </VBox>
                         <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="windowPatterns2Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                                 <opaqueInsets>
-                                    <Insets bottom="20.0" />
-                                 </opaqueInsets>
+                              <HBox fx:id="windowPatterns2ImageBox" alignment="BOTTOM_CENTER" VBox.vgrow="NEVER">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
-                              </Button>
+                              </HBox>
                               <Button fx:id="windowPatterns2FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
                                  <padding>
                                     <Insets top="5.0" />
@@ -454,14 +448,11 @@
                         </VBox>
                         <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="windowPatterns3Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                                 <opaqueInsets>
-                                    <Insets bottom="20.0" />
-                                 </opaqueInsets>
+                              <HBox fx:id="windowPatterns3ImageBox" alignment="BOTTOM_CENTER" VBox.vgrow="NEVER">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
-                              </Button>
+                              </HBox>
                               <Button fx:id="windowPatterns3FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
                                  <padding>
                                     <Insets top="5.0" />
@@ -477,14 +468,11 @@
                         </VBox>
                         <VBox alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="windowPatterns4Image" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="276.0" prefWidth="347.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                                 <opaqueInsets>
-                                    <Insets bottom="20.0" />
-                                 </opaqueInsets>
+                              <HBox fx:id="windowPatterns4ImageBox" alignment="BOTTOM_CENTER" VBox.vgrow="NEVER">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
-                              </Button>
+                              </HBox>
                               <Button fx:id="windowPatterns4FavorTokens" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" textAlignment="CENTER">
                                  <padding>
                                     <Insets top="5.0" />

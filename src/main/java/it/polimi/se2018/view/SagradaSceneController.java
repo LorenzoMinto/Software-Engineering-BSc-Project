@@ -236,11 +236,11 @@ public class SagradaSceneController extends View implements Initializable {
     @FXML private VBox windowPatternsVBox;
     @FXML private Button windowPatternsPrivateObjectiveCardImage;
 
-    private List<Button> windowPatternsImages = new ArrayList<>();
-    @FXML private Button windowPatterns1Image;
-    @FXML private Button windowPatterns2Image;
-    @FXML private Button windowPatterns3Image;
-    @FXML private Button windowPatterns4Image;
+    private List<HBox> windowPatternsImageBoxes = new ArrayList<>();
+    @FXML private HBox windowPatterns1ImageBox;
+    @FXML private HBox windowPatterns2ImageBox;
+    @FXML private HBox windowPatterns3ImageBox;
+    @FXML private HBox windowPatterns4ImageBox;
 
     @FXML private Button windowPatterns1FavorTokens;
     @FXML private Button windowPatterns2FavorTokens;
@@ -338,10 +338,10 @@ public class SagradaSceneController extends View implements Initializable {
         disable(toolCardsVisibleComponents);
 
 
-        windowPatternsImages.add(windowPatterns1Image);
-        windowPatternsImages.add(windowPatterns2Image);
-        windowPatternsImages.add(windowPatterns3Image);
-        windowPatternsImages.add(windowPatterns4Image);
+        windowPatternsImageBoxes.add(windowPatterns1ImageBox);
+        windowPatternsImageBoxes.add(windowPatterns2ImageBox);
+        windowPatternsImageBoxes.add(windowPatterns3ImageBox);
+        windowPatternsImageBoxes.add(windowPatterns4ImageBox);
 
         windowPatterns1FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
         windowPatterns2FavorTokens.setBackground(getBackgroundFromImage(favorTokensImage));
@@ -351,10 +351,10 @@ public class SagradaSceneController extends View implements Initializable {
         windowPatternsVisibleComponents.add(windowPatternsHBox);
         windowPatternsVisibleComponents.add(windowPatternsVBox);
         windowPatternsVisibleComponents.add(windowPatternsPrivateObjectiveCardImage);
-        windowPatternsVisibleComponents.add(windowPatterns1Image);
-        windowPatternsVisibleComponents.add(windowPatterns2Image);
-        windowPatternsVisibleComponents.add(windowPatterns3Image);
-        windowPatternsVisibleComponents.add(windowPatterns4Image);
+        windowPatternsVisibleComponents.add(windowPatterns1ImageBox);
+        windowPatternsVisibleComponents.add(windowPatterns2ImageBox);
+        windowPatternsVisibleComponents.add(windowPatterns3ImageBox);
+        windowPatternsVisibleComponents.add(windowPatterns4ImageBox);
         windowPatternsVisibleComponents.add(windowPatterns1FavorTokens);
         windowPatternsVisibleComponents.add(windowPatterns2FavorTokens);
         windowPatternsVisibleComponents.add(windowPatterns3FavorTokens);
@@ -875,9 +875,6 @@ public class SagradaSceneController extends View implements Initializable {
         } else {
             Platform.runLater(() -> currentDraftedPane.getChildren().clear());
         }
-
-        //TODO: TESTING
-        handleAbortedEvent();
     }
 
     @Override
@@ -933,52 +930,42 @@ public class SagradaSceneController extends View implements Initializable {
             windowPatternsHBox.prefHeightProperty().bind(windowPatternsVBox.heightProperty().divide(2));
 
             WindowPattern windowPattern = drawnWindowPatterns.get(0);
-            Image windowPatternImage = getImageFromPath(windowPattern.getImageURL());
-            windowPatterns1Image.setBackground(getBackgroundFromImage(windowPatternImage));
-            windowPatterns1Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
-            windowPatterns1Image.prefHeightProperty().bind(windowPatterns1Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
+            WindowPatternView wpv = new WindowPatternView(windowPattern, event -> handleWindowPatterSelected(0));
+            windowPatterns1ImageBox.getChildren().add(wpv);
             windowPatterns1FavorTokens.setText(String.valueOf(windowPattern.getDifficulty()));
 
-            windowPattern = drawnWindowPatterns.get(1);
-            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
-            windowPatterns2Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
-            windowPatterns2Image.prefHeightProperty().bind(windowPatterns2Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
-            windowPatterns2Image.setBackground(getBackgroundFromImage(windowPatternImage));
-            windowPatterns2FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(1).getDifficulty()));
+            WindowPattern windowPattern1 = drawnWindowPatterns.get(1);
+            WindowPatternView wpv1 = new WindowPatternView(windowPattern1, event -> handleWindowPatterSelected(1));
+            windowPatterns2ImageBox.getChildren().add(wpv1);
+            windowPatterns2FavorTokens.setText(String.valueOf(windowPattern1.getDifficulty()));
 
-            windowPattern = drawnWindowPatterns.get(2);
-            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
-            windowPatterns3Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
-            windowPatterns3Image.prefHeightProperty().bind(windowPatterns3Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
-            windowPatterns3Image.setBackground(getBackgroundFromImage(windowPatternImage));
-            windowPatterns3FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(2).getDifficulty()));
+            WindowPattern windowPattern2 = drawnWindowPatterns.get(2);
+            WindowPatternView wpv2 = new WindowPatternView(windowPattern2, event -> handleWindowPatterSelected(2));
+            windowPatterns3ImageBox.getChildren().add(wpv2);
+            windowPatterns3FavorTokens.setText(String.valueOf(windowPattern2.getDifficulty()));
 
-            windowPattern = drawnWindowPatterns.get(3);
-            windowPatternImage = getImageFromPath(windowPattern.getImageURL());
-            windowPatterns4Image.prefWidthProperty().bind(windowPatternsHBox.widthProperty().divide(widthProportion));
-            windowPatterns4Image.prefHeightProperty().bind(windowPatterns4Image.prefWidthProperty().multiply(heightWidthWindowPatternProportion));
-            windowPatterns4Image.setBackground(getBackgroundFromImage(windowPatternImage));
-            windowPatterns4FavorTokens.setText(String.valueOf(drawnWindowPatterns.get(3).getDifficulty()));
-
-            for (Button wp: windowPatternsImages) {
-                wp.setOnAction(event -> {
-                    WindowPattern windowPattern1 = drawnWindowPatterns.get(windowPatternsImages.indexOf(wp));
-                    try {
-                        HashMap<String,Object> params = new HashMap<>();
-                        params.put(PARAM_MOVE,Move.CHOOSE_WINDOW_PATTERN);
-                        params.put(PARAM_WINDOW_PATTERN,windowPattern1.copy());
-                        notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
-                    } catch (NetworkingException e) {
-                        printOnConsole(e.getMessage());
-                    }
-                    hasChosenWindowPattern();
-                    printOnConsole(windowPattern1.getTitle() +" chosen.");
-                    Label waitLabel = new Label("Your window pattern was assigned. Waiting for the other players to pick theirs.");
-                    waitLabel.setFont(new Font(24));
-                    windowPatternsBox.getChildren().add(waitLabel);
-                });
-            }
+            WindowPattern windowPattern3 = drawnWindowPatterns.get(3);
+            WindowPatternView wpv3 = new WindowPatternView(windowPattern3, event -> handleWindowPatterSelected(3));
+            windowPatterns4ImageBox.getChildren().add(wpv3);
+            windowPatterns4FavorTokens.setText(String.valueOf(windowPattern3.getDifficulty()));
         });
+    }
+
+    private void handleWindowPatterSelected(int i) {
+        WindowPattern windowPattern1 = drawnWindowPatterns.get(i);
+        try {
+            HashMap<String,Object> params = new HashMap<>();
+            params.put(PARAM_MOVE,Move.CHOOSE_WINDOW_PATTERN);
+            params.put(PARAM_WINDOW_PATTERN,windowPattern1.copy());
+            notifyGame(new Message(ControllerBoundMessageType.MOVE, params));
+        } catch (NetworkingException e) {
+            printOnConsole(e.getMessage());
+        }
+        hasChosenWindowPattern();
+        printOnConsole(windowPattern1.getTitle() +" chosen.");
+        Label waitLabel = new Label("Your window pattern was assigned. Waiting for the other players to pick theirs.");
+        waitLabel.setFont(new Font(24));
+        windowPatternsBox.getChildren().add(waitLabel);
     }
 
 
