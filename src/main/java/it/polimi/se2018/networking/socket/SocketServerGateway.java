@@ -56,4 +56,9 @@ public final class SocketServerGateway implements SocketReceiverInterface, Serve
     public void lostSocketConnection(ClientProxyInterface sender) {
         this.server.lostSocketConnection(sender);
     }
+
+    @Override
+    public void restoredSocketConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+        this.server.restoredSocketConnection(previous,next);
+    }
 }

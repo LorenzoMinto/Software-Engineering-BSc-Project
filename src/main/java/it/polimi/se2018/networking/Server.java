@@ -163,19 +163,14 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private List<ClientProxyInterface> disconnectedGateways = new ArrayList<>();
 
     /**
+     * Queue of all messages that were not sent due to connection problems
+     */
+    private HashMap<ClientProxyInterface,List<Message>> unSentMessages = new HashMap<>();
+
+    /**
      * Path for persistency rankings file
      */
     private final String persistencyPath;
-
-    /**
-     * Timer for pinging
-     */
-    private Timer timer = new Timer();
-
-    /**
-     * Timers for pinging
-     */
-    private HashMap<ClientProxyInterface,TimerTask> pingTimers = new HashMap<>();
 
     /**
      * The main class for server in order to make it runnable.
@@ -329,31 +324,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * @param sender the sender of the message
      */
     public void handleInBoundMessage(Message message, ClientProxyInterface sender) {
-
-        if(message.getType()==ControllerBoundMessageType.PING){
-
-
-
-            TimerTask pingTimer = pingTimers.get(sender);
-
-            if(pingTimer!=null){
-                pingTimer.cancel();
-            }
-
-            pingTimers.put(sender, new TimerTask() {
-                @Override
-                public void run() {
-                    handleGatewayError(sender);
-                }
-            });
-
-            this.timer.schedule(pingTimers.get(sender),3000);
-
-            if(disconnectedGateways.contains(sender)){
-                disconnectedGateways.remove(sender);
-                controller.playerRestoredConnection(gatewayToPlayerIDMap.get(sender));
-            }
-        }
 
         ControllerBoundMessageType type = (ControllerBoundMessageType) message.getType();
 
@@ -549,6 +519,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         playerIDToGatewayMap.putAll(waitingList);
         for(Map.Entry<String, ClientProxyInterface> entry : playerIDToGatewayMap.entrySet()){
             gatewayToPlayerIDMap.put(entry.getValue(), entry.getKey());
+            unSentMessages.put(entry.getValue(),new ArrayList<>());
         }
         //Send players to controller and let it actually starting the game
         controller.launchGame(waitingList.keySet());
@@ -575,11 +546,13 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         boolean somethingFailed = false;
         List<ClientProxyInterface> g = getGateway(message);
 
+
         for(ClientProxyInterface o : g){
             int attempts = 0;
             boolean correctlySent = false;
 
-            if(disconnectedGateways.contains(o) && message.getType()!=ViewBoundMessageType.PING){
+            if(disconnectedGateways.contains(o)){
+                unSentMessages.get(o).add(message);
                 continue;
             }
 
@@ -603,7 +576,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
 
             if(!correctlySent){
-                handleGatewayError(o);
+                handleSendMessageError(o);
                 somethingFailed=true;
             }
         }
@@ -615,7 +588,7 @@ public class Server implements Observer, SenderInterface, ServerInterface {
      * Method created to decrease cognitive complexity of sendMessage()
      * @param o the gateway where the sending message call failed
      */
-    private void handleGatewayError(ClientProxyInterface o){
+    private void handleSendMessageError(ClientProxyInterface o){
         if(this.serverState==ServerState.WAITING_ROOM){
             removeFromWaitingRoom(o);
         } else {
@@ -630,6 +603,43 @@ public class Server implements Observer, SenderInterface, ServerInterface {
     private void handleDisconnectedGateway(ClientProxyInterface gateway){
         this.disconnectedGateways.add(gateway);
         this.controller.playerLostConnection(gatewayToPlayerIDMap.get(gateway));
+
+        new Thread(()->{
+            while(true){
+                boolean restored = false;
+                try {
+                    gateway.receiveMessage(new Message(ViewBoundMessageType.PING));
+                    this.disconnectedGateways.remove(gateway);
+                    restored = true;
+                } catch (NetworkingException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+
+                if(restored){
+                    resendUnSentMessages(gateway);
+                    return;
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * Method created to lower cognitive compexity of handleDisconnectedGateway().
+     * Try to send messages that were not sent of a given gateway
+     * @param gateway the gateway to look into for un sent messages
+     */
+    private void resendUnSentMessages(ClientProxyInterface gateway){
+        for(Message message : this.unSentMessages.get(gateway)){
+            try {
+                sendMessage(message);
+            } catch (NetworkingException e) {
+                return;
+            }
+        }
     }
 
     @Override
@@ -657,8 +667,6 @@ public class Server implements Observer, SenderInterface, ServerInterface {
 
     @Override
     public void lostSocketConnection(ClientProxyInterface sender) {
-        if(sender==null) return;
-
         if (serverState == ServerState.WAITING_ROOM) {
 
             removeFromWaitingRoom(sender);
@@ -666,6 +674,19 @@ public class Server implements Observer, SenderInterface, ServerInterface {
         } else if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(sender)){
             this.disconnectedGateways.add(sender);
             controller.playerLostConnection(gatewayToPlayerIDMap.get(sender));
+        }
+    }
+
+    @Override
+    public void restoredSocketConnection(ClientProxyInterface previous, ClientProxyInterface next) {
+        if(serverState == ServerState.FORWARDING_TO_CONTROLLER && gatewayToPlayerIDMap.containsKey(previous)){
+            String playerID = gatewayToPlayerIDMap.get(previous);
+            gatewayToPlayerIDMap.remove(previous);
+            gatewayToPlayerIDMap.put(next,playerID);
+            playerIDToGatewayMap.remove(playerID);
+            playerIDToGatewayMap.put(playerID,next);
+            this.disconnectedGateways.remove(previous);
+            controller.playerRestoredConnection(playerID);
         }
     }
 
