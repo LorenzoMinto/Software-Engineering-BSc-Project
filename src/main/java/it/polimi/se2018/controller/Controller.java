@@ -153,11 +153,6 @@ public class Controller extends Observable {
     private HashSet<String> inactivePlayers = new HashSet<>();
 
     /**
-     * Set of players that are disconnected due to connection lost and before that they were inactive
-     */
-    private HashSet<String> inactiveDisconnectedPlayers = new HashSet<>();
-
-    /**
      * Persistency singleton that gives access to all persisted information.
      */
     private Persistency persistency;
@@ -872,11 +867,9 @@ public class Controller extends Observable {
      * @param playerID the player id of the player who lost connection
      */
     public void playerLostConnection(String playerID){
-        if(this.inactivePlayers.add(playerID)){
-            this.inactiveDisconnectedPlayers.add(playerID);
-        }
+        this.inactivePlayers.add(playerID);
         notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
-        if(waitingForPatternsChoice != null && waitingForPatternsChoice.cancel()){
+        if(waitingForPatternsChoice!= null && waitingForPatternsChoice.cancel()){
             forcePatternChoice();
         }
 
@@ -892,14 +885,10 @@ public class Controller extends Observable {
      * @param playerID the player id of the player who restored its connection
      */
     public void playerRestoredConnection(String playerID){
+
         if(this.inactivePlayers.contains(playerID)){
-            if(this.inactiveDisconnectedPlayers.contains(playerID)){
-                this.inactiveDisconnectedPlayers.remove(playerID);
-                //player is not removed from inactive ones because it was so before loosing connection
-            } else {
-                this.inactivePlayers.remove(playerID);
-                notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
-            }
+            this.inactivePlayers.remove(playerID);
+            notify(new Message(ViewBoundMessageType.A_PLAYER_RECONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
         }
     }
 }
