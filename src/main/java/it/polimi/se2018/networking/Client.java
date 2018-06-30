@@ -4,6 +4,8 @@ import it.polimi.se2018.networking.rmi.RMIClientGateway;
 import it.polimi.se2018.networking.socket.SocketClientGateway;
 import it.polimi.se2018.utils.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.*;
 
 /**
@@ -58,6 +60,9 @@ public class Client extends Observable implements ClientInterface {
      * True if connection is established. False if it dropped.
      */
     private boolean connectionAvailable = true;
+
+    private Timer timer = new Timer();
+    private TimerTask pingTimer;
 
     /**
      * Constructor for Client
@@ -185,5 +190,25 @@ public class Client extends Observable implements ClientInterface {
                 notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
             }
         }
+    }
+
+    @Override
+    public void notify(Message message) {
+        super.notify(message);
+
+        setConnectionAvailable(true);
+
+        if(this.pingTimer!= null) {
+            this.pingTimer.cancel();
+        }
+
+        this.pingTimer = new TimerTask() {
+            @Override
+            public void run() {
+                gateway.fixConnection();
+            }
+        };
+
+        this.timer.schedule(this.pingTimer, 1500);
     }
 }
