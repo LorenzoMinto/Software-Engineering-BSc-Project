@@ -1119,7 +1119,7 @@ public abstract class View implements Observer {
      * @param message the message to be removed
      */
     void removeHandlingMessage(Message message){
-        if(this.handlingMessage.equals(message)){
+        if(this.handlingMessage!=null && this.handlingMessage.equals(message)){
             this.handlingMessage = null;
         }
     }

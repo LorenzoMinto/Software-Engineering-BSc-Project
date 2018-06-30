@@ -4,6 +4,8 @@ import it.polimi.se2018.networking.rmi.RMIClientGateway;
 import it.polimi.se2018.networking.socket.SocketClientGateway;
 import it.polimi.se2018.utils.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.*;
 
 /**
@@ -60,6 +62,16 @@ public class Client extends Observable implements ClientInterface {
     private boolean connectionAvailable = true;
 
     /**
+     * Timer for pinging
+     */
+    private Timer timer = new Timer();
+
+    /**
+     * Timer for pinging
+     */
+    private TimerTask pingTimer;
+
+    /**
      * Constructor for Client
      *
      * @param type type of connection
@@ -76,10 +88,8 @@ public class Client extends Observable implements ClientInterface {
         this.register(view);
 
         ClientInterface g = null;
-        boolean needsPinging = false;
         if (type == ConnectionType.RMI) {
             g = new RMIClientGateway(serverName, port, this);
-            needsPinging = true;
         } else if (type == ConnectionType.SOCKET) {
             g = new SocketClientGateway(serverName, port, this);
             /*SocketClientGateway is a thread. So exception that could be thrown in it
@@ -88,9 +98,9 @@ public class Client extends Observable implements ClientInterface {
 
         this.gateway = g;
 
-        if(needsPinging){
-            new Pinging(this,ControllerBoundMessageType.PING).start();
-        }
+
+        new Pinging(this,ControllerBoundMessageType.PING).start();
+
 
         log(ACKNOWLEDGEMENT_MESSAGE_CONSTRUCTOR);
     }
@@ -162,6 +172,7 @@ public class Client extends Observable implements ClientInterface {
     public void fixConnection() {
         setConnectionAvailable(false);
         gateway.fixConnection();
+
     }
 
     /**
@@ -184,6 +195,31 @@ public class Client extends Observable implements ClientInterface {
             } else {
                 notify(new Message(ViewBoundMessageType.CONNECTION_LOST));
             }
+        }
+    }
+
+    @Override
+    public void notify(Message message){
+        super.notify(message);
+        if(message.getType()==ViewBoundMessageType.CONNECTION_LOST){
+            setConnectionAvailable(false);
+        } else {
+            setConnectionAvailable(true);
+        }
+        if(message.getType()==ViewBoundMessageType.PING){
+            if(this.pingTimer!=null){
+                this.pingTimer.cancel();
+            }
+
+            this.pingTimer = new TimerTask() {
+                @Override
+                public void run() {
+                    setConnectionAvailable(false);
+                    gateway.fixConnection();
+                }
+            };
+
+            this.timer.schedule(this.pingTimer,1500);
         }
     }
 }

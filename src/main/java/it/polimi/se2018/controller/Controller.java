@@ -876,7 +876,7 @@ public class Controller extends Observable {
             this.inactiveDisconnectedPlayers.add(playerID);
         }
         notify(new Message(ViewBoundMessageType.A_PLAYER_DISCONNECTED,Message.fastMap(STRING_PLAYER,playerID)));
-        if(waitingForPatternsChoice.cancel()){
+        if(waitingForPatternsChoice != null && waitingForPatternsChoice.cancel()){
             forcePatternChoice();
         }
 
